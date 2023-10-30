@@ -1,0 +1,136 @@
+body{
+	font-family:"Century Gothic"}
+/* CSS Document */
+
+@media print{
+ body{
+	font-family:"Century Gothic";
+	font-size:10px;}
+
+
+	           .ecran
+                {display: none;}
+
+        }
+.encadre {
+	border: 1px solid #000000;
+	text-align:center;
+
+}
+.droite {
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+.gauche{
+	border-left-width: 3px;
+	border-left-style: solid;
+	border-left-color: #000000;
+
+}
+.encadrecmpl {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+}
+.encadrebas {
+
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #000000;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #000000;
+}
+.encadredroite {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-style:solid;
+
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+
+	border-left-color: #000000;
+}
+.encadrebasligne {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+}
+.encadrehautligne {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+}
+.encadrecmplbas {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: none;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+}
+    .btn{display:block;clear:both;padding:8px 0 6px;border-top:1px solid rgba(255,255,255,.2);box-shadow: 0 -1px 0 rgba(0,0,0,.2);text-align:center;position:relative;top:4px;cursor:pointer}
+.Style34 { font-size: 18px; font-weight: bold;  }
+
+.Grand {  font-size:18px; font-weight: bold; }
+.Grandp { font-size: 14px; font-weight: bold; }
+.Style36 {font-size: 11px; font-weight: bold; }
+.Style37 { border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: none; border-left-style: none; border-top-color: #000000; border-right-color: #000000; border-bottom-color: #000000; border-left-color: #000000; font-size: 11px; }
+.Style38 {border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: none; border-bottom-style: none; border-left-style: none; border-top-color: #000000; border-right-color: #000000; border-bottom-color: #000000; border-left-color: #000000; font-size: 11px; }
+.Style39 {font-size: 11px}
+
+.texte1 .Style34 strong u {
+	font-size: 14px;
+}
+.blanc_entete
+{
+	color:#FFFfff;
+}
+.heading {border-bottom: 1px solid #000;margin-bottom: 18px;padding-bottom: 5px}

@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property float $num_agce
+ * @property string $lib_agce
+ * @property string $date_crea_agce
+ * @property string $date_valid_agce
+ * @property integer $flag_agce
+ * @property string $code_agce
+ * @property integer $autonom_agce
+ * @property integer $flag_siege_agce
+ * @property integer $flag_caisse
+ * @property string $lettre_agce
+ * @property FabricationFour[] $fabricationFours
+ * @property ProdAgce[] $prodAgces
+ * @property User[] $user
+ * @property Commandefour[] $commandefours
+ */
+class Agence extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'agence';
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'num_agce';
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'float';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['lib_agce', 'date_crea_agce', 'date_valid_agce', 'flag_agce', 'code_agce',
+                            'autonom_agce', 'flag_siege_agce', 'flag_caisse', 'lettre_agce','created_at',
+                            'updated_at','tel_agce','adresse_agce'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function fabricationFours()
+    {
+        return $this->hasMany('App\Models\FabricationFour', 'num_agce', 'num_agce');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function prodAgces()
+    {
+        return $this->hasMany('App\Models\ProdAgce', 'num_agce', 'num_agce');
+    }
+
+//    /**
+//     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+//     */
+//    public function intrantAgces()
+//    {
+//        return $this->hasMany('App\Models\IntrantAgce', 'num_agce', 'num_agce');
+//    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function user()
+    {
+        return $this->hasMany('App\Models\User', 'num_agce', 'num_agce');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+//    public function ligneTrves()
+//    {
+//        return $this->hasMany('App\Models\LigneTrf', 'num_agce', 'num_agce');
+//    }
+
+//    /**
+//     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+//     */
+//    public function ligneTrves()
+//    {
+//        return $this->hasMany('App\Models\LigneTrf', 'num_agce_1', 'num_agce');
+//    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commandefours()
+    {
+        return $this->hasMany('App\Models\Commandefour', 'num_agce', 'num_agce');
+    }
+}
