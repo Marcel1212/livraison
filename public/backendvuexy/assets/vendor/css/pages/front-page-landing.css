@@ -1,5 +1,5 @@
 .section-py {
-  padding: 6.25rem 0;
+  padding: 6.25rem 0 0 0;
 }
 @media (max-width: 1199.98px) {
   .section-py {
@@ -14,7 +14,7 @@
 
 .landing-hero {
   border-radius: 0 0 3.5rem 3.5rem;
-  padding-top: 10.2rem;
+  padding-top: 9.2rem;
 }
 .landing-hero::after {
   content: "";
@@ -27,12 +27,12 @@
 }
 @media (min-width: 992px) {
   .landing-hero .hero-text-box {
-    max-width: 34.375rem;
+    max-width: 78rem;
     margin: 0 auto;
   }
 }
 .landing-hero .hero-title {
-  background: linear-gradient(to right, #28c76f 0%, #5a4aff 47.92%, #ff3739 100%);
+  background: linear-gradient(to right, #62a2ee 0%, #2266b1 47.92%, #f5811c 100%);
   background-size: 200% auto;
   color: #5d596c;
   background-clip: text;
@@ -74,7 +74,7 @@
 }
 
 .landing-hero-blank {
-  padding-top: 26rem;
+  padding-top: 2rem;
 }
 @media (max-width: 1199.98px) {
   .landing-hero-blank {
@@ -222,7 +222,10 @@
 }
 
 .light-style .landing-hero {
+  background: #F9F1E4;
+  /*
   background: linear-gradient(138.18deg, #eae8fd 0%, #fce5e6 94.44%);
+  */
 }
 .light-style .landing-hero::after {
   background-color: #fff;
@@ -271,4 +274,46 @@
   inset-block-start: -1.875rem;
   inset-inline-start: -3.125rem;
   transform: rotate(90deg);
+}
+
+
+
+.banner-style-five .thumb {
+  position: relative;
+  z-index: 1;
+}
+
+img {
+  border: none;
+  outline: none;
+  max-width: 100%;
+}
+
+.banner-style-five .thumb .shape {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.banner-style-five .thumb .shape {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+img, svg {
+  vertical-align: middle;
+}
+
+.author-social {
+  position: absolute;
+  right: 8%;
+  bottom: 20%;
+  z-index: 1;
+}
+
+.pl-60 {
+  padding-left: 60px;
 }

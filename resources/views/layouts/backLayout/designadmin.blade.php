@@ -16,7 +16,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <!DOCTYPE html>
 
 <html
-  lang="fr"
+  lang="{{ str_replace('_', '-', app()->getLocale()) }}"
   class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
   dir="ltr"
   data-theme="theme-default"
@@ -715,5 +715,79 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
     <!-- Page JS -->
     <script src="{{asset('backendvuexy/assets/js/dashboards-analytics.js')}}"></script>
+
+
+    <script>
+    $(window).on('load', function () {
+        if (feather) {
+            feather.replace({
+                width: 14,
+                height: 14
+            });
+        }
+    })
+</script>
+
+
+<script type="text/javascript">
+    var win = null;
+
+    function NewWindow(mypage, myname, w, h, scroll, pos, niveau) {
+
+        if (pos == "random") {
+            LeftPosition = (screen.width) ? Math.floor(Math.random() * (screen.width - w)) : 100;
+            TopPosition = (screen.height) ? Math.floor(Math.random() * ((screen.height - h) - 75)) : 100;
+        }
+        if (pos == "center") {
+            LeftPosition = (screen.width) ? (screen.width - w) / 2 : 100;
+            TopPosition = (screen.height) ? (screen.height - h) / 2 : 100;
+        } else if ((pos != "center" && pos != "random") || pos == null) {
+            LeftPosition = 0;
+            TopPosition = 20
+        }
+        settings = 'width=' + w + ',height=' + h + ',top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars=' + scroll + ',location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes';
+
+        if ((win == null || win.closed) && (mypage != '#')) {
+            win = window.open(mypage, myname, settings);
+            win.focus();
+        } else {
+            win.close();
+            if ((mypage != '#')) {
+                win = window.open(mypage, myname, settings);
+                win.focus();
+            }
+        }
+
+    }
+
+</script>
+<script>
+    $(window).on('load', function () {
+        if (feather) {
+            feather.replace({
+                width: 14,
+                height: 14
+            });
+        }
+    })
+
+    function startTime() {
+        let today = new Date();
+        let h = today.getHours();
+        let m = today.getMinutes();
+        let s = today.getSeconds();
+        var day = today.getDay();
+        var Y = today.getFullYear();
+        var dayarr = ["Dimance", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+        day = dayarr[day];
+        //  let ampm = h >= 24 ; h = h % 24; h = h ? h : 24; // the hour '0' should  be '12' m = m < 10 ? '0'+m : m; h = h < 10 ? '0'+h : h; s = s < 10 ? '0'+s : s;
+        document.getElementById('clock').innerHTML = day + " <?= date('d/m/Y'); ?> " + h + ":" + m + ":" + s;
+        let t = setTimeout(startTime, 500);
+    }
+
+    $(document).ready(function () {
+        $('#exampleData').DataTable();
+    });
+</script>
   </body>
 </html>

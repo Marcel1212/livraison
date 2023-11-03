@@ -95,6 +95,16 @@ class Menu
 
 
         return (isset($logof) ? $logof : '');
+    }      
+    
+    public static function get_info_reseaux()
+    {
+
+
+        $logof = Logo::where([['flag_logo','=',true],['valeur','=','RESEAUX SOCIAUX']])->get();
+
+
+        return (isset($logof) ? $logof : '');
     }   
     
 

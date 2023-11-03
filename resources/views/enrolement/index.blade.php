@@ -71,11 +71,10 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Localité </th>
-                                            <th>Activité </th>
                                             <th>Ncc </th>
                                             <th>Raison sociale </th>
-                                            <th>Numero cnps </th>
-                                            <th>Rccm </th>
+                                            <th>Date de demande </th>
+                                            <th>Recevablilite</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
@@ -85,16 +84,21 @@
                                             <tr>
                                                 <td>{{ $demandeenrole->id_demande_enrolement }}</td>
                                                 <td>{{ $demandeenrole->localite->libelle_localite }}</td>
-                                                <td>{{ $demandeenrole->activite->libelle_activites }}</td>
                                                 <td>{{ $demandeenrole->ncc_demande_enrolement }}</td>
                                                 <td>{{ $demandeenrole->raison_sociale_demande_enroleme }}</td>
-                                                <td>{{ $demandeenrole->numero_cnps_demande_enrolement }}</td>
-                                                <td>{{ $demandeenrole->rccm_demande_enrolement }}</td>
+                                                <td>{{ $demandeenrole->date_depot_demande_enrolement }}</td>
+                                                <td align="center">
+                                                    <?php if ($demandeenrole->flag_recevablilite_demande_enrolement == true ){?>
+                                                    <span class="badge bg-success">Recevable</span>
+                                                    <?php } else {?>
+                                                    <span class="badge bg-danger">Non recevable</span>
+                                                    <?php }  ?>
+                                                </td>                                                
                                                 <td align="center">
                                                     <?php if ($demandeenrole->flag_traitement_demande_enrolem == true ){?>
-                                                    <span class="badge badge-light-success">Traiter</span>
+                                                    <span class="badge bg-success">Valider</span>
                                                     <?php } else {?>
-                                                    <span class="badge badge-light-primary">Non traiter</span>
+                                                    <span class="badge bg-danger">Rejeter</span>
                                                     <?php }  ?>
                                                 </td>
                                                 <td align="center">

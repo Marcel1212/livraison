@@ -174,6 +174,7 @@ return [
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
         Spatie\Html\HtmlServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
     ])->toArray(),
 
@@ -192,6 +193,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'Html' => Spatie\Html\Facades\Html::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ])->toArray(),
 
 ];

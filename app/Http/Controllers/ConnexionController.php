@@ -19,6 +19,11 @@ use Session;
 class ConnexionController extends Controller
 {
 
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img()]);
+    }
+
     public function login(Request $request)
     {
 
@@ -26,7 +31,13 @@ class ConnexionController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'password' => 'required',
+                'captcha' => 'required|captcha'
+            ], [
+                'username.required' => 'Veuillez saisir votreidentifiant.',
+                'password.required' => 'Veuillez saisir le mot de passe.',
+                'captcha.required' => 'Veuillez saisir le captcha.',
             ]);
+
             $data = $request->input();
             if (Auth::attempt(['login_users' => $data['username'], 'password' => $data['password']])) {
                 // echo "succes";die;

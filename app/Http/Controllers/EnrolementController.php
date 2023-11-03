@@ -32,7 +32,9 @@ class EnrolementController extends Controller
      */
     public function index()
     {
-        $demandeenroles = DemandeEnrolement::all();
+        $demandeenroles = DemandeEnrolement::where([['flag_traitement_demande_enrolem','=',null],['flag_recevablilite_demande_enrolement','=',null]])
+                                            ->orWhere([['flag_traitement_demande_enrolem','=',false],['flag_recevablilite_demande_enrolement','=',null]])
+                                            ->get();
         return view('enrolement.index', compact('demandeenroles'));       
     }
 
@@ -78,18 +80,34 @@ class EnrolementController extends Controller
 
             $this->validate($request, [
                 'raison_sociale_demande_enroleme' => 'required',
-                'email_demande_enrolement' => 'required',
+                'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                 'indicatif_demande_enrolement' => 'required',
                 'tel_demande_enrolement' => 'required',
                 'id_localite' => 'required',
                 'id_centre_impot' => 'required',
                 'id_activites' => 'required',
-                'ncc_demande_enrolement' => 'required',
+                'ncc_demande_enrolement' => 'required|unique:demande_enrolement,ncc_demande_enrolement',
                 'rccm_demande_enrolement' => 'required',
                 'numero_cnps_demande_enrolement' => 'required',
                 'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                 'piece_rccm_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120'
+                'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'captcha' => 'required|captcha'
+            ],[
+                'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
+                'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
+                'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
+                'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
+                'id_localite.required' => 'Veuillez selectionnez une localite.',
+                'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
+                'id_activites.required' => 'Veuillez selectionner une activité.',
+                'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
+                'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
+                'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
+                'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
+                'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
+                'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatricualtion.',
+                'captcha.required' => 'Veuillez saisir le captcha.',
             ]);
 
             $data = $request->all();
@@ -110,7 +128,7 @@ class EnrolementController extends Controller
     
                     $input['piece_dfe_demande_enrolement'] = $fileName1;
                 }else{
-                    return redirect()->route('enrolement.create')
+                    return redirect()->route('enrolements')
                     ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte'); 
                 }
 
@@ -129,7 +147,7 @@ class EnrolementController extends Controller
                     $input['piece_rccm_demande_enrolement'] = $fileName1;
 
                 }else{
-                    return redirect()->route('enrolement.create')
+                    return redirect()->route('enrolements')
                     ->with('error', 'l\extension du fichier de la RCCM n\'est pas correcte'); 
                 }                
 
@@ -148,7 +166,7 @@ class EnrolementController extends Controller
                     $input['piece_attestation_immatriculati'] = $fileName1;
 
                 }else{
-                    return redirect()->route('enrolement.create')
+                    return redirect()->route('enrolements')
                     ->with('error', 'l\extension du fichier de l\attestation immatriculation n\'est pas correcte'); 
                 }                
 
@@ -184,7 +202,7 @@ class EnrolementController extends Controller
 
         }
 
-        return redirect()->route('enrolement.create')
+        return redirect()->route('enrolements')
             ->with('success', 'Votre demande d\'enrolement a ete effectuer avec succes');        
     }
 
@@ -233,9 +251,11 @@ class EnrolementController extends Controller
 
             if($data['action'] === 'Rejeter'){
                 $this->validate($request, [
-                    'id_statut_operation' => 'required',
                     'id_motif' => 'required',
                     'commentaire_demande_enrolement' => 'required'
+                ],[
+                    'id_motif.required' => 'Veuillez selectionner le motif rejet.',
+                    'commentaire_demande_enrolement.required' => 'Veuillez ajouter un commentaire.',
                 ]);
 
                 $input = $request->all();
@@ -252,7 +272,7 @@ class EnrolementController extends Controller
                     $sujet = "Rejet pour la demande enrolement sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                     $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
-                                    <br><br>Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et 
+                                    <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et 
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
                                     
                                     <br><b>Motif de rejet  : </b> @$demandeenrole1->motif->libelle_motif
@@ -263,7 +283,7 @@ class EnrolementController extends Controller
                                         Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de 
                                         soumettre une nouvelle demande lorsque les problèmes seront résolus.
                                         Cordialement,
-                                        L'équipe [Nom de la plateforme/service]
+                                        L'équipe e-FDFP
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -275,12 +295,82 @@ class EnrolementController extends Controller
                 }                
                 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
+            }          
+            
+            if($data['action'] === 'Recevable'){
+                $this->validate($request, [
+                    'id_motif_recevable' => 'required'
+                ],[
+                    'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                ]);
+
+                $input = $request->all();
+
+                $input['id_user'] = Auth::user()->id;
+                $input['flag_recevablilite_demande_enrolement'] = true;
+                $input['date_recevabilite_demande_enrolement'] = Carbon::now();
+                
+                $demandeenrole->update($input);
+
+                $demandeenrole1 = DemandeEnrolement::find($id);
+                
+                                
+                
+                return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
+            }          
+            
+            if($data['action'] === 'NonRecevable'){
+                $this->validate($request, [
+                    'id_motif_recevable' => 'required'
+                ],[
+                    'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                ]);
+
+                $input = $request->all();
+
+                $input['id_user'] = Auth::user()->id;
+                $input['flag_recevablilite_demande_enrolement'] = false;
+                $input['date_recevabilite_demande_enrolement'] = Carbon::now();
+                
+                $demandeenrole->update($input);
+
+                $demandeenrole1 = DemandeEnrolement::find($id);
+                
+                if (isset($demandeenrole1->email_demande_enrolement)) {
+                    $sujet = "Recevabilité de demande enrolement sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
+                                    <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et 
+                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
+                                    
+                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif1->libelle_motif
+                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_recevable_demande_enrolement
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
+                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de 
+                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                        Cordialement,
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+        
+        
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandeenrole1->email_demande_enrolement, $demandeenrole1->raison_sociale_demande_enroleme, $messageMail, $sujet, $titre);
+                }                
+                
+                return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }            
             
             if($data['action'] === 'Valider'){
 
                 $this->validate($request, [
-                    'id_statut_operation' => 'required'
+                    'id_motif' => 'required'
+                ],[
+                    'id_motif.required' => 'Veuillez selectionner le motif de validation.',
                 ]);
 
                 $input = $request->all();

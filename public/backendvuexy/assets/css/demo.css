@@ -4,11 +4,11 @@
 ******************************************************************************/
 
 .light-style .menu .app-brand.demo {
-  height: 64px;
+  height: 40px;
 }
 
 .dark-style .menu .app-brand.demo {
-  height: 64px;
+  height: 40px;
 }
 
 .app-brand-logo.demo {
@@ -18,13 +18,12 @@
   justify-content: center;
   display: -ms-flexbox;
   display: flex;
-  width: 34px;
-  height: 24px;
+  width: 97px;
+
 }
 
 .app-brand-logo.demo svg {
-  width: 35px;
-  height: 24px;
+  width: 170px;
 }
 
 .app-brand-text.demo {
@@ -127,3 +126,5 @@
   text-align: center;
   margin-top: 1rem;
 }
+
+

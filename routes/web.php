@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::match(['get', 'post'], '/', [App\Http\Controllers\ConnexionController::class, 'login'])->name('login');
+Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
+
+Route::match(['get', 'post'], '/', [App\Http\Controllers\IndexController::class, 'index'])->name('/');
 Route::match(['get', 'post'], '/login', [App\Http\Controllers\ConnexionController::class, 'login'])->name('login');
-//Route::match(['get', 'post'], '/enrolement', [App\Http\Controllers\EnrolementController::class, 'create'])->name('enrolement');
-Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
+Route::match(['get', 'post'], '/enrolements', [App\Http\Controllers\EnrolementController::class, 'create'])->name('enrolements');
+Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
+//Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
 Route::get('/deconnexion', [App\Http\Controllers\HomeController::class, 'deconnexion']);
 Route::group(['middleware' => ['auth']], function () {
@@ -23,7 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
             'activites' => App\Http\Controllers\ActivitesController::class,
             'centreimpot' => App\Http\Controllers\CentreImpotController::class,
             'localite' => App\Http\Controllers\LocaliteController::class,
-           // 'enrolement' => App\Http\Controllers\EnrolementController::class,
+            'enrolement' => App\Http\Controllers\EnrolementController::class,
             'statutoperations' => App\Http\Controllers\StatutOperationController::class,
             'motifs' => App\Http\Controllers\MotifController::class,
         ]);
