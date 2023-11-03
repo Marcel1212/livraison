@@ -5,18 +5,22 @@ use App\Helpers\Menu;
 $logo = Menu::get_logo();
 ?>
 
-<footer class="footer footer-static footer-light">
-    <p class="clearfix mb-0">
-        <span class="float-md-start d-block d-md-inline-block mt-25">Copyright &copy; <?= date('Y') ?>
-            <a class="ms-25" href="#" target="_blank"><?php echo @$logo->titre_logo;?></a>
-            <span class="d-none d-sm-inline-block">, Tous  droits  réservés</span>
-        </span>
-        <?php if(isset($logo->mot_cle)){?>
-            <span class="float-md-end d-none d-md-block"><?php echo $logo->mot_cle;?> <img width="35" height="35" src="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}"></span>
-        <?php } ?>
 
-    </p>
+<footer class="content-footer footer bg-footer-theme ">
+    <div class="container-fluid">
+        <div
+            class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
+            <div>
+                © 2023 -
+                <script>
+                    document.write(new Date().getFullYear());
+                </script>
+                , <a href="#" target="_blank" class="fw-medium">FDFP</a>
+            </div>
+            <div class="d-none d-lg-inline-block">
+                Design by
+                <a href="#" class="footer-link me-4" target="_blank">Barnoin informatique </a>
+            </div>
+        </div>
+    </div>
 </footer>
-<button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
-
-
