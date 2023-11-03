@@ -29,7 +29,7 @@
 
             </div>
 
-            
+
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -96,7 +96,7 @@
                 </section>
             </div>
 
-            
+
         </div>
     </div>
     <!-- END: Content-->
