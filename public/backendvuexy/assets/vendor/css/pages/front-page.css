@@ -43,8 +43,10 @@
 }
 
 .light-style body {
-  background-color: #fff;
+  background-color: #f8f8fb;
 }
+
+/*background-color: rgb(241 245 249 / var(1) );*/
 
 .dark-style body {
   background-color: #2f3349;
@@ -73,8 +75,8 @@ nav.layout-navbar.navbar-active::after {
   box-shadow: none;
   transition: all 0.2s ease-in-out;
   transform: unset !important;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+ /* padding-top: 0.75rem;
+  padding-bottom: 0.75rem;*/
   margin-top: 1rem;
   border-width: 2px;
   border-style: solid;
@@ -217,13 +219,13 @@ nav.layout-navbar.navbar-active::after {
   background-position: right center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 3.5rem 0;
+  padding: 2rem 0 0 0;
   border-top-left-radius: 3.75rem;
   border-top-right-radius: 3.75rem;
 }
 @media (max-width: 767.98px) {
   .landing-footer .footer-top {
-    padding: 3rem 0;
+    padding: 1.8rem 0 0 0;
   }
 }
 @media (min-width: 992px) {
@@ -260,7 +262,7 @@ nav.layout-navbar.navbar-active::after {
   background-image: url("../../../img/front-pages/backgrounds/footer-bg-light.png");
 }
 .light-style .landing-footer .footer-bottom {
-  background-color: #282c3e;
+  background-color: #003478;
 }
 
 .dark-style .landing-footer .footer-link,

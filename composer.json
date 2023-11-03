@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "mailjet/mailjet-apiv3-php": "^1.6",
+        "mews/captcha": "^3.3",
         "porwisz/eloquent-model-generator": "^2.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-html": "^3.2",

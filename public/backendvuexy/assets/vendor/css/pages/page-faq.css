@@ -2,7 +2,7 @@
   background: url("../../../img/pages/header.png");
   background-repeat: no-repeat;
   background-size: cover;
-  min-height: 300px !important;
+  min-height: 250px !important;
 }
 .faq-header .input-wrapper {
   position: relative;

@@ -1,7 +1,7 @@
 .dropzone {
   width: 100%;
   position: relative;
-  padding: 1.5rem;
+  padding: 1rem;
   cursor: pointer;
   border-radius: 0.5rem;
 }
@@ -23,7 +23,7 @@
   content: "";
   border-radius: 8px;
   position: absolute;
-  top: 5rem;
+  top: 2rem;
   left: calc(50% - 23px);
   display: inline-block;
   height: 48px;
@@ -32,7 +32,7 @@
   background-position: center !important;
 }
 .dz-message .note {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
 }
 
 .dz-browser-not-supported.dropzone-box {
@@ -53,14 +53,15 @@
 }
 
 .dz-message {
-  margin: 8rem 0 3rem;
+  margin: 4rem 0 0.5rem;
   font-weight: 500;
+  font-size: 0.9375rem;
   text-align: center;
 }
 .dz-message .note {
   font-weight: 400;
   display: block;
-  margin-top: 0.625rem;
+  /*margin-top: 0.625rem;*/
 }
 
 .dz-preview {
