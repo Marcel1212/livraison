@@ -32,8 +32,7 @@ class EnrolementController extends Controller
      */
     public function index()
     {
-        $demandeenroles = DemandeEnrolement::where([['flag_traitement_demande_enrolem','=',null],['flag_recevablilite_demande_enrolement','=',null]])
-                                            ->orWhere([['flag_traitement_demande_enrolem','=',false],['flag_recevablilite_demande_enrolement','=',null]])
+        $demandeenroles = DemandeEnrolement::where([['flag_valider_demande_enrolement','=',false],['flag_rejeter_demande_enrolement','=',false]])
                                             ->get();
         return view('enrolement.index', compact('demandeenroles'));       
     }
@@ -102,11 +101,18 @@ class EnrolementController extends Controller
                 'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
                 'id_activites.required' => 'Veuillez selectionner une activité.',
                 'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
+                'ncc_demande_enrolement.unique' => 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
                 'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
                 'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
                 'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
                 'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
-                'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatricualtion.',
+                'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatriculation.',
+                'piece_attestation_immatriculati.mimes' => 'Les formats requises pour la pièce de l\'attestataion immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                'piece_attestation_immatriculati.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
+                'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
+                'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
                 'captcha.required' => 'Veuillez saisir le captcha.',
             ]);
 
@@ -261,7 +267,8 @@ class EnrolementController extends Controller
                 $input = $request->all();
 
                 $input['id_user'] = Auth::user()->id;
-                $input['flag_traitement_demande_enrolem'] = 1;
+                $input['flag_traitement_demande_enrolem'] = true;
+                $input['flag_rejeter_demande_enrolement'] = true;
                 $input['date_traitement_demande_enrolem'] = Carbon::now();
                 
                 $demandeenrole->update($input);
@@ -308,6 +315,7 @@ class EnrolementController extends Controller
 
                 $input['id_user'] = Auth::user()->id;
                 $input['flag_recevablilite_demande_enrolement'] = true;
+                //$input['flag_traitement_demande_enrolem'] = true;
                 $input['date_recevabilite_demande_enrolement'] = Carbon::now();
                 
                 $demandeenrole->update($input);
@@ -330,6 +338,8 @@ class EnrolementController extends Controller
 
                 $input['id_user'] = Auth::user()->id;
                 $input['flag_recevablilite_demande_enrolement'] = false;
+                $input['flag_traitement_demande_enrolem'] = true;
+                $input['flag_rejeter_demande_enrolement'] = true;
                 $input['date_recevabilite_demande_enrolement'] = Carbon::now();
                 
                 $demandeenrole->update($input);
@@ -376,7 +386,8 @@ class EnrolementController extends Controller
                 $input = $request->all();
 
                 $input['id_user'] = Auth::user()->id;
-                $input['flag_traitement_demande_enrolem'] = 1;
+                $input['flag_traitement_demande_enrolem'] = true;
+                $input['flag_valider_demande_enrolement'] = true;
                 $input['date_traitement_demande_enrolem'] = Carbon::now();
                 
                 $demandeenrole->update($input);

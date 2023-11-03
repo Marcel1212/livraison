@@ -190,12 +190,12 @@ $reseaux = Menu::get_info_reseaux();
                               @endif
 
                               @if ($message = Session::get('errors'))
-                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                  <!--<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                       <div class="alert-body">
                                           {{ $message }}
                                       </div>
                                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                  </div>
+                                  </div>-->
                               @endif 
 
                               @if($errors->any())
