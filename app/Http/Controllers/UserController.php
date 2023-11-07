@@ -30,7 +30,7 @@ class UserController extends Controller
         $data = User::with('agence:num_agce,lib_agce')
                 ->where([['flag_demission_users', '=', false], ['flag_admin_users', '=', false]])
                 ->get();
-       //dd($data);
+       dd($data);
         return view('users.index', compact('data'));
     }
 
