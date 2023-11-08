@@ -7,7 +7,7 @@ use App\Models\Activites;
 use App\Models\CentreImpot;
 use App\Models\Localite;
 use App\Models\Pays;
-use App\Models\Motif;
+use App\Models\Motif; 
 use App\Models\StatutOperation;
 use App\Models\DemandeEnrolement;
 use App\Models\Entreprises;
@@ -404,7 +404,10 @@ class EnrolementController extends Controller
                     'tel_entreprises' => $demandeenrole1->tel_demande_enrolement,
                     'indicatif_entreprises' => $demandeenrole1->indicatif_demande_enrolement,
                     'numero_cnps_entreprises' => $demandeenrole1->numero_cnps_demande_enrolement,
-                    'rccm_entreprises' => $demandeenrole1->rccm_demande_enrolement,
+                    'id_localite_entreprises' => $demandeenrole1->id_localite,
+                    'id_centre_impot' => $demandeenrole1->id_centre_impot,
+                    'id_activite_entreprises' => $demandeenrole1->id_activites,
+                    'id_pays' => $demandeenrole1->indicatif_demande_enrolement,
                     'flag_actif_entreprises' => true
                 ]);
 

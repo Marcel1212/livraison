@@ -64,6 +64,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css"/>
     <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css"/>
     <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css" />
 
     <!-- Page CSS -->
 
@@ -227,6 +228,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
 <script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
 <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
+<script src="/assets/vendor/libs/select2/select2.js"></script>
 
 <!-- Main JS -->
 <script src="{{asset('assets/js/main.js')}}"></script>

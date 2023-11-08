@@ -5,7 +5,7 @@
     @php($Module='Parametre')
     @php($titre='Liste des profils')
     @php($soustitre='Modifier un profil et ses permissions')
-    @php($lien='/roles')
+    @php($lien='roles')
 
     <!-- BEGIN: Content-->
 

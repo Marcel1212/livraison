@@ -98,7 +98,7 @@
                                                     @can($lien.'-edit')
                                                         <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($demandeenrole->id_demande_enrolement)) }}"
                                                            class=" "
-                                                           title="Modifier"><img src='/app-assets/images/icons/bouton-modifier.png'></a>
+                                                           title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
 
                                                 </td>

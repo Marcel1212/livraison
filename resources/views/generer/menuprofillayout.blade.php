@@ -7,28 +7,9 @@
     @php($lien='menus')
 
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper ">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$titre}}</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">{{$titre}}
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+                <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}}  </span> 
+                </h5> 
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -43,20 +24,22 @@
 
                 <form action="{{ route('menuprofillayout',$role->id) }}" method="POST">
                     @csrf
+                
                     <section id="multiple-column-form">
                         <div class="row">
 
                             <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">{{$titre}} / Profil : {{$role->name}}</h4>
-                                        <span align="right">
-                                      @can('role-create')
+                                <div class="card mb-4">
+
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0">{{$titre}} / Profil : {{$role->name}}</h5>
+                                    <small class="text-muted float-end">
+                                            @can('role-create')
                                                 <button type="submit"
                                                         class="btn btn-primary btn-sm waves-effect waves-float waves-light"><i
                                                         class="la la-plus"></i>Attribuer</button>
                                             @endcan
-                                </span>
+                                    </small>
                                     </div>
                                     <!-- Accordion with margin start -->
                                     <section id="accordion-with-margin">
@@ -114,6 +97,7 @@
                                     </section>
                                     <!-- Accordion with margin end -->
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </section>
