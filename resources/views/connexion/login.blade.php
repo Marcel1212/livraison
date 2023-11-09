@@ -14,7 +14,7 @@ $couleur = Menu::get_info_couleur();
   class="light-style layout-wide customizer-hide"
   dir="ltr"
   data-theme="theme-default"
-  data-assets-path="{{asset('backendvuexy/assets/')}}"
+  data-assets-path="{{asset('assets/')}}"
   data-template="horizontal-menu-template-no-customizer">
   <head>
     <meta charset="utf-8" />
@@ -41,31 +41,31 @@ $couleur = Menu::get_info_couleur();
       rel="stylesheet" />
 
     <!-- Icons -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/fontawesome.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/tabler-icons.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/flag-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/fontawesome.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/tabler-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/flag-icons.css')}}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/core.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/theme-default.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/css/demo.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/core.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/theme-default.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/typeahead-js/typeahead.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/node-waves/node-waves.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/typeahead-js/typeahead.css')}}" />
     <!-- Vendor -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/@form-validation/umd/styles/index.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/@form-validation/umd/styles/index.min.css')}}" />
 
     <!-- Page CSS -->
     <!-- Page -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/pages/page-auth.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-auth.css')}}" />
 
     <!-- Helpers -->
-    <script src="{{asset('backendvuexy/assets/vendor/js/helpers.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{{asset('backendvuexy/assets/js/config.js')}}"></script>
+    <script src="{{asset('assets/js/config.js')}}"></script>
   </head>
 
   <body>
@@ -77,12 +77,12 @@ $couleur = Menu::get_info_couleur();
         <div class="d-none d-lg-flex col-lg-7 p-0">
           <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
             <img
-              src="{{asset('backendvuexy/assets/img/illustrations/auth-login-illustration-light.png')}}"
+              src="{{asset('assets/img/illustrations/auth-login-illustration-light.png')}}"
               alt="auth-login-cover"
               class="img-fluid my-5 auth-illustration" />
 
             <img
-              src="{{asset('backendvuexy/assets/img/illustrations/bg-shape-image-light.png')}}"
+              src="{{asset('assets/img/illustrations/bg-shape-image-light.png')}}"
               alt="auth-login-cover"
               class="platform-bg" />
           </div>
@@ -227,28 +227,28 @@ $couleur = Menu::get_info_couleur();
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
 
-    <script src="{{asset('backendvuexy/assets/vendor/libs/jquery/jquery.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/popper/popper.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/js/bootstrap.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/hammer/hammer.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/i18n/i18n.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/js/menu.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/popper/popper.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/bootstrap.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/node-waves/node-waves.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/hammer/hammer.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/i18n/i18n.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/menu.js')}}"></script>
 
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{asset('backendvuexy/assets/vendor/libs/@form-validation/umd/bundle/popular.min.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js')}}"></script>
 
     <!-- Main JS -->
-    <script src="{{asset('backendvuexy/assets/js/main.js')}}"></script>
+    <script src="{{asset('assets/js/main.js')}}"></script>
 
     <!-- Page JS -->
-    <script src="{{asset('backendvuexy/assets/js/pages-auth.js')}}"></script>
+    <script src="{{asset('assets/js/pages-auth.js')}}"></script>
 
     <script type="text/javascript">
     $('#reload').click(function () {

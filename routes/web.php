@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
             'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
             'butformation' => App\Http\Controllers\ButFormationController::class,
             'typeformation' => App\Http\Controllers\TypeFormationController::class,
+            'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         ]);
     //});
 

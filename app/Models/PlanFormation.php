@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_plan_de_formation
  * @property float $id_type_entreprise
  * @property float $id_entreprises
+ * @property float $id_motif_recevable
  * @property string $nom_prenoms_charge_plan_formati
  * @property string $fonction_charge_plan_formation
  * @property float $nombre_salarie_plan_formation
@@ -19,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_soumis_plan_formation
  * @property boolean $flag_valide_plan_formation
  * @property boolean $flag_rejeter_plan_formation
+ * @property boolean $flag_soumis_ct_plan_formation
  * @property float $user_conseiller
  * @property string $conde_entreprise_plan_formation
  * @property string $code_plan_formation
@@ -29,11 +31,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $date_soumis_plan_formation
  * @property string $date_valide_plan_formation
  * @property string $date_rejet_paln_formation
+ * @property string $date_soumis_ct_plan_formation
  * @property string $email_professionnel_charge_plan_formation
- * @property CategoriePlan[] $categoriePlans
+ * @property string $commentaire_recevable_plan_formation
  * @property ActionFormationPlan[] $actionFormationPlans
+ * @property CategoriePlan[] $categoriePlans
  * @property TypeEntreprise $typeEntreprise
  * @property Entreprise $entreprise
+ * @property Motif $motif
  */
 class PlanFormation extends Model
 {
@@ -59,24 +64,9 @@ class PlanFormation extends Model
     protected $keyType = 'float';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     * 
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * @var array
      */
-    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function categoriePlans()
-    {
-        return $this->hasMany('App\Models\CategoriePlan', 'id_plan_de_formation', 'id_plan_de_formation');
-    }
+    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation','flag_soumis_ct_plan_formation','date_soumis_ct_plan_formation'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -84,6 +74,14 @@ class PlanFormation extends Model
     public function actionFormationPlans()
     {
         return $this->hasMany('App\Models\ActionFormationPlan', 'id_plan_de_formation', 'id_plan_de_formation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categoriePlans()
+    {
+        return $this->hasMany('App\Models\CategoriePlan', 'id_plan_de_formation', 'id_plan_de_formation');
     }
 
     /**
@@ -99,6 +97,14 @@ class PlanFormation extends Model
      */
     public function entreprise()
     {
-        return $this->belongsTo('App\Models\Entreprise', 'id_entreprises', 'id_entreprises');
+        return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function motif()
+    {
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 }

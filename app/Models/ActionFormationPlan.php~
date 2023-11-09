@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property float $id_action_formation_plan
  * @property float $id_plan_de_formation
- * @property float $motif_non_financement_action_formation
  * @property string $intitule_action_formation_plan
  * @property string $structure_etablissement_action_
  * @property float $nombre_stagiaire_action_formati
@@ -19,11 +18,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $numero_action_formation_plan
  * @property string $facture_proforma_action_formati
- * @property float $cout_accorde_action_formation
- * @property string $commentaire_action_formation
- * @property FicheADemandeAgrement[] $ficheADemandeAgrements
  * @property PlanFormation $planFormation
- * @property Motif $motif
+ * @property FicheADemandeAgrement[] $ficheADemandeAgrements
  */
 class ActionFormationPlan extends Model
 {
@@ -51,15 +47,7 @@ class ActionFormationPlan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function ficheADemandeAgrements()
-    {
-        return $this->hasMany('App\Models\FicheADemandeAgrement', 'id_action_formation_plan', 'id_action_formation_plan');
-    }
+    protected $fillable = ['id_plan_de_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -70,10 +58,10 @@ class ActionFormationPlan extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function motif()
+    public function ficheADemandeAgrements()
     {
-        return $this->belongsTo('App\Models\Motif', 'motif_non_financement_action_formation', 'id_motif');
+        return $this->hasMany('App\Models\FicheADemandeAgrement', 'id_action_formation_plan', 'id_action_formation_plan');
     }
 }
