@@ -7,7 +7,6 @@
     @php($soustitre='Modifier un profil et ses permissions')
     @php($lien='roles')
 
-
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">

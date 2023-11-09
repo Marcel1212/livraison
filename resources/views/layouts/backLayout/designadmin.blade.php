@@ -55,14 +55,16 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" href="/assets/css/demo.css"/>  
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/node-waves/node-waves.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/typeahead-js/typeahead.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/swiper/swiper.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
+    <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css"/>
+    <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css" />
 
     <!-- Page CSS -->
 
@@ -229,6 +231,11 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <script src="{{asset('assets/vendor/libs/swiper/swiper.js')}}"></script>
     <script src="{{asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
 
+<!-- Vendors JS -->
+<script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+<script src="{{asset('assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
+<script src="/assets/vendor/libs/select2/select2.js"></script>
 
 <!-- Main JS -->
 <script src="{{asset('assets/js/main.js')}}"></script>
