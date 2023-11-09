@@ -11,7 +11,7 @@ $reseaux = Menu::get_info_reseaux();
   class="light-style layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed"
   dir="ltr"
   data-theme="theme-default"
-  data-assets-path="{{asset('backendvuexy/assets/')}}"
+  data-assets-path="{{asset('assets/')}}"
   data-template="vertical-menu-template">
   <head>
     <meta charset="utf-8" />
@@ -38,35 +38,35 @@ $reseaux = Menu::get_info_reseaux();
       rel="stylesheet" />
 
     <!-- Icons -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/fontawesome.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/tabler-icons.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/flag-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/fontawesome.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/tabler-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/flag-icons.css')}}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/css/demo.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/pages/front-page.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/front-page.css')}}"/>
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/typeahead-js/typeahead.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/select1/select1.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/select2/select2.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/select3/select3.css')}}" />
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/dropzone/dropzone.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/node-waves/node-waves.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/typeahead-js/typeahead.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select1/select1.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select3/select3.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/dropzone/dropzone.css')}}" />
 
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/pages/page-faq.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-faq.css')}}" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="{{asset('backendvuexy/assets/vendor/js/helpers.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{{asset('backendvuexy/assets/js/config.js')}}"></script>
+    <script src="{{asset('assets/js/config.js')}}"></script>
   </head>
 
   <body>
@@ -190,12 +190,12 @@ $reseaux = Menu::get_info_reseaux();
                               @endif
 
                               @if ($message = Session::get('errors'))
-                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                  <!--<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                       <div class="alert-body">
                                           {{ $message }}
                                       </div>
                                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                  </div>
+                                  </div>-->
                               @endif 
 
                               @if($errors->any())
@@ -492,33 +492,33 @@ $reseaux = Menu::get_info_reseaux();
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
 
-    <script src="{{asset('backendvuexy/assets/vendor/libs/jquery/jquery.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/popper/popper.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/js/bootstrap.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/hammer/hammer.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/i18n/i18n.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/js/menu.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/popper/popper.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/bootstrap.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/node-waves/node-waves.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/hammer/hammer.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/i18n/i18n.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/menu.js')}}"></script>
 
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{asset('backendvuexy/assets/vendor/libs/jquery-sticky/jquery-sticky.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/cleavejs/cleave.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/cleavejs/cleave-phone.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/select1/select1.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/select2/select2.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/select3/select3.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/dropzone/dropzone.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/jquery-sticky/jquery-sticky.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/cleavejs/cleave.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/cleavejs/cleave-phone.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/select1/select1.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/select3/select3.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/dropzone/dropzone.js')}}"></script>
 
     <!-- Main JS -->
-    <script src="{{asset('backendvuexy/assets/js/main.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/js/forms-file-upload.js')}}"></script>
+    <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="{{asset('assets/js/forms-file-upload.js')}}"></script>
 
     <!-- Page JS -->
-    <script src="{{asset('backendvuexy/assets/js/form-layouts.js')}}"></script>
+    <script src="{{asset('assets/js/form-layouts.js')}}"></script>
 
     <script type="text/javascript">
     $('#reload').click(function () {

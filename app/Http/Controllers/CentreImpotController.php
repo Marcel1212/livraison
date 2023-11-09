@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CentreImpot;
+use App\Models\CentreImpot; 
 
 class CentreImpotController extends Controller
 {
@@ -12,7 +12,7 @@ class CentreImpotController extends Controller
      */
     public function index()
     {
-        $centreimpots = CentreImpot::all();
+        $centreimpots = CentreImpot::all(); 
         return view('centreimpot.index', compact('centreimpots'));
     }
 
