@@ -12,6 +12,8 @@ use App\Models\StatutOperation;
 use App\Models\DemandeEnrolement;
 use App\Models\Entreprises;
 use App\Models\Pieces;
+use App\Models\ProjetEtude;
+use App\Models\PiecesProjetEtude;
 use Carbon\Carbon;
 use App\Helpers\Menu;
 use App\Helpers\Crypt;
@@ -32,9 +34,9 @@ class ProjetEtudeController extends Controller
      */
     public function index()
     {
-        $demandeenroles = DemandeEnrolement::where([['flag_traitement_demande_enrolem','=',null],['flag_recevablilite_demande_enrolement','=',null]])
-                                            ->orWhere([['flag_traitement_demande_enrolem','=',false],['flag_recevablilite_demande_enrolement','=',null]])
-                                            ->get();
+        $user_id = Auth::user()->id;
+        // dd($user_id);
+        $demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
         return view('projetetude.index', compact('demandeenroles'));
     }
 
@@ -79,131 +81,217 @@ class ProjetEtudeController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                'raison_sociale_demande_enroleme' => 'required',
-                'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
-                'indicatif_demande_enrolement' => 'required',
-                'tel_demande_enrolement' => 'required',
-                'id_localite' => 'required',
-                'id_centre_impot' => 'required',
-                'id_activites' => 'required',
-                'ncc_demande_enrolement' => 'required|unique:demande_enrolement,ncc_demande_enrolement',
-                'rccm_demande_enrolement' => 'required',
-                'numero_cnps_demande_enrolement' => 'required',
-                'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'piece_rccm_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'captcha' => 'required|captcha'
+                'titre_projet' => 'required',
+                'contexte_probleme' => 'required',
+                'objectif_general' => 'required',
+                'objectif_specifique' => 'required',
+                'resultat_attendu' => 'required',
+                'champ_etude' => 'required',
+                'cible' => 'required',
+                'avant_projet_tdr' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'courier_demande_fin' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'dossier_intention' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'lettre_engagement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'offre_technique' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                'offre_financiere' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
             ],[
-                'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
-                'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
-                'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
-                'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
-                'id_localite.required' => 'Veuillez selectionnez une localite.',
-                'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
-                'id_activites.required' => 'Veuillez selectionner une activité.',
-                'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
-                'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
-                'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
-                'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
-                'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
-                'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatricualtion.',
-                'captcha.required' => 'Veuillez saisir le captcha.',
+                'titre_projet.required' => 'Veuillez ajouter un titre de projet',
+                'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
+                'objectif_general.required' => 'Veuillez ajouter un objectif general',
+                'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+                'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
+                'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+                'cible.required' => 'Veuillez ajouter une cible',
+                'avant_projet_tdr.required' => 'Veuillez ajouter un avant-projet TDR',
+                'courier_demande_fin.required' => 'Veuillez ajouter un courrier de demande de financemen',
+                'dossier_intention.required' => 'Veuillez ajouter un dossier d’intention',
+                'lettre_engagement.required' => 'Veuillez ajouter une lettre d’engagement',
+                'offre_technique.required' => 'Veuillez ajouter une offre technique',
+                'offre_financiere.required' => 'Veuillez ajouter une offre financière',
             ]);
-
+            $user_id = Auth::user()->id;
             $data = $request->all();
+            //echo($data);
+            // exit();
 
             $input = $request->all();
 
-            if (isset($data['piece_dfe_demande_enrolement'])){
+            if (isset($data['avant_projet_tdr'])){
 
-                $filefront = $data['piece_dfe_demande_enrolement'];
-
-                //dd($filefront->extension());
+                $filefront = $data['avant_projet_tdr'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'piece_dfe_demande_enrolement'. '_' . rand(111,99999) . '_' . 'piece_dfe_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces/piece_dfe_demande_enrolement/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
 
-                    $input['piece_dfe_demande_enrolement'] = $fileName1;
+                    $input['avant_projet_tdr'] = $fileName1;
+
                 }else{
-                    return redirect()->route('enrolements')
-                    ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
                 }
 
             }
 
-            if (isset($data['piece_rccm_demande_enrolement'])){
 
-                $filefront = $data['piece_rccm_demande_enrolement'];
+            if (isset($data['courier_demande_fin'])){
+
+                $filefront = $data['courier_demande_fin'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'piece_rccm_demande_enrolement'. '_' . rand(111,99999) . '_' . 'piece_rccm_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'courier_demande_fin'. '_' . rand(111,99999) . '_' . 'courier_demande_fin' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces/piece_rccm_demande_enrolement/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet/courier_demande_fin/'), $fileName1);
 
-                    $input['piece_rccm_demande_enrolement'] = $fileName1;
+                    $input['courier_demande_fin'] = $fileName1;
 
                 }else{
-                    return redirect()->route('enrolements')
-                    ->with('error', 'l\extension du fichier de la RCCM n\'est pas correcte');
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier du  courrier de demande n\'est pas correcte');
                 }
 
             }
 
-            if (isset($data['piece_attestation_immatriculati'])){
+            if (isset($data['dossier_intention'])){
 
-                $filefront = $data['piece_attestation_immatriculati'];
+                $filefront = $data['dossier_intention'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'piece_attestation_immatriculati'. '_' . rand(111,99999) . '_' . 'piece_attestation_immatriculati' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'dossier_intention'. '_' . rand(111,99999) . '_' . 'dossier_intention' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces/piece_attestation_immatriculati/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet/dossier_intention/'), $fileName1);
 
-                    $input['piece_attestation_immatriculati'] = $fileName1;
+                    $input['dossier_intention'] = $fileName1;
 
                 }else{
-                    return redirect()->route('enrolements')
-                    ->with('error', 'l\extension du fichier de l\attestation immatriculation n\'est pas correcte');
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier du dossier de l\'intention n\'est pas correcte');
                 }
 
             }
 
-            $input['date_depot_demande_enrolement'] = Carbon::now();
-            $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
-            $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
-            $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
-            $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
+            if (isset($data['lettre_engagement'])){
 
-            DemandeEnrolement::create($input);
+                $filefront = $data['lettre_engagement'];
 
-            $rais = $input['raison_sociale_demande_enroleme'];
-            if (isset($input['email_demande_enrolement'])) {
-                $sujet = "Enrolement FDFP";
-                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                $messageMail = "<b>Cher,  $rais ,</b>
-                                <br><br>Votre demande d\'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                                SMS dans 48h ouvrées
+                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                                <br><br><br>
+                    $fileName1 = 'lettre_engagement'. '_' . rand(111,99999) . '_' . 'lettre_engagement' . '_' . time() . '.' . $filefront->extension();
 
-                                <br><br><br>
-                                -----
-                                Ceci est un mail automatique, Merci de ne pas y répondre.
-                                -----
-                                ";
+                    $filefront->move(public_path('pieces_projet/lettre_engagement/'), $fileName1);
 
+                    $input['lettre_engagement'] = $fileName1;
 
-                $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
+                }else{
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier de la lettre d\'engagement n\'est pas correcte');
+                }
+
             }
+
+            if (isset($data['offre_technique'])){
+
+                $filefront = $data['offre_technique'];
+
+                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                    $fileName1 = 'offre_technique'. '_' . rand(111,99999) . '_' . 'offre_technique' . '_' . time() . '.' . $filefront->extension();
+
+                    $filefront->move(public_path('pieces_projet/offre_technique/'), $fileName1);
+
+                    $input['offre_technique'] = $fileName1;
+
+                }else{
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier de l\'offre technique n\'est pas correcte');
+                }
+
+            }
+
+            if (isset($data['offre_financiere'])){
+
+                $filefront = $data['offre_financiere'];
+
+                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                    $fileName1 = 'offre_financiere'. '_' . rand(111,99999) . '_' . 'offre_financiere' . '_' . time() . '.' . $filefront->extension();
+
+                    $filefront->move(public_path('pieces_projet/offre_financiere/'), $fileName1);
+
+                    $input['offre_financiere'] = $fileName1;
+
+                }else{
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier de l\'offre financiere n\'est pas correcte');
+                }
+
+            }
+
+            $input['date_soumis'] = Carbon::now();
+            $input['flag_soumis'] = false;
+            $input['flag_valide'] = false;
+            $input['flag_rejet'] = false;
+            $input['id_user'] = $user_id;
+            $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
+            $input['contexte_probleme_projet_etude'] = ucfirst($input['contexte_probleme']);
+            $input['objectif_general_projet_etude'] = ucfirst($input['objectif_general']);
+            $input['objectif_specifique_projet_etud'] = ucfirst($input['objectif_specifique']);
+            $input['resultat_attendu_projet_etude'] = ucfirst($input['resultat_attendu']);
+            $input['champ_etude_projet_etude'] = ucfirst($input['champ_etude']);
+            $input['cible_projet_etude'] = ucfirst($input['cible']);
+
+            ProjetEtude::create($input);
+            $id_projet = ProjetEtude::latest()->first()->id_projet_etude;
+            //dd($id_projet);
+
+            // Enregistrement du chemin de pieces projets
+
+            // Avant projet TDR
+            PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '1',
+                'libelle_pieces' => $input['avant_projet_tdr']
+            ]);
+            // Courrier de demande de financement
+            PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '2',
+                'libelle_pieces' => $input['courier_demande_fin']
+            ]);
+            // Dossier d’intention
+            PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '3',
+                'libelle_pieces' => $input['dossier_intention']
+            ]);
+            // Lettre d’engagement
+            PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '4',
+                'libelle_pieces' => $input['lettre_engagement']
+            ]);
+            // Offre technique
+            PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '5',
+                'libelle_pieces' => $input['offre_technique']
+            ]);
+             // Offre financiere
+             PiecesProjetEtude::create([
+                'id_projet_etude' => $id_projet,
+                'code_pieces' => '5',
+                'libelle_pieces' => $input['offre_financiere']
+            ]);
+
 
         }
 
-        return redirect()->route('enrolements')
-            ->with('success', 'Votre demande d\'enrolement a ete effectuer avec succes');
+        return redirect()->route('projetetude.index')
+            ->with('success', 'Votre demande de projet d\'etude a ete effectue avec succes');
     }
 
     /**
@@ -220,7 +308,10 @@ class ProjetEtudeController extends Controller
     public function edit($id)
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
-        $demandeenrole = DemandeEnrolement::find($id);
+        //dd($id);
+        $projetetude = ProjetEtude::find($id);
+        //dd($projetetude['titre_projet_etude']);
+        //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
 
         $statutoperations = StatutOperation::all();
         $statutoperation = "<option value=''> Selectionnez le statut </option>";
@@ -234,7 +325,30 @@ class ProjetEtudeController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        return view('enrolement.edit', compact('demandeenrole','statutoperation','motif'));
+        return view('projetetude.edit', compact('projetetude','statutoperation','motif'));
+    }
+
+    public function projetetudesoumettre($id)
+    {
+        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+        dd($id);
+        $projetetude = ProjetEtude::find($id);
+        //dd($projetetude['titre_projet_etude']);
+        //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
+
+        $statutoperations = StatutOperation::all();
+        $statutoperation = "<option value=''> Selectionnez le statut </option>";
+        foreach ($statutoperations as $comp) {
+            $statutoperation .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
+        }
+
+        $motifs = Motif::all();
+        $motif = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+
+        return view('projetetude.edit', compact('projetetude','statutoperation','motif'));
     }
 
     /**

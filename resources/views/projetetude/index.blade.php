@@ -71,48 +71,44 @@
                                         style="margin-top: 13px !important">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
                                                 <th>Titre du projet </th>
                                                 <th>Contexte ou Problèmes
                                                     constatés / Justification
                                                     Contexte ou Problèmes
                                                 </th>
-                                                <th>Objectif Général </th>
-                                                <th>Objectifs spécifiques </th>
                                                 <th>Cible</th>
-                                                <th>Statut</th>
+                                                <th>Date de creation</th>
+                                                <th>Statut Soumission</th>
+                                                <th>Statut Etat</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($demandeenroles as $key => $demandeenrole)
                                                 <tr>
-                                                    <td>{{ $demandeenrole->id_demande_enrolement }}</td>
-                                                    <td>{{ $demandeenrole->localite->libelle_localite }}</td>
-                                                    <td>{{ $demandeenrole->ncc_demande_enrolement }}</td>
-                                                    <td>{{ $demandeenrole->raison_sociale_demande_enroleme }}</td>
-                                                    <td>{{ $demandeenrole->date_depot_demande_enrolement }}</td>
+                                                    <td>{{ $demandeenrole->titre_projet_etude }}</td>
+                                                    <td>{{ $demandeenrole->contexte_probleme_projet_etude }}</td>
+                                                    <td>{{ $demandeenrole->cible_projet_etude }}</td>
+                                                    <td>{{ $demandeenrole->created_at }}</td>
                                                     <td align="center">
-                                                        <?php if ($demandeenrole->flag_recevablilite_demande_enrolement == true ){?>
-                                                        <span class="badge bg-success">Recevable</span>
+                                                        <?php if ($demandeenrole->FLAG_SOUMIS == true ){?>
+                                                        <span class="badge bg-success">Soumis</span>
                                                         <?php } else {?>
-                                                        <span class="badge bg-danger">Non recevable</span>
+                                                        <span class="badge bg-danger">Non Soumis</span>
                                                         <?php }  ?>
                                                     </td>
                                                     <td align="center">
-                                                        <?php if ($demandeenrole->flag_traitement_demande_enrolem == true ){?>
+                                                        <?php if ($demandeenrole->flag_valide == true ){?>
                                                         <span class="badge bg-success">Valider</span>
                                                         <?php } else {?>
-                                                        <span class="badge bg-danger">Rejeter</span>
+                                                        <span class="badge bg-danger">Non valider</span>
                                                         <?php }  ?>
                                                     </td>
                                                     <td align="center">
-                                                        @can($lien . '-edit')
-                                                            <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($demandeenrole->id_demande_enrolement)) }}"
-                                                                class=" " title="Modifier"><img
-                                                                    src='/app-assets/images/icons/bouton-modifier.png'></a>
-                                                        @endcan
 
+                                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($demandeenrole->id_projet_etude)) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/app-assets/images/icons/bouton-modifier.png'></a>
                                                     </td>
                                                 </tr>
                                             @endforeach
