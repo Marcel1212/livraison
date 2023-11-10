@@ -244,7 +244,7 @@
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
                                                         <label>Commentaire validation:</label>
-                                                        <textarea class="form-control form-control-sm"  name="commentaire_demande_enrolement" id="commentaire_demande_enrolement" rows="6" disabled="disabled">{{@$demandeenrole->commentaire_demande_enrolement}}</textarea>
+                                                        <textarea class="form-control form-control-sm"  name="commentaire_demande_enrolement" id="commentaire_demande_enrolement" rows="6" >{{@$demandeenrole->commentaire_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-12" align="right">
@@ -263,7 +263,7 @@
                                                     href="/{{$lien }}">
                                                         Retour</a>
                                                 </div>
-                                            <?php }else if($demandeenrole->flag_recevablilite_demande_enrolement == false){ ?>
+                                            <?php }elseif($demandeenrole->flag_recevablilite_demande_enrolement == false and $demandeenrole->flag_recevablilite_demande_enrolement != null){ ?>
                                                 <div class="col-md-6 col-12">
                                                     <label class="form-label" for="billings-country">Motif de recevabilite</label>
                                                     

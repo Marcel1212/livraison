@@ -30,6 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $created_at
  * @property boolean $flag_recevablilite_demande_enrolement
+ * @property boolean $flag_valider_demande_enrolement
+ * @property boolean $flag_rejeter_demande_enrolement
  * @property string $date_recevabilite_demande_enrolement
  * @property string $commentaire_recevable_demande_enrolement
  * @property Entreprise[] $entreprises
@@ -67,7 +69,13 @@ class DemandeEnrolement extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_localite', 'id_centre_impot', 'id_activites', 'id_statut_operation', 'id_motif', 'indicatif_demande_enrolement', 'id_motif_recevable', 'ncc_demande_enrolement', 'raison_sociale_demande_enroleme', 'tel_demande_enrolement', 'email_demande_enrolement', 'numero_cnps_demande_enrolement', 'rccm_demande_enrolement', 'piece_dfe_demande_enrolement', 'piece_rccm_demande_enrolement', 'piece_attestation_immatriculati', 'commentaire_demande_enrolement', 'id_user', 'date_depot_demande_enrolement', 'date_traitement_demande_enrolem', 'flag_traitement_demande_enrolem', 'updated_at', 'created_at', 'flag_recevablilite_demande_enrolement', 'date_recevabilite_demande_enrolement', 'commentaire_recevable_demande_enrolement'];
+    protected $fillable = ['id_localite', 'id_centre_impot', 'id_activites', 'id_statut_operation', 'id_motif',
+     'indicatif_demande_enrolement', 'id_motif_recevable', 'ncc_demande_enrolement', 'raison_sociale_demande_enroleme',
+      'tel_demande_enrolement', 'email_demande_enrolement', 'numero_cnps_demande_enrolement', 'rccm_demande_enrolement',
+       'piece_dfe_demande_enrolement', 'piece_rccm_demande_enrolement', 'piece_attestation_immatriculati',
+        'commentaire_demande_enrolement', 'id_user', 'date_depot_demande_enrolement', 'date_traitement_demande_enrolem',
+         'flag_traitement_demande_enrolem', 'updated_at', 'created_at', 'flag_recevablilite_demande_enrolement',
+          'date_recevabilite_demande_enrolement', 'commentaire_recevable_demande_enrolement','flag_valider_demande_enrolement','flag_rejeter_demande_enrolement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -15,7 +15,7 @@ $reseaux = Menu::get_info_reseaux();
         class="light-style layout-navbar-fixed layout-wide"
         dir="ltr"
         data-theme="theme-default"
-        data-assets-path="{{asset('backendvuexy/assets/')}}"
+        data-assets-path="{{asset('assets/')}}"
         data-template="front-pages">
 <head>
     <meta charset="utf-8"/>
@@ -30,7 +30,7 @@ $reseaux = Menu::get_info_reseaux();
     <meta name="description" content=""/>
 
     <!-- Favicon -->
-    <!--<link rel="icon" type="image/x-icon" href="{{asset('backendvuexy/assets/img/favicon/favicon.ico"/>-->
+    <!--<link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon/favicon.ico"/>-->
     <?php if(isset($logo->logo_logo)){?>
         <link rel="<?php echo @$logo->mot_cle;?>" type="image/x-icon" href="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}"/>
     <?php } ?>
@@ -41,32 +41,32 @@ $reseaux = Menu::get_info_reseaux();
             href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
             rel="stylesheet"/>
 
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/fonts/tabler-icons.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/tabler-icons.css')}}"/>
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css"/>
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css"/>
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/css/demo.css')}}"/>
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/pages/front-page.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css"/>
+    <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/front-page.css')}}"/>
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/node-waves/node-waves.css')}}"/>
 
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/nouislider/nouislider.css')}}"/>
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/libs/swiper/swiper.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/nouislider/nouislider.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/libs/swiper/swiper.css')}}"/>
 
     <!-- Page CSS -->
 
-    <link rel="stylesheet" href="{{asset('backendvuexy/assets/vendor/css/pages/front-page-landing.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/front-page-landing.css')}}"/>
 
 
     <!-- Helpers -->
-    <script src="{{asset('backendvuexy/assets/vendor/js/helpers.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/js/front-config.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
+    <script src="{{asset('assets/js/front-config.js')}}"></script>
 </head>
 
 <body>
-<script src="{{asset('backendvuexy/assets/vendor/js/dropdown-hover.js')}}"></script>
-<script src="{{asset('backendvuexy/assets/vendor/js/mega-dropdown.js')}}"></script>
+<script src="{{asset('assets/vendor/js/dropdown-hover.js')}}"></script>
+<script src="{{asset('assets/vendor/js/mega-dropdown.js')}}"></script>
 
 <!-- Navbar: Start -->
 <nav class="layout-navbar shadow-none py-0">
@@ -163,7 +163,7 @@ $reseaux = Menu::get_info_reseaux();
                      <span class="hero-btn-item position-absolute d-none d-md-flex text-heading"
                      >Effectuer ma
                          <img
-                                 src="{{asset('backendvuexy/assets/img/front-pages/icons/Join-community-arrow.png')}}"
+                                 src="{{asset('assets/img/front-pages/icons/Join-community-arrow.png')}}"
                                  alt="Join community arrow"
                                  class="scaleX-n1-rtl"/>
                      </span>
@@ -172,7 +172,7 @@ $reseaux = Menu::get_info_reseaux();
                             </div>
                             <div class="col-xl-7 pr-50 pr-md-15  pr-xs-15">
                                 <div class="thumb">
-                                    <img src="{{asset('backendvuexy/assets/img/front-pages/landing-page/5.png')}}" alt="Thumb">
+                                    <img src="{{asset('assets/img/front-pages/landing-page/5.png')}}" alt="Thumb">
                                     <div class="author-social">
                                         <input type="checkbox" id="toggle" class="share-toggle" hidden="">
                                     </div>
@@ -270,20 +270,20 @@ $reseaux = Menu::get_info_reseaux();
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{asset('backendvuexy/assets/vendor/libs/popper/popper.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/js/bootstrap.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/node-waves/node-waves.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/popper/popper.js')}}"></script>
+    <script src="{{asset('assets/vendor/js/bootstrap.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/node-waves/node-waves.js')}}"></script>
 
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{asset('backendvuexy/assets/vendor/libs/nouislider/nouislider.js')}}"></script>
-    <script src="{{asset('backendvuexy/assets/vendor/libs/swiper/swiper.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/nouislider/nouislider.js')}}"></script>
+    <script src="{{asset('assets/vendor/libs/swiper/swiper.js')}}"></script>
 
     <!-- Main JS -->
-    <script src="{{asset('backendvuexy/assets/js/front-main.js')}}"></script>
+    <script src="{{asset('assets/js/front-main.js')}}"></script>
 
     <!-- Page JS -->
-    <script src="{{asset('backendvuexy/assets/js/front-page-landing.js')}}"></script>
+    <script src="{{asset('assets/js/front-page-landing.js')}}"></script>
 </body>
 </html>

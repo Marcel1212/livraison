@@ -194,6 +194,7 @@ return [
         'Html' => Spatie\Html\Facades\Html::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
+        'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
     ])->toArray(),
 
 ];

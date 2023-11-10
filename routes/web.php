@@ -11,6 +11,7 @@ Route::match(['get', 'post'], '/projetetude', [App\Http\Controllers\ProjetEtudeC
 Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
 //Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
+Route::match(['post'], '/test', [App\Http\Controllers\PlanFormationController::class, 'test'])->name('test');
 Route::get('/deconnexion', [App\Http\Controllers\HomeController::class, 'deconnexion']);
 Route::group(['middleware' => ['auth']], function () {
     //Route::group(['middleware' => ['can:role-index']], function () {
@@ -31,8 +32,15 @@ Route::group(['middleware' => ['auth']], function () {
             'enrolement' => App\Http\Controllers\EnrolementController::class,
             'statutoperations' => App\Http\Controllers\StatutOperationController::class,
             'motifs' => App\Http\Controllers\MotifController::class,
+            'planformation' => App\Http\Controllers\PlanFormationController::class,
+            'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
+            'butformation' => App\Http\Controllers\ButFormationController::class,
+            'typeformation' => App\Http\Controllers\TypeFormationController::class,
+            'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         ]);
     //});
+
+    Route::get('planformation/{id}/delete', [App\Http\Controllers\PlanFormationController::class, 'delete'])->name('planformation.delete');
     Route::get('/dashboard', [App\Http\Controllers\ConnexionController::class, 'dashboard'])->name('dashboard');
     Route::match(['get', 'post'], '/menuprofil', [App\Http\Controllers\GenerermenuController::class, 'parametragemenu'])->name('menuprofil');
     Route::match(['get', 'post'], '/profil', [App\Http\Controllers\HomeController::class, 'profil'])->name('profil');

@@ -75,7 +75,6 @@
                                             <th>Raison sociale </th>
                                             <th>Date de demande </th>
                                             <th>Recevablilite</th>
-                                            <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
@@ -94,18 +93,12 @@
                                                     <span class="badge bg-danger">Non recevable</span>
                                                     <?php }  ?>
                                                 </td>                                                
-                                                <td align="center">
-                                                    <?php if ($demandeenrole->flag_traitement_demande_enrolem == true ){?>
-                                                    <span class="badge bg-success">Valider</span>
-                                                    <?php } else {?>
-                                                    <span class="badge bg-danger">Rejeter</span>
-                                                    <?php }  ?>
-                                                </td>
+
                                                 <td align="center">
                                                     @can($lien.'-edit')
                                                         <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($demandeenrole->id_demande_enrolement)) }}"
                                                            class=" "
-                                                           title="Modifier"><img src='/app-assets/images/icons/bouton-modifier.png'></a>
+                                                           title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
 
                                                 </td>
