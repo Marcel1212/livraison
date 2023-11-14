@@ -7,7 +7,12 @@ use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Envoisms;
 use App\Models\Agence;
+use App\Models\Direction;
+use App\Models\Departement;
+use App\Models\Service;
+use App\Models\Activites;
 use App\Models\User;
+use App\Models\SecteurActiviteUserConseiller;
 use Auth;
 use DB;
 use Hash;
@@ -42,12 +47,26 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::where([['id', '!=', 4]])->get()->pluck('name', 'name');
+        $roless = Role::where([['id', '!=', 15]])->get();
+        //$roles = Role::where([['id', '!=', 15]])->get()->pluck('name', 'name');
+        $roles = "<option value=''> -- Sélectionner --</option>";
+        foreach ($roless as $comp) {
+            $roles .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."'   > " . ucfirst($comp->name) . " </option>";
+        }
+        //dd($roles);
         $Entite = Agence::where([['flag_agce', '=', true]])->get();
         foreach ($Entite as $comp) {
             $Entite .= "<option  value='" . $comp->num_agce . "'   > " . $comp->lib_agce . " </option>";
-        }
-        return view('users.create', compact('roles', 'Entite'));
+        }       
+        
+
+
+        $directions = Direction::all();
+        /*$direction = "<option value=''> Selectionnez une direction </option>";
+        foreach ($directions as $comp) {
+            $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
+        }*/
+        return view('users.create', compact('roles', 'Entite','directions'));
     }
 
 
@@ -71,9 +90,23 @@ class UserController extends Controller
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
         $user = User::create($input);
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('users.index')
-            ->with('success', 'Succes : Enregistrement reussi');
+        $exploeprofil = explode("/",$request->input('roles'));
+        $valprofile = $exploeprofil[0];
+        $valcodeprofile = $exploeprofil[1];
+       // $user->assignRole($request->input('roles'));
+        $user->assignRole($valprofile);
+
+        $profile = Role::where([['name', '=', $valprofile]])->first();
+        if(isset($profile)){
+            if($profile->code_roles == "CONSEILLER"){
+                return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($user->id))->with('success', 'Succes : Enregistrement reussi');
+            }else{
+                return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
+            }
+        }else{
+            return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
+        }
+
     }
 
 
@@ -98,6 +131,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->first();
@@ -115,7 +150,17 @@ class UserController extends Controller
             if ($userRole == $comp->name) {$val = 'selected="selected"'; } else { $val = '';}
             $Roless .= "<option  value='" . $comp->name . "' $val  > " . $comp->name . " </option>";
         }
-        return view('users.edit', compact('user', 'roles', 'userRole', 'Entite','Roless'));
+
+        $SecteursActivites = Activites::all();
+        $SecteursActivite = "<option value=''> Selectionnez le secteur d'activite </option>";
+        foreach ($SecteursActivites as $comp) {
+            $SecteursActivite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
+        }
+
+        $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id]])->get();
+
+        $directions = Direction::all();
+        return view('users.edit', compact('user', 'roles', 'userRole', 'Entite','Roless','directions','SecteursActivite','secteurlierusers'));
     }
 
 
@@ -134,18 +179,75 @@ class UserController extends Controller
             'login_users' => 'required|login_users|unique:users,login_users,' . $id,
             'roles' => 'required'
         ]);*/
-        $user = User::find($id);
-        $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except($input, ['password']);
+        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+
+
+        if ($request->isMethod('put')) {
+            $data = $request->all();
+
+            if ($data['action'] == 'Modifier'){
+
+                $validatedData = $request->validate([
+                    'name' => 'required',
+                    'email' => 'required|unique:users,email',
+                    'login_users' => 'required|unique:users,login_users',
+                    'roles' => 'required'
+                ]);
+
+                $user = User::find($id);
+                $input = $request->all();
+                if (!empty($input['password'])) {
+                    $input['password'] = Hash::make($input['password']);
+                } else {
+                    $input = Arr::except($input, ['password']);
+                }
+                $user->update($input);
+                DB::table('model_has_roles')->where('model_id', $id)->delete();
+                $exploeprofil = explode("/",$request->input('roles'));
+                $valprofile = $exploeprofil[0];
+                $valcodeprofile = $exploeprofil[1];
+                //$user->assignRole($request->input('roles'));
+                $user->assignRole($valprofile);
+                return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
+
+            }            
+            
+            if ($data['action'] == 'Lier_secteur_Conseiller'){
+                $this->validate($request, [
+                    'id_secteur_activite' => 'required',
+                ],[
+                    'id_secteur_activite.required' => 'Veuillez selectionnez le secteur d\'activité.',
+                ]);
+
+                $input = $request->all();
+
+                $input['id_user_conseiller'] = $id;
+
+                $countst =  $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id],['id_secteur_activite', '=', $input['id_secteur_activite']]])->get();
+                if(count($countst)==0){
+                    SecteurActiviteUserConseiller::create($input);
+
+                    return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($id))->with('success', 'Succes : Operation reussi. ');
+                }else{
+                    return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($id))->with('error', 'Erreur : Seteur deja attribuer. ');
+                }
+
+            }
+
         }
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id', $id)->delete();
-        $user->assignRole($request->input('roles'));
-        return redirect()->route('users.index')
-            ->with('success', 'Succes : Enregistrement reussi');
+
+
+    }
+
+    public function delete($id){
+
+        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+
+        $SecteurActiviteUserConseiller = SecteurActiviteUserConseiller::find($id);
+        $iduserconseiller = $SecteurActiviteUserConseiller->id_user_conseiller;
+        SecteurActiviteUserConseiller::where([['id_secteur_user_consseiller','=',$id]])->delete();
+
+        return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($iduserconseiller))->with('success', 'Succes : Operation reussi. ');
     }
 
 

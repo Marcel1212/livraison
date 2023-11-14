@@ -4,27 +4,14 @@
     @php($titre='Liste des agences')
     @php($soustitre='Modifier une agence')
     @php($lien='agence')
+
+
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper ">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$soustitre}}</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{$lien}}">{{$titre}}</a></li>
-                                    <li class="breadcrumb-item active">{{$soustitre}}  </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    
+            <h5 class="py-2 mb-1">
+                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+            </h5>
+
             <div class="content-body">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -34,15 +21,37 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <section id="multiple-column-form">
+                @if($errors->any())
+                                  @foreach ($errors->all() as $error)
+                                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <div class="alert-body">
+                                            {{ $error }}
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                      </div>
+                                  @endforeach
+                              @endif  
+                              @if ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">{{$soustitre}} </h4>
+                        <!-- Basic Layout -->
+                        <div class="col-xxl">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0">{{$titre}}</h5>
+                                    <small class="text-muted float-end">
+
+                                    </small>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route($lien.'.update',$agence->num_agce) }}" method="POST">
+                                    <form action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($agence->num_agce)) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
@@ -118,7 +127,7 @@
                                             </div>
                                             <div class="col-12" align="right">
                                                 <hr>
-                                                <button type="submit"
+                                                <button type="submit" name="action" value="Modifier"
                                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                     Enregistrer
                                                 </button>
@@ -128,14 +137,66 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                    <hr/>
+
+ 
+                                        <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($agence->num_agce)) }}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('put')
+                                                    <div class="row">
+                                                        <div class="col-10 col-md-11">
+                                                            <label class="form-label" for="id_localite">joindre la localite a l'agence</label>
+                                                            <select
+                                                                id="id_localite"
+                                                                name="id_localite"
+                                                                class="select2 form-select"
+                                                                aria-label="Default select example" required="required">
+                                                                <?= $localite; ?>
+                                                            </select>
+                                                        </div>                                    
+                                                        
+                                                    
+                                                            <div class="col-2 col-md-1" align="right"> <br>
+                                                                <button  type="submit" name="action" value="Lier_agence_localite" class="btn btn-sm btn-success me-sm-3 me-1">Ajouter</button>
+                                                            </div> 
+                                                        
+                                                    </div>
+
+                                            </form>
+                                        
+                                            <hr>
+                                            
+                                            <table class="table table-bordered table-striped table-hover table-sm"
+                                                id="exampleData"
+                                                style="margin-top: 13px !important">
+                                                <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Localite </th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $i = 0; ?>
+                                                    @foreach ($listeagencelocalites as $listeagencelocalite)
+                                                    <td>{{ ++$i }}</td>
+                                                    <td>{{ $listeagencelocalite->localite->libelle_localite }}</td>
+                                                    <td>
+                                                        <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($listeagencelocalite->id_agence_localite)) }}"
+                                                            class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette localite ?")) return false;'
+                                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> 
+                                                        </a>
+                                                    </td>
+                                                    @endforeach
+                                                
+                                                </tbody>
+                                            </table>                                   
+
+
+                                    </div>
+                </div>
             </div>
         </div>
-    </div>
     <!-- END: Content-->
 
 @endsection

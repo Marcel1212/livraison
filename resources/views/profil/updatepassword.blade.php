@@ -1,5 +1,9 @@
 @extends('layouts.backLayout.designadmin')
 @section('content')
+@php($Module='Profil')
+    @php($titre='Mon profil')
+    @php($soustitre='Mise a jour')
+   
     <?php
     if (Auth::user()->photo_profil != '') {
         $iconUser = 'photoprofile/' . Auth::user()->photo_profil;
@@ -8,46 +12,38 @@
     }
     ?>
         <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper ">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">Mon profil</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/dashboard">Accueil</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">Mon profil
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+                </h5>
 
-            </div>
             <div class="content-body">
                 <section class="app-user-view-account">
-                    @if ($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
                         </div>
-                    @endif
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+                @if($errors->any())
+                                  @foreach ($errors->all() as $error)
+                                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <div class="alert-body">
+                                            {{ $error }}
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                      </div>
+                                  @endforeach
+                              @endif  
+                              @if ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
                         </div>
-                    @endif
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                     <div class="row">
                         <!-- User Sidebar -->
                         <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
@@ -77,7 +73,7 @@
                                             </li>
                                             <li class="mb-75">
                                                 <span class="fw-bolder me-25">Status:</span>
-                                                <span class="badge bg-light-success">Active</span>
+                                                <span class="badge bg-success">Active</span>
                                             </li>
                                             <li class="mb-75">
                                                 <span class="fw-bolder me-25">Role:</span>
@@ -133,65 +129,139 @@
                                     <div id="DataTables_Table_0_wrapper"
                                          class="dataTables_wrapper dt-bootstrap5 no-footer">
                                         <div class="card-body">
+                                           
+                                            <?php if($naroles =="ENTREPRISE"){ ?>
+                                                
                                             <form method="POST" enctype="multipart/form-data"
                                                   class="form form-horizontal"
                                                   action="{{ route('modifier.mot.passe') }}">
                                                 @csrf
                                                 <div class="row">
-
-                                                    <div class="col-12">
-                                                        <div class="mb-1 row">
-                                                            <div class="col-sm-3">
-                                                                <label class="col-form-label"
-                                                                       for="fname-icon">Ancien mot de passe </label>
-                                                            </div>
-                                                            <div class="col-sm-9">
-                                                                <div class="input-group input-group-merge">
-                                                                    <span class="input-group-text"> <i
-                                                                            data-feather='lock'></i></span>
-                                                                    <input type="password" id="fname-icon"
+                                                    
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Ancien mot de passe </label>
+                                                            <input type="password" id="fname-icon"
                                                                            class="form-control" name="cpwd"
                                                                            placeholder="Ancien mot de passe">
-                                                                </div>
-                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="mb-1 row">
-                                                            <div class="col-sm-3">
-                                                                <label class="col-form-label"
-                                                                       for="fname-icon">Nouveau mot de passe </label>
-                                                            </div>
-                                                            <div class="col-sm-9">
-                                                                <div class="input-group input-group-merge">
-                                                                    <span class="input-group-text"> <i
-                                                                            data-feather='lock'></i></span>
-                                                                    <input type="password" id="fname-icon"
+                                                    </div>                                                     
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Nouveau mot de passe </label>
+                                                            <input type="password" id="fname-icon"
                                                                            class="form-control" name="npwd"
                                                                            placeholder="Nouveau mot de passe">
-                                                                </div>
-                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="mb-1 row">
-                                                            <div class="col-sm-3">
-                                                                <label class="col-form-label"
-                                                                       for="fname-icon">Confirmer mot de passe </label>
-                                                            </div>
-                                                            <div class="col-sm-9">
-                                                                <div class="input-group input-group-merge">
-                                                                    <span class="input-group-text"> <i
-                                                                            data-feather='lock'></i></span>
-                                                                    <input type="password" id="fname-icon"
+                                                    </div>                                                    
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Confirmer mot de passe </label>
+                                                            <input type="password" id="fname-icon"
                                                                            class="form-control" name="vpwd"
                                                                            placeholder="Confirmer mot de passe">
-                                                                </div>
-                                                            </div>
+                                                        </div>
+                                                    </div>                                                     
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>N° de compte contribuable </label>
+                                                            <input type="text" 
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
+                                                        </div>
+                                                    </div>                                
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Activité </label>
+                                                            <input type="text" 
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
+                                                        </div>
+                                                    </div>                                
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Localisation geaographique </label>
+                                                            <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
+                                                        </div>
+                                                    </div>                                
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Repère d'accès </label>
+                                                            <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
+                                                        </div>
+                                                    </div>                                
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <label>Adresse postal </label>
+                                                            <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
                                                         </div>
                                                     </div>
+
+
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="billings-country">Indicatif</label>
+                                                                    <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                                        <?= $pay; ?>
+                                                                    </select>
+                                                                </div>                     
+                                                                <div class="col-md-8">
+                                                                    <label class="form-label">Telephone  </label>
+                                                                    <input type="text" 
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->tel_entreprises}}" name="tel_entreprises">
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="billings-country">Indicatif</label>
+                                                                    <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                                        <?= $pay; ?>
+                                                                    </select>
+                                                                </div>                     
+                                                                <div class="col-md-8">
+                                                                    <label class="form-label">Cellulaire Professionnelle  </label>
+                                                                    <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </div>     
+
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="mb-1">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="billings-country">Indicatif</label>
+                                                                    <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                                        <?= $pay; ?>
+                                                                    </select>
+                                                                </div>                     
+                                                                <div class="col-md-8">
+                                                                    <label class="form-label">Fax  </label>
+                                                                    <input type="number" name="fax_entreprises" id="fax_entreprises"
+                                                                class="form-control form-control-sm"
+                                                                    value="{{@$infoentreprise->fax_entreprises}}">
+                                                                </div>
+                                                            </div> 
+                                                        </div>
+                                                    </div>                                                    
                                                     <div class="col-sm-9 offset-sm-3">
-                                                        <button type="submit"
+                                                        <button type="submit" name="action" value="profil_entreprise"
                                                                 class="btn btn-primary me-1 waves-effect waves-float waves-light">
                                                             Modifier
                                                         </button>
@@ -201,23 +271,82 @@
                                                     </div>
                                                 </div>
                                             </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Project table -->
 
+                                            <?php }else{ ?>
+                                                    <form method="POST" enctype="multipart/form-data"
+                                                        class="form form-horizontal"
+                                                        action="{{ route('modifier.mot.passe') }}">
+                                                        @csrf
+                                                        <div class="row">
 
-                        </div>
-                        <!--/ User Content -->
-                    </div>
-                </section>
-
-
+                                                            <div class="col-12">
+                                                                <div class="mb-1 row">
+                                                                    <div class="col-sm-3">
+                                                                        <label class="col-form-label"
+                                                                            for="fname-icon">Ancien mot de passe </label>
+                                                                    </div>
+                                                                    <div class="col-sm-9">
+                                                                        <div class="input-group input-group-merge">
+                                                                            <span class="input-group-text"> <i
+                                                                                    data-feather='lock'></i></span>
+                                                                            <input type="password" id="fname-icon"
+                                                                                class="form-control" name="cpwd"
+                                                                                placeholder="Ancien mot de passe">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="mb-1 row">
+                                                                    <div class="col-sm-3">
+                                                                        <label class="col-form-label"
+                                                                            for="fname-icon">Nouveau mot de passe </label>
+                                                                    </div>
+                                                                    <div class="col-sm-9">
+                                                                        <div class="input-group input-group-merge">
+                                                                            <span class="input-group-text"> <i
+                                                                                    data-feather='lock'></i></span>
+                                                                            <input type="password" id="fname-icon"
+                                                                                class="form-control" name="npwd"
+                                                                                placeholder="Nouveau mot de passe">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="mb-1 row">
+                                                                    <div class="col-sm-3">
+                                                                        <label class="col-form-label"
+                                                                            for="fname-icon">Confirmer mot de passe </label>
+                                                                    </div>
+                                                                    <div class="col-sm-9">
+                                                                        <div class="input-group input-group-merge">
+                                                                            <span class="input-group-text"> <i
+                                                                                    data-feather='lock'></i></span>
+                                                                            <input type="password" id="fname-icon"
+                                                                                class="form-control" name="vpwd"
+                                                                                placeholder="Confirmer mot de passe">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-9 offset-sm-3">
+                                                                <button type="submit" name="action" value="autre_profil"
+                                                                        class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                                    Modifier
+                                                                </button>
+                                                                <button type="reset"
+                                                                        class="btn btn-outline-secondary waves-effect">Annuler
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>                                               
+                                            <?php } ?>
+                                            </div>
+                </div>
             </div>
-
-
         </div>
-    </div>
+        </div>
+        </div>
     <!-- END: Content-->
 @endsection

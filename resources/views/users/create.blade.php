@@ -7,29 +7,65 @@
     @php($soustitre='Ajouter un utilisateur')
     @php($lien='users')
 
+    <script type="text/javascript">
+
+        function changeFunc() {
+            //location.reload();
+           // location.href = location.href;
+           //document.getElementById("departement").innerHTML = "";
+           //document.getElementById("service").innerHTML = "";
+            var selectBox = document.getElementById("profiles");
+            //var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            const myArray = selectedValue.split("/");
+            let profile = myArray[0];
+            let code = myArray[1];
+            
+            if(code === 'DIR'){
+                document.getElementById("direction").disabled = false;
+                document.getElementById("departement").disabled = true;
+                document.getElementById("departement").style.display = "none";
+                document.getElementById("service").disabled = true;
+                document.getElementById("service").style.display = "none";
+            }else if(code === 'DEPART'){
+                document.getElementById("direction").disabled = false;
+                document.getElementById("departement").disabled = false;
+                document.getElementById("service").disabled = true;
+                document.getElementById("service").style.display = "none";
+            }else if(code === 'SERV'){
+                document.getElementById("direction").disabled = false;
+                document.getElementById("departement").disabled = false;
+                document.getElementById("service").disabled = false;
+            }else{
+                document.getElementById("direction").disabled = false;
+                document.getElementById("departement").disabled = false;
+                document.getElementById("service").disabled = false;
+            }
+           // alert(code)
+            // alert(selectedValue);
+            /*if (selectedValue==3 || selectedValue==1){
+                document.getElementById("superfie_lot").disabled = true;
+                document.getElementById("type_superficie_lot").disabled = true;
+                document.getElementById("montant_lot").disabled = false;
+            }else if(selectedValue==2){
+                document.getElementById("montant_lot").disabled = true;
+                document.getElementById("superfie_lot").disabled = false;
+                document.getElementById("type_superficie_lot").disabled = false;
+            }else{
+                document.getElementById("montant_lot").disabled = false;
+                document.getElementById("superfie_lot").disabled = false;
+                document.getElementById("type_superficie_lot").disabled = false;
+            }*/
+
+        }
+
+    </script>
 
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper ">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-2">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$soustitre}}</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{$lien}}">{{$titre}}</a></li>
-                                    <li class="breadcrumb-item active">{{$soustitre}}  </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
+            <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+                </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -40,28 +76,26 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <section id="multiple-column-form">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">{{$soustitre}} </h4>
+
+                <div class="row">
+                        <!-- Basic Layout -->
+                        <div class="col-xxl">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0">{{$titre}}</h5>
+                                    <small class="text-muted float-end">
+
+                                    </small>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('users.store') }}" method="POST">
+                                    <form action="{{ route($lien.'.store') }}" method="POST">
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
                                                     <label>Profil utilisateur</label>
-                                                    <select class="select2 select2-size-sm form-select" name="roles"
-                                                            id="roles">
-                                                        <option value=""> -- Sélectionner --</option>
-                                                        @foreach ($roles as $permission)
-                                                            <option value="{{$permission}}"
-                                                                     >{!!ucfirst($permission)!!}
-                                                            </option>
-                                                        @endforeach
+                                                    <select class="select2 select2-size-sm form-select" name="roles" id="profiles" onchange="changeFunc();">
+                                                        <?php echo $roles; ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -73,6 +107,29 @@
                                                            placeholder="Identifiant"
                                                            required></div>
                                             </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="state">Direction</label>
+                                                <select class="select2 form-select" id="direction" name="id_direction"/>
+                                                    <option value='0'>Directions</option>
+                                                    @foreach($directions as $direction)
+                                                    <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>                                            
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="state">Departement</label>
+                                                <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
+                                                    <option value='0'>Departement</option>
+                                                </select>
+                                            </div>                                            
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="state">Service</label>
+
+                                                <select class="select2 form-select" id='service' name='id_service' class="form-control" >
+                                                    <option value='0'>Service</option>
+                                                </select>
+                                            </div>
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Nom </label>
@@ -164,15 +221,24 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                    </div>
+                </div>
             </div>
         </div>
-    </div>
     <!-- END: Content-->
+
+    <script>
+        
+        /*$(function(){
+            $('#profiles').on('change',function(e)
+            {
+                var roles=e.target.value;
+                alert(roles); //exit;
+
+            });
+
+            });*/       
+    </script>
 
 @endsection
 

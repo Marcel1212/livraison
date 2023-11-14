@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Menu;
 use App\Models\User;
+use App\Models\Entreprises;
 use Auth;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Session;
+use App\Helpers\InfosEntreprise;
+use App\Models\Pays;
 
 //use Illuminate\Support\Facades\Auth;
 
@@ -111,19 +114,96 @@ class HomeController extends Controller
 
             // dd($data);
 
-            if (Hash::check($data['cpwd'], $users->password)) {
+            if($users->flag_mdp != true){
+                
+                if ($data['action'] == 'profil_entreprise'){
 
-                $motpass = $key . '+' . $data['npwd'];
-                $pass = Hash::make($data['npwd']);
+                    $this->validate($request, [
+                        'localisation_geographique_entreprise' => 'required',
+                        'repere_acces_entreprises' => 'required',
+                        'adresse_postal_entreprises' => 'required',
+                        'cellulaire_professionnel_entreprises' => 'required',
+                        'cpwd' => 'required',
+                        'npwd' => 'required',
+                        'vpwd' => 'required',
+                        'tel_entreprises' => 'required'
+                    ],[
+                        'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
+                        'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
+                        'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
+                        'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
+                        'tel_entreprises.required' => 'Veuillez ajouter un contact telephonique.',
+                        'cpwd.required' => 'Veuillez ajouter l\' ancien mot de passe.',
+                        'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
+                        'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
+                    ]);
 
-                User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                    if (Hash::check($data['cpwd'], $users->password)) {
 
-                return redirect('/dashboard')
-                    ->with('success', 'Votre mot de passe a été  modifié avec succes');
+                        $motpass = $key . '+' . $data['npwd'];
+                        $pass = Hash::make($data['npwd']);
+    
+                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        $input = $request->all();
+                        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+                        $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
+                        $input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
+                        $input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);  
+                        $entreprise = Entreprises::find($infoentreprise->id_entreprises);
+                        $entreprise->update($input);  
+                        return redirect('/dashboard')
+                            ->with('success', 'Votre mot de passe et information de l\'entreprise a été  modifié avec succes');
+    
+                    } else {
+                        return redirect('/modifiermotdepasse')
+                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                    } 
 
-            } else {
-                return redirect('/modifiermotdepasse')
-                    ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                }                
+                
+                if ($data['action'] == 'autre_profil'){
+
+                    $this->validate($request, [
+                        'cpwd' => 'required',
+                        'npwd' => 'required',
+                        'vpwd' => 'required'
+                    ],[
+                        'cpwd.required' => 'Veuillez ajouter l\' ancien mot de passe.',
+                        'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
+                        'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
+                    ]);
+
+                    if (Hash::check($data['cpwd'], $users->password)) {
+
+                        $motpass = $key . '+' . $data['npwd'];
+                        $pass = Hash::make($data['npwd']);
+    
+                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+    
+                        return redirect('/dashboard')
+                            ->with('success', 'Votre mot de passe a été  modifié avec succes');
+    
+                    } else {
+                        return redirect('/modifiermotdepasse')
+                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                    } 
+                }
+
+            }else{
+                /*if (Hash::check($data['cpwd'], $users->password)) {
+
+                    $motpass = $key . '+' . $data['npwd'];
+                    $pass = Hash::make($data['npwd']);
+
+                    User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+
+                    return redirect('/dashboard')
+                        ->with('success', 'Votre mot de passe a été  modifié avec succes');
+
+                } else {
+                    return redirect('/modifiermotdepasse')
+                        ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                }*/               
             }
 
 
@@ -163,8 +243,14 @@ class HomeController extends Controller
 
         $users = DB::table('users')->where([['id', '=', $idutil]])->first();
 
-
-        return view('profil.updatepassword')->with(compact('tabl', 'naroles'));
+        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+        //dd($infoentreprise);
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        } 
+        return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay'));
 
     }
 }

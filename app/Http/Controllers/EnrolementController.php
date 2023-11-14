@@ -492,6 +492,7 @@ class EnrolementController extends Controller
                                     <br><br>Voici un récapitulatif de vos informations de compte :
                                     <br><b>Nom d'utilisateur : </b> $name
                                     <br><b>Adresse e-mail : </b> $emailcli
+                                    <br><b>Identifiant : </b> $ncc_entreprises
                                     <br><b>Mot de passe : </b> $passwordCli
                                     <br><b>Date de création du compte : : </b> $entreprise->created_at
                                     <br><br>
