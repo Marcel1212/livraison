@@ -213,7 +213,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
-
+<script src="{{asset('assets/js/codeapp.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/popper/popper.js')}}"></script>
 <script src="{{asset('assets/vendor/js/bootstrap.js')}}"></script>
@@ -243,7 +243,62 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <!-- Page JS -->
 <script src="{{asset('assets/js/app-academy-dashboard.js')}}"></script>
 <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+<script>
+$(function(){
+    $('#profiles').on('change',function(e)
+            {
+                var roles=e.target.value;
+                //alert(roles); //exit;
 
+            });
+
+           
+    $('#direction').on('change',function(e)
+    {
+        var id_direction=e.target.value;
+         //alert(id_direction); //exit;
+        telUpdate(id_direction);
+        //alert('ttt'); //exit;
+    });
+
+    function telUpdate(id)
+    { 
+        //alert('testanc'); //exit;
+        $.get('/departementlist/'+id,function(data)
+        { 
+           // alert(data); //exit;
+            $('#departement').empty();
+            $.each(data,function(index,tels)
+            {
+                $('#departement').append($('<option>',{
+                    value : tels.id_departement,
+                    text : tels.libelle_departement,
+                }));
+
+                $.get('/servicelist/'+tels.id_departement,function(data)
+                {
+                    $('#service').empty();
+                    $.each(data,function(index,tels)
+                    {
+                        $('#service').append($('<option>',{
+                            value : tels.id_service,
+                            text : tels.libelle_service,
+                        }));
+
+
+                    });
+                });
+            });
+
+
+        });
+    }
+
+
+});
+
+
+ </script>   
 <script>
     var win = null;
 

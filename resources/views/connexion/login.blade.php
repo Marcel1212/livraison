@@ -186,6 +186,7 @@ $couleur = Menu::get_info_couleur();
                 </div>
         
                 <div class="form-group mb-4">
+                    <span>Saisie les mot ci-dessus</span>
                     <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
                 </div>
               
@@ -200,7 +201,7 @@ $couleur = Menu::get_info_couleur();
             </p>
 
             <div class="divider my-4">
-              <div class="divider-text">or</div>
+              <div class="divider-text">Nous suivre</div>
             </div>
 
             <div class="d-flex justify-content-center">

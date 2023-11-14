@@ -19,6 +19,7 @@ use App\Models\CategorieProfessionelle;
 use App\Models\CategoriePlan;
 use App\Models\TypeFormation;
 use App\Helpers\Crypt;
+use App\Helpers\InfosEntreprise;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -37,7 +38,8 @@ class PlanFormationController extends Controller
     public function index()
     {
         //if()
-        $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+        //$infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
             $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
             return view('planformation.index',compact('planformations'));

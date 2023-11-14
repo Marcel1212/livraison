@@ -75,7 +75,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if(count($categorieplans)<4){ echo "active";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if(count($categorieplans)<1){ echo "active";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-categorieplan"
@@ -87,7 +87,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if(count($categorieplans)>=4){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if(count($categorieplans)>=1){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
@@ -281,7 +281,7 @@
                         </form>
 
                       </div>
-                      <div class="tab-pane fade <?php if(count($categorieplans)<4){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                      <div class="tab-pane fade <?php if(count($categorieplans)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                       <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}" enctype="multipart/form-data">
                                 @csrf
@@ -369,7 +369,7 @@
                             </tbody>
                         </table>
                       </div>
-                      <div class="tab-pane fade <?php if(count($categorieplans)>=4){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
+                      <div class="tab-pane fade <?php if(count($categorieplans)>=1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                       <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}" enctype="multipart/form-data">
                                 @csrf
