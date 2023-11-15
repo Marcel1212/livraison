@@ -231,7 +231,7 @@ class ProjetEtudeController extends Controller
 
             }
 
-            $input['date_soumis'] = Carbon::now();
+           // $input['id_entreprises'] = Carbon::now();
             $input['flag_soumis'] = false;
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
@@ -283,15 +283,15 @@ class ProjetEtudeController extends Controller
              // Offre financiere
              PiecesProjetEtude::create([
                 'id_projet_etude' => $id_projet,
-                'code_pieces' => '5',
+                'code_pieces' => '6',
                 'libelle_pieces' => $input['offre_financiere']
             ]);
 
 
         }
+        return redirect('projetetude/'.Crypt::UrlCrypt($id_projet).'/edit')->with('success', 'Succes : Votre projet d\'etude a été crée ');
 
-        return redirect()->route('projetetude.index')
-            ->with('success', 'Votre demande de projet d\'etude a ete effectue avec succes');
+            //return redirect()->route('projetetude.index')->with('success', 'Votre demande de projet d\'etude a ete cree avec succes');
     }
 
     /**
@@ -311,6 +311,20 @@ class ProjetEtudeController extends Controller
         //dd($id);
         $projetetude = ProjetEtude::find($id);
         //dd($projetetude['titre_projet_etude']);
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
+        $piecesetude1 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','2']])->get();
+        $piecesetude2 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','3']])->get();
+        $piecesetude3 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','4']])->get();
+        $piecesetude4 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','5']])->get();
+        $piecesetude5 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','6']])->get();
+        $piecesetude6 = $piecesetude['0']['libelle_pieces'];
+        //dd($piecesetude['0']['libelle_pieces']);
+        // Pieces Projet Etudes
         //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
 
         $statutoperations = StatutOperation::all();
@@ -325,31 +339,10 @@ class ProjetEtudeController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        return view('projetetude.edit', compact('projetetude','statutoperation','motif'));
+        return view('projetetude.edit', compact('projetetude','statutoperation','motif','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
-    public function projetetudesoumettre($id)
-    {
-        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
-        dd($id);
-        $projetetude = ProjetEtude::find($id);
-        //dd($projetetude['titre_projet_etude']);
-        //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
 
-        $statutoperations = StatutOperation::all();
-        $statutoperation = "<option value=''> Selectionnez le statut </option>";
-        foreach ($statutoperations as $comp) {
-            $statutoperation .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
-        }
-
-        $motifs = Motif::all();
-        $motif = "<option value=''> Selectionnez un motif </option>";
-        foreach ($motifs as $comp) {
-            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
-        }
-
-        return view('projetetude.edit', compact('projetetude','statutoperation','motif'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -357,260 +350,109 @@ class ProjetEtudeController extends Controller
     public function update(Request $request, $id)
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
-        $demandeenrole = DemandeEnrolement::find($id);
+
 
         if ($request->isMethod('put')) {
 
             $data = $request->all();
-
-            if($data['action'] === 'Rejeter'){
-                $this->validate($request, [
-                    'id_motif' => 'required',
-                    'commentaire_demande_enrolement' => 'required'
-                ],[
-                    'id_motif.required' => 'Veuillez selectionner le motif rejet.',
-                    'commentaire_demande_enrolement.required' => 'Veuillez ajouter un commentaire.',
-                ]);
-
-                $input = $request->all();
-
-                $input['id_user'] = Auth::user()->id;
-                $input['flag_traitement_demande_enrolem'] = 1;
-                $input['date_traitement_demande_enrolem'] = Carbon::now();
-
-                $demandeenrole->update($input);
-
-                $demandeenrole1 = DemandeEnrolement::find($id);
-
-                if (isset($demandeenrole1->email_demande_enrolement)) {
-                    $sujet = "Rejet pour la demande enrolement sur e-FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                    $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
-                                    <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et
-                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
-
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_demande_enrolement
-                                    <br><br>
-                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
-                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
-                                        Cordialement,
-                                        L'équipe e-FDFP
-                                    <br><br><br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-
-                    $messageMailEnvoi = Email::get_envoimailTemplate($demandeenrole1->email_demande_enrolement, $demandeenrole1->raison_sociale_demande_enroleme, $messageMail, $sujet, $titre);
-                }
-
-                return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
-            }
-
-            if($data['action'] === 'Recevable'){
-                $this->validate($request, [
-                    'id_motif_recevable' => 'required'
-                ],[
-                    'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
-                ]);
-
-                $input = $request->all();
-
-                $input['id_user'] = Auth::user()->id;
-                $input['flag_recevablilite_demande_enrolement'] = true;
-                $input['date_recevabilite_demande_enrolement'] = Carbon::now();
-
-                $demandeenrole->update($input);
-
-                $demandeenrole1 = DemandeEnrolement::find($id);
-
-
-
-                return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
-            }
-
-            if($data['action'] === 'NonRecevable'){
-                $this->validate($request, [
-                    'id_motif_recevable' => 'required'
-                ],[
-                    'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
-                ]);
-
-                $input = $request->all();
-
-                $input['id_user'] = Auth::user()->id;
-                $input['flag_recevablilite_demande_enrolement'] = false;
-                $input['date_recevabilite_demande_enrolement'] = Carbon::now();
-
-                $demandeenrole->update($input);
-
-                $demandeenrole1 = DemandeEnrolement::find($id);
-
-                if (isset($demandeenrole1->email_demande_enrolement)) {
-                    $sujet = "Recevabilité de demande enrolement sur e-FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                    $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
-                                    <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et
-                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
-
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif1->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_recevable_demande_enrolement
-                                    <br><br>
-                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
-                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
-                                        Cordialement,
-                                        L'équipe e-FDFP
-                                    <br><br><br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-
-                    $messageMailEnvoi = Email::get_envoimailTemplate($demandeenrole1->email_demande_enrolement, $demandeenrole1->raison_sociale_demande_enroleme, $messageMail, $sujet, $titre);
-                }
-
-                return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
-            }
-
-            if($data['action'] === 'Valider'){
-
-                $this->validate($request, [
-                    'id_motif' => 'required'
-                ],[
-                    'id_motif.required' => 'Veuillez selectionner le motif de validation.',
-                ]);
-
-                $input = $request->all();
-
-                $input['id_user'] = Auth::user()->id;
-                $input['flag_traitement_demande_enrolem'] = 1;
-                $input['date_traitement_demande_enrolem'] = Carbon::now();
-
-                $demandeenrole->update($input);
-
-                $demandeenrole1 = DemandeEnrolement::find($id);
-
-                $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
-
-                Entreprises::create([
-                    'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
-                    'numero_fdfp_entreprises' => $numfdfp,
-                    'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
-                    'raison_social_entreprises' => $demandeenrole1->raison_sociale_demande_enroleme,
-                    'tel_entreprises' => $demandeenrole1->tel_demande_enrolement,
-                    'indicatif_entreprises' => $demandeenrole1->indicatif_demande_enrolement,
-                    'numero_cnps_entreprises' => $demandeenrole1->numero_cnps_demande_enrolement,
-                    'rccm_entreprises' => $demandeenrole1->rccm_demande_enrolement,
-                    'flag_actif_entreprises' => true
-                ]);
-
-                $insertedId = Entreprises::latest()->first()->id_entreprises;
-                $entreprise = Entreprises::latest()->first();
-
-                if(isset($demandeenrole1->piece_dfe_demande_enrolement)){
-                    Pieces::create([
-                        'id_entreprises' => $insertedId,
-                        'libelle_pieces' => $demandeenrole1->piece_dfe_demande_enrolement,
-                        'code_pieces' => 'dfe',
-                    ]);
-                }
-
-                if(isset($demandeenrole1->piece_rccm_demande_enrolement)){
-                    Pieces::create([
-                        'id_entreprises' => $insertedId,
-                        'libelle_pieces' => $demandeenrole1->piece_rccm_demande_enrolement,
-                        'code_pieces' => 'rccm',
-                    ]);
-                }
-
-                if(isset($demandeenrole1->piece_attestation_immatriculati)){
-                    Pieces::create([
-                        'id_entreprises' => $insertedId,
-                        'libelle_pieces' => $demandeenrole1->piece_attestation_immatriculati,
-                        'code_pieces' => 'attest_immat',
-                    ]);
-                }
-
-                $roles = Role::where([['code_roles', '=', 'ENTREPRISE']])->first();
-
-                $name = $entreprise->raison_social_entreprises;
-                $prenom_users = $entreprise->rccm_entreprises;
-                $emailcli = $demandeenrole1->email_demande_enrolement;
-                $id_partenaire = $entreprise->id_entreprises;
-                $cel_users = $entreprise->tel_entreprises;
-                $indicatif_tel_users = $entreprise->indicatif_entreprises;
-                $ncc_entreprises = $entreprise->ncc_entreprises;
-
-                $role = $roles->name;
-
-                $clientrech = DB::table('users')->where([['email', '=', $emailcli]])->get();
-
-                if (count($clientrech) > 0) {
-                    return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
-                }
-
-                $clientrechnum = DB::table('users')->where([['cel_users', '=', $cel_users]])->get();
-
-                if (count($clientrechnum) > 0) {
-                    return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
-                }
-
-                $passwordCli = Crypt::MotDePasse(); // '123456789';
-                $password = Hash::make($passwordCli);
-
-                $user = new User();
-                $user->name = $name;
-                $user->prenom_users = $prenom_users;
-                $user->email = $emailcli;
-                $user->id_partenaire = $id_partenaire;
-                $user->password = $password;
-                $user->cel_users = $cel_users;
-                $user->login_users = $ncc_entreprises;
-                $user->indicatif_tel_users = $indicatif_tel_users;
-
-                $user->assignRole($role);
-                $user->save();
-
-                $logo = Menu::get_logo();
-
-                if (isset($emailcli)) {
-                    $sujet = "Activation de compte FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                    $messageMail = "<b>Cher $name ,</b>
-                                    <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
-                                        succès, et il est maintenant prêt à être utilisé.
-                                    <br><br>
-                                    <br><br>Voici un récapitulatif de vos informations de compte :
-                                    <br><b>Nom d'utilisateur : </b> $name
-                                    <br><b>Adresse e-mail : </b> $emailcli
-                                    <br><b>Mot de passe : </b> $passwordCli
-                                    <br><b>Date de création du compte : : </b> $entreprise->created_at
-                                    <br><br>
-                                    <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
-                                            www.e-fdfp.ci
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-
-                    $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
-                }
-
-
-                return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
+            dd($data);
+            // Traitement de la soumission
+            if($data['action'] === 'soumission_plan_formation'){
+                // ID du plan
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_soumis = true;
+                $projetetude->date_soumis = $date_soumission;
+                $projetetude->save();
+                return redirect()->route('projetetude.index')->with('success', 'Projet soumis avec succès.');
 
             }
+
+            // Traitement de la modification
+            if($data['action'] === 'modifier_plan_formation'){
+                // ID du plan
+                // Modification du fichier l'avant TDR
+                if (isset($data['avant_projet_tdr_modif'])){
+
+                    $filefront = $data['avant_projet_tdr_modif'];
+
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                        $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
+
+                    }else{
+                        return redirect()->route('projetetude.create')
+                        ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                    }
+
+                }
+
+                 // Modification du  Courrier de demande de financement
+                 if (isset($data['avant_projet_tdr_modif'])){
+
+                    $filefront = $data['avant_projet_tdr_modif'];
+
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                        $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
+
+                    }else{
+                        return redirect()->route('projetetude.create')
+                        ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                    }
+
+                }
+
+                // if (isset($data['courier_demande_fin_modif'])){
+                //     $filefront = $data['courier_demande_fin_modif'];
+
+                //     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                //         $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+
+                //         $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
+
+                //         $input['avant_projet_tdr'] = $fileName1;
+
+                //     }else{
+                //         return redirect()->route('projetetude.create')
+                //         ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                //     }
+
+                // }
+
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->titre_projet_etude = $data['titre_projet'];
+                $projetetude->contexte_probleme_projet_etude = $data['contexte_probleme'];
+                $projetetude->objectif_general_projet_etude = $data['objectif_general'];
+                $projetetude->objectif_specifique_projet_etud = $data['objectif_specifique'];
+                $projetetude->resultat_attendu_projet_etude = $data['resultat_attendu'];
+                $projetetude->champ_etude_projet_etude = $data['champ_etude'];
+                $projetetude->cible_projet_etude = $data['cible'];
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Votre projet d\'etude a été modifié avec succes ');
+
+                //return redirect()->route('projetetude.index')->with('success', 'Projet modifié avec succès.');
+
+
+            }
+
 
         }
     }

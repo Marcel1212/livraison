@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property float $id_projet_etude
  * @property float $id_entreprises
@@ -46,33 +43,28 @@ class ProjetEtude extends Model
      * @var string
      */
     protected $table = 'projet_etude';
-
     /**
      * The primary key for the model.
      *
      * @var string
      */
     protected $primaryKey = 'id_projet_etude';
-
     /**
      * The "type" of the auto-incrementing ID.
      *
      * @var string
      */
     protected $keyType = 'float';
-
     /**
      * Indicates if the IDs are auto-incrementing.
      *
      * @var bool
      */
     public $incrementing = false;
-
     /**
      * @var array
      */
     protected $fillable = ['id_entreprises', 'titre_projet_etude', 'contexte_probleme_projet_etude', 'objectif_general_projet_etude', 'objectif_specifique_projet_etud', 'resultat_attendu_projet_etude', 'champ_etude_projet_etude', 'cible_projet_etude', 'updated_at', 'created_at', 'id_user', 'id_user_affecte', 'flag_soumis', 'flag_valide', 'flag_rejet', 'date_soumis', 'date_valide', 'date_rejet', 'statut_instruction', 'commentaires_instruction', 'titre_projet_instruction', 'contexte_probleme_instruction', 'objectif_general_instruction', 'objectif_specifique_instruction', 'resultat_attendus_instruction', 'champ_etude_instruction', 'cible_instruction', 'methodologie_instruction', 'piece_jointe_instruction', 'date_instruction'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -80,7 +72,6 @@ class ProjetEtude extends Model
     {
         return $this->belongsTo('App\Models\Entreprise', 'id_entreprises', 'id_entreprises');
     }
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
