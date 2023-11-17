@@ -197,7 +197,7 @@ $couleur = Menu::get_info_couleur();
             <p class="text-center">
               <span>Vous êtes nouveau sur la plateforme ?</span>
               <a href="{{route('enrolements')}}">
-                <span>Faites vous enroler</span>
+                <span>Faites-vous enrôler</span>
               </a>
             </p>
 
