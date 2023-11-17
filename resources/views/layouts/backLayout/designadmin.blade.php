@@ -52,7 +52,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <!-- Core CSS -->
     <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css"/>
     <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css"/>
-    <link rel="stylesheet" href="/assets/css/demo.css"/>  
+    <link rel="stylesheet" href="/assets/css/demo.css"/>
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css"/>
@@ -142,7 +142,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="pages-account-settings-account.html">
+                                <a class="dropdown-item" href="#">
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar avatar-online">
@@ -154,7 +154,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                                                     class="fw-medium d-block">{{Auth::user()->name.' '.Auth::user()->prenom_users}}</span>
                                             <small
                                                 class="text-muted">{{ $naroles }}<?php if (isset(Auth::user()->num_agce)) { ?>
-                                                <em> ({{@Auth::user()->agence->lib_agce}})</em><?php } ?></small>
+                                                <em> {{'('.@Auth::user()->agence->lib_agce.')'}}</em><?php } ?></small>
                                         </div>
                                     </div>
                                 </a>
@@ -252,7 +252,7 @@ $(function(){
 
             });
 
-           
+
     $('#direction').on('change',function(e)
     {
         var id_direction=e.target.value;
@@ -262,10 +262,10 @@ $(function(){
     });
 
     function telUpdate(id)
-    { 
+    {
         //alert('testanc'); //exit;
         $.get('/departementlist/'+id,function(data)
-        { 
+        {
            // alert(data); //exit;
             $('#departement').empty();
             $.each(data,function(index,tels)
@@ -298,7 +298,7 @@ $(function(){
 });
 
 
- </script>   
+ </script>
 <script>
     var win = null;
 
