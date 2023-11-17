@@ -315,6 +315,13 @@ $logo = Menu::get_logo();
                                                             </td>
                                                         </tr>
                                                     </table>
+                                                    <td valign="top">&nbsp;</td>
+                                                <td align="right" valign="top">{{\SimpleSoftwareIO\QrCode\Facades\QrCode::size(130)->generate(
+'Intitule action de formation :'. $actionplan->intitule_action_formation_plan.'
+Type de formation :'.  $ficheagrement->typeFormation->type_formation.'
+Code formation :'.  @$planformation->conde_entreprise_plan_formation.'
+Code conseiller :'.  @$planformation->code_plan_formation.'
+Date soumis :'. @$planformation->date_soumis_plan_formation )}}</td>
                                                 </td>
                                               <td valign="top">&nbsp;</td>
                                                 <td align="right" valign="top"></td>
