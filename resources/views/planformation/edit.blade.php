@@ -106,7 +106,7 @@
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>N° de compte contribuable </label>
+                                        <label>N° de compte contribuable <strong style="color:red;">*</strong></label>
                                         <input type="text" 
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
@@ -114,7 +114,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Activité </label>
+                                        <label>Activité <strong style="color:red;">*</strong></label>
                                         <input type="text" 
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
@@ -122,7 +122,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation geaographique </label>
+                                        <label>Localisation geaographique <strong style="color:red;">*</strong></label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
@@ -130,7 +130,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Repère d'accès </label>
+                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
                                         <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
@@ -138,16 +138,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal </label>
-                                        <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
-                                               class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Adresse postal </label>
+                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
@@ -164,7 +155,7 @@
                                                 </select>
                                             </div>                     
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone  </label>
+                                                <label class="form-label">Telephone  <strong style="color:red;">*</strong></label>
                                                 <input type="text" 
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
@@ -183,7 +174,7 @@
                                                 </select>
                                             </div>                     
                                             <div class="col-md-8">
-                                                <label class="form-label">Cellulaire Professionnelle  </label>
+                                                <label class="form-label">Cellulaire Professionnelle  <strong style="color:red;">*</strong></label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
@@ -213,7 +204,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation </label>
+                                        <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}">
                                     </div>
@@ -221,7 +212,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Fonction du responsable formation </label>
+                                        <label>Fonction du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="fonction_charge_plan_formation" id="fonction_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->fonction_charge_plan_formation}}">
                                     </div>
@@ -229,7 +220,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation </label>
+                                        <label>Email professsionel du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->email_professionnel_charge_plan_formation}}">
                                     </div>
@@ -237,7 +228,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié </label>
+                                        <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}">
                                     </div>
@@ -245,7 +236,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Type entreprises </label>
+                                        <label>Type entreprises <strong style="color:red;">*</strong></label>
                                         <select class="select2 form-select input-group-text" name="id_type_entreprise" id="id_type_entreprise" required="required">
                                             <?php echo $typeentreprise; ?>
                                         </select>
@@ -255,9 +246,17 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
 
-                                        <label>Masse salariale </label>
+                                        <label>Masse salariale <strong style="color:red;">*</strong></label>
                                         <input type="number" name="masse_salariale" id="masse_salariale"
                                                class="form-control form-control-sm" value="{{@$planformation->masse_salariale}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Part entreprise </label>
+                                        <input type="number" 
+                                               class="form-control form-control-sm"
+                                                value="{{@$planformation->part_entreprise}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-12" align="right">
@@ -288,7 +287,7 @@
                                 @method('put')
                                 <div class="row">
                                     <div class="col-12 col-md-4">
-                                        <label class="form-label" for="id_categorie_professionelle">Categorie</label>
+                                        <label class="form-label" for="id_categorie_professionelle">Categorie <strong style="color:red;">*</strong></label>
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
@@ -298,7 +297,7 @@
                                         </select>
                                     </div>                                    
                                     <div class="col-12 col-md-3">
-                                        <label class="form-label" for="genre_plan">Genre</label>
+                                        <label class="form-label" for="genre_plan">Genre <strong style="color:red;">*</strong></label>
                                         <select
                                             id="genre_plan"
                                             name="genre_plan"
@@ -310,7 +309,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-3">
-                                        <label class="form-label" for="nombre_plan">Nombre</label>
+                                        <label class="form-label" for="nombre_plan">Nombre <strong style="color:red;">*</strong></label>
                                         <input
                                             type="number"
                                             id="nombre_plan"
@@ -376,7 +375,7 @@
                                 @method('put')
                                 <div class="row">
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation</label>
+                            <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="intitule_action_formation_plan"
@@ -385,7 +384,7 @@
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="structure_etablissement_action_"
@@ -394,7 +393,7 @@
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires</label>
+                            <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="nombre_stagiaire_action_formati"
@@ -403,7 +402,7 @@
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="nombre_groupe_action_formation_"
@@ -412,7 +411,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
+                            <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="nombre_heure_action_formation_p"
@@ -421,7 +420,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="cout_action_formation_plan">Cout de la formation</label>
+                            <label class="form-label" for="cout_action_formation_plan">Cout de la formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="cout_action_formation_plan"
@@ -430,7 +429,7 @@
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="id_type_formation">Type de formation</label>
+                            <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
                             <select
                                 id="id_type_formation"
                                 name="id_type_formation"
@@ -440,7 +439,7 @@
                             </select>
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="id_but_formation">But de la formation</label>
+                            <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
                             <select
                                 id="id_but_formation"
                                 name="id_but_formation"
@@ -450,7 +449,7 @@
                             </select>
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
                                 id="date_debut_fiche_agrement"
@@ -459,7 +458,7 @@
                                />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
                                 id="date_fin_fiche_agrement"
@@ -468,7 +467,7 @@
                                 />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
+                            <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="lieu_formation_fiche_agrement"
@@ -477,7 +476,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="cout_total_fiche_agrement"
@@ -486,7 +485,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="objectif_pedagogique_fiche_agre"
@@ -495,7 +494,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="cadre_fiche_demande_agrement"
@@ -504,7 +503,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="agent_maitrise_fiche_demande_ag"
@@ -513,7 +512,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="employe_fiche_demande_agrement"
@@ -522,7 +521,7 @@
                                  />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel)</label>
+                            <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="file_beneficiare"
@@ -531,7 +530,7 @@
                                 />
                             </div>                        
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF)</label>
+                            <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="facture_proforma_action_formati"
@@ -547,6 +546,7 @@
 
                              
                                 <br/>
+                                <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
                                 <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
 
                                 <?php if (count($actionplanformations)>=1){ ?>
@@ -590,18 +590,15 @@
                                                         
                                                 <td align="center">
                                                     @can($lien.'-edit')
-                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width/2,screen.height,'yes','center',1);" target="_blank"
+                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>                                                        
                                                         
                                                            <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
-                                                                <form  method="POST" class="form" action="{{ route($lien.'.destroy', \App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}" enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <input name="id_plan_action" value="{{$planformation->id_plan_de_formation}}" type="hidden"/>
-                                                                    <button type="submit" onclick='javascript:if (!confirm("Voulez-vous supprimer cet action de plan de formation ?")) return false;'
-                                                                    class=" "><img src='/assets/img/trash-can-solid.png'></button>
-                                                                </form>
+                                                                    <a href="{{ route($lien.'.deleteapf',\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}"
+                                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet action de plan de formation ?")) return false;'
+                                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+
                                                             <?php } ?>    
                                                     @endcan
 

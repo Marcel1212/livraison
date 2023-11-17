@@ -68,13 +68,16 @@ class TratementPlanFormationController extends Controller
         $actionplan = null;
         $ficheagrement = null;
         $beneficiaires = null;
+        $planformation = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
-        }     
-        return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires'));
+            $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+        } 
+             
+        return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
