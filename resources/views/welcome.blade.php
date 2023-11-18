@@ -304,10 +304,10 @@ Hero Area
             </div>
 
 
-        
+
         </div>
     </div>
-    
+
 
     <footer class="footer-wrapper pt-45 footer-layout1" data-bg-src="{{asset('assetsfront/img/bg/footer-bg.png')}}">
 
@@ -344,6 +344,7 @@ Hero Area
                                     <ul class="menu">
                                         <li><a href="#">Consulter les questions fréquentes</a></li>
                                         <li><a href="#">Contacter l'assistance</a></li>
+                                        <li><a href="#">Conditions générales</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -373,7 +374,7 @@ Hero Area
                             <div class="footer-links">
                                 <ul>
                                     <li><a href="#">Politique de confidentialité</a></li>
-                                    <li><a href="#">Conditions générales</a></li>
+                                    <li><a href="www.barnoininformatique.ci">Designed by Barnoin Informatique</a></li>
                                 </ul>
                             </div>
                         </div>
