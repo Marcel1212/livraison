@@ -64,6 +64,7 @@
                                                     <th>Date de creation</th>
                                                     <th>Statut Soumission</th>
                                                     <th>Statut Etat</th>
+                                                    <th>Statut Instruction</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -84,10 +85,23 @@
                                                             <?php }  ?>
                                                         </td>
                                                         <td align="center">
-                                                            <?php if ($demandeenrole->flag_valide == true ){?>
+                                                            <?php if ($demandeenrole->flag_valide == true && $demandeenrole->flag_rejet == false){?>
+                                                            <span class="badge bg-success">Recevable</span>
+                                                            <?php } else if($demandeenrole->flag_valide != true && $demandeenrole->flag_rejet == true) {?>
+                                                            <span class="badge bg-danger">Non recevable</span>
+                                                            <?php }  else if($demandeenrole->flag_valide == null && $demandeenrole->flag_rejet == null && $demandeenrole->flag_attente_rec == null ) {?>
+                                                            <span class="badge bg-secondary">En cours de traitement</span>
+                                                            <?php }   else if($demandeenrole->flag_attente_rec == true && $demandeenrole->flag_rejet == null && $demandeenrole->flag_valide == null) {?>
+                                                            <span class="badge bg-warning">Mis en attente</span>
+                                                            <?php }  ?>
+                                                        </td>
+                                                        <td align="center">
+                                                            <?php if ($demandeenrole->statut_instruction == true && $demandeenrole->date_instruction != null ) {?>
                                                             <span class="badge bg-success">Valider</span>
-                                                            <?php } else {?>
-                                                            <span class="badge bg-danger">Non valider</span>
+                                                            <?php } else if($demandeenrole->statut_instruction == false && $demandeenrole->date_instruction != null ) {?>
+                                                            <span class="badge bg-danger">Rejeter</span>
+                                                            <?php }  else if($demandeenrole->statut_instruction == null && $demandeenrole->date_instruction == null  ) {?>
+                                                            <span class="badge bg-secondary">En cours de traitement</span>
                                                             <?php }  ?>
                                                         </td>
                                                         <td align="center">

@@ -326,20 +326,66 @@ class ProjetEtudeController extends Controller
         //dd($piecesetude['0']['libelle_pieces']);
         // Pieces Projet Etudes
         //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
+        //dd($projetetude->flag_soumis);
+        if($projetetude->flag_soumis == true) {
+            $listeuser = User::all();
+            $listeuserfinal = "<option value=''> Selectionnez un agent </option>";
+            foreach ($listeuser as $comp) {
+                $listeuserfinal .= "<option value='" . $comp->id  . "'>" . $comp->name . " ". $comp->prenom_users   ." </option>";
+            }
 
-        $statutoperations = StatutOperation::all();
-        $statutoperation = "<option value=''> Selectionnez le statut </option>";
-        foreach ($statutoperations as $comp) {
-            $statutoperation .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
+        }else{
+            $listeuserfinal = "";
+        }
+        // recuperation chef de service
+        if($projetetude->flag_soumis_chef_service == true ){
+
+            $id_cs = $projetetude->id_chef_serv;
+            //dd($id_cs);
+            $user_cs = User::find($id_cs);
+             $user_cs_name = $user_cs->name . ' '.$user_cs->prenom_users;
+        }else {
+            $user_cs_name = '';
         }
 
-        $motifs = Motif::all();
-        $motif = "<option value=''> Selectionnez un motif </option>";
-        foreach ($motifs as $comp) {
-            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        // recuperation charge d'etude
+        if($projetetude->flag_soumis_charge_etude == true ){
+
+            $id_cs = $projetetude->id_charge_etude;
+            //dd($id_cs);
+            $user_cs = User::find($id_cs);
+             $user_ce_name = $user_cs->name . ' '.$user_cs->prenom_users;
+        }else {
+            $user_ce_name = '';
         }
 
-        return view('projetetude.edit', compact('projetetude','statutoperation','motif','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        // recuperation de l'etat de recevabilite
+        $idmot = $projetetude->motif_rec ;
+        if($projetetude->flag_valide == true ){
+
+             $etat_dossier = 'Valide';
+        }else {
+            $etat_dossier = 'Rejete';
+        }
+
+        $motif_p = $projetetude->motif_rec ;
+        //dd($motif);
+
+
+        // Recuperation des motif & des statuts de recevabilite
+        $motif = Motif::where([['code_motif','=','PRE']])->get();;
+        $motifs = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motif as $comp) {
+            $motifs .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+        $statut = StatutOperation::where([['code_statut_operation','=','PRE']])->get();;
+        $statuts = "<option value=''> Selectionnez un statut </option>";
+        foreach ($statut as $comp) {
+            $statuts .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
+        }
+        //dd($motifs);
+
+        return view('projetetude.edit', compact('motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 
@@ -355,7 +401,194 @@ class ProjetEtudeController extends Controller
         if ($request->isMethod('put')) {
 
             $data = $request->all();
-            dd($data);
+            //dd($data);
+            /// Traitement de l'instruction
+            if($data['action'] === 'soumission_instruction'){
+                // ID du plan
+                    // traitement valide
+                    if($data['id_statut_instruction'] === '3'){
+                        //dd($data);
+                        if (isset($data['fichier_instruction'])){
+
+                            $filefront = $data['fichier_instruction'];
+
+                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+
+                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+
+                                $input['fichier_instruction'] = $fileName1;
+
+                            }else{
+                                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+
+                            }
+
+                        }
+
+                        $date_soumission = Carbon::now();
+                        $projetetude = ProjetEtude::find($id);
+                        $projetetude->statut_instruction = true;
+                        $projetetude->date_instruction = $date_soumission;
+                        $projetetude->commentaires_instruction = $data['commentaires_instruction'];
+                        $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
+                        $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
+                        $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
+                        $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
+                        $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
+                        $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
+                        $projetetude->cible_instruction = $data['cible_instruction'];
+                        $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+                        $projetetude->piece_jointe_instruction =$fileName1;
+                        $projetetude->save();
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Dossier validé effectue avec succes');
+                    }
+
+                    // traitement rejet
+                    if($data['id_statut_instruction'] === '5'){
+                        //dd($data);
+                        if (isset($data['fichier_instruction'])){
+
+                            $filefront = $data['fichier_instruction'];
+
+                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+
+                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+
+                                $input['fichier_instruction'] = $fileName1;
+
+                            }else{
+                                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+
+                            }
+
+                        }
+                        $date_soumission = Carbon::now();
+                        $projetetude = ProjetEtude::find($id);
+                        $projetetude->statut_instruction = false;
+                        $projetetude->date_instruction = $date_soumission;
+                        $projetetude->commentaires_instruction = $data['commentaires_instruction'];
+                        $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
+                        $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
+                        $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
+                        $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
+                        $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
+                        $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
+                        $projetetude->cible_instruction = $data['cible_instruction'];
+                        $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+                        $projetetude->piece_jointe_instruction =$fileName1;
+                        $projetetude->save();
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet de l\'instruction effectue avec succes');
+                    }
+          }
+            // Traitement de la recevabilite
+            if($data['action'] === 'soumission_recevabilite'){
+                // ID du plan
+
+               // traitement recavable
+               if($data['id_charge_etude'] === '3'){
+                //dd($data);
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_valide = true;
+                $projetetude->flag_rejet = false;
+                $projetetude->flag_attente_rec = false;
+                $projetetude->date_valide = $date_soumission;
+                $projetetude->commentaires_recevabilite = $data['commentaires_chef_service'];
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                // $user_id = Auth::user()->id;
+                // $projetetude->id_charge_etude = $user_id;
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Recevabilite effectue avec succes');
+               }
+
+               // traitement attente
+               if($data['id_charge_etude'] === '4'){
+                //dd($data);
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_attente_rec = true;
+                // $projetetude->flag_rejet = false;
+                $projetetude->date_mis_en_attente = $date_soumission;
+                $projetetude->commentaires_recevabilite = $data['commentaires_chef_service'];
+                // Recuperation du motif
+                $id_motif = intval($data['motif_rec']);
+                $motif = Motif::find($id_motif);
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                // $user_id = Auth::user()->id;
+                // $projetetude->id_charge_etude = $user_id;
+                $projetetude->motif_rec = $motif->libelle_motif;
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Mise en attente  du projet d\'etude edffectue effectue avec succes');
+               }
+
+               // traitement rejet
+               if($data['id_charge_etude'] === '5'){
+                //dd($data);
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_valide = false;
+                $projetetude->flag_rejet = true;
+                $projetetude->flag_attente_rec = false;
+                $projetetude->date_rejet = $date_soumission;
+                $projetetude->commentaires_recevabilite = $data['commentaires_chef_service'];
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                // $user_id = Auth::user()->id;
+                // $projetetude->id_charge_etude = $user_id;
+                // Recuperation du motif
+                $id_motif = intval($data['motif_rec']);
+                $motif = Motif::find($id_motif);
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                // $user_id = Auth::user()->id;
+                // $projetetude->id_charge_etude = $user_id;
+                $projetetude->motif_rec = $motif->libelle_motif;
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet du projet d\'etude edffectue effectue avec succes');
+               }
+            }
+            // Traitement de la soumission du Chef de service
+            if($data['action'] === 'soumission_plan_etude_cs'){
+                // ID du plan
+               // dd($data);
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_soumis_charge_etude = true;
+                $projetetude->date_trans_charg_etude = $date_soumission;
+                $projetetude->commentaires_cs = $data['commentaires_chef_service'];
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                //dd(($data));
+                $user_id = intval($data['id_charge_etude']);
+                $projetetude->id_charge_etude = $user_id;
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au charge d\'etude avec succes');
+            }
+
+            // Traitement de la soumission du Chef de Departement
+            if($data['action'] === 'soumission_plan_etude_cd'){
+                // ID du plan
+                $date_soumission = Carbon::now();
+                $projetetude = ProjetEtude::find($id);
+                $projetetude->flag_soumis_chef_service = true;
+                $projetetude->date_trans_chef_s = $date_soumission;
+                $projetetude->commentaires_cd = $data['commentaires_chef_dep'];
+                // Atribution au chef de departement
+                // Recuperation de l'id
+                // $user_id = Auth::user()->id;
+                // dd(intval($data['id_chef_service']));
+                // dd($user_id);
+                $user_id = intval($data['id_chef_service']);
+                $projetetude->id_chef_serv = $user_id;
+                $projetetude->save();
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au chef de service');
+            }
             // Traitement de la soumission
             if($data['action'] === 'soumission_plan_formation'){
                 // ID du plan
@@ -363,6 +596,10 @@ class ProjetEtudeController extends Controller
                 $projetetude = ProjetEtude::find($id);
                 $projetetude->flag_soumis = true;
                 $projetetude->date_soumis = $date_soumission;
+                // Atribution au chef de departement
+                // Recuperation de l'id Traitement a faire
+                $user_id = Auth::user()->id;
+                $projetetude->id_chef_dep = $user_id;
                 $projetetude->save();
                 return redirect()->route('projetetude.index')->with('success', 'Projet soumis avec succès.');
 
@@ -389,23 +626,23 @@ class ProjetEtudeController extends Controller
                         //$input['avant_projet_tdr'] = $fileName1;
 
                     }else{
-                        return redirect()->route('projetetude.create')
-                        ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                        //->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
                     }
 
                 }
 
                  // Modification du  Courrier de demande de financement
-                 if (isset($data['avant_projet_tdr_modif'])){
+                 if (isset($data['courier_demande_fin_modif'])){
 
-                    $filefront = $data['avant_projet_tdr_modif'];
+                    $filefront = $data['courier_demande_fin_modif'];
 
                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                        $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+                        $fileName1 = 'courier_demande_fin'. '_' . rand(111,99999) . '_' . 'courier_demande_fin' . '_' . time() . '.' . $filefront->extension();
 
-                        $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
-                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
+                        $filefront->move(public_path('pieces_projet/courier_demande_fin/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','2']])->get();
                         $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
                         $piece= PiecesProjetEtude::find($id_piece);
                         $piece->libelle_pieces = $fileName1;
@@ -413,29 +650,108 @@ class ProjetEtudeController extends Controller
                         //$input['avant_projet_tdr'] = $fileName1;
 
                     }else{
-                        return redirect()->route('projetetude.create')
-                        ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')
+                        ->with('error', 'l\extension du fichier du courrier de demande de financement n\'est pas correcte');
                     }
 
                 }
 
-                // if (isset($data['courier_demande_fin_modif'])){
-                //     $filefront = $data['courier_demande_fin_modif'];
+                // Modification du dossier intention
+                if (isset($data['dossier_intention_modif'])){
 
-                //     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                    $filefront = $data['dossier_intention_modif'];
 
-                //         $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                //         $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
+                        $fileName1 = 'dossier_intention'. '_' . rand(111,99999) . '_' . 'dossier_intention' . '_' . time() . '.' . $filefront->extension();
 
-                //         $input['avant_projet_tdr'] = $fileName1;
+                        $filefront->move(public_path('pieces_projet/dossier_intention/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','3']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
 
-                //     }else{
-                //         return redirect()->route('projetetude.create')
-                //         ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
-                //     }
+                    }else{
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')
+                        ->with('error', 'l\extension du fichier du dossier intention n\'est pas correcte');
+                    }
 
-                // }
+                }
+
+
+                // Modification de la lettre d'engagement
+                if (isset($data['lettre_engagement_modif'])){
+
+                    $filefront = $data['lettre_engagement_modif'];
+
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                        $fileName1 = 'lettre_engagement'. '_' . rand(111,99999) . '_' . 'lettre_engagement' . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces_projet/lettre_engagement/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','4']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
+
+                    }else{
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')
+                        ->with('error', 'l\extension du fichier de la lettre d\'engagement n\'est pas correcte');
+                    }
+
+                }
+
+                 // Modification de l'offre technique'
+                 if (isset($data['offre_technique_modif'])){
+
+                    $filefront = $data['offre_technique_modif'];
+
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                        $fileName1 = 'offre_technique'. '_' . rand(111,99999) . '_' . 'offre_technique' . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces_projet/offre_technique/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','5']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
+
+                    }else{
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')
+                        ->with('error', 'l\extension du fichier de l\'offre technique n\'est pas correcte');
+                    }
+
+                }
+
+                // Modification de l'offre finnaciere'
+                if (isset($data['offre_financiere_modif'])){
+
+                    $filefront = $data['offre_financiere_modif'];
+
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                        $fileName1 = 'offre_financiere'. '_' . rand(111,99999) . '_' . 'offre_financiere' . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces_projet/offre_financiere/'), $fileName1);
+                        $pieceprojetetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','6']])->get();
+                        $id_piece = $pieceprojetetude[0]['id_pieces_projet_etude'];
+                        $piece= PiecesProjetEtude::find($id_piece);
+                        $piece->libelle_pieces = $fileName1;
+                        $piece->save();
+                        //$input['avant_projet_tdr'] = $fileName1;
+
+                    }else{
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')
+                        ->with('error', 'l\extension du fichier de l\'offre technique n\'est pas correcte');
+                    }
+
+                }
 
                 $projetetude = ProjetEtude::find($id);
                 $projetetude->titre_projet_etude = $data['titre_projet'];

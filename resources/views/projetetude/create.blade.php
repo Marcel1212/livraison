@@ -172,7 +172,7 @@
 
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Avant-projet TDR <span
-                                                                            style="color:red;">*</span> (PDF, WORD)
+                                                                            style="color:red;">*</span> (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="avant_projet_tdr"
                                                                         class="form-control" placeholder=""
@@ -181,7 +181,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Courrier de demande de
                                                                         financement<span style="color:red;">*</span> (PDF,
-                                                                        WORD)
+                                                                        WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="courier_demande_fin"
                                                                         class="form-control" placeholder=""
@@ -189,7 +189,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Dossier d’intention <span
-                                                                            style="color:red;">*</span> (PDF, WORD)
+                                                                            style="color:red;">*</span> (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="dossier_intention"
                                                                         class="form-control" placeholder=""
@@ -197,7 +197,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre d’engagement<span
-                                                                            style="color:red;">*</span> (PDF, WORD)
+                                                                            style="color:red;">*</span> (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="lettre_engagement"
                                                                         class="form-control" placeholder=""
@@ -205,7 +205,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Offre technique<span
-                                                                            style="color:red;">*</span> (PDF, WORD)
+                                                                            style="color:red;">*</span> (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="offre_technique"
                                                                         class="form-control" placeholder=""
@@ -213,7 +213,7 @@
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Offre financière<span
-                                                                            style="color:red;">*</span> (PDF, WORD)
+                                                                            style="color:red;">*</span> (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="offre_financiere"
                                                                         class="form-control" placeholder=""
