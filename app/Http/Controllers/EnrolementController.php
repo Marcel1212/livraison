@@ -79,13 +79,15 @@ class EnrolementController extends Controller
 
             $this->validate($request, [
                 'raison_sociale_demande_enroleme' => 'required',
-                'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
+                'email_demande_enrolement' => 'required',
+                //'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                 'indicatif_demande_enrolement' => 'required',
                 'tel_demande_enrolement' => 'required',
                 'id_localite' => 'required',
                 'id_centre_impot' => 'required',
                 'id_activites' => 'required',
-                'ncc_demande_enrolement' => 'required|unique:demande_enrolement,ncc_demande_enrolement',
+                'ncc_demande_enrolement' => 'required',
+                //'ncc_demande_enrolement' => 'required|unique:demande_enrolement,ncc_demande_enrolement',
                 'rccm_demande_enrolement' => 'required',
                 'numero_cnps_demande_enrolement' => 'required',
                 'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
@@ -101,7 +103,7 @@ class EnrolementController extends Controller
                 'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
                 'id_activites.required' => 'Veuillez selectionner une activité.',
                 'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
-                'ncc_demande_enrolement.unique' => 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
+                //'ncc_demande_enrolement.unique' => 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
                 'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
                 'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
                 'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
@@ -114,10 +116,18 @@ class EnrolementController extends Controller
                 'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
                 'captcha.required' => 'Veuillez saisir le captcha.',
+                'captcha.captcha' => 'Caractère saisi incorrect.',
             ]);
 
             $data = $request->all();
 
+            $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement','=',$data['ncc_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+
+            if(count($verfiencc)>=1){
+
+                return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
+            }
+            
             $input = $request->all();
 
             if (isset($data['piece_dfe_demande_enrolement'])){
@@ -209,7 +219,7 @@ class EnrolementController extends Controller
         }
 
         return redirect()->route('enrolements')
-            ->with('success', 'Votre demande d\'enrolement a ete effectuer avec succes');        
+            ->with('success', 'Votre demande d\'enrôlement a été effectuée avec succès !');        
     }
 
     /**
@@ -323,8 +333,9 @@ class EnrolementController extends Controller
                 $demandeenrole1 = DemandeEnrolement::find($id);
                 
                                 
-                
-                return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
+                return redirect('enrolement/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+               // return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }          
             
             if($data['action'] === 'NonRecevable'){

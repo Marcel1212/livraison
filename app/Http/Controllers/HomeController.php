@@ -246,7 +246,7 @@ class HomeController extends Controller
         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         //dd($infoentreprise);
         $pays = Pays::all();
-        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
         foreach ($pays as $comp) {
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         } 
