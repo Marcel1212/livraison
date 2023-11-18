@@ -54,26 +54,6 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/quill/typography.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/quill/katex.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/quill/editor.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/dropzone/dropzone.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/tagify/tagify.css">
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
-    <link rel="stylesheet" href="/assets/vendor/css/rtl/core.css" />
-    <link rel="stylesheet" href="/assets/vendor/css/rtl/theme-default.css" />
-    <link rel="stylesheet" href="/assets/css/demo.css" />
-
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="/assets/vendor/libs/node-waves/node-waves.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="/assets/vendor/libs/typeahead-js/typeahead.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
@@ -158,8 +138,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar avatar-online">
-                                                    <img src="{{ $iconUser }}" alt
-                                                        class="h-auto rounded-circle" />
+                                                    <img src="{{ $iconUser }}" alt class="h-auto rounded-circle" />
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
@@ -236,6 +215,8 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
     <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+
 
     <!-- Vendors JS -->
     <script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
@@ -271,7 +252,13 @@ $imagedashboard = Menu::get_info_image_dashboard();
         <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
         <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
         <script src="/assets/vendor/libs/select2/select2.js"></script>
-        >>>>>>> origin/dev
+
+        <!-- Main JS -->
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+
+        <!-- Page JS -->
+        <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
+        <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
             var win = null;

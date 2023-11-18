@@ -29,27 +29,9 @@
 </script>
 
     <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper ">
-            <div class="content-header row">
-                <div class="content-header-left col-md-9 col-12 mb-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$soustitre}}</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{$lien}}">{{$titre}}</a></li>
-                                    <li class="breadcrumb-item active">{{$soustitre}}  </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+            <h5 class="py-2 mb-1">
+                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+            </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -70,12 +52,15 @@
                                       </div>
                                   @endforeach
                               @endif
-                <section id="multiple-column-form">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">{{$soustitre}} </h4>
+                              <div class="row">
+                        <!-- Basic Layout -->
+                        <div class="col-xxl">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0">{{$titre}}</h5>
+                                    <small class="text-muted float-end">
+
+                                    </small>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($demandeenrole->id_demande_enrolement)) }}">
@@ -318,15 +303,10 @@
                                            <?php } ?>
                                         </div>
                                     </form>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                                    </div>
+                </div>
             </div>
         </div>
-    </div>
     <!-- END: Content-->
 
 @endsection

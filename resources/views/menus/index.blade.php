@@ -59,9 +59,9 @@
                                                 <td>{{ $menu->priorite_menu }}</td>
                                                 <td align="center">
                                                         <?php if ($menu->is_valide == true){ ?>
-                                                    <span class="badge badge-light-success">Actif</span>
+                                                    <span class="badge bg-success">Actif</span>
                                                     <?php } else { ?>
-                                                    <span class="badge badge-light-danger">Inactif</span>
+                                                    <span class="badge bg-danger">Inactif</span>
                                                     <?php } ?>
                                                 </td>
                                                 <td align="center">

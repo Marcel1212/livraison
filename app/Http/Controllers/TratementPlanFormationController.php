@@ -68,13 +68,16 @@ class TratementPlanFormationController extends Controller
         $actionplan = null;
         $ficheagrement = null;
         $beneficiaires = null;
+        $planformation = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
-        }     
-        return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires'));
+            $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+        } 
+             
+        return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -167,12 +170,12 @@ class TratementPlanFormationController extends Controller
                 ]);
                 
                 $input = $request->all();
-
+                $dateanneeencours = Carbon::now()->format('Y');
                 $input['id_user'] = Auth::user()->id;
                 $input['user_conseiller'] = Auth::user()->id;
                 $input['flag_recevablite_plan_formation'] = true;
-                $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5);
-                $input['code_plan_formation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5);
+                $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+                $input['code_plan_formation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
                 $input['date_recevabilite_plan_formatio'] = Carbon::now();
 
                 $planformation = PlanFormation::find($id);
@@ -190,13 +193,13 @@ class TratementPlanFormationController extends Controller
                 ]);
                 
                 $input = $request->all();
-
+                $dateanneeencours = Carbon::now()->format('Y');
                 $input['id_user'] = Auth::user()->id;
                 $input['user_conseiller'] = Auth::user()->id;
                 $input['flag_recevablite_plan_formation'] = true;
                 $input['flag_rejeter_plan_formation'] = true;
-                $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5);
-                $input['code_plan_formation'] = substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5);
+                $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                $input['code_plan_formation'] = substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
                 $input['date_recevabilite_plan_formatio'] = Carbon::now();
                 $input['date_rejet_paln_formation'] = Carbon::now();
 

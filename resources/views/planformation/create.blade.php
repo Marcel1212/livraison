@@ -99,7 +99,7 @@
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>N° de compte contribuable </label>
+                                        <label>N° de compte contribuable <strong style="color:red;">*</strong></label>
                                         <input type="text" 
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
@@ -107,7 +107,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Activité </label>
+                                        <label>Activité <strong style="color:red;">*</strong></label>
                                         <input type="text" 
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
@@ -115,7 +115,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation geaographique </label>
+                                        <label>Localisation geaographique <strong style="color:red;">*</strong></label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
@@ -123,7 +123,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Repère d'accès </label>
+                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
                                         <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
@@ -131,7 +131,7 @@
                                 </div>                                
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal </label>
+                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
@@ -149,10 +149,10 @@
                                                 </select>
                                             </div>                     
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone  </label>
+                                                <label class="form-label">Telephone <strong style="color:red;">*</strong> </label>
                                                 <input type="text" 
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
+                                                value="{{@$infoentreprise->tel_entreprises}}" name="tel_entreprises">
                                             </div>
                                         </div> 
                                     </div>
@@ -168,7 +168,7 @@
                                                 </select>
                                             </div>                     
                                             <div class="col-md-8">
-                                                <label class="form-label">Cellulaire Professionnelle  </label>
+                                                <label class="form-label">Cellulaire Professionnelle <strong style="color:red;">*</strong> </label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
@@ -198,7 +198,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation </label>
+                                        <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong> </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -206,7 +206,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Fonction du responsable formation </label>
+                                        <label>Fonction du responsable formation <strong style="color:red;">*</strong> </label>
                                         <input type="text" name="fonction_charge_plan_formation" id="fonction_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -214,7 +214,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation </label>
+                                        <label>Email professsionel du responsable formation <strong style="color:red;">*</strong> </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -222,7 +222,7 @@
                                 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié </label>
+                                        <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -230,7 +230,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Type entreprises </label>
+                                        <label>Type entreprises <strong style="color:red;">*</strong></label>
                                         <select class="select2 form-select" name="id_type_entreprise" id="id_type_entreprise" required="required">
                                             <?php echo $typeentreprise; ?>
                                         </select>
@@ -240,7 +240,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
 
-                                        <label>Masse salariale </label>
+                                        <label>Masse salariale <strong style="color:red;">*</strong></label>
                                         <input type="number" name="masse_salariale" id="masse_salariale"
                                                class="form-control form-control-sm" required="required">
                                     </div>

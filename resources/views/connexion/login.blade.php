@@ -119,7 +119,7 @@ $couleur = Menu::get_info_couleur();
               </a>
             </div>
             <!-- /Logo -->
-            <h3 class="mb-1">Bienvenue!</h3>
+            <h3 class="mb-1">Bienvenue !</h3>
             <p class="mb-4">Connectez-vous à votre compte</p>
 
             <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST" autocomplete="off">
@@ -149,12 +149,12 @@ $couleur = Menu::get_info_couleur();
                   class="form-control"
                   id="username"
                   name="username"
-                  placeholder="Votre Identifiant"
+                  placeholder="Mon identifiant"
                   autofocus/>
               </div>
               <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
-                  <label class="form-label" for="password">Mot de passe</label>
+                  <label class="form-label" for="password">Mon mot de passe</label>
                   <a href="#">
                     <small>Mot de passe oublié ?</small>
                   </a>
@@ -186,21 +186,23 @@ $couleur = Menu::get_info_couleur();
                 </div>
         
                 <div class="form-group mb-4">
-                    <input id="captcha" type="text" class="form-control" placeholder="Enter Captcha" name="captcha">
+                    <span></span>
+                    <label class="form-label">Saisir les caractères ci-dessus</label>
+                    <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
                 </div>
               
               <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
             </form>
 
             <p class="text-center">
-              <span>Vous etes nouveau sur la plateforme ?</span>
+              <span>Vous êtes nouveau sur la plateforme ?</span>
               <a href="{{route('enrolements')}}">
-                <span>Faites vous enroler</span>
+                <span>Faites-vous enrôler</span>
               </a>
             </p>
 
             <div class="divider my-4">
-              <div class="divider-text">or</div>
+              <div class="divider-text">Nous suivre</div>
             </div>
 
             <div class="d-flex justify-content-center">

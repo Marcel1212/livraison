@@ -27,6 +27,7 @@ class ConnexionController extends Controller
     public function login(Request $request)
     {
 
+        $logo = Menu::get_logo();
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'username' => 'required',
@@ -36,6 +37,7 @@ class ConnexionController extends Controller
                 'username.required' => 'Veuillez saisir votreidentifiant.',
                 'password.required' => 'Veuillez saisir le mot de passe.',
                 'captcha.required' => 'Veuillez saisir le captcha.',
+                'captcha.captcha' => 'Caractère saisi incorrect.',
             ]);
 
             $data = $request->input();
@@ -48,7 +50,7 @@ class ConnexionController extends Controller
                 } else {
                     return redirect('/modifiermotdepasse')->with('success', 'Info:  Veuillez modifier votre mot de passe à la première connexion');
                 }
-                return redirect('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de 2ge');
+                return redirect('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
             } else {
                 return redirect('/connexion')->with('error', 'Identifiant ou mot de passe  incorrect');
             }

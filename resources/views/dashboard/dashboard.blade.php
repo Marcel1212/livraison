@@ -1,10 +1,10 @@
 <?php
+
 use App\Helpers\Crypt;
+
 ?>
 @extends('layouts.backLayout.designadmin')
 @section('content')
-
-
 
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -13,31 +13,19 @@ use App\Helpers\Crypt;
             <div class="content-header row">
             </div>
             <div class="content-body">
-                <!-- Dashboard Ecommerce Starts -->
-            <?php if ($nacodes == "ADMIN") { ?>
-            @include('dashboard.menu.admin')
-            <?php } elseif($nacodes == "DECID") { ?>
-            @include('dashboard.menu.decideur')
-            <?php } else { ?>
-            @include('dashboard.menu.autre')
-
-            <?php } ?>
-            <!-- Dashboard Ecommerce ends -->
-
+                <?php if ($nacodes == "ADMIN") { ?>
+                @include('dashboard.menu.admin')
+                <?php } elseif($nacodes == "DECID") { ?>
+                @include('dashboard.menu.decideur')
+                <?php } elseif($nacodes == "ENTREPRISE") { ?>
+                @include('dashboard.menu.entreprise')
+                <?php } elseif($nacodes == "AGTENR") { ?>
+                @include('dashboard.menu.agentenroleur')
+                <?php } else { ?>
+                @include('dashboard.menu.autre')
+                <?php } ?>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
 @endsection

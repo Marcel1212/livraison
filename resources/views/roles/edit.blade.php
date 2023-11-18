@@ -37,9 +37,9 @@
                                     <h5 class="mb-0">{{$titre}}</h5>
                                     <small class="text-muted float-end">
                                         @can('role-create')
-                                            <a href="{{ route($lien.'.create') }}"
+                                            <!--<a href="{{ route($lien.'.create') }}"
                                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                                <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
+                                                <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>-->
                                         @endcan
                                     </small>
                                 </div>
@@ -76,7 +76,7 @@
                                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                     Enregistrer
                                                 </button>
-                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="{{$lien }}">
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien}}">
                                                     Retour</a>
                                             </div>
                                         </div>

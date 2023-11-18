@@ -19,6 +19,7 @@ use App\Models\CategorieProfessionelle;
 use App\Models\CategoriePlan;
 use App\Models\TypeFormation;
 use App\Helpers\Crypt;
+use App\Helpers\InfosEntreprise;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -37,7 +38,8 @@ class PlanFormationController extends Controller
     public function index()
     {
         //if()
-        $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+        //$infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
             $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
             return view('planformation.index',compact('planformations'));
@@ -87,12 +89,14 @@ class PlanFormationController extends Controller
                 'email_professionnel_charge_plan_formation' => 'required',
                 'nombre_salarie_plan_formation' => 'required',
                 'id_type_entreprise' => 'required',
+                'tel_entreprises' => 'required',
                 'masse_salariale' => 'required'
             ],[
                 'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
                 'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
                 'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
                 'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
+                'tel_entreprises.required' => 'Veuillez ajouter un contact telephonique.',
                 'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                 'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                 'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
@@ -142,8 +146,11 @@ class PlanFormationController extends Controller
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
-        }     
-        return view('planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires'));
+            $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+        }   
+        
+        //dd($planformation);
+        return view('planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -434,6 +441,26 @@ class PlanFormationController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
+    {
+        $idVal = Crypt::UrldeCrypt($id);
+//dd($idVal);
+            $actionplan = ActionFormationPlan::find($idVal);
+            $idplanformation = $actionplan->id_plan_de_formation;
+            $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
+            $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
+
+            foreach($beneficiaires as $beneficiaire){
+                BeneficiairesFormation::where([['id_beneficiaire_formation','=',$beneficiaire->id_beneficiaire_formation]])->delete();
+            }
+
+            FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
+            ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
+
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
+
+    }    
+    
+    public function deleteapf($id)
     {
         $idVal = Crypt::UrldeCrypt($id);
 //dd($idVal);
