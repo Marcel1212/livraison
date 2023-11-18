@@ -19,7 +19,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
             <div class="d-flex justify-content-between flex-wrap gap-3 me-5">
                 <div class="d-flex align-items-center gap-3 me-4 me-sm-0">
                         <span class="bg-label-success p-2 rounded">
-                          <i class="ti ti-device-laptop ti-report-money"></i>
+                          <i class="ti ti-device-laptop ti-report-money ti-xl"></i>
                         </span>
                     <div class="content-right">
                         <p class="mb-0">&Agrave; jour de mes cotisations ?</p>
@@ -28,7 +28,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                 </div>
                 <div class="d-flex align-items-center gap-3">
                         <span class="bg-label-info p-2 rounded">
-                          <i class="ti ti-bulb ti-folder"></i>
+                          <i class="ti ti-bulb ti-folder ti-xl"></i>
                         </span>
                     <div class="content-right">
                         <p class="mb-0">Demande en cours de traitement</p>
@@ -50,16 +50,19 @@ $imagedashboard = Menu::get_info_image_dashboard();
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <div>
-                        <h5 class="mb-2">Time Spendings</h5>
-                        <p class="mb-5">Weekly report</p>
+                        <h5 class="mb-2">Période d'exercice</h5>
                     </div>
                     <div class="time-spending-chart">
-                        <h3 class="mb-2">231<span class="text-muted">h</span> 14<span
-                                class="text-muted">m</span></h3>
-                        <span class="badge bg-label-success">+18.4%</span>
+                        <h3 class="mb-2"><span class="text-muted">Du</span> <span class="badge bg-label-success">01-01-2023 </span>
+                            <span class="text-muted"> au </span> <span
+                                class="badge bg-label-danger"> 31-12-2023</span>
+                        </h3>
+                        <h3 class="mb-2"><span class="text-muted">Prolongée jusqu'au </span> <span
+                                class="badge bg-label-success">01-01-2023 </span>
+
+                        </h3>
                     </div>
                 </div>
-                <div id="leadsReportChart"></div>
             </div>
         </div>
     </div>
