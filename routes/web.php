@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
             'butformation' => App\Http\Controllers\ButFormationController::class,
             'typeformation' => App\Http\Controllers\TypeFormationController::class,
             'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
+            'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         ]);
     //});
 
