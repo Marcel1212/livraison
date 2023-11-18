@@ -378,15 +378,15 @@
                                                         
                                                 <td align="center">
                                                     @can($lien.'-edit')
-                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width/2,screen.height,'yes','center',1);" target="_blank"
+                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>                                                        
                                                            <?php if($planformation->flag_recevablite_plan_formation==true){ ?>
                                                            <button type="button"
                                                                     class="btn btn-sm btn-secondary me-1 waves-effect waves-float waves-light" data-bs-toggle="modal" data-bs-target="#traiterActionFomationPlan<?php echo $actionplanformation->id_action_formation_plan ?>" href="#myModal1" data-url="http://example.com">
-                                                                Traiter action
+                                                                        Traiter action
                                                             </button>  
-
+                                                            
                                                             <!--<a href="#myModal" id="btnChange"class="btn btn-default" data-toggle="modal" data-id="@$actionplanformation->id_action_formation_plan">Change Location</a>-->
 
                                                             <?php } ?> 
@@ -406,7 +406,7 @@
                                 @method('put')
                                 <div class="row">
                                             <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite</label>
+                                                    <label class="form-label" for="billings-country">Motif de recevabilite <strong style="color:red;">*</strong></label>
                                                     
                                                         <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
@@ -414,7 +414,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite: </label>
+                                                        <label>Commentaire recevabilite <strong style="color:red;">(obligatoire si non recevable)*</strong>: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_plan_formation" id="commentaire_recevable_plan_formation" rows="6">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
                                                     </div>
                                                 </div>
@@ -634,7 +634,7 @@
                         <hr/>
                         
                         <div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de non-financement</label>
+                            <label class="form-label" for="billings-country">Motif de non-financement <strong style="color:red;">(obligatoire si le montant accordé est egal a 0*)</strong></label>
                                                     
                             <select class="form-select" data-allow-clear="true" name="motif_non_financement_action_formation" id="motif_non_financement_action_formation">
                                 <?= $motif; ?>
@@ -642,12 +642,12 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="mb-1">
-                                <label>Montant accorder: </label>
+                                <label>Montant accorder <strong style="color:red;">*</strong>: </label>
                                 <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                         </div>                         
                         <div class="col-md-12 col-12">
                             <div class="mb-1">
-                                <label>Commentaire: </label>
+                                <label>Commentaire <strong style="color:red;">*</strong>: </label>
                                 <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
                             </div>
                         </div>                   

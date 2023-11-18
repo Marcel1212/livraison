@@ -11,7 +11,7 @@ $logo = Menu::get_logo();
         <div
             class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column">
             <div>
-                © 2023 -
+                © Copyright  -
                 <script>
                     document.write(new Date().getFullYear());
                 </script>
@@ -19,7 +19,7 @@ $logo = Menu::get_logo();
             </div>
             <div class="d-none d-lg-inline-block">
                 Design by
-                <a href="#" class="footer-link me-4" target="_blank">Barnoin informatique </a>
+                <a href="https://barnoininformatique.ci/" class="footer-link me-4" target="_blank">Barnoin informatique </a>
             </div>
         </div>
     </div>

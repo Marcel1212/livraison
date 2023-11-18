@@ -368,7 +368,7 @@ Hero Area
                 <div class="copyright-wrap">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-6">
-                            <p class="copyright-text">Copyright © document.write(new Date().getFullYear()); <a href="{{route('/')}}">FDFP</a> Tous droits réservés.</p>
+                            <p class="copyright-text">Copyright © <?php echo Date('Y') ;?>; <a href="{{route('/')}}">FDFP</a> Tous droits réservés.</p>
                         </div>
                         <div class="col-md-6 text-end d-none d-md-block">
                             <div class="footer-links">

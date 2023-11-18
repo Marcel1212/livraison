@@ -37,6 +37,7 @@ class ConnexionController extends Controller
                 'username.required' => 'Veuillez saisir votreidentifiant.',
                 'password.required' => 'Veuillez saisir le mot de passe.',
                 'captcha.required' => 'Veuillez saisir le captcha.',
+                'captcha.captcha' => 'Caractère saisi incorrect.',
             ]);
 
             $data = $request->input();
