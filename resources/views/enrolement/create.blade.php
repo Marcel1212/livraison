@@ -1,4 +1,4 @@
-<?php 
+<?php
 use App\Helpers\Menu;
 $logo = Menu::get_logo();
 $reseaux = Menu::get_info_reseaux();
@@ -78,10 +78,10 @@ $reseaux = Menu::get_info_reseaux();
         <!-- / Menu -->
 
         <!-- Layout container -->
-        <div class="layout-page">
+        <div class="layout-page bt-ls-x0">
           <!-- Navbar -->
 
-          <nav class="layout-navbar shadow-none py-0">
+          <nav class="layout-navbar shadow-none bt-ls-xl0 py-0">
             <div class="container">
               <div class="navbar navbar-expand-lg landing-navbar px-3 px-md-4">
                 <!-- Menu logo wrapper: Start -->
@@ -130,7 +130,7 @@ $reseaux = Menu::get_info_reseaux();
                 <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
 
                   <ul class="navbar-nav me-auto">
-                    
+
                   </ul>
                 </div>
                 <div class="landing-menu-overlay d-lg-none"></div>
@@ -162,11 +162,11 @@ $reseaux = Menu::get_info_reseaux();
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="faq-header d-flex flex-column justify-content-center align-items-center rounded">
                 <h3 class="text-center"></h3>
-                  <span class="input-group-text" id="basic-addon1"></span>
+
                 </div>
                 <p class="text-center mb-0 px-3"></p>
               </div>
-              
+
             </div>
 
             <div class="container-xxl flex-grow-1 container-p-y">
@@ -196,7 +196,7 @@ $reseaux = Menu::get_info_reseaux();
                                       </div>
                                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                   </div>-->
-                              @endif 
+                              @endif
 
                               @if($errors->any())
                                   @foreach ($errors->all() as $error)
@@ -207,13 +207,13 @@ $reseaux = Menu::get_info_reseaux();
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif               
+                              @endif
               <!-- Sticky Actions -->
               <div class="row">
                 <div class="col-12">
                   <div class="card">
                     <div
-                      class="card-header sticky-element bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
+                      class="card-header bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
                       <h3 class="card-title mb-sm-0 me-2">Demande d'enrôlement</h3>
                       <div class="action-btns">
                         <button class="btn btn-label-primary me-3">
@@ -225,11 +225,11 @@ $reseaux = Menu::get_info_reseaux();
                       <div class="row">
                         <div class="col-lg-9 mx-auto">
                           <!-- 1. Delivery Address -->
-                                                     
-                          <h5 class="mb-4">1. Renseigner les informations </h5>
+
+                          <h5 class="my-4">1. Renseigner les informations </h5>
 
                           <form method="POST" class="form" action="{{ route('enrolements.store') }}" enctype="multipart/form-data">
-                            @csrf                          
+                            @csrf
                           <div class="row g-3">
 
                           <div class="row">
@@ -259,14 +259,14 @@ $reseaux = Menu::get_info_reseaux();
                                   <select class="form-select input-group-text" data-allow-clear="true" name="indicatif_demande_enrolement">
                                       <?= $pay; ?>
                                   </select>
-                                </div>                     
+                                </div>
                                 <div class="col-md-8">
                                   <label class="form-label">Telephone  </label>
                                   <input type="number" name="tel_demande_enrolement"  class="form-control" placeholder="" required="required"/>
                                 </div>
                               </div>
                             </div>
-                          </div>                            
+                          </div>
 
                           <div class="row">
                             <div class="col-md-4">
@@ -274,7 +274,7 @@ $reseaux = Menu::get_info_reseaux();
                               <select class="select2 form-select" data-allow-clear="true" name="id_localite" required="required">
                                   <?= $localite; ?>
                               </select>
-                              
+
                             </div>
 
                             <div class="col-md-4">
@@ -282,7 +282,7 @@ $reseaux = Menu::get_info_reseaux();
                               <select class="select2 form-select" data-allow-clear="true" name="id_centre_impot" required="required">
                                   <?= $centreimpot; ?>
                               </select>
-                              
+
                             </div>
 
                             <div class="col-md-4">
@@ -290,10 +290,10 @@ $reseaux = Menu::get_info_reseaux();
                               <select class="select2 form-select" data-allow-clear="true" name="id_activites" required="required">
                                   <?= $activite; ?>
                               </select>
-                              
+
                             </div>
                           </div>
-                          
+
                           <div class="row">
                             <div class="col-4 col-md-4">
                               <div class="mb-3">
@@ -317,21 +317,21 @@ $reseaux = Menu::get_info_reseaux();
                             <div class="col-4 col-md-4">
                               <div class="mb-3">
                                 <label class="form-label" for="collapsible-cnps-name">N° CNPS</label>
-                                
+
                                   <input
                                           type="text"
                                           class="form-control"
                                           maxlength=""
                                           placeholder="" name="numero_cnps_demande_enrolement" required="required"/>
 
-                                
+
                               </div>
                             </div>
-                          </div>                          
+                          </div>
 
                           </div>
 
-                          
+
                           <hr/>
 
                           <!-- 2. Delivery Type -->
@@ -339,25 +339,25 @@ $reseaux = Menu::get_info_reseaux();
 
 
                           <div class="row gy-3">
- 
+
                           <div class="col-md-4">
                             <label class="form-label">Piece DFE * (PDF, JPG, JPEG, PNG) 5M</label>
                             <input type="file" name="piece_dfe_demande_enrolement"  class="form-control" placeholder="" required="required"/>
-                          </div>                  
+                          </div>
                           <div class="col-md-4">
                             <label class="form-label">Piece RCCM * (PDF, JPG, JPEG, PNG) 5M</label>
                             <input type="file" name="piece_rccm_demande_enrolement"  class="form-control" placeholder="" required="required"/>
-                          </div>                  
+                          </div>
                           <div class="col-md-4">
                             <label class="form-label">Piece attestation immat * (PDF, JPG, JPEG, PNG) 5M</label>
                             <input type="file" name="piece_attestation_immatriculati"  class="form-control" placeholder="" required="required"/>
                           </div>
-                            
+
                           </div>
 
                           <br/>
-                          <hr>          
-                          
+                          <hr>
+
                           <h5 class="my-4">3. Verificateur de securite</h5>
 
                           <div class="row gy-3">

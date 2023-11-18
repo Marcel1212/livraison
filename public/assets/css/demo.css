@@ -127,4 +127,10 @@
   margin-top: 1rem;
 }
 
+.bt-ls-x0 {
+    padding-left: 0!important;
+}
 
+.bt-ls-xl0 {
+    left: 0!important;
+}
