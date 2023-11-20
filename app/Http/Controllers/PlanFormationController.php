@@ -193,6 +193,12 @@ class PlanFormationController extends Controller
         $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
         foreach ($categorieprofessionelles as $comp) {
             $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
+        }        
+        
+        $structureformations = Entreprises::where([['flag_habilitation_entreprise','=',true]])->get();
+        $structureformation = "<option value=''> Selectionnez la structrue de formation </option>";
+        foreach ($structureformations as $comp) {
+            $structureformation .= "<option value='" . $comp->id_entreprises  . "'>" .mb_strtoupper($comp->ncc_entreprises) .' / '.mb_strtoupper($comp->raison_social_entreprises)." </option>";
         }
 
         $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
@@ -201,7 +207,7 @@ class PlanFormationController extends Controller
 
 
 
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans'));
+        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation'));
 
     }
 
@@ -307,7 +313,7 @@ class PlanFormationController extends Controller
                // dd($data);
                 $this->validate($request, [
                     'intitule_action_formation_plan' => 'required',
-                    'structure_etablissement_action_' => 'required',
+                    'id_entreprise_structure_formation_plan_formation' => 'required',
                     'nombre_stagiaire_action_formati' => 'required',
                     'nombre_groupe_action_formation_' => 'required',
                     'nombre_heure_action_formation_p' => 'required',
@@ -326,7 +332,7 @@ class PlanFormationController extends Controller
                     'facture_proforma_action_formati' => 'required|mimes:pdf,PDF|max:5120'
                 ],[
                     'intitule_action_formation_plan.required' => 'Veuillez ajoutez l\'intitule de l\'action.',
-                    'structure_etablissement_action_.required' => 'Veuillez ajoutez une structure ou etablissement.',
+                    'id_entreprise_structure_formation_plan_formation.required' => 'Veuillez ajoutez une structure ou etablissement.',
                     'nombre_stagiaire_action_formati.required' => 'Veuillez ajoutez le nombre de stagiaire.',
                     'nombre_groupe_action_formation_.required' => 'Veuillez ajoutez le nombre de groupe.',
                     'nombre_heure_action_formation_p.required' => 'Veuillez ajoutez le nombre d\'heure.',
@@ -355,8 +361,10 @@ class PlanFormationController extends Controller
 
                 //dd($input);
 
+                $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation']]])->first();
+
                 $input['intitule_action_formation_plan'] = mb_strtoupper($input['intitule_action_formation_plan']);
-                $input['structure_etablissement_action_'] = mb_strtoupper($input['structure_etablissement_action_']);
+                $input['structure_etablissement_action_'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
                 $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
                 $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
                 $input['id_plan_de_formation'] = $id;

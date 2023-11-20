@@ -7,7 +7,32 @@
 						
 	}*/
 ?>
+<?php
 
+use App\Helpers\AnneeExercice;
+use Carbon\Carbon;
+$anneexercice = AnneeExercice::get_annee_exercice();
+$dateday = Carbon::now()->format('d-m-Y');
+$actifsoumission = false;
+
+if(isset($anneexercice->id_periode_exercice)){
+    $actifsoumission = true; 
+}else{
+    $actifsoumission = false; 
+}
+
+if(!empty($anneexercice->date_prolongation_periode_exercice)){
+    $dateexercice = $anneexercice->date_prolongation_periode_exercice;
+    if($dateday <= $dateexercice){
+        $actifsoumission = true; 
+    }else{
+        $actifsoumission = false;
+    }   
+}
+
+
+
+?>
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -28,6 +53,14 @@
 
 
     <div class="content-body">
+    @if(!isset($anneexercice->id_periode_exercice))
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert-body" style="text-align:center">
+                    {{$anneexercice}}
+                </div>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            </div>
+         @endif       
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
@@ -385,12 +418,17 @@
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation <strong style="color:red;">*</strong></label>
-                            <input
+
+                                <select class="select2 form-select" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                    <?php echo $structureformation; ?>
+                                 </select>
+                                    
+                            <!--<input
                                 type="text"
                                 id="structure_etablissement_action_"
                                 name="structure_etablissement_action_"
                                 class="form-control form-control-sm"
-                                 />
+                                 />-->
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires <strong style="color:red;">*</strong></label>
@@ -549,8 +587,10 @@
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
                                 <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
 
-                                <?php if (count($actionplanformations)>=1){ ?>
-                                    <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irreversible")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
+                                <?php if ($actifsoumission == true){ ?>
+                                    <?php if (count($actionplanformations)>=1){ ?>
+                                        <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irreversible")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
+                                    <?php } ?>    
                                 <?php } ?>    
                                 
 

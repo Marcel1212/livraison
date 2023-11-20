@@ -1,8 +1,11 @@
 <?php
 
 use App\Helpers\Menu;
+use App\Helpers\AnneeExercice;
 
 $imagedashboard = Menu::get_info_image_dashboard();
+$anneexercice = AnneeExercice::get_annee_exercice();
+
 ?>
 
 
@@ -53,14 +56,29 @@ $imagedashboard = Menu::get_info_image_dashboard();
                         <h5 class="mb-2">Période d'exercice</h5>
                     </div>
                     <div class="time-spending-chart">
-                        <h3 class="mb-2"><span class="text-muted">Du</span> <span class="badge bg-label-success">01-01-2023 </span>
-                            <span class="text-muted"> au </span> <span
-                                class="badge bg-label-danger"> 31-12-2023</span>
-                        </h3>
-                        <h3 class="mb-2"><span class="text-muted">Prolongée jusqu'au </span> <span
-                                class="badge bg-label-success">01-01-2023 </span>
+                        <?php if(isset($anneexercice->id_periode_exercice)){ ?>
+                            <h3 class="mb-2">
+                                <span class="text-muted">Du</span> 
+                                <span class="badge bg-label-success">{{$anneexercice->date_debut_periode_exercice}} </span>
+                                <span class="text-muted"> au </span> 
+                                <span class="badge bg-label-danger"> {{$anneexercice->date_fin_periode_exercice}}</span>
+                            </h3>
+                            <?php if(!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
+                                <h3 class="mb-2">
 
-                        </h3>
+                                    <span class="text-muted">Prolongée jusqu'au </span> 
+                                    <span class="badge bg-label-success">{{$anneexercice->date_prolongation_periode_exercice}} </span>
+
+                                </h3>
+                            <?php } ?>
+                        <?php }else{ ?>
+                            <h3 class="mb-2">
+
+                                <span class="text-danger mb-0">{{$anneexercice}}</span> 
+
+                            </h3>
+                        <?php } ?>
+
                     </div>
                 </div>
             </div>
@@ -78,7 +96,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
             <div class="col-lg-4 col-sm-6 mb-4">
                 <div class="card card-border-shadow-primary h-100">
-                    <a href="">
+                    <a href="{{route('planformation.index')}}">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2 pb-1">
                                 <div class="avatar me-2">
