@@ -39,7 +39,14 @@ class TratementPlanFormationController extends Controller
      */
     public function index()
     {
-        $planformations = PlanFormation::all();
+        $nacodes = Menu::get_code_menu_profil(Auth::user()->id);
+        //dd($nacodes);
+        if($nacodes === "CONSEILLER"){
+            $planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id]])->get();
+        }else{
+            $planformations = PlanFormation::all();
+        }
+        
         return view('traitementplanformation.index',compact('planformations'));
     }
 

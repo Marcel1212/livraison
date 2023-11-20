@@ -13,7 +13,7 @@ class AnneeExercice
     {
         $anneeexercice = PeriodeExercice::where([['flag_actif_periode_exercice','=',true]])->first();
 
-        return (isset($anneeexercice) ? $anneeexercice : 'La période d\'exercice n\'a pas encore demarré');
+        return (isset($anneeexercice) ? $anneeexercice : 'La période d\'exercice de l\'année en cours n\'a pas encore demarré');
     }    
     
   

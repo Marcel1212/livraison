@@ -1,3 +1,5 @@
+
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -40,6 +42,8 @@
                         <thead>
                         <tr>
                             <th>No</th>
+                            <th>Entreprise </th>
+                            <th>Conseiller </th>
                             <th>Code </th>
                             <th>Nom et prenom de la charger de formation</th>
                             <th>Fonction de la charger de formation</th>
@@ -50,10 +54,12 @@
                         </tr>
                         </thead>
                         <tbody>
-
+                        <?php $i=0 ?>
                         @foreach ($planformations as $key => $planformation)
                             <tr>
-                                <td>{{ $planformation->id_plan_de_formation }}</td>
+                                <td>{{ ++$i }}</td>
+                                <td>{{ @$planformation->entreprise->ncc_entreprises  }} / {{ @$planformation->entreprise->raison_social_entreprises  }}</td>
+                                <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td>
                                 <td>{{ @$planformation->code_plan_formation }}</td>
                                 <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
                                 <td>{{ $planformation->fonction_charge_plan_formation }}</td>

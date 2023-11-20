@@ -1,3 +1,11 @@
+<?php
+
+use App\Helpers\AnneeExercice;
+
+$anneexercice = AnneeExercice::get_annee_exercice();
+
+?>
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -18,6 +26,15 @@
                 {{ $message }}
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(!isset($anneexercice->id_periode_exercice))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <div class="alert-body" style="text-align:center">
+                 {{$anneexercice}}
+            </div>
+            <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
         </div>
     @endif
 
