@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @php($Module='Système')
+    @php($Module='Configuration')
     @php($titre='Liste des sous modules')
     @php($soustitre='Ajouter un sous module')
     @php($lien='sousmenus')
