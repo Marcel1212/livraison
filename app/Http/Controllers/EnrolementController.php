@@ -116,7 +116,7 @@ class EnrolementController extends Controller
                 'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
                 'captcha.required' => 'Veuillez saisir le captcha.',
-                'captcha.captcha' => 'Caractère saisi incorrect.',
+                'captcha.captcha' => 'Captcha saisi incorrect.',
             ]);
 
             $data = $request->all();
