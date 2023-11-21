@@ -242,15 +242,15 @@ $reseaux = Menu::get_info_reseaux();
                                                         <div class="row">
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="fullname">Dénomination
-                                                                    sociale</label>
+                                                                    sociale <strong style="color:red;">*</strong></label>
                                                                 <input type="text" id="raison_sociale_demande_enroleme"
                                                                        name="raison_sociale_demande_enroleme"
                                                                        class="form-control"
                                                                        placeholder="ASSOCIATION SERVICE MEDIATION"
-                                                                       required="required"/>
+                                                                       required="required" value="{{ old('raison_sociale_demande_enroleme') }}"/>
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <label class="form-label" for="email">Email</label>
+                                                                <label class="form-label" for="email">Email <strong style="color:red;">*</strong></label>
                                                                 <div class="input-group input-group-merge">
                                                                     <input
                                                                         class="form-control"
@@ -259,9 +259,8 @@ $reseaux = Menu::get_info_reseaux();
                                                                         name="email_demande_enrolement"
                                                                         placeholder=""
                                                                         aria-label=""
-                                                                        aria-describedby="email3"/>
-                                                                    <span class="input-group-text" id="email3"
-                                                                          required="required"></span>
+                                                                        aria-describedby="email3" required="required" value="{{ old('email_demande_enrolement') }}"/>
+                                                                    <span class="input-group-text" id="email"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
@@ -277,11 +276,11 @@ $reseaux = Menu::get_info_reseaux();
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-md-8">
-                                                                        <label class="form-label">Telephone </label>
-                                                                        <input type="number"
+                                                                        <label class="form-label">Telephone <strong style="color:red;">*</strong></label>
+                                                                        <input type="text" maxlength="10"
                                                                                name="tel_demande_enrolement"
                                                                                class="form-control" placeholder=""
-                                                                               required="required"/>
+                                                                               required="required" value="{{ old('tel_demande_enrolement') }}"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -289,7 +288,7 @@ $reseaux = Menu::get_info_reseaux();
 
                                                         <div class="row">
                                                             <div class="col-md-4">
-                                                                <label class="form-label" for="state">Localité</label>
+                                                                <label class="form-label" for="state">Localité <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
                                                                         data-allow-clear="true" name="id_localite"
                                                                         required="required">
@@ -300,7 +299,7 @@ $reseaux = Menu::get_info_reseaux();
 
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="state">Centre des
-                                                                    impôts</label>
+                                                                    impôts <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
                                                                         data-allow-clear="true" name="id_centre_impot"
                                                                         required="required">
@@ -310,7 +309,7 @@ $reseaux = Menu::get_info_reseaux();
                                                             </div>
 
                                                             <div class="col-md-4">
-                                                                <label class="form-label" for="state">Activités</label>
+                                                                <label class="form-label" for="state">Activités <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
                                                                         data-allow-clear="true" name="id_activites"
                                                                         required="required">
@@ -324,30 +323,30 @@ $reseaux = Menu::get_info_reseaux();
                                                             <div class="col-4 col-md-4">
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
-                                                                           for="collapsible-ncc-name">NCC</label>
+                                                                           for="collapsible-ncc-name">NCC <strong style="color:red;">*</strong></label>
                                                                     <input
                                                                         type="text"
                                                                         id="collapsible-payment-name"
-                                                                        class="form-control"
+                                                                        class="form-control" maxlength="9"
                                                                         placeholder="" name="ncc_demande_enrolement"
-                                                                        required="required"/>
+                                                                        required="required" value="{{ old('ncc_demande_enrolement') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-4 col-md-4">
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
-                                                                           for="collapsible-rccm-name">RCCM</label>
+                                                                           for="collapsible-rccm-name">RCCM <strong style="color:red;">*</strong></label>
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
                                                                         placeholder="" name="rccm_demande_enrolement"
-                                                                        required="required"/>
+                                                                        required="required" value="{{ old('rccm_demande_enrolement') }}"/>
                                                                 </div>
                                                             </div>
                                                             <div class="col-4 col-md-4">
                                                                 <div class="mb-3">
                                                                     <label class="form-label"
-                                                                           for="collapsible-cnps-name">N° CNPS</label>
+                                                                           for="collapsible-cnps-name">N° CNPS <strong style="color:red;">*</strong></label>
 
                                                                     <input
                                                                         type="text"
@@ -355,7 +354,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                         maxlength=""
                                                                         placeholder=""
                                                                         name="numero_cnps_demande_enrolement"
-                                                                        required="required"/>
+                                                                        required="required" value="{{ old('numero_cnps_demande_enrolement') }}"/>
 
 
                                                                 </div>
@@ -375,24 +374,24 @@ $reseaux = Menu::get_info_reseaux();
 
                                                         <div class="col-md-4">
                                                             <label class="form-label">Piece DFE * (PDF, JPG, JPEG, PNG)
-                                                                5M</label>
+                                                                5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_dfe_demande_enrolement"
                                                                    class="form-control" placeholder=""
-                                                                   required="required"/>
+                                                                   required="required" value="{{ old('piece_dfe_demande_enrolement') }}"/>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label">Piece RCCM * (PDF, JPG, JPEG, PNG)
-                                                                5M</label>
+                                                                5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_rccm_demande_enrolement"
                                                                    class="form-control" placeholder=""
-                                                                   required="required"/>
+                                                                   required="required" value="{{ old('piece_rccm_demande_enrolement') }}"/>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label">Piece attestation immat * (PDF,
-                                                                JPG, JPEG, PNG) 5M</label>
+                                                                JPG, JPEG, PNG) 5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_attestation_immatriculati"
                                                                    class="form-control" placeholder=""
-                                                                   required="required"/>
+                                                                   required="required" value="{{ old('piece_attestation_immatriculati') }}"/>
                                                         </div>
 
                                                     </div>
@@ -400,7 +399,7 @@ $reseaux = Menu::get_info_reseaux();
                                                     <br/>
                                                     <hr>
 
-                                                    <h5 class="my-4">3. Verificateur de securite</h5>
+                                                    <h5 class="my-4">3. Vérificateur de sécurité</h5>
 
                                                     <div class="row gy-3">
                                                         <div class="col-md-6">
@@ -527,86 +526,14 @@ $reseaux = Menu::get_info_reseaux();
                                 alt="{{$reseau->titre_logo}}"/>
                     </a>
                   @endforeach
+                  <a href="www.barnoininformatique.ci" class="footer-link me-3" target="_blank">Designed by Barnoin Informatique</a>
           </div>
         </div>
       </div>
     </footer>
 
 
-    <!--<footer class="footer-wrapper pt-45 footer-layout1" data-bg-src="{{asset('assetsfront/img/bg/footer-bg.png')}}">
-
-        <div class="footer-wrap  " data-bg-src="{{asset('assetsfront/img/bg/jiji.png')}}">
-            <div class="widget-area">
-                <div class="container">
-                    <div class="row justify-content-between">
-                        <div class="col-md-6 col-xxl-3 col-xl-3">
-                            <div class="widget footer-widget">
-                                <div class="th-widget-about">
-                                    <div class="about-logo">
-                                        <a href="{{route('/')}}"><img src="{{asset('assetsfront/img/logo-white.png')}}" alt="FDFP"></a>
-                                    </div>
-                                    <p class="about-text">Fonds de Dévéloppement de Formation Professionnelle.</p>
-                                    <div class="th-social">
-                                        <h6 class="title text-white">SUIVEZ-NOUS SUR:</h6>
-                                        @foreach($reseaux as $reseau)
-                                        <a href="{{$reseau->mot_cle}}" target="_blank"><i class="{{$reseau->titre_logo}}"></i></a>
-                                        <!--<a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>-->
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-xxl-3 col-xl-3">
-                            <div class="widget newsletter-widget footer-widget">
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-auto">
-                            <div class="widget widget_nav_menu footer-widget">
-                                <h3 class="widget_title">Besoin d'aide?</h3>
-                                <div class="menu-all-pages-container">
-                                    <ul class="menu">
-                                        <li><a href="#">Consulter les questions fréquentes</a></li>
-                                        <li><a href="#">Contacter l'assistance</a></li>
-                                        <li><a href="#">Conditions générales</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-auto">
-                            <div class="widget widget_nav_menu footer-widget">
-                                <h3 class="widget_title">Ressources</h3>
-                                <div class="menu-all-pages-container">
-                                    <ul class="menu">
-                                        <li><a href="#">Support</a></li>
-                                        <li><a href="#">Guides vidéos</a></li>
-                                        <li><a href="#">Documentations</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="copyright-wrap">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-6">
-                            <p class="copyright-text">Copyright © <?php /*echo Date('Y') ;*/?>; <a href="{{route('/')}}">FDFP</a> Tous droits réservés.</p>
-                        </div>
-                        <div class="col-md-6 text-end d-none d-md-block">
-                            <div class="footer-links">
-                                <ul>
-                                    <li><a href="#">Politique de confidentialité</a></li>
-                                    <li><a href="www.barnoininformatique.ci">Designed by Barnoin Informatique</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>-->
+    
 
 
     <!-- / Layout wrapper -->
