@@ -351,9 +351,9 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        maxlength=""
                                                                         placeholder=""
                                                                         name="numero_cnps_demande_enrolement"
+                                                                        maxlength="3"
                                                                         required="required" value="{{ old('numero_cnps_demande_enrolement') }}"/>
 
 
