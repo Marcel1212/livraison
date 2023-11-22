@@ -373,21 +373,21 @@ $reseaux = Menu::get_info_reseaux();
                                                     <div class="row gy-3">
 
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece DFE * (PDF, JPG, JPEG, PNG)
+                                                            <label class="form-label">Piece DFE  (PDF, JPG, JPEG, PNG)
                                                                 5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_dfe_demande_enrolement"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_dfe_demande_enrolement') }}"/>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece RCCM * (PDF, JPG, JPEG, PNG)
+                                                            <label class="form-label">Piece RCCM  (PDF, JPG, JPEG, PNG)
                                                                 5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_rccm_demande_enrolement"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_rccm_demande_enrolement') }}"/>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece attestation immat * (PDF,
+                                                            <label class="form-label">Piece attestation immat (PDF,
                                                                 JPG, JPEG, PNG) 5M <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_attestation_immatriculati"
                                                                    class="form-control" placeholder=""
