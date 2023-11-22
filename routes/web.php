@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
             'centreimpot' => App\Http\Controllers\CentreImpotController::class,
             'localite' => App\Http\Controllers\LocaliteController::class,
             'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
+            'projetformation' => App\Http\Controllers\ProjetFormationController::class,
             'enrolement' => App\Http\Controllers\EnrolementController::class,
             'statutoperations' => App\Http\Controllers\StatutOperationController::class,
             'motifs' => App\Http\Controllers\MotifController::class,

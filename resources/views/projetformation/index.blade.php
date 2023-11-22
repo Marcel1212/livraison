@@ -1,9 +1,9 @@
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-    @php($Module = 'PROJET ETUDE')
-    @php($titre = 'Liste des projets d\'etudes')
-    @php($lien = 'projetetude')
+    @php($Module = 'Demandes')
+    @php($titre = 'Liste des projets de formation')
+    @php($lien = 'projetformation')
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">
@@ -45,7 +45,7 @@
                                     <span align="right">
                                         <a href="{{ route($lien . '.create') }}"
                                             class="btn btn-sm btn-primary waves-effect waves-light">
-                                            <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter un projet d'étude </a>
+                                            <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter un projet de formation</a>
 
                                     </span>
                                 </div>
@@ -57,13 +57,11 @@
                                             <thead>
                                                 <tr>
                                                     <th>Titre du projet </th>
-                                                    <th>Contexte
+                                                    <th>Acteurs du projet </th>
                                                     </th>
-                                                    <th>Cible</th>
+                                                    <th>Promoteur</th>
                                                     <th>Date de creation</th>
                                                     <th>Statut Soumission</th>
-                                                    <th>Statut Etat</th>
-                                                    <th>Statut Instruction</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -71,9 +69,9 @@
                                                 @foreach ($demandeenroles as $key => $demandeenrole)
                                                     <tr>
                                                         <td>{{ $demandeenrole->titre_projet_etude }}</td>
-                                                        <td>{{ Str::substr($demandeenrole->contexte_probleme_projet_etude, 0, 30) }}
+                                                        <td>{{ Str::substr($demandeenrole->acteurs, 0, 30) }}
                                                         </td>
-                                                        <td>{{ Str::substr($demandeenrole->cible_projet_etude, 0, 40) }}
+                                                        <td>{{ Str::substr($demandeenrole->promoteur, 0, 40) }}
                                                         </td>
                                                         <td>{{ $demandeenrole->created_at }}</td>
                                                         <td align="center">
@@ -83,26 +81,8 @@
                                                             <span class="badge bg-danger">Non Soumis</span>
                                                             <?php }  ?>
                                                         </td>
-                                                        <td align="center">
-                                                            <?php if ($demandeenrole->flag_valide == true && $demandeenrole->flag_rejet == false){?>
-                                                            <span class="badge bg-success">Recevable</span>
-                                                            <?php } else if($demandeenrole->flag_valide != true && $demandeenrole->flag_rejet == true) {?>
-                                                            <span class="badge bg-danger">Non recevable</span>
-                                                            <?php }  else if($demandeenrole->flag_valide == null && $demandeenrole->flag_rejet == null && $demandeenrole->flag_attente_rec == null ) {?>
-                                                            <span class="badge bg-secondary">En cours de traitement</span>
-                                                            <?php }   else if($demandeenrole->flag_attente_rec == true && $demandeenrole->flag_rejet == null && $demandeenrole->flag_valide == null) {?>
-                                                            <span class="badge bg-warning">Mis en attente</span>
-                                                            <?php }  ?>
-                                                        </td>
-                                                        <td align="center">
-                                                            <?php if ($demandeenrole->statut_instruction == true && $demandeenrole->date_instruction != null ) {?>
-                                                            <span class="badge bg-success">Valider</span>
-                                                            <?php } else if($demandeenrole->statut_instruction == false && $demandeenrole->date_instruction != null ) {?>
-                                                            <span class="badge bg-danger">Rejeter</span>
-                                                            <?php }  else if($demandeenrole->statut_instruction == null && $demandeenrole->date_instruction == null  ) {?>
-                                                            <span class="badge bg-secondary">En cours de traitement</span>
-                                                            <?php }  ?>
-                                                        </td>
+
+
                                                         <td align="center">
 
                                                             <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($demandeenrole->id_projet_etude)) }}"

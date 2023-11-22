@@ -10,6 +10,8 @@ use App\Models\Pays;
 use App\Models\Motif;
 use App\Models\StatutOperation;
 use App\Models\DemandeEnrolement;
+use App\Models\ProjetFormation;
+use App\Models\PiecesProjetFormation;
 use App\Models\Entreprises;
 use App\Models\Pieces;
 use App\Models\ProjetEtude;
@@ -28,7 +30,7 @@ use Image;
 use File;
 use Auth;
 
-class ProjetEtudeController extends Controller
+class ProjetFormationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,8 +39,8 @@ class ProjetEtudeController extends Controller
     {
         $user_id = Auth::user()->id;
         // dd($user_id);
-        $demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
-        return view('projetetude.index', compact('demandeenroles'));
+        $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
+        return view('projetformation.index', compact('demandeenroles'));
     }
 
     /**
@@ -74,7 +76,7 @@ class ProjetEtudeController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        return view('projetetude.create', compact('activite','centreimpot','localite','pay','entreprise','user'));
+        return view('projetformation.create', compact('activite','centreimpot','localite','pay','entreprise','user'));
     }
 
     /**
@@ -84,111 +86,78 @@ class ProjetEtudeController extends Controller
     {
         if ($request->isMethod('post')) {
 
-            $this->validate($request, [
-                'titre_projet' => 'required',
-                'contexte_probleme' => 'required',
-                'objectif_general' => 'required',
-                'objectif_specifique' => 'required',
-                'resultat_attendu' => 'required',
-                'champ_etude' => 'required',
-                'cible' => 'required',
-                'avant_projet_tdr' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'courier_demande_fin' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'dossier_intention' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'lettre_engagement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'offre_technique' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                'offre_financiere' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-            ],[
-                'titre_projet.required' => 'Veuillez ajouter un titre de projet',
-                'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
-                'objectif_general.required' => 'Veuillez ajouter un objectif general',
-                'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
-                'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
-                'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
-                'cible.required' => 'Veuillez ajouter une cible',
-                'avant_projet_tdr.required' => 'Veuillez ajouter un avant-projet TDR',
-                'courier_demande_fin.required' => 'Veuillez ajouter un courrier de demande de financemen',
-                'dossier_intention.required' => 'Veuillez ajouter un dossier d’intention',
-                'lettre_engagement.required' => 'Veuillez ajouter une lettre d’engagement',
-                'offre_technique.required' => 'Veuillez ajouter une offre technique',
-                'offre_financiere.required' => 'Veuillez ajouter une offre financière',
-            ]);
+            // $this->validate($request, [
+            //     'titre_projet' => 'required',
+            //     'contexte_probleme' => 'required',
+            //     'objectif_general' => 'required',
+            //     'objectif_specifique' => 'required',
+            //     'resultat_attendu' => 'required',
+            //     'champ_etude' => 'required',
+            //     'cible' => 'required',
+            //     'avant_projet_tdr' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            //     'courier_demande_fin' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            //     'dossier_intention' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            //     'lettre_engagement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            //     'offre_technique' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            //     'offre_financiere' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+            // ],[
+            //     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
+            //     'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
+            //     'objectif_general.required' => 'Veuillez ajouter un objectif general',
+            //     'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+            //     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
+            //     'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+            //     'cible.required' => 'Veuillez ajouter une cible',
+            //     'avant_projet_tdr.required' => 'Veuillez ajouter un avant-projet TDR',
+            //     'courier_demande_fin.required' => 'Veuillez ajouter un courrier de demande de financemen',
+            //     'dossier_intention.required' => 'Veuillez ajouter un dossier d’intention',
+            //     'lettre_engagement.required' => 'Veuillez ajouter une lettre d’engagement',
+            //     'offre_technique.required' => 'Veuillez ajouter une offre technique',
+            //     'offre_financiere.required' => 'Veuillez ajouter une offre financière',
+            // ]);
             $user_id = Auth::user()->id;
             $data = $request->all();
-            //echo($data);
+            //dd($data);
             // exit();
+            $user = User::find(Auth::user()->id);
+
+            $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+            $id_entreprise = $entreprise->id_entreprises;
+            //dd($id_entreprise);
 
             $input = $request->all();
 
-            if (isset($data['avant_projet_tdr'])){
+            if (isset($data['doc_demande_financement'])){
 
-                $filefront = $data['avant_projet_tdr'];
+                $filefront = $data['doc_demande_financement'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'doc_demande_financement'. '_' . rand(111,99999) . '_' . 'doc_demande_financement' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet_formation/lettre_demande_fin/'), $fileName1);
 
-                    $input['avant_projet_tdr'] = $fileName1;
+                    $input['doc_demande_financement'] = $fileName1;
 
                 }else{
                     return redirect()->route('projetetude.create')
-                    ->with('error', 'l\extension du fichier de l\'avant-projet TDR n\'est pas correcte');
+                    ->with('error', 'l\extension du fichier du document de financement n\'est pas correcte');
                 }
 
             }
 
 
-            if (isset($data['courier_demande_fin'])){
+            if (isset($data['doc_lettre_engagement'])){
 
-                $filefront = $data['courier_demande_fin'];
-
-                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
-
-                    $fileName1 = 'courier_demande_fin'. '_' . rand(111,99999) . '_' . 'courier_demande_fin' . '_' . time() . '.' . $filefront->extension();
-
-                    $filefront->move(public_path('pieces_projet/courier_demande_fin/'), $fileName1);
-
-                    $input['courier_demande_fin'] = $fileName1;
-
-                }else{
-                    return redirect()->route('projetetude.create')
-                    ->with('error', 'l\extension du fichier du  courrier de demande n\'est pas correcte');
-                }
-
-            }
-
-            if (isset($data['dossier_intention'])){
-
-                $filefront = $data['dossier_intention'];
+                $filefront = $data['doc_lettre_engagement'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'dossier_intention'. '_' . rand(111,99999) . '_' . 'dossier_intention' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'doc_lettre_engagement'. '_' . rand(111,99999) . '_' . 'doc_lettre_engagement' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces_projet/dossier_intention/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet_formation/lettre_engagement/'), $fileName1);
 
-                    $input['dossier_intention'] = $fileName1;
-
-                }else{
-                    return redirect()->route('projetetude.create')
-                    ->with('error', 'l\extension du fichier du dossier de l\'intention n\'est pas correcte');
-                }
-
-            }
-
-            if (isset($data['lettre_engagement'])){
-
-                $filefront = $data['lettre_engagement'];
-
-                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
-
-                    $fileName1 = 'lettre_engagement'. '_' . rand(111,99999) . '_' . 'lettre_engagement' . '_' . time() . '.' . $filefront->extension();
-
-                    $filefront->move(public_path('pieces_projet/lettre_engagement/'), $fileName1);
-
-                    $input['lettre_engagement'] = $fileName1;
+                    $input['doc_lettre_engagement'] = $fileName1;
 
                 }else{
                     return redirect()->route('projetetude.create')
@@ -197,103 +166,154 @@ class ProjetEtudeController extends Controller
 
             }
 
-            if (isset($data['offre_technique'])){
+            if (isset($data['doc_liste_beneficiaires'])){
 
-                $filefront = $data['offre_technique'];
+                $filefront = $data['doc_liste_beneficiaires'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'offre_technique'. '_' . rand(111,99999) . '_' . 'offre_technique' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'doc_liste_beneficiaires'. '_' . rand(111,99999) . '_' . 'doc_liste_beneficiaires' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces_projet/offre_technique/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet_formation/liste_beneficiaires/'), $fileName1);
 
-                    $input['offre_technique'] = $fileName1;
+                    $input['doc_liste_beneficiaires'] = $fileName1;
 
                 }else{
                     return redirect()->route('projetetude.create')
-                    ->with('error', 'l\extension du fichier de l\'offre technique n\'est pas correcte');
+                    ->with('error', 'l\extension du fichier du de la liste des bénéficiaires n\'est pas correcte');
                 }
 
             }
 
-            if (isset($data['offre_financiere'])){
+            if (isset($data['doc_supports_pedagogiques'])){
 
-                $filefront = $data['offre_financiere'];
+                $filefront = $data['doc_supports_pedagogiques'];
 
                 if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                    $fileName1 = 'offre_financiere'. '_' . rand(111,99999) . '_' . 'offre_financiere' . '_' . time() . '.' . $filefront->extension();
+                    $fileName1 = 'doc_supports_pedagogiques'. '_' . rand(111,99999) . '_' . 'doc_supports_pedagogiques' . '_' . time() . '.' . $filefront->extension();
 
-                    $filefront->move(public_path('pieces_projet/offre_financiere/'), $fileName1);
+                    $filefront->move(public_path('pieces_projet_formation/liste_de_supports/'), $fileName1);
 
-                    $input['offre_financiere'] = $fileName1;
+                    $input['doc_supports_pedagogiques'] = $fileName1;
 
                 }else{
                     return redirect()->route('projetetude.create')
-                    ->with('error', 'l\extension du fichier de l\'offre financiere n\'est pas correcte');
+                    ->with('error', 'l\extension du fichier des supports pedagogiques n\'est pas correcte');
+                }
+
+            }
+
+            if (isset($data['doc_preuve_existance'])){
+
+                $filefront = $data['doc_preuve_existance'];
+
+                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                    $fileName1 = 'doc_preuve_existance'. '_' . rand(111,99999) . '_' . 'doc_preuve_existance' . '_' . time() . '.' . $filefront->extension();
+
+                    $filefront->move(public_path('pieces_projet_formation/preuv_legales/'), $fileName1);
+
+                    $input['doc_preuve_existance'] = $fileName1;
+
+                }else{
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier de l\'existence legale du promoteur n\'est pas correcte');
+                }
+
+            }
+
+            if (isset($data['doc_autre_document'])){
+
+                $filefront = $data['doc_autre_document'];
+
+                if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+
+                    $fileName1 = 'doc_autre_document'. '_' . rand(111,99999) . '_' . 'doc_autre_document' . '_' . time() . '.' . $filefront->extension();
+
+                    $filefront->move(public_path('pieces_projet_formation/autres_docs/'), $fileName1);
+
+                    $input['doc_autre_document'] = $fileName1;
+
+                }else{
+                    return redirect()->route('projetetude.create')
+                    ->with('error', 'l\extension du fichier externe n\'est pas correcte');
                 }
 
             }
 
            // $input['id_entreprises'] = Carbon::now();
+
             $input['flag_soumis'] = false;
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
             $input['id_user'] = $user_id;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
-            $input['contexte_probleme_projet_etude'] = ucfirst($input['contexte_probleme']);
-            $input['objectif_general_projet_etude'] = ucfirst($input['objectif_general']);
-            $input['objectif_specifique_projet_etud'] = ucfirst($input['objectif_specifique']);
-            $input['resultat_attendu_projet_etude'] = ucfirst($input['resultat_attendu']);
-            $input['champ_etude_projet_etude'] = ucfirst($input['champ_etude']);
-            $input['cible_projet_etude'] = ucfirst($input['cible']);
+            $input['operateur'] = ucfirst($input['operateur']);
+            $input['promoteur'] = ucfirst($input['promoteur']);
+            $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
+            $input['zone_projet'] = ucfirst($input['zone_projey']);
+            $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
+            $input['fonction'] = ucfirst($input['fonction']);
+            $input['telephone'] = ucfirst($input['telephone']);
+            $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
+            $input['acteurs'] = ucfirst($input['acteurs_projet']);
+            $input['role_p'] = ucfirst($input['role_projet']);
+            $input['responsabilite'] = ucfirst($input['responsabilite_projet']);
+            $input['problemes'] = ucfirst($input['problemes_odf']);
+            $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
+            $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
+            $input['competences'] = ucfirst($input['competences_odf']);
+            $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
+            $input['source_verification'] = ucfirst($input['sources_verification_odf']);
+            $input['id_entreprises'] = $id_entreprise ;
 
-            ProjetEtude::create($input);
-            $id_projet = ProjetEtude::latest()->first()->id_projet_etude;
-            //dd($id_projet);
+            ProjetFormation::create($input);
+            $id_projet = ProjetFormation::latest()->first()->id_projet_formation;
+            // dd($id_projet);
 
             // Enregistrement du chemin de pieces projets
 
-            // Avant projet TDR
-            PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+            // Document demande de financement
+            PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '1',
-                'libelle_pieces' => $input['avant_projet_tdr']
+                'libelle_pieces' => $input['doc_demande_financement']
             ]);
-            // Courrier de demande de financement
-            PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+            // Lettre de financement
+            PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '2',
-                'libelle_pieces' => $input['courier_demande_fin']
+                'libelle_pieces' => $input['doc_lettre_engagement']
             ]);
-            // Dossier d’intention
-            PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+            // Liste des beneficiaires
+            PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '3',
-                'libelle_pieces' => $input['dossier_intention']
+                'libelle_pieces' => $input['doc_liste_beneficiaires']
             ]);
-            // Lettre d’engagement
-            PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+            // Supports pedagogiques
+            PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '4',
-                'libelle_pieces' => $input['lettre_engagement']
+                'libelle_pieces' => $input['doc_supports_pedagogiques']
             ]);
-            // Offre technique
-            PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+            // preuve existante
+            PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '5',
-                'libelle_pieces' => $input['offre_technique']
+                'libelle_pieces' => $input['doc_preuve_existance']
             ]);
-             // Offre financiere
-             PiecesProjetEtude::create([
-                'id_projet_etude' => $id_projet,
+             // Autre document
+             PiecesProjetFormation::create([
+                'id_projet_formation' => $id_projet,
                 'code_pieces' => '6',
-                'libelle_pieces' => $input['offre_financiere']
+                'libelle_pieces' => $input['doc_autre_document']
             ]);
 
 
         }
-        return redirect('projetetude/'.Crypt::UrlCrypt($id_projet).'/edit')->with('success', 'Succes : Votre projet d\'etude a été crée ');
+        return redirect('projetformation/'.Crypt::UrlCrypt($id_projet).'/edit')->with('success', 'Succes : Votre projet de formation  a été crée ');
 
             //return redirect()->route('projetetude.index')->with('success', 'Votre demande de projet d\'etude a ete cree avec succes');
     }
@@ -313,19 +333,21 @@ class ProjetEtudeController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         //dd($id);
-        $projetetude = ProjetEtude::find($id);
+        $projetetude = ProjetFormation::find($id);
+        //dd($id);
         //dd($projetetude['titre_projet_etude']);
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','1']])->get();
+        //dd($piecesetude);
         $piecesetude1 = $piecesetude['0']['libelle_pieces'];
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','2']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','2']])->get();
         $piecesetude2 = $piecesetude['0']['libelle_pieces'];
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','3']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','3']])->get();
         $piecesetude3 = $piecesetude['0']['libelle_pieces'];
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','4']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','4']])->get();
         $piecesetude4 = $piecesetude['0']['libelle_pieces'];
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','5']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','5']])->get();
         $piecesetude5 = $piecesetude['0']['libelle_pieces'];
-        $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','6']])->get();
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','6']])->get();
         $piecesetude6 = $piecesetude['0']['libelle_pieces'];
         //dd($piecesetude['0']['libelle_pieces']);
         // Pieces Projet Etudes
@@ -389,7 +411,7 @@ class ProjetEtudeController extends Controller
         }
         //dd($motifs);
 
-        return view('projetetude.edit', compact('motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetformation.edit', compact('motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 

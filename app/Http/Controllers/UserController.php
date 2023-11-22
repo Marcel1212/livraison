@@ -35,7 +35,7 @@ class UserController extends Controller
         $data = User::with('agence:num_agce,lib_agce')
                 ->where([['flag_demission_users', '=', false], ['flag_admin_users', '=', false]])
                 ->get();
-       dd($data);
+       //dd($data);
         return view('users.index', compact('data'));
     }
 
@@ -57,8 +57,8 @@ class UserController extends Controller
         $Entite = Agence::where([['flag_agce', '=', true]])->get();
         foreach ($Entite as $comp) {
             $Entite .= "<option  value='" . $comp->num_agce . "'   > " . $comp->lib_agce . " </option>";
-        }       
-        
+        }
+
 
 
         $directions = Direction::all();
@@ -210,8 +210,8 @@ class UserController extends Controller
                 $user->assignRole($valprofile);
                 return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
 
-            }            
-            
+            }
+
             if ($data['action'] == 'Lier_secteur_Conseiller'){
                 $this->validate($request, [
                     'id_secteur_activite' => 'required',

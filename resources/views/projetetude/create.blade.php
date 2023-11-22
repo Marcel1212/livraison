@@ -70,7 +70,58 @@
                                                     <div id="accordionOne" class="accordion-collapse collapse show"
                                                         data-bs-parent="#accordionExample" style="">
                                                         <div class="accordion-body">
+                                                            <div class="row gy-3">
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numero de compte
+                                                                                contribuable: </b> </label> <br>
+                                                                        <label> <?php echo $entreprise->ncc_entreprises; ?></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Raison sociale: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->raison_social_entreprises; ?></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numéro de téléphone: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->tel_entreprises; ?></label>
 
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Email: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $user->email; ?></label>
+
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Situation géographique:
+                                                                            </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->localisation_geographique_entreprise; ?></label>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numéro CNPS:
+                                                                            </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->numero_cnps_entreprises; ?></label>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
