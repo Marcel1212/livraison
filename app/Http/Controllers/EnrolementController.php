@@ -77,6 +77,7 @@ class EnrolementController extends Controller
     {
         if ($request->isMethod('post')) {
 
+
             $this->validate($request, [
                 'raison_sociale_demande_enroleme' => 'required',
                 'email_demande_enrolement' => 'required|email',
@@ -129,6 +130,20 @@ class EnrolementController extends Controller
             if(count($verfiencc)>=1){
 
                 return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
+            }            
+            
+            $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement','=',$data['rccm_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+
+            if(count($verfienccrcm)>=1){
+
+                return redirect()->route('enrolements')->with('error', 'Ce numéro RCCM est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
+            }            
+            
+            $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement','=',$data['numero_cnps_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+
+            if(count($verfienccCNPS)>=1){
+
+                return redirect()->route('enrolements')->with('error', 'Ce numéro CNPS est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
             }
             
             $input = $request->all();
