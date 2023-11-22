@@ -77,9 +77,10 @@ class EnrolementController extends Controller
     {
         if ($request->isMethod('post')) {
 
+
             $this->validate($request, [
                 'raison_sociale_demande_enroleme' => 'required',
-                'email_demande_enrolement' => 'required',
+                'email_demande_enrolement' => 'required|email',
                 //'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                 'indicatif_demande_enrolement' => 'required',
                 'tel_demande_enrolement' => 'required',
@@ -107,16 +108,19 @@ class EnrolementController extends Controller
                 'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
                 'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
                 'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
+                'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
                 'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
+                'piece_rccm_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce attestation RCCM.',
                 'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatriculation.',
+                'piece_attestation_immatriculati.uploaded' => 'Veuillez ajouter une piéce attestation immatriculation.',
                 'piece_attestation_immatriculati.mimes' => 'Les formats requises pour la pièce de l\'attestataion immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_attestation_immatriculati.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
                 'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
                 'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                'captcha.required' => 'Veuillez saisir le captcha.',
-                'captcha.captcha' => 'Caractère saisi incorrect.',
+                'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
+                'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
             ]);
 
             $data = $request->all();
@@ -126,6 +130,20 @@ class EnrolementController extends Controller
             if(count($verfiencc)>=1){
 
                 return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
+            }            
+            
+            $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement','=',$data['rccm_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+
+            if(count($verfienccrcm)>=1){
+
+                return redirect()->route('enrolements')->with('error', 'Ce numéro RCCM est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
+            }            
+            
+            $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement','=',$data['numero_cnps_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+
+            if(count($verfienccCNPS)>=1){
+
+                return redirect()->route('enrolements')->with('error', 'Ce numéro CNPS est déjà utilisé dans le système. Veuillez contactez l\'administrateur.'); 
             }
             
             $input = $request->all();
@@ -292,8 +310,8 @@ class EnrolementController extends Controller
                                     <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et 
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
                                     
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_demande_enrolement
+                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandeenrole1->commentaire_demande_enrolement."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
@@ -364,8 +382,8 @@ class EnrolementController extends Controller
                                     <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et 
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
                                     
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif1->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_recevable_demande_enrolement
+                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif1->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandeenrole1->commentaire_recevable_demande_enrolement."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
@@ -465,14 +483,14 @@ class EnrolementController extends Controller
 
                 if (count($clientrech) > 0) {
                     return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
+                        ->with('danger', 'Echec : Cet mail est déja utilisé par une entreprise !');
                 }
 
                 $clientrechnum = DB::table('users')->where([['cel_users', '=', $cel_users]])->get();
 
                 if (count($clientrechnum) > 0) {
                     return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
+                        ->with('danger', 'Echec : Cet numero est déja utilisé par une entreprise !');
                 }
                                 
                 $passwordCli = Crypt::MotDePasse(); // '123456789';

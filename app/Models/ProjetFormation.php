@@ -42,21 +42,21 @@ class ProjetFormation extends Model
 {
     /**
      * The table associated with the model.
-     *
+     * 
      * @var string
      */
     protected $table = 'projet_formation';
 
     /**
      * The primary key for the model.
-     *
+     * 
      * @var string
      */
     protected $primaryKey = 'id_projet_formation';
 
     /**
      * The "type" of the auto-incrementing ID.
-     *
+     * 
      * @var string
      */
     protected $keyType = 'float';
