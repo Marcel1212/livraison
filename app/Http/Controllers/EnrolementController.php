@@ -79,7 +79,7 @@ class EnrolementController extends Controller
 
             $this->validate($request, [
                 'raison_sociale_demande_enroleme' => 'required',
-                'email_demande_enrolement' => 'required',
+                'email_demande_enrolement' => 'required|email',
                 //'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                 'indicatif_demande_enrolement' => 'required',
                 'tel_demande_enrolement' => 'required',

@@ -254,7 +254,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                 <div class="input-group input-group-merge">
                                                                     <input
                                                                         class="form-control"
-                                                                        type="text"
+                                                                        type="email"
                                                                         id="email"
                                                                         name="email_demande_enrolement"
                                                                         placeholder=""
