@@ -59,7 +59,7 @@ $reseaux = Menu::get_info_reseaux();
 
     <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-faq.css')}}" />
 
-      <link rel="stylesheet" href="{{asset('assetsfront/css/style.css')}}">
+
 
 
       <!-- Page CSS -->
