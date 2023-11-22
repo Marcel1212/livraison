@@ -310,8 +310,8 @@ class EnrolementController extends Controller
                                     <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et 
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
                                     
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_demande_enrolement
+                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandeenrole1->commentaire_demande_enrolement."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
@@ -382,8 +382,8 @@ class EnrolementController extends Controller
                                     <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et 
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
                                     
-                                    <br><b>Motif de rejet  : </b> @$demandeenrole1->motif1->libelle_motif
-                                    <br><b>Commentaire : </b> @$demandeenrole1->commentaire_recevable_demande_enrolement
+                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif1->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandeenrole1->commentaire_recevable_demande_enrolement."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
