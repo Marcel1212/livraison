@@ -107,16 +107,19 @@ class EnrolementController extends Controller
                 'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
                 'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
                 'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
+                'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
                 'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
+                'piece_rccm_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce attestation RCCM.',
                 'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatriculation.',
+                'piece_attestation_immatriculati.uploaded' => 'Veuillez ajouter une piéce attestation immatriculation.',
                 'piece_attestation_immatriculati.mimes' => 'Les formats requises pour la pièce de l\'attestataion immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_attestation_immatriculati.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
                 'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',                
                 'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                 'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                'captcha.required' => 'Veuillez saisir le captcha.',
-                'captcha.captcha' => 'Captcha saisi incorrect.',
+                'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
+                'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
             ]);
 
             $data = $request->all();
@@ -465,14 +468,14 @@ class EnrolementController extends Controller
 
                 if (count($clientrech) > 0) {
                     return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
+                        ->with('danger', 'Echec : Cet mail est déja utilisé par une entreprise !');
                 }
 
                 $clientrechnum = DB::table('users')->where([['cel_users', '=', $cel_users]])->get();
 
                 if (count($clientrechnum) > 0) {
                     return redirect()->route('enrolement.index')
-                        ->with('danger', 'Echec : Le compte de entreprise ' . $name . ' ' . $prenom_users . ' a déjà été créé !');
+                        ->with('danger', 'Echec : Cet numero est déja utilisé par une entreprise !');
                 }
                                 
                 $passwordCli = Crypt::MotDePasse(); // '123456789';
