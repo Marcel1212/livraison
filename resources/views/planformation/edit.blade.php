@@ -270,7 +270,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Type entreprises <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select input-group-text" name="id_type_entreprise" id="id_type_entreprise" required="required">
+                                        <select class="select2 form-select " name="id_type_entreprise" id="id_type_entreprise" required="required">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -368,7 +368,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         <hr>
                         <?php } ?>
                         <table class="table table-bordered table-striped table-hover table-sm"
-                            id="exampleData"
+                            id=""
                             style="margin-top: 13px !important">
                             <thead>
                             <tr>

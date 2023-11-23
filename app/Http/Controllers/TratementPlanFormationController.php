@@ -18,7 +18,7 @@ use App\Models\ButFormation;
 use App\Models\CategorieProfessionelle;
 use App\Models\CategoriePlan;
 use App\Models\TypeFormation;
-use App\Models\Motif; 
+use App\Models\Motif;
 use App\Helpers\Crypt;
 use App\Helpers\Menu;
 use App\Helpers\Email;
@@ -42,11 +42,11 @@ class TratementPlanFormationController extends Controller
         $nacodes = Menu::get_code_menu_profil(Auth::user()->id);
         //dd($nacodes);
         if($nacodes === "CONSEILLER"){
-            $planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id]])->get();
+            $planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',false]])->get();
         }else{
             $planformations = PlanFormation::all();
         }
-        
+
         return view('traitementplanformation.index',compact('planformations'));
     }
 
@@ -82,8 +82,8 @@ class TratementPlanFormationController extends Controller
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
-        } 
-             
+        }
+
         return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
@@ -109,20 +109,20 @@ class TratementPlanFormationController extends Controller
         $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
         foreach ($pays as $comp) {
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
-        } 
-        
+        }
+
         $butformations = ButFormation::all();
         $butformation = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($butformations as $comp) {
             $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
-        }        
-        
+        }
+
         $typeformations = TypeFormation::all();
         $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
         foreach ($typeformations as $comp) {
             $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
-        }        
-        
+        }
+
         $categorieprofessionelles = CategorieProfessionelle::all();
         $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
         foreach ($categorieprofessionelles as $comp) {
@@ -175,19 +175,20 @@ class TratementPlanFormationController extends Controller
                 ],[
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
                 ]);
-                
+
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
                 $input['id_user'] = Auth::user()->id;
                 $input['user_conseiller'] = Auth::user()->id;
+                $input['id_agence'] = Auth::user()->num_agce;
                 $input['flag_recevablite_plan_formation'] = true;
                 $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
                 $input['code_plan_formation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
                 $input['date_recevabilite_plan_formatio'] = Carbon::now();
 
                 $planformation = PlanFormation::find($id);
-                $planformation->update($input); 
-                
+                $planformation->update($input);
+
                 return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
             }
 
@@ -198,11 +199,12 @@ class TratementPlanFormationController extends Controller
                 ],[
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
                 ]);
-                
+
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
                 $input['id_user'] = Auth::user()->id;
                 $input['user_conseiller'] = Auth::user()->id;
+                $input['id_agence'] = Auth::user()->num_agce;
                 $input['flag_recevablite_plan_formation'] = true;
                 $input['flag_rejeter_plan_formation'] = true;
                 $input['conde_entreprise_plan_formation'] = 'fdfpentre' . Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
@@ -220,16 +222,16 @@ class TratementPlanFormationController extends Controller
                 if (isset($planformation1->email_professionnel_charge_plan_formation)) {
                     $sujet = "Recevabilité du plan de formation sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                    $messageMail = "<b>Cher,  $infoentreprise->raison_social_entreprises ,</b>
-                                    <br><br>Nous avons examiné votre paln de formation sur e-FDFP, et 
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous avons examiné votre paln de formation sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
-                                    
-                                    <br><b>Motif de rejet  : </b> @$planformation1->motif->libelle_motif
-                                    <br><b>Commentaire : </b> @$planformation1->commentaire_recevable_plan_formation
+
+                                    <br><b>Motif de rejet  : </b> ".@$planformation1->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$planformation1->commentaire_recevable_plan_formation."
                                     <br><br>
-                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à 
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
-                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de 
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
                                         soumettre une nouvelle demande lorsque les problèmes seront résolus.
                                         Cordialement,
                                         L'équipe e-FDFP
@@ -240,11 +242,11 @@ class TratementPlanFormationController extends Controller
                                     ";
                     $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
-                
+
                 return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
 
             }
-            
+
             if($data['action'] === 'Traiter_action_formation'){
 
                 $actionplan = ActionFormationPlan::find($id);
@@ -286,7 +288,7 @@ class TratementPlanFormationController extends Controller
                 }
 
                 return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
-            }   
+            }
 
             if($data['action'] === 'Soumission_ct_plan_formation'){
 
@@ -294,7 +296,7 @@ class TratementPlanFormationController extends Controller
                     'flag_soumis_ct_plan_formation' => true,
                     'date_soumis_ct_plan_formation' => Carbon::now()
                 ]);
-                
+
                 return redirect()->route('traitementplanformation.index')->with('success', 'Succes : Plan de formation soumis ');
 
             }

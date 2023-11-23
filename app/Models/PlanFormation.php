@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_entreprises
  * @property float $id_motif_recevable
  * @property float $id_annee_exercice
+ * @property float $id_processus
+ * @property float $id_agence
  * @property float $id_entreprise_structure_formation_plan_formation
  * @property string $nom_prenoms_charge_plan_formati
  * @property string $fonction_charge_plan_formation
@@ -22,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_soumis_plan_formation
  * @property boolean $flag_valide_plan_formation
  * @property boolean $flag_rejeter_plan_formation
+ * @property boolean $flag_plan_formation_valider_par_processus
  * @property float $user_conseiller
  * @property string $conde_entreprise_plan_formation
  * @property string $code_plan_formation
@@ -35,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email_professionnel_charge_plan_formation
  * @property string $commentaire_recevable_plan_formation
  * @property boolean $flag_soumis_ct_plan_formation
+ * @property boolean $flag_valide_action_des_plan_formation
  * @property string $date_soumis_ct_plan_formation
  * @property ActionFormationPlan[] $actionFormationPlans
  * @property TypeEntreprise $typeEntreprise
@@ -43,27 +47,29 @@ use Illuminate\Database\Eloquent\Model;
  * @property PeriodeExercice $periodeExercice
  * @property EntrepriseHabilitation $entreprisehabilitation
  * @property UserConseilPlanFormation $userconseilplanformation
+ * @property Agence $agence
+ * @property Processus $processus
  * @property CategoriePlan[] $categoriePlans
  */
 class PlanFormation extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'plan_formation';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_plan_de_formation';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -71,7 +77,7 @@ class PlanFormation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_entreprise_structure_formation_plan_formation', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation'];
+    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_entreprise_structure_formation_plan_formation', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation','id_processus','flag_valide_action_des_plan_formation','flag_plan_formation_valider_par_processus','id_agence'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -119,14 +125,30 @@ class PlanFormation extends Model
     public function entreprisehabilitation()
     {
         return $this->belongsTo('App\Models\Entreprises', 'id_entreprise_structure_formation_plan_formation', 'id_entreprises');
-    }    
-    
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function userconseilplanformation()
     {
         return $this->belongsTo('App\Models\User', 'user_conseiller', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function agence()
+    {
+        return $this->belongsTo('App\Models\Agence', 'id_agence', 'num_agce');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function processus()
+    {
+        return $this->belongsTo('App\Models\Processus', 'id_processus', 'id_processus');
     }
 
     /**

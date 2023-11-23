@@ -5,12 +5,12 @@
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des plans de formations soumis')
-    @php($lien='traitementplanformation')
+    @php($titre='Liste des plans de formations a validés')
+    @php($lien='ctplanformationvalider')
 
     <!-- BEGIN: Content-->
 
-    <h5 class="py-2 mb-1"> 
+    <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
     </h5>
 
@@ -52,36 +52,37 @@
                         </thead>
                         <tbody>
                         <?php $i=0 ?>
-                        @foreach ($planformations as $key => $planformation)
+                        @foreach ($Resultat as $key => $res1)
+                        @foreach ($res1 as $key => $planformation)
                             <tr>
                                 <td>{{ ++$i }}</td>
-                                <td>{{ @$planformation->entreprise->ncc_entreprises  }} / {{ @$planformation->entreprise->raison_social_entreprises  }}</td>
-                                <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td>
+                                <td>{{ @$planformation->ncc_entreprises  }} / {{ @$planformation->raison_social_entreprises  }}</td>
+                                <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
                                 <td>{{ @$planformation->code_plan_formation }}</td>
                                 <td>{{ $planformation->date_soumis_plan_formation }}</td>
                                 <td align="center">
-                                        <?php if ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true 
+                                        <?php if ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
                                         and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){ ?>
                                             <span class="badge bg-success">Valider</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){ ?>
                                         <span class="badge bg-warning">En cours de traitement</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) { ?>
                                         <span class="badge bg-secondary">Soumis</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == false and 
-                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == false and
+                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) { ?>
                                         <span class="badge bg-primary">Non Soumis</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == true and $planformation->flag_soumis_ct_plan_formation==false) { ?>
-                                        <span class="badge bg-danger">Rejeter</span>                                    
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false 
+                                        <span class="badge bg-danger">Rejeter</span>
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) { ?>
                                         <span class="badge bg-warning">Soumis au ct</span>
                                     <?php } else { ?>
@@ -90,13 +91,14 @@
                                 </td>
                                 <td align="center">
                                     @can($lien.'-edit')
-                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
+                                        <a href="{{ route($lien.'.editer',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($planformation->id_combi_proc)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
                                     @endcan
                                 </td>
                             </tr>
+                        @endforeach
                         @endforeach
                         </tbody>
                     </table>
