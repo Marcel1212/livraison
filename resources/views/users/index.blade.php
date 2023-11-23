@@ -45,8 +45,6 @@
                                             <th>Email</th>
                                             <th>Profil</th>
                                             <th>Entité</th>
-                                            <th>Contact</th>
-                                            <th>Adresse</th>
                                             <th>Statut</th>
                                             <th>Action</th>
                                         </tr>
@@ -65,15 +63,13 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ @$user->agence->lib_agce }}</td>
-                                                <td>{{ $user->cel_users. ' / '.$user->tel_users }}</td>
-                                                <td>{{ $user->adresse_users }}</td>
                                                 <td align="center">
                                                     <?php if ($user->flag_actif_users == true ){?>
                                                     <span class="badge bg-success">Actif</span>
                                                     <?php } else {?>
                                                     <span class="badge bg-danger">Inactif</span>
                                                     <?php }  ?>
-                                                </td> 
+                                                </td>
                                                 <td align="center">
                                                     @can($lien.'-edit')
                                                         <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($user->id)) }}"

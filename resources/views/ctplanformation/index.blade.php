@@ -5,8 +5,8 @@
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des plans de formations soumis')
-    @php($lien='traitementplanformation')
+    @php($titre='Liste des plans de formations a validés')
+    @php($lien='ctplanformation')
 
     <!-- BEGIN: Content-->
 

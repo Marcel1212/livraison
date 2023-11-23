@@ -33,6 +33,18 @@ class Menu
         return (isset($tabl) ? $tabl : '');
     }
 
+    public static function get_id_profil($idutil)
+    {
+        $roles = DB::table('users')
+            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+            ->where([['users.id', '=', $idutil]])
+            ->first();
+        $idroles = $roles->role_id;
+        return (isset($idroles) ? $idroles : '');
+    }
+
+
     public static function get_menu_profil($idutil)
     {
         $roles = DB::table('users')
@@ -65,7 +77,7 @@ class Menu
 
         return (isset($logof) ? $logof : '');
     }
-    
+
 
     public static function get_info_acceuil()
     {
@@ -76,7 +88,7 @@ class Menu
 
         return (isset($logof) ? $logof : '');
     }
-    
+
     public static function get_info_couleur()
     {
 
@@ -85,8 +97,8 @@ class Menu
 
 
         return (isset($logof) ? $logof : '');
-    }    
-    
+    }
+
     public static function get_info_image_dashboard()
     {
 
@@ -95,8 +107,8 @@ class Menu
 
 
         return (isset($logof) ? $logof : '');
-    }      
-    
+    }
+
     public static function get_info_reseaux()
     {
 
@@ -105,7 +117,7 @@ class Menu
 
 
         return (isset($logof) ? $logof : '');
-    }   
-    
+    }
+
 
 }

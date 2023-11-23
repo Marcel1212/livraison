@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @php($Module='Plan de formation')
+    @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
     @php($soustitre='Demande de un plan de formations')
     @php($lien='planformation')
