@@ -337,7 +337,7 @@ class PlanFormationController extends Controller
                     'agent_maitrise_fiche_demande_ag' => 'required',
                     'employe_fiche_demande_agrement' => 'required',
                     'file_beneficiare' => 'required|mimes:xlsx,XLSX|max:5120',
-                    'facture_proforma_action_formati' => 'required|mimes:pdf,PDF|max:5120'
+                    'facture_proforma_action_formati' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120'
                 ],[
                     'intitule_action_formation_plan.required' => 'Veuillez ajoutez l\'intitule de l\'action.',
                     'id_entreprise_structure_formation_plan_formation.required' => 'Veuillez ajoutez une structure ou etablissement.',
@@ -359,7 +359,7 @@ class PlanFormationController extends Controller
                     'facture_proforma_action_formati.required' => 'Veuillez ajoutez la massse salariale.',
                     'file_beneficiare.mimes' => 'Les formats requises pour le fichier excel contenant la liste des beneficiaires est: xlsx,XLSX.',
                     'file_beneficiare.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                    'facture_proforma_action_formati.mimes' => 'Les formats requises pour la proformat est: pdf,PDF.',
+                    'facture_proforma_action_formati.mimes' => 'Les formats requises pour la proformat est: PDF,PNG,JPG,JPEG.',
                     'facture_proforma_action_formati.max'=> 'la taille maximale doit etre 5 MegaOctets.',
                 ]);
 
@@ -384,7 +384,9 @@ class PlanFormationController extends Controller
 
                     //dd($filefront->extension());
 
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf"){
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
 
                         $fileName1 = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
 
@@ -400,7 +402,7 @@ class PlanFormationController extends Controller
                 $insertedIdActionPlanFormation = ActionFormationPlan::latest()->first()->id_action_formation_plan;
 
                 $input['id_action_formation_plan'] = $insertedIdActionPlanFormation;
-                $input['total_beneficiaire_fiche_demand'] = $input['cadre_fiche_demande_agrement'] + $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'];
+               // $input['total_beneficiaire_fiche_demand'] = $input['cadre_fiche_demande_agrement'] + $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'];
 
                 FicheADemandeAgrement::create($input);
 
@@ -413,49 +415,7 @@ class PlanFormationController extends Controller
                     $collections = (new FastExcel)->import($file);
 
                     foreach($collections as $collection){
-                        /*$this->validate($request, [
-                            'intitule_action_formation_plan' => 'required',
-                            'id_entreprise_structure_formation_plan_formation' => 'required',
-                            'nombre_stagiaire_action_formati' => 'required',
-                            'nombre_groupe_action_formation_' => 'required',
-                            'nombre_heure_action_formation_p' => 'required',
-                            'cout_action_formation_plan' => 'required',
-                            'id_type_formation' => 'required',
-                            'id_but_formation' => 'required',
-                            'date_debut_fiche_agrement' => 'required',
-                            'date_fin_fiche_agrement' => 'required',
-                            'lieu_formation_fiche_agrement' => 'required',
-                            'cout_total_fiche_agrement' => 'required',
-                            'objectif_pedagogique_fiche_agre' => 'required',
-                            'cadre_fiche_demande_agrement' => 'required',
-                            'agent_maitrise_fiche_demande_ag' => 'required',
-                            'employe_fiche_demande_agrement' => 'required',
-                            'file_beneficiare' => 'required|mimes:xlsx,XLSX|max:5120',
-                            'facture_proforma_action_formati' => 'required|mimes:pdf,PDF|max:5120'
-                        ],[
-                            'intitule_action_formation_plan.required' => 'Veuillez ajoutez l\'intitule de l\'action.',
-                            'id_entreprise_structure_formation_plan_formation.required' => 'Veuillez ajoutez une structure ou etablissement.',
-                            'nombre_stagiaire_action_formati.required' => 'Veuillez ajoutez le nombre de stagiaire.',
-                            'nombre_groupe_action_formation_.required' => 'Veuillez ajoutez le nombre de groupe.',
-                            'nombre_heure_action_formation_p.required' => 'Veuillez ajoutez le nombre d\'heure.',
-                            'cout_action_formation_plan.required' => 'Veuillez ajoutez le cout de la formation.',
-                            'id_type_formation.required' => 'Veuillez selectionnez un type de formation.',
-                            'id_but_formation.required' => 'Veuillez selectionnez le but de la formation.',
-                            'date_debut_fiche_agrement.unique' => 'Veuillez ajoutez la date de debut',
-                            'date_fin_fiche_agrement.required' => 'Veuillez ajoutez la date de fin .',
-                            'lieu_formation_fiche_agrement.required' => 'Veuillez ajoutez le lieu de formation.',
-                            'cout_total_fiche_agrement.required' => 'Veuillez ajoutez le cout total de la fiche d\'agrement.',
-                            'objectif_pedagogique_fiche_agre.required' => 'Veuillez ajoutez l\'objectif pedagogique.',
-                            'cadre_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre de cadre.',
-                            'agent_maitrise_fiche_demande_ag.required' => 'Veuillez ajoutez le nombre d\'agent de maitrise.',
-                            'employe_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre d\employe .',
-                            'file_beneficiare.required' => 'Veuillez ajoutez le fichier excel contenant la liste des beneficiaires.',
-                            'facture_proforma_action_formati.required' => 'Veuillez ajoutez la massse salariale.',
-                            'file_beneficiare.mimes' => 'Les formats requises pour le fichier excel contenant la liste des beneficiaires est: xlsx,XLSX.',
-                            'file_beneficiare.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                            'facture_proforma_action_formati.mimes' => 'Les formats requises pour la proformat est: pdf,PDF.',
-                            'facture_proforma_action_formati.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                        ]);*/
+
                         if(isset($collection['NOM ET PRENON'])){
                             $nom_prenom = $collection['NOM ET PRENON'];
                         }else{
@@ -508,7 +468,17 @@ class PlanFormationController extends Controller
                             'matricule_cnps' => $matricule_cnps
                         ]);
 
+
                     }
+
+                    $nbrebeneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$insertedIdFicheAgrement]])->get();
+
+                    $nbrebene = count($nbrebeneficiaires);
+
+                    $fiche = FicheADemandeAgrement::find($insertedIdFicheAgrement);
+                    $fiche->update([
+                        'total_beneficiaire_fiche_demand' =>$nbrebene
+                    ]);
 
                }
 

@@ -265,6 +265,10 @@ class TratementPlanFormationController extends Controller
 
                 $input = $request->all();
 
+                //$planformationupadteinfos = PlanFormation::find($idplan);
+
+                //$planformationupadteinfos->update($input);
+
                 if($input['cout_accorde_action_formation']==0){
 
                     $this->validate($request, [
@@ -278,12 +282,22 @@ class TratementPlanFormationController extends Controller
                     $actionplanupdate = ActionFormationPlan::find($id);
                     $actionplanupdate->update($input);
 
+                    $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                    $idficheagre = $infosficheagrement->id_fiche_agrement;
+                    $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                    $infosfchieupdate->update($input);
+
                 }else{
 
                     $input['flag_valide_action_formation_pl'] = true;
 
                     $actionplanupdate = ActionFormationPlan::find($id);
                     $actionplanupdate->update($input);
+
+                    $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                    $idficheagre = $infosficheagrement->id_fiche_agrement;
+                    $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                    $infosfchieupdate->update($input);
 
                 }
 
