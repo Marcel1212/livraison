@@ -223,102 +223,102 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
     <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
 
-    <<<<<<< HEAD <!-- Main JS -->
-        <script src="{{ asset('assets/js/main.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 
-        <!-- Page JS -->
-        <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
-        <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
-        =======
-        <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
-        <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
-        <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
+    <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+    =======
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 
 
-        <!-- Vendors JS -->
-        <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
 
-        <!-- Vendors JS -->
-        <script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-        <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
-        <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
-        <script src="/assets/vendor/libs/select2/select2.js"></script>
+    <!-- Vendors JS -->
+    <script src="/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
+    <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
+    <script src="/assets/vendor/libs/select2/select2.js"></script>
 
-        <!-- Main JS -->
-        <script src="{{ asset('assets/js/main.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 
-        <!-- Page JS -->
-        <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
-        <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
+    <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
 
-        <script>
-            var win = null;
+    <script>
+        var win = null;
 
-            function NewWindow(mypage, myname, w, h, scroll, pos, niveau) {
+        function NewWindow(mypage, myname, w, h, scroll, pos, niveau) {
 
-                if (pos == "random") {
-                    LeftPosition = (screen.width) ? Math.floor(Math.random() * (screen.width - w)) : 100;
-                    TopPosition = (screen.height) ? Math.floor(Math.random() * ((screen.height - h) - 75)) : 100;
-                }
-                if (pos == "center") {
-                    LeftPosition = (screen.width) ? (screen.width - w) / 2 : 100;
-                    TopPosition = (screen.height) ? (screen.height - h) / 2 : 100;
-                } else if ((pos != "center" && pos != "random") || pos == null) {
-                    LeftPosition = 0;
-                    TopPosition = 20
-                }
-                settings = 'width=' + w + ',height=' + h + ',top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars=' +
-                    scroll + ',location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes';
+            if (pos == "random") {
+                LeftPosition = (screen.width) ? Math.floor(Math.random() * (screen.width - w)) : 100;
+                TopPosition = (screen.height) ? Math.floor(Math.random() * ((screen.height - h) - 75)) : 100;
+            }
+            if (pos == "center") {
+                LeftPosition = (screen.width) ? (screen.width - w) / 2 : 100;
+                TopPosition = (screen.height) ? (screen.height - h) / 2 : 100;
+            } else if ((pos != "center" && pos != "random") || pos == null) {
+                LeftPosition = 0;
+                TopPosition = 20
+            }
+            settings = 'width=' + w + ',height=' + h + ',top=' + TopPosition + ',left=' + LeftPosition + ',scrollbars=' +
+                scroll + ',location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes';
 
-                if ((win == null || win.closed) && (mypage != '#')) {
+            if ((win == null || win.closed) && (mypage != '#')) {
+                win = window.open(mypage, myname, settings);
+                win.focus();
+            } else {
+                win.close();
+                if ((mypage != '#')) {
                     win = window.open(mypage, myname, settings);
                     win.focus();
-                } else {
-                    win.close();
-                    if ((mypage != '#')) {
-                        win = window.open(mypage, myname, settings);
-                        win.focus();
-                    }
                 }
-
             }
 
-            $(window).on('load', function() {
-                if (feather) {
-                    feather.replace({
-                        width: 14,
-                        height: 14
-                    });
-                }
-            })
+        }
 
-            function startTime() {
-                let today = new Date();
-                let h = today.getHours();
-                let m = today.getMinutes();
-                let s = today.getSeconds();
-                var day = today.getDay();
-                var Y = today.getFullYear();
-                var dayarr = ["Dimance", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-                day = dayarr[day];
-                //  let ampm = h >= 24 ; h = h % 24; h = h ? h : 24; // the hour '0' should  be '12' m = m < 10 ? '0'+m : m; h = h < 10 ? '0'+h : h; s = s < 10 ? '0'+s : s;
-                document.getElementById('clock').innerHTML = day + " <?= date('d/m/Y') ?> " + h + ":" + m + ":" + s;
-                let t = setTimeout(startTime, 500);
+        $(window).on('load', function() {
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
             }
+        })
 
-            $(document).ready(function() {
-                $('#exampleData').DataTable();
-            });
-        </script>
+        function startTime() {
+            let today = new Date();
+            let h = today.getHours();
+            let m = today.getMinutes();
+            let s = today.getSeconds();
+            var day = today.getDay();
+            var Y = today.getFullYear();
+            var dayarr = ["Dimance", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+            day = dayarr[day];
+            //  let ampm = h >= 24 ; h = h % 24; h = h ? h : 24; // the hour '0' should  be '12' m = m < 10 ? '0'+m : m; h = h < 10 ? '0'+h : h; s = s < 10 ? '0'+s : s;
+            document.getElementById('clock').innerHTML = day + " <?= date('d/m/Y') ?> " + h + ":" + m + ":" + s;
+            let t = setTimeout(startTime, 500);
+        }
+
+        $(document).ready(function() {
+            $('#exampleData').DataTable();
+        });
+    </script>
 </body>
 
 </html>

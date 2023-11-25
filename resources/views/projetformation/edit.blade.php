@@ -75,35 +75,35 @@
                                                                     <div class="mb-1">
                                                                         <label> <b class="term">Numero de compte
                                                                                 contribuable: </b> </label> <br>
-                                                                        <label> <?php echo $entreprise->ncc_entreprises; ?></label>
+                                                                        <label><?php echo $entreprise->ncc_entreprises; ?></label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label> <b class="term">Raison sociale: </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->raison_social_entreprises; ?></label>
+                                                                        <label><?php echo $entreprise->raison_social_entreprises; ?></label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label> <b class="term">RCCM </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->rccm_entreprises; ?></label>
+                                                                        <label><?php echo $entreprise->rccm_entreprises; ?></label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label> <b class="term">NCC </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->ncc_entreprises; ?></label>
+                                                                        <label><?php echo $entreprise->ncc_entreprises; ?></label>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label> <b class="term">Numéro de téléphone: </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->tel_entreprises; ?></label>
+                                                                        <label><?php echo $entreprise->tel_entreprises; ?></label>
 
                                                                     </div>
                                                                 </div>
@@ -122,7 +122,7 @@
                                                                         <label> <b class="term">Situation géographique:
                                                                             </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->localisation_geographique_entreprise; ?></label>
+                                                                        <label><?php echo $entreprise->localisation_geographique_entreprise; ?></label>
 
                                                                     </div>
                                                                 </div>
@@ -131,8 +131,7 @@
                                                                         <label> <b class="term">Numéro CNPS:
                                                                             </b>
                                                                         </label> <br>
-                                                                        <label> <?php echo $entreprise->numero_cnps_entreprises; ?></label>
-
+                                                                        <label><?php echo $entreprise->numero_cnps_entreprises; ?></label>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -160,7 +159,8 @@
                                                                         <input type="text" name="titre_projet"
                                                                             required="required" id="titre_projet"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Perfectionnement ..">
+                                                                            placeholder="ex : Perfectionnement .."
+                                                                            value="{{ $projetetude->titre_projet_etude }}">
                                                                     </div>
                                                                     <div class="mb-1">
                                                                         <label>Operateur <span style="color:red;">*</span>
@@ -168,7 +168,8 @@
                                                                         <input type="text" name="operateur"
                                                                             required="required" id="operateur"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Perfectionnement ..">
+                                                                            placeholder="ex : Perfectionnement .."
+                                                                            value="{{ $projetetude->operateur }}">
                                                                     </div>
                                                                     <div class="mb-1">
                                                                         <label>Promoteur <span style="color:red;">*</span>
@@ -176,15 +177,18 @@
                                                                         <input type="text" name="promoteur"
                                                                             required="required" id="promoteur"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Perfectionnement ..">
+                                                                            placeholder="ex : Perfectionnement .."
+                                                                            value="{{ $projetetude->promoteur }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 col-12">
+                                                                <div
+                                                                    class="col-md-6
+                                                                            col-12">
                                                                     <div class="mb-1">
                                                                         <label>Beneficiaire / Cible <span
                                                                                 style="color:red;">*</span></label>
                                                                         <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="beneficiaire_cible" style="height: 121px;"></textarea>
+                                                                            name="beneficiaire_cible" style="height: 121px;"><?php echo $projetetude->beneficiaires_cible; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
@@ -193,7 +197,7 @@
                                                                                 style="color:red;">*</span>
                                                                         </label>
                                                                         <textarea required="required" class="form-control" rows="3" id="exampleFormControlTextarea"
-                                                                            name="zone_projey" style="height: 121px;"></textarea>
+                                                                            name="zone_projey" style="height: 121px;"><?php echo $projetetude->zone_projet; ?></textarea>
 
                                                                     </div>
                                                                 </div>
@@ -221,34 +225,43 @@
                                                                         <input type="text" name="nom_prenoms"
                                                                             id="titre_projet"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Koa Augustin ..">
+                                                                            placeholder="ex : Koa Augustin .."
+                                                                            value="{{ $projetetude->nom_prenoms }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 col-12">
+                                                                <div
+                                                                    class="col-md-6
+                                                                            col-12">
                                                                     <div class="mb-1">
                                                                         <label>Fonction
                                                                         </label>
                                                                         <input type="text" name="fonction"
                                                                             id="fonction"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Charge d'etude ..">
+                                                                            placeholder="ex : Charge d'etude .."
+                                                                            value="{{ $projetetude->fonction }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 col-12">
+                                                                <div
+                                                                    class="col-md-6
+                                                                                col-12">
                                                                     <div class="mb-1">
                                                                         <label>Téléphone
                                                                         </label>
                                                                         <input type="number" name="telephone"
                                                                             minlength="9" maxlength="10" id="telephone"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : 02014575777">
+                                                                            placeholder="ex : 02014575777"
+                                                                            value="{{ $projetetude->telephone }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="card accordion-item">
+                                                <div
+                                                    class="card
+                                                                                    accordion-item">
                                                     <h2 class="accordion-header" id="headingTwo">
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionDP"
@@ -264,10 +277,11 @@
 
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-4">
-                                                                        <label>Environnement / contexte <span
+                                                                        <label>Environnement /
+                                                                            contexte <span
                                                                                 style="color:red;">*</span></label>
                                                                         <textarea class="form-control" required="required" rows="4" id="exampleFormControlTextarea"
-                                                                            name="environnement_contexte" style="height: 150px;"></textarea>
+                                                                            name="environnement_contexte" style="height: 150px;"><?php echo $projetetude->environnement_contexte; ?></textarea>
                                                                     </div>
                                                                 </div>
 
@@ -296,15 +310,25 @@
                                                                             id="exampleFormControlSelect1"
                                                                             name="acteurs_projet"
                                                                             aria-label="Default select example">
-                                                                            <option selected="">Selectionnez un acteur
+                                                                            <option selected="">
+                                                                                Selectionnez un
+                                                                                acteur
                                                                             </option>
-                                                                            <option value="Les bénéficiaires">Les
-                                                                                bénéficiaires</option>
-                                                                            <option value="Le promoteur">Le promoteur
+                                                                            <option value="Les bénéficiaires">
+                                                                                Les
+                                                                                bénéficiaires
                                                                             </option>
-                                                                            <option value="Les partenaires">Les partenaires
+                                                                            <option value="Le promoteur">
+                                                                                Le
+                                                                                promoteur
                                                                             </option>
-                                                                            <option value="Autres acteurs">Autres acteurs
+                                                                            <option value="Les partenaires">
+                                                                                Les
+                                                                                partenaires
+                                                                            </option>
+                                                                            <option value="Autres acteurs">
+                                                                                Autres
+                                                                                acteurs
                                                                             </option>
                                                                             </option>
                                                                         </select>
@@ -317,15 +341,19 @@
                                                                         <input type="text" name="role_projet"
                                                                             required="required" id="role"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : Perfectionnement ..">
+                                                                            placeholder="ex : Perfectionnement .."
+                                                                            value="{{ $projetetude->role_p }}">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 col-12">
+                                                                <div
+                                                                    class="col-md-6
+                                                                            col-12">
                                                                     <div class="mb-1">
-                                                                        <label> Responsabilite <span
-                                                                                style="color:red;">*</span></label>
+                                                                        <label>
+                                                                            Responsabilite
+                                                                            <span style="color:red;">*</span></label>
                                                                         <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="responsabilite_projet" style="height: 121px;"></textarea>
+                                                                            name="responsabilite_projet" style="height: 121px;"><?php echo $projetetude->responsabilite; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -338,7 +366,8 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionPOD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Problèmes observes, objet de la demande de financement
+                                                            Problèmes observes, objet de la
+                                                            demande de financement
                                                         </button>
                                                     </h2>
                                                     <div id="accordionPOD" class="accordion-collapse collapse"
@@ -351,21 +380,27 @@
                                                                         <label>Problèmes
                                                                         </label>
                                                                         <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="problemes_odf" style="height: 121px;"></textarea>
+                                                                            name="problemes_odf" style="height: 121px;"><?php echo $projetetude->problemes; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6  col-12">
                                                                     <div class="mb-1">
-                                                                        <label>Manifestations / Impacts / Effet </label>
+                                                                        <label>Manifestations
+                                                                            /
+                                                                            Impacts / Effet
+                                                                        </label>
                                                                         <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="manifestation_impacts_odf" style="height: 121px;"></textarea>
+                                                                            name="manifestation_impacts_odf" style="height: 121px;"><?php echo $projetetude->manifestation_impact_effet; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
-                                                                        <label> Moyens probables de résolution </label>
+                                                                        <label> Moyens
+                                                                            probables
+                                                                            de résolution
+                                                                        </label>
                                                                         <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="moyens_problemes_odf" style="height: 121px;"></textarea>
+                                                                            name="moyens_problemes_odf" style="height: 121px;"><?php echo $projetetude->moyens_probables; ?></textarea>
                                                                     </div>
                                                                 </div>
 
@@ -378,7 +413,8 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionACD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Analyse des compétences des bénéficiaires
+                                                            Analyse des compétences des
+                                                            bénéficiaires
                                                         </button>
                                                     </h2>
                                                     <div id="accordionACD" class="accordion-collapse collapse"
@@ -389,23 +425,28 @@
 
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
-                                                                        <label> Compétences</label>
+                                                                        <label>
+                                                                            Compétences</label>
                                                                         <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="competences_odf"
-                                                                            style="height: 121px;"></textarea>
+                                                                            style="height: 121px;"><?php echo $projetetude->competences; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
-                                                                        <label> Evaluation des compétences </label>
+                                                                        <label> Evaluation
+                                                                            des
+                                                                            compétences
+                                                                        </label>
                                                                         <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="evaluation_competences_odf"
-                                                                            style="height: 121px;"></textarea>
+                                                                            style="height: 121px;"><?php echo $projetetude->evaluation_contexte; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
-                                                                        <label> Sources de verification</label>
+                                                                        <label> Sources de
+                                                                            verification</label>
                                                                         <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="sources_verification_odf"
-                                                                            style="height: 121px;"></textarea>
+                                                                            style="height: 121px;"><?php echo $projetetude->source_verification; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -427,38 +468,56 @@
                                                             <div class="row gy-3">
 
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Lettre de demande de
-                                                                        financement (PDF, WORD, JPG)
+                                                                    <label class="form-label">Lettre
+                                                                        de demande de
+                                                                        financement (PDF,
+                                                                        WORD,
+                                                                        JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_demande_financement"
                                                                         class="form-control" placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Lettre d’engagement (PDF,
+                                                                    <label class="form-label">Lettre
+                                                                        d’engagement
+                                                                        (PDF,
                                                                         WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_lettre_engagement"
                                                                         class="form-control" placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Liste des bénéficiaires (si
-                                                                        identifiés) selon le type de
-                                                                        projet (PDF, WORD, JPG)
+                                                                    <label class="form-label">Liste
+                                                                        des
+                                                                        bénéficiaires
+                                                                        (si
+                                                                        identifiés) selon le
+                                                                        type de
+                                                                        projet (PDF, WORD,
+                                                                        JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_liste_beneficiaires"
                                                                         class="form-control" placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Liste de supports
-                                                                        pédagogiques nécessaires à la
-                                                                        réalisation des formations (PDF, WORD, JPG)
+                                                                    <label class="form-label">Liste
+                                                                        de supports
+                                                                        pédagogiques
+                                                                        nécessaires
+                                                                        à la
+                                                                        réalisation des
+                                                                        formations (PDF,
+                                                                        WORD,
+                                                                        JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_supports_pedagogiques"
                                                                         class="form-control" placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Document prouvant
-                                                                        l’existence légale du
+                                                                    <label class="form-label">Document
+                                                                        prouvant
+                                                                        l’existence légale
+                                                                        du
                                                                         promoteur
                                                                         (PDF, WORD, JPG)
                                                                         5M</label>
@@ -466,7 +525,9 @@
                                                                         class="form-control" placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Autre document (PDF, WORD,
+                                                                    <label class="form-label">Autre
+                                                                        document (PDF,
+                                                                        WORD,
                                                                         JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_autre_document"
@@ -483,9 +544,13 @@
                                             <div class="col-12" align="left">
                                                 <br>
                                                 <div class="col-12" align="right">
-                                                    <button type="submit"
+                                                    <button type="submit" name="soumettre"
+                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        Soumettre
+                                                    </button>
+                                                    <button type="submit" name="modifier"
                                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                        Enregistrer
+                                                        Modifier
                                                     </button>
                                                     <a class="btn btn-sm btn-outline-secondary waves-effect"
                                                         href="/{{ $lien }}">

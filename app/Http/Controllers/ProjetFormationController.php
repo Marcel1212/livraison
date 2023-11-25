@@ -353,6 +353,9 @@ class ProjetFormationController extends Controller
         // Pieces Projet Etudes
         //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
         //dd($projetetude->flag_soumis);
+        // Infos entrerprises
+        $user = User::find(Auth::user()->id);
+        $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
         if($projetetude->flag_soumis == true) {
             $listeuser = User::all();
             $listeuserfinal = "<option value=''> Selectionnez un agent </option>";
@@ -411,7 +414,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetformation.edit', compact('user','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 
