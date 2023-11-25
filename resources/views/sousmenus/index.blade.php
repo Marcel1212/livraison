@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @php($Module='Système')
+    @php($Module='Configuration')
     @php($titre='Liste des sous modules')
     @php($lien='sousmenus')
 
@@ -73,7 +73,7 @@
                                         <a href="{{ route('sousmenus.edit',$sousmenu->id_sousmenu) }}"
                                            class=" "
                                            title="Modifier"><img
-                                                src='/assets/img/editing.png'></a> 
+                                                src='/assets/img/editing.png'></a>
                                     @endcan
                                 </td>
                             </tr>
