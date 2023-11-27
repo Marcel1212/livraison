@@ -90,6 +90,38 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                             <span class="text-danger mb-0">{{ $anneexercice }}</span>
 
                         </h3>
+                        <h3 class="mb-2"><span class="text-muted">Du</span> <span
+                                class="badge bg-label-success">01-01-2023 </span>
+                            <span class="text-muted"> au </span> <span class="badge bg-label-danger"> 31-12-2023</span>
+                        </h3>
+                        <h3 class="mb-2"><span class="text-muted">Prolongée jusqu'au </span> <span
+                                class="badge bg-label-success">01-01-2023 </span>
+
+                        </h3>
+
+                        <?php if(isset($anneexercice->id_periode_exercice)){ ?>
+                        <h3 class="mb-2">
+                            <span class="text-muted">Du</span>
+                            <span class="badge bg-label-success">{{ $anneexercice->date_debut_periode_exercice }}
+                            </span>
+                            <span class="text-muted"> au </span>
+                            <span class="badge bg-label-danger"> {{ $anneexercice->date_fin_periode_exercice }}</span>
+                        </h3>
+                        <?php if(!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
+                        <h3 class="mb-2">
+
+                            <span class="text-muted">Prolongée jusqu'au </span>
+                            <span class="badge bg-label-success">{{ $anneexercice->date_prolongation_periode_exercice }}
+                            </span>
+
+                        </h3>
+                        <?php } ?>
+                        <?php }else{ ?>
+                        <h3 class="mb-2">
+
+                            <span class="text-danger mb-0">{{ $anneexercice }}</span>
+
+                        </h3>
                         <?php } ?>
 
                     </div>
