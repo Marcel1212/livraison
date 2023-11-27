@@ -144,7 +144,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Direction</label>
                                                 <select class="select2 form-select" id="direction" name="id_direction"/>
-                                                    <option value='{{@$user->direction->libelle_direction}}'>{{@$user->direction->libelle_direction}}</option>
+                                                    <option value='{{@$user->direction->id_direction}}'>{{@$user->direction->libelle_direction}}</option>
                                                     @foreach($directions as $direction)
                                                     <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
                                                     @endforeach
