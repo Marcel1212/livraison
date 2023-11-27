@@ -36,9 +36,30 @@ class ProjetEtudeController extends Controller
     public function index()
     {
         $user_id = Auth::user()->id;
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
+        //dd($nomrole);
         // dd($user_id);
-        $demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
-        return view('projetetude.index', compact('demandeenroles'));
+        if ($nomrole == 'ENTREPRISE'){
+            $demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
+
+        }else if ($nomrole == 'CHEF DE DEPARTEMENT') {
+            //dd('Autre');
+            $demandeenroles = ProjetEtude::where('id_user_affecte','=',$user_id)->get();
+        }else if ($nomrole == 'CHEF DE SERVICE') {
+            $demandeenroles = ProjetEtude::where('id_chef_serv','=',$user_id)->get();
+        }else if ($nomrole == 'CHARGER ETUDE') {
+            //dd('Autre');
+            $demandeenroles = ProjetEtude::where('id_charge_etude','=',$user_id)->get();
+        }
+        // dd($demandeenroles);
+        //$demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
+        return view('projetetude.index', compact('demandeenroles','nomrole'));
     }
 
     /**
@@ -247,6 +268,7 @@ class ProjetEtudeController extends Controller
             $input['resultat_attendu_projet_etude'] = ucfirst($input['resultat_attendu']);
             $input['champ_etude_projet_etude'] = ucfirst($input['champ_etude']);
             $input['cible_projet_etude'] = ucfirst($input['cible']);
+            $input['id_processus'] = 2;
 
             ProjetEtude::create($input);
             $id_projet = ProjetEtude::latest()->first()->id_projet_etude;
@@ -313,6 +335,22 @@ class ProjetEtudeController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         //dd($id);
+        // Recuperation des informations de l'entreprise
+        $projetetude = ProjetEtude::find($id);
+        $enterprise = User::find($projetetude->id_user);
+        $enterprise_mail = $enterprise->email;
+        $entreprise = InfosEntreprise::get_infos_entreprise($enterprise->login_users);
+        //dd($entreprise);
+        $user_id = Auth::user()->id;
+        //dd($user_id);
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
+        //dd($nomrole);
         $projetetude = ProjetEtude::find($id);
         //dd($projetetude['titre_projet_etude']);
         $piecesetude = PiecesProjetEtude::where([['id_projet_etude','=',$id],['code_pieces','=','1']])->get();
@@ -331,16 +369,48 @@ class ProjetEtudeController extends Controller
         // Pieces Projet Etudes
         //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
         //dd($projetetude->flag_soumis);
+
+        // Recuperation des agent
+        //dd($nomrole);
         if($projetetude->flag_soumis == true) {
-            $listeuser = User::all();
-            $listeuserfinal = "<option value=''> Selectionnez un agent </option>";
+            if ($nomrole == "CHEF DE DEPARTEMENT"){
+                //dd($nomrole);
+            $num_agce = Auth::user()->num_agce;
+            $chefservice = DB::table('users')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.name', 'users.prenom_users', 'users.id')
+            ->where([['roles.id','=',19],['users.num_agce','=',$num_agce]])
+            ->get();
+            //dd($chefservice);
+            //$listeuser = User::all();
+            $listeuser = $chefservice;
+            $listeuserfinal = "<option value=''> Selectionnez un chef de service </option>";
             foreach ($listeuser as $comp) {
                 $listeuserfinal .= "<option value='" . $comp->id  . "'>" . $comp->name . " ". $comp->prenom_users   ." </option>";
             }
+        } else {
+            //dd($nomrole);
+            $num_agce = Auth::user()->num_agce;
+            $chargetude = DB::table('users')
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->select('users.name', 'users.prenom_users', 'users.id')
+            ->where([['roles.id','=',22],['users.num_agce','=',$num_agce]])
+            ->get();
+            //dd($chargetude);
+            //$listeuser = User::all();
+            $listeuser = $chargetude;
+            $listeuserfinal = "<option value=''> Selectionnez un chargé d'etude </option>";
+            foreach ($listeuser as $comp) {
+                $listeuserfinal .= "<option value='" . $comp->id  . "'>" . $comp->name . " ". $comp->prenom_users   ." </option>";
+            }
+        }
 
         }else{
             $listeuserfinal = "";
         }
+
         // recuperation chef de service
         if($projetetude->flag_soumis_chef_service == true ){
 
@@ -387,9 +457,9 @@ class ProjetEtudeController extends Controller
         foreach ($statut as $comp) {
             $statuts .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
         }
-        //dd($motifs);
+        //dd($nomrole);
 
-        return view('projetetude.edit', compact('motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetetude.edit', compact('enterprise_mail','entreprise','motifs','nomrole','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 
@@ -584,10 +654,6 @@ class ProjetEtudeController extends Controller
                 $projetetude->date_trans_chef_s = $date_soumission;
                 $projetetude->commentaires_cd = $data['commentaires_chef_dep'];
                 // Atribution au chef de departement
-                // Recuperation de l'id
-                // $user_id = Auth::user()->id;
-                // dd(intval($data['id_chef_service']));
-                // dd($user_id);
                 $user_id = intval($data['id_chef_service']);
                 $projetetude->id_chef_serv = $user_id;
                 $projetetude->save();
@@ -601,9 +667,20 @@ class ProjetEtudeController extends Controller
                 $projetetude->flag_soumis = true;
                 $projetetude->date_soumis = $date_soumission;
                 // Atribution au chef de departement
+                // Recuperation de l'ID du chef de departement
+                $num_agce = Auth::user()->num_agce;
+                //dd($num_agce);
+                $chefdepartement = DB::table('users')
+                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select('users.name', 'users.prenom_users', 'users.id')
+                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]])
+                ->get();
+                //dd(intval($chefdepartement[0]->id));
+                $projetetude->id_user_affecte = intval($chefdepartement[0]->id);
                 // Recuperation de l'id Traitement a faire
                 $user_id = Auth::user()->id;
-                $projetetude->id_chef_dep = $user_id;
+                $projetetude->id_chef_dep = intval($chefdepartement[0]->id);
                 $projetetude->save();
                 return redirect()->route('projetetude.index')->with('success', 'Projet soumis avec succès.');
 

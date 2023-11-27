@@ -183,7 +183,59 @@
                                                     <div id="accordionOne" class="accordion-collapse collapse show"
                                                         data-bs-parent="#accordionExample" style="">
                                                         <div class="accordion-body">
+                                                            <div class="row gy-3">
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numero de compte
+                                                                                contribuable: </b> </label> <br>
+                                                                        <label> <?php echo $entreprise->ncc_entreprises; ?></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Raison sociale: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->raison_social_entreprises; ?></label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numéro de téléphone: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->tel_entreprises; ?></label>
 
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Email: </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $enterprise_mail;
+                                                                        ?></label>
+
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Situation géographique:
+                                                                            </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->localisation_geographique_entreprise; ?></label>
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label> <b class="term">Numéro CNPS:
+                                                                            </b>
+                                                                        </label> <br>
+                                                                        <label> <?php echo $entreprise->numero_cnps_entreprises; ?></label>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -394,9 +446,10 @@
                                                 </div>
                                             </div>
                                     </form>
-                                    <?php if ($projetetude->flag_soumis == true ) { ?>
+                                    <?php if ($nomrole == "CHEF DE DEPARTEMENT") { ?>
                                     <div class="card-body">
-                                        <h5 class="card-title" align="center"> Traitement du chef de departement</h5>
+                                        <h5 class="card-title" align="center"> Traitement du chef de
+                                            departement</h5>
                                         <div class="row">
                                             <label class="form-label">Liste des chefs de service <span
                                                     style="color:red;">*</span></label>
@@ -435,7 +488,7 @@
                                     </div>
                                     <?php }?>
 
-                                    <?php if ($projetetude->flag_soumis_chef_service == true ) { ?>
+                                    <?php if ($nomrole == "CHEF DE SERVICE" && $projetetude->flag_soumis_chef_service == true) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement du chef de service</h5>
                                         <div class="row">
@@ -477,7 +530,7 @@
                                     <?php }?>
 
 
-                                    <?php if ($projetetude->flag_soumis_charge_etude == true ) { ?>
+                                    <?php if ($nomrole == "CHARGER ETUDE" && $projetetude->flag_soumis_charge_etude == true ) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement de la recevabilité du dossier
                                         </h5>
@@ -537,7 +590,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php }?>
+                                    <?php //}
+                                    ?>
                                     <?php if ($projetetude->flag_valide == true && $projetetude->flag_rejet == false) { ?>
                                     <div class="card-body">
                                         <h5 align="center"> Traitement de l'instruction du dossier
@@ -776,6 +830,7 @@
                                         <?php } ?>
                                     </div>
 
+                                    <?php }?>
                                     <?php }?>
                                 </div>
                             </div>

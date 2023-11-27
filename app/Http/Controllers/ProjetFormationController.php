@@ -38,9 +38,24 @@ class ProjetFormationController extends Controller
     public function index()
     {
         $user_id = Auth::user()->id;
-        // dd($user_id);
-        $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
-        return view('projetformation.index', compact('demandeenroles'));
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
+        //dd($nomrole);
+        if ($nomrole == 'CHEF DE DEPARTEMENT'){
+            //dd('CHEF DE DEPARTEMENT');
+            $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
+
+        }else {
+            //dd('Autre');
+            $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
+        }
+
+        return view('projetformation.index', compact('demandeenroles','nomrole'));
     }
 
     /**
@@ -332,6 +347,14 @@ class ProjetFormationController extends Controller
     public function edit($id)
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+        $user_id = Auth::user()->id;
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
         //dd($id);
         $projetetude = ProjetFormation::find($id);
         //dd($id);
@@ -414,7 +437,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('user','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetformation.edit', compact('user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 

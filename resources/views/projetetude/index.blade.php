@@ -42,12 +42,14 @@
                             <div class="card mb-4">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h5 class="mb-0">{{ $titre }}</h5>
+                                    <?php if ($nomrole == 'ENTREPRISE') { ?>
                                     <span align="right">
                                         <a href="{{ route($lien . '.create') }}"
                                             class="btn btn-sm btn-primary waves-effect waves-light">
                                             <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter un projet d'étude </a>
 
                                     </span>
+                                    <?php }?>
                                 </div>
                                 <div class="card-body">
                                     <div class="table">
