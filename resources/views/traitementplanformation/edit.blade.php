@@ -171,7 +171,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -190,7 +190,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -209,7 +209,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -258,7 +258,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Type entreprises </label>
-                                        <select class="select2 form-select" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
+                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -341,7 +341,7 @@
                                     @method('put')
                                     <button type="submit" name="action" value="Soumission_ct_plan_formation"
                                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Valider
+                                                    Valider le plan de formation
                                     </button>
                                 </form>
                             <?php } ?>
@@ -469,7 +469,7 @@
                       <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan)) }}">
                             @csrf
                             @method('put')
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-9">
                           <label class="form-label" for="masse_salariale">Entreprise</label>
                           <input
                             type="text"
@@ -485,15 +485,8 @@
                             value="{{@$infosactionplanformation->masse_salariale}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="part_entreprise">Part entreprise</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->part_entreprise}}"
-                            disabled="disabled" />
-                        </div>
-                        <div class="col-12 col-md-3">
+
+                        <div class="col-12 col-md-12">
                           <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
                           <input
                             type="text"
@@ -501,6 +494,23 @@
                             name="intitule_action_formation_plan"
                             value="{{@$infosactionplanformation->intitule_action_formation_plan}}" />
                         </div>
+                        <div class="col-12 col-md-12">
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              name="objectif_pedagogique_fiche_agre"
+                              value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
+                               />
+                          </div>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label" for="part_entreprise">Part entreprise</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->part_entreprise}}"
+                              disabled="disabled" />
+                          </div>
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
                           <input
@@ -589,15 +599,7 @@
                             value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            name="objectif_pedagogique_fiche_agre"
-                            value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                             />
-                        </div>
+
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
                           <input
@@ -624,7 +626,7 @@
                         </div>
                         <div class="col-12 col-md-3">
                                             <div class="mb-1">
-                                                    <label>Proformat </label>
+                                                    <label>Facture proforma </label> <br>
                                                             <span class="badge bg-secondary"><a target="_blank"
                                                             onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
