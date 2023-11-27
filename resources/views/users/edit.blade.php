@@ -20,7 +20,7 @@
             const myArray = selectedValue.split("/");
             let profile = myArray[0];
             let code = myArray[1];
-            
+
             if(code === 'DIR'){
                 document.getElementById("direction").disabled = false;
                 document.getElementById("departement").disabled = true;
@@ -62,7 +62,7 @@
     </script>
     <!-- BEGIN: Content-->
 
-    
+
             <h5 class="py-2 mb-1">
                 <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
             </h5>
@@ -85,7 +85,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif  
+                              @endif
                               @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <div class="alert-body">
@@ -109,7 +109,7 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
-                                        <?php if($userRole != "ENTREPRISE") { ?> 
+                                        <?php if($nacodes != "ENTREPRISE") { ?>
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
                                                     <label>Profil utilisateur</label>
@@ -118,7 +118,7 @@
                                                         </select>
                                                 </div>
                                             </div>
-                                        <?php }else{ ?> 
+                                        <?php }else{ ?>
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
                                                     <label>Profil utilisateur</label>
@@ -140,7 +140,7 @@
                                                            required>
                                                 </div>
                                             </div>
-                                            <?php if($userRole != "ENTREPRISE") { ?> 
+                                            <?php if($nacodes != "ENTREPRISE") { ?>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Direction</label>
                                                 <select class="select2 form-select" id="direction" name="id_direction"/>
@@ -149,20 +149,20 @@
                                                     <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Departement</label>
                                                 <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
                                                     <option value='{{@$user->departement->id_departement}}'>{{@$user->departement->libelle_departement}}</option>
                                                 </select>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Service</label>
 
                                                 <select class="select2 form-select" id='service' name='id_service' class="form-control" >
                                                     <option value='{{@$user->service->id_service}}'>{{@$user->service->libelle_service}}</option>
                                                 </select>
-                                            </div>  
+                                            </div>
                                             <?php }?>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
@@ -222,7 +222,7 @@
                                                            class="form-control form-control-sm" placeholder="Adresse">
                                                 </div>
                                             </div>
-                                            
+
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
@@ -275,14 +275,14 @@
                                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                     Enregistrer
                                                 </button>
-                                               
+
                                                 <a class="btn btn-sm btn-outline-secondary waves-effect"
                                                    href="/{{$lien }}">
                                                     Retour</a>
                                             </div>
                                         </div>
                                     </form>
-                                    <?php if($userRole == "CONSEILLER") { ?> 
+                                    <?php if($nacodes == "CONSEILLER") { ?>
                                     <hr>
 
                                                     <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($user->id)) }}" enctype="multipart/form-data">
@@ -298,19 +298,19 @@
                                                                 aria-label="Default select example" required="required">
                                                                 <?= $SecteursActivite; ?>
                                                             </select>
-                                                        </div>                                    
-                                                        
-                                                    
+                                                        </div>
+
+
                                                             <div class="col-2 col-md-1" align="right"> <br>
                                                                 <button  type="submit" name="action" value="Lier_secteur_Conseiller" class="btn btn-sm btn-success me-sm-3 me-1">Ajouter</button>
-                                                            </div> 
-                                                        
+                                                            </div>
+
                                                     </div>
 
                                             </form>
-                                        
+
                                             <hr>
-                                            
+
                                             <table class="table table-bordered table-striped table-hover table-sm"
                                                 id="exampleData"
                                                 style="margin-top: 13px !important">
@@ -329,11 +329,11 @@
                                                     <td>
                                                     <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($secteurlieruser->id_secteur_user_consseiller)) }}"
                                                             class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet secteur ?")) return false;'
-                                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> 
+                                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'>
                                                         </a>
                                                     </td>
                                                     @endforeach
-                                                
+
                                                 </tbody>
                                             </table>
                                             <?php }?>
