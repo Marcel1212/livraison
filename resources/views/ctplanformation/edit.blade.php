@@ -181,7 +181,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -200,7 +200,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -219,7 +219,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -268,7 +268,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Type entreprises </label>
-                                        <select class="select2 form-select" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
+                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -352,7 +352,7 @@
                                         @method('put')
                                         <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
                                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                        Valider
+                                                        Valider le comite technique en ligne
                                         </button>
                                     </form>
                                 <?php }else{?>
@@ -400,7 +400,8 @@
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
-                                                           <?php if($planformation->flag_recevablite_plan_formation==true){ ?>
+
+                                                           <?php if(count($conseillerplan)<1){ ?>
                                                            <a type="button"
                                                                     class="" data-bs-toggle="modal" data-bs-target="#traiterActionFomationPlan<?php echo $actionplanformation->id_action_formation_plan ?>" href="#myModal1" data-url="http://example.com">
                                                                         <img src='/assets/img/editing.png'>
@@ -427,7 +428,7 @@
                                             <div class="col-md-6 col-12">
                                                     <label class="form-label" for="billings-country">Motif de recevabilite <strong style="color:red;">*</strong></label>
 
-                                                        <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+                                                        <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
                                                         </select>
                                                 </div>
@@ -488,7 +489,7 @@
                       <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan)) }}">
                             @csrf
                             @method('put')
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-9">
                           <label class="form-label" for="masse_salariale">Entreprise</label>
                           <input
                             type="text"
@@ -504,15 +505,8 @@
                             value="{{@$infosactionplanformation->masse_salariale}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="part_entreprise">Part entreprise</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->part_entreprise}}"
-                            disabled="disabled" />
-                        </div>
-                        <div class="col-12 col-md-3">
+
+                        <div class="col-12 col-md-12">
                           <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
                           <input
                             type="text"
@@ -520,6 +514,22 @@
                             value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
                             disabled="disabled" />
                         </div>
+                        <div class="col-12 col-md-12">
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
+                              disabled="disabled" />
+                          </div>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label" for="part_entreprise">Part entreprise</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->part_entreprise}}"
+                              disabled="disabled" />
+                          </div>
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
                           <input
@@ -608,14 +618,7 @@
                             value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                            disabled="disabled" />
-                        </div>
+
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
                           <input
@@ -648,7 +651,7 @@
                             value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-9">
                           <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
                           <!--<input
                             type="number"
@@ -659,7 +662,7 @@
                         </div>
                         <div class="col-12 col-md-3">
                                             <div class="mb-1">
-                                                    <label>Proformat </label> <br>
+                                                    <label>Facture proforma </label> <br>
                                                             <span class="badge bg-secondary"><a target="_blank"
                                                             onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
@@ -670,7 +673,7 @@
                         <hr/>
 
                         <div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si actiona corrigé)</strong></label>
+                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
 
                             <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                 <?= $motif; ?>

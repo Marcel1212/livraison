@@ -64,43 +64,10 @@
                     </div>
                 @endif
 
-                <div class="card mb-4">
-                    <div class="card-widget-separator-wrapper">
-                      <div class="card-body card-widget-separator">
-                        <div class="row gy-4 gy-sm-1">
-                        @foreach ($ResultProssesList as $res)
-
-                          <div class="col-sm-6 col-lg-3">
-                            <div class="d-flex justify-content-between align-items-start card-widget-1 border-end pb-3 pb-sm-0">
-                              <div>
-                                <h6 class="mb-2">{{ $res->priorite_combi_proc }}</h6>
-                                <h4 class="mb-2">{{ $res->name }}</h4>
-                                <p class="mb-0">
-                                    <?php if($res->is_valide == true){ ?>
-                                        <span class="text-muted me-2">Observation : {{ $res->comment_parcours }}</span>
-                                        <span class="badge bg-label-success">Validé le {{ $res->date_valide }}</span>
-                                    <?php  } if( $res->is_valide === false) {?>
-                                        <span class="text-muted me-2">Observation : {{ $res->comment_parcours }}</span>
-                                        <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
-                                    <?php } ?>
-                                </p>
-                              </div>
-                              <span class="avatar me-sm-4">
-                                <span class="avatar-initial bg-label-secondary rounded"><i class="ti-md ti ti-smart-home text-body"></i></span>
-                              </span>
-                            </div>
-                            <hr class="d-none d-sm-block d-lg-none me-4">
-                          </div>
-
-                          @endforeach
-
-                        </div>
-                      </div>
-                    </div>
-                </div>
 
 
-        <div class="col-xl-12">
+                <div class="row">
+                <div class="col-xl-7">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -215,7 +182,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -234,7 +201,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -253,7 +220,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -302,7 +269,7 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Type entreprises </label>
-                                        <select class="select2 form-select" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
+                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -407,9 +374,6 @@
                                 <th>No</th>
                                 <th>Intitluer de l'action de formation </th>
                                 <th>Structure ou etablissemnt de formation</th>
-                                <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
-                                <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
@@ -423,9 +387,6 @@
                                                 <td>{{ $i }}</td>
                                                 <td>{{ $actionplanformation->intitule_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->structure_etablissement_action_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
-                                                <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
 
@@ -505,6 +466,51 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-xl-5">
+                    <div class="card">
+                      <h5 class="card-header">Niveau de validation</h5>
+                      <div class="card-body pb-0">
+                        <ul class="timeline pt-3">
+                            @foreach ($ResultProssesList as $res)
+                          <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                            <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                              <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                            </span>
+                            <div class="timeline-event">
+                              <div class="timeline-header border-bottom mb-3">
+                                <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
+                                <span class="text-muted"><strong>{{ $res->name }}</strong></span>
+                              </div>
+                              <div class="d-flex justify-content-between flex-wrap mb-2">
+                                <div class="d-flex align-items-center">
+                                      <?php if($res->is_valide == true){ ?>
+                                          <span>Observation :<br/> {{ $res->comment_parcours }}</span>
+                                          <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
+                                          <span>Validé le <br/> {{ $res->date_valide }}</span>
+                                      <?php  } if( $res->is_valide === false) {?>
+                                          <span class="text-muted me-2">Observation : {{ $res->comment_parcours }}</span> <br>
+
+                                          <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
+                                      <?php } ?>
+                                  <!--<span>Charles de Gaulle Airport, Paris</span>
+                                  <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
+                                  <span>Heathrow Airport, London</span>-->
+                                </div>
+                                <div>
+                                  <!--<span>6:30 AM</span>-->
+                                </div>
+                              </div>
+                              <div class="d-flex align-items-center">
+
+                              </div>
+                            </div>
+                          </li>
+                          @endforeach
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
     </div>
 
 
@@ -522,7 +528,7 @@
                       <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan)) }}">
                             @csrf
                             @method('put')
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-9">
                           <label class="form-label" for="masse_salariale">Entreprise</label>
                           <input
                             type="text"
@@ -538,15 +544,8 @@
                             value="{{@$infosactionplanformation->masse_salariale}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="part_entreprise">Part entreprise</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->part_entreprise}}"
-                            disabled="disabled" />
-                        </div>
-                        <div class="col-12 col-md-3">
+
+                        <div class="col-12 col-md-12">
                           <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
                           <input
                             type="text"
@@ -554,6 +553,22 @@
                             value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
                             disabled="disabled" />
                         </div>
+                        <div class="col-12 col-md-12">
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
+                              disabled="disabled" />
+                          </div>
+                          <div class="col-12 col-md-3">
+                            <label class="form-label" for="part_entreprise">Part entreprise</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->part_entreprise}}"
+                              disabled="disabled" />
+                          </div>
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
                           <input
@@ -642,14 +657,7 @@
                             value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-3">
-                          <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
-                          <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                            disabled="disabled" />
-                        </div>
+
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
                           <input
@@ -682,7 +690,7 @@
                             value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
                             disabled="disabled" />
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-9">
                           <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
                           <!--<input
                             type="number"
@@ -693,7 +701,7 @@
                         </div>
                         <div class="col-12 col-md-3">
                                             <div class="mb-1">
-                                                    <label>Proformat </label> <br>
+                                                    <label>Facture proforma </label> <br>
                                                             <span class="badge bg-secondary"><a target="_blank"
                                                             onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
