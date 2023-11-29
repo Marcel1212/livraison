@@ -8,8 +8,9 @@ $imagedashboard = Menu::get_info_image_dashboard();
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 $IdUser = Auth::user()->id;
+$numAgce = Auth::user()->num_agce;
 
-$planformations = ListePlanFormationSoumis::get_liste_plan_formation_soumis($IdUser);
+$planformations = ListePlanFormationSoumis::get_liste_plan_formation_soumis($IdUser,$numAgce);
 $planformationstraitement = ListePlanFormationSoumis::get_plan_en_traitement($IdUser);
 $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser);
 //dd($planformations);
@@ -63,15 +64,15 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                         <div class="time-spending-chart">
                             <?php if(isset($anneexercice->id_periode_exercice)){ ?>
                                 <h3 class="mb-2">
-                                    <span class="text-muted">Du</span> 
+                                    <span class="text-muted">Du</span>
                                     <span class="badge bg-label-success">{{$anneexercice->date_debut_periode_exercice}} </span>
-                                    <span class="text-muted"> au </span> 
+                                    <span class="text-muted"> au </span>
                                     <span class="badge bg-label-danger"> {{$anneexercice->date_fin_periode_exercice}}</span>
                                 </h3>
                                 <?php if(!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
                                     <h3 class="mb-2">
 
-                                        <span class="text-muted">Prolongée jusqu'au </span> 
+                                        <span class="text-muted">Prolongée jusqu'au </span>
                                         <span class="badge bg-label-success">{{$anneexercice->date_prolongation_periode_exercice}} </span>
 
                                     </h3>
@@ -79,7 +80,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                             <?php }else{ ?>
                                 <h3 class="mb-2">
 
-                                    <span class="text-danger mb-0">{{$anneexercice}}</span> 
+                                    <span class="text-danger mb-0">{{$anneexercice}}</span>
 
                                 </h3>
                             <?php } ?>
@@ -191,7 +192,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($planformations as $planformation)    
+                        @foreach($planformations as $planformation)
                         <tr>
                             <td class="pt-2">
                                 <div class="d-flex justify-content-start align-items-center mt-lg-4">
@@ -200,7 +201,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                                         <small class="text-truncate text-muted">{{$planformation->raison_social_entreprises}}</small>
                                     </div>
                                 </div>
-                            </td>                            
+                            </td>
                             <td class="pt-2">
                                 <div class="d-flex justify-content-start align-items-center mt-lg-4">
                                     <div class="d-flex flex-column">
@@ -221,8 +222,8 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                             </td>
                         </tr>
                         @endforeach
-                        
-                        
+
+
                         </tbody>
                     </table>
                 </div>

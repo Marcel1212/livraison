@@ -46,10 +46,10 @@ class CtplanformationController extends Controller
         //dd($nacodes);
         if($nacodes === "CONSEILLER"){
             $planformations = PlanFormation::leftJoin('plan_formation_a_valider_par_user', 'plan_formation.id_plan_de_formation', '=', 'plan_formation_a_valider_par_user.id_plan_formation')->
-            where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false]])->get();
+            where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
             //$planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',true]])->get();
         }else{
-            $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false]])->get();
+            $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
         }
 
         //dd($planformations);
@@ -237,7 +237,8 @@ class CtplanformationController extends Controller
                     $plan = PlanFormation::find($idplan);
                     $plan->update([
                         'id_processus' => 1,
-                        'flag_valide_action_des_plan_formation' => true
+                        'flag_valide_action_des_plan_formation' => true,
+                        'flag_plan_validation_valider_par_comite_en_ligne' => true
                     ]);
                 }
                 return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Les actions ont été validée ');
@@ -262,15 +263,21 @@ class CtplanformationController extends Controller
                 $input = $request->all();
 
                 $input['flag_valide_action_plan_formation'] = false;
+                $input['flag_plan_validation_rejeter_par_comite_en_ligne'] = true;
                 $input['id_user_conseil'] = Auth::user()->id;
                 $input['id_action_plan_formation'] = $id;
                 $input['id_plan_formation'] = $idplan;
 
                 ActionPlanFormationAValiderParUser::create($input);
 
-                CtPleniere::create([
-                    'id_plan_formation' => $idplan
+                $plan = PlanFormation::find($idplan);
+                $plan->update([
+                    'flag_valide_action_plan_formation' => false,
+                    'flag_plan_validation_rejeter_par_comite_en_ligne' => true
                 ]);
+                /*CtPleniere::create([
+                    'id_plan_formation' => $idplan
+                ]);*/
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
 
                 return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
