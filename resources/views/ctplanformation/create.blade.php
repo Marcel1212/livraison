@@ -4,10 +4,10 @@
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de un plan de formations')
+    @php($soustitre='Demande de plan de formations')
     @php($lien='planformation')
 
-    <!-- BEGIN: Content--> 
+    <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
@@ -35,9 +35,9 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif  
+                              @endif
 
-                              
+
                 <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -77,7 +77,7 @@
                           aria-selected="false">
                           Categorie professionnel
                         </button>
-                      </li>                      
+                      </li>
                       <li class="nav-item">
                         <button
                           type="button"
@@ -100,19 +100,19 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>N° de compte contribuable </label>
-                                        <input type="text" 
+                                        <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Activité </label>
-                                        <input type="text" 
+                                        <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Localisation geaographique </label>
@@ -120,7 +120,7 @@
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Repère d'accès </label>
@@ -128,7 +128,7 @@
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Adresse postal </label>
@@ -147,14 +147,14 @@
                                                 <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Telephone  </label>
-                                                <input type="text" 
+                                                <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
 
@@ -166,16 +166,16 @@
                                                 <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Cellulaire Professionnelle  </label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
-                                </div>     
+                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
@@ -185,41 +185,41 @@
                                                 <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Fax  </label>
                                                 <input type="number" name="fax_entreprises" id="fax_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->fax_entreprises}}">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nom et prenom du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" required="required">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Fonction du responsable formation </label>
                                         <input type="text" name="fonction_charge_plan_formation" id="fonction_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Email professsionel du responsable formation </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nombre total de salarié </label>
@@ -245,7 +245,7 @@
                                                class="form-control form-control-sm" required="required">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-12" align="right">
                                     <hr>
                                     <button type="submit"

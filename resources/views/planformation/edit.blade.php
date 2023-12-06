@@ -39,7 +39,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Modifier une demande de plan de formations')
+    @php($soustitre='Modifier une demande de plan de formation')
     @php($lien='planformation')
 
 

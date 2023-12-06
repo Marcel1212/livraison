@@ -21,7 +21,7 @@
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des comite plénière')
+    @php($titre='Liste des comites plénières')
     @php($soustitre='Tenue de comite plénière')
     @php($lien='comitepleniere')
 

@@ -12,7 +12,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de un plan de formations')
+    @php($soustitre='Demande de plan de formation')
     @php($lien='planformation')
 
     <!-- BEGIN: Content-->
