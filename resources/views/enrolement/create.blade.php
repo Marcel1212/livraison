@@ -327,7 +327,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         id="collapsible-payment-name"
-                                                                        class="form-control" maxlength="9"
+                                                                        class="form-control" maxlength="9" minlength="6"
                                                                         placeholder="" name="ncc_demande_enrolement"
                                                                         required="required" value="{{ old('ncc_demande_enrolement') }}"/>
                                                                 </div>
@@ -388,7 +388,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                    required="required" value="{{ old('piece_rccm_demande_enrolement') }}"/>
                                                             <div id="defaultFormControlHelp" class="form-text">
                                                                   (PDF, JPG, JPEG, PNG) 5M
-                                                            </div>                                                                   
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label">Pièce attestation immat <strong style="color:red;">*</strong></label>
@@ -396,8 +396,8 @@ $reseaux = Menu::get_info_reseaux();
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_attestation_immatriculati') }}"/>
                                                             <div id="defaultFormControlHelp" class="form-text">
-                                                                 (PDF,JPG, JPEG, PNG) 5M 
-                                                            </div>                                                                    
+                                                                 (PDF,JPG, JPEG, PNG) 5M
+                                                            </div>
                                                         </div>
 
                                                     </div>
@@ -539,7 +539,7 @@ $reseaux = Menu::get_info_reseaux();
     </footer>
 
 
-    
+
 
 
     <!-- / Layout wrapper -->
