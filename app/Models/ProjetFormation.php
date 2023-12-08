@@ -64,7 +64,7 @@ class ProjetFormation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_entreprises', 'titre_projet_etude', 'promoteur', 'operateur', 'beneficiaires_cible', 'zone_projet', 'date_depot_demande', 'nom_prenoms', 'fonction', 'telephone', 'environnement_contexte', 'acteurs', 'role_p', 'responsabilite', 'problemes', 'manifestation_impact_effet', 'moyens_probables', 'competences', 'evaluation_contexte', 'source_verification', 'updated_at', 'created_at', 'id_user', 'flag_soumis', 'flag_valide', 'flag_rejet', 'date_soumis', 'date_valide', 'date_rejet'];
+    protected $fillable = ['id_entreprises', 'titre_projet_etude', 'promoteur', 'operateur', 'beneficiaires_cible', 'zone_projet', 'date_depot_demande', 'nom_prenoms', 'fonction', 'telephone', 'environnement_contexte', 'acteurs', 'role_p', 'responsabilite', 'problemes', 'manifestation_impact_effet', 'moyens_probables', 'competences', 'evaluation_contexte', 'source_verification', 'updated_at', 'created_at', 'id_user', 'flag_soumis', 'flag_valide', 'flag_rejet', 'date_soumis', 'date_valide', 'date_rejet','id_entreprises'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
