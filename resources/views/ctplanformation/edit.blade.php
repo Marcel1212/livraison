@@ -21,7 +21,7 @@
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Traitement une demande de plan de formations')
+    @php($soustitre='Traitement de la demande de plan de formation')
     @php($lien='ctplanformation')
 
 
