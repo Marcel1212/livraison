@@ -1,18 +1,10 @@
-<?php
-
-use App\Helpers\AnneeExercice;
-
-$anneexercice = AnneeExercice::get_annee_exercice();
-
-?>
-
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de plan de formation')
+    @php($soustitre='Demande de plan de formations')
     @php($lien='planformation')
 
     <!-- BEGIN: Content-->
@@ -33,14 +25,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        @if(!isset($anneexercice->id_periode_exercice))
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <div class="alert-body" style="text-align:center">
-                    {{$anneexercice}}
-                </div>
-                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-            </div>
-         @endif
+
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -114,7 +99,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>N° de compte contribuable <strong style="color:red;">*</strong></label>
+                                        <label>N° de compte contribuable </label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
@@ -122,7 +107,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Activité <strong style="color:red;">*</strong></label>
+                                        <label>Activité </label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
@@ -130,7 +115,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation geaographique <strong style="color:red;">*</strong></label>
+                                        <label>Localisation geaographique </label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
@@ -138,7 +123,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
+                                        <label>Repère d'accès </label>
                                         <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
@@ -146,7 +131,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
+                                        <label>Adresse postal </label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
@@ -159,15 +144,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone <strong style="color:red;">*</strong> </label>
+                                                <label class="form-label">Telephone  </label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->tel_entreprises}}" name="tel_entreprises">
+                                                value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
@@ -178,12 +163,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Cellulaire Professionnelle <strong style="color:red;">*</strong> </label>
+                                                <label class="form-label">Cellulaire Professionnelle  </label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
@@ -197,7 +182,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
                                             </div>
@@ -213,7 +198,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <label>Nom et prenom du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -221,7 +206,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Fonction du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <label>Fonction du responsable formation </label>
                                         <input type="text" name="fonction_charge_plan_formation" id="fonction_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -229,7 +214,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <label>Email professsionel du responsable formation </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -237,7 +222,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
+                                        <label>Nombre total de salarié </label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -245,8 +230,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Type entreprises <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" required="required">
+                                        <label>Type entreprises </label>
+                                        <select class="select2 form-select" name="id_type_entreprise" id="id_type_entreprise" required="required">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -255,7 +240,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
 
-                                        <label>Masse salariale <strong style="color:red;">*</strong></label>
+                                        <label>Masse salariale </label>
                                         <input type="number" name="masse_salariale" id="masse_salariale"
                                                class="form-control form-control-sm" required="required">
                                     </div>

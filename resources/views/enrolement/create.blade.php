@@ -276,7 +276,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-md-8">
-                                                                        <label class="form-label">Telephone <strong style="color:red;">*</strong></label>
+                                                                        <label class="form-label">Téléphone <strong style="color:red;">*</strong></label>
                                                                         <input type="text" maxlength="10"
                                                                                name="tel_demande_enrolement"
                                                                                class="form-control" placeholder=""
@@ -327,7 +327,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         id="collapsible-payment-name"
-                                                                        class="form-control" maxlength="9"
+                                                                        class="form-control" maxlength="9" minlength="6"
                                                                         placeholder="" name="ncc_demande_enrolement"
                                                                         required="required" value="{{ old('ncc_demande_enrolement') }}"/>
                                                                 </div>
@@ -373,25 +373,31 @@ $reseaux = Menu::get_info_reseaux();
                                                     <div class="row gy-3">
 
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece DFE  (PDF, JPG, JPEG, PNG)
-                                                                5M <strong style="color:red;">*</strong></label>
+                                                            <label class="form-label">Pièce DFE <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_dfe_demande_enrolement"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_dfe_demande_enrolement') }}"/>
+                                                            <div id="defaultFormControlHelp" class="form-text">
+                                                                  (PDF, JPG, JPEG, PNG) 5M
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece RCCM  (PDF, JPG, JPEG, PNG)
-                                                                5M <strong style="color:red;">*</strong></label>
+                                                            <label class="form-label"> Pièce RCCM <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_rccm_demande_enrolement"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_rccm_demande_enrolement') }}"/>
+                                                            <div id="defaultFormControlHelp" class="form-text">
+                                                                  (PDF, JPG, JPEG, PNG) 5M
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Piece attestation immat (PDF,
-                                                                JPG, JPEG, PNG) 5M <strong style="color:red;">*</strong></label>
+                                                            <label class="form-label">Pièce attestation immat <strong style="color:red;">*</strong></label>
                                                             <input type="file" name="piece_attestation_immatriculati"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_attestation_immatriculati') }}"/>
+                                                            <div id="defaultFormControlHelp" class="form-text">
+                                                                 (PDF,JPG, JPEG, PNG) 5M
+                                                            </div>
                                                         </div>
 
                                                     </div>
@@ -533,7 +539,7 @@ $reseaux = Menu::get_info_reseaux();
     </footer>
 
 
-    
+
 
 
     <!-- / Layout wrapper -->

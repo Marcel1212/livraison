@@ -4,7 +4,7 @@
 		$activetabpane = "show active";
 		$activetab = "active";
 	}else{
-						
+
 	}*/
 ?>
 <?php
@@ -16,18 +16,18 @@ $dateday = Carbon::now()->format('d-m-Y');
 $actifsoumission = false;
 
 if(isset($anneexercice->id_periode_exercice)){
-    $actifsoumission = true; 
+    $actifsoumission = true;
 }else{
-    $actifsoumission = false; 
+    $actifsoumission = false;
 }
 
 if(!empty($anneexercice->date_prolongation_periode_exercice)){
     $dateexercice = $anneexercice->date_prolongation_periode_exercice;
     if($dateday <= $dateexercice){
-        $actifsoumission = true; 
+        $actifsoumission = true;
     }else{
         $actifsoumission = false;
-    }   
+    }
 }
 
 
@@ -39,7 +39,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Modifier une demande de plan de formations')
+    @php($soustitre='Modifier une demande de plan de formation')
     @php($lien='planformation')
 
 
@@ -60,7 +60,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
                 <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
             </div>
-         @endif       
+         @endif
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
@@ -79,7 +79,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif  
+                              @endif
 
              @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -116,7 +116,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           aria-selected="false">
                           Categorie des travailleurs
                         </button>
-                      </li>                      
+                      </li>
                       <li class="nav-item">
                         <button
                           type="button"
@@ -140,19 +140,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>N° de compte contribuable <strong style="color:red;">*</strong></label>
-                                        <input type="text" 
+                                        <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Activité <strong style="color:red;">*</strong></label>
-                                        <input type="text" 
+                                        <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Localisation geaographique <strong style="color:red;">*</strong></label>
@@ -160,7 +160,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Repère d'accès <strong style="color:red;">*</strong></label>
@@ -168,7 +168,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Adresse postal <strong style="color:red;">*</strong></label>
@@ -183,17 +183,17 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Telephone  <strong style="color:red;">*</strong></label>
-                                                <input type="text" 
+                                                <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
 
@@ -202,63 +202,63 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Cellulaire Professionnelle  <strong style="color:red;">*</strong></label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
-                                </div>     
+                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
-                                                <select class="select2 form-select-sm input-group-text" data-allow-clear="true" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                                     <?= $pay; ?>
                                                 </select>
-                                            </div>                     
+                                            </div>
                                             <div class="col-md-8">
                                                 <label class="form-label">Fax  </label>
                                                 <input type="number" name="fax_entreprises" id="fax_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->fax_entreprises}}">
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Fonction du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="fonction_charge_plan_formation" id="fonction_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->fonction_charge_plan_formation}}">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Email professsionel du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->email_professionnel_charge_plan_formation}}">
                                     </div>
-                                </div>                                
-                                
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
@@ -270,7 +270,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Type entreprises <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select input-group-text" name="id_type_entreprise" id="id_type_entreprise" required="required">
+                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" required="required">
                                             <?php echo $typeentreprise; ?>
                                         </select>
                                     </div>
@@ -287,7 +287,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Part entreprise </label>
-                                        <input type="number" 
+                                        <input type="number"
                                                class="form-control form-control-sm"
                                                 value="{{@$planformation->part_entreprise}}" disabled="disabled">
                                     </div>
@@ -299,8 +299,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                             Modifier
                                         </button>
-                                    <?php } ?>                                    
-                                    
+                                    <?php } ?>
+
                                     <!--<button type="button"
                                             class="btn btn-sm btn-secondary me-1 waves-effect waves-float waves-light" data-bs-toggle="modal" data-bs-target="#ajoutActionFomationPlan">
                                         Ajouter action
@@ -324,17 +324,17 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
-                                            class="select2 form-select"
+                                            class="select2 form-select-sm input-group"
                                             aria-label="Default select example" required="required">
                                             <?= $categorieprofessionelle; ?>
                                         </select>
-                                    </div>                                    
+                                    </div>
                                     <div class="col-12 col-md-3">
                                         <label class="form-label" for="genre_plan">Genre <strong style="color:red;">*</strong></label>
                                         <select
                                             id="genre_plan"
                                             name="genre_plan"
-                                            class="select2 form-select"
+                                            class="select2 form-select-sm input-group"
                                             aria-label="Default select example" required="required">
                                            <option value="">Selectionnez le genre</option>
                                            <option value="HOMMES">HOMMES</option>
@@ -350,25 +350,25 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             class="form-control form-control-sm"
                                             required="required" />
                                     </div>
-                                   
+
                                         <div class="col-12 col-md-2" align="right"> <br>
                                             <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
-                                        </div> 
-                                    
+                                        </div>
+
                                 </div>
                                 <?php if (count($categorieplans)>=4){ ?>
                                    <!-- <hr>
-                                    
+
                                     <div class="col-12" align="right"> <br>
                                         <button  type="submit" name="action" value="Enregistrer_categorie_plan_suivant" class="btn btn-sm btn-secondary me-sm-3 me-1">Suivant</button>
                                     </div>-->
                                 <?php } ?>
                         </form>
-                       
+
                         <hr>
                         <?php } ?>
                         <table class="table table-bordered table-striped table-hover table-sm"
-                            id="exampleData"
+                            id=""
                             style="margin-top: 13px !important">
                             <thead>
                             <tr>
@@ -395,9 +395,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                <?php } ?>
                                             </td>
-                                            </tr>                                    
+                                            </tr>
                                 @endforeach
-                            
+
                             </tbody>
                         </table>
                       </div>
@@ -407,7 +407,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @csrf
                                 @method('put')
                                 <div class="row">
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-8">
                             <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
@@ -419,10 +419,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation <strong style="color:red;">*</strong></label>
 
-                                <select class="select2 form-select" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                <select class="select2 form-select-sm input-group" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
                                     <?php echo $structureformation; ?>
                                  </select>
-                                    
+
                             <!--<input
                                 type="text"
                                 id="structure_etablissement_action_"
@@ -447,7 +447,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="nombre_groupe_action_formation_"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
                             <input
@@ -456,7 +456,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="nombre_heure_action_formation_p"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cout_action_formation_plan">Cout de la formation <strong style="color:red;">*</strong></label>
                             <input
@@ -471,22 +471,22 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <select
                                 id="id_type_formation"
                                 name="id_type_formation"
-                                class="select2 form-select"
+                                class="select2 form-select-sm input-group"
                                 aria-label="Default select example" >
                                 <?= $typeformation; ?>
                             </select>
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
                             <select
                                 id="id_but_formation"
                                 name="id_but_formation"
-                                class="select2 form-select"
+                                class="select2 form-select-sm input-group"
                                 aria-label="Default select example" >
                                 <?= $butformation; ?>
                             </select>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-2">
                             <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
@@ -494,8 +494,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="date_debut_fiche_agrement"
                                 class="form-control form-control-sm"
                                />
-                            </div>                        
-                            <div class="col-12 col-md-4">
+                            </div>
+                            <div class="col-12 col-md-2">
                             <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
@@ -512,7 +512,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="lieu_formation_fiche_agrement"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
                             <input
@@ -521,7 +521,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="cout_total_fiche_agrement"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
                             <input
@@ -530,7 +530,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="objectif_pedagogique_fiche_agre"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
                             <input
@@ -539,7 +539,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="cadre_fiche_demande_agrement"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise <strong style="color:red;">*</strong></label>
                             <input
@@ -548,7 +548,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="agent_maitrise_fiche_demande_ag"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers <strong style="color:red;">*</strong></label>
                             <input
@@ -557,7 +557,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="employe_fiche_demande_agrement"
                                 class="form-control form-control-sm"
                                  />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
                             <input
@@ -566,7 +566,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="file_beneficiare"
                                 class="form-control form-control-sm"
                                 />
-                            </div>                        
+                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
                             <input
@@ -576,13 +576,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 class="form-control form-control-sm"
                                  />
                             </div>
-                            
-                            
-                            
-                            
-                            <div class="col-12" align="right"> 
 
-                             
+
+
+
+                            <div class="col-12" align="right">
+
+
                                 <br/>
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
                                 <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
@@ -590,14 +590,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <?php if ($actifsoumission == true){ ?>
                                     <?php if (count($actionplanformations)>=1){ ?>
                                         <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irreversible")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
-                                    <?php } ?>    
-                                <?php } ?>    
-                                
+                                    <?php } ?>
+                                <?php } ?>
+
 
                             </div>
                             </div>
                         </form>
-       
+
                         <hr/>
                         <?php } ?>
                         <table class="table table-bordered table-striped table-hover table-sm"
@@ -627,25 +627,25 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
-                                                        
+
                                                 <td align="center">
                                                     @can($lien.'-edit')
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
-                                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>                                                        
-                                                        
+                                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+
                                                            <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                                                                     <a href="{{ route($lien.'.deleteapf',\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet action de plan de formation ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
 
-                                                            <?php } ?>    
+                                                            <?php } ?>
                                                     @endcan
 
                                                 </td>
-                                            </tr>                                    
+                                            </tr>
                                 @endforeach
-                            
+
                             </tbody>
                         </table>
                       </div>

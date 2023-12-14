@@ -6,16 +6,23 @@
 	}else{
 
 	}*/
+    $NumAgce = Auth::user()->num_agce;
+    use App\Helpers\ConseillerParAgence;
+    use App\Helpers\NombreActionValiderParLeConseiller;
+    $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
+    $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
+    $nombre = count($conseilleragence);
+    //dd($nombre);
 ?>
 
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Plan de formation')
+    @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
     @php($soustitre='Traitement de la demande de plan de formation')
-    @php($lien='traitementplanformation')
+    @php($lien='ctplanformation')
 
 
     <!-- BEGIN: Content-->
@@ -56,6 +63,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
+
+
         <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -335,15 +345,24 @@
 
                         <div class="col-12" align="right">
 
-                            <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
-                                <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
-                                    @csrf
-                                    @method('put')
-                                    <button type="submit" name="action" value="Soumission_ct_plan_formation"
-                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Valider le plan de formation
-                                    </button>
-                                </form>
+                            <?php if($nombreaction == $nombreactionvaliderparconseiller){?>
+                                <?php if(count($conseillerplan)<1){?>
+                                    <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
+                                        @csrf
+                                        @method('put')
+                                        <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
+                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        Valider le comite technique en ligne
+                                        </button>
+                                    </form>
+                                <?php }else{?>
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <div class="alert-body" style="text-align:center">
+                                            Validation des actions déja effectuer
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
                             <?php } ?>
                         </div>
                         <table class="table table-bordered table-striped table-hover table-sm"
@@ -381,7 +400,8 @@
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
-                                                           <?php if($planformation->flag_recevablite_plan_formation==true){ ?>
+
+                                                           <?php if(count($conseillerplan)<1){ ?>
                                                            <a type="button"
                                                                     class="" data-bs-toggle="modal" data-bs-target="#traiterActionFomationPlan<?php echo $actionplanformation->id_action_formation_plan ?>" href="#myModal1" data-url="http://example.com">
                                                                         <img src='/assets/img/editing.png'>
@@ -408,7 +428,7 @@
                                             <div class="col-md-6 col-12">
                                                     <label class="form-label" for="billings-country">Motif de recevabilite <strong style="color:red;">*</strong></label>
 
-                                                        <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+                                                        <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
                                                         </select>
                                                 </div>
@@ -491,17 +511,16 @@
                           <input
                             type="text"
                             class="form-control form-control-sm"
-                            name="intitule_action_formation_plan"
-                            value="{{@$infosactionplanformation->intitule_action_formation_plan}}" />
+                            value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
+                            disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-12">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
                             <input
                               type="text"
                               class="form-control form-control-sm"
-                              name="objectif_pedagogique_fiche_agre"
                               value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                               />
+                              disabled="disabled" />
                           </div>
                         <div class="col-12 col-md-3">
                             <label class="form-label" for="part_entreprise">Part entreprise</label>
@@ -625,6 +644,23 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
+                          <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
+                          <input
+                            type="number"
+                            class="form-control form-control-sm"
+                            value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
+                            disabled="disabled" />
+                        </div>
+                        <div class="col-12 col-md-9">
+                          <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
+                          <!--<input
+                            type="number"
+                            class="form-control form-control-sm"
+                            value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
+                            disabled="disabled" />-->
+                            <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
+                        </div>
+                        <div class="col-12 col-md-3">
                                             <div class="mb-1">
                                                     <label>Facture proforma </label> <br>
                                                             <span class="badge bg-secondary"><a target="_blank"
@@ -637,27 +673,33 @@
                         <hr/>
 
                         <div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de non-financement <strong style="color:red;">(obligatoire si le montant accordé est egal a 0*)</strong></label>
+                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
 
-                            <select class="form-select form-select-sm" data-allow-clear="true" name="motif_non_financement_action_formation" id="motif_non_financement_action_formation">
+                            <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                 <?= $motif; ?>
                             </select>
                         </div>
+
                         <div class="col-md-6 col-12">
                             <div class="mb-1">
-                                <label>Montant accorder <strong style="color:red;">*</strong>: </label>
-                                <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
-                        </div>
-                        <div class="col-md-12 col-12">
-                            <div class="mb-1">
                                 <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
+                                <textarea class="form-control form-control-sm"  name="commentaire" id="commentaire" rows="6"></textarea>
                             </div>
                         </div>
 
                         <div class="col-12 text-center">
-                        <?php if($planformation->flag_soumis_ct_plan_formation != true){?>
-                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation" class="btn btn-primary me-sm-3 me-1">Enregistrer</button>
+                            <?php
+                                $conseilleraction = NombreActionValiderParLeConseiller::get_conseiller_valide_action_plan($infosactionplanformation->id_action_formation_plan , Auth::user()->id);
+                            ?>
+                          <?php if(count($conseilleraction)<1){?>
+                            <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider" class="btn btn-success me-sm-3 me-1">Valider</button>
+                            <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_rejeter" class="btn btn-danger me-sm-3 me-1">Action à corriger</button>
+                          <?php }else{?>
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <div class="alert-body" style="text-align:center">
+                                    Action déja traité
+                                </div>
+                            </div>
                           <?php } ?>
                           <button
                             type="reset"
