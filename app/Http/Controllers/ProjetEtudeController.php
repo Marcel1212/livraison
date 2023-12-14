@@ -376,11 +376,12 @@ class ProjetEtudeController extends Controller
             if ($nomrole == "CHEF DE DEPARTEMENT"){
                 //dd($nomrole);
             $num_agce = Auth::user()->num_agce;
+            $num_direction = Auth::user()->id_direction;
             $chefservice = DB::table('users')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('users.name', 'users.prenom_users', 'users.id')
-            ->where([['roles.id','=',19],['users.num_agce','=',$num_agce]])
+            ->where([['roles.id','=',19],['users.num_agce','=',$num_agce],['users.id_direction','=',$num_direction]])
             ->get();
             //dd($chefservice);
             //$listeuser = User::all();
@@ -392,11 +393,12 @@ class ProjetEtudeController extends Controller
         } else {
             //dd($nomrole);
             $num_agce = Auth::user()->num_agce;
+            $num_direction = Auth::user()->id_direction;
             $chargetude = DB::table('users')
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
             ->select('users.name', 'users.prenom_users', 'users.id')
-            ->where([['roles.id','=',22],['users.num_agce','=',$num_agce]])
+            ->where([['roles.id','=',22],['users.num_agce','=',$num_agce],['users.id_direction','=',$num_direction]])
             ->get();
             //dd($chargetude);
             //$listeuser = User::all();
@@ -666,6 +668,7 @@ class ProjetEtudeController extends Controller
                 $projetetude = ProjetEtude::find($id);
                 $projetetude->flag_soumis = true;
                 $projetetude->date_soumis = $date_soumission;
+                $num_direction = Auth::user()->id_direction;
                 // Atribution au chef de departement
                 // Recuperation de l'ID du chef de departement
                 $num_agce = Auth::user()->num_agce;
@@ -674,7 +677,7 @@ class ProjetEtudeController extends Controller
                 ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]])
+                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
                 ->get();
                 //dd(intval($chefdepartement[0]->id));
                 $projetetude->id_user_affecte = intval($chefdepartement[0]->id);

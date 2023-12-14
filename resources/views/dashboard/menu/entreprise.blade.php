@@ -123,6 +123,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
 
                         </h3>
                         <?php } ?>
+                        <?php } ?>
 
                     </div>
                 </div>
