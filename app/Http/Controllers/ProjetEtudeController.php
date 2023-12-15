@@ -256,7 +256,11 @@ class ProjetEtudeController extends Controller
 
             }
 
-           // $input['id_entreprises'] = Carbon::now();
+           // Recuperation de l'entreprise
+           $user = User::find(Auth::user()->id);
+           $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+            $id_entreprise = $entreprise->id_entreprises;
+            // Enregistrement des données
             $input['flag_soumis'] = false;
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
@@ -269,6 +273,10 @@ class ProjetEtudeController extends Controller
             $input['champ_etude_projet_etude'] = ucfirst($input['champ_etude']);
             $input['cible_projet_etude'] = ucfirst($input['cible']);
             $input['id_processus'] = 2;
+            $input['id_entreprise'] = 2;
+            // Creation d'un numero de dossier
+            $number = mt_rand(10000,999999);
+            $input['code_dossier'] = $id_entreprise;
 
             ProjetEtude::create($input);
             $id_projet = ProjetEtude::latest()->first()->id_projet_etude;
@@ -459,9 +467,15 @@ class ProjetEtudeController extends Controller
         foreach ($statut as $comp) {
             $statuts .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
         }
+
+        $statutinstall = StatutOperation::where([['code_statut_operation','=','PRI']])->get();;
+        $statutinst = "<option value=''> Selectionnez un statut </option>";
+        foreach ($statutinstall as $comp) {
+            $statutinst .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
+        }
         //dd($nomrole);
 
-        return view('projetetude.edit', compact('enterprise_mail','entreprise','motifs','nomrole','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetetude.edit', compact('enterprise_mail','entreprise','motifs','nomrole','motif_p','etat_dossier','statuts','statutinst','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
     }
 
 
@@ -481,8 +495,9 @@ class ProjetEtudeController extends Controller
             /// Traitement de l'instruction
             if($data['action'] === 'soumission_instruction'){
                 // ID du plan
+                //dd($data);
                     // traitement valide
-                    if($data['id_statut_instruction'] === '3'){
+                    if($data['id_statut_instruction'] === '6'){
                         //dd($data);
                         if (isset($data['fichier_instruction'])){
 
@@ -522,7 +537,7 @@ class ProjetEtudeController extends Controller
                     }
 
                     // traitement rejet
-                    if($data['id_statut_instruction'] === '5'){
+                    if($data['id_statut_instruction'] === '7'){
                         //dd($data);
                         if (isset($data['fichier_instruction'])){
 
@@ -574,10 +589,14 @@ class ProjetEtudeController extends Controller
                 $projetetude->flag_attente_rec = false;
                 $projetetude->date_valide = $date_soumission;
                 $projetetude->commentaires_recevabilite = $data['commentaires_chef_service'];
+                // Recuperation du motif
+                $id_motif = intval($data['motif_rec']);
+                $motif = Motif::find($id_motif);
                 // Atribution au chef de departement
                 // Recuperation de l'id
                 // $user_id = Auth::user()->id;
                 // $projetetude->id_charge_etude = $user_id;
+                $projetetude->motif_rec = $motif->libelle_motif;
                 $projetetude->save();
                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Recevabilite effectue avec succes');
                }

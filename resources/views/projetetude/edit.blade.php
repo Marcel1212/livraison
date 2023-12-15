@@ -74,11 +74,15 @@
 
                                 <div class="card-body">
                                     <?php if ($projetetude->flag_soumis == true ) {?>
-                                    <div class="col-md-4 col-12">
-                                        <button type="button" class="btn rounded-pill btn-info waves-effect waves-light"
+                                    <div align="right">
+                                        <button type="button"
+                                            class="btn rounded-pill btn-outline-primary waves-effect waves-light"
                                             data-bs-toggle="modal" data-bs-target="#modalToggle">
-                                            Voir le parcours
+                                            Voir le parcours de validation
                                         </button>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+
                                         <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
                                             aria-hidden="true">
@@ -102,9 +106,15 @@
                                                                             class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
                                                                     </span>
                                                                     <div class="timeline-event">
-
+                                                                        <div class="timeline-header border-bottom mb-4">
+                                                                            <h6 class="mb-0">Entreprise</h6>
+                                                                            <span class="text-muted"><strong>
+                                                                                    <?php echo $entreprise->raison_social_entreprises;
+                                                                                    ?>
+                                                                                </strong></span>
+                                                                        </div>
                                                                         <div
-                                                                            class="d-flex justify-content-between flex-wrap mb-2">
+                                                                            class="d-flex justify-content-between flex-wrap mb-4">
                                                                             <div class="d-flex align-items-center">
 
                                                                                 <span>Soumis le </span>
@@ -145,6 +155,10 @@
 
                                                                                 <span>Commentaires: <?php echo $projetetude->commentaires_cd; ?>
                                                                                 </span> <br>
+                                                                                <span>Affecté à :
+                                                                                    <span class="badge bg-label-success">
+                                                                                        <?php echo $user_cs_name; ?></span>
+                                                                                </span> <br>
                                                                                 <span>Date de l'affectation :
                                                                                     <span class="badge bg-label-danger">
                                                                                         <?php echo $projetetude->date_trans_chef_s; ?> </span>
@@ -173,7 +187,8 @@
                                                                     </span>
                                                                     <div class="timeline-event">
                                                                         <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement du chef de service
+                                                                            <h6 class="mb-0">Traitement du chef de
+                                                                                service
                                                                             </h6>
                                                                             <span class="text-muted"><strong>
                                                                                     <?php //echo $entreprise_info->raison_social_entreprises;
@@ -185,6 +200,10 @@
                                                                             <div class="row ">
 
                                                                                 <span>Commentaire: <?php echo $projetetude->commentaires_cs; ?>
+                                                                                </span> <br>
+                                                                                <span>Affecté à :
+                                                                                    <span class="badge bg-label-success">
+                                                                                        <?php echo $user_ce_name; ?></span>
                                                                                 </span> <br>
 
                                                                                 <span>Date de l'affectation: <span
@@ -205,8 +224,7 @@
                                                             </ul>
                                                             <?php }?>
 
-
-                                                            <?php if ($projetetude->flag_valide != null OR $projetetude->flag_rejet != null OR $projetetude->flag_attente_rec != null   ) {?>
+                                                            <?php if ($projetetude->flag_valide == null && $projetetude->flag_rejet == null && $projetetude->flag_attente_rec == true   ) {?>
                                                             <ul class="timeline pt-3">
 
                                                                 <li
@@ -228,19 +246,65 @@
                                                                         <div class="d-flex lex-wrap mb-4">
                                                                             <div class="row ">
 
-                                                                                <span>Statut : <?php if ($projetetude->flag_recevabilite == true) {
-                                                                                    echo 'RECEVABLE  ';
+                                                                                <span>Statut : <span
+                                                                                        class="badge bg-label-warning"> EN
+                                                                                        ATTENTE
+                                                                                    </span> </span> <br>
+                                                                                </span>
+
+                                                                                <span>Motif : <?php echo $projetetude->motif_rec;
+                                                                                ?></span>
+                                                                                <br>
+                                                                                </span>
+
+                                                                            </div>
+                                                                            <div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            <?php }?>
+
+
+                                                            <?php if ($projetetude->flag_valide != null OR $projetetude->flag_rejet != null ) {?>
+                                                            <ul class="timeline pt-3">
+
+                                                                <li
+                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
+                                                                    <span
+                                                                        class="timeline-indicator-advanced timeline-indicator-success">
+                                                                        <i
+                                                                            class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                                                    </span>
+                                                                    <div class="timeline-event">
+                                                                        <div class="timeline-header border-bottom mb-4">
+                                                                            <h6 class="mb-0">Traitement de la
+                                                                                recevabilite</h6>
+                                                                            <span class="text-muted"><strong>
+                                                                                    <?php //echo $entreprise_info->raison_social_entreprises;
+                                                                                    ?>
+                                                                                </strong></span>
+                                                                        </div>
+                                                                        <div class="d-flex lex-wrap mb-4">
+                                                                            <div class="row ">
+
+                                                                                <span>Statut : <?php if ($projetetude->flag_valide == true) {
+                                                                                    echo 'RECEVABLE';
                                                                                 } else {
                                                                                     echo 'NON RECEVABLE  ';
-                                                                                } ?> </span>
+                                                                                } ?>
+                                                                                </span>
                                                                                 <br>
+                                                                                <span>Motif : <?php echo $projetetude->motif_rec;
+                                                                                ?></span>
                                                                                 <br>
                                                                                 <span>Date : <span
-                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_recevabilite; ?>
-                                                                                    </span> </span> <br> <br>
-
-
-
+                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_valide; ?>
+                                                                                    </span> </span> <br>
                                                                             </div>
                                                                             <div>
                                                                             </div>
@@ -264,7 +328,8 @@
                                                                     </span>
                                                                     <div class="timeline-event">
                                                                         <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement de l'instruction
+                                                                            <h6 class="mb-0">Traitement de
+                                                                                l'instruction
                                                                             </h6>
                                                                             <span class="text-muted"><strong>
                                                                                     <?php //echo $entreprise_info->raison_social_entreprises;
@@ -278,8 +343,12 @@
                                                                                     echo 'RECEVABLE  ';
                                                                                 } else {
                                                                                     echo 'NON RECEVABLE  ';
-                                                                                } ?> </span>
-                                                                                <br> <br>
+                                                                                } ?>
+                                                                                </span>
+                                                                                <br>
+                                                                                <span>Commentaires : <?php echo $projetetude->commentaires_instruction; ?>
+                                                                                </span>
+                                                                                <br>
 
                                                                                 <span>Date : <span
                                                                                         class="badge bg-label-danger"><?php echo $projetetude->date_instruction; ?>
@@ -310,8 +379,10 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <?php }?>
-                                    <?php if ($projetetude->flag_soumis == true && $projetetude->flag_valide == null && $projetetude->flag_rejet == null) {?>
+                                    {{-- <?php //if ($projetetude->flag_soumis == true && $projetetude->flag_valide == null && $projetetude->flag_rejet == null) {
+                                    ?>
                                     <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
                                         align="center">
                                         <div class="badge bg-label-success rounded p-2"><i class="ti ti-circle-check"></i>
@@ -321,7 +392,8 @@
                                         </div>
 
                                     </li>
-                                    <?php }else if ($projetetude->flag_soumis == true &&  $projetetude->flag_valide == true && $projetetude->flag_rejet == false){?>
+                                    <?php //}else if ($projetetude->flag_soumis == true &&  $projetetude->flag_valide == true && $projetetude->flag_rejet == false){
+                                    ?>
                                     <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
                                         align="center">
                                         <div class="badge bg-label-success rounded p-2"><i class="ti ti-link ti-sm"></i>
@@ -331,7 +403,7 @@
                                         </div>
 
                                     </li>
-                                    <?php }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?>
+                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -359,15 +431,17 @@
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div class="modal-body"><?php echo $projetetude->motif_rec; ?></div>
+                                                        <div class="modal-body"><?php //echo $projetetude->motif_rec;
+                                                        ?></div>
 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <?php }?>
-                                    <?php if ($projetetude->flag_attente_rec == true ) {?>
+                                    <?php //}
+                                    ?>
+                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -395,14 +469,16 @@
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div class="modal-body"><?php echo $projetetude->motif_rec; ?></div>
+                                                        <div class="modal-body"><?php //echo $projetetude->motif_rec;
+                                                        ?></div>
 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <?php }?>
+                                    <?php //}
+                                    ?> --}}
                                     <form method="POST" class="form"
                                         action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude)) }}"
                                         enctype="multipart/form-data">
@@ -686,7 +762,7 @@
                                                 </div>
                                             </div>
                                     </form>
-                                    <?php if ($nomrole == "CHEF DE DEPARTEMENT") { ?>
+                                    <?php if ($nomrole == "CHEF DE DEPARTEMENT" && $projetetude->flag_soumis_chef_service == null) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement du chef de
                                             departement</h5>
@@ -728,7 +804,7 @@
                                     </div>
                                     <?php }?>
 
-                                    <?php if ($nomrole == "CHEF DE SERVICE" && $projetetude->flag_soumis_chef_service == true) { ?>
+                                    <?php if ($nomrole == "CHEF DE SERVICE" && $projetetude->flag_soumis_chef_service == true && $projetetude->flag_soumis_charge_etude == null ) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement du chef de service</h5>
                                         <div class="row">
@@ -770,7 +846,7 @@
                                     <?php }?>
 
 
-                                    <?php if ($nomrole == "CHARGER ETUDE" && $projetetude->flag_soumis_charge_etude == true ) { ?>
+                                    <?php if ($nomrole == "CHARGER ETUDE" && $projetetude->flag_soumis_charge_etude == true && $projetetude->flag_valide == null ) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement de la recevabilité du dossier
                                         </h5>
@@ -830,7 +906,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php //}
+                                    <?php }
                                     ?>
                                     <?php if ($projetetude->flag_valide == true && $projetetude->flag_rejet == false) { ?>
                                     <div class="card-body">
@@ -846,7 +922,7 @@
                                                 ?> required="required">
                                                 <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_soumis_chef_service == true  &&  $projetetude->flag_soumis_charge_etude == true &&  $projetetude->flag_valide == true &&  $projetetude->statut_instruction == null ) {
                                             ?>
-                                                <?php echo $statuts;
+                                                <?php echo $statutinst;
                                                 ?>
                                                 <?php }else{
                                                 ?>
@@ -888,24 +964,26 @@
 
                                         <?php }?>
                                         <?php }?>
+                                        <?php if ($disable_ins == '') { ?>
                                         <div class="row">
                                             <label class="form-label">Commentaires </label>
                                             <textarea class="form-control" id="commentaires_instruction" name="commentaires_instruction" rows="4"
-                                                <?php echo $disable_ins; ?>>
-                                                <?php if ($disable_ins != '') {
+                                                <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
                                                     echo $projetetude->commentaires_instruction;
                                                 } ?></textarea>
                                         </div>
+                                        <?php }?>
                                         <div class="accordion mt-3" id="accordionExample">
                                             <div class="card accordion-item">
                                                 <h2 class="accordion-header" id="headingTwo">
                                                     <button type="button" class="accordion-button collapsed"
-                                                        data-bs-toggle="collapse" data-bs-target="#accordionTwo"
-                                                        aria-expanded="false" aria-controls="accordionTwo">
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#accordionTwoInstruction" aria-expanded="false"
+                                                        aria-controls="accordionTwo">
                                                         Informations du projet d'etude
                                                     </button>
                                                 </h2>
-                                                <div id="accordionTwo" class="accordion-collapse collapse"
+                                                <div id="accordionTwoInstruction" class="accordion-collapse collapse"
                                                     aria-labelledby="headingTwo" data-bs-parent="#accordionExample"
                                                     style="">
                                                     <div class="accordion-body">
@@ -919,9 +997,8 @@
                                                                         required="required" id="titre_projet_instruction"
                                                                         class="form-control form-control-sm"
                                                                         placeholder="ex : Perfectionnement .."
-                                                                        <?php echo $disable_ins; ?> <?php if ($disable_ins != '') {
-                                                                            echo 'value=' . $projetetude->titre_projet_instruction;
-                                                                        } ?>>
+                                                                        <?php echo $disable_ins; ?>
+                                                                        value="{{ $projetetude->titre_projet_instruction }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 col-12">
@@ -929,10 +1006,9 @@
                                                                     <label>Contexte ou Problèmes constatés <span
                                                                             style="color:red;">*</span></label>
                                                                     <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                        name="contexte_probleme_instruction" style="height: 121px;" <?php echo $disable_ins; ?>>
-                                                                   <?php if ($disable_ins != '') {
-                                                                       echo $projetetude->contexte_probleme_instruction;
-                                                                   } ?></textarea>
+                                                                        name="contexte_probleme_instruction" style="height: 121px;" <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
+                                                                            echo $projetetude->contexte_probleme_instruction;
+                                                                        } ?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 col-12">
@@ -940,11 +1016,10 @@
                                                                     <label>Objectif Général <span
                                                                             style="color:red;">*</span>
                                                                     </label>
-                                                                    <textarea required="required" class="form-control" rows="3" id="exampleFormControlTextarea"
-                                                                        name="objectif_general_instruction" style="height: 121px;" <?php echo $disable_ins; ?>>
-                                                                   <?php if ($disable_ins != '') {
-                                                                       echo $projetetude->objectif_general_instruction;
-                                                                   } ?></textarea>
+                                                                    <textarea required="required" class="form-control" rows="3"
+                                                                        id="exampleFormControlTextarea"name="objectif_general_instruction" style="height: 121px;" <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
+                                                                            echo $projetetude->objectif_general_instruction;
+                                                                        } ?></textarea>
 
                                                                 </div>
                                                             </div>
@@ -953,10 +1028,9 @@
                                                                     <label>Objectifs spécifiques <span
                                                                             style="color:red;">*</span> </label>
                                                                     <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                        name="objectif_specifique_instruction" style="height: 121px;" <?php echo $disable_ins; ?>>
-                                                                    <?php if ($disable_ins != '') {
-                                                                        echo $projetetude->objectif_specifique_instruction;
-                                                                    } ?>
+                                                                        name="objectif_specifique_instruction" style="height: 121px;" <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
+                                                                            echo $projetetude->objectif_specifique_instruction;
+                                                                        } ?>
                                                                 </textarea>
 
                                                                 </div>
@@ -968,10 +1042,9 @@
                                                                             style="color:red;">*</span>
                                                                     </label>
                                                                     <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                        name="resultat_attendu_instruction" style="height: 121px;" <?php echo $disable_ins; ?>>
-                                                                    <?php if ($disable_ins != '') {
-                                                                        echo $projetetude->resultat_attendus_instruction;
-                                                                    } ?></textarea>
+                                                                        name="resultat_attendu_instruction" style="height: 121px;" <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
+                                                                            echo $projetetude->resultat_attendus_instruction;
+                                                                        } ?></textarea>
 
                                                                 </div>
                                                             </div>
@@ -980,11 +1053,9 @@
                                                                     <label>Champ de l’étude <span
                                                                             style="color:red;">*</span></label>
                                                                     <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="champ_etude_instruction"
-                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>>
-                                                                    <?php if ($disable_ins != '') {
-                                                                        echo $projetetude->champ_etude_instruction;
-                                                                    } ?></textarea>
-
+                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>><?php if ($disable_ins != '') {
+                                                                            echo $projetetude->champ_etude_instruction;
+                                                                        } ?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4 col-12">
@@ -992,10 +1063,9 @@
                                                                     <label>Cible <span style="color:red;">*</span>
                                                                     </label>
                                                                     <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="cible_instruction"
-                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>>
-                                                                    <?php if ($disable_ins != '') {
-                                                                        echo $projetetude->cible_instruction;
-                                                                    } ?></textarea>
+                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>> <?php if ($disable_ins != '') {
+                                                                            echo $projetetude->cible_instruction;
+                                                                        } ?></textarea>
 
                                                                 </div>
                                                             </div>
@@ -1004,10 +1074,9 @@
                                                                     <label>Methodologie <span style="color:red;">*</span>
                                                                     </label>
                                                                     <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="methodologie_instruction"
-                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>>
-                                                                    <?php if ($disable_ins != '') {
-                                                                        echo $projetetude->methodologie_instruction;
-                                                                    } ?></textarea>
+                                                                        style="height: 121px;" required="required" <?php echo $disable_ins; ?>> <?php if ($disable_ins != '') {
+                                                                            echo $projetetude->methodologie_instruction;
+                                                                        } ?></textarea>
 
                                                                 </div>
                                                             </div>
@@ -1071,7 +1140,8 @@
                                     </div>
 
                                     <?php }?>
-                                    <?php }?>
+                                    <?php //}
+                                    ?>
                                 </div>
                             </div>
                         </div>
