@@ -403,7 +403,7 @@
                                         </div>
 
                                     </li>
-                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -441,7 +441,7 @@
                                     </div>
                                     <?php //}
                                     ?>
-                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -988,7 +988,7 @@
                                                     style="">
                                                     <div class="accordion-body">
                                                         <div class="row gy-3">
-                                                            <div class="col-md-12 col-10" align="center">
+                                                            <div class="col-md-6 col-10" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Titre du projet <span
                                                                             style="color:red;">*</span>
@@ -1001,7 +1001,21 @@
                                                                         value="{{ $projetetude->titre_projet_instruction }}">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-6 col-10" align="center">
+                                                                <div class="mb-1">
+                                                                    <label>Montant du projet <span
+                                                                            style="color:red;">*</span>
+                                                                    </label>
+                                                                    <input type="number"
+                                                                        name="montant_projet_instruction"
+                                                                        required="required"
+                                                                        id="montant_projet_instruction"
+                                                                        class="form-control form-control-sm"
+                                                                        placeholder="ex : 1000000" <?php echo $disable_ins; ?>
+                                                                        value="{{ $projetetude->montant_projet_instruction }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Contexte ou Problèmes constatés <span
                                                                             style="color:red;">*</span></label>
@@ -1011,7 +1025,7 @@
                                                                         } ?></textarea>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Objectif Général <span
                                                                             style="color:red;">*</span>
@@ -1023,7 +1037,7 @@
 
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Objectifs spécifiques <span
                                                                             style="color:red;">*</span> </label>
@@ -1036,7 +1050,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Résultats attendus <span
                                                                             style="color:red;">*</span>
@@ -1048,7 +1062,7 @@
 
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Champ de l’étude <span
                                                                             style="color:red;">*</span></label>
@@ -1058,7 +1072,7 @@
                                                                         } ?></textarea>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Cible <span style="color:red;">*</span>
                                                                     </label>
@@ -1069,7 +1083,7 @@
 
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-12">
+                                                            <div class="col-md-4 col-12" align="center">
                                                                 <div class="mb-1">
                                                                     <label>Methodologie <span style="color:red;">*</span>
                                                                     </label>

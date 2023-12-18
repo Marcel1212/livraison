@@ -531,6 +531,7 @@ class ProjetEtudeController extends Controller
                         $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
                         $projetetude->cible_instruction = $data['cible_instruction'];
                         $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+                        $projetetude->montant_projet_instruction = $data['montant_projet_instruction'];
                         $projetetude->piece_jointe_instruction =$fileName1;
                         $projetetude->save();
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Dossier validé effectue avec succes');
@@ -570,6 +571,7 @@ class ProjetEtudeController extends Controller
                         $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
                         $projetetude->cible_instruction = $data['cible_instruction'];
                         $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+                        $projetetude->montant_projet_instruction = $data['montant_projet_instruction'];
                         $projetetude->piece_jointe_instruction =$fileName1;
                         $projetetude->save();
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet de l\'instruction effectue avec succes');
