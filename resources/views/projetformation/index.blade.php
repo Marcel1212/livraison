@@ -42,12 +42,14 @@
                             <div class="card mb-4">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h5 class="mb-0">{{ $titre }}</h5>
+                                    <?php if ($nomrole == 'ENTREPRISE') { ?>
                                     <span align="right">
                                         <a href="{{ route($lien . '.create') }}"
                                             class="btn btn-sm btn-primary waves-effect waves-light">
                                             <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter un projet de formation</a>
 
                                     </span>
+                                    <?php } ?>
                                 </div>
                                 <div class="card-body">
                                     <div class="table">
@@ -62,6 +64,7 @@
                                                     <th>Promoteur</th>
                                                     <th>Date de creation</th>
                                                     <th>Statut Soumission</th>
+                                                    <th>Statut instruction</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -81,11 +84,19 @@
                                                             <span class="badge bg-danger">Non Soumis</span>
                                                             <?php }  ?>
                                                         </td>
+                                                        <td align="center">
+                                                            <?php if ($demandeenrole->flag_statut_instruction == true ){?>
+                                                            <span class="badge bg-success">Recevable</span>
+                                                            <?php } else if ($demandeenrole->flag_statut_instruction == null ) {?>
+                                                            <span class="badge bg-warning">En cours de traitement</span>
+                                                            <?php } else if ($demandeenrole->flag_statut_instruction == false ) {?>
+                                                            <span class="badge bg-danger">Non recevable</span>
+                                                            <?php }  ?>
+                                                        </td>
 
 
                                                         <td align="center">
-
-                                                            <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($demandeenrole->id_projet_etude)) }}"
+                                                            <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($demandeenrole->id_projet_formation)) }}"
                                                                 class=" " title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
                                                         </td>

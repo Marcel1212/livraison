@@ -350,22 +350,22 @@
                                                                     <div class="mb-1">
                                                                         <label>Problèmes
                                                                         </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="problemes_odf" style="height: 121px;"></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="problemes_odf"
+                                                                            style="height: 121px;"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6  col-12">
                                                                     <div class="mb-1">
                                                                         <label>Manifestations / Impacts / Effet </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="manifestation_impacts_odf" style="height: 121px;"></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="manifestation_impacts_odf"
+                                                                            style="height: 121px;"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
                                                                         <label> Moyens probables de résolution </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="moyens_problemes_odf" style="height: 121px;"></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="moyens_problemes_odf"
+                                                                            style="height: 121px;"></textarea>
                                                                     </div>
                                                                 </div>
 
