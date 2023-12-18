@@ -541,7 +541,7 @@ class ProjetEtudeController extends Controller
                     if($data['id_statut_instruction'] === '7'){
                         //dd($data);
                         if (isset($data['fichier_instruction'])){
-
+ // Projet Formation
                             $filefront = $data['fichier_instruction'];
 
                             if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
