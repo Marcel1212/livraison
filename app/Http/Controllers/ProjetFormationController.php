@@ -715,14 +715,52 @@ class ProjetFormationController extends Controller
                     //dd($data['statut_rec']);
                     if($data['statut_rec'] === "RECEVABLE"){
                         $etat_rec = true ;
-                    }else{
-                        $etat_rec = false ;
-                    }
-                    //dd($etat_rec);
+                         //dd($etat_rec);
                     $projetformation->flag_recevabilite = $etat_rec;
                     $projetformation->date_recevabilite = $date_soumission;
                     $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité au conseiller avec succes');
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation recevable');
+
+                    }else{
+                        $etat_rec = false ;
+                         //dd($etat_rec);
+                    $projetformation->flag_recevabilite = $etat_rec;
+                    $projetformation->date_recevabilite = $date_soumission;
+                    $projetformation->commentaires_recevabilite = $data["commentaires_recevabilite"];
+                    $projetformation->save();
+
+                        // Envoie du mail pour la notification
+
+                        // Recuperation des informations de l'entreprise
+                        $entreprise_info = Entreprises::find($projetformation->id_entreprises);
+                        $rais = $entreprise_info->raison_social_entreprises;
+                        $nccm = $entreprise_info->ncc_entreprises;
+                        $user = User::where('ncc_entreprises','=',$nccm)->get();
+                        $email = $user->email;
+                        //$mail = $entreprise_info->mail ;
+                        $sujet = "Recevabilite du projet de formation" ;
+                        $titre = "INFORMATION PROJET DE FORMATION";
+
+                        $messageMail = "<b>Cher,  $rais ,</b>
+                                    <br><br>Votre projet de formation intitulé : ". $projetformation->titre_projet_etude ." a été rejete
+
+                                    MOTIF DU REJET : ". $data["commentaires_recevabilite"] . "
+
+                                    <br><br><br>
+
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                                        ";
+                            $messageMailEnvoi = Email::get_envoimailTemplate($email, $rais, $messageMail, $sujet, $titre);
+                            return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation non recevable');
+                    }
+                    //dd($etat_rec);
+                    // $projetformation->flag_recevabilite = $etat_rec;
+                    // $projetformation->date_recevabilite = $date_soumission;
+                    // $projetformation->save();
+                    // return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité au conseiller avec succes');
 
             }
 
