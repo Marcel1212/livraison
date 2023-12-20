@@ -126,22 +126,20 @@ class EnrolementController extends Controller
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
-                    //'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                     'indicatif_demande_enrolement' => 'required',
                     'tel_demande_enrolement' => 'required',
                     'id_localite' => 'required',
                     'id_centre_impot' => 'required',
-                    'id_activites' => 'required',
+                    //'id_activites' => 'required',
                     'id_secteur_activite' => 'required',
                     'ncc_demande_enrolement' => 'required|min:6|max:9',
-                    //'ncc_demande_enrolement' => 'required|unique:demande_enrolement,ncc_demande_enrolement',
                     'rccm_demande_enrolement' => 'required',
                     'numero_cnps_demande_enrolement' => 'required',
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_rccm_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     //'captcha' => 'required|captcha',
-                    'g-recaptcha-response' => ['required', new Recaptcha()],
+                    'g-recaptcha-response' => ['required', new ReCaptcha]
                 ],[
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
@@ -149,7 +147,7 @@ class EnrolementController extends Controller
                     'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
                     'id_localite.required' => 'Veuillez selectionnez une localite.',
                     'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
-                    'id_activites.required' => 'Veuillez selectionner une activité.',
+                    //'id_activites.required' => 'Veuillez selectionner une activité.',
                     'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                     'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
                     'ncc_demande_enrolement.min' => 'Le numero NCC doit avoir au moins 6 caractère.',
@@ -169,6 +167,7 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
                     'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                     'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+                    //'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
                     //'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
                     //'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
                 ]);
@@ -273,8 +272,12 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
-                $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
-                $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
+                if(isset($input['numero_cnps_demande_enrolement'])){
+                    $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
+                }
+                if(isset($input['rccm_demande_enrolement'])){
+                    $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
+                }
                 $input['id_forme_juridique'] = $validformejuri;
 
                 DemandeEnrolement::create($input);
@@ -304,17 +307,15 @@ class EnrolementController extends Controller
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
-                    //'email_demande_enrolement' => 'required|unique:demande_enrolement,email_demande_enrolement',
                     'indicatif_demande_enrolement' => 'required',
                     'tel_demande_enrolement' => 'required',
                     'id_localite' => 'required',
                     'id_centre_impot' => 'required',
-                    'id_activites' => 'required',
+                    //'id_activites' => 'required',
                     'id_secteur_activite' => 'required',
                     'ncc_demande_enrolement' => 'required|min:6|max:9',
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                    'captcha' => 'required|captcha',
-                    'g-recaptcha-response' => ['required', new Recaptcha()],
+                    'g-recaptcha-response' => ['required', new Recaptcha],
                 ],[
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
@@ -322,7 +323,7 @@ class EnrolementController extends Controller
                     'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
                     'id_localite.required' => 'Veuillez selectionnez une localite.',
                     'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
-                    'id_activites.required' => 'Veuillez selectionner une activité.',
+                    //'id_activites.required' => 'Veuillez selectionner une activité.',
                     'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                     'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
                     'ncc_demande_enrolement.min' => 'Le numero NCC doit avoir au moins 6 caractère.',
@@ -331,8 +332,6 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                     'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                    'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
-                    'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
                 ]);
 
                 $data = $request->all();
@@ -383,8 +382,12 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
-                $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
-                $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
+                if(isset($input['numero_cnps_demande_enrolement'])){
+                    $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
+                }
+                if(isset($input['rccm_demande_enrolement'])){
+                    $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
+                }
                 $input['id_forme_juridique'] = $validformejuri;
                 DemandeEnrolement::create($input);
 

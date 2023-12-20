@@ -106,8 +106,9 @@ $reseaux = Menu::get_info_reseaux();
 
     </script>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!--<script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script>-->
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
 
   </head>
 
@@ -274,7 +275,7 @@ $reseaux = Menu::get_info_reseaux();
 
                                                 <form method="POST" class="form"
                                                       action="{{ route('enrolements.store') }}"
-                                                      enctype="multipart/form-data">
+                                                      enctype="multipart/form-data" id="EnrolementUSForm">
                                                     @csrf
                                                     <div class="row g-3">
 
@@ -295,7 +296,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                        placeholder="Raison sociale"
                                                                        required="required" value="{{ old('raison_sociale_demande_enroleme') }}"/>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-6">
                                                                 <label class="form-label" for="email">Email <strong style="color:red;">*</strong></label>
                                                                 <div class="input-group input-group-merge">
                                                                     <input
@@ -309,7 +310,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <span class="input-group-text" id="email"></span>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-6">
                                                                 <!--<label class="form-label" for="phone-number-mask">Téléphone du représentant</label>-->
                                                                 <div class="row">
                                                                     <div class="col-md-4">
@@ -331,6 +332,12 @@ $reseaux = Menu::get_info_reseaux();
                                                                 </div>
                                                             </div>
 
+
+                                                        </div>
+
+                                                        <div class="row">
+
+
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="state">Localité <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
@@ -340,12 +347,6 @@ $reseaux = Menu::get_info_reseaux();
                                                                 </select>
 
                                                             </div>
-                                                        </div>
-
-                                                        <div class="row">
-
-
-
 
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="state">Centre des
@@ -370,7 +371,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                 </select>
                                                             </div>
 
-                                                            <div class="col-md-4">
+                                                            <!--<div class="col-md-4">
                                                                 <label class="form-label" for="state">Activités <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
                                                                         data-allow-clear="true" name="id_activites" id="id_activites"
@@ -378,7 +379,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                         <option value='0'>-- Secteur d'activité -- &nbsp;&nbsp;&nbsp;</option>
                                                                 </select>
 
-                                                            </div>
+                                                            </div>-->
 
                                                         </div>
 
@@ -487,9 +488,18 @@ $reseaux = Menu::get_info_reseaux();
                                                                        placeholder="Enter Captcha" name="captcha">
                                                             </div>
                                                         </div>-->
-                                                        <div class="col-md-6">
+                                                        <!--<div class="col-md-6">
                                                             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
                                                             <div class="g-recaptcha" id="feedback-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}">
+                                                            </div>
+                                                        </div>-->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <strong>ReCaptcha:</strong>
+                                                                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                                                                @if ($errors->has('g-recaptcha-response'))
+                                                                    <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -685,5 +695,7 @@ $reseaux = Menu::get_info_reseaux();
       });
 
   </script>
+
+
   </body>
 </html>
