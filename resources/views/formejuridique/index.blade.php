@@ -3,13 +3,13 @@
 @section('content')
 
     @php($Module='Parametrage')
-    @php($titre='Liste des activités')
-    @php($lien='activites')
+    @php($titre='Liste des formes juridiques')
+    @php($lien='formejuridique')
 
     <!-- BEGIN: Content-->
-            <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
-            </h5>
+                <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
+                </h5>
 
 
                 @if ($message = Session::get('success'))
@@ -22,21 +22,21 @@
                 @endif
 
 
-                <div class="row">
-                    <!-- Basic Layout -->
-                    <div class="col-xxl">
-                        <div class="card mb-4">
-                            <div class="card-header d-flex align-items-center justify-content-between">
-                                <h5 class="mb-0">{{$titre}}</h5>
-                                <small class="text-muted float-end">
-                                    @can($lien.'-create')
-                                        <a href="{{ route($lien.'.create') }}"
-                                        class="btn btn-sm btn-primary waves-effect waves-light">
-                                            <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
-                                    @endcan
-                                </small>
-                            </div>
-                            <div class="card-body">
+                        <div class="row">
+                            <!-- Basic Layout -->
+                            <div class="col-xxl">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h5 class="mb-0">{{$titre}}</h5>
+                                        <small class="text-muted float-end">
+                                            @can($lien.'-create')
+                                                <a href="{{ route($lien.'.create') }}"
+                                                class="btn btn-sm btn-primary waves-effect waves-light">
+                                                    <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
+                                            @endcan
+                                        </small>
+                                    </div>
+                                    <div class="card-body">
                                     <!--begin: Datatable-->
                                     <table class="table table-bordered table-striped table-hover table-sm "
                                              id="exampleData"
@@ -44,20 +44,26 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Secteur activité</th>
                                             <th>Libelle</th>
+                                            <th>Type</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($activites as $key => $activite)
+                                        @foreach ($formejuridiques as $key => $formejuridique)
                                             <tr>
-                                                <td>{{ $activite->id_activites }}</td>
-                                                <td>{{ @$activite->secteurActivite->libelle_secteur_activite }}</td>
-                                                <td>{{ $activite->libelle_activites }}</td>
+                                                <td>{{ $formejuridique->id_forme_juridique }}</td>
+                                                <td>{{ $formejuridique->libelle_forme_juridique }}</td>
+                                                <td>
+                                                    <?php if ($formejuridique->code_forme_juridique == 'PR' ){?>
+                                                    <span class="badge bg-info">PRIVEE</span>
+                                                    <?php } else {?>
+                                                    <span class="badge bg-info">PUBLIC</span>
+                                                    <?php }  ?>
+                                                </td>
                                                 <td align="center">
-                                                    <?php if ($activite->flag_activites == true ){?>
+                                                    <?php if ($formejuridique->flag_actif_forme_juridique == true ){?>
                                                     <span class="badge bg-success">Actif</span>
                                                     <?php } else {?>
                                                     <span class="badge bg-danger">Inactif</span>
@@ -65,7 +71,7 @@
                                                 </td>
                                                 <td align="center">
                                                     @can($lien.'-edit')
-                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($activite->id_activites)) }}"
+                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($formejuridique->id_forme_juridique)) }}"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
@@ -76,9 +82,9 @@
                                         </tbody>
                                     </table>
                                     <!--end: Datatable-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
     <!-- END: Content-->
 @endsection

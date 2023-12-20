@@ -2,16 +2,16 @@
 
 @section('content')
 
-    @php($Module='Configuration')
-    @php($titre='Liste des  permissions')
-    @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($Module='Parametrage')
+    @php($titre='Liste des parts entreprises')
+    @php($soustitre='Ajouter une part entreprise')
+    @php($lien='partentreprise')
 
 
     <!-- BEGIN: Content-->
-            <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
-            </h5>
+                 <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+                </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -23,7 +23,7 @@
                     </div>
                 @endif
 
-                    <div class="row">
+                <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
                             <div class="card mb-4">
@@ -37,37 +37,33 @@
                                     <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                                         @csrf
                                         <div class="row">
+
+
                                             <div class="col-md-5 col-12">
                                                 <div class="mb-1">
-                                                    <label>Sous menu </label>
-                                                    <select class="select2 select2-size-sm form-select"  data-allow-clear="true" name="id_sousmenu" required>
-                                                        <?= $SousMenuList; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
                                                     <label>Libellé </label>
-                                                    <input type="text" name="lib_permission" id="lib_permission"
-                                                           class="form-control form-control-sm"
-                                                           placeholder="Libellé">
+                                                    <input type="text" name="libelle_part_entreprise" id="libelle_part_entreprise"
+                                                           class="form-control form-control-sm">
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 col-12">
+
+                                            <div class="col-md-5 col-12">
                                                 <div class="mb-1">
-                                                    <label>Code </label>
-                                                    <input type="text" name="name" id="name"
-                                                           class="form-control form-control-sm" placeholder="Priorité"
+                                                    <label>Valeur </label>
+                                                    <input type="number" name="valeur_part_entreprise" id="valeur_part_entreprise"
+                                                           class="form-control form-control-sm" step="0.0001"
                                                            required>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="is_valide"
+                                                    <input type="checkbox" class="form-check-input" name="flag_actif_part_entreprise"
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
+
                                             <div class="col-12" align="right">
                                                 <hr>
                                                 <button type="submit"
@@ -84,7 +80,6 @@
                 </div>
             </div>
         </div>
-
     <!-- END: Content-->
 
 @endsection

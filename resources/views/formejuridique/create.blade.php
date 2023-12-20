@@ -2,16 +2,16 @@
 
 @section('content')
 
-    @php($Module='Configuration')
-    @php($titre='Liste des  permissions')
-    @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($Module='Parametrage')
+    @php($titre='Liste des formes juridiques')
+    @php($soustitre='Ajouter une forme juridique')
+    @php($lien='formejuridique')
 
 
     <!-- BEGIN: Content-->
-            <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
-            </h5>
+                 <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+                </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -23,7 +23,7 @@
                     </div>
                 @endif
 
-                    <div class="row">
+                <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
                             <div class="card mb-4">
@@ -37,34 +37,33 @@
                                     <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-5 col-12">
+
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Sous menu </label>
-                                                    <select class="select2 select2-size-sm form-select"  data-allow-clear="true" name="id_sousmenu" required>
-                                                        <?= $SousMenuList; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Libellé </label>
-                                                    <input type="text" name="lib_permission" id="lib_permission"
+                                                    <label>Forme juridique </label>
+                                                    <input type="text" name="libelle_forme_juridique" id="libelle_forme_juridique"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Libellé">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 col-12">
-                                                <div class="mb-1">
-                                                    <label>Code </label>
-                                                    <input type="text" name="name" id="name"
-                                                           class="form-control form-control-sm" placeholder="Priorité"
                                                            required>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>TYPE</label>
+                                                    <select class="select2 select2-size-sm form-select"
+                                                    data-allow-clear="true" name="code_forme_juridique"
+                                                    required="required">
+                                                       <option value="">---------</option>
+                                                       <option value="PR">PRIVEE</option>
+                                                       <option value="PU">PUBLIC</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="is_valide"
+                                                    <input type="checkbox" class="form-check-input" name="flag_actif_forme_juridique"
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
@@ -84,7 +83,6 @@
                 </div>
             </div>
         </div>
-
     <!-- END: Content-->
 
 @endsection

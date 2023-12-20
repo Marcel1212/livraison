@@ -2,10 +2,10 @@
 
 @section('content')
 
-    @php($Module='Configuration')
-    @php($titre='Liste des  permissions')
-    @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($Module='Parametrage')
+    @php($titre='Liste des formes juridiques')
+    @php($soustitre='Modifier une forme juridique')
+    @php($lien='formejuridique')
 
 
     <!-- BEGIN: Content-->
@@ -23,6 +23,7 @@
                     </div>
                 @endif
 
+
                     <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
@@ -34,37 +35,42 @@
                                     </small>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($formejuridique->id_forme_juridique)) }}">
                                         @csrf
+                                        @method('PUT')
                                         <div class="row">
-                                            <div class="col-md-5 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Sous menu </label>
-                                                    <select class="select2 select2-size-sm form-select"  data-allow-clear="true" name="id_sousmenu" required>
-                                                        <?= $SousMenuList; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Libellé </label>
-                                                    <input type="text" name="lib_permission" id="lib_permission"
-                                                           class="form-control form-control-sm"
-                                                           placeholder="Libellé">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 col-12">
-                                                <div class="mb-1">
-                                                    <label>Code </label>
-                                                    <input type="text" name="name" id="name"
-                                                           class="form-control form-control-sm" placeholder="Priorité"
+                                                    <label>But de formation </label>
+                                                    <input type="text" name="libelle_forme_juridique" id="libelle_forme_juridique"
+                                                           class="form-control form-control-sm" value="{{$formejuridique->libelle_forme_juridique}}"
                                                            required>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>TYPE</label>
+                                                    <select class="select2 form-select"
+                                                    data-allow-clear="true" name="code_forme_juridique"
+                                                    required="required">
+                                                       <option value="{{$formejuridique->code_forme_juridique}}">
+                                                            @if($formejuridique->code_forme_juridique=='PR')
+                                                                PRIVEE
+                                                            @else
+                                                               PUBLIC
+                                                            @endif
+                                                       </option>
+                                                       <option value="PR">PRIVEE</option>
+                                                       <option value="PU">PUBLIC</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="is_valide"
+                                                    <input type="checkbox" class="form-check-input" name="flag_actif_forme_juridique" {{  ($formejuridique->flag_actif_forme_juridique == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
@@ -80,26 +86,12 @@
                                             </div>
                                         </div>
                                     </form>
+
                                     </div>
                 </div>
             </div>
         </div>
-
     <!-- END: Content-->
 
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -70,6 +70,45 @@ $reseaux = Menu::get_info_reseaux();
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
+
+    <script type="text/javascript">
+
+        function changeFuncFormeJuridique() {
+            //location.reload();
+           // location.href = location.href;
+           //document.getElementById("departement").innerHTML = "";
+           //document.getElementById("service").innerHTML = "";
+            var selectBox = document.getElementById("id_forme_juridique");
+            //var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+            const myArray = selectedValue.split("/");
+            let code_forme_juridique = myArray[0];
+            let id_forme_juridiques = myArray[1];
+
+            if(code_forme_juridique === 'PU'){
+                document.getElementById("rccm_demande_enrolement").disabled = false;
+                document.getElementById("numero_cnps_demande_enrolement").disabled = false;
+                document.getElementById("piece_rccm_demande_enrolement").disabled = false;
+                document.getElementById("piece_attestation_immatriculati").disabled = false;
+            }else if(code_forme_juridique === 'PR'){
+                document.getElementById("rccm_demande_enrolement").disabled = true;
+                document.getElementById("numero_cnps_demande_enrolement").disabled = true;
+                document.getElementById("piece_rccm_demande_enrolement").disabled = true;
+                document.getElementById("piece_attestation_immatriculati").disabled = true;
+            }else{
+                document.getElementById("rccm_demande_enrolement").disabled = false;
+                document.getElementById("numero_cnps_demande_enrolement").disabled = false;
+                document.getElementById("piece_rccm_demande_enrolement").disabled = false;
+                document.getElementById("piece_attestation_immatriculati").disabled = false;
+            }
+
+        }
+
+    </script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
   </head>
 
   <body>
@@ -145,12 +184,12 @@ $reseaux = Menu::get_info_reseaux();
                                     <!-- / Style Switcher-->
 
                                     <!-- navbar button: Start -->
-                                    <li>
+                                    <!--<li>
                                         <a href="{{route('connexion')}}" class="btn btn-primary" target="_blank"
                                         ><span class="tf-icons ti ti-login scaleX-n1-rtl me-md-1"></span
                                             ><span class="d-none d-md-block">se connecter</span></a
                                         >
-                                    </li>
+                                    </li>-->
                                     <!-- navbar button: End -->
                                 </ul>
                                 <!-- Toolbar: End -->
@@ -240,9 +279,16 @@ $reseaux = Menu::get_info_reseaux();
                                                     <div class="row g-3">
 
                                                         <div class="row">
-                                                            <div class="col-md-4">
-                                                                <label class="form-label" for="fullname">Dénomination
-                                                                    sociale <strong style="color:red;">*</strong></label>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label" for="fullname">Forme juridique <strong style="color:red;">*</strong></label>
+                                                                <select class="select2 form-select"
+                                                                        data-allow-clear="true" name="id_forme_juridique" id="id_forme_juridique" onchange="changeFuncFormeJuridique();"
+                                                                        required="required">
+                                                                    <?= $formejuridique; ?>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label class="form-label" for="fullname">Raison sociale <strong style="color:red;">*</strong></label>
                                                                 <input type="text" id="raison_sociale_demande_enroleme"
                                                                        name="raison_sociale_demande_enroleme"
                                                                        class="form-control"
@@ -284,9 +330,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="row">
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="state">Localité <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
@@ -296,6 +340,12 @@ $reseaux = Menu::get_info_reseaux();
                                                                 </select>
 
                                                             </div>
+                                                        </div>
+
+                                                        <div class="row">
+
+
+
 
                                                             <div class="col-md-4">
                                                                 <label class="form-label" for="state">Centre des
@@ -309,14 +359,27 @@ $reseaux = Menu::get_info_reseaux();
                                                             </div>
 
                                                             <div class="col-md-4">
+                                                                <label class="form-label" for="fullname">Secteur activité <strong style="color:red;">*</strong></label>
+                                                                <select class="select2 form-select"
+                                                                        data-allow-clear="true" name="id_secteur_activite" id="id_secteur_activite">
+                                                                        <option value="0">-- Selectionnez une activité -- &nbsp;&nbsp;&nbsp;</option>
+                                                                        @foreach ($secteuractivites as $activite)
+                                                                            <option
+                                                                                value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                                                        @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-md-4">
                                                                 <label class="form-label" for="state">Activités <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
-                                                                        data-allow-clear="true" name="id_activites"
+                                                                        data-allow-clear="true" name="id_activites" id="id_activites"
                                                                         required="required">
-                                                                    <?= $activite; ?>
+                                                                        <option value='0'>-- Secteur d'activité -- &nbsp;&nbsp;&nbsp;</option>
                                                                 </select>
 
                                                             </div>
+
                                                         </div>
 
                                                         <div class="row">
@@ -339,7 +402,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        placeholder="" name="rccm_demande_enrolement"
+                                                                        placeholder="" name="rccm_demande_enrolement" id="rccm_demande_enrolement"
                                                                         required="required" value="{{ old('rccm_demande_enrolement') }}"/>
                                                                 </div>
                                                             </div>
@@ -352,8 +415,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                         type="text"
                                                                         class="form-control"
                                                                         placeholder=""
-                                                                        name="numero_cnps_demande_enrolement"
-                                                                        maxlength="3"
+                                                                        name="numero_cnps_demande_enrolement" id="numero_cnps_demande_enrolement"
                                                                         required="required" value="{{ old('numero_cnps_demande_enrolement') }}"/>
 
 
@@ -383,7 +445,7 @@ $reseaux = Menu::get_info_reseaux();
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="form-label"> Pièce RCCM <strong style="color:red;">*</strong></label>
-                                                            <input type="file" name="piece_rccm_demande_enrolement"
+                                                            <input type="file" name="piece_rccm_demande_enrolement" id="piece_rccm_demande_enrolement"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_rccm_demande_enrolement') }}"/>
                                                             <div id="defaultFormControlHelp" class="form-text">
@@ -391,8 +453,8 @@ $reseaux = Menu::get_info_reseaux();
                                                             </div>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Pièce attestation immat <strong style="color:red;">*</strong></label>
-                                                            <input type="file" name="piece_attestation_immatriculati"
+                                                            <label class="form-label">Pièce attestation immatriculation <strong style="color:red;">*</strong></label>
+                                                            <input type="file" name="piece_attestation_immatriculati" id="piece_attestation_immatriculati"
                                                                    class="form-control" placeholder=""
                                                                    required="required" value="{{ old('piece_attestation_immatriculati') }}"/>
                                                             <div id="defaultFormControlHelp" class="form-text">
@@ -408,10 +470,10 @@ $reseaux = Menu::get_info_reseaux();
                                                     <h5 class="my-4">3. Vérificateur de sécurité</h5>
 
                                                     <div class="row gy-3">
-                                                        <div class="col-md-6">
+                                                        <!--<div class="col-md-6">
                                                             <div class="form-group mt-4 mb-4">
                                                                 <div class="captcha">
-                                                                    <span><?php echo captcha_img(); ?></span>
+                                                                    <span><?php //echo captcha_img(); ?></span>
                                                                     <button type="button"
                                                                             class="btn-label-secondary waves-effect"
                                                                             class="reload" id="reload">
@@ -423,6 +485,11 @@ $reseaux = Menu::get_info_reseaux();
                                                             <div class="form-group mb-4">
                                                                 <input id="captcha" type="text" class="form-control"
                                                                        placeholder="Enter Captcha" name="captcha">
+                                                            </div>
+                                                        </div>-->
+                                                        <div class="col-md-6">
+                                                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                                            <div class="g-recaptcha" id="feedback-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -574,6 +641,36 @@ $reseaux = Menu::get_info_reseaux();
 
     <!-- Page JS -->
     <script src="{{asset('assets/js/form-layouts.js')}}"></script>
+
+    <script>
+        $(function () {
+
+            $('#id_secteur_activite').on('change', function (e) {
+                var id = e.target.value;
+               // alert(id); //exit;
+                telUpdate1(id);
+                //alert('ttt'); //exit;
+            });
+
+            function telUpdate1(id) {
+                //alert('testanc'); //exit;
+                $.get('/secteuractivilitelistes/' + id, function (data) {
+                    // alert(data); //exit;
+                    $('#id_activites').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_activites').append($('<option>', {
+                            value: tels.id_activites,
+                            text: tels.libelle_activites,
+                        }));
+
+                    });
+
+                });
+            }
+
+        });
+
+    </script>
 
     <script type="text/javascript">
     $('#reload').click(function () {

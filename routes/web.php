@@ -8,6 +8,7 @@ Route::match(['get', 'post'], '/', [App\Http\Controllers\IndexController::class,
 Route::match(['get', 'post'], '/login', [App\Http\Controllers\ConnexionController::class, 'login'])->name('login');
 Route::match(['get', 'post'], '/enrolements', [App\Http\Controllers\EnrolementController::class, 'create'])->name('enrolements');
 Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
+Route::get('/secteuractivilitelistes/{id}', [App\Http\Controllers\EnrolementController::class, 'getsecteuractivilitelistes']);
 //Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
 Route::match(['post'], '/test', [App\Http\Controllers\PlanFormationController::class, 'test'])->name('test');
@@ -39,6 +40,9 @@ Route::group(['middleware' => ['auth']], function () {
             'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
             'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
             'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+            'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
+            'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
+            'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
         ]);
     //});
 

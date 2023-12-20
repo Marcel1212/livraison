@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_statut_operation
  * @property float $id_motif
  * @property float $indicatif_demande_enrolement
+ * @property float $id_motif_recevable
  * @property string $ncc_demande_enrolement
  * @property string $raison_sociale_demande_enroleme
  * @property float $tel_demande_enrolement
@@ -28,13 +29,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_traitement_demande_enrolem
  * @property string $updated_at
  * @property string $created_at
+ * @property boolean $flag_recevablilite_demande_enrolement
+ * @property boolean $flag_valider_demande_enrolement
+ * @property boolean $flag_rejeter_demande_enrolement
+ * @property string $date_recevabilite_demande_enrolement
+ * @property string $commentaire_recevable_demande_enrolement
+ * @property Entreprise[] $entreprises
  * @property Localite $localite
  * @property CentreImpot $centreImpot
  * @property Activite $activite
  * @property StatutOperation $statutOperation
  * @property Motif $motif
  * @property Pay $pay
- * @property Entreprise[] $entreprises
+ * @property Motif $motif1
  */
 class DemandeEnrolement extends Model
 {
@@ -43,7 +50,7 @@ class DemandeEnrolement extends Model
      * 
      * @var string
      */
-    protected $table = 'demande_enrolement'; 
+    protected $table = 'demande_enrolement';
 
     /**
      * The primary key for the model.
@@ -60,16 +67,23 @@ class DemandeEnrolement extends Model
     protected $keyType = 'float';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     * 
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * @var array
      */
-    protected $fillable = ['id_localite', 'id_centre_impot', 'id_activites', 'id_statut_operation', 'id_motif', 'indicatif_demande_enrolement', 'ncc_demande_enrolement', 'raison_sociale_demande_enroleme', 'tel_demande_enrolement', 'email_demande_enrolement', 'numero_cnps_demande_enrolement', 'rccm_demande_enrolement', 'piece_dfe_demande_enrolement', 'piece_rccm_demande_enrolement', 'piece_attestation_immatriculati', 'commentaire_demande_enrolement', 'id_user', 'date_depot_demande_enrolement', 'date_traitement_demande_enrolem', 'flag_traitement_demande_enrolem', 'updated_at', 'created_at'];
+    protected $fillable = ['id_localite', 'id_centre_impot', 'id_activites', 'id_statut_operation', 'id_motif',
+     'indicatif_demande_enrolement', 'id_motif_recevable', 'ncc_demande_enrolement', 'raison_sociale_demande_enroleme',
+      'tel_demande_enrolement', 'email_demande_enrolement', 'numero_cnps_demande_enrolement', 'rccm_demande_enrolement',
+       'piece_dfe_demande_enrolement', 'piece_rccm_demande_enrolement', 'piece_attestation_immatriculati',
+        'commentaire_demande_enrolement', 'id_user', 'date_depot_demande_enrolement', 'date_traitement_demande_enrolem',
+         'flag_traitement_demande_enrolem', 'updated_at', 'created_at', 'flag_recevablilite_demande_enrolement',
+          'date_recevabilite_demande_enrolement', 'commentaire_recevable_demande_enrolement','flag_valider_demande_enrolement','flag_rejeter_demande_enrolement'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function entreprises()
+    {
+        return $this->hasMany('App\Models\Entreprise', 'id_demande_enrolement', 'id_demande_enrolement');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -77,7 +91,7 @@ class DemandeEnrolement extends Model
     public function localite()
     {
         return $this->belongsTo('App\Models\Localite', 'id_localite', 'id_localite');
-    } 
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -120,10 +134,10 @@ class DemandeEnrolement extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function entreprises()
+    public function motif1()
     {
-        return $this->hasMany('App\Models\Entreprise', 'id_demande_enrolement', 'id_demande_enrolement');
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 }

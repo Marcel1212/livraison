@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Rules;
+
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+
+class Recaptcha implements ValidationRule
+{
+    /**
+     * Run the validation rule.
+     *
+     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        //
+    }
+    public function __construct() {
+
+	}
+
+	public function passes($attribute, $value) {
+		$data = array('secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+			'response' => $value);
+
+		try {
+			$verify = curl_init();
+			curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+			curl_setopt($verify, CURLOPT_POST, true);
+			curl_setopt($verify, CURLOPT_POSTFIELDS,
+						http_build_query($data));
+			curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+			$response = curl_exec($verify);
+
+			return json_decode($response) -> success;
+		}
+		catch (\Exception $e) {
+			return false;
+		}
+	}
+
+	public function message() {
+		return 'ReCaptcha verification failed.';
+	}
+}
