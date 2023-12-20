@@ -63,7 +63,7 @@
                                                         <button type="button" class="accordion-button"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionOne"
                                                             aria-expanded="true" aria-controls="accordionOne">
-                                                            Details de l'entreprise
+                                                            DETAILS DE L'ENTREPRISE
                                                         </button>
                                                     </h2>
 
@@ -144,7 +144,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionTwo"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Fiche promoteur
+                                                            FICHE PROMOTEUR
                                                         </button>
                                                     </h2>
                                                     <div id="accordionTwo" class="accordion-collapse collapse"
@@ -206,7 +206,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionPC"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Personne à contacter
+                                                            PERSONNE A CONTACTER
                                                         </button>
                                                     </h2>
                                                     <div id="accordionPC" class="accordion-collapse collapse"
@@ -253,7 +253,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionDP"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Description du projet
+                                                            DESCRIPTION DU PROJET
                                                         </button>
                                                     </h2>
                                                     <div id="accordionDP" class="accordion-collapse collapse"
@@ -280,7 +280,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionAC"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Acteurs
+                                                            ACTEURS
                                                         </button>
                                                     </h2>
                                                     <div id="accordionAC" class="accordion-collapse collapse"
@@ -338,7 +338,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionPOD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Problèmes observes, objet de la demande de financement
+                                                            PROBLEMES OBSERVES , OBJET DE LA DEMANDE DE FINANCEMENT
                                                         </button>
                                                     </h2>
                                                     <div id="accordionPOD" class="accordion-collapse collapse"
@@ -378,7 +378,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionACD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Analyse des compétences des bénéficiaires
+                                                            ANALYSE DES COMPETENCES DES BENEFICIAIRES
                                                         </button>
                                                     </h2>
                                                     <div id="accordionACD" class="accordion-collapse collapse"
@@ -417,7 +417,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionThree"
                                                             aria-expanded="false" aria-controls="accordionThree">
-                                                            Pieces justificatives
+                                                            PIECES JUSTIFICATIVES
                                                         </button>
                                                     </h2>
                                                     <div id="accordionThree" class="accordion-collapse collapse"
@@ -431,14 +431,16 @@
                                                                         financement (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_demande_financement"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre d’engagement (PDF,
                                                                         WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_lettre_engagement"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste des bénéficiaires (si
@@ -446,7 +448,8 @@
                                                                         projet (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_liste_beneficiaires"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste de supports
@@ -454,7 +457,8 @@
                                                                         réalisation des formations (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_supports_pedagogiques"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Document prouvant
@@ -463,14 +467,16 @@
                                                                         (PDF, WORD, JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_preuve_existance"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Autre document (PDF, WORD,
                                                                         JPG)
                                                                         5M</label>
                                                                     <input type="file" name="doc_autre_document"
-                                                                        class="form-control" placeholder="" />
+                                                                        class="form-control" required="required"
+                                                                        placeholder="" />
                                                                 </div>
                                                             </div>
                                                         </div>

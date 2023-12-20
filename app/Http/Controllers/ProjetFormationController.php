@@ -643,7 +643,6 @@ class ProjetFormationController extends Controller
           }
 
             // Soumission instructions
-
             if($data['action'] === 'soumission_recevabilite_global_instruction'){
                 // ID du plan
 
@@ -676,18 +675,34 @@ class ProjetFormationController extends Controller
                     //dd($data['statut_rec']);
                     if($data['statut_rec_global_instruction'] === "RECEVABLE"){
                         $etat_rec = true ;
-                    }else{
-                        $etat_rec = false ;
-                    }
-                    //dd($etat_rec);
+                          //dd($etat_rec);
                     $projetformation->flag_statut_instruction = $etat_rec;
                     //$projetformation->flag_statut_instruction = $etat_rec;
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
-
                     $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes');
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes, vous pouvez passer a l\'instruction');
+                    }else{
+                        $etat_rec = false ;
+                          //dd($etat_rec);
+                    $projetformation->flag_statut_instruction = $etat_rec;
+                    //$projetformation->flag_statut_instruction = $etat_rec;
+                    $projetformation->date_instructions = $date_soumission;
+                    $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
+                    $projetformation->commpetences_instruction = $data["competences_instruction"];
+                    $projetformation->save();
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Projet formation rejeté avec succes');
+                    }
+                    //dd($etat_rec);
+                    // $projetformation->flag_statut_instruction = $etat_rec;
+                    // //$projetformation->flag_statut_instruction = $etat_rec;
+                    // $projetformation->date_instructions = $date_soumission;
+                    // $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
+                    // $projetformation->commpetences_instruction = $data["competences_instruction"];
+
+                    // $projetformation->save();
+                    // return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes');
 
             }
              // traitement de la recevabilite

@@ -42,6 +42,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+                @if ($message = Session::get('warning'))
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <section id="multiple-column-form">
                     <div class="row">
                         <div class="col-12">
@@ -203,7 +211,8 @@
                                                                     </span>
                                                                     <div class="timeline-event">
                                                                         <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement du chef de service
+                                                                            <h6 class="mb-0">Traitement du chef de
+                                                                                service
                                                                             </h6>
                                                                             <span class="text-muted"><strong>
                                                                                     <?php //echo $entreprise_info->raison_social_entreprises;
