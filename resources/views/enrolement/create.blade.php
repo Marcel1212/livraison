@@ -280,7 +280,7 @@ $reseaux = Menu::get_info_reseaux();
                                                     <div class="row g-3">
 
                                                         <div class="row">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-4">
                                                                 <label class="form-label" for="fullname">Forme juridique <strong style="color:red;">*</strong></label>
                                                                 <select class="select2 form-select"
                                                                         data-allow-clear="true" name="id_forme_juridique" id="id_forme_juridique" onchange="changeFuncFormeJuridique();"
@@ -288,7 +288,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <?= $formejuridique; ?>
                                                                 </select>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-8">
                                                                 <label class="form-label" for="fullname">Raison sociale <strong style="color:red;">*</strong></label>
                                                                 <input type="text" id="raison_sociale_demande_enroleme"
                                                                        name="raison_sociale_demande_enroleme"
