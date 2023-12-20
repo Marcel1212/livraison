@@ -1062,7 +1062,7 @@
                                                     <br>
                                                     <div class="row">
                                                         <label class="form-label">Commentaires</label>
-                                                        <textarea class="form-control" id="commentaires_conseiller_rec" name="commentaires_chef_serv" rows="4"
+                                                        <textarea class="form-control" id="commentaires_conseiller_rec" name="commentaires_recevabilite" rows="4"
                                                             <?php //echo $disable_cs;
                                                             ?>><?php //echo $projetetude->commentaires_cs;
                                                             ?></textarea>
