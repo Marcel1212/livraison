@@ -292,7 +292,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                 <input type="text" id="raison_sociale_demande_enroleme"
                                                                        name="raison_sociale_demande_enroleme"
                                                                        class="form-control"
-                                                                       placeholder="ASSOCIATION SERVICE MEDIATION"
+                                                                       placeholder="Raison sociale"
                                                                        required="required" value="{{ old('raison_sociale_demande_enroleme') }}"/>
                                                             </div>
                                                             <div class="col-md-4">
@@ -391,7 +391,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                         type="text"
                                                                         id="collapsible-payment-name"
                                                                         class="form-control" maxlength="9" minlength="6"
-                                                                        placeholder="" name="ncc_demande_enrolement"
+                                                                        placeholder="NCC" name="ncc_demande_enrolement"
                                                                         required="required" value="{{ old('ncc_demande_enrolement') }}"/>
                                                                 </div>
                                                             </div>
@@ -402,7 +402,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        placeholder="" name="rccm_demande_enrolement" id="rccm_demande_enrolement"
+                                                                        placeholder="RCCM" name="rccm_demande_enrolement" id="rccm_demande_enrolement"
                                                                         required="required" value="{{ old('rccm_demande_enrolement') }}"/>
                                                                 </div>
                                                             </div>
@@ -414,7 +414,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <input
                                                                         type="text"
                                                                         class="form-control"
-                                                                        placeholder=""
+                                                                        placeholder="N° CNPS"
                                                                         name="numero_cnps_demande_enrolement" id="numero_cnps_demande_enrolement"
                                                                         required="required" value="{{ old('numero_cnps_demande_enrolement') }}"/>
 
