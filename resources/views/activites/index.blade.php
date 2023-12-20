@@ -1,10 +1,9 @@
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-
-    @php($Module='Parametrage')
-    @php($titre='Liste des activités')
-    @php($lien='activites')
+    @php($Module = 'Parametrage')
+    @php($titre = 'Liste des activités')
+    @php($lien = 'activites')
 
     <!-- BEGIN: Content-->
             <h5 class="py-2 mb-1">
@@ -38,9 +37,8 @@
                             </div>
                             <div class="card-body">
                                     <!--begin: Datatable-->
-                                    <table class="table table-bordered table-striped table-hover table-sm "
-                                             id="exampleData"
-                                             style="margin-top: 13px !important">
+                                    <table class="table table-bordered table-striped table-hover table-sm " id="exampleData"
+                                        style="margin-top: 13px !important">
                                         <thead>
                                         <tr>
                                             <th>No</th>
@@ -70,9 +68,14 @@
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
 
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($activite->id_activites)) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/app-assets/images/icons/bouton-modifier.png'></a>
+
+
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     <!--end: Datatable-->
