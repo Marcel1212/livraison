@@ -3,6 +3,7 @@
 use App\Helpers\Menu;
 use App\Helpers\AnneeExercice;
 use Carbon\Carbon;
+use App\Models\ProjetEtude;
 
 $imagedashboard = Menu::get_info_image_dashboard();
 $anneexercice = AnneeExercice::get_annee_exercice();
@@ -89,7 +90,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
 
                         </h3>
                         <?php } ?>
-                        <?php } ?>
+                        <?php //} ?>
 
                     </div>
                 </div>
