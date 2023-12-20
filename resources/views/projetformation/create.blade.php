@@ -429,7 +429,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre de demande de
                                                                         financement (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_demande_financement"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
@@ -437,7 +437,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre d’engagement (PDF,
                                                                         WORD, JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_lettre_engagement"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
@@ -446,7 +446,7 @@
                                                                     <label class="form-label">Liste des bénéficiaires (si
                                                                         identifiés) selon le type de
                                                                         projet (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_liste_beneficiaires"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
@@ -455,7 +455,7 @@
                                                                     <label class="form-label">Liste de supports
                                                                         pédagogiques nécessaires à la
                                                                         réalisation des formations (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_supports_pedagogiques"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
@@ -465,7 +465,7 @@
                                                                         l’existence légale du
                                                                         promoteur
                                                                         (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_preuve_existance"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
@@ -473,7 +473,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Autre document (PDF, WORD,
                                                                         JPG)
-                                                                        5M</label>
+                                                                        5M <span style="color:red;">*</span></label>
                                                                     <input type="file" name="doc_autre_document"
                                                                         class="form-control" required="required"
                                                                         placeholder="" />
