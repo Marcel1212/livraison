@@ -71,6 +71,26 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Forme juridique</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->formeJuridique->libelle_forme_juridique}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Raison sociale </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->raison_sociale_demande_enroleme}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Localite </label>
@@ -79,11 +99,21 @@
                                                            disabled="disabled">
                                                 </div>
                                             </div>
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Centre impot </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->centreImpot->libelle_centre_impot}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Secteur activité</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->secteurActivite->libelle_secteur_activite}}"
                                                            disabled="disabled">
                                                 </div>
                                             </div>
@@ -104,14 +134,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Raison sociale </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->raison_sociale_demande_enroleme}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Numero CNPS </label>

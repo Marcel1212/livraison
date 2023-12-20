@@ -3,23 +3,23 @@
 @section('content')
 
     @php($Module='Parametrage')
-    @php($titre='Liste des motifs')
-    @php($lien='motifs')
+    @php($titre='Liste des formes juridiques')
+    @php($lien='formejuridique')
 
     <!-- BEGIN: Content-->
-            <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
-            </h5>
+                <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
+                </h5>
 
 
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <div class="alert-body">
-                        {{ $message }}
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-             @endif
+                @endif
 
 
                         <div class="row">
@@ -45,19 +45,25 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Libelle</th>
-                                            <th>Code</th>
+                                            <th>Type</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($motifs as $key => $motif)
+                                        @foreach ($formejuridiques as $key => $formejuridique)
                                             <tr>
-                                                <td>{{ $motif->id_motif }}</td>
-                                                <td>{{ $motif->libelle_motif }}</td>
-                                                <td>{{ $motif->code_motif }}</td>
+                                                <td>{{ $formejuridique->id_forme_juridique }}</td>
+                                                <td>{{ $formejuridique->libelle_forme_juridique }}</td>
+                                                <td>
+                                                    <?php if ($formejuridique->code_forme_juridique == 'PR' ){?>
+                                                    <span class="badge bg-info">PRIVEE</span>
+                                                    <?php } else {?>
+                                                    <span class="badge bg-info">PUBLIC</span>
+                                                    <?php }  ?>
+                                                </td>
                                                 <td align="center">
-                                                    <?php if ($motif->flag_actif_motif == true ){?>
+                                                    <?php if ($formejuridique->flag_actif_forme_juridique == true ){?>
                                                     <span class="badge bg-success">Actif</span>
                                                     <?php } else {?>
                                                     <span class="badge bg-danger">Inactif</span>
@@ -65,7 +71,7 @@
                                                 </td>
                                                 <td align="center">
                                                     @can($lien.'-edit')
-                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($motif->id_motif)) }}"
+                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($formejuridique->id_forme_juridique)) }}"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
@@ -76,9 +82,9 @@
                                         </tbody>
                                     </table>
                                     <!--end: Datatable-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    </div>
+            </div>
+        </div>
+    </div>
     <!-- END: Content-->
 @endsection

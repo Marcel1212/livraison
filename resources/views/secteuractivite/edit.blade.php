@@ -2,10 +2,10 @@
 
 @section('content')
 
-    @php($Module='Configuration')
-    @php($titre='Liste des  permissions')
-    @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($Module='Parametrage')
+    @php($titre='Liste des secteurs activités')
+    @php($soustitre='Modifier un secteur activité')
+    @php($lien='secteuractivite')
 
 
     <!-- BEGIN: Content-->
@@ -23,6 +23,7 @@
                     </div>
                 @endif
 
+
                     <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
@@ -34,37 +35,27 @@
                                     </small>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($secteuractivite->id_secteur_activite)) }}">
                                         @csrf
+                                        @method('PUT')
                                         <div class="row">
-                                            <div class="col-md-5 col-12">
+
+                                            <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>Sous menu </label>
-                                                    <select class="select2 select2-size-sm form-select"  data-allow-clear="true" name="id_sousmenu" required>
-                                                        <?= $SousMenuList; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Libellé </label>
-                                                    <input type="text" name="lib_permission" id="lib_permission"
+                                                    <label>Secteur activité </label>
+                                                    <input type="text"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Libellé">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 col-12">
-                                                <div class="mb-1">
-                                                    <label>Code </label>
-                                                    <input type="text" name="name" id="name"
-                                                           class="form-control form-control-sm" placeholder="Priorité"
-                                                           required>
+                                                           value="{{$secteuractivite->libelle_secteur_activite}}"
+                                                           name="libelle_secteur_activite"
+                                                    />
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="is_valide"
+                                                    <input type="checkbox" class="form-check-input"
+                                                           name="flag_actif_secteur_activite"
+                                                           {{  ($secteuractivite->flag_actif_secteur_activite == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
@@ -80,26 +71,12 @@
                                             </div>
                                         </div>
                                     </form>
+
                                     </div>
                 </div>
             </div>
         </div>
-
     <!-- END: Content-->
 
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

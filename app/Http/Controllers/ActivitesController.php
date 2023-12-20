@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Activites;
+use App\Models\SecteurActivite;
 
 class ActivitesController extends Controller
 {
@@ -21,7 +22,12 @@ class ActivitesController extends Controller
      */
     public function create()
     {
-        return view('activites.create');
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)->orderBy('libelle_secteur_activite',)->get();
+        $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+        foreach ($secteuractivites as $comp) {
+            $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
+        }
+        return view('activites.create', compact('secteuractivite'));
     }
 
     /**
@@ -29,10 +35,21 @@ class ActivitesController extends Controller
      */
     public function store(Request $request)
     {
-        Activites::create($request->all());
+        if ($request->isMethod('post')) {
 
-        return redirect()->route('activites.index')
-            ->with('success', 'Activites ajouté avec succès.');
+            $this->validate($request, [
+                'libelle_activites' => 'required',
+                'id_secteur_activite' => 'required'
+            ],[
+                'libelle_activites.required' => 'Veuillez ajouter un libelle.',
+                'id_secteur_activite.required' => 'Veuillez sélectionner un secteur activité.'
+            ]);
+
+            Activites::create($request->all());
+
+            return redirect()->route('activites.index')
+                ->with('success', 'Activités ajoutées avec succès.');
+        }
     }
 
     /**
@@ -50,7 +67,13 @@ class ActivitesController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $activite = Activites::find($id);
-        return view('activites.edit', compact('activite'));
+
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)->orderBy('libelle_secteur_activite',)->get();
+        $secteuractivite = "<option value='".@$activite->secteurActivite->id_secteur_activite."'> " . mb_strtoupper(@$activite->secteurActivite->libelle_secteur_activite) . " </option>";
+        foreach ($secteuractivites as $comp) {
+            $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
+        }
+        return view('activites.edit', compact('activite','secteuractivite'));
     }
 
     /**
@@ -58,11 +81,27 @@ class ActivitesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
-        $activite = Activites::find($id);
-        $activite->update($request->all());
+        if ($request->isMethod('put')) {
 
-        return redirect()->route('activites.index')->with('success', 'Activites mis à jour avec succès.');
+            $this->validate($request, [
+                'libelle_activites' => 'required',
+                'id_secteur_activite' => 'required'
+            ],[
+                'libelle_activites.required' => 'Veuillez ajouter un libelle.',
+                'id_secteur_activite.required' => 'Veuillez sélectionner un secteur activité.'
+            ]);
+
+            $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+            $activite = Activites::find($id);
+            $input = $request->all();
+            if(!isset($input['flag_activites'])){
+                $input['flag_activites'] = false;
+            }
+
+            $activite->update($input);
+
+            return redirect()->route('activites.index')->with('success', 'Activités mises à jour avec succès.');
+        }
     }
 
     /**

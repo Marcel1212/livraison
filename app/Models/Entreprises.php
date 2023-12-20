@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_localite_entreprises
  * @property float $id_centre_impot
  * @property float $id_pays
+ * @property float $id_secteur_activite_entreprise
+ * @property float $id_forme_juridique_entreprise
  * @property string $numero_fdfp_entreprises
  * @property string $ncc_entreprises
  * @property string $raison_social_entreprises
@@ -26,26 +28,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $adresse_postal_entreprises
  * @property string $cellulaire_professionnel_entreprises
  * @property string $fax_entreprises
+ * @property boolean $flag_habilitation_entreprise
  * @property DemandeEnrolement $demandeEnrolement
- * @property Activite $activite
- * @property Localite $localite
+ * @property Activites $activite
  * @property CentreImpot $centreImpot
- * @property Pay $pay
- * @property Piece[] $pieces
+ * @property Localite $localite
+ * @property Pays $pay
+ * @property FormeJuridique $formeJuridique
+ * @property SecteurActivite $secteurActivite
  * @property PlanFormation[] $planFormations
+ * @property PlanFormation[] $planFormations1
+ * @property ActionFormationPlan[] $actionFormationPlans
+ * @property Pieces[] $pieces
  */
 class Entreprises extends Model
 {
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_entreprises';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -53,7 +60,7 @@ class Entreprises extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_demande_enrolement', 'id_activite_entreprises', 'id_localite_entreprises', 'id_centre_impot', 'id_pays', 'numero_fdfp_entreprises', 'ncc_entreprises', 'raison_social_entreprises', 'tel_entreprises', 'indicatif_entreprises', 'numero_cnps_entreprises', 'rccm_entreprises', 'flag_actif_entreprises', 'created_at', 'updated_at', 'localisation_geographique_entreprise', 'repere_acces_entreprises', 'adresse_postal_entreprises', 'cellulaire_professionnel_entreprises', 'fax_entreprises'];
+    protected $fillable = ['id_demande_enrolement', 'id_activite_entreprises', 'id_localite_entreprises', 'id_centre_impot', 'id_pays', 'id_secteur_activite_entreprise', 'id_forme_juridique_entreprise', 'numero_fdfp_entreprises', 'ncc_entreprises', 'raison_social_entreprises', 'tel_entreprises', 'indicatif_entreprises', 'numero_cnps_entreprises', 'rccm_entreprises', 'flag_actif_entreprises', 'created_at', 'updated_at', 'localisation_geographique_entreprise', 'repere_acces_entreprises', 'adresse_postal_entreprises', 'cellulaire_professionnel_entreprises', 'fax_entreprises', 'flag_habilitation_entreprise'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -74,17 +81,17 @@ class Entreprises extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function localite()
+    public function centreImpot()
     {
-        return $this->belongsTo('App\Models\Localite', 'id_localite_entreprises', 'id_localite');
+        return $this->belongsTo('App\Models\CentreImpot', 'id_centre_impot', 'id_centre_impot');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function centreImpot()
+    public function localite()
     {
-        return $this->belongsTo('App\Models\CentreImpot', 'id_centre_impot', 'id_centre_impot');
+        return $this->belongsTo('App\Models\Localite', 'id_localite_entreprises', 'id_localite');
     }
 
     /**
@@ -96,11 +103,19 @@ class Entreprises extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function pieces()
+    public function formeJuridique()
     {
-        return $this->hasMany('App\Models\Piece', 'id_entreprises', 'id_entreprises');
+        return $this->belongsTo('App\Models\FormeJuridique', 'id_forme_juridique_entreprise', 'id_forme_juridique');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function secteurActivite()
+    {
+        return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite_entreprise', 'id_secteur_activite');
     }
 
     /**
@@ -109,5 +124,29 @@ class Entreprises extends Model
     public function planFormations()
     {
         return $this->hasMany('App\Models\PlanFormation', 'id_entreprises', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function planFormations1()
+    {
+        return $this->hasMany('App\Models\PlanFormation', 'id_entreprise_structure_formation_plan_formation', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function actionFormationPlans()
+    {
+        return $this->hasMany('App\Models\ActionFormationPlan', 'id_entreprise_structure_formation_action', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pieces()
+    {
+        return $this->hasMany('App\Models\Pieces', 'id_entreprises', 'id_entreprises');
     }
 }
