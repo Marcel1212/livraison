@@ -93,7 +93,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           Actions du plan de formation
                         </button>
                       </li>
-                      <li class="nav-item">
+                      <!--<li class="nav-item">
                         <button
                           type="button"
                           class="nav-link disabled"
@@ -104,7 +104,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           aria-selected="false">
                           Soumisssion du plan de formation
                         </button>
-                      </li>
+                      </li>-->
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane fade show active" id="navs-top-planformation" role="tabpanel">

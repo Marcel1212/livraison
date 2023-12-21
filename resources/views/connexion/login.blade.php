@@ -66,6 +66,7 @@ $couleur = Menu::get_info_couleur();
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
   </head>
 
   <body>
@@ -141,7 +142,7 @@ $couleur = Menu::get_info_couleur();
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif 
+                              @endif
               <div class="mb-3">
                 <label for="username" class="form-label">Mon identifiant</label>
                 <input
@@ -176,21 +177,31 @@ $couleur = Menu::get_info_couleur();
                   <label class="form-check-label" for="remember-me"> Souvenez-vous de moi </label>
                 </div>
               </div>-->
-              <div class="form-group mt-4 mb-4">
+              <!--<div class="form-group mt-4 mb-4">
                 <div class="captcha">
-                    <span><?php echo captcha_img(); ?></span>
+                    <span><?php //echo captcha_img(); ?></span>
                     <button type="button" class="btn-label-secondary waves-effect" class="reload" id="reload">
                     &#x21bb;
                     </button>
                 </div>
-                </div>
-        
-                <div class="form-group mb-4">
+                </div>-->
+
+                <!--<div class="form-group mb-4">
                     <span></span>
                     <label class="form-label">Saisir les caractères ci-dessus</label>
                     <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
-                </div>
-              
+                </div>-->
+
+                <div class="form-group mb-4">
+                    <div class="form-group">
+                        <strong>ReCaptcha:</strong>
+                        <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                        @if ($errors->has('g-recaptcha-response'))
+                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                        @endif
+                    </div>
+                 </div>
+
               <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
             </form>
 
