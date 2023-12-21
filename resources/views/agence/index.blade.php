@@ -37,8 +37,7 @@
                                     <div class="card-body">
                                     <!--begin: Datatable-->
                                     <table class="table table-bordered table-striped table-hover table-sm "
-                                           id="exampleData"
-                                           style="margin-top: 13px !important">
+                                           id="exampleData" >
                                         <thead>
                                         <tr>
                                             <th>No</th>

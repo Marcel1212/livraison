@@ -447,7 +447,7 @@ table.table-bordered.dataTable {
 
 table.table-bordered.dataTable thead tr:first-child th,
 table.table-bordered.dataTable thead tr:first-child td {
-  border-top-width: 1px;
+  border-top-width: 0.5px;
 }
 
 table.table-bordered.dataTable th,
@@ -489,7 +489,7 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
 }
 
 div.dataTables_wrapper div.dataTables_length select {
-  margin-left: 0.5rem;
+  margin-left: 0.1rem;
   margin-right: 0.5rem;
 }
 
@@ -669,14 +669,14 @@ div.card-datatable .dataTable {
 }
 div.dataTables_wrapper div.dataTables_length,
 div.dataTables_wrapper div.dataTables_filter {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 div.dataTables_wrapper div.dataTables_paginate ul.pagination .page-link {
-  padding: 0.745rem;
+  padding: 0.345rem;
   min-width: calc(
-    2.38155rem + 0px
+    1.38155rem + 0px
   );
   line-height: 1;
 }
