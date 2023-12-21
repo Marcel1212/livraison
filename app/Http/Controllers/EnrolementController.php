@@ -52,12 +52,18 @@ class EnrolementController extends Controller
             $activite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
         }*/
 
-        $secteuractivites = SecteurActivite::join('activites','secteur_activite.id_secteur_activite','activites.id_secteur_activite')
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                                            ->orderByDesc('libelle_secteur_activite','','')
+                                            ->get();
+
+        /*$secteuractivites = SecteurActivite::join('activites','secteur_activite.id_secteur_activite','activites.id_secteur_activite')
                                             ->select(['secteur_activite.id_secteur_activite','secteur_activite.libelle_secteur_activite'])
                                             ->where('flag_actif_secteur_activite', '=', true)
                                             ->groupBy('secteur_activite.id_secteur_activite','secteur_activite.libelle_secteur_activite')
                                             ->orderByDesc('libelle_secteur_activite','','')
-                                            ->get();
+                                            ->get();*/
+
+
         $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
         foreach ($secteuractivites as $comp) {
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
