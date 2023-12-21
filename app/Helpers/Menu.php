@@ -1,6 +1,4 @@
 <?php
-
-
 namespace App\Helpers;
 
 use App\Models\Logo;
@@ -22,7 +20,7 @@ class Menu
             ->join('sousmenu', 'role_has_sousmenus.sousmenus_id_sousmenu', 'sousmenu.id_sousmenu')
             ->join('roles', 'role_has_sousmenus.role_id', 'roles.id')
             ->join('menu', 'sousmenu.menu_id_menu', 'menu.id_menu')
-            ->where([['roles.id', '=', $idroles],['menu.is_valide', '=',true],['sousmenu.is_valide', '=',true]])
+            ->where([['roles.id', '=', $idroles], ['menu.is_valide', '=', true], ['sousmenu.is_valide', '=', true]])
             ->orderBy('menu.priorite_menu', 'ASC')
             ->orderBy('sousmenu.priorite_sousmenu', 'ASC')
             ->get();
@@ -70,54 +68,33 @@ class Menu
 
     public static function get_logo()
     {
-
-
-        $logof = Logo::where([['flag_logo','=',true],['valeur','=','LOGO']])->first();
-
-
+        $logof = Logo::where([['flag_logo', '=', true], ['valeur', '=', 'LOGO']])->first();
         return (isset($logof) ? $logof : '');
     }
 
 
     public static function get_info_acceuil()
     {
-
-
-        $logof = Logo::where([['flag_logo','=',true],['valeur','=','IMAGE ACCEUIL']])->first();
-
-
+        $logof = Logo::where([['flag_logo', '=', true], ['valeur', '=', 'IMAGE ACCEUIL']])->first();
         return (isset($logof) ? $logof : '');
     }
 
     public static function get_info_couleur()
     {
-
-
-        $logof = Logo::where([['flag_logo','=',true],['valeur','=','COULEUR MENU HAUT']])->first();
-
-
+        $logof = Logo::where([['flag_logo', '=', true], ['valeur', '=', 'COULEUR MENU HAUT']])->first();
         return (isset($logof) ? $logof : '');
     }
 
     public static function get_info_image_dashboard()
     {
-
-
-        $logof = Logo::where([['flag_logo','=',true],['valeur','=','IMAGE DASHBORD']])->first();
-
-
+        $logof = Logo::where([['flag_logo', '=', true], ['valeur', '=', 'IMAGE DASHBORD']])->first();
         return (isset($logof) ? $logof : '');
     }
 
     public static function get_info_reseaux()
     {
-
-
-        $logof = Logo::where([['flag_logo','=',true],['valeur','=','RESEAUX SOCIAUX']])->get();
-
-
+        $logof = Logo::where([['flag_logo', '=', true], ['valeur', '=', 'RESEAUX SOCIAUX']])->get();
         return (isset($logof) ? $logof : '');
     }
-
 
 }
