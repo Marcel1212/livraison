@@ -12,6 +12,7 @@ use App\Models\Motif;
 use App\Models\StatutOperation;
 use App\Models\DemandeEnrolement;
 use App\Models\ProjetFormation;
+use App\Models\AgenceLocalite;
 use App\Models\PiecesProjetFormation;
 use App\Models\Entreprises;
 use App\Models\Pieces;
@@ -769,12 +770,19 @@ class ProjetFormationController extends Controller
             if($data['action'] === 'soumission_projet_formation_conseiller'){
                 // ID du plan
               //dd($data);
-               $num_agce = Auth::user()->num_agce;
+
+                // Recuperation du numero d'agence
+                $numncc = Auth::user()->login_users;
+                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+                $id_localite = $entreprise->id_localite_entreprises;
+                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+                //dd($localite_info[]);
+                $id_agence = $localite_info[0]->id_agence;
                $conseiller = DB::table('users')
                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
+               ->where([['roles.id','=',20],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
                ->get();
                //dd($conseiller);
                 if($conseiller == ''){
@@ -798,12 +806,18 @@ class ProjetFormationController extends Controller
             if($data['action'] === 'soumission_projet_formation_cs'){
                 // ID du plan
               // dd($data);
-               $num_agce = Auth::user()->num_agce;
+               //$num_agce = Auth::user()->num_agce;
+               $numncc = Auth::user()->login_users;
+               $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+               $id_localite = $entreprise->id_localite_entreprises;
+               $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+               //dd($localite_info[]);
+               $id_agence = $localite_info[0]->id_agence;
                $chefdeservice = DB::table('users')
                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',19],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
+               ->where([['roles.id','=',19],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
                ->get();
                 if($chefdeservice == ''){
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
@@ -832,13 +846,18 @@ class ProjetFormationController extends Controller
                 // $user_id = Auth::user()->id;
                 // dd(intval($data['id_chef_service']));
                 // dd($user_id);
-                // recherche chef de de departement
-                $num_agce = Auth::user()->num_agce;
+                // Recuperation du numero d'agence
+                $numncc = Auth::user()->login_users;
+                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+                $id_localite = $entreprise->id_localite_entreprises;
+                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+                //dd($localite_info[]);
+                $id_agence = $localite_info[0]->id_agence;
                 $chefdedepartement = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
+                ->where([['roles.id','=',21],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
                 ->get();
                 if($chefdedepartement == ''){
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de departement');
@@ -867,12 +886,19 @@ class ProjetFormationController extends Controller
                 $projetformation->date_soumis = $date_soumission;
                 // Attribution au directeur
                 $num_agce = Auth::user()->num_agce;
-                //dd($num_agce);
+                // Recuperation du numero d'agence
+                $numncc = Auth::user()->login_users;
+                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+                $id_localite = $entreprise->id_localite_entreprises;
+                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+                //dd($localite_info[]);
+                $id_agence = $localite_info[0]->id_agence;
+                // Requete d'affectation au directeur d'agence
                 $directeur = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',25],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
+                ->where([['roles.id','=',25],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
                 ->get();
                 //dd(intval($directeur[0]->id));
                 $projetformation->id_user_affecte = intval($directeur[0]->id);
