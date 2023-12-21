@@ -85,12 +85,12 @@ $reseaux = Menu::get_info_reseaux();
             let code_forme_juridique = myArray[0];
             let id_forme_juridiques = myArray[1];
 
-            if(code_forme_juridique === 'PU'){
+            if(code_forme_juridique === 'PR'){
                 document.getElementById("rccm_demande_enrolement").disabled = false;
                 document.getElementById("numero_cnps_demande_enrolement").disabled = false;
                 document.getElementById("piece_rccm_demande_enrolement").disabled = false;
                 document.getElementById("piece_attestation_immatriculati").disabled = false;
-            }else if(code_forme_juridique === 'PR'){
+            }else if(code_forme_juridique === 'PU'){
                 document.getElementById("rccm_demande_enrolement").disabled = true;
                 document.getElementById("numero_cnps_demande_enrolement").disabled = true;
                 document.getElementById("piece_rccm_demande_enrolement").disabled = true;

@@ -128,7 +128,7 @@ class EnrolementController extends Controller
             $exploeformejuri = explode("/",$request->input('id_forme_juridique'));
             $valcodeformejuri = $exploeformejuri[0];
             $validformejuri = $exploeformejuri[1];
-            if($valcodeformejuri == 'PU'){
+            if($valcodeformejuri == 'PR'){
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
@@ -309,7 +309,7 @@ class EnrolementController extends Controller
                 }
             }
 
-            if($valcodeformejuri == 'PR'){
+            if($valcodeformejuri == 'PU'){
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
