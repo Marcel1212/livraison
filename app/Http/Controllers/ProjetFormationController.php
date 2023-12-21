@@ -712,7 +712,7 @@ class ProjetFormationController extends Controller
                     //dd($idchefserv);
                     $date_soumission = Carbon::now();
                     $projetformation = ProjetFormation::find($id);
-                    //dd($data['statut_rec']);
+                    //dd($data);
                     if($data['statut_rec'] === "RECEVABLE"){
                         $etat_rec = true ;
                          //dd($etat_rec);
@@ -723,7 +723,7 @@ class ProjetFormationController extends Controller
 
                     }else{
                         $etat_rec = false ;
-                         //dd($etat_rec);
+                         //dd($data);
                     $projetformation->flag_recevabilite = $etat_rec;
                     $projetformation->date_recevabilite = $date_soumission;
                     $projetformation->commentaires_recevabilite = $data["commentaires_recevabilite"];
@@ -735,9 +735,8 @@ class ProjetFormationController extends Controller
                         $entreprise_info = Entreprises::find($projetformation->id_entreprises);
                         $rais = $entreprise_info->raison_social_entreprises;
                         $nccm = $entreprise_info->ncc_entreprises;
-                        $user = User::where('ncc_entreprises','=',$nccm)->get();
-                        $email = $user->email;
-                        //$mail = $entreprise_info->mail ;
+                        $user = User::where('login_users','=',$nccm)->get();
+                        $email = $user[0]->email;
                         $sujet = "Recevabilite du projet de formation" ;
                         $titre = "INFORMATION PROJET DE FORMATION";
 
@@ -753,8 +752,9 @@ class ProjetFormationController extends Controller
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                                         ";
-                            $messageMailEnvoi = Email::get_envoimailTemplate($email, $rais, $messageMail, $sujet, $titre);
-                            return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation non recevable');
+                        $messageMailEnvoi = Email::get_envoimailTemplate($email, $rais, $messageMail, $sujet, $titre);
+                        //dd("ENVOIES");
+                        return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation non recevable');
                     }
                     //dd($etat_rec);
                     // $projetformation->flag_recevabilite = $etat_rec;
