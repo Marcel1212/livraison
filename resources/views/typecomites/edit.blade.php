@@ -3,9 +3,9 @@
 @section('content')
 
     @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
-    @php($soustitre='Modifier un type entreprise')
-    @php($lien='typeentreprise')
+    @php($titre='Liste des Types de comites')
+    @php($soustitre='Modifier  un type de comite')
+    @php($lien='typecomites')
 
 
     <!-- BEGIN: Content-->
@@ -35,22 +35,40 @@
                                     </small>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($typeentreprise->id_type_entreprise)) }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($typecomite->id_type_comite)) }}">
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
-                                            <div class="col-md-10 col-12">
+
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Type entreprise </label>
-                                                    <input type="text" name="lielle_type_entrepise" id="lielle_type_entrepise"
-                                                           class="form-control form-control-sm" value="{{$typeentreprise->lielle_type_entrepise}}"
+                                                    <input type="text" name="libelle_type_comite" id="libelle_type_comite"
+                                                           class="form-control form-control-sm" value="{{$typecomite->libelle_type_comite}}"
                                                            required>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label>Valeur min </label>
+                                                    <input type="text" name="valeur_min_type_comite" id="valeur_min_type_comite"
+                                                           class="form-control form-control-sm" value="{{$typecomite->valeur_min_type_comite}}" min="0">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label>Valeur max </label>
+                                                    <input type="text" name="valeur_max_type_comite" id="valeur_max_type_comite"
+                                                           class="form-control form-control-sm" value="{{$typecomite->valeur_max_type_comite}}" min="0">
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_type_entreprise" {{  ($typeentreprise->flag_type_entreprise == true ? ' checked' : '') }}
+                                                    <input type="checkbox" class="form-check-input" name="flag_actif_type_comite" {{  ($typecomite->flag_actif_type_comite == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>
                                             </div>

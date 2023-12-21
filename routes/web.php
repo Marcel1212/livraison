@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth']], function () {
             'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
             'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
             'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
-            'typecomite' => App\Http\Controllers\TypeComiteController::class,
+            'typecomites' => App\Http\Controllers\TypeComiteController::class,
         ]);
     //});
 
