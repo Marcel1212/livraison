@@ -172,7 +172,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Activité </label>
+                                                    <label>Secteur d'activité </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            value="{{@$infoentreprise->activite->libelle_activites}}"
@@ -181,7 +181,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Localisation geaographique </label>
+                                                    <label>Localisation géographique </label>
                                                     <input type="text" name="localisation_geographique_entreprise"
                                                            id="localisation_geographique_entreprise"
                                                            class="form-control form-control-sm"
@@ -189,7 +189,7 @@
                                                            required="required">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Repère d'accès </label>
                                                     <input type="text" name="repere_acces_entreprises"
@@ -199,7 +199,7 @@
                                                            required="required">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Adresse postal </label>
                                                     <input type="text" name="adresse_postal_entreprises"
@@ -223,7 +223,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-md-8">
-                                                            <label class="form-label">Telephone </label>
+                                                            <label class="form-label">Téléphone </label>
                                                             <input type="text"
                                                                    class="form-control form-control-sm"
                                                                    value="{{@$infoentreprise->tel_entreprises}}"
@@ -245,7 +245,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-md-8">
-                                                            <label class="form-label">Contact Professionnelle </label>
+                                                            <label class="form-label">Contact Professionnel </label>
                                                             <input type="number" min="0"
                                                                    name="cellulaire_professionnel_entreprises"
                                                                    id="cellulaire_professionnel_entreprises"
@@ -278,10 +278,9 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="col-sm-9"  align="right">
-
+                                            <div class="col-sm-12"  align="right">
                                                 <button type="submit" name="action" value="profil_entreprise"
-                                                        class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                        class="btn btn-primary me-1 waves-effect waves-float waves-light">
                                                     Modifier
                                                 </button>
                                             </div>
