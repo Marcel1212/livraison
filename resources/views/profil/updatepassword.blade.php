@@ -278,9 +278,8 @@
                                                 </div>
                                             </div>
                                             <hr>
-                                            <div class="col-sm-9 offset-sm-3">
+                                            <div class="col-sm-9"  align="right">
 
-                                                <hr>
                                                 <button type="submit" name="action" value="profil_entreprise"
                                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                     Modifier
@@ -347,14 +346,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-9 offset-sm-3">
+                                            <hr>
+                                            <div class="col-sm-12" align="right">
                                                 <button type="submit" name="action" value="autre_profil"
                                                         class="btn btn-primary me-1 waves-effect waves-float waves-light">
                                                     Modifier
                                                 </button>
-                                                <button type="reset"
-                                                        class="btn btn-outline-secondary waves-effect">Annuler
-                                                </button>
+
                                             </div>
                                         </div>
                                     </form>
