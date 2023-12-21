@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
             'enrolement' => App\Http\Controllers\EnrolementController::class,
             'statutoperations' => App\Http\Controllers\StatutOperationController::class,
             'motifs' => App\Http\Controllers\MotifController::class,
-            'planformation' => App\Http\Controllers\PlanFormationController::class,
+            //'planformation' => App\Http\Controllers\PlanFormationController::class,
             'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
             'butformation' => App\Http\Controllers\ButFormationController::class,
             'typeformation' => App\Http\Controllers\TypeFormationController::class,
@@ -58,6 +58,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/departementlist/{id}', [App\Http\Controllers\ListeLierController::class, 'getDepartements']);
     Route::get('/servicelist/{id}', [App\Http\Controllers\ListeLierController::class, 'getServices']);
     Route::get('planformation/{id}/delete', [App\Http\Controllers\PlanFormationController::class, 'delete'])->name('planformation.delete');
+    Route::get('planformation/{id}/{id1}/edit', [App\Http\Controllers\PlanFormationController::class, 'edit'])->name('planformation.edit');
+    Route::put('planformation/{id}/{id1}/update', [App\Http\Controllers\PlanFormationController::class, 'update'])->name('planformation.update');
+    Route::get('planformation/index', [App\Http\Controllers\PlanFormationController::class, 'index'])->name('planformation.index');
+    Route::get('planformation', [App\Http\Controllers\PlanFormationController::class, 'index'])->name('planformation');
+    Route::get('planformation/create', [App\Http\Controllers\PlanFormationController::class, 'create'])->name('planformation.create');
+    Route::post('planformation/store', [App\Http\Controllers\PlanFormationController::class, 'store'])->name('planformation.store');
+    Route::get('planformation/{id}/show', [App\Http\Controllers\PlanFormationController::class, 'show'])->name('planformation.show');
+
 
     Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [App\Http\Controllers\CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');

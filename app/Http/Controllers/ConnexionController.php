@@ -9,6 +9,7 @@ use App\Helpers\Menu;
 use App\Helpers\Notification;
 use App\Models\User;
 use Auth;
+use App\Rules\Recaptcha;
 use Carbon\Carbon;
 use Hash;
 use Illuminate\Http\Request;
@@ -32,12 +33,13 @@ class ConnexionController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'password' => 'required',
-                'captcha' => 'required|captcha'
+                'g-recaptcha-response' => ['required', new ReCaptcha]
+                //'captcha' => 'required|captcha'
             ], [
                 'username.required' => 'Veuillez saisir votreidentifiant.',
                 'password.required' => 'Veuillez saisir le mot de passe.',
-                'captcha.required' => 'Veuillez saisir le captcha.',
-                'captcha.captcha' => 'Caractère saisi incorrect.',
+                //'captcha.required' => 'Veuillez saisir le captcha.',
+                //'captcha.captcha' => 'Caractère saisi incorrect.',
             ]);
 
             $data = $request->input();
@@ -70,7 +72,7 @@ class ConnexionController extends Controller
         $date = date('d/m/Y'); // var_dump($date); exit();
         /******************AFFICHIER LES GRAPHES****************************/
         $dataUser = DB::table('users as v')->select(DB::raw("count(v.id) as nb_user"))->first();
-        
+
         return view('dashboard.dashboard')->with(
             compact('naroles', 'idutilClient', 'nacodes', 'dataUser')
         );

@@ -29,6 +29,7 @@ use File;
 use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Helpers\AnneeExercice;
+use App\Helpers\PartEntreprisesHelper;
 
 
 class PlanFormationController extends Controller
@@ -70,6 +71,7 @@ class PlanFormationController extends Controller
         }
 
 
+
         return view('planformation.create', compact('infoentreprise','typeentreprise','pay'));
     }
 
@@ -81,23 +83,23 @@ class PlanFormationController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                'localisation_geographique_entreprise' => 'required',
-                'repere_acces_entreprises' => 'required',
-                'adresse_postal_entreprises' => 'required',
-                'cellulaire_professionnel_entreprises' => 'required',
+                //'localisation_geographique_entreprise' => 'required',
+                //'repere_acces_entreprises' => 'required',
+                //'adresse_postal_entreprises' => 'required',
+                //'cellulaire_professionnel_entreprises' => 'required',
                 'nom_prenoms_charge_plan_formati' => 'required',
                 'fonction_charge_plan_formation' => 'required',
                 'email_professionnel_charge_plan_formation' => 'required',
                 'nombre_salarie_plan_formation' => 'required',
                 'id_type_entreprise' => 'required',
-                'tel_entreprises' => 'required',
+                //'tel_entreprises' => 'required',
                 'masse_salariale' => 'required'
             ],[
-                'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
-                'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
-                'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
-                'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
-                'tel_entreprises.required' => 'Veuillez ajouter un contact telephonique.',
+                //'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
+                //'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
+                //'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
+                //'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
+                //'tel_entreprises.required' => 'Veuillez ajouter un contact telephonique.',
                 'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                 'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                 'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
@@ -113,14 +115,15 @@ class PlanFormationController extends Controller
 
             $input['date_creation'] = Carbon::now();
             $input['id_entreprises'] = $infoentrprise->id_entreprises;
-            $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
-            $input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
-            $input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
-            $input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
+            //$input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
+            //$input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
+            //$input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
+            //$input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
             $input['nom_prenoms_charge_plan_formati'] = mb_strtoupper($input['nom_prenoms_charge_plan_formati']);
             $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
-            $input['part_entreprise'] = $input['masse_salariale'] * 0.006;
-
+            $part = PartEntreprisesHelper::get_part_entreprise();
+            $input['id_part_entreprise'] = $part->id_part_entreprise;
+            $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
             $entreprise = Entreprises::find($infoentrprise->id_entreprises);
             $entreprise->update($input);
 
@@ -128,7 +131,7 @@ class PlanFormationController extends Controller
 
             $insertedId = PlanFormation::latest()->first()->id_plan_de_formation;
 
-            return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
 
         }
     }
@@ -157,10 +160,11 @@ class PlanFormationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id, $id1)
     {
 
         $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
 //dd($id);
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
@@ -208,16 +212,17 @@ class PlanFormationController extends Controller
 
 
 
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation'));
+        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $id1)
     {
         $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
 
         if ($request->isMethod('put')) {
             $data = $request->all();
@@ -225,10 +230,10 @@ class PlanFormationController extends Controller
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
-                    'localisation_geographique_entreprise' => 'required',
-                    'repere_acces_entreprises' => 'required',
-                    'adresse_postal_entreprises' => 'required',
-                    'cellulaire_professionnel_entreprises' => 'required',
+                    //'localisation_geographique_entreprise' => 'required',
+                    //'repere_acces_entreprises' => 'required',
+                    //'adresse_postal_entreprises' => 'required',
+                    //'cellulaire_professionnel_entreprises' => 'required',
                     'nom_prenoms_charge_plan_formati' => 'required',
                     'fonction_charge_plan_formation' => 'required',
                     'email_professionnel_charge_plan_formation' => 'required',
@@ -236,10 +241,10 @@ class PlanFormationController extends Controller
                     'id_type_entreprise' => 'required',
                     'masse_salariale' => 'required'
                 ],[
-                    'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
-                    'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
-                    'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
-                    'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
+                    //'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
+                    //'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
+                    //'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
+                   // 'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
                     'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                     'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                     'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
@@ -262,12 +267,15 @@ class PlanFormationController extends Controller
                 $input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
                 $input['nom_prenoms_charge_plan_formati'] = mb_strtoupper($input['nom_prenoms_charge_plan_formati']);
                 $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
-                $input['part_entreprise'] = $input['masse_salariale'] * 0.006;
+                $part = PartEntreprisesHelper::get_part_entreprise();
+                $input['id_part_entreprise'] = $part->id_part_entreprise;
+                $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
+                //$input['part_entreprise'] = $input['masse_salariale'] * 0.006;
 
                 $infoentreprise->update($input);
                 $planformation->update($input);
 
-                return redirect('planformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -292,10 +300,10 @@ class PlanFormationController extends Controller
 
                     CategoriePlan::create($input);
 
-                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Operation reussi. ');
+                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Operation reussi. ');
 
                 }else{
-                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Erreur : Cela a deja ete saisie. ');
+                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('error', 'Erreur : Cela a deja ete saisie. ');
                 }
 
 
@@ -331,7 +339,7 @@ class PlanFormationController extends Controller
                     'date_debut_fiche_agrement' => 'required',
                     'date_fin_fiche_agrement' => 'required',
                     'lieu_formation_fiche_agrement' => 'required',
-                    'cout_total_fiche_agrement' => 'required',
+                    //'cout_total_fiche_agrement' => 'required',
                     'objectif_pedagogique_fiche_agre' => 'required',
                     'cadre_fiche_demande_agrement' => 'required',
                     'agent_maitrise_fiche_demande_ag' => 'required',
@@ -350,7 +358,7 @@ class PlanFormationController extends Controller
                     'date_debut_fiche_agrement.unique' => 'Veuillez ajoutez la date de debut',
                     'date_fin_fiche_agrement.required' => 'Veuillez ajoutez la date de fin .',
                     'lieu_formation_fiche_agrement.required' => 'Veuillez ajoutez le lieu de formation.',
-                    'cout_total_fiche_agrement.required' => 'Veuillez ajoutez le cout total de la fiche d\'agrement.',
+                    //'cout_total_fiche_agrement.required' => 'Veuillez ajoutez le cout total de la fiche d\'agrement.',
                     'objectif_pedagogique_fiche_agre.required' => 'Veuillez ajoutez l\'objectif pedagogique.',
                     'cadre_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre de cadre.',
                     'agent_maitrise_fiche_demande_ag.required' => 'Veuillez ajoutez le nombre d\'agent de maitrise.',
@@ -402,7 +410,7 @@ class PlanFormationController extends Controller
                 $insertedIdActionPlanFormation = ActionFormationPlan::latest()->first()->id_action_formation_plan;
 
                 $input['id_action_formation_plan'] = $insertedIdActionPlanFormation;
-               // $input['total_beneficiaire_fiche_demand'] = $input['cadre_fiche_demande_agrement'] + $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'];
+                $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan'];
 
                 FicheADemandeAgrement::create($input);
 
@@ -500,7 +508,7 @@ class PlanFormationController extends Controller
                     }
                }
 
-               return redirect('planformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Action de plan de formation ajouté ');
+               return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Action de plan de formation ajouté ');
 
 
             }
@@ -526,7 +534,7 @@ class PlanFormationController extends Controller
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
-            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
     }
 
@@ -546,7 +554,7 @@ class PlanFormationController extends Controller
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
-            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
     }
 
@@ -557,7 +565,7 @@ class PlanFormationController extends Controller
         $categorieplan = CategoriePlan::find($idVal);
         $idplanformation = $categorieplan->id_plan_de_formation;
         CategoriePlan::where([['id_categorie_plan','=',$idVal]])->delete();
-        return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
+        return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
     }
 
 }

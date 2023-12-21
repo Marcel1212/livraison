@@ -81,24 +81,24 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $planformation->nombre_salarie_plan_formation }}</td>
                                 <td>{{ $planformation->date_soumis_plan_formation }}</td>
                                 <td align="center">
-                                        <?php if ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true 
+                                        <?php if ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
                                         and $planformation->flag_rejeter_plan_formation == false){ ?>
                                             <span class="badge bg-success">Valider</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false){ ?>
                                         <span class="badge bg-warning">En cours de traitement</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false) { ?>
                                         <span class="badge bg-secondary">Soumis</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == false and 
-                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == false and
+                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false) { ?>
                                         <span class="badge bg-primary">Non Soumis</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and 
-                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false 
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == true) { ?>
                                         <span class="badge bg-danger">Non recevable</span>
                                     <?php } else { ?>
@@ -107,7 +107,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
                                     @can($lien.'-edit')
-                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
