@@ -3,9 +3,9 @@
 @section('content')
 
     @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
-    @php($soustitre='Ajouter un type entreprise')
-    @php($lien='typeentreprise')
+    @php($titre='Liste des Types de comites')
+    @php($soustitre='Ajouter un type de comite')
+    @php($lien='typecomites')
 
 
     <!-- BEGIN: Content-->
@@ -38,18 +38,32 @@
                                         @csrf
                                         <div class="row">
 
-                                              <div class="col-md-10 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Type entreprise</label>
-                                                    <input type="text" name="lielle_type_entrepise" id="lielle_type_entrepise"
-                                                           class="form-control form-control-sm" 
+                                                    <label>Libelle</label>
+                                                    <input type="text" name="libelle_type_comite" id="libelle_type_comite"
+                                                           class="form-control form-control-sm"
                                                            required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label>Valeur min</label>
+                                                    <input type="number" name="valeur_min_type_comite" id="valeur_min_type_comite"
+                                                           class="form-control form-control-sm" min="0"/>
+                                                </div>
+                                            </div>
+                                             <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label>Valeur max</label>
+                                                    <input type="text" name="valeur_max_type_comite" id="valeur_max_type_comite"
+                                                           class="form-control form-control-sm" min="0"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_type_entreprise"
+                                                    <input type="checkbox" class="form-check-input" name="flag_actif_type_comite"
                                                            id="colorCheck1">
                                                 </div>
                                             </div>

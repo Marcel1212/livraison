@@ -3,8 +3,8 @@
 @section('content')
 
     @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
-    @php($lien='typeentreprise')
+    @php($titre='Liste des Types de comites')
+    @php($lien='typecomites')
 
     <!-- BEGIN: Content-->
                 <h5 class="py-2 mb-1">
@@ -45,17 +45,23 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Libelle</th>
+                                            <th>Valeur min</th>
+                                            <th>Valeur min</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($typeentreprises as $key => $typeentreprise)
+                                            <?php $i=0; ?>
+                                        @foreach ($typecomites as $key => $typecomite)
+                                        <?php $i += 1;?>
                                             <tr>
-                                                <td>{{ $typeentreprise->id_type_entreprise }}</td>
-                                                <td>{{ $typeentreprise->lielle_type_entrepise }}</td>
+                                                <td>{{ $i }}</td>
+                                                <td>{{ $typecomite->libelle_type_comite }}</td>
+                                                <td>{{ $typecomite->valeur_min_type_comite }}</td>
+                                                <td>{{ $typecomite->valeur_max_type_comite }}</td>
                                                 <td align="center">
-                                                    <?php if ($typeentreprise->flag_type_entreprise == true ){?>
+                                                    <?php if ($typecomite->flag_actif_type_comite == true ){?>
                                                     <span class="badge bg-success">Actif</span>
                                                     <?php } else {?>
                                                     <span class="badge bg-danger">Inactif</span>
@@ -63,7 +69,7 @@
                                                 </td>
                                                 <td align="center">
                                                     @can($lien.'-edit')
-                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($typeentreprise->id_type_entreprise)) }}"
+                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($typecomite->id_type_comite)) }}"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan

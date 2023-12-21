@@ -102,10 +102,6 @@ $reseaux = Menu::get_info_reseaux();
             </div>
             <div class="th-mobile-menu">
                 <ul>
-
-
-
-
                     <li>
                         <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler</a>
                     </li>
@@ -173,14 +169,14 @@ $reseaux = Menu::get_info_reseaux();
                                     </nav>
                                     <!--<button type="button" class="th-menu-toggle d-block d-lg-none"><i class="far fa-bars"></i></button>-->
                                     <div class="header-button d-lg-none">
-                                        <a href="{{route('connexion')}}" class="">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
                                         <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{route('connexion')}}" class="">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-auto d-none d-xl-block">
                                     <div class="header-button">
-                                        <a href="{{route('connexion')}}" class="th-btn ml-25">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
                                         <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{route('connexion')}}" class="th-btn ml-25">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
                                 </div>
                             </div>
