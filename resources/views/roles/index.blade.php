@@ -36,35 +36,33 @@
                     </small>
                 </div>
                 <div class="card-body">
-
-                    <div class="table">
-                        <table id="exampleData" class="table  table-bordered table-striped table-hover table-sm ">
-                            <thead>
+                    <table id="exampleData" class="table  table-bordered table-striped table-hover table-sm ">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nom</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($roles as $key => $role)
                             <tr>
-                                <th>No</th>
-                                <th>Nom</th>
-                                <th>Action</th>
+                                <td>{{ $role->id }}</td>
+                                <td>{{ $role->name }}</td>
+                                <td align="center">
+                                    @can('role-edit')
+                                        <a href="{{ route('roles.edit',\App\Helpers\Crypt::UrlCrypt($role->id)) }}"
+                                           class=" "
+                                           title="Modifier"><img src='/assets/img/editing.png'></a>
+
+                                    @endcan
+
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($roles as $key => $role)
-                                <tr>
-                                    <td>{{ $role->id }}</td>
-                                    <td>{{ $role->name }}</td>
-                                    <td align="center">
-                                        @can('role-edit')
-                                            <a href="{{ route('roles.edit',\App\Helpers\Crypt::UrlCrypt($role->id)) }}"
-                                               class=" "
-                                               title="Modifier"><img src='/assets/img/editing.png'></a>
+                        @endforeach
+                        </tbody>
+                    </table>
 
-                                        @endcan
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
