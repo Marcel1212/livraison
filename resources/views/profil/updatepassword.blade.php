@@ -201,7 +201,7 @@
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Adresse postal </label>
+                                                    <label>Adresse postale </label>
                                                     <input type="text" name="adresse_postal_entreprises"
                                                            id="adresse_postal_entreprises"
                                                            class="form-control form-control-sm"
