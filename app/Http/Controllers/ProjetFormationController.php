@@ -680,7 +680,7 @@ class ProjetFormationController extends Controller
                     $projetformation->flag_statut_instruction = $etat_rec;
                     //$projetformation->flag_statut_instruction = $etat_rec;
                     $projetformation->date_instructions = $date_soumission;
-                    $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
+                    $projetformation->titre_projet_instruction = $data["titre_projet_instruction"]; //
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
                     $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes, vous pouvez passer a l\'instruction');
@@ -770,19 +770,12 @@ class ProjetFormationController extends Controller
             if($data['action'] === 'soumission_projet_formation_conseiller'){
                 // ID du plan
               //dd($data);
-
-                // Recuperation du numero d'agence
-                $numncc = Auth::user()->login_users;
-                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
-                $id_localite = $entreprise->id_localite_entreprises;
-                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-                //dd($localite_info[]);
-                $id_agence = $localite_info[0]->id_agence;
+               $num_agce = Auth::user()->num_agce;
                $conseiller = DB::table('users')
                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',20],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
+               ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
                ->get();
                //dd($conseiller);
                 if($conseiller == ''){
@@ -806,18 +799,12 @@ class ProjetFormationController extends Controller
             if($data['action'] === 'soumission_projet_formation_cs'){
                 // ID du plan
               // dd($data);
-               //$num_agce = Auth::user()->num_agce;
-               $numncc = Auth::user()->login_users;
-               $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
-               $id_localite = $entreprise->id_localite_entreprises;
-               $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-               //dd($localite_info[]);
-               $id_agence = $localite_info[0]->id_agence;
+               $num_agce = Auth::user()->num_agce;
                $chefdeservice = DB::table('users')
                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',19],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
+               ->where([['roles.id','=',19],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
                ->get();
                 if($chefdeservice == ''){
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
@@ -847,17 +834,18 @@ class ProjetFormationController extends Controller
                 // dd(intval($data['id_chef_service']));
                 // dd($user_id);
                 // Recuperation du numero d'agence
-                $numncc = Auth::user()->login_users;
-                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
-                $id_localite = $entreprise->id_localite_entreprises;
-                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-                //dd($localite_info[]);
-                $id_agence = $localite_info[0]->id_agence;
+                $num_agce = Auth::user()->num_agce;
+                // $numncc = Auth::user()->login_users;
+                // $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+                // $id_localite = $entreprise->id_localite_entreprises;
+                // $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+                // //dd($localite_info[]);
+               // $id_agence = $localite_info[0]->id_agence;
                 $chefdedepartement = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                 ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',21],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
+                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
                 ->get();
                 if($chefdedepartement == ''){
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de departement');
