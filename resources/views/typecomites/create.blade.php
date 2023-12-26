@@ -23,6 +23,15 @@
                     </div>
                 @endif
 
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $message }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                         <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
@@ -41,23 +50,37 @@
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle</label>
-                                                    <input type="text" name="libelle_type_comite" id="libelle_type_comite"
-                                                           class="form-control form-control-sm"
-                                                           required>
+                                                    <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
+                                                            <option value="">----Selectionnez le comiten----</option>
+                                                            <option value="Comitepleniere">Comite pléniere</option>
+                                                            <option value="Comitedegestion">Comite de gestion</option>
+                                                            <option value="Comitepermant">Comite permant</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur min</label>
                                                     <input type="number" name="valeur_min_type_comite" id="valeur_min_type_comite"
                                                            class="form-control form-control-sm" min="0"/>
                                                 </div>
                                             </div>
-                                             <div class="col-md-3 col-12">
+                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur max</label>
                                                     <input type="text" name="valeur_max_type_comite" id="valeur_max_type_comite"
                                                            class="form-control form-control-sm" min="0"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-12">
+                                                <div class="mb-1">
+                                                    <label>Type prestation</label>
+                                                    <select class="select2 form-select" name="code_type_comite" id="code_type_comite" required>
+                                                            <option value="">----Selectionnez un type de prestation----</option>
+                                                            <option value="PF">Plan de formation</option>
+                                                            <option value="POF">Projet de formation</option>
+                                                            <option value="PE">Projet etude</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-12">

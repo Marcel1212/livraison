@@ -29,7 +29,13 @@ class TypeComiteController extends Controller
      */
     public function store(Request $request)
     {
-        TypeComite::create($request->all());
+        $typeverifie = TypeComite::where([['libelle_type_comite','=', $request->libelle_type_comite],['code_type_comite','=', $request->code_type_comite]])->get();
+
+        if(count($typeverifie) == 0){
+            TypeComite::create($request->all());
+        }else{
+            return redirect()->route('typecomites.create')->with('error', 'Erreur : Cette combinaison existe déjà. ');
+        }
 
         return redirect()->route('typecomites.index')->with('success', 'Type de comité ajouté avec succès.');
     }
