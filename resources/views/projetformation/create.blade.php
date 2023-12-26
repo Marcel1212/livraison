@@ -6,7 +6,20 @@
     @php($soustitre = 'Ajouter un projet de formation ')
     @php($lien = 'projetformation')
 
+    <!-- Vendors JS -->
+    <script src="../../public/assets/vendor/libs/select2/select2.js"></script>
+    <script src="../../public/assets/vendor/libs/tagify/tagify.js"></script>
+    <script src="../../public/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+    <script src="../../public/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../../public/assets/vendor/libs/bloodhound/bloodhound.js"></script>
 
+    <!-- Main JS -->
+    <script src="../../public/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="../../public/assets/js/forms-selects.js"></script>
+    <script src="../../public/assets/js/forms-tagify.js"></script>
+    <script src="../../public/assets/js/forms-typeahead.js"></script>
     <!-- BEGIN: Content-->
     <div class="app-content content ">
 
@@ -292,7 +305,7 @@
                                                                     <div class="mb-1">
                                                                         <label>Acteurs<span style="color:red;">*</span>
                                                                         </label>
-                                                                        <select required="required" class="form-select"
+                                                                        {{-- <select required="required" class="form-select"
                                                                             id="exampleFormControlSelect1"
                                                                             name="acteurs_projet"
                                                                             aria-label="Default select example">
@@ -307,7 +320,61 @@
                                                                             <option value="Autres acteurs">Autres acteurs
                                                                             </option>
                                                                             </option>
-                                                                        </select>
+                                                                        </select> --}}
+                                                                        <div class="select2-success" data-select2-id="46">
+                                                                            <div class="position-relative"
+                                                                                data-select2-id="45"><select
+                                                                                    id="select2Success"
+                                                                                    class="select2 form-select select2-hidden-accessible"
+                                                                                    multiple=""
+                                                                                    data-select2-id="select2Success"
+                                                                                    tabindex="-1" aria-hidden="true">
+                                                                                    <option value="1" selected=""
+                                                                                        data-select2-id="17">Option1
+                                                                                    </option>
+                                                                                    <option value="2" selected=""
+                                                                                        data-select2-id="18">Option2
+                                                                                    </option>
+                                                                                    <option value="3"
+                                                                                        data-select2-id="57">Option3
+                                                                                    </option>
+                                                                                    <option value="4"
+                                                                                        data-select2-id="58">Option4
+                                                                                    </option>
+                                                                                </select><span
+                                                                                    class="select2 select2-container select2-container--default select2-container--focus select2-container--below"
+                                                                                    dir="ltr" data-select2-id="16"
+                                                                                    style="width: 660px;"><span
+                                                                                        class="selection"><span
+                                                                                            class="select2-selection select2-selection--multiple"
+                                                                                            role="combobox"
+                                                                                            aria-haspopup="true"
+                                                                                            aria-expanded="false"
+                                                                                            tabindex="-1"
+                                                                                            aria-disabled="false">
+                                                                                            <ul
+                                                                                                class="select2-selection__rendered">
+                                                                                                <li
+                                                                                                    class="select2-search select2-search--inline">
+                                                                                                    <input
+                                                                                                        class="select2-search__field"
+                                                                                                        type="search"
+                                                                                                        tabindex="0"
+                                                                                                        autocomplete="off"
+                                                                                                        autocorrect="off"
+                                                                                                        autocapitalize="none"
+                                                                                                        spellcheck="false"
+                                                                                                        role="searchbox"
+                                                                                                        aria-autocomplete="list"
+                                                                                                        placeholder="Select value"
+                                                                                                        style="width: 646px;">
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                        </span></span><span
+                                                                                        class="dropdown-wrapper"
+                                                                                        aria-hidden="true"></span></span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6  col-12">
@@ -507,4 +574,55 @@
             </div>
         </div>
     </div> <!-- END: Content-->
+
+    <script>
+        'use strict';
+
+        $(function() {
+            const selectPicker = $('.selectpicker'),
+                select2 = $('.select2'),
+                select2Icons = $('.select2-icons');
+
+            // Bootstrap Select
+            // --------------------------------------------------------------------
+            if (selectPicker.length) {
+                selectPicker.selectpicker();
+            }
+
+            // Select2
+            // --------------------------------------------------------------------
+
+            // Default
+            if (select2.length) {
+                select2.each(function() {
+                    var $this = $(this);
+                    $this.wrap('<div class="position-relative"></div>').select2({
+                        placeholder: 'Select value',
+                        dropdownParent: $this.parent()
+                    });
+                });
+            }
+
+            // Select2 Icons
+            if (select2Icons.length) {
+                // custom template to render icons
+                function renderIcons(option) {
+                    if (!option.id) {
+                        return option.text;
+                    }
+                    var $icon = "<i class='" + $(option.element).data('icon') + " me-2'></i>" + option.text;
+
+                    return $icon;
+                }
+                select2Icons.wrap('<div class="position-relative"></div>').select2({
+                    dropdownParent: select2Icons.parent(),
+                    templateResult: renderIcons,
+                    templateSelection: renderIcons,
+                    escapeMarkup: function(es) {
+                        return es;
+                    }
+                });
+            }
+        });
+    </script>
 @endsection
