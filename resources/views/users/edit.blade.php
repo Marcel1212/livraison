@@ -244,7 +244,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Agence :</label>
+                                                    <label>Antenne :</label>
                                                     <select class="select2 select2-size-sm form-select" name="num_agce"
                                                             id="num_agce">
                                                         <?php echo $Entite; ?>

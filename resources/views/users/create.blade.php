@@ -20,7 +20,7 @@
             const myArray = selectedValue.split("/");
             let profile = myArray[0];
             let code = myArray[1];
-            
+
             if(code === 'DIR'){
                 document.getElementById("direction").disabled = false;
                 document.getElementById("departement").disabled = true;
@@ -115,13 +115,13 @@
                                                     <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Departement</label>
                                                 <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
                                                     <option value='0'>Departement</option>
                                                 </select>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Service</label>
 
@@ -194,7 +194,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Agence :</label>
+                                                    <label>Antenne :</label>
                                                     <select class="select2 select2-size-sm form-select" name="num_agce" id="num_agce">
                                                         <?php echo $Entite; ?>
                                                     </select></div>
@@ -228,7 +228,7 @@
     <!-- END: Content-->
 
     <script>
-        
+
         /*$(function(){
             $('#profiles').on('change',function(e)
             {
@@ -237,7 +237,7 @@
 
             });
 
-            });*/       
+            });*/
     </script>
 
 @endsection

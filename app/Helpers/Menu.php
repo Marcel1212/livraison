@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\Logo;
@@ -97,4 +98,19 @@ class Menu
         return (isset($logof) ? $logof : '');
     }
 
+    public static function dateEnFrancais($dateSend)
+    {
+        // Configuration de la localisation en français
+        $locale = 'fr_FR';
+        // Obtenir la date actuelle
+        $dateActuelle = new \DateTime($dateSend);
+        // Créer un objet IntlDateFormatter
+        $dateFormatter = new \IntlDateFormatter($locale, \IntlDateFormatter::FULL, \IntlDateFormatter::NONE);
+        // Formater la date
+        $dateFormatee = $dateFormatter->format($dateActuelle);
+        // Afficher la date formatée
+        // echo "Date en français : $dateFormatee";
+
+        return (isset($dateFormatee) ? $dateFormatee : '');
+    }
 }
