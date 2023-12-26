@@ -41,10 +41,10 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Noms et prenoms</th>
+                                            <th>Noms et prénoms</th>
                                             <th>Email</th>
                                             <th>Profil</th>
-                                            <th>Entité</th>
+                                            <th>Antenne</th>
                                             <th>Statut</th>
                                             <th>Action</th>
                                         </tr>
