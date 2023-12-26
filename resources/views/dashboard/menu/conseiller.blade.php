@@ -31,7 +31,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                           <i class="ti ti-device-laptop ti-xl"></i>
                         </span>
                         <div class="content-right">
-                            <p class="mb-0">Plan de formation non attribuer</p>
+                            <p class="mb-0">Plan de formation non attribué</p>
                             <h4 class="text-primary mb-0">{{count($planformations)}}</h4>
                         </div>
                     </div>
@@ -40,7 +40,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                           <i class="ti ti-bulb ti-xl"></i>
                         </span>
                         <div class="content-right">
-                            <p class="mb-0">Plan en traitement</p>
+                            <p class="mb-0">Plan de formation en traitement</p>
                             <h4 class="text-info mb-0">{{count($planformationstraitement)}}</h4>
                         </div>
                     </div>
@@ -49,7 +49,7 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                           <i class="ti ti-discount-check ti-xl"></i>
                         </span>
                         <div class="content-right">
-                            <p class="mb-0">Plan soumis au CT</p>
+                            <p class="mb-0">Plan de formation soumis au CT</p>
                             <h4 class="text-warning mb-0">{{count($planformationssoumis)}}</h4>
                         </div>
                     </div>
@@ -62,90 +62,13 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
 
     <!-- Topic and Instructors -->
     <div class="row mb-4 g-4">
-        <div class="col-12 col-xl-6">
-            <div class="card h-100">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Topic you are interested in</h5>
-                    <div class="dropdown">
-                        <button
-                            class="btn p-0"
-                            type="button"
-                            id="topic"
-                            data-bs-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="ti ti-dots-vertical"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="topic">
-                            <a class="dropdown-item" href="javascript:void(0);">Highest Views</a>
-                            <a class="dropdown-item" href="javascript:void(0);">See All</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body row g-3">
-                    <div class="col-md-6">
-                        <div id="horizontalBarChart"></div>
-                    </div>
-                    <div class="col-md-6 d-flex justify-content-around align-items-center">
-                        <div>
-                            <div class="d-flex align-items-baseline">
-                                <span class="text-primary me-2"><i class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">UI Design</p>
-                                    <h5>35%</h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-baseline my-3">
-                                <span class="text-success me-2"><i class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">Music</p>
-                                    <h5>14%</h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-baseline">
-                                <span class="text-danger me-2"><i class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">React</p>
-                                    <h5>10%</h5>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div>
-                            <div class="d-flex align-items-baseline">
-                                                <span class="text-info me-2"><i
-                                                        class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">UX Design</p>
-                                    <h5>20%</h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-baseline my-3">
-                                                <span class="text-secondary me-2"><i
-                                                        class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">Animation</p>
-                                    <h5>12%</h5>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-baseline">
-                                <span class="text-warning me-2"><i class="ti ti-circle-filled fs-6"></i></span>
-                                <div>
-                                    <p class="mb-2">SEO</p>
-                                    <h5>9%</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div class="col-12 col-xl-6 col-md-6">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Plan de formation non attribuer</h5>
+                        <h5 class="m-0 me-2">Plan de formation non attribué</h5>
                     </div>
 
                 </div>
