@@ -1,16 +1,7 @@
 <?php
-
 use App\Helpers\Menu;
-use App\Helpers\AnneeExercice;
-
 $imagedashboard = Menu::get_info_acceuil();
-$anneexercice = AnneeExercice::get_annee_exercice();
-
 $imagedashboard = Menu::get_info_image_dashboard();
-$anneexerciceDebut = Menu::dateEnFrancais($anneexercice->date_debut_periode_exercice);
-$anneexerciceFin = Menu::dateEnFrancais($anneexercice->date_fin_periode_exercice);
-
-
 ?>
 
 
