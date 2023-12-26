@@ -47,6 +47,7 @@
                                             <th>Libelle</th>
                                             <th>Valeur min</th>
                                             <th>Valeur min</th>
+                                            <th>Type de prestation</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>
@@ -57,9 +58,26 @@
                                         <?php $i += 1;?>
                                             <tr>
                                                 <td>{{ $i }}</td>
-                                                <td>{{ $typecomite->libelle_type_comite }}</td>
+                                                <td><?php if($typecomite->libelle_type_comite=="Comitepleniere"){
+                                                        echo "Comite pléniere";
+                                                    }elseif ($typecomite->libelle_type_comite=="Comitedegestion") {
+                                                        echo "Comite de gestion";
+                                                    }elseif ($typecomite->libelle_type_comite=="Comitepermant") {
+                                                        echo "Comite permant";
+                                                    }else {
+                                                        echo "";
+                                                    }?></td>
                                                 <td>{{ $typecomite->valeur_min_type_comite }}</td>
                                                 <td>{{ $typecomite->valeur_max_type_comite }}</td>
+                                                <td><?php if($typecomite->code_type_comite=="PF"){
+                                                    echo "Plan de formation";
+                                                }elseif ($typecomite->code_type_comite=="POF") {
+                                                    echo "Projet de formation";
+                                                }elseif ($typecomite->code_type_comite=="PE") {
+                                                    echo "Projet etude";
+                                                }else {
+                                                    echo "";
+                                                }?></td>
                                                 <td align="center">
                                                     <?php if ($typecomite->flag_actif_type_comite == true ){?>
                                                     <span class="badge bg-success">Actif</span>

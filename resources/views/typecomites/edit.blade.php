@@ -40,16 +40,27 @@
                                         @method('PUT')
                                         <div class="row">
 
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Type entreprise </label>
-                                                    <input type="text" name="libelle_type_comite" id="libelle_type_comite"
-                                                           class="form-control form-control-sm" value="{{$typecomite->libelle_type_comite}}"
-                                                           required>
+                                                    <label>Libelle</label>
+                                                    <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
+                                                            <option value="<?php if($typecomite->libelle_type_comite=="Comitepleniere"){
+                                                                echo "Comite pléniere";
+                                                            }elseif ($typecomite->code_type_comite=="Comitedegestion") {
+                                                                echo "Comite de gestion";
+                                                            }elseif ($typecomite->code_type_comite=="Comitepermant") {
+                                                                echo "Comite permant";
+                                                            }else {
+                                                                echo "";
+                                                            }?>">----Selectionnez le comiten----</option>
+                                                            <option value="Comitepleniere">Comite pléniere</option>
+                                                            <option value="Comitedegestion">Comite de gestion</option>
+                                                            <option value="Comitepermant">Comite permant</option>
+                                                    </select>
                                                 </div>
                                             </div>
-
-                                            <div class="col-md-3 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur min </label>
                                                     <input type="text" name="valeur_min_type_comite" id="valeur_min_type_comite"
@@ -57,11 +68,39 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur max </label>
                                                     <input type="text" name="valeur_max_type_comite" id="valeur_max_type_comite"
                                                            class="form-control form-control-sm" value="{{$typecomite->valeur_max_type_comite}}" min="0">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2 col-12">
+                                                <div class="mb-1">
+                                                    <label>Type prestation</label>
+                                                    <select class="select2 form-select" name="code_type_comite" id="code_type_comite">
+                                                            <option value="<?php if($typecomite->code_type_comite=="PF"){
+                                                                                echo "PF";
+                                                                            }elseif ($typecomite->code_type_comite=="POF") {
+                                                                                echo "POF";
+                                                                            }elseif ($typecomite->code_type_comite=="PE") {
+                                                                                echo "PE";
+                                                                            }else {
+                                                                                echo "";
+                                                                            }?>"><?php if($typecomite->code_type_comite=="PF"){
+                                                                                echo "Plan de formation";
+                                                                            }elseif ($typecomite->code_type_comite=="POF") {
+                                                                                echo "Projet de formation";
+                                                                            }elseif ($typecomite->code_type_comite=="PE") {
+                                                                                echo "Projet etude";
+                                                                            }else {
+                                                                                echo "----Selectionnez un type de prestation---";
+                                                                            }?></option>
+                                                            <option value="PF">Plan de formation</option>
+                                                            <option value="POF">Projet de formation</option>
+                                                            <option value="PE">Projet etude</option>
+                                                    </select>
                                                 </div>
                                             </div>
 

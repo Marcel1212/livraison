@@ -416,7 +416,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <?php if (count($categorieplans)>=1){ ?>
 
 
-                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Suivant</button>
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
                             <?php } ?>
