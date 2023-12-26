@@ -90,7 +90,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
     <div class="col-12 col-xl-4 col-md-6">
         <div class="card h-100">
-            <div align="center" class="card-header d-flex align-items-center justify-content-between">
+            <div align="center" >
                 <img  src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
             </div>
         </div>

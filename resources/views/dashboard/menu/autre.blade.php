@@ -28,7 +28,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <div class="row mb-4 g-4">
     <div class="col-12 col-xl-12">
         <div class="card h-100">
-            <div align="center" class="card-header d-flex align-items-center justify-content-between">
+            <div align="center" >
                 <img  src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
             </div>
         </div>
