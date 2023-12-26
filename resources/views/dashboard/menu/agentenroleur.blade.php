@@ -32,7 +32,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement non traité</p>
+                        <p class="mb-0">Enrôlement non traité</p>
                         <h4 class="text-info mb-0">{{$nbrnontraiter}}</h4>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement  validé</p>
+                        <p class="mb-0">Enrôlement validé</p>
                         <h4 class="text-success mb-0">{{$nbrvalider}}</h4>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement rejeté</p>
+                        <p class="mb-0">Enrôlement rejeté</p>
                         <h4 class="text-danger mb-0">{{$nbrnonrejeter}}</h4>
                     </div>
                 </div>
@@ -78,21 +78,21 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <span class="avatar-initial rounded bg-label-primary">
                                     <i class="ti ti-folder-filled"></i></span>
                                 </div>
-                                <h4 class="ms-1 mb-0">Traitement des enrolements</h4>
+                                <h4 class="ms-1 mb-0">Traitement des enrôlements</h4>
                             </div>
-                            <p class="mb-1">Cliquer ici pour éffectuer un tratiement </p>
+                            <p class="mb-1">Cliquez ici pour effectuer un traitement.</p>
                         </div>
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="col-12 col-xl-4 col-md-6">
         <div class="card h-100">
-
-
+            <div align="center" class="card-header d-flex align-items-center justify-content-between">
+                <img  src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
+            </div>
         </div>
     </div>
 

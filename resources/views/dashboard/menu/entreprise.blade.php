@@ -85,8 +85,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 <h4 class="ms-1 mb-0">Plan de formation</h4>
                             </div>
                             <a href="{{ route($lienformation . '.create') }}" class="mb-1">
-                                Cliquer ici pour éffectuer une
-                                demande</a>
+                                Cliquez ici pour effectuer une demande</a>
                         </div>
                     </a>
                 </div>
@@ -102,7 +101,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 </div>
                                 <h4 class="ms-1 mb-0">Projet de formation</h4>
                             </div>
-                            <p class="mb-1">Cliquer ici pour éffectuer une demande </p>
+                            <p class="mb-1">Cliquez ici pour effectuer une demande </p>
                         </div>
                     </a>
                 </div>
@@ -119,8 +118,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 <h4 class="ms-1 mb-0">Projet d'étude</h4>
                             </div>
                             <a href="{{ route($lien . '.create') }}" class="mb-1">
-                                Cliquer ici pour éffectuer une
-                                demande</a>
+                                Cliquez ici pour effectuer une demande</a>
                         </div>
                     </a>
                 </div>

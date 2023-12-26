@@ -34,8 +34,8 @@ $anneexerciceFin = Menu::dateEnFrancais($anneexercice->date_fin_periode_exercice
 <div class="row mb-4 g-4">
     <div class="col-12 col-xl-12">
         <div class="card h-100">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <img src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
+            <div align="center" class="card-header d-flex align-items-center justify-content-between">
+                <img  src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
             </div>
         </div>
     </div>
