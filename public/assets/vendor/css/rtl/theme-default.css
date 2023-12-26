@@ -118,7 +118,7 @@ a.bg-primary:hover, a.bg-primary:focus {
 }
 
 .bg-gradient-primary {
-  background-image: linear-gradient(45deg, #7367f0, #b9b3f8) !important;
+  background-image: linear-gradient(45deg, #0066B1, #b9b3f8) !important;
 }
 
 .bg-primary.bg-glow {
@@ -127,20 +127,20 @@ a.bg-primary:hover, a.bg-primary:focus {
 
 .page-item.active .page-link,
 .pagination li.active > a:not(.page-link) {
-  border-color: #7367f0;
-  background-color: #7367f0;
+  border-color: #0066B1;
+  background-color: #0066B1;
   color: #fff;
 }
 
 .page-item > .page-link.active {
-  border-color: #7367f0;
-  background-color: #7367f0;
+  border-color: #0066B1;
+  background-color: #0066B1;
   color: #fff;
 }
 
 .page-item.first .page-link.active, .page-item.last .page-link.active, .page-item.next .page-link.active, .page-item.prev .page-link.active, .page-item.previous .page-link.active {
-  border-color: #7367f0;
-  background-color: #7367f0;
+  border-color: #0066B1;
+  background-color: #0066B1;
   color: #fff;
 }
 

@@ -108,32 +108,32 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if(count($categorieplans)<1){ echo "active";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if($idetape==1){ echo "active";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-categorieplan"
                           aria-controls="navs-top-categorieplan"
                           aria-selected="false">
-                          Categorie des travailleurs
+                          Effectif de l'entreprise
                         </button>
                       </li>
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if(count($categorieplans)>=1){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if($idetape==2){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Action de formation
+                          Actions du plan de formation
                         </button>
                       </li>
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
 
-                      <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
+                      <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
                             @csrf
                             @method('put')
                             <div class="row">
@@ -143,6 +143,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                                value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -158,7 +166,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <label>Localisation geaographique <strong style="color:red;">*</strong></label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->localisation_geographique_entreprise}}" required="required">
+                                                value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -166,7 +174,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <label>Repère d'accès <strong style="color:red;">*</strong></label>
                                         <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->repere_acces_entreprises}}" required="required">
+                                                value="{{@$infoentreprise->repere_acces_entreprises}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -174,7 +182,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <label>Adresse postal <strong style="color:red;">*</strong></label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" required="required">
+                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
                                     </div>
                                 </div>
 
@@ -210,7 +218,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 <label class="form-label">Cellulaire Professionnelle  <strong style="color:red;">*</strong></label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}">
+                                                value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
@@ -229,7 +237,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 <label class="form-label">Fax  </label>
                                                 <input type="number" name="fax_entreprises" id="fax_entreprises"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->fax_entreprises}}">
+                                                value="{{@$infoentreprise->fax_entreprises}}" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
@@ -292,6 +300,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 value="{{@$planformation->part_entreprise}}" disabled="disabled">
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Seuil de cotisation </label>
+                                        <input type="number"
+                                               class="form-control form-control-sm"
+                                                value="10000" disabled="disabled">
+                                    </div>
+                                </div>
                                 <div class="col-12" align="right">
                                     <hr>
                                     <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
@@ -313,9 +329,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         </form>
 
                       </div>
-                      <div class="tab-pane fade <?php if(count($categorieplans)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                      <div class="tab-pane fade <?php if($idetape==1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
-                      <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}" enctype="multipart/form-data">
+                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="row">
@@ -356,13 +372,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         </div>
 
                                 </div>
-                                <?php if (count($categorieplans)>=4){ ?>
-                                   <!-- <hr>
 
-                                    <div class="col-12" align="right"> <br>
-                                        <button  type="submit" name="action" value="Enregistrer_categorie_plan_suivant" class="btn btn-sm btn-secondary me-sm-3 me-1">Suivant</button>
-                                    </div>-->
-                                <?php } ?>
                         </form>
 
                         <hr>
@@ -400,20 +410,35 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                             </tbody>
                         </table>
+                        <div class="col-12" align="right">
+                            <hr>
+
+                            <?php if (count($categorieplans)>=1){ ?>
+
+
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+
+
+                            <?php } ?>
+
+                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                Retour</a>
+                        </div>
                       </div>
-                      <div class="tab-pane fade <?php if(count($categorieplans)>=1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
+                      <div class="tab-pane fade <?php if($idetape==2){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
-                      <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}" enctype="multipart/form-data">
+                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="row">
-                            <div class="col-12 col-md-8">
+                            <div class="col-12 col-md-12">
                             <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="intitule_action_formation_plan"
                                 name="intitule_action_formation_plan"
                                 class="form-control form-control-sm"
+                                value="{{ old('intitule_action_formation_plan') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -437,6 +462,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="nombre_stagiaire_action_formati"
                                 name="nombre_stagiaire_action_formati"
                                 class="form-control form-control-sm"
+                                value="{{ old('nombre_stagiaire_action_formati') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -446,6 +472,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="nombre_groupe_action_formation_"
                                 name="nombre_groupe_action_formation_"
                                 class="form-control form-control-sm"
+                                value="{{ old('nombre_groupe_action_formation_') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -455,6 +482,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="nombre_heure_action_formation_p"
                                 name="nombre_heure_action_formation_p"
                                 class="form-control form-control-sm"
+                                value="{{ old('nombre_heure_action_formation_p') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -464,6 +492,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="cout_action_formation_plan"
                                 name="cout_action_formation_plan"
                                 class="form-control form-control-sm"
+                                value="{{ old('cout_action_formation_plan') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -493,6 +522,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="date_debut_fiche_agrement"
                                 name="date_debut_fiche_agrement"
                                 class="form-control form-control-sm"
+                                value="{{ old('date_debut_fiche_agrement') }}"
                                />
                             </div>
                             <div class="col-12 col-md-2">
@@ -502,6 +532,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="date_fin_fiche_agrement"
                                 name="date_fin_fiche_agrement"
                                 class="form-control form-control-sm"
+                                value="{{ old('date_fin_fiche_agrement') }}"
                                 />
                             </div>
                             <div class="col-12 col-md-4">
@@ -511,9 +542,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="lieu_formation_fiche_agrement"
                                 name="lieu_formation_fiche_agrement"
                                 class="form-control form-control-sm"
+                                value="{{ old('lieu_formation_fiche_agrement') }}"
                                  />
                             </div>
-                            <div class="col-12 col-md-4">
+                            <!--<div class="col-12 col-md-4">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
@@ -521,7 +553,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="cout_total_fiche_agrement"
                                 class="form-control form-control-sm"
                                  />
-                            </div>
+                            </div>-->
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
                             <input
@@ -529,6 +561,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="objectif_pedagogique_fiche_agre"
                                 name="objectif_pedagogique_fiche_agre"
                                 class="form-control form-control-sm"
+                                value="{{ old('objectif_pedagogique_fiche_agre') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -538,6 +571,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="cadre_fiche_demande_agrement"
                                 name="cadre_fiche_demande_agrement"
                                 class="form-control form-control-sm"
+                                value="{{ old('cadre_fiche_demande_agrement') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -547,6 +581,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="agent_maitrise_fiche_demande_ag"
                                 name="agent_maitrise_fiche_demande_ag"
                                 class="form-control form-control-sm"
+                                value="{{ old('agent_maitrise_fiche_demande_ag') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">
@@ -556,6 +591,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="employe_fiche_demande_agrement"
                                 name="employe_fiche_demande_agrement"
                                 class="form-control form-control-sm"
+                                value="{{ old('employe_fiche_demande_agrement') }}"
                                  />
                             </div>
                             <div class="col-12 col-md-4">

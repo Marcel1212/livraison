@@ -40,7 +40,7 @@
                                             <div class="col-md-5 col-12">
                                                 <div class="mb-1">
                                                     <label>Sous menu </label>
-                                                    <select name="id_sousmenu" id="id_sousmenu" required  class="select2 select2-size-sm form-select">
+                                                    <select class="select2 select2-size-sm form-select"  data-allow-clear="true" name="id_sousmenu" required>
                                                         <?= $SousMenuList; ?>
                                                     </select>
                                                 </div>

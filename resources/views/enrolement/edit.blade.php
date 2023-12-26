@@ -71,6 +71,26 @@
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Forme juridique</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->formeJuridique->libelle_forme_juridique}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8 col-12">
+                                                <div class="mb-1">
+                                                    <label>Raison sociale </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->raison_sociale_demande_enroleme}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Localite </label>
@@ -79,6 +99,7 @@
                                                            disabled="disabled">
                                                 </div>
                                             </div>
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Centre impot </label>
@@ -87,14 +108,70 @@
                                                            disabled="disabled">
                                                 </div>
                                             </div>
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Activité</label>
+                                                    <label>Secteur activité</label>
                                                     <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->activite->libelle_activites}}"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->secteurActivite->libelle_secteur_activite}}"
                                                            disabled="disabled">
                                                 </div>
                                             </div>
+                                            <!--<div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Activité</label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value=""
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>-->
+
+
+                                            <div class="col-md-6 col-12">
+
+                                                                <!--<label class="form-label" for="phone-number-mask">Téléphone du représentant</label>-->
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <label>Indicatif </label>
+                                                                        <input type="text"
+                                                                               class="form-control form-control-sm" value="{{$demandeenrole->pay->indicatif}}"
+                                                                               disabled="disabled">
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        <label>Telephone </label>
+                                                                        <input type="text"
+                                                                               class="form-control form-control-sm" value="{{$demandeenrole->tel_demande_enrolement}}"
+                                                                               disabled="disabled">
+                                                                    </div>
+                                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Email </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->email_demande_enrolement}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Date de demande </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->date_depot_demande_enrolement}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Date de traitement </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->date_traitement_demande_enrolem}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>NCC </label>
@@ -104,14 +181,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Raison sociale </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->raison_sociale_demande_enroleme}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Numero CNPS </label>
@@ -129,48 +198,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Indicatif </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->pay->indicatif}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Telephone </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->tel_demande_enrolement}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Email </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->email_demande_enrolement}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Date de demande </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->date_depot_demande_enrolement}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Date de traitement </label>
-                                                    <input type="text"
-                                                           class="form-control form-control-sm" value="{{$demandeenrole->date_traitement_demande_enrolem}}"
-                                                           disabled="disabled">
-                                                </div>
-                                            </div>
-
+                                            @if (isset($demandeenrole->piece_dfe_demande_enrolement))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Pièce DFE </label>
@@ -179,6 +207,9 @@
                                                             Voir la pièce  </a> </span>
                                                 </div>
                                             </div>
+                                            @endif
+
+                                            @if (isset($demandeenrole->piece_rccm_demande_enrolement))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Pièce RCCM </label>
@@ -188,6 +219,9 @@
                                                             Voir la pièce  </a> </span>
                                                 </div>
                                             </div>
+                                            @endif
+
+                                            @if (isset($demandeenrole->piece_attestation_immatriculati))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Pièce attestation immatriculation </label>
@@ -197,6 +231,7 @@
                                                             Voir la pièce  </a> </span>
                                                 </div>
                                             </div>
+                                            @endif
 
                                             <hr>
 

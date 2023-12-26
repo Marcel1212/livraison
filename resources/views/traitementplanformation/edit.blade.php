@@ -81,7 +81,19 @@
                           data-bs-target="#navs-top-categorieplan"
                           aria-controls="navs-top-categorieplan"
                           aria-selected="false">
-                          Categorie des travailleurs
+                          Effectif de l'entreprise
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-top-histortiqueactionformation"
+                          aria-controls="navs-top-histortiqueactionformation"
+                          aria-selected="false">
+                          Historiques des actions du plan de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -93,7 +105,7 @@
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Action de formation
+                          Actions du plan de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -122,6 +134,14 @@
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                                value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -330,6 +350,36 @@
                         </table>
                       </div>
 
+
+                     <div class="tab-pane fade" id="navs-top-histortiqueactionformation" role="tabpanel">
+
+                        <div class="col-12" align="right">
+
+
+                        </div>
+                        <table class="table table-bordered table-striped table-hover table-sm"
+                            id="exampleData"
+                            style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Intitluer de l'action de formation </th>
+                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Nombre de stagiaires</th>
+                                <th>Nombre de groupe</th>
+                                <th>Nombre d'heures par groupe</th>
+                                <th>Cout de l'action</th>
+                                <th>Cout de l'action accordée</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $i = 0; ?>
+
+
+                            </tbody>
+                        </table>
+                      </div>
 
                       <div class="tab-pane fade <?php if($planformation->flag_recevablite_plan_formation==true){ echo "show active";} ?>" id="navs-top-actionformation" role="tabpanel">
 

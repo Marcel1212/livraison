@@ -133,7 +133,7 @@ class TratementPlanFormationController extends Controller
 
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
 
-        $motifs = Motif::all();
+        $motifs = Motif::where([['code_motif','=','PAF']])->get();
         $motif = "<option value=''> Selectionnez un motif </option>";
         foreach ($motifs as $comp) {
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";

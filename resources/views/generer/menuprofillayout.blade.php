@@ -41,61 +41,61 @@
                         </small>
                     </div>
                 </div>
-                    <!-- Accordion with margin start -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                            <?php $i = 0; foreach ($tablsm as $key => $tablvue) {
-                                            $i++; ?>
-                                        <div class="accordion mt-3 accordion-bordered" id="accordionStyle1">
-                                            <div class="accordion-item card">
-                                                <h2 class="accordion-header"
-                                                    id="headingMarginOne<?php echo $key; ?>">
-                                                    <button class="accordion-button collapsed"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#accordionMarginOne<?php echo $key; ?>"
-                                                            aria-expanded="false"
-                                                            aria-controls="accordionMarginOne<?php echo $key; ?>">
-                                                            <?php //dd($tablvue); ?>
-                                                        {{  $tablvue[0]->menu }}
-                                                    </button>
-                                                </h2>
-                                                <div id="accordionMarginOne<?php echo $key; ?>"
-                                                     class="accordion-collapse collapse"
-                                                     aria-labelledby="headingMarginOne"
-                                                     data-bs-parent="#accordionMargin">
+                <!-- Accordion with margin start -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                    <?php $i = 0; foreach ($tablsm as $key => $tablvue) {
+                                    $i++; ?>
+                                <div class="accordion mt-3 accordion-bordered" id="accordionStyle1">
+                                    <div class="accordion-item card">
+                                        <h2 class="accordion-header"
+                                            id="headingMarginOne<?php echo $key; ?>">
+                                            <button class="accordion-button collapsed"
+                                                    type="button"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#accordionMarginOne<?php echo $key; ?>"
+                                                    aria-expanded="false"
+                                                    aria-controls="accordionMarginOne<?php echo $key; ?>">
+                                                    <?php //dd($tablvue); ?>
+                                                {{  $tablvue[0]->menu }}
+                                            </button>
+                                        </h2>
+                                        <div id="accordionMarginOne<?php echo $key; ?>"
+                                             class="accordion-collapse collapse"
+                                             aria-labelledby="headingMarginOne"
+                                             data-bs-parent="#accordionMargin">
 
-                                                        <?php foreach ($tablvue as $key => $vue) { ?>
-                                                    <div class="accordion-body">
-                                                        <div class="checkbox-list">
+                                                <?php foreach ($tablvue as $key => $vue) { ?>
+                                            <div class="accordion-body">
+                                                <div class="checkbox-list">
 
-                                                            <label class="checkbox">
-                                                                <input type="checkbox"
-                                                                       value="<?php echo $vue->id_sousmenu;?>"
-                                                                       <?php if (in_array($vue->id_sousmenu, $roleSousmenus)) {
-                                                                           echo 'checked';
-                                                                       } ?> name="route[<?php echo $vue->id_sousmenu;?>]"
-                                                                       id="route<?php echo $vue->id_sousmenu;?>"/>
-                                                                <span></span><?php echo $vue->libelle; ?>
-                                                                                 <?php //echo $vue->lib_permission; ?>
-                                                            </label>
+                                                    <label class="checkbox">
+                                                        <input type="checkbox"
+                                                               value="<?php echo $vue->id_sousmenu;?>"
+                                                               <?php if (in_array($vue->id_sousmenu, $roleSousmenus)) {
+                                                                   echo 'checked';
+                                                               } ?> name="route[<?php echo $vue->id_sousmenu;?>]"
+                                                               id="route<?php echo $vue->id_sousmenu;?>"/>
+                                                        <span></span><?php echo $vue->libelle; ?>
+                                                                         <?php //echo $vue->lib_permission; ?>
+                                                    </label>
 
-                                                        </div>
-                                                    </div>
-                                                    <?php } ?>
                                                 </div>
                                             </div>
+                                            <?php } ?>
                                         </div>
-                                        <?php } ?>
                                     </div>
                                 </div>
+                                <?php } ?>
                             </div>
                         </div>
-                    <!-- Accordion with margin end -->
+                    </div>
                 </div>
+                <!-- Accordion with margin end -->
             </div>
+        </div>
     </form>
     <!-- END: Content-->
 
