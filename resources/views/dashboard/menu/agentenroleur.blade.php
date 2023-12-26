@@ -10,7 +10,6 @@ $nbrvalider = count(StatAgentEnroleur::get_infos_enrolement_valider());
 $nbrnonrejeter = count(StatAgentEnroleur::get_infos_enrolement_rejeter());
 
 $imagedashboard = Menu::get_info_image_dashboard();
-$anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
 

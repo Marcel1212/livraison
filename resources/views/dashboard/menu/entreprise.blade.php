@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\ProjetEtude;
 
 $imagedashboard = Menu::get_info_image_dashboard();
-$anneexercice = AnneeExercice::get_annee_exercice();
 $iduser = Auth::user()->id;
 $projetetudeenattente = ProjetEtude::where([['id_user', '=', $iduser], ['flag_attente_rec', '=', true]])->get();
 $projetetuderecevable = ProjetEtude::where([['id_user', '=', $iduser], ['flag_valide', '=', true]])->get();

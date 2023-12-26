@@ -3,10 +3,7 @@
 use App\Helpers\Menu;
 use App\Helpers\AnneeExercice;
 use Carbon\Carbon;
-
 $imagedashboard = Menu::get_info_image_dashboard();
-$anneexercice = AnneeExercice::get_annee_exercice();
-
 $imagedashboard = Menu::get_info_image_dashboard();
 ?>
     <!-- Hour chart  -->
