@@ -289,6 +289,56 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <hr>
+                                    <form method="POST" enctype="multipart/form-data"
+                                          class="form form-horizontal"
+                                          action="{{ route('modifier.mot.passe') }}">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-12 col-12">
+                                                <label class="form-label">Activité </label>
+
+                                                <select class="select2 form-select"
+                                                        data-allow-clear="true" name="id_activites"
+                                                        required="required">
+                                                    <?= $activite; ?>
+                                                </select>
+                                            </div> <br/> <br/>
+                                            <hr>
+                                            <div class="col-sm-12"  align="right">
+                                                <button type="submit" name="action" value="profil_entreprise_activite"
+                                                        class="btn btn-primary me-1 waves-effect waves-float waves-light">
+                                                    Ajouter activité
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <table class="table table-bordered table-striped table-hover table-sm "
+                                             id="exampleData"
+                                             style="margin-top: 13px !important">
+                                        <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Activité </th>
+                                            <th >Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php $i=0; ?>
+                                        @foreach ($listeactivites as $key => $listeactivite)
+                                            <tr>
+                                                <td>{{ ++$i }}</td>
+                                                <td>{{ $listeactivite->activite->libelle_activites }}</td>
+                                                <td align="center">
+                                                    <a href="{{ route('deleteactiviteentreprise',\App\Helpers\Crypt::UrlCrypt($listeactivite->id_activites_entreprises)) }}"
+                                                        class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
+                                                        title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
 
                                     <?php }else{ ?>
                                     <form method="POST" enctype="multipart/form-data"
