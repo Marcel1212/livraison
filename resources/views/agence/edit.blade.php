@@ -176,7 +176,7 @@
                     </form>
 
                     <table class="table table-bordered table-striped table-hover table-sm"
-                           style="margin-top: 13px !important">
+                           id="exampleData" >
                         <thead>
                         <tr>
                             <th>No</th>
