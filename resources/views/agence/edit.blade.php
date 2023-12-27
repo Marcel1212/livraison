@@ -187,6 +187,7 @@
                         <tbody>
                         <?php $i = 0; ?>
                         @foreach ($listeagencelocalites as $listeagencelocalite)
+                            <tr>
                             <td>{{ ++$i }}</td>
                             <td>{{ $listeagencelocalite->localite->libelle_localite }}</td>
                             <td align="center">
@@ -196,6 +197,7 @@
                                    title="Supprimer"> <img src='/assets/img/trash-can-solid.png'>
                                 </a>
                             </td>
+                            </tr>
                         @endforeach
 
                         </tbody>
