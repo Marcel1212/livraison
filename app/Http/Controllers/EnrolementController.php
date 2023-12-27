@@ -408,7 +408,7 @@ class EnrolementController extends Controller
         }
 
         return redirect()->route('enrolements')
-            ->with('success', '<strong>Félicitations<strong> <br>Votre demande d\'enrôlement a été effectuée avec succès.<br>Le traitement de votre demande s\'effectura dans un délai de 48h !');
+            ->with('success', '<strong>Félicitations<strong> <br>Votre demande d\'enrôlement a été effectuée avec succès.<br>Le traitement de votre demande s\'effectuera dans un délai de 48h !');
     }
 
     /**

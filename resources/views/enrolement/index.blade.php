@@ -17,8 +17,8 @@
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif  
-                              
+                @endif
+
                 @if ($message = Session::get('danger'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <div class="alert-body">
@@ -46,10 +46,10 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Localité </th>
-                                            <th>Ncc </th>
+                                            <th>NCC </th>
                                             <th>Raison sociale </th>
-                                            <th>Date de demande </th>
-                                            <th>Recevablilite</th>
+                                            <th>Date de la demande </th>
+                                            <th>Recevablilité</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
@@ -65,9 +65,9 @@
                                                     <?php if ($demandeenrole->flag_recevablilite_demande_enrolement == true ){?>
                                                     <span class="badge bg-success">Recevable</span>
                                                     <?php } else {?>
-                                                    <span class="badge bg-danger">Non recevable</span>
+                                                    <span class="badge bg-danger">Non Traité</span>
                                                     <?php }  ?>
-                                                </td>                                                
+                                                </td>
 
                                                 <td align="center">
                                                     @can($lien.'-edit')

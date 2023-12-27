@@ -93,7 +93,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Localite </label>
+                                                    <label>Localité de l'entreprise </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->localite->libelle_localite}}"
                                                            disabled="disabled">
@@ -102,7 +102,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Centre impot </label>
+                                                    <label>Centre d'impôt </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->centreImpot->libelle_centre_impot}}"
                                                            disabled="disabled">
@@ -138,7 +138,7 @@
                                                                                disabled="disabled">
                                                                     </div>
                                                                     <div class="col-md-8">
-                                                                        <label>Telephone </label>
+                                                                        <label>Téléphone </label>
                                                                         <input type="text"
                                                                                class="form-control form-control-sm" value="{{$demandeenrole->tel_demande_enrolement}}"
                                                                                disabled="disabled">
@@ -165,7 +165,7 @@
                                             </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Date de traitement </label>
+                                                    <label>Date de validation </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->date_traitement_demande_enrolem}}"
                                                            disabled="disabled">
@@ -174,7 +174,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>NCC </label>
+                                                    <label>Numéro de compte contribuable (NCC)</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->ncc_demande_enrolement}}"
                                                            disabled="disabled">
@@ -183,7 +183,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Numero CNPS </label>
+                                                    <label>Numéro CNPS </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->numero_cnps_demande_enrolement}}"
                                                            disabled="disabled">
@@ -191,7 +191,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>RCCM </label>
+                                                    <label>Numéro du registre de commerce (RCCM) </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->rccm_demande_enrolement}}"
                                                            disabled="disabled">
@@ -201,7 +201,7 @@
                                             @if (isset($demandeenrole->piece_dfe_demande_enrolement))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Pièce DFE </label>
+                                                    <label>Pièce de la DFE </label>
                                                             <span class="badge bg-secondary"><a target="_blank"
                                                             onclick="NewWindow('{{ asset("/pieces/piece_dfe_demande_enrolement/". $demandeenrole->piece_dfe_demande_enrolement)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
@@ -212,7 +212,7 @@
                                             @if (isset($demandeenrole->piece_rccm_demande_enrolement))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Pièce RCCM </label>
+                                                    <label>Pièce du RCCM</label>
 
                                                     <span class="badge bg-secondary"><a target="_blank"
                                                             onclick="NewWindow('{{ asset("/pieces/piece_rccm_demande_enrolement/". $demandeenrole->piece_rccm_demande_enrolement)}}','',screen.width/2,screen.height,'yes','center',1);">
@@ -224,7 +224,7 @@
                                             @if (isset($demandeenrole->piece_attestation_immatriculati))
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Pièce attestation immatriculation </label>
+                                                    <label>Pièce d'attestation immatriculation *</label>
 
                                                             <span class="badge bg-secondary"><a target="_blank"
                                                         onclick="NewWindow('{{ asset("/pieces/piece_attestation_immatriculati/". $demandeenrole->piece_attestation_immatriculati)}}','',screen.width/2,screen.height,'yes','center',1);">
@@ -238,7 +238,7 @@
                                             <?php if($demandeenrole->flag_recevablilite_demande_enrolement == true){?>
 
                                                 <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite</label>
+                                                    <label class="form-label" for="billings-country">Motif de recevabilité</label>
 
                                                     <input type="text"
                                                             class="form-control form-control-sm" value="{{@$demandeenrole->motif1->libelle_motif}}"
@@ -247,7 +247,7 @@
 
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite: </label>
+                                                        <label>Commentaire recevabilité: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_demande_enrolement" id="commentaire_recevable_demande_enrolement" rows="6" disabled="disabled">{{@$demandeenrole->commentaire_recevable_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
