@@ -247,7 +247,7 @@
 
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilité: </label>
+                                                        <label>Commentaire de la recevabilité: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_demande_enrolement" id="commentaire_recevable_demande_enrolement" rows="6" disabled="disabled">{{@$demandeenrole->commentaire_recevable_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
@@ -267,7 +267,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire validation:</label>
+                                                        <label>Commentaire de la validation:</label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_demande_enrolement" id="commentaire_demande_enrolement" rows="6" >{{@$demandeenrole->commentaire_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
