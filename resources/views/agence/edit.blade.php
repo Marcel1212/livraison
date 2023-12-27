@@ -189,7 +189,7 @@
                         @foreach ($listeagencelocalites as $listeagencelocalite)
                             <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $listeagencelocalite->localite->libelle_localite }}</td>
+                            <td>{{ @$listeagencelocalite->localite->libelle_localite }}</td>
                             <td align="center">
                                 <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($listeagencelocalite->id_agence_localite)) }}"
                                    class=""
