@@ -2,8 +2,8 @@
 
 @section('content')
 
-    @php($Module='DEMANDE ENROLEMENT')
-    @php($titre='Liste des demandes d\'enrolements')
+    @php($Module='Demande enrôlement')
+    @php($titre='Liste des demandes d\'enrôlements')
     @php($lien='enrolement')
 
     <!-- BEGIN: Content-->
@@ -49,7 +49,7 @@
                                             <th>NCC </th>
                                             <th>Raison sociale </th>
                                             <th>Date de la demande </th>
-                                            <th>Recevablilité</th>
+                                            <th>Recevabilité</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
