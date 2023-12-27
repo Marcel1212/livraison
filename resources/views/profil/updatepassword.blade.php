@@ -163,7 +163,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>N° de compte contribuable </label>
+                                                    <label>Numéro de compte contribuable (NCC)*</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            value="{{@$infoentreprise->ncc_entreprises}}"
@@ -175,7 +175,7 @@
                                                     <label>Secteur d'activité </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
-                                                           value="{{@$infoentreprise->activite->libelle_activites}}"
+                                                           value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}"
                                                            disabled="disabled">
                                                 </div>
                                             </div>
@@ -185,6 +185,7 @@
                                                     <input type="text" name="localisation_geographique_entreprise"
                                                            id="localisation_geographique_entreprise"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Localisation géographique"
                                                            value="{{@$infoentreprise->localisation_geographique_entreprise}}"
                                                            required="required">
                                                 </div>
@@ -195,6 +196,7 @@
                                                     <input type="text" name="repere_acces_entreprises"
                                                            id="repere_acces_entreprises"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Repère d'accès"
                                                            value="{{@$infoentreprise->repere_acces_entreprises}}"
                                                            required="required">
                                                 </div>
@@ -205,6 +207,7 @@
                                                     <input type="text" name="adresse_postal_entreprises"
                                                            id="adresse_postal_entreprises"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Adresse postale"
                                                            value="{{@$infoentreprise->adresse_postal_entreprises}}"
                                                            required="required">
                                                 </div>
