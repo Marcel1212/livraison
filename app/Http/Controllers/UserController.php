@@ -158,7 +158,7 @@ class UserController extends Controller
             $SecteursActivite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
         }
 
-        $nacodes = 0;//Menu::get_code_menu_profil($id);
+        $nacodes = Menu::get_code_menu_profil($id);
 
         $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id]])->get();
 
