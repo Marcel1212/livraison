@@ -30,7 +30,7 @@ use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Helpers\AnneeExercice;
 use App\Helpers\PartEntreprisesHelper;
-
+use App\Models\SecteurActivite;
 
 class PlanFormationController extends Controller
 {
@@ -70,9 +70,18 @@ class PlanFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
+        /******************** secteuractivites *********************************/
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+            ->orderBy('libelle_secteur_activite')
+            ->get();
+        $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+        foreach ($secteuractivites as $comp) {
+            $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+        }
 
 
-        return view('planformation.create', compact('infoentreprise','typeentreprise','pay'));
+
+        return view('planformation.create', compact('infoentreprise','typeentreprise','pay','secteuractivites'));
     }
 
     /**
@@ -83,29 +92,21 @@ class PlanFormationController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                //'localisation_geographique_entreprise' => 'required',
-                //'repere_acces_entreprises' => 'required',
-                //'adresse_postal_entreprises' => 'required',
-                //'cellulaire_professionnel_entreprises' => 'required',
                 'nom_prenoms_charge_plan_formati' => 'required',
                 'fonction_charge_plan_formation' => 'required',
                 'email_professionnel_charge_plan_formation' => 'required',
                 'nombre_salarie_plan_formation' => 'required',
                 'id_type_entreprise' => 'required',
-                //'tel_entreprises' => 'required',
-                'masse_salariale' => 'required'
+                'masse_salariale' => 'required',
+                'id_secteur_activite' => 'required',
             ],[
-                //'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
-                //'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
-                //'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
-                //'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
-                //'tel_entreprises.required' => 'Veuillez ajouter un contact telephonique.',
                 'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                 'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                 'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
                 'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                 'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                 'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
+                'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
             ]);
 
 
@@ -115,10 +116,6 @@ class PlanFormationController extends Controller
 
             $input['date_creation'] = Carbon::now();
             $input['id_entreprises'] = $infoentrprise->id_entreprises;
-            //$input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
-            //$input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
-            //$input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
-            //$input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
             $input['nom_prenoms_charge_plan_formati'] = mb_strtoupper($input['nom_prenoms_charge_plan_formati']);
             $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
             $part = PartEntreprisesHelper::get_part_entreprise();
@@ -131,8 +128,15 @@ class PlanFormationController extends Controller
 
             $insertedId = PlanFormation::latest()->first()->id_plan_de_formation;
 
-            return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            if ($input['action'] == 'Enregister'){
 
+                return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
+
+            if ($input['action'] == 'Enregistrer_suivant'){
+
+                return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
         }
     }
 
@@ -210,9 +214,12 @@ class PlanFormationController extends Controller
 
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
 
+        /******************** secteuractivites *********************************/
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+            ->orderBy('libelle_secteur_activite')
+            ->get();
 
-
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape'));
+        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites'));
 
     }
 
@@ -230,27 +237,21 @@ class PlanFormationController extends Controller
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
-                    //'localisation_geographique_entreprise' => 'required',
-                    //'repere_acces_entreprises' => 'required',
-                    //'adresse_postal_entreprises' => 'required',
-                    //'cellulaire_professionnel_entreprises' => 'required',
                     'nom_prenoms_charge_plan_formati' => 'required',
                     'fonction_charge_plan_formation' => 'required',
                     'email_professionnel_charge_plan_formation' => 'required',
                     'nombre_salarie_plan_formation' => 'required',
                     'id_type_entreprise' => 'required',
-                    'masse_salariale' => 'required'
+                    'masse_salariale' => 'required',
+                    'id_secteur_activite' => 'required',
                 ],[
-                    //'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
-                    //'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
-                    //'adresse_postal_entreprises.required' => 'Veuillez ajouter une adresse postale.',
-                   // 'cellulaire_professionnel_entreprises.required' => 'Veuillez ajouter un contact cellulaire.',
                     'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                     'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                     'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
                     'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                     'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                     'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
+                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                 ]);
 
                 $input = $request->all();
@@ -300,10 +301,10 @@ class PlanFormationController extends Controller
 
                     CategoriePlan::create($input);
 
-                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Operation reussi. ');
+                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Operation reussi. ');
 
                 }else{
-                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('error', 'Erreur : Cela a deja ete saisie. ');
+                    return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cela a deja ete saisie. ');
                 }
 
 

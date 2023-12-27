@@ -96,7 +96,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link"
+                          class="nav-link <?php if($idetape==1){ echo "active";} ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-planformation"
@@ -108,7 +108,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if($idetape==1){ echo "active";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if($idetape==2){ echo "active";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-categorieplan"
@@ -120,7 +120,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if($idetape==2){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
+                          class="nav-link <?php if($idetape==3){ echo "active";}else{ echo "disabled";} //dd($activetab); echo $activetab; ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
@@ -131,7 +131,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       </li>
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+                      <div class="tab-pane fade <?php if($idetape==1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
 
                       <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
                             @csrf
@@ -153,14 +153,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
+                                <!--<div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Activité <strong style="color:red;">*</strong></label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Localisation geaographique <strong style="color:red;">*</strong></label>
@@ -242,7 +242,20 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Secteur d'activite pour le plan <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select"
+                                                data-allow-clear="true" name="id_secteur_activite"
+                                                id="id_secteur_activite" required>
+                                            <option value="{{@$infoentreprise->secteurActivite->id_secteur_activite}}">{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}</option>
+                                            @foreach ($secteuractivites as $activite)
+                                                <option
+                                                    value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong></label>
@@ -294,20 +307,20 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Part entreprise </label>
+                                        <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
                                         <input type="number"
                                                class="form-control form-control-sm"
                                                 value="{{@$planformation->part_entreprise}}" disabled="disabled">
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
+                                <!--<div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Seuil de cotisation </label>
                                         <input type="number"
                                                class="form-control form-control-sm"
                                                 value="10000" disabled="disabled">
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-12" align="right">
                                     <hr>
                                     <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
@@ -316,6 +329,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             Modifier
                                         </button>
                                     <?php } ?>
+
+
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+
 
                                     <!--<button type="button"
                                             class="btn btn-sm btn-secondary me-1 waves-effect waves-float waves-light" data-bs-toggle="modal" data-bs-target="#ajoutActionFomationPlan">
@@ -329,7 +346,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         </form>
 
                       </div>
-                      <div class="tab-pane fade <?php if($idetape==1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                      <div class="tab-pane fade <?php if($idetape==2){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                       <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}" enctype="multipart/form-data">
                                 @csrf
@@ -413,10 +430,11 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         <div class="col-12" align="right">
                             <hr>
 
+                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
                             <?php if (count($categorieplans)>=1){ ?>
 
 
-                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
                             <?php } ?>
@@ -425,12 +443,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 Retour</a>
                         </div>
                       </div>
-                      <div class="tab-pane fade <?php if($idetape==2){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
+                      <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                       <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <div class="row">
+                            <div>
+                            <div class="row">
                             <div class="col-12 col-md-12">
                             <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
@@ -612,15 +631,17 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 class="form-control form-control-sm"
                                  />
                             </div>
-
-
-
+                                </div>
+<hr>
 
                             <div class="col-12" align="right">
 
 
-                                <br/>
+
+                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
+
                                 <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
 
                                 <?php if ($actifsoumission == true){ ?>
