@@ -2,8 +2,8 @@
 
 @section('content')
 
-    @php($Module='Demande enrôlement')
-    @php($titre='Liste des demandes d\'enrôlements')
+    @php($Module='enrôlement')
+    @php($titre='Liste des enrôlements')
     @php($lien='enrolement')
 
     <!-- BEGIN: Content-->
