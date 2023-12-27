@@ -2,12 +2,12 @@
 
 @section('content')
 
-    @php($Module='DEMANDE ENROLEMENT')
-    @php($titre='Liste des demandes d\'enrolements')
+    @php($Module='Enrôlement')
+    @php($titre='Liste des enrôlements')
     <?php if($demandeenrole->flag_recevablilite_demande_enrolement == true){ ?>
-        @php($soustitre='Traitement de demande d\'enrolement')
+        @php($soustitre='Traitement des enrôlements')
     <?php }else{ ?>
-        @php($soustitre='Traitement de la demande de recevabilité d\'enrolement')
+        @php($soustitre='Traitement de la recevabilité de l\'enrôlement')
     <?php } ?>
     @php($lien='enrolement')
 
@@ -111,7 +111,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Secteur activité</label>
+                                                    <label>Secteur d'activité</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->secteurActivite->libelle_secteur_activite}}"
                                                            disabled="disabled">
@@ -238,7 +238,7 @@
                                             <?php if($demandeenrole->flag_recevablilite_demande_enrolement == true){?>
 
                                                 <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilité</label>
+                                                    <label class="form-label" for="billings-country">Motif de la recevabilité</label>
 
                                                     <input type="text"
                                                             class="form-control form-control-sm" value="{{@$demandeenrole->motif1->libelle_motif}}"
@@ -254,7 +254,7 @@
 
 
                                                 <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de validation</label>
+                                                    <label class="form-label" for="billings-country">Motif de la validation</label>
                                                     <?php if($demandeenrole->flag_traitement_demande_enrolem != true){ ?>
                                                         <select class="form-select" data-allow-clear="true" name="id_motif" id="id_motif">
                                                             <?= $motif; ?>
@@ -289,7 +289,7 @@
                                                 </div>
                                             <?php }elseif($demandeenrole->flag_recevablilite_demande_enrolement == false and $demandeenrole->flag_recevablilite_demande_enrolement != null){ ?>
                                                 <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite</label>
+                                                    <label class="form-label" for="billings-country">Motif de la recevabilité</label>
 
                                                     <input type="text"
                                                             class="form-control form-control-sm" value="{{@$demandeenrole->motif1->libelle_motif}}"
@@ -298,7 +298,7 @@
 
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite: </label>
+                                                        <label>Commentaire de la recevabilité: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_demande_enrolement" id="commentaire_recevable_demande_enrolement" rows="6" disabled="disabled">{{@$demandeenrole->commentaire_recevable_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
@@ -312,7 +312,7 @@
                                             <?php }else{ ?>
 
                                                 <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite</label>
+                                                    <label class="form-label" for="billings-country">Motif de la recevabilité</label>
 
                                                         <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
@@ -320,7 +320,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite: </label>
+                                                        <label>Commentaire de la recevabilité: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_demande_enrolement" id="commentaire_recevable_demande_enrolement" rows="6">{{@$demandeenrole->commentaire_recevable_demande_enrolement}}</textarea>
                                                     </div>
                                                 </div>
