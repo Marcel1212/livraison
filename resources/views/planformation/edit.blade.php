@@ -326,7 +326,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                                         <button type="submit" name="action" value="Modifier"
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Modifier
+                                                Enregister
                                         </button>
                                     <?php } ?>
 
