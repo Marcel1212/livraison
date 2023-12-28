@@ -1,13 +1,9 @@
 @extends('layouts.backLayout.designadmin')
-
 @section('content')
-
     @php($Module='Parametrage')
     @php($titre='Liste des centres d\'impots')
     @php($soustitre='Ajouter un centre d\'impot')
     @php($lien='centreimpot')
-
-
     <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -17,19 +13,16 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$soustitre}}</h2>
                             <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{$lien}}">{{$titre}}</a></li>
-                                    <li class="breadcrumb-item active">{{$soustitre}}  </li>
-                                </ol>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
+    <h5 class="py-2 mb-1">
+        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+    </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -40,12 +33,15 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <section id="multiple-column-form">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">{{$soustitre}} </h4>
+                <div class="row">
+                        <!-- Basic Layout -->
+                        <div class="col-xxl">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <h5 class="mb-0">{{$titre}}</h5>
+                                    <small class="text-muted float-end">
+
+                                    </small>
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" class="form" action="{{ route($lien.'.store') }}">
@@ -56,15 +52,14 @@
                                                 <div class="mb-1">
                                                     <label>Centre d'impot </label>
                                                     <input type="text" name="libelle_centre_impot" id="libelle_centre_impot"
-                                                           class="form-control form-control-sm" 
-                                                           required>
+                                                    class="form-control form-control-sm" placeholder="Code">
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_centre_impot"
-                                                           id="colorCheck1">
+                                                           id="flag_centre_impot">
                                                 </div>
                                             </div>
                                             <div class="col-12" align="right">
@@ -83,10 +78,10 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                
             </div>
         </div>
-    </div>
+    
     <!-- END: Content-->
 
 @endsection
