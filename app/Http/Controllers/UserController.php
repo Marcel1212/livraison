@@ -156,7 +156,7 @@ class UserController extends Controller
         $SecteursActivites = SecteurActivite::where([['flag_actif_secteur_activite', '=', true]])->get();
         $SecteursActivite = "<option value=''> -- Sélectionnez un secteur d'activité -- </option>";
         foreach ($SecteursActivites as $comp) {
-            $SecteursActivite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
+            $SecteursActivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
         }
 
         $nacodes = Menu::get_code_menu_profil($id);

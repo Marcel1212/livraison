@@ -292,6 +292,7 @@
                 </div>
             </div>
         </div>
+        <?php if ($nacodes == "CONSEILLER") { ?>
         <div class="row">
             <!-- Basic Layout -->
             <div class="col-xxl">
@@ -300,7 +301,7 @@
                         <h5 class="mb-0">Secteur d'activité   d'intervention</h5>
                     </div>
                     <div class="card-body">
-                        <?php if ($nacodes == "CONSEILLER") { ?>
+
                         <form method="POST" class="form"
                               action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($user->id)) }}"
                               enctype="multipart/form-data">
@@ -340,8 +341,9 @@
                             <tbody>
                                 <?php $i = 0; ?>
                             @foreach ($secteurlierusers as $secteurlieruser)
+                            <tr>
                                 <td>{{ ++$i }}</td>
-                                <td>{{ $secteurlieruser->activite->libelle_activites }}</td>
+                                <td>{{ $secteurlieruser->secteurActivite->libelle_secteur_activite }}</td>
                                 <td align="center">
                                     <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($secteurlieruser->id_secteur_user_consseiller)) }}"
                                        class=""
@@ -349,14 +351,16 @@
                                        title="Suprimer"> <img src='/assets/img/trash-can-solid.png'>
                                     </a>
                                 </td>
+                            </tr>
                             @endforeach
                             </tbody>
                         </table>
-                        <?php } ?>
+
                     </div>
                 </div>
             </div>
         </div>
+        <?php } ?>
         <!-- END: Content-->
 
 @endsection
