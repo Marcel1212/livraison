@@ -13,10 +13,10 @@
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
     </h5>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <div class="alert-body">
-                {{ $message }}
+                      @if ($message = Session::get('success'))
+                      <div class="alert alert-success alert-dismissible fade show" role="alert">
+                           <div class="alert-body">
+                                 {{ $message }}
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

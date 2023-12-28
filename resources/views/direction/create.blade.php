@@ -13,18 +13,17 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            <h2 class="content-header-title float-start mb-0">{{$soustitre}}</h2>
+                            
                             <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">{{$Module}}</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{$lien}}">{{$titre}}</a></li>
-                                    <li class="breadcrumb-item active">{{$soustitre}}  </li>
-                                </ol>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <h5 class="py-2 mb-1">
+                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+                </h5>
             <div class="content-body">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -60,7 +59,6 @@
                                                            class="form-control form-control-sm" placeholder="Code">
                                                 </div>
                                             </div>                                            
-
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>

@@ -38,6 +38,7 @@ class ServiceController extends Controller
         if ($request->isMethod('post')) {
             $request->validate([
                 'libelle_service' => 'required'
+                
             ]);
 
             $input = $request->all();
@@ -60,7 +61,6 @@ class ServiceController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     * 
      * @param \App\Models\Service $service
      * @return \Illuminate\Http\Response
      */
@@ -86,6 +86,7 @@ class ServiceController extends Controller
     {
         $request->validate([
             'libelle_service' => 'required'
+            
         ]);
 
         $input = $request->all();
