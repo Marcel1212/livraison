@@ -334,7 +334,7 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Sectteur d'activite</th>
+                                <th>Secteur d'activité</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
