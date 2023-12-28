@@ -297,7 +297,7 @@
             <div class="col-xxl">
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="mb-0">{{$titre}}</h5>
+                        <h5 class="mb-0">Secteur d'activité   d'intervention</h5>
                     </div>
                     <div class="card-body">
                         <?php if ($nacodes == "CONSEILLER") { ?>
@@ -308,8 +308,6 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-10 col-md-11">
-                                    <label class="form-label" for="id_secteur_activite">Secteur d'activité
-                                        d'intervention</label>
                                     <select
                                         id="id_secteur_activite"
                                         name="id_secteur_activite"
@@ -320,9 +318,9 @@
                                 </div>
 
 
-                                <div class="col-2 col-md-1" align="right"><br>
+                                <div class="col-2 col-md-1" align="right">
                                     <button type="submit" name="action" value="Lier_secteur_Conseiller"
-                                            class="btn btn-sm btn-success me-sm-3 me-1">Ajouter
+                                            class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter
                                     </button>
                                 </div>
 
