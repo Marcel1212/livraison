@@ -95,22 +95,22 @@
                                         <div class="row">
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
-                                                    <label>Profil utilisateur</label>
-                                                    <select class="select2 select2-size-sm form-select" name="roles" id="profiles" onchange="changeFunc();">
+                                                    <label>Profil utilisateur</label> <strong style="color: red">(*)</strong>
+                                                    <select class="select2 select2-size-sm form-select" name="roles" id="profiles" onchange="changeFunc();" required>
                                                         <?php echo $roles; ?>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Identifiant</label>
+                                                    <label>Identifiant</label> <strong style="color: red">6 caractères minimum</strong>
                                                     <input type="text" name="login_users" id="login_users"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Identifiant"
+                                                           placeholder="Identifiant" minlength="6"
                                                            required></div>
                                             </div>
                                             <div class="col-md-4">
-                                                <label class="form-label" for="state">Direction</label>
+                                                <label class="form-label" for="state">Direction </label> <strong style="color: red">(*)</strong>
                                                 <select class="select2 form-select" id="direction" name="id_direction"/>
                                                     <option value='0'>Directions</option>
                                                     @foreach($directions as $direction)
@@ -134,7 +134,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Nom </label>
+                                                    <label>Nom </label> <strong style="color: red">(*)</strong>
                                                     <input type="text" name="name" id="name"
                                                            class="form-control form-control-sm" placeholder="Nom"
                                                            required>
@@ -142,16 +142,16 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Prénoms</label>
+                                                    <label>Prénoms</label> <strong style="color: red">(*)</strong>
                                                     <input type="text" name="prenom_users" id="prenom_users"
                                                            class="form-control form-control-sm" placeholder="Prénoms">
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Mot de passe</label>
+                                                    <label>Mot de passe</label> <strong style="color: red">6 caractères minimum</strong>
                                                     <input type="password" name="password" id="password"
-                                                           class="form-control form-control-sm"
+                                                           class="form-control form-control-sm" minlength="6"
                                                            placeholder="Mot de passe">
                                                 </div>
                                             </div>
@@ -166,9 +166,9 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Email :</label>
+                                                    <label>Email :</label>  <strong style="color: red">(*)</strong>
                                                     <input type="email" name="email" id="email"
-                                                           class="form-control form-control-sm" placeholder="Email">
+                                                           class="form-control form-control-sm" placeholder="Email" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-12">
@@ -196,8 +196,8 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Antenne :</label>
-                                                    <select class="select2 select2-size-sm form-select" name="num_agce" id="num_agce">
+                                                    <label>Antenne :</label> <strong style="color: red">(*)</strong>
+                                                    <select class="select2 select2-size-sm form-select" name="num_agce" id="num_agce" required>
                                                         <?php echo $Entite; ?>
                                                     </select></div>
                                             </div>
