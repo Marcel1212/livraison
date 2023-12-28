@@ -262,10 +262,10 @@ class PlanFormationController extends Controller
                 $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
 
-                $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
-                $input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
-                $input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
-                $input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
+                //$input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
+                //$input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
+                //$input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
+                //$input['cellulaire_professionnel_entreprises'] = mb_strtoupper($input['cellulaire_professionnel_entreprises']);
                 $input['nom_prenoms_charge_plan_formati'] = mb_strtoupper($input['nom_prenoms_charge_plan_formati']);
                 $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
                 $part = PartEntreprisesHelper::get_part_entreprise();
