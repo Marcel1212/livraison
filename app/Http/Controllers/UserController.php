@@ -9,6 +9,7 @@ use App\Helpers\Envoisms;
 use App\Models\Agence;
 use App\Models\Direction;
 use App\Models\Departement;
+use App\Models\SecteurActivite;
 use App\Models\Service;
 use App\Models\Activites;
 use App\Models\User;
@@ -149,20 +150,18 @@ class UserController extends Controller
         //dd($userRole);
         foreach ($Roless as $comp) {
             if ($userRole == $comp->name) {$val = 'selected="selected"'; } else { $val = '';}
-            $Roless .= "<option  value='" . $comp->name . "' $val  > " . $comp->name . " </option>";
+            $Roless .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."' $val  > " . $comp->name . " </option>";
         }
 
-        $SecteursActivites = Activites::all();
-        $SecteursActivite = "<option value=''> Selectionnez le secteur d'activite </option>";
+        $SecteursActivites = SecteurActivite::where([['flag_actif_secteur_activite', '=', true]])->get();
+        $SecteursActivite = "<option value=''> -- Sélectionnez un secteur d'activité -- </option>";
         foreach ($SecteursActivites as $comp) {
-            $SecteursActivite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
+            $SecteursActivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
         }
 
         $nacodes = Menu::get_code_menu_profil($id);
-
         $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id]])->get();
-
-        $directions = Direction::all();
+        $directions = Direction::where([['flag_direction', '=', true]])->get();
         return view('users.edit', compact('user', 'roles', 'userRole', 'Entite','Roless','directions','SecteursActivite','secteurlierusers','nacodes'));
     }
 
@@ -205,6 +204,7 @@ class UserController extends Controller
                 $user->update($input);
                 DB::table('model_has_roles')->where('model_id', $id)->delete();
                 $exploeprofil = explode("/",$request->input('roles'));
+                //dd($exploeprofil);
                 $valprofile = $exploeprofil[0];
                 $valcodeprofile = $exploeprofil[1];
                 //$user->assignRole($request->input('roles'));

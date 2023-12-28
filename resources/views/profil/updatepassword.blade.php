@@ -163,7 +163,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>N° de compte contribuable </label>
+                                                    <label>Numéro de compte contribuable (NCC)*</label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            value="{{@$infoentreprise->ncc_entreprises}}"
@@ -175,7 +175,7 @@
                                                     <label>Secteur d'activité </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
-                                                           value="{{@$infoentreprise->activite->libelle_activites}}"
+                                                           value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}"
                                                            disabled="disabled">
                                                 </div>
                                             </div>
@@ -185,6 +185,7 @@
                                                     <input type="text" name="localisation_geographique_entreprise"
                                                            id="localisation_geographique_entreprise"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Localisation géographique"
                                                            value="{{@$infoentreprise->localisation_geographique_entreprise}}"
                                                            required="required">
                                                 </div>
@@ -195,6 +196,7 @@
                                                     <input type="text" name="repere_acces_entreprises"
                                                            id="repere_acces_entreprises"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Repère d'accès"
                                                            value="{{@$infoentreprise->repere_acces_entreprises}}"
                                                            required="required">
                                                 </div>
@@ -205,6 +207,7 @@
                                                     <input type="text" name="adresse_postal_entreprises"
                                                            id="adresse_postal_entreprises"
                                                            class="form-control form-control-sm"
+                                                           placeholder="Adresse postale"
                                                            value="{{@$infoentreprise->adresse_postal_entreprises}}"
                                                            required="required">
                                                 </div>
@@ -357,6 +360,63 @@
                                     </form>
                                     <?php } ?>
                                 </div>
+                                </div>
+                                </div>
+                                </div>
+                                <br/>
+                                <div class="card">
+                                    <div class="table-responsive">
+                                        <div id="DataTables_Table_0_wrapper"
+                                             class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data"
+                                        class="form form-horizontal"
+                                        action="{{ route('modifier.mot.passe') }}">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-9 col-12">
+                                            <label class="form-label">Liste des activités de liée à l'entreprise </label>
+
+                                            <select class="select2 form-select"
+                                                    data-allow-clear="true" name="id_activites"
+                                                    required="required">
+                                                <?= $activite; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3"  align="right"><br/>
+                                            <button type="submit" name="action" value="profil_entreprise_activite"
+                                                    class="btn btn-sm btn-primary">
+                                                Ajouter activité
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <table class="table table-bordered table-striped table-hover table-sm "
+                                        id=""
+                                        style="margin-top: 13px !important">
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Activité </th>
+                                        <th >Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i=0; ?>
+                                    @foreach ($listeactivites as $key => $listeactivite)
+                                        <tr>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $listeactivite->activite->libelle_activites }}</td>
+                                            <td align="center">
+                                                <a href="{{ route('deleteactiviteentreprise',\App\Helpers\Crypt::UrlCrypt($listeactivite->id_activites_entreprises)) }}"
+                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
+                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

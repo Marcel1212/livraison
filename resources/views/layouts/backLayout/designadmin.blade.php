@@ -216,28 +216,31 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <!-- Drag Target Area To SlideIn Menu On Small Screens -->
 <div class="drag-target"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
 <!-- / Layout wrapper -->
 
 <!-- Core JS -->
-<!-- build:js assets/vendor/js/core.js -->
-<script src="{{asset('/assets/vendor/libs/select2/select2.js')}}"></script>
 <script src="{{asset('/assets/js/codeapp.js')}}"></script>
+
+<!-- build:js assets/vendor/js/core.js -->
+<script src="{{asset('/assets/vendor/js/menu.js')}}"></script>
+<script src="{{asset('/assets/vendor/js/bootstrap.js')}}"></script>
+
+<!-- Vendors JS -->
 <script src="{{asset('/assets/vendor/libs/jquery/jquery.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/popper/popper.js')}}"></script>
-<script src="{{asset('/assets/vendor/js/bootstrap.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/node-waves/node-waves.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/hammer/hammer.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/i18n/i18n.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
-<script src="{{asset('/assets/vendor/js/menu.js')}}"></script>
-
-<!-- Vendors JS -->
 <script src="{{asset('/assets/vendor/libs/apex-charts/apexcharts.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/swiper/swiper.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/moment/moment.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/flatpickr/flatpickr.js')}}"></script>
+<script src="{{asset('/assets/vendor/libs/select2/select2.js')}}"></script>
 
 <!-- Main JS -->
 <script src="{{asset('/assets/js/main.js')}}"></script>
@@ -245,45 +248,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <!-- Page JS -->
 <script src="{{asset('/assets/js/app-academy-dashboard.js')}}"></script>
 <script src="{{asset('/assets/js/forms-editors.js')}}"></script>
-<script>
-    $(function () {
-        $('#profiles').on('change', function (e) {
-            var roles = e.target.value;
-        });
 
-
-        $('#direction').on('change', function (e) {
-            var id_direction = e.target.value;
-            telUpdate(id_direction);
-        });
-
-        function telUpdate(id) {
-            //alert('testanc'); //exit;
-            $.get('/departementlist/' + id, function (data) {
-                // alert(data); //exit;
-                $('#departement').empty();
-                $.each(data, function (index, tels) {
-                    $('#departement').append($('<option>', {
-                        value: tels.id_departement,
-                        text: tels.libelle_departement,
-                    }));
-
-                    $.get('/servicelist/' + tels.id_departement, function (data) {
-                        $('#service').empty();
-                        $.each(data, function (index, tels) {
-                            $('#service').append($('<option>', {
-                                value: tels.id_service,
-                                text: tels.libelle_service,
-                            }));
-
-
-                        });
-                    });
-                });
-            });
-        }
-    }
-</script>
 
 
 <script>

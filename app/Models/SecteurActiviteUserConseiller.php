@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_secteur_activite_user_conseiller
  * @property string $updated_at
  * @property string $created_at
- * @property Activite $activite
  * @property User $user
+ * @property SecteurActivite $secteurActivite
  */
 class SecteurActiviteUserConseiller extends Model
 {
@@ -38,13 +38,6 @@ class SecteurActiviteUserConseiller extends Model
     protected $keyType = 'float';
 
     /**
-     * Indicates if the IDs are auto-incrementing.
-     * 
-     * @var bool
-     */
-    public $incrementing = false;
-
-    /**
      * @var array
      */
     protected $fillable = ['id_user_conseiller', 'id_secteur_activite', 'flag_secteur_activite_user_conseiller', 'updated_at', 'created_at'];
@@ -52,16 +45,16 @@ class SecteurActiviteUserConseiller extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function activite()
+    public function user()
     {
-        return $this->belongsTo('App\Models\Activites', 'id_secteur_activite', 'id_activites');
+        return $this->belongsTo('App\Models\User', 'id_user_conseiller');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function secteurActivite()
     {
-        return $this->belongsTo('App\Models\User', 'id_user_conseiller');
+        return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
     }
 }

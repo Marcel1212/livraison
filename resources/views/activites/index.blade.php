@@ -67,12 +67,6 @@
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     @endcan
-
-                                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($activite->id_activites)) }}"
-                                                            class=" " title="Modifier"><img
-                                                                src='/app-assets/images/icons/bouton-modifier.png'></a>
-
-
                                                     </td>
                                                 </tr>
                                             @endforeach
