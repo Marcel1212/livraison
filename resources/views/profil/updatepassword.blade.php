@@ -364,62 +364,64 @@
                                 </div>
                                 </div>
                                 <br/>
+                                <?php if ($naroles == "ENTREPRISE"){ ?>
                                 <div class="card">
                                     <div class="table-responsive">
                                         <div id="DataTables_Table_0_wrapper"
                                              class="dataTables_wrapper dt-bootstrap5 no-footer">
-                                <div class="card-body">
-                                <form method="POST" enctype="multipart/form-data"
-                                        class="form form-horizontal"
-                                        action="{{ route('modifier.mot.passe') }}">
-                                    @csrf
-                                    <div class="row">
-                                        <div class="col-md-9 col-12">
-                                            <label class="form-label">Liste des activités de liée à l'entreprise </label>
+                                            <div class="card-body">
+                                            <form method="POST" enctype="multipart/form-data"
+                                                    class="form form-horizontal"
+                                                    action="{{ route('modifier.mot.passe') }}">
+                                                @csrf
+                                                <div class="row">
+                                                    <div class="col-md-9 col-12">
+                                                        <label class="form-label">Liste des activités de liée à l'entreprise </label>
 
-                                            <select class="select2 form-select"
-                                                    data-allow-clear="true" name="id_activites"
-                                                    required="required">
-                                                <?= $activite; ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-3"  align="right"><br/>
-                                            <button type="submit" name="action" value="profil_entreprise_activite"
-                                                    class="btn btn-sm btn-primary">
-                                                Ajouter activité
-                                            </button>
+                                                        <select class="select2 form-select"
+                                                                data-allow-clear="true" name="id_activites"
+                                                                required="required">
+                                                            <?= $activite; ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3"  align="right"><br/>
+                                                        <button type="submit" name="action" value="profil_entreprise_activite"
+                                                                class="btn btn-sm btn-primary">
+                                                            Ajouter activité
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                            <table class="table table-bordered table-striped table-hover table-sm "
+                                                    id=""
+                                                    style="margin-top: 13px !important">
+                                                <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Activité </th>
+                                                    <th >Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $i=0; ?>
+                                                @foreach ($listeactivites as $key => $listeactivite)
+                                                    <tr>
+                                                        <td>{{ ++$i }}</td>
+                                                        <td>{{ $listeactivite->activite->libelle_activites }}</td>
+                                                        <td align="center">
+                                                            <a href="{{ route('deleteactiviteentreprise',\App\Helpers\Crypt::UrlCrypt($listeactivite->id_activites_entreprises)) }}"
+                                                                class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
+                                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
-                                </form>
-
-                                <table class="table table-bordered table-striped table-hover table-sm "
-                                        id=""
-                                        style="margin-top: 13px !important">
-                                    <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Activité </th>
-                                        <th >Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i=0; ?>
-                                    @foreach ($listeactivites as $key => $listeactivite)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            <td>{{ $listeactivite->activite->libelle_activites }}</td>
-                                            <td align="center">
-                                                <a href="{{ route('deleteactiviteentreprise',\App\Helpers\Crypt::UrlCrypt($listeactivite->id_activites_entreprises)) }}"
-                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
-                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                                </div>
+                                <?php } ?>
                 </div>
             </div>
             <!-- END: Content-->

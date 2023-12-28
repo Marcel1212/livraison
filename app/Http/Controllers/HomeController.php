@@ -374,14 +374,23 @@ class HomeController extends Controller
         foreach ($pays as $comp) {
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
+//dd($infoentreprise);
+        //if(isset($infoentreprise)){
 
-        $activites = Activites::where([['id_secteur_activite','=',$infoentreprise->id_secteur_activite_entreprise],['flag_activites','=',true]])->get();
-        $activite = "<option value=''> -- Sélectionnez une activité -- </option>";
-        foreach ($activites as $comp) {
-            $activite .= "<option value='" . $comp->id_activites  . "'>" . $comp->libelle_activites ." </option>";
-        }
+            $activites = Activites::where([['id_secteur_activite','=',@$infoentreprise->id_secteur_activite_entreprise],['flag_activites','=',true]])->get();
+            $activite = "<option value=''> -- Sélectionnez une activité -- </option>";
+            foreach ($activites as $comp) {
+                $activite .= "<option value='" . @$comp->id_activites  . "'>" . @$comp->libelle_activites ." </option>";
+            }
 
-        $listeactivites = ActivitesEntreprises::where([['id_entreprises','=',$infoentreprise->id_entreprises],['flag_activites_entreprises','=',true]])->get();
+            $listeactivites = ActivitesEntreprises::where([['id_entreprises','=',@$infoentreprise->id_entreprises],['flag_activites_entreprises','=',true]])->get();
+
+        /*}else{
+            $activites = [];
+            $activite = [];
+            $listeactivites = [];
+        }*/
+
         return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay','activite','listeactivites'));
 
     }
