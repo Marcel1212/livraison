@@ -248,7 +248,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <select class="select2 form-select"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite" required>
-                                            <option value="{{@$infoentreprise->secteurActivite->id_secteur_activite}}">{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}</option>
+                                            <option value="{{@$planformation->secteurActivite->id_secteur_activite}}">{{@$planformation->secteurActivite->libelle_secteur_activite}}</option>
                                             @foreach ($secteuractivites as $activite)
                                                 <option
                                                     value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>

@@ -206,7 +206,7 @@ class UserController extends Controller
 
             if ($data['action'] == 'Modifier'){
 
-                $this->validate($request, [
+                /*$this->validate($request, [
                     'name' => 'required',
                     'login_users' => 'required|unique:users,login_users|min:6',
                     'email' => 'required|unique:users,email',
@@ -226,7 +226,7 @@ class UserController extends Controller
                     'password.required' => 'Veuillez ajouter un mot de passe.',
                     'password.min' => 'Le mot de passe doit avoir au moins 6 caractère.',
                     'num_agce.required' => 'Veuillez ajouter une antenne.'
-                ]);
+                ]);*/
 
                 $user = User::find($id);
                 $input = $request->all();
