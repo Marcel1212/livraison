@@ -10,6 +10,7 @@
     <script type="text/javascript">
 
         function changeFunc() {
+            //alert('code');exit;
             //location.reload();
            // location.href = location.href;
            //document.getElementById("departement").innerHTML = "";
@@ -20,7 +21,6 @@
             const myArray = selectedValue.split("/");
             let profile = myArray[0];
             let code = myArray[1];
-
             if(code === 'DIR'){
                 document.getElementById("direction").disabled = false;
                 document.getElementById("departement").disabled = true;
@@ -41,7 +41,7 @@
                 document.getElementById("departement").disabled = false;
                 document.getElementById("service").disabled = false;
             }
-           // alert(code)
+
             // alert(selectedValue);
             /*if (selectedValue==3 || selectedValue==1){
                 document.getElementById("superfie_lot").disabled = true;
@@ -57,7 +57,9 @@
                 document.getElementById("type_superficie_lot").disabled = false;
             }*/
 
-        }
+        };
+
+
 
     </script>
 
@@ -227,18 +229,9 @@
         </div>
     <!-- END: Content-->
 
-    <script>
+<!--<script language="JavaScript" type="text/javascript">
 
-        /*$(function(){
-            $('#profiles').on('change',function(e)
-            {
-                var roles=e.target.value;
-                alert(roles); //exit;
-
-            });
-
-            });*/
-    </script>
+</script>-->
 
 @endsection
 

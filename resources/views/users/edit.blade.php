@@ -112,7 +112,7 @@
                                 <div class="col-md-8 col-12">
                                     <div class="mb-1">
                                         <label>Profil utilisateur</label>
-                                        <select class="select2 select2-size-sm form-select" name="roles" id="roles">
+                                        <select class="select2 select2-size-sm form-select" name="roles" id="profiles" onchange="changeFunc();">
                                                 <?php echo $Roless; ?>
                                         </select>
                                     </div>
