@@ -186,6 +186,11 @@ class PlanFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
+        $payss = Pays::where([['flag_actif_pays','=',true]])->get();
+        $paysc = "<option value=''> ---Selectionnez un pays--- </option>";
+        foreach ($payss as $comp) {
+            $paysc .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
         $butformations = ButFormation::all();
         $butformation = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($butformations as $comp) {
@@ -219,7 +224,7 @@ class PlanFormationController extends Controller
             ->orderBy('libelle_secteur_activite')
             ->get();
 
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites'));
+        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc'));
 
     }
 
@@ -313,8 +318,18 @@ class PlanFormationController extends Controller
             if ($data['action'] == 'Enregistrer_soumettre_plan_formation'){
                 $anneexercice = AnneeExercice::get_annee_exercice();
                 if(isset($anneexercice->id_periode_exercice)){
+
+                    $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
+                    $montantcouttotal = 0;
+
+                    foreach($actionformationvals as $actionformationval){
+                        $montantcouttotal += $actionformationval->cout_action_formation_plan;
+                    }
+
                     PlanFormation::where('id_plan_de_formation',$id)->update([
                         'flag_soumis_plan_formation' => true,
+                        'cout_total_demande_plan_formation' => $montantcouttotal,
                         'id_annee_exercice' => $anneexercice->id_periode_exercice,
                         'date_soumis_plan_formation' => Carbon::now()
                     ]);
