@@ -30,8 +30,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
     }
 }
 
+$idpart = Auth::user()->id_partenaire;
 
-
+//dd($idpart);
 ?>
 @extends('layouts.backLayout.designadmin')
 
@@ -42,7 +43,90 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
     @php($soustitre='Modifier une demande de plan de formation')
     @php($lien='planformation')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script type="text/javascript">
+
+       // document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+        function changeFunction() {
+            //alert('code');exit;
+
+            var selectBox = document.getElementById("id_type_formation");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            //alert(selectedValue);
+
+            if(selectedValue == 1){
+
+                //function telUpdate() {
+                //alert('testanc'); //exit;
+
+                document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+                $.get('/entrepriseinterneplan', function (data) {
+                     //alert(data); //exit;
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+
+
+                    });
+                });
+                // }
+
+            }
+
+            if(selectedValue == 2 || selectedValue ==3 || selectedValue == 5){
+
+                document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+                $.get('/entreprisecabinetformation', function (data) {
+                     //alert(data); //exit;
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                    });
+                });
+
+            }
+
+
+            if(selectedValue == 4){
+
+                document.getElementById("Activeajoutercabinetformation").disabled = false;
+
+                $.get('/entreprisecabinetetrangerformation', function (data) {
+                     //alert(data); //exit;
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                    });
+                });
+
+                //$('#Activeajoutercabinetformation').removeAttr('disabled');
+               // $('#cabinetetranger').modal('show');
+
+            }
+
+
+
+
+        };
+
+
+
+    </script>
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
@@ -153,17 +237,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
-                                <!--<div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Activité <strong style="color:red;">*</strong></label>
-                                        <input type="text"
-                                               class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
-                                    </div>
-                                </div>-->
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation geaographique <strong style="color:red;">*</strong></label>
+                                        <label>Localisation géographique  <strong style="color:red;">*</strong></label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -179,7 +256,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
+                                        <label>Adresse postale <strong style="color:red;">*</strong></label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
@@ -196,7 +273,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone  <strong style="color:red;">*</strong></label>
+                                                <label class="form-label">Téléphone  <strong style="color:red;">*</strong></label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
@@ -244,7 +321,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Secteur d'activite pour le plan <strong style="color:red;">*</strong></label>
+                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
                                         <select class="select2 form-select"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite" required>
@@ -258,7 +335,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong></label>
+                                        <label>Nom et prénom du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}">
                                     </div>
@@ -274,7 +351,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation <strong style="color:red;">*</strong></label>
+                                        <label>Email professionnel du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->email_professionnel_charge_plan_formation}}">
                                     </div>
@@ -282,7 +359,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
+                                        <label>Nombre total de salariés <strong style="color:red;">*</strong></label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}">
                                     </div>
@@ -353,7 +430,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @method('put')
                                 <div class="row">
                                     <div class="col-12 col-md-4">
-                                        <label class="form-label" for="id_categorie_professionelle">Categorie <strong style="color:red;">*</strong></label>
+                                        <label class="form-label" for="id_categorie_professionelle">Categories <strong style="color:red;">*</strong></label>
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
@@ -380,6 +457,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             type="number"
                                             id="nombre_plan"
                                             name="nombre_plan"
+                                            min="1"
                                             class="form-control form-control-sm"
                                             required="required" />
                                     </div>
@@ -445,13 +523,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       </div>
                       <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
-                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}" enctype="multipart/form-data">
+                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                             <div>
                             <div class="row">
                             <div class="col-12 col-md-12">
-                            <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="intitule_action_formation_plan"
@@ -460,20 +538,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 value="{{ old('intitule_action_formation_plan') }}"
                                  />
                             </div>
-                            <div class="col-12 col-md-4">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation <strong style="color:red;">*</strong></label>
 
-                                <select class="select2 form-select-sm input-group" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
-                                    <?php echo $structureformation; ?>
-                                 </select>
-
-                            <!--<input
-                                type="text"
-                                id="structure_etablissement_action_"
-                                name="structure_etablissement_action_"
-                                class="form-control form-control-sm"
-                                 />-->
-                            </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires <strong style="color:red;">*</strong></label>
                             <input
@@ -485,7 +550,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="nombre_groupe_action_formation_"
@@ -520,9 +585,30 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="id_type_formation"
                                 name="id_type_formation"
                                 class="select2 form-select-sm input-group"
-                                aria-label="Default select example" >
+                                aria-label="Default select example"
+                                onchange="changeFunction();">
                                 <?= $typeformation; ?>
                             </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-10">
+                                        <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
+
+                                        <select class="select2 form-select-sm input-group" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                            <option value='0'></option>
+                                            <?php echo $structureformation; ?>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <br>
+                                        <button type="button" id="Activeajoutercabinetformation"
+                                        class="btn" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
+                                            <img src='/assets/img/editing.png'>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
@@ -535,7 +621,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             </select>
                             </div>
                             <div class="col-12 col-md-2">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
                                 id="date_debut_fiche_agrement"
@@ -545,7 +631,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                />
                             </div>
                             <div class="col-12 col-md-2">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation <strong style="color:red;">*</strong></label>
                             <input
                                 type="date"
                                 id="date_fin_fiche_agrement"
@@ -574,7 +660,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>-->
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
                             <input
                                 type="text"
                                 id="objectif_pedagogique_fiche_agre"
@@ -584,7 +670,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="cadre_fiche_demande_agrement"
@@ -594,7 +680,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="agent_maitrise_fiche_demande_ag"
@@ -604,7 +690,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="employe_fiche_demande_agrement"
@@ -614,7 +700,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="file_beneficiare">Charger les bénéficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="file_beneficiare"
@@ -623,7 +709,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="facture_proforma_action_formati">Joindre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="facture_proforma_action_formati"
@@ -640,13 +726,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                 <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
 
-                                <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
+                                <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Modèle de la liste des bénéficiaires à télécharger</a>
 
-                                <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
 
                                 <?php if ($actifsoumission == true){ ?>
                                     <?php if (count($actionplanformations)>=1){ ?>
-                                        <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irreversible")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
+                                        <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irréversible.")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
                                     <?php } ?>
                                 <?php } ?>
 
@@ -663,10 +749,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
+                                <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Action</th>
@@ -714,5 +800,163 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
     </div>
 
-        @endsection
 
+
+                <div class="modal fade" id="Ajoutercabinetformation" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-simple modal-edit-user">
+                    <div class="modal-content p-3 p-md-5">
+                        <div class="modal-body">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="text-center mb-4">
+                            <h3 class="mb-2">Cabinet étrangere</h3>
+                            <p class="text-muted"></p>
+                        </div>
+                        <div class="modal-body">
+                        <form class="mt-3" id="ajax-form" action="{{ route('ajoutcabinetetrangere') }}">
+                            @csrf
+                            <div class="alert alert-danger print-error-msg" style="display:none">
+                                <ul></ul>
+                            </div>
+                        <div class="row">
+
+                        <div class="col-md-12">
+                            <label class="form-label" for="fullname">Raison sociale
+                                <strong style="color:red;">*</strong></label>
+                            <input type="text" id="raison_social_entreprises"
+                                   name="raison_social_entreprises"
+                                   class="form-control form-control-sm"
+                                   placeholder="Raison sociale"
+                                   required="required"
+                                   />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label" for="email">Email <strong style="color:red;">*</strong></label>
+                            <div class="input-group input-group-merge">
+                                <input
+                                    class="form-control form-control-sm"
+                                    type="email"
+                                    id="email"
+                                    name="email_entreprises"
+                                    placeholder="Email"
+                                    aria-label=""
+                                    aria-describedby="email3" required="required"/>
+                                <span class="input-group-text" id="email"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <!--<label class="form-label" for="phone-number-mask">Téléphone du représentant</label>-->
+
+                            <label class="form-label"
+                                   for="billings-country">Indicatif <strong style="color:red;">*</strong> </label>
+                            <select class="form-select" readonly=""
+                                    name="indicatif_entreprises" required="required">
+                                <?php echo "+" .$paysc; ?>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Téléphone <strong
+                                    style="color:red;">*</strong></label>
+                            <input type="number" min="0"
+                                   name="tel_entreprises"
+                                   class="form-control form-control-sm"
+                                   placeholder="Téléphone"
+                                   required="required"/>
+                        </div>
+
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1">
+                                <label>Localisation géographique <strong style="color:red;">*</strong></label>
+                                <input type="text" name="localisation_geographique_entreprise"
+                                       id="localisation_geographique_entreprise"
+                                       class="form-control form-control-sm"
+                                       placeholder="Localisation géographique"
+                                       required="required">
+                            </div>
+                        </div>
+
+                             <div class="col-12 text-center">
+
+                              <button class="btn btn-primary me-sm-3 me-1 btn-submit" id="create_new">Enregistrer</button>
+
+                              <button
+                                type="reset"
+                                class="btn btn-label-secondary"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                                Annuler
+                              </button>
+                            </div>
+                        </div>
+                    </form>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+
+        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+
+            /*------------------------------------------
+            --------------------------------------------
+            Form Submit Event
+            --------------------------------------------
+            --------------------------------------------*/
+            $('#ajax-form').submit(function(e) {
+                e.preventDefault();
+                //alert(this);
+                var url = $(this).attr("action");
+                //alert(url);
+                let formData = new FormData(this);
+                $.ajax({
+                        type:'POST',
+                        url: url,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: (response) => {
+
+                            //alert(response.data.id_entreprises);
+                            //alert(response.success);
+                            /*$('#id_entreprise_structure_formation_plan_formation').empty();
+                            $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                                value: response.data.id_entreprises,
+                                text: response.data.raison_social_entreprises,
+                             }));*/
+                             $.get('/entreprisecabinetetrangerformationmax', function (data) {
+                                    //alert(data); //exit;
+                                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+
+
+                                    });
+                                });
+                            //location.reload();
+                            $('#Ajoutercabinetformation').modal('hide');
+                            return false;
+                        },
+                        error: function(response){
+                            $('#ajax-form').find(".print-error-msg").find("ul").html('');
+                            $('#ajax-form').find(".print-error-msg").css('display','block');
+                            $.each( response.responseJSON.errors, function( key, value ) {
+                                $('#ajax-form').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                            });
+                        }
+                   });
+
+            });
+
+        </script>
+
+
+       @endsection
