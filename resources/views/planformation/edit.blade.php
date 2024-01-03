@@ -321,7 +321,7 @@ $idpart = Auth::user()->id_partenaire;
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
+                                        <label>Secteur d'activité du plan <strong style="color:red;">*</strong></label>
                                         <select class="select2 form-select"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite" required>

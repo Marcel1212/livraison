@@ -12,7 +12,7 @@
     $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
     $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
     $nombre = count($conseilleragence);
-    //dd($nombre);
+    //dd($conseillerplan);
 ?>
 
 @extends('layouts.backLayout.designadmin')
