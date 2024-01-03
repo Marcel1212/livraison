@@ -38,8 +38,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des comites permanent')
-    @php($soustitre='Tenue de comite permanent')
+    @php($titre='Liste des commissions permanente')
+    @php($soustitre='Tenue de Commission permanente')
     @php($lien='comitepermanente')
 
 
@@ -102,7 +102,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite permanent
+                          Commission permanente
                         </button>
                       </li>
                       <li class="nav-item">
@@ -120,7 +120,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if($idetape==3){ echo "active";} ?>"
+                          class="nav-link "
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
@@ -138,7 +138,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           data-bs-target="#navs-top-cahieraprescomite"
                           aria-controls="navs-top-cahieraprescomite"
                           aria-selected="false">
-                          Agreement
+                          Agrément
                         </button>
                       </li>
                     </ul>
@@ -267,7 +267,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     Retour</a>
                             </div>
                         </div>
-                        <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} //if(count($planformations)>0 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-actionformation" role="tabpanel">
+                        <div class="tab-pane fade " id="navs-top-actionformation" role="tabpanel">
 
                             <table class="table table-bordered table-striped table-hover table-sm"
                                 id="exampleData"
@@ -337,7 +337,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     @method('put')
                                     <button type="submit" name="action" value="Traiter_cahier_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                             Valider le comite permanent
+                                        Valider la commission permanente
                                     </button>
                                 </form>
                                 </div>

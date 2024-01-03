@@ -121,7 +121,7 @@ class ComitePermanenteController extends Controller
         $ficheagrements = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
                             ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','plan_formation.user_conseiller','=','users.id')
-                            ->where([['id_comite_permanente','=',$comitegestion->id_comite_gestion]])->get();
+                            ->where([['fiche_agrement.id_comite_permanente','=',$comitegestion->id_comite_permanente]])->get();
 
         $conseillers = ConseillerParAgence::get_comite_gestion_permanente();
 //dd($conseillers);
@@ -383,8 +383,20 @@ class ComitePermanenteController extends Controller
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
                     $plan = PlanFormation::find($idplan);
+
+                    $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+                    $montantcouttotal = 0;
+
+                    foreach($actionformationvals as $actionformationval){
+                        $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                    }
+
+
                     $plan->update([
-                        'flag_fiche_agrement' => true
+                        'flag_fiche_agrement' => true,
+                        'cout_total_accorder_plan_formation' => $montantcouttotal,
+                        'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Les actions ont été validée ');

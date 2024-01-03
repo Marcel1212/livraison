@@ -21,8 +21,8 @@
 @section('content')
 
 @php($Module='Plan de formation')
-@php($titre='Liste des comites permanent')
-@php($soustitre='Tenue de comite permanent')
+@php($titre='Liste des commissions permanente')
+@php($soustitre='Tenue de Commission permanente')
 @php($lien='comitepermanente')
 
 
@@ -77,7 +77,7 @@
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite permanent
+                          Commission permanente
                         </button>
                       </li>
                       <li class="nav-item">
@@ -113,7 +113,7 @@
                           data-bs-target="#navs-top-recevabilite"
                           aria-controls="navs-top-recevabilite"
                           aria-selected="false">
-                          Agreement
+                          Agrément
                         </button>
                       </li>
                     </ul>
@@ -140,7 +140,7 @@
                                     @method('post')
                                     <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                             Valider le comite pour ce plan de formation
+                                        Valider la commission permanente pour ce plan de formation
                                     </button>
                                 </form>
                                 <?php } ?>
@@ -255,7 +255,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -271,7 +271,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                            <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -287,7 +287,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -303,7 +303,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" >Cout de la formation</label>
+                            <label class="form-label" >Coût de la formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -327,7 +327,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -335,7 +335,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -351,7 +351,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                            <label class="form-label" for="cout_total_fiche_agrement">Coût total fiche agrément</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -360,7 +360,7 @@
                             </div>
 
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -368,7 +368,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -376,7 +376,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -384,7 +384,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
+                            <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -393,11 +393,7 @@
                             </div>
                             <div class="col-12 col-md-9">
                             <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
-                            <!--<input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
-                                disabled="disabled" />-->
+
                                 <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
                             </div>
                             <div class="col-12 col-md-3">
@@ -415,11 +411,11 @@
 
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
-                                    <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                    <label>Montant à accorder <strong style="color:red;">*</strong>: </label>
                                     <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                             </div>
                             <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
 
                                 <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                     <?= $motif; ?>
