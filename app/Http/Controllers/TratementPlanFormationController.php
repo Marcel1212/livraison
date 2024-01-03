@@ -129,7 +129,12 @@ class TratementPlanFormationController extends Controller
             $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
         }
 
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+//        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+        $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$id)
+            ->where(function ($query) {
+                $query->where('flag_annulation_action', false)
+                    ->orwhereNull('flag_annulation_action');
+            })->get();
 
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
 
