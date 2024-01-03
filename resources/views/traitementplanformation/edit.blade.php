@@ -359,10 +359,10 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
+                                <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
@@ -418,10 +418,10 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
+                                <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
