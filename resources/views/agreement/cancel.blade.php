@@ -42,7 +42,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
             </div>
        @endif
             <div class="col-xl-12">
-                <h6 class="text-muted"></h6>
                 <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
