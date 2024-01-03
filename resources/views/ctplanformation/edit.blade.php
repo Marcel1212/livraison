@@ -428,9 +428,9 @@
                                         </button>
                                     </form>
                                 <?php }else{?>
-                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <div class="alert-body" style="text-align:center">
-                                            Validation des actions déja effectuer
+                                            Vous avez effectué votre comite technique en ligne
                                         </div>
                                     </div>
                                 <?php } ?>
