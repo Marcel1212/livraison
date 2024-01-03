@@ -43,6 +43,7 @@ class AgreementController extends Controller
                             ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
                             ->where('plan_formation.id_entreprises',Auth::user()->id_partenaire)
                             ->get();
+
         return view('agreement.index', compact('agreements'));
     }
 
@@ -107,7 +108,7 @@ class AgreementController extends Controller
 
         }
 
-        return view('agreement.edit', compact('actionformations','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
+        return view('agreement.edit', compact('agreement','actionformations','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
     }
 
     /**

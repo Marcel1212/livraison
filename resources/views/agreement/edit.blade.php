@@ -121,11 +121,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             Effectif de l'entreprise
                         </button>
                     </li>
+
                     <li class="nav-item">
                         <button
                             type="button"
                             class="nav-link"
                             role="tab"
+
+
+                            @isset($agreement->flag_annulation_plan)
+                                @if($agreement->flag_annulation_plan==true)
+                                    disabled
+                               @endif
+                            @endisset
                             data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation"
                             aria-controls="navs-top-actionformation"

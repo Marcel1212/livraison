@@ -1247,7 +1247,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             @csrf
                             <div class="row">
                                 <div class="col-12 col-md-12">
-                                    <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation à substituer <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="intitule_action_formation_plan">Inititule de l'action de formation à substituer </label>
                                     <input
                                         type="text" disabled
                                         id="intitule_action_formation_plan"
@@ -1257,7 +1257,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-12">
-                                    <label class="form-label" for="intitule_action_formation_plan_substi">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="intitule_action_formation_plan_substi">Inititule de l'action de formation </label>
                                     <input
                                         type="text"
                                         id="intitule_action_formation_plan_substi"
@@ -1267,7 +1267,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation </label>
                                     <select class="select2 form-select-sm input-group" name="structure_etablissement_plan_substi" id="structure_etablissement_plan_substi">
 
                                         @foreach($structureformations as $structureformation)
@@ -1276,7 +1276,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_stagiaire_action_formati_plan_substi">Nombre de stagiaires <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="nombre_stagiaire_action_formati_plan_substi">Nombre de stagiaires</label>
                                     <input
                                         type="number"
                                         id="nombre_stagiaire_action_formati_plan_substi"
@@ -1286,7 +1286,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_groupe_action_formation_plan_substi">Nombre de groupe <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="nombre_groupe_action_formation_plan_substi">Nombre de groupe </label>
                                     <input
                                         type="number"
                                         id="nombre_groupe_action_formation_plan_substi"
@@ -1296,7 +1296,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
                                     <input
                                         type="number"
                                         id="nombre_heure_action_formation_plan_substi"
@@ -1306,7 +1306,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation</label>
                                     <input
                                         type="number"
                                         id="cout_action_formation_plan_substi"
@@ -1316,7 +1316,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="id_type_formation">Type de formation</label>
                                     <select
                                         id="id_type_formation"
                                         name="id_type_formation"
@@ -1328,20 +1328,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="id_but_formation">But de la formation </label>
                                     <select
                                         id="id_but_formation"
                                         name="id_but_formation"
                                         class="select2 form-select-sm input-group"
                                         aria-label="Default select example" >
-                                        {{--                                    <?= $butformation; ?>--}}
                                         @foreach($butformations as $butformation)
                                             <option value="{{$butformation->id_but_formation}}">{{mb_strtoupper($butformation->but_formation)}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-2">
-                                    <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
                                     <input
                                         type="date"
                                         id="date_debut_fiche_agrement"
@@ -1351,7 +1350,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-2">
-                                    <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
                                     <input
                                         type="date"
                                         id="date_fin_fiche_agrement"
@@ -1361,7 +1360,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation </label>
                                     <input
                                         type="text"
                                         id="lieu_formation_fiche_agrement"
@@ -1370,17 +1369,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         value="{{ old('lieu_formation_fiche_agrement') }}"
                                     />
                                 </div>
-                                <!--<div class="col-12 col-md-4">
-                                <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
-                                <input
-                                    type="number"
-                                    id="cout_total_fiche_agrement"
-                                    name="cout_total_fiche_agrement"
-                                    class="form-control form-control-sm"
-                                     />
-                                </div>-->
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique </label>
                                     <input
                                         type="text"
                                         id="objectif_pedagogique_fiche_agre"
@@ -1390,7 +1380,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre </label>
                                     <input
                                         type="number"
                                         id="cadre_fiche_demande_agrement"
@@ -1400,7 +1390,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
                                     <input
                                         type="number"
                                         id="agent_maitrise_fiche_demande_ag"
@@ -1410,7 +1400,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers </label>
                                     <input
                                         type="number"
                                         id="employe_fiche_demande_agrement"
@@ -1420,7 +1410,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel)</label>
                                     <input
                                         type="file"
                                         id="file_beneficiare"
@@ -1429,7 +1419,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
-                                    <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
+                                    <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) </label>
                                     <input
                                         type="file"
                                         id="facture_proforma_action_plan_substi"
@@ -1437,32 +1427,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         class="form-control form-control-sm"
                                     />
                                 </div>
-                                <div class="col-12" align="right">
-                                    <br/>
-                                    {{--                                <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>--}}
-                                    {{--                                <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>--}}
-
-                                    {{--                                <?php if ($actifsoumission == true){ ?>--}}
-                                    {{--                                    <?php if (count($actionplanformations)>=1){ ?>--}}
-                                    {{--                                <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irreversible")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>--}}
-                                    {{--                                <?php } ?>--}}
-                                    {{--                                <?php } ?>--}}
-
-
-                                </div>
                             </div>
-                            {{--                    </form>--}}
-
-
-                            {{--                    <form method="POST" class="form"--}}
-                            {{--                          action="" enctype="multipart/form-data">--}}
-                            {{--                        @csrf--}}
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-1">
-                                                <label> Motif de la demande de substitution du plan d'action<strong
+                                                <label> Motif de la demande de substitution du plan d'action <strong
                                                         style="color:red;">*</strong></label>
                                                 <select  class="select2 form-select-sm input-group"  data-allow-clear="true" name="id_motif_demande_plan_substi" id="id_motif_demande_plan_substi" >
                                                     @foreach($motifs as $motif)
@@ -1498,8 +1469,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-12" align="right">
                                     <hr>
                                     <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Model de la liste des beneficaires a telecharger</a>
-                                    {{--                                <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cet action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>--}}
-
                                     <button type="submit"
                                             class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
                                         Enregistrer
