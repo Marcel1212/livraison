@@ -9,6 +9,7 @@ use App\Helpers\Envoisms;
 use App\Models\Agence;
 use App\Models\Direction;
 use App\Models\Departement;
+use App\Models\SecteurActivite;
 use App\Models\Service;
 use App\Models\Activites;
 use App\Models\User;
@@ -67,6 +68,7 @@ class UserController extends Controller
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
         }*/
+
         return view('users.create', compact('roles', 'Entite','directions'));
     }
 
@@ -74,40 +76,56 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
 
-        // $key = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        // $idutil = Auth::user()->id;
-        /*$this->validate($request, [
-            'name' => 'required',
-            'login_users' => 'required|login_users|unique:users,login_users',
-            'email' => 'email|unique:users,email',
-            'cel_users' => 'required'
-        ]);*/
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $user = User::create($input);
-        $exploeprofil = explode("/",$request->input('roles'));
-        $valprofile = $exploeprofil[0];
-        $valcodeprofile = $exploeprofil[1];
-       // $user->assignRole($request->input('roles'));
-        $user->assignRole($valprofile);
+        if ($request->isMethod('post')) {
 
-        $profile = Role::where([['name', '=', $valprofile]])->first();
-        if(isset($profile)){
-            if($profile->code_roles == "CONSEILLER"){
-                return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($user->id))->with('success', 'Succes : Enregistrement reussi');
+            $this->validate($request, [
+                'name' => 'required',
+                'login_users' => 'required|unique:users,login_users|min:6',
+                'email' => 'required|unique:users,email',
+                'roles' => 'required',
+                'prenom_users' => 'required',
+                'password' => 'required|min:6',
+                'num_agce' => 'required'
+            ], [
+                'name.required' => 'Veuillez ajouter un nom.',
+                'login_users.required' => 'Veuillez ajouter un identifiant.',
+                'login_users.min' => 'Un identifiant doit avoir un minimum 6 caractères.',
+                'login_users.unique' => 'Un identifiant doit être unique, celui-ci existe déjà dans le système.',
+                'email.required' => 'Veuillez ajouter un mail.',
+                'email.unique' => 'Email doit être unique.',
+                'roles.required' => 'Veuillez selectionner un profil.',
+                'prenom_users.required' => 'Veuillez ajouter un prénom.',
+                'password.required' => 'Veuillez ajouter un mot de passe.',
+                'password.min' => 'Le mot de passe doit avoir au moins 6 caractère.',
+                'num_agce.required' => 'Veuillez ajouter une antenne.'
+            ]);
+
+            $input = $request->all();
+            $input['password'] = Hash::make($input['password']);
+            $user = User::create($input);
+            $exploeprofil = explode("/",$request->input('roles'));
+            $valprofile = $exploeprofil[0];
+            $valcodeprofile = $exploeprofil[1];
+             // $user->assignRole($request->input('roles'));
+            $user->assignRole($valprofile);
+
+            $profile = Role::where([['name', '=', $valprofile]])->first();
+
+            if(isset($profile)){
+                if($profile->code_roles == "CONSEILLER"){
+                    return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($user->id))->with('success', 'Succes : Enregistrement reussi');
+                }else{
+                    return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
+                }
             }else{
                 return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
             }
-        }else{
-            return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
-        }
 
+        }
     }
 
 
@@ -152,17 +170,15 @@ class UserController extends Controller
             $Roless .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."' $val  > " . $comp->name . " </option>";
         }
 
-        $SecteursActivites = Activites::all();
-        $SecteursActivite = "<option value=''> Selectionnez le secteur d'activite </option>";
+        $SecteursActivites = SecteurActivite::where([['flag_actif_secteur_activite', '=', true]])->get();
+        $SecteursActivite = "<option value=''> -- Sélectionnez un secteur d'activité -- </option>";
         foreach ($SecteursActivites as $comp) {
-            $SecteursActivite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
+            $SecteursActivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
         }
 
-        $nacodes = 0;//Menu::get_code_menu_profil($id);
-
+        $nacodes = Menu::get_code_menu_profil($id);
         $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id]])->get();
-
-        $directions = Direction::all();
+        $directions = Direction::where([['flag_direction', '=', true]])->get();
         return view('users.edit', compact('user', 'roles', 'userRole', 'Entite','Roless','directions','SecteursActivite','secteurlierusers','nacodes'));
     }
 
@@ -190,10 +206,27 @@ class UserController extends Controller
 
             if ($data['action'] == 'Modifier'){
 
-                $validatedData = $request->validate([
+                /*$this->validate($request, [
                     'name' => 'required',
-                    'roles' => 'required'
-                ]);
+                    'login_users' => 'required|unique:users,login_users|min:6',
+                    'email' => 'required|unique:users,email',
+                    'roles' => 'required',
+                    'prenom_users' => 'required',
+                    'password' => 'required|min:6',
+                    'num_agce' => 'required'
+                ], [
+                    'name.required' => 'Veuillez ajouter un nom.',
+                    'login_users.required' => 'Veuillez ajouter un identifiant.',
+                    'login_users.min' => 'Un identifiant doit avoir un minimum 6 caractères.',
+                    'login_users.unique' => 'Un identifiant doit être unique, celui-ci existe déjà dans le système.',
+                    'email.required' => 'Veuillez ajouter un mail.',
+                    'email.unique' => 'Email doit être unique.',
+                    'roles.required' => 'Veuillez selectionner un profil.',
+                    'prenom_users.required' => 'Veuillez ajouter un prénom.',
+                    'password.required' => 'Veuillez ajouter un mot de passe.',
+                    'password.min' => 'Le mot de passe doit avoir au moins 6 caractère.',
+                    'num_agce.required' => 'Veuillez ajouter une antenne.'
+                ]);*/
 
                 $user = User::find($id);
                 $input = $request->all();

@@ -10,27 +10,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_entreprises
  * @property float $id_motif_recevable
  * @property float $id_annee_exercice
+ * @property float $id_entreprise_structure_formation_plan_formation
  * @property float $id_processus
  * @property float $id_agence
  * @property float $id_part_entreprise
- * @property float $id_entreprise_structure_formation_plan_formation
  * @property string $nom_prenoms_charge_plan_formati
  * @property string $fonction_charge_plan_formation
  * @property float $nombre_salarie_plan_formation
  * @property float $masse_salariale
  * @property float $part_entreprise
  * @property float $cout_total
- * @property float $cout_total_demande_plan_formation
- * @property float $cout_total_accorder_plan_formation
  * @property string $date_creation
  * @property float $id_user
  * @property boolean $flag_soumis_plan_formation
  * @property boolean $flag_valide_plan_formation
  * @property boolean $flag_rejeter_plan_formation
- * @property boolean $flag_plan_formation_valider_par_processus
- * @property boolean $flag_plan_validation_valider_par_comite_en_ligne
- * @property boolean $flag_plan_validation_rejeter_par_comite_en_ligne
- * @property boolean $flag_plan_formation_valider_par_comite_pleniere
  * @property float $user_conseiller
  * @property string $conde_entreprise_plan_formation
  * @property string $code_plan_formation
@@ -44,20 +38,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $email_professionnel_charge_plan_formation
  * @property string $commentaire_recevable_plan_formation
  * @property boolean $flag_soumis_ct_plan_formation
- * @property boolean $flag_valide_action_des_plan_formation
- * @property boolean $flag_fiche_agrement
  * @property string $date_soumis_ct_plan_formation
+ * @property boolean $flag_valide_action_des_plan_formation
+ * @property boolean $flag_plan_formation_valider_par_processus
+ * @property boolean $flag_plan_validation_valider_par_comite_en_ligne
+ * @property boolean $flag_plan_validation_rejeter_par_comite_en_ligne
+ * @property boolean $flag_plan_formation_valider_par_comite_pleniere
+ * @property float $cout_total_demande_plan_formation
+ * @property float $cout_total_accorder_plan_formation
+ * @property boolean $flag_fiche_agrement
+ * @property string $date_fiche_agreement
+ * @property float $id_secteur_activite
+ * @property CtPleniere[] $ctPlenieres
  * @property ActionFormationPlan[] $actionFormationPlans
- * @property TypeEntreprise $typeEntreprise
- * @property Entreprises $entreprise
- * @property PartEntreprise $partEntreprise
- * @property Motif $motif
- * @property PeriodeExercice $periodeExercice
- * @property EntrepriseHabilitation $entreprisehabilitation
- * @property UserConseilPlanFormation $userconseilplanformation
- * @property Agence $agence
- * @property Processus $processus
+ * @property PlanFormationAValiderParUser[] $planFormationAValiderParUsers
  * @property CategoriePlan[] $categoriePlans
+ * @property PeriodeExercice $periodeExercice
+ * @property TypeEntreprise $typeEntreprise
+ * @property Motif $motif
+ * @property Agence $agence
+ * @property Entreprises $entreprise
+ * @property EntrepriseHabilitation $entreprisehabilitation
+ * @property PartEntreprise $partEntreprise
+ * @property Processus $processus
+ * @property UserConseilPlanFormation $userconseilplanformation
+ * @property SecteurActivite $secteurActivite
  */
 class PlanFormation extends Model
 {
@@ -85,7 +90,15 @@ class PlanFormation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_part_entreprise', 'id_entreprise_structure_formation_plan_formation', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation','id_processus','flag_valide_action_des_plan_formation','flag_plan_formation_valider_par_processus','id_agence','flag_plan_validation_rejeter_par_comite_en_ligne','flag_plan_validation_valider_par_comite_en_ligne','flag_plan_formation_valider_par_comite_pleniere','cout_total_accorder_plan_formation','cout_total_demande_plan_formation','flag_fiche_agrement'];
+    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_entreprise_structure_formation_plan_formation', 'id_processus', 'id_agence', 'id_part_entreprise', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation', 'flag_valide_action_des_plan_formation', 'flag_plan_formation_valider_par_processus', 'flag_plan_validation_valider_par_comite_en_ligne', 'flag_plan_validation_rejeter_par_comite_en_ligne', 'flag_plan_formation_valider_par_comite_pleniere', 'cout_total_demande_plan_formation', 'cout_total_accorder_plan_formation', 'flag_fiche_agrement', 'date_fiche_agreement', 'id_secteur_activite'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ctPlenieres()
+    {
+        return $this->hasMany('App\Models\CtPleniere', 'id_plan_formation', 'id_plan_de_formation');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -96,27 +109,19 @@ class PlanFormation extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function typeEntreprise()
+    public function planFormationAValiderParUsers()
     {
-        return $this->belongsTo('App\Models\TypeEntreprise', 'id_type_entreprise', 'id_type_entreprise');
+        return $this->hasMany('App\Models\PlanFormationAValiderParUser', 'id_plan_formation', 'id_plan_de_formation');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function entreprise()
+    public function categoriePlans()
     {
-        return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function motif()
-    {
-        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
+        return $this->hasMany('App\Models\CategoriePlan', 'id_plan_de_formation', 'id_plan_de_formation');
     }
 
     /**
@@ -130,22 +135,17 @@ class PlanFormation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function entreprisehabilitation()
+    public function typeEntreprise()
     {
-        return $this->belongsTo('App\Models\Entreprises', 'id_entreprise_structure_formation_plan_formation', 'id_entreprises');
-    }
-
-    public function partEntreprise()
-    {
-        return $this->belongsTo('App\Models\PartEntreprise', 'id_part_entreprise', 'id_part_entreprise');
+        return $this->belongsTo('App\Models\TypeEntreprise', 'id_type_entreprise', 'id_type_entreprise');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function userconseilplanformation()
+    public function motif()
     {
-        return $this->belongsTo('App\Models\User', 'user_conseiller', 'id');
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 
     /**
@@ -159,16 +159,48 @@ class PlanFormation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
+    public function entreprise()
+    {
+        return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function entreprisehabilitation()
+    {
+        return $this->belongsTo('App\Models\Entreprises', 'id_entreprise_structure_formation_plan_formation', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partEntreprise()
+    {
+        return $this->belongsTo('App\Models\PartEntreprise', 'id_part_entreprise', 'id_part_entreprise');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function processus()
     {
         return $this->belongsTo('App\Models\Processus', 'id_processus', 'id_processus');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function categoriePlans()
+    public function userconseilplanformation()
     {
-        return $this->hasMany('App\Models\CategoriePlan', 'id_plan_de_formation', 'id_plan_de_formation');
+        return $this->belongsTo('App\Models\User', 'user_conseiller', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function secteurActivite()
+    {
+        return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
     }
 }

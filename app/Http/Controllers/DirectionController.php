@@ -22,12 +22,7 @@ class DirectionController extends Controller
      */
     public function create()
     {
-        $agences = Agence::all();
-        $agence = "<option value=''> Selectionnez une agence </option>";
-        foreach ($agences as $comp) {
-            $agence .= "<option value='" . $comp->num_agce  . "'>" . $comp->lib_agce ." </option>";
-        } 
-        return view('direction.create', compact('agence'));
+        return view('direction.create');
     }
 
     /**
@@ -38,16 +33,12 @@ class DirectionController extends Controller
         if ($request->isMethod('post')) {
             $request->validate([
                 'libelle_direction' => 'required',
-                'num_agce' => 'required'
+                //'num_agce' => 'required'
             ]);
-
             $input = $request->all();
-
-            $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']); 
-
+            $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']);
             Direction::create($input);
-
-            return redirect()->route('direction.index')->with('success', 'Direction ajouté avec succès.');
+            return redirect()->route('direction.index')->with('success', 'Direction ajoutée avec succès.');
         }
     }
 
@@ -66,17 +57,12 @@ class DirectionController extends Controller
      */
     public function edit(Direction $direction)
     {
-        $agences = Agence::all();
-        $agence = "<option value='".$direction->agence->num_agce."'> ".$direction->agence->lib_agce." </option>";
-        foreach ($agences as $comp) {
-            $agence .= "<option value='" . $comp->num_agce  . "'>" . $comp->lib_agce ." </option>";
-        } 
-        return view('direction.edit', compact('direction','agence'));
+        return view('direction.edit', compact('direction'));
     }
 
     /**
      * Update the specified resource in storage.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Direction $direction
      * @return \Illuminate\Http\Response
@@ -85,15 +71,11 @@ class DirectionController extends Controller
     {
         $request->validate([
             'libelle_direction' => 'required',
-            'num_agce' => 'required'
+          //  'num_agce' => 'required'
         ]);
-
         $input = $request->all();
-
-        $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']); 
-
+        $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']);
         $direction->update($input);
-
         return redirect()->route('direction.index')->with('success', 'Direction mis à jour avec succès.');
     }
 

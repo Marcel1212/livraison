@@ -11,28 +11,27 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_direction
  * @property string $created_at
  * @property string $updated_at
- * @property Agence $agence
  * @property Departement[] $departements
  */
 class Direction extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'direction';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_direction';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -40,15 +39,8 @@ class Direction extends Model
     /**
      * @var array
      */
-    protected $fillable = ['num_agce', 'libelle_direction', 'flag_direction', 'created_at', 'updated_at'];
+    protected $fillable = [ 'libelle_direction', 'flag_direction', 'created_at', 'updated_at'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function agence()
-    {
-        return $this->belongsTo('App\Models\Agence', 'num_agce', 'num_agce');
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

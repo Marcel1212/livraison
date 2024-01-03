@@ -13,10 +13,10 @@
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
     </h5>
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <div class="alert-body">
-                {{ $message }}
+                      @if ($message = Session::get('success'))
+                      <div class="alert alert-success alert-dismissible fade show" role="alert">
+                           <div class="alert-body">
+                                 {{ $message }}
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -44,7 +44,7 @@
                         <thead>
                         <tr>
                             <th>No</th>
-                            <th>Agence</th>
+
                             <th>Libelle</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -54,7 +54,6 @@
                         @foreach ($Resultat as $key => $res)
                             <tr>
                                 <td>{{ $res->id_direction }}</td>
-                                <td>{{ $res->agence->lib_agce }}</td>
                                 <td>{{ $res->libelle_direction }}</td>
                                 <td align="center">
                                         <?php if($res->flag_direction == true){ ?>

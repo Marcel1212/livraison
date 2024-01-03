@@ -23,6 +23,7 @@ use App\Helpers\Crypt;
 use App\Helpers\Menu;
 use App\Helpers\Email;
 use App\Helpers\GenerateCode as Gencode;
+use App\Models\FicheAgrement;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -98,6 +99,10 @@ class TratementPlanFormationController extends Controller
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
+        $historiquesplanformations = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
+                                                    ->join('action_formation_plan','plan_formation.id_plan_de_formation','action_formation_plan.id_plan_de_formation')
+                                                    ->where([['plan_formation.id_entreprises','=',$planformation->id_entreprises]])->get();
+//dd($historiquesplanformations);
         $typeentreprises = TypeEntreprise::all();
         $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
         foreach ($typeentreprises as $comp) {
@@ -160,7 +165,7 @@ class TratementPlanFormationController extends Controller
 
         $nombreactionvalider = count($actionvalider);
 
-        return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider'));
+        return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations'));
 
     }
 
@@ -311,8 +316,17 @@ class TratementPlanFormationController extends Controller
 
             if($data['action'] === 'Soumission_ct_plan_formation'){
 
+                $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
+                $montantcouttotal = 0;
+
+                foreach($actionformationvals as $actionformationval){
+                    $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                }
+
                 PlanFormation::where('id_plan_de_formation',$id)->update([
                     'flag_soumis_ct_plan_formation' => true,
+                    'cout_total_accorder_plan_formation' => $montantcouttotal,
                     'date_soumis_ct_plan_formation' => Carbon::now()
                 ]);
 
