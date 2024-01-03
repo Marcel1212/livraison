@@ -383,8 +383,20 @@ class ComitePermanenteController extends Controller
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
                     $plan = PlanFormation::find($idplan);
+
+                    $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+                    $montantcouttotal = 0;
+
+                    foreach($actionformationvals as $actionformationval){
+                        $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                    }
+
+
                     $plan->update([
-                        'flag_fiche_agrement' => true
+                        'flag_fiche_agrement' => true,
+                        'cout_total_accorder_plan_formation' => $montantcouttotal,
+                        'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Les actions ont été validée ');
