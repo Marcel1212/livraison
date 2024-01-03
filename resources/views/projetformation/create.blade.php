@@ -107,13 +107,6 @@
                                                                 </div>
                                                                 <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
-                                                                        <label> <b class="term">NCC </b>
-                                                                        </label> <br>
-                                                                        <label> <?php echo $entreprise->ncc_entreprises; ?></label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4 col-12">
-                                                                    <div class="mb-1">
                                                                         <label> <b class="term">Numéro de téléphone: </b>
                                                                         </label> <br>
                                                                         <label> <?php echo $entreprise->tel_entreprises; ?></label>
@@ -275,7 +268,7 @@
                                                         <div class="accordion-body">
                                                             <div class="row gy-3">
 
-                                                                <div class="col-md-6 col-12">
+                                                                <div class="col-md-12 col-12">
                                                                     <div class="mb-4">
                                                                         <label>Environnement / contexte <span
                                                                                 style="color:red;">*</span></label>
@@ -300,12 +293,141 @@
                                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample"
                                                         style="">
                                                         <div class="accordion-body">
-                                                            <div class="row gy-3">
-                                                                <div class="col-md-6 col-12">
+                                                            <div class="card mb-3">
+                                                                <div class="card-header pt-2">
+                                                                    <ul class="nav nav-tabs card-header-tabs"
+                                                                        role="tablist">
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <button class="nav-link active"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-personal"
+                                                                                role="tab" aria-selected="true">
+                                                                                Les beneficiaires
+                                                                            </button>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-account"
+                                                                                role="tab" aria-selected="false"
+                                                                                tabindex="-1">
+                                                                                Le promoteur
+                                                                            </button>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-social"
+                                                                                role="tab" aria-selected="false"
+                                                                                tabindex="-1">
+                                                                                Les partenaires
+                                                                            </button>
+                                                                        </li>
+                                                                        <li class="nav-item" role="presentation">
+                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-autres"
+                                                                                role="tab" aria-selected="false"
+                                                                                tabindex="-1">
+                                                                                Autres acteurs
+                                                                            </button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div class="tab-content">
+                                                                    <div class="tab-pane fade active show"
+                                                                        id="form-tabs-personal" role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_beneficiaire"
+                                                                                    style="height: 150px;"></textarea>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_beneficiaires"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="form-tabs-account"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_promoteur"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_promoteur"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="form-tabs-social"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_partenaires"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_partenaires"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+
+
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="form-tabs-autres"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="mb-1">
+                                                                                <label>Precisez
+                                                                                </label>
+                                                                                <input type="text" name="autre_acteur"
+                                                                                    id="autre_acteur"
+                                                                                    class="form-control form-control-sm"
+                                                                                    placeholder="ex : Panelistes">
+                                                                            </div>
+                                                                        </div> <br>
+                                                                        <div class="row g-3">
+
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_autres"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_autres"
+                                                                                    style="height: 150px;"></textarea>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {{-- <div class="row gy-3">
+                                                                <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label>Acteurs<span style="color:red;">*</span>
                                                                         </label>
-                                                                        {{-- <select required="required" class="form-select"
+                                                                        <select required="required" class="form-select"
                                                                             id="exampleFormControlSelect1"
                                                                             name="acteurs_projet"
                                                                             aria-label="Default select example">
@@ -320,64 +442,11 @@
                                                                             <option value="Autres acteurs">Autres acteurs
                                                                             </option>
                                                                             </option>
-                                                                        </select> --}}
-                                                                        <div class="select2-success" data-select2-id="46">
-                                                                            <div class="position-relative"
-                                                                                data-select2-id="45"><select
-                                                                                    id="select2Success"
-                                                                                    class="select2 form-select select2-hidden-accessible"
-                                                                                    multiple=""
-                                                                                    data-select2-id="select2Success"
-                                                                                    tabindex="-1" aria-hidden="true">
-                                                                                    <option value="1" selected=""
-                                                                                        data-select2-id="17">Option1
-                                                                                    </option>
-                                                                                    <option value="2" selected=""
-                                                                                        data-select2-id="18">Option2
-                                                                                    </option>
-                                                                                    <option value="3"
-                                                                                        data-select2-id="57">Option3
-                                                                                    </option>
-                                                                                    <option value="4"
-                                                                                        data-select2-id="58">Option4
-                                                                                    </option>
-                                                                                </select><span
-                                                                                    class="select2 select2-container select2-container--default select2-container--focus select2-container--below"
-                                                                                    dir="ltr" data-select2-id="16"
-                                                                                    style="width: 660px;"><span
-                                                                                        class="selection"><span
-                                                                                            class="select2-selection select2-selection--multiple"
-                                                                                            role="combobox"
-                                                                                            aria-haspopup="true"
-                                                                                            aria-expanded="false"
-                                                                                            tabindex="-1"
-                                                                                            aria-disabled="false">
-                                                                                            <ul
-                                                                                                class="select2-selection__rendered">
-                                                                                                <li
-                                                                                                    class="select2-search select2-search--inline">
-                                                                                                    <input
-                                                                                                        class="select2-search__field"
-                                                                                                        type="search"
-                                                                                                        tabindex="0"
-                                                                                                        autocomplete="off"
-                                                                                                        autocorrect="off"
-                                                                                                        autocapitalize="none"
-                                                                                                        spellcheck="false"
-                                                                                                        role="searchbox"
-                                                                                                        aria-autocomplete="list"
-                                                                                                        placeholder="Select value"
-                                                                                                        style="width: 646px;">
-                                                                                                </li>
-                                                                                            </ul>
-                                                                                        </span></span><span
-                                                                                        class="dropdown-wrapper"
-                                                                                        aria-hidden="true"></span></span>
-                                                                            </div>
-                                                                        </div>
+                                                                        </select>
+
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6  col-12">
+                                                                <div class="col-md-4  col-12">
                                                                     <div class="mb-1">
                                                                         <label>Role <span
                                                                                 style="color:red;">*</span></label>
@@ -387,15 +456,40 @@
                                                                             placeholder="ex : Perfectionnement ..">
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 col-12">
+                                                                <div class="col-md-4 col-12">
                                                                     <div class="mb-1">
                                                                         <label> Responsabilite <span
                                                                                 style="color:red;">*</span></label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="responsabilite_projet" style="height: 121px;"></textarea>
+                                                                        <input type="text" name="responsabilite_projet"
+                                                                            required="required" id="role"
+                                                                            class="form-control form-control-sm"
+                                                                            placeholder="ex : Perfectionnement ..">
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                                <div class="row gy-3">
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="mb-1" id="AddActeur"
+                                                                            name="AddActeur">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="mb-1" id="AddRole"
+                                                                            name="AddRole">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 col-12">
+                                                                        <div class="mb-1" id="AddResponsabilite"
+                                                                            name="AddResponsabilite">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div align="top-left" class="col-md-4 ">
+                                                                    <button
+                                                                        class="btn btn-primary waves-effect waves-light"
+                                                                        id="btn_add_1" onclick="ajouterInput()">Ajouter
+                                                                        un acteur</button>
+                                                                </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -574,6 +668,71 @@
             </div>
         </div>
     </div> <!-- END: Content-->
+
+    <script>
+        function ajouterInput() {
+            // Création d'un élément input
+            var nouvelInput = document.createElement("input");
+            var role = document.createElement("input");
+            var responsabilite = document.createElement("input");
+
+            // Définition des attributs de l'input
+            nouvelInput.setAttribute("type", "text");
+            nouvelInput.setAttribute("class", "form-control form-control-sm col-md-4  col-12");
+            nouvelInput.setAttribute("name", "nouveauacteur");
+            nouvelInput.setAttribute("placeholder", "Acteur");
+
+            // Definition des acteurs
+            var acteur = document.createElement("select");
+            acteur.setAttribute("class", "form-select form-control form-control-sm col-md-4  col-12");
+            acteur.setAttribute("name", "acteur");
+            const opt1 = document.createElement("option");
+            const opt2 = document.createElement("option");
+            const opt3 = document.createElement("option");
+
+            opt1.value = "Les bénéficiaires";
+            opt1.text = "Les bénéficiaires";
+            opt2.value = "Le promoteur";
+            opt2.text = "Le promoteur";
+            opt3.value = "Les partenaires";
+            opt3.text = "Les partenaires";
+
+            acteur.add(opt1, null);
+            acteur.add(opt2, null);
+            acteur.add(opt3, null);
+
+            // Definition du role
+            role.setAttribute("type", "text");
+            role.setAttribute("class", "form-control form-control-sm col-md-4  col-12");
+            role.setAttribute("name", "nouveaurole");
+            role.setAttribute("placeholder", "Role");
+
+            // Definition de la responsabilite
+            responsabilite.setAttribute("type", "text");
+            responsabilite.setAttribute("class", "form-control form-control-sm col-md-4  col-12");
+            responsabilite.setAttribute("name", "nouveauResp");
+            responsabilite.setAttribute("placeholder", "Responsabilite");
+
+            // Récupération du formulaire existant
+            var formulaire = document.getElementById("monFormulaire");
+
+            // Ajout de l'input au formulaire
+            AddActeur.appendChild(acteur);
+            AddRole.appendChild(role);
+            AddResponsabilite.appendChild(responsabilite);
+
+            // Desactivation du bouton
+            // document.getElementById("btn_add_1").disabled = true;
+            var parentElement = document.getElementById("btn_add_1").parentNode;
+            var bouton = document.getElementById("btn_add_1");
+            parentElement.removeChild(bouton);
+
+
+
+
+        }
+    </script>
+
 
     <script>
         'use strict';
