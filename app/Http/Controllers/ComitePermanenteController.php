@@ -121,7 +121,7 @@ class ComitePermanenteController extends Controller
         $ficheagrements = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
                             ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','plan_formation.user_conseiller','=','users.id')
-                            ->where([['id_comite_permanente','=',$comitegestion->id_comite_gestion]])->get();
+                            ->where([['id_comite_permanente','=',$comitegestion->id_comite_permanentes]])->get();
 
         $conseillers = ConseillerParAgence::get_comite_gestion_permanente();
 //dd($conseillers);
