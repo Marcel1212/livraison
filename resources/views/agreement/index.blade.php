@@ -71,17 +71,16 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $planformation->code_plan_formation }}</td>
                                 <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
+
+                                <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
+                                <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
                                 <td>
                                     @isset($planformation->flag_annulation_plan)
                                         <span class="badge bg-danger">Annulé</span>
                                     @else
                                         <span class="badge bg-success xs">Agrée</span>
                                     @endisset
-{{--                                    {{ $planformation->cout_total_accorder_plan_formation }}--}}
                                 </td>
-                                <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
-                                <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
-
                                 <td align="center">
 {{--                                    @can($lien.'-edit')--}}
                                         <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"

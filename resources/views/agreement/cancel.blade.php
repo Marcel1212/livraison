@@ -124,14 +124,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                    value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12">
-                                        <div class="mb-1">
-                                            <label>Activité </label>
-                                            <input type="text"
-                                                   class="form-control form-control-sm"
-                                                   value="{{$infoentreprise->activite->libelle_activites}}" disabled="disabled">
-                                        </div>
-                                    </div>
+{{--                                    <div class="col-md-4 col-12">--}}
+{{--                                        <div class="mb-1">--}}
+{{--                                            <label>Activité </label>--}}
+{{--                                            <input type="text"--}}
+{{--                                                   class="form-control form-control-sm"--}}
+{{--                                                   value="{{$infoentreprise->activite->libelle_activites}}" disabled="disabled">--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                     <div class="col-md-4 col-12">
                                         <div class="mb-1">
                                             <label>Localisation geaographique </label>
