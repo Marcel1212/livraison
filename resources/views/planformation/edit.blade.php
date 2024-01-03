@@ -850,7 +850,7 @@ $idpart = Auth::user()->id_partenaire;
 
                             <label class="form-label"
                                    for="billings-country">Indicatif <strong style="color:red;">*</strong> </label>
-                            <select class="form-select" readonly=""
+                            <select class="select2 form-select-sm input-group" readonly=""
                                     name="indicatif_entreprises" required="required">
                                 <?php echo "+" .$paysc; ?>
 
