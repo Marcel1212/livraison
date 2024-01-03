@@ -51,6 +51,10 @@ class TraitementDemandeAnnulationPlanController extends Controller
                         ['p.id_roles', '=', $id_roles]
                     ])->get();
             }
+
+//            dd($resultat_etape);
+
+
         }
         return view('traitementdemandeannulationplan.index',compact('resultat'));
     }
