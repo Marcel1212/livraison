@@ -104,7 +104,7 @@
                           data-bs-target="#navs-top-histortiqueactionformation"
                           aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Historiques des actions du plan de formation
+                          Historiques des actions des plans de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -311,6 +311,26 @@
                                                class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût demandé </label>
+                                        <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_demande_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût accordé </label>
+                                        <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+
                                 <div class="col-12" align="right">
                                     <hr>
 
