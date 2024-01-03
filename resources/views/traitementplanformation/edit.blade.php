@@ -14,7 +14,7 @@
 
     @php($Module='Plan de formation')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Traitement de la demande de plan de formation')
+    @php($soustitre='Instruction')
     @php($lien='traitementplanformation')
 
 
@@ -489,7 +489,7 @@
                                 @method('put')
                                 <div class="row">
                                             <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite <strong style="color:red;">*</strong></label>
+                                                    <label class="form-label" for="billings-country">Motif de Recevabilité <strong style="color:red;">*</strong></label>
 
                                                         <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
@@ -497,7 +497,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite <strong style="color:red;">(obligatoire si non recevable)*</strong>: </label>
+                                                        <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_plan_formation" id="commentaire_recevable_plan_formation" rows="6">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
                                                     </div>
                                                 </div>
