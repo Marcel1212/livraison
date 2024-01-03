@@ -745,7 +745,7 @@
                         <hr/>
 
                         <div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                            <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
 
                             <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                 <?= $motif; ?>
