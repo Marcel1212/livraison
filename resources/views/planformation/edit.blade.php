@@ -709,7 +709,7 @@ $idpart = Auth::user()->id_partenaire;
                                 />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="facture_proforma_action_formati">Joindre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="facture_proforma_action_formati">Joindre la facture proforma (PDF) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="facture_proforma_action_formati"

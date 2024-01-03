@@ -16,7 +16,7 @@ class ConseillerParAgence
                             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
                             ->select('users.*', 'model_has_roles.*', 'roles.*')
-                            ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]])
+                            ->where([['roles.code_roles','=','CONSEILLER'],['users.num_agce','=',$num_agce]])
                             ->get();
 
         return (isset($conseiller_agence) ? $conseiller_agence : '');
