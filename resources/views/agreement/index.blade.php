@@ -59,9 +59,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <th>No</th>
                             <th>Code </th>
                             <th>Nom et prenom de la charger de formation</th>
+                            <th>Montant demandé</th>
+                            <th>Montant accordé</th>
                             <th>Statut</th>
-                            <th>Montant demandée</th>
-                            <th>Montant accordée</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -71,7 +71,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ $planformation->code_plan_formation }}</td>
                                 <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
-
                                 <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
                                 <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
                                 <td>
