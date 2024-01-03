@@ -14,7 +14,7 @@ class ListeLierController extends Controller
 
         $idpart = Auth::user()->id_partenaire;
 
-         $entreprise = Entreprises::where([['id_entreprises','=',10]])->get();
+         $entreprise = Entreprises::where([['id_entreprises','=',$idpart]])->get();
         //dd($departements);
          return $entreprise;
 

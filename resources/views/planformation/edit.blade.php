@@ -58,7 +58,7 @@ $idpart = Auth::user()->id_partenaire;
 
             //alert(selectedValue);
 
-            if(selectedValue == 1){
+            if(selectedValue == 3){
 
                 //function telUpdate() {
                 //alert('testanc'); //exit;
@@ -81,7 +81,7 @@ $idpart = Auth::user()->id_partenaire;
 
             }
 
-            if(selectedValue == 2 || selectedValue ==3 || selectedValue == 5){
+            if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
 
                 document.getElementById("Activeajoutercabinetformation").disabled = true;
 
@@ -321,7 +321,7 @@ $idpart = Auth::user()->id_partenaire;
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
+                                        <label>Secteur d'activité du plan <strong style="color:red;">*</strong></label>
                                         <select class="select2 form-select"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite" required>
@@ -430,7 +430,7 @@ $idpart = Auth::user()->id_partenaire;
                                 @method('put')
                                 <div class="row">
                                     <div class="col-12 col-md-4">
-                                        <label class="form-label" for="id_categorie_professionelle">Categories <strong style="color:red;">*</strong></label>
+                                        <label class="form-label" for="id_categorie_professionelle">Catégories <strong style="color:red;">*</strong></label>
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
@@ -478,7 +478,7 @@ $idpart = Auth::user()->id_partenaire;
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Categorie </th>
+                                <th>Catégorie </th>
                                 <th>Genre</th>
                                 <th>Nombre</th>
                                 <th>Action</th>
@@ -604,8 +604,8 @@ $idpart = Auth::user()->id_partenaire;
                                     <div class="col-12 col-md-2">
                                         <br>
                                         <button type="button" id="Activeajoutercabinetformation"
-                                        class="btn" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
-                                            <img src='/assets/img/editing.png'>
+                                        class="btn btn-icon btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
+                                            <span class="ti ti-plus"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -709,7 +709,7 @@ $idpart = Auth::user()->id_partenaire;
                                 />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="facture_proforma_action_formati">Joindre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="facture_proforma_action_formati">Joindre la facture proforma (PDF) <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="facture_proforma_action_formati"
@@ -808,7 +808,7 @@ $idpart = Auth::user()->id_partenaire;
                         <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3 class="mb-2">Cabinet étrangere</h3>
+                            <h3 class="mb-2">Saisie les informations du cabinet étranger</h3>
                             <p class="text-muted"></p>
                         </div>
                         <div class="modal-body">
@@ -850,7 +850,7 @@ $idpart = Auth::user()->id_partenaire;
 
                             <label class="form-label"
                                    for="billings-country">Indicatif <strong style="color:red;">*</strong> </label>
-                            <select class="form-select" readonly=""
+                            <select class="select2 form-select-sm input-group" readonly=""
                                     name="indicatif_entreprises" required="required">
                                 <?php echo "+" .$paysc; ?>
 

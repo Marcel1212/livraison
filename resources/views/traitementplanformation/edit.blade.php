@@ -93,7 +93,7 @@
                           data-bs-target="#navs-top-histortiqueactionformation"
                           aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Historiques des actions du plan de formation
+                          Historiques des actions des plans de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -117,7 +117,7 @@
                           data-bs-target="#navs-top-recevabilite"
                           aria-controls="navs-top-recevabilite"
                           aria-selected="false">
-                          Recevabilite
+                          Recevabilité
                         </button>
                       </li>
                     </ul>
@@ -304,6 +304,23 @@
                                                class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût demandé </label>
+                                        <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_demande_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût accordé </label>
+                                        <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
                                 <div class="col-12" align="right">
                                     <hr>
 
@@ -359,10 +376,10 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
+                                <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
@@ -418,10 +435,10 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
+                                <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
