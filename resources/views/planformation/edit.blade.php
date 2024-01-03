@@ -430,7 +430,7 @@ $idpart = Auth::user()->id_partenaire;
                                 @method('put')
                                 <div class="row">
                                     <div class="col-12 col-md-4">
-                                        <label class="form-label" for="id_categorie_professionelle">Categories <strong style="color:red;">*</strong></label>
+                                        <label class="form-label" for="id_categorie_professionelle">Catégories <strong style="color:red;">*</strong></label>
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
@@ -478,7 +478,7 @@ $idpart = Auth::user()->id_partenaire;
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Categorie </th>
+                                <th>Catégorie </th>
                                 <th>Genre</th>
                                 <th>Nombre</th>
                                 <th>Action</th>
