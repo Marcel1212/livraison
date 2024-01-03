@@ -604,8 +604,8 @@ $idpart = Auth::user()->id_partenaire;
                                     <div class="col-12 col-md-2">
                                         <br>
                                         <button type="button" id="Activeajoutercabinetformation"
-                                        class="btn" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
-                                            <img src='/assets/img/editing.png'>
+                                        class="btn btn-icon btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
+                                            <span class="ti ti-plus"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -808,7 +808,7 @@ $idpart = Auth::user()->id_partenaire;
                         <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3 class="mb-2">Cabinet étrangere</h3>
+                            <h3 class="mb-2">Saisie les informations du cabinet étranger</h3>
                             <p class="text-muted"></p>
                         </div>
                         <div class="modal-body">
