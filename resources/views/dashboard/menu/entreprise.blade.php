@@ -19,6 +19,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
 
 @php($lien = 'projetetude')
 @php($lienformation = 'projetformation')
+@php($lienplan = 'planformation')
 
 <!-- Hour chart  -->
 <div class="card bg-transparent shadow-none my-4 border-0">
@@ -70,30 +71,29 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                     <div class="time-spending-chart">
                         <?php if (isset($anneexercice->id_periode_exercice)){ ?>
                         <h3 class="mb-2">
-                            <span
-                                class="text-muted">Du</span> <?php $dacon = Carbon::parse($anneexercice->date_debut_periode_exercice); ?>
+                            <span class="text-muted">Du</span> <?php $dacon = Carbon::parse($anneexercice->date_debut_periode_exercice); ?>
                             <span class="badge bg-label-success">{{ strtoupper($dacon->format('d M Y')) }} </span>
-                            <span
-                                class="text-muted"> au </span> <?php $daconf = Carbon::parse($anneexercice->date_fin_periode_exercice); ?>
+                            <span class="text-muted"> au </span> <?php $daconf = Carbon::parse($anneexercice->date_fin_periode_exercice); ?>
                             <span class="badge bg-label-danger"> {{ strtoupper($daconf->format('d M Y')) }}</span>
                         </h3>
-                            <?php if (!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
+                        <?php if (!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
                         <h3 class="mb-2">
 
                             <span class="text-muted">Prolongée jusqu'au </span>
-                            <span
-                                class="badge bg-label-success">{{$anneexercice->date_prolongation_periode_exercice}} </span>
+                            <span class="badge bg-label-success">{{ $anneexercice->date_prolongation_periode_exercice }}
+                            </span>
 
                         </h3>
                         <?php } ?>
                         <?php }else{ ?>
                         <h3 class="mb-2">
 
-                            <span class="text-danger mb-0">{{$anneexercice}}</span>
+                            <span class="text-danger mb-0">{{ $anneexercice }}</span>
 
                         </h3>
                         <?php } ?>
-                        <?php //} ?>
+                        <?php //}
+                        ?>
 
                     </div>
                 </div>
@@ -121,7 +121,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 </div>
                                 <h4 class="ms-1 mb-0">Plan de formation</h4>
                             </div>
-                            <a href="{{ route($lienformation . '.create') }}" class="mb-1">
+                            <a href="{{ route($lienplan . '.create') }}" class="mb-1">
                                 Cliquer ici pour éffectuer une
                                 demande</a>
                         </div>
@@ -139,7 +139,9 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 </div>
                                 <h4 class="ms-1 mb-0">Projet de formation</h4>
                             </div>
-                            <p class="mb-1">Cliquer ici pour éffectuer une demande </p>
+                            <a href="{{ route($lienformation . '.create') }}" class="mb-1">
+                                Cliquer ici pour éffectuer une
+                                demande</a>
                         </div>
                     </a>
                 </div>
@@ -175,7 +177,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                 </div>
                 <div class="dropdown">
                     <button class="btn p-0" type="button" id="popularInstructors" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                        aria-haspopup="true" aria-expanded="false">
 
                     </button>
                 </div>
@@ -183,142 +185,142 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
             <div class="table-responsive">
                 <table class="table table-borderless border-top">
                     <thead class="border-bottom">
-                    <tr>
-                        <th>Projet d'etudes</th>
-                        <th class="text-end">Nbres</th>
-                    </tr>
+                        <tr>
+                            <th>Projet d'etudes</th>
+                            <th class="text-end">Nbres</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="pt-2">
-                            <div class="d-flex justify-content-start align-items-center mt-lg-4">
+                        <tr>
+                            <td class="pt-2">
+                                <div class="d-flex justify-content-start align-items-center mt-lg-4">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet soumis</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet soumis</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end pt-2">
-                            <div class="user-progress mt-lg-4">
-                                <p class="mb-0 fw-medium"><?php echo count($projetetudesoumis); ?></p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end pt-2">
+                                <div class="user-progress mt-lg-4">
+                                    <p class="mb-0 fw-medium"><?php echo count($projetetudesoumis); ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet non-soumis</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet non-soumis</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium"><?php echo count($projetetudenonsoumis); ?></p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium"><?php echo count($projetetudenonsoumis); ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet en attente</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet en attente</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium"><?php echo count($projetetudeenattente); ?></p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium"><?php echo count($projetetudeenattente); ?></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet recevable</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet recevable</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium"><?php echo count($projetetuderecevable); ?></p>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium"><?php echo count($projetetuderecevable); ?></p>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <table class="table table-borderless border-top">
                     <thead class="border-bottom">
-                    <tr>
-                        <th>Projet de formation</th>
-                        <th class="text-end">Nbres</th>
-                    </tr>
+                        <tr>
+                            <th>Projet de formation</th>
+                            <th class="text-end">Nbres</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td class="pt-2">
-                            <div class="d-flex justify-content-start align-items-center mt-lg-4">
+                        <tr>
+                            <td class="pt-2">
+                                <div class="d-flex justify-content-start align-items-center mt-lg-4">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet soumis</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet soumis</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end pt-2">
-                            <div class="user-progress mt-lg-4">
-                                <p class="mb-0 fw-medium">0</p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end pt-2">
+                                <div class="user-progress mt-lg-4">
+                                    <p class="mb-0 fw-medium">0</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet non-soumis</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet non-soumis</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium">0</p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium">0</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet en attente</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet en attente</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium">0</p>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex justify-content-start align-items-center">
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium">0</p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-start align-items-center">
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-0">Projet recevable</h6>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-0">Projet recevable</h6>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-end">
-                            <div class="user-progress">
-                                <p class="mb-0 fw-medium">0</p>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="text-end">
+                                <div class="user-progress">
+                                    <p class="mb-0 fw-medium">0</p>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

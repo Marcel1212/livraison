@@ -295,9 +295,19 @@ class ProjetFormationController extends Controller
             $input['fonction'] = ucfirst($input['fonction']);
             $input['telephone'] = ucfirst($input['telephone']);
             $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
-            $input['acteurs'] = ucfirst($input['acteurs_projet']);
-            $input['role_p'] = ucfirst($input['role_projet']);
-            $input['responsabilite'] = ucfirst($input['responsabilite_projet']);
+            // $input['acteurs'] = ucfirst($input['acteurs_projet']);
+            // $input['role_p'] = ucfirst($input['role_projet']);
+            // $input['responsabilite'] = ucfirst($input['responsabilite_projet']);
+            $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
+            $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
+            $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
+            $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
+            $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
+            $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
+            $input['autre_acteur'] = ucfirst($input['autre_acteur']);
+            $input['roles_autres'] = ucfirst($input['roles_autres']);
+            $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
+
             $input['problemes'] = ucfirst($input['problemes_odf']);
             $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
             $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
@@ -561,87 +571,87 @@ class ProjetFormationController extends Controller
             $data = $request->all();
             //dd($data);
             /// Traitement de l'instruction
-            if($data['action'] === 'soumission_instruction'){
-                // ID du plan
-                    // traitement valide
-                    if($data['id_statut_instruction'] === '3'){
-                        //dd($data);
-                        if (isset($data['fichier_instruction'])){
+        //     if($data['action'] === 'soumission_instruction'){
+        //         // ID du plan
+        //             // traitement valide
+        //             if($data['id_statut_instruction'] === '3'){
+        //                 //dd($data);
+        //                 if (isset($data['fichier_instruction'])){
 
-                            $filefront = $data['fichier_instruction'];
+        //                     $filefront = $data['fichier_instruction'];
 
-                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+        //                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+        //                         $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
 
-                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+        //                         $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
 
-                                $input['fichier_instruction'] = $fileName1;
+        //                         $input['fichier_instruction'] = $fileName1;
 
-                            }else{
-                                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+        //                     }else{
+        //                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
 
-                            }
+        //                     }
 
-                        }
+        //                 }
 
-                        $date_soumission = Carbon::now();
-                        $projetetude = ProjetEtude::find($id);
-                        $projetetude->statut_instruction = true;
-                        $projetetude->date_instruction = $date_soumission;
-                        $projetetude->commentaires_instruction = $data['commentaires_instruction'];
-                        $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
-                        $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
-                        $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
-                        $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
-                        $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
-                        $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
-                        $projetetude->cible_instruction = $data['cible_instruction'];
-                        $projetetude->methodologie_instruction = $data['methodologie_instruction'];
-                        $projetetude->piece_jointe_instruction =$fileName1;
-                        $projetetude->save();
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Dossier validé effectue avec succes');
-                    }
+        //                 $date_soumission = Carbon::now();
+        //                 $projetetude = ProjetEtude::find($id);
+        //                 $projetetude->statut_instruction = true;
+        //                 $projetetude->date_instruction = $date_soumission;
+        //                 $projetetude->commentaires_instruction = $data['commentaires_instruction'];
+        //                 $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
+        //                 $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
+        //                 $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
+        //                 $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
+        //                 $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
+        //                 $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
+        //                 $projetetude->cible_instruction = $data['cible_instruction'];
+        //                 $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+        //                 $projetetude->piece_jointe_instruction =$fileName1;
+        //                 $projetetude->save();
+        //                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Dossier validé effectue avec succes');
+        //             }
 
-                    // traitement rejet
-                    if($data['id_statut_instruction'] === '5'){
-                        //dd($data);
-                        if (isset($data['fichier_instruction'])){
+        //             // traitement rejet
+        //             if($data['id_statut_instruction'] === '5'){
+        //                 //dd($data);
+        //                 if (isset($data['fichier_instruction'])){
 
-                            $filefront = $data['fichier_instruction'];
+        //                     $filefront = $data['fichier_instruction'];
 
-                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+        //                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
 
-                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+        //                         $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
 
-                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+        //                         $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
 
-                                $input['fichier_instruction'] = $fileName1;
+        //                         $input['fichier_instruction'] = $fileName1;
 
-                            }else{
-                                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+        //                     }else{
+        //                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
 
-                            }
+        //                     }
 
-                        }
-                        $date_soumission = Carbon::now();
-                        $projetetude = ProjetEtude::find($id);
-                        $projetetude->statut_instruction = false;
-                        $projetetude->date_instruction = $date_soumission;
-                        $projetetude->commentaires_instruction = $data['commentaires_instruction'];
-                        $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
-                        $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
-                        $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
-                        $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
-                        $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
-                        $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
-                        $projetetude->cible_instruction = $data['cible_instruction'];
-                        $projetetude->methodologie_instruction = $data['methodologie_instruction'];
-                        $projetetude->piece_jointe_instruction =$fileName1;
-                        $projetetude->save();
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet de l\'instruction effectue avec succes');
-                    }
-          }
+        //                 }
+        //                 $date_soumission = Carbon::now();
+        //                 $projetetude = ProjetEtude::find($id);
+        //                 $projetetude->statut_instruction = false;
+        //                 $projetetude->date_instruction = $date_soumission;
+        //                 $projetetude->commentaires_instruction = $data['commentaires_instruction'];
+        //                 $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
+        //                 $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
+        //                 $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
+        //                 $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
+        //                 $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
+        //                 $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
+        //                 $projetetude->cible_instruction = $data['cible_instruction'];
+        //                 $projetetude->methodologie_instruction = $data['methodologie_instruction'];
+        //                 $projetetude->piece_jointe_instruction =$fileName1;
+        //                 $projetetude->save();
+        //                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet de l\'instruction effectue avec succes');
+        //             }
+        //   }
 
             // Soumission instructions
             if($data['action'] === 'soumission_recevabilite_global_instruction'){
@@ -1056,9 +1066,20 @@ class ProjetFormationController extends Controller
                 $projetformation->fonction = $data['fonction'];
                 $projetformation->telephone = $data['telephone'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
-                $projetformation->acteurs = $data['acteurs_projet'];
-                $projetformation->role_p = $data['role_projet'];
-                $projetformation->responsabilite = $data['responsabilite_projet'];
+                // $projetformation->acteurs = $data['acteurs_projet'];
+                // $projetformation->role_p = $data['role_projet'];
+                // $projetformation->responsabilite = $data['responsabilite_projet'];
+                $projetformation->roles_beneficiaire = $data['roles_beneficiaire'];
+                $projetformation->responsabilites_beneficiaires = $data['responsabilites_beneficiaires'];
+                $projetformation->roles_promoteur = $data['roles_promoteur'];
+                $projetformation->responsabilites_promoteur = $data['responsabilites_promoteur'];
+                $projetformation->roles_partenaires = $data['roles_partenaires'];
+                $projetformation->responsabilites_partenaires = $data['responsabilites_partenaires'];
+                $projetformation->autre_acteur = $data['autre_acteur'];
+                $projetformation->roles_autres = $data['roles_autres'];
+                $projetformation->responsabilites_autres = $data['responsabilites_autres'];
+
+
                 $projetformation->problemes = $data['problemes_odf'];
                 $projetformation->manifestation_impact_effet = $data['manifestation_impacts_odf'];
                 $projetformation->moyens_probables = $data['moyens_problemes_odf'];
