@@ -58,7 +58,7 @@ $idpart = Auth::user()->id_partenaire;
 
             //alert(selectedValue);
 
-            if(selectedValue == 1){
+            if(selectedValue == 3){
 
                 //function telUpdate() {
                 //alert('testanc'); //exit;
@@ -81,7 +81,7 @@ $idpart = Auth::user()->id_partenaire;
 
             }
 
-            if(selectedValue == 2 || selectedValue ==3 || selectedValue == 5){
+            if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
 
                 document.getElementById("Activeajoutercabinetformation").disabled = true;
 
