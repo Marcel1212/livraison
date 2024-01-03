@@ -120,7 +120,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link <?php if($idetape==3){ echo "active";} ?>"
+                          class="nav-link "
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
