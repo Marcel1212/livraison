@@ -11,10 +11,6 @@ $nbrnonrejeter = count(StatAgentEnroleur::get_infos_enrolement_rejeter());
 
 $imagedashboard = Menu::get_info_image_dashboard();
 
-$imagedashboard = Menu::get_info_image_dashboard();
-$anneexercice = AnneeExercice::get_annee_exercice();
-
-$imagedashboard = Menu::get_info_image_dashboard();
 ?>
 
 
@@ -35,7 +31,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement non traité</p>
+                        <p class="mb-0">Enrôlement non traité</p>
                         <h4 class="text-info mb-0">{{$nbrnontraiter}}</h4>
                     </div>
                 </div>
@@ -45,7 +41,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement  validé</p>
+                        <p class="mb-0">Enrôlement validé</p>
                         <h4 class="text-success mb-0">{{$nbrvalider}}</h4>
                     </div>
                 </div>
@@ -55,51 +51,14 @@ $imagedashboard = Menu::get_info_image_dashboard();
                           <i class="ti ti-bulb ti-folder"></i>
                         </span>
                     <div class="content-right">
-                        <p class="mb-0">Enrolement rejeté</p>
+                        <p class="mb-0">Enrôlement rejeté</p>
                         <h4 class="text-danger mb-0">{{$nbrnonrejeter}}</h4>
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="col-12 col-md-4 ps-md-3 ps-lg-4 pt-3 pt-md-0">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div>
-                        <h5 class="mb-2">Période d'exercice</h5>
-                    </div>
-                    <div class="time-spending-chart">
-                        <?php if (isset($anneexercice->id_periode_exercice)){ ?>
-                        <h3 class="mb-2">
-                            <span
-                                class="text-muted">Du</span> <?php $dacon = Carbon::parse($anneexercice->date_debut_periode_exercice); ?>
-                            <span class="badge bg-label-success">{{ strtoupper($dacon->format('d M Y')) }} </span>
-                            <span
-                                class="text-muted"> au </span> <?php $daconf = Carbon::parse($anneexercice->date_fin_periode_exercice); ?>
-                            <span class="badge bg-label-danger"> {{ strtoupper($daconf->format('d M Y')) }}</span>
-                        </h3>
-                            <?php if (!empty($anneexercice->date_prolongation_periode_exercice)){ ?>
-                        <h3 class="mb-2">
-
-                            <span class="text-muted">Prolongée jusqu'au </span>
-                            <span
-                                class="badge bg-label-success">{{$anneexercice->date_prolongation_periode_exercice}} </span>
-
-                        </h3>
-                        <?php } ?>
-                        <?php }else{ ?>
-                        <h3 class="mb-2">
-
-                            <span class="text-danger mb-0">{{$anneexercice}}</span>
-
-                        </h3>
-                        <?php } ?>
-                        <?php //} ?>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('dashboard.annee')
     </div>
 </div>
 <!-- Hour chart End  -->
@@ -118,21 +77,21 @@ $imagedashboard = Menu::get_info_image_dashboard();
                                 <span class="avatar-initial rounded bg-label-primary">
                                     <i class="ti ti-folder-filled"></i></span>
                                 </div>
-                                <h4 class="ms-1 mb-0">Traitement des enrolements</h4>
+                                <h4 class="ms-1 mb-0">Traitement des enrôlements</h4>
                             </div>
-                            <p class="mb-1">Cliquer ici pour éffectuer un tratiement </p>
+                            <p class="mb-1">Cliquez ici pour effectuer un traitement.</p>
                         </div>
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="col-12 col-xl-4 col-md-6">
         <div class="card h-100">
-
-
+            <div align="center" >
+                <img  src="{{ asset('/frontend/logo/'. $imagedashboard->logo_logo)}}" alt="">
+            </div>
         </div>
     </div>
 

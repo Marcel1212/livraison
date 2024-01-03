@@ -16,7 +16,7 @@ class AgenceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { 
+    {
         $Resultat = Agence::all();
         return view('agence.index', compact('Resultat'));
     }
@@ -43,9 +43,6 @@ class AgenceController extends Controller
             'lib_agce' => 'required'
         ]);
         if ($request->isMethod('post')) {
-            /*$flag_agce=0;$flag_siege_agce=0;
-            if ($request->input('flag_agce')=='on') { $flag_agce=1;}
-            if ($request->input('flag_siege_agce')=='on') { $flag_siege_agce=1;}*/
             Agence::create(
                 [
                     'lib_agce' => strtoupper($request->input('lib_agce')),
@@ -78,11 +75,11 @@ class AgenceController extends Controller
 
         $localites = Localite::all();
         //dd($localites);
-        $localite = "<option value=''> Selectionnez une localite </option>";
+        $localite = "<option value=''> -- Sélectionnez une localité -- </option>";
         foreach ($localites as $comp) {
             $localite .= "<option value='" . $comp->id_localite  . "'>" . $comp->libelle_localite ." </option>";
         }
-        
+
         $listeagencelocalites = AgenceLocalite::where([['id_agence','=',$id]])->get();
 
         return view('agence.edit', compact('agence','localite','listeagencelocalites'));
@@ -109,11 +106,6 @@ class AgenceController extends Controller
                 $request->validate([
                     'lib_agce' => 'required'
                 ]);
-                /*$flag_agce=0;$flag_siege_agce=0;$autonom_agce=0;
-                if ($request->input('flag_agce')=='on') { $flag_agce=1;}
-                if ($request->input('flag_siege_agce')=='on') { $flag_siege_agce=1;}
-                if ($request->input('autonom_agce')=='on') { $autonom_agce=1;}*/
-                // dd($flag_agce);
                 $agence = Agence::find($id);
                 $agence->update(
                     [
@@ -130,11 +122,11 @@ class AgenceController extends Controller
             }
 
             if ($data['action'] == 'Lier_agence_localite'){
-                
+
                 $this->validate($request, [
                     'id_localite' => 'required',
                 ],[
-                    'id_localite.required' => 'Veuillez selectionnez la localite.',
+                    'id_localite.required' => 'Veuillez sélectionner une localité',
                 ]);
 
                 $input = $request->all();

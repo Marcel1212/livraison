@@ -62,23 +62,23 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
-                            <th>Nom et prenom de la charger de formation</th>
-                            <th>Fonction de la charger de formation</th>
-                            <th>Nombre de salarie pour la formation</th>
-                            <th>Date soumis</th>
+                            <th>Entreprise </th>
+                            <th>Nom du conseiller</th>
+                            <th>Antenne</th>
+                            <th>Date de soumission</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-
+                        <?php $i=0; ?>
                         @foreach ($planformations as $key => $planformation)
                             <tr>
-                                <td>{{ $planformation->id_plan_de_formation }}</td>
+                                <td>{{ ++$i }}</td>
                                 <td>{{ @$planformation->code_plan_formation }}</td>
-                                <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
-                                <td>{{ $planformation->fonction_charge_plan_formation }}</td>
-                                <td>{{ $planformation->nombre_salarie_plan_formation }}</td>
+                                <td>{{ @$planformation->entreprise->raison_social_entreprises }}</td>
+                                <td>{{  @$planformation->userconseilplanformation->name }} {{  @$planformation->userconseilplanformation->prenom_users }}</td>
+                                <td>{{  @$planformation->agence->lib_agce }}</td>
                                 <td>{{ $planformation->date_soumis_plan_formation }}</td>
                                 <td align="center">
                                         <?php if ($planformation->flag_soumis_plan_formation == true and

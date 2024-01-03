@@ -114,7 +114,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>N° de compte contribuable <strong style="color:red;">*</strong></label>
+                                        <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
@@ -128,17 +128,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Activité <strong style="color:red;">*</strong></label>
-                                        <input type="text"
-                                               class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Localisation geaographique <strong style="color:red;">*</strong></label>
+                                        <label>Localisation géographique <strong style="color:red;">*</strong></label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -172,7 +165,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone <strong style="color:red;">*</strong> </label>
+                                                <label class="form-label">Téléphone <strong style="color:red;">*</strong> </label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
@@ -218,10 +211,25 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select"
+                                                data-allow-clear="true" name="id_secteur_activite"
+                                                id="id_secteur_activite" required>
+                                            <option value="">-- Sélectionnez un secteur d'activité
+                                                --
+                                            </option>
+                                            @foreach ($secteuractivites as $activite)
+                                                <option
+                                                    value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Nom et prénoms du responsable formation <strong style="color:red;">*</strong> </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -237,7 +245,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <label>Email professionnel du responsable formation <strong style="color:red;">*</strong> </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -245,7 +253,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié <strong style="color:red;">*</strong></label>
+                                        <label>Nombre total de salariés <strong style="color:red;">*</strong></label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" required="required">
                                     </div>
@@ -271,9 +279,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregister"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                        Suivant
+                                        Enregister
+                                    </button>
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
+                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                            Suivant
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                         Retour</a>

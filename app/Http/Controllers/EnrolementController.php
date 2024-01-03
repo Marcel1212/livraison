@@ -35,9 +35,13 @@ class EnrolementController extends Controller
      */
     public function index()
     {
-        $demandeenroles = DemandeEnrolement::where([['flag_valider_demande_enrolement','=',false],['flag_rejeter_demande_enrolement','=',false]])
-                                            ->get();
+        $demandeenroles = DemandeEnrolement::where([['flag_valider_demande_enrolement', '=', false], ['flag_rejeter_demande_enrolement', '=', false]])->get();
         return view('enrolement.index', compact('demandeenroles'));
+    }
+
+    public function fini()
+    {
+           return view('enrolement.fini');
     }
 
     /**
@@ -45,68 +49,50 @@ class EnrolementController extends Controller
      */
     public function create()
     {
-
-        /*$activites = Activites::all();
-        $activite = "<option value=''> Selectionnez une activité </option>";
-        foreach ($activites as $comp) {
-            $activite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
-        }*/
-
+        /******************** secteuractivites *********************************/
         $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                                            ->orderByDesc('libelle_secteur_activite','','')
-                                            ->get();
-
-        /*$secteuractivites = SecteurActivite::join('activites','secteur_activite.id_secteur_activite','activites.id_secteur_activite')
-                                            ->select(['secteur_activite.id_secteur_activite','secteur_activite.libelle_secteur_activite'])
-                                            ->where('flag_actif_secteur_activite', '=', true)
-                                            ->groupBy('secteur_activite.id_secteur_activite','secteur_activite.libelle_secteur_activite')
-                                            ->orderByDesc('libelle_secteur_activite','','')
-                                            ->get();*/
-
-
+            ->orderBy('libelle_secteur_activite')
+            ->get();
         $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
         foreach ($secteuractivites as $comp) {
-            $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
+            $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
-
-        $centreimpots = CentreImpot::all();
+        /******************** CentreImpot *********************************/
+        $centreimpots = CentreImpot::where('flag_centre_impot', '=', true)
+            ->orderBy('libelle_centre_impot')
+            ->get();
         $centreimpot = "<option value=''> Selectionnez un centre impot </option>";
         foreach ($centreimpots as $comp) {
-            $centreimpot .= "<option value='" . $comp->id_centre_impot  . "'>" . mb_strtoupper($comp->libelle_centre_impot) ." </option>";
+            $centreimpot .= "<option value='" . $comp->id_centre_impot . "'>" . mb_strtoupper($comp->libelle_centre_impot) . " </option>";
         }
-
-        $localites = Localite::all();
+        /******************** Localite *********************************/
+        $localites = Localite::where('flag_localite', '=', true)
+            ->orderBy('libelle_localite')
+            ->get();
         $localite = "<option value=''> Selectionnez une localite </option>";
         foreach ($localites as $comp) {
-            $localite .= "<option value='" . $comp->id_localite  . "'>" . mb_strtoupper($comp->libelle_localite) ." </option>";
+            $localite .= "<option value='" . $comp->id_localite . "'>" . mb_strtoupper($comp->libelle_localite) . " </option>";
         }
-
-        /*$activites = Activites::where('flag_activites', '=', true)->orderBy('libelle_activites',)->get();
-        $activite = "<option value=''> Selectionnez une activité </option>";
-        foreach ($activites as $comp) {
-            $activite .= "<option value='" . $comp->id_activites  . "'>" . mb_strtoupper($comp->libelle_activites) ." </option>";
-        }*/
-
+        /******************** FormeJuridique *********************************/
         $formejuridiques = FormeJuridique::where('flag_actif_forme_juridique', '=', true)->orderBy('libelle_forme_juridique',)->get();
         $formejuridique = "<option value=''> Selectionnez une forme juridique </option>";
         foreach ($formejuridiques as $comp) {
-            $formejuridique .= "<option value='". $comp->code_forme_juridique .'/' . $comp->id_forme_juridique  . "'>" . mb_strtoupper($comp->libelle_forme_juridique) ." </option>";
+            $formejuridique .= "<option value='" . $comp->code_forme_juridique . '/' . $comp->id_forme_juridique . "'>" . mb_strtoupper($comp->libelle_forme_juridique) . " </option>";
         }
 
-        $pays = Pays::all();
-        $pay = "<option value='202'> 225 </option>";
+        /******************** Pays *********************************/
+        $pays = Pays::where('flag_actif_pays', '=', true)->get();
         foreach ($pays as $comp) {
-            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+            $pay = "<option value='" . $comp->id_pays . "'> +" . $comp->indicatif . " </option>";
         }
 
-        return view('enrolement.create', compact('secteuractivite','secteuractivites','centreimpot','localite','pay','formejuridique'));
+        return view('enrolement.create', compact('secteuractivite', 'secteuractivites', 'centreimpot', 'localite', 'pay', 'formejuridique'));
     }
 
-    public function getsecteuractivilitelistes($secteur=0)
+
+    public function getsecteuractivilitelistes($secteur = 0)
     {
-
-        $services = Activites::where([['id_secteur_activite','=',$secteur],['flag_activites','=',true]])->get();
-
+        $services = Activites::where([['id_secteur_activite', '=', $secteur], ['flag_activites', '=', true]])->get();
         return $services;
 
     }
@@ -121,14 +107,14 @@ class EnrolementController extends Controller
 
             $this->validate($request, [
                 'id_forme_juridique' => 'required',
-            ],[
+            ], [
                 'id_forme_juridique.required' => 'Veuillez sélectionner une forme juridique.'
             ]);
 
-            $exploeformejuri = explode("/",$request->input('id_forme_juridique'));
+            $exploeformejuri = explode("/", $request->input('id_forme_juridique'));
             $valcodeformejuri = $exploeformejuri[0];
             $validformejuri = $exploeformejuri[1];
-            if($valcodeformejuri == 'PR'){
+            if ($valcodeformejuri == 'PR') {
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
@@ -146,7 +132,7 @@ class EnrolementController extends Controller
                     'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     //'captcha' => 'required|captcha',
                     'g-recaptcha-response' => ['required', new ReCaptcha]
-                ],[
+                ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
@@ -168,11 +154,11 @@ class EnrolementController extends Controller
                     'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatriculation.',
                     'piece_attestation_immatriculati.uploaded' => 'Veuillez ajouter une piéce attestation immatriculation.',
                     'piece_attestation_immatriculati.mimes' => 'Les formats requises pour la pièce de l\'attestataion immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_attestation_immatriculati.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+                    'piece_attestation_immatriculati.max' => 'la taille maximale doit etre 5 MegaOctets.',
                     'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
                     'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_rccm_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+                    'piece_rccm_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
                     //'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
                     //'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
                     //'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
@@ -180,97 +166,97 @@ class EnrolementController extends Controller
 
                 $data = $request->all();
 
-                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement','=',$data['ncc_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfiencc)>=1){
+                if (count($verfiencc) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement','=',$data['rccm_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement', '=', $data['rccm_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccrcm)>=1){
+                if (count($verfienccrcm) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce numéro RCCM est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement','=',$data['numero_cnps_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement', '=', $data['numero_cnps_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccCNPS)>=1){
+                if (count($verfienccCNPS) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce numéro CNPS est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement','=',$data['tel_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccNumerotel)>=1){
+                if (count($verfienccNumerotel) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement','=',$data['email_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccEmail)>=1){
+                if (count($verfienccEmail) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
                 $input = $request->all();
 
-                if (isset($data['piece_dfe_demande_enrolement'])){
+                if (isset($data['piece_dfe_demande_enrolement'])) {
 
                     $filefront = $data['piece_dfe_demande_enrolement'];
 
                     //dd($filefront->extension());
 
-                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                    if ($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg") {
 
-                        $fileName1 = 'piece_dfe_demande_enrolement'. '_' . rand(111,99999) . '_' . 'piece_dfe_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
+                        $fileName1 = 'piece_dfe_demande_enrolement' . '_' . rand(111, 99999) . '_' . 'piece_dfe_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
 
                         $filefront->move(public_path('pieces/piece_dfe_demande_enrolement/'), $fileName1);
 
                         $input['piece_dfe_demande_enrolement'] = $fileName1;
-                    }else{
+                    } else {
                         return redirect()->route('enrolements')
-                        ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
+                            ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
                     }
 
                 }
 
-                if (isset($data['piece_rccm_demande_enrolement'])){
+                if (isset($data['piece_rccm_demande_enrolement'])) {
 
                     $filefront = $data['piece_rccm_demande_enrolement'];
 
-                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                    if ($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg") {
 
-                        $fileName1 = 'piece_rccm_demande_enrolement'. '_' . rand(111,99999) . '_' . 'piece_rccm_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
+                        $fileName1 = 'piece_rccm_demande_enrolement' . '_' . rand(111, 99999) . '_' . 'piece_rccm_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
 
                         $filefront->move(public_path('pieces/piece_rccm_demande_enrolement/'), $fileName1);
 
                         $input['piece_rccm_demande_enrolement'] = $fileName1;
 
-                    }else{
+                    } else {
                         return redirect()->route('enrolements')
-                        ->with('error', 'l\extension du fichier de la RCCM n\'est pas correcte');
+                            ->with('error', 'l\extension du fichier de la RCCM n\'est pas correcte');
                     }
 
                 }
 
-                if (isset($data['piece_attestation_immatriculati'])){
+                if (isset($data['piece_attestation_immatriculati'])) {
 
                     $filefront = $data['piece_attestation_immatriculati'];
 
-                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                    if ($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg") {
 
-                        $fileName1 = 'piece_attestation_immatriculati'. '_' . rand(111,99999) . '_' . 'piece_attestation_immatriculati' . '_' . time() . '.' . $filefront->extension();
+                        $fileName1 = 'piece_attestation_immatriculati' . '_' . rand(111, 99999) . '_' . 'piece_attestation_immatriculati' . '_' . time() . '.' . $filefront->extension();
 
                         $filefront->move(public_path('pieces/piece_attestation_immatriculati/'), $fileName1);
 
                         $input['piece_attestation_immatriculati'] = $fileName1;
 
-                    }else{
+                    } else {
                         return redirect()->route('enrolements')
-                        ->with('error', 'l\extension du fichier de l\attestation immatriculation n\'est pas correcte');
+                            ->with('error', 'l\extension du fichier de l\attestation immatriculation n\'est pas correcte');
                     }
 
                 }
@@ -278,10 +264,10 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
-                if(isset($input['numero_cnps_demande_enrolement'])){
+                if (isset($input['numero_cnps_demande_enrolement'])) {
                     $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
                 }
-                if(isset($input['rccm_demande_enrolement'])){
+                if (isset($input['rccm_demande_enrolement'])) {
                     $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
                 }
                 $input['id_forme_juridique'] = $validformejuri;
@@ -291,7 +277,7 @@ class EnrolementController extends Controller
                 $rais = $input['raison_sociale_demande_enroleme'];
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher,  $rais ,</b>
                                     <br><br>Votre demande d\'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
                                     SMS dans 48h ouvrées
@@ -309,7 +295,7 @@ class EnrolementController extends Controller
                 }
             }
 
-            if($valcodeformejuri == 'PU'){
+            if ($valcodeformejuri == 'PU') {
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
                     'email_demande_enrolement' => 'required|email',
@@ -322,7 +308,7 @@ class EnrolementController extends Controller
                     'ncc_demande_enrolement' => 'required|min:6|max:9',
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'g-recaptcha-response' => ['required', new Recaptcha],
-                ],[
+                ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
@@ -337,50 +323,50 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_dfe_demande_enrolement.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
                 ]);
 
                 $data = $request->all();
 
-                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement','=',$data['ncc_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfiencc)>=1){
+                if (count($verfiencc) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement','=',$data['tel_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccNumerotel)>=1){
+                if (count($verfienccNumerotel) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
-                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement','=',$data['email_demande_enrolement']],['flag_valider_demande_enrolement','=',true]])->get();
+                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if(count($verfienccEmail)>=1){
+                if (count($verfienccEmail) >= 1) {
 
                     return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
                 }
 
                 $input = $request->all();
 
-                if (isset($data['piece_dfe_demande_enrolement'])){
+                if (isset($data['piece_dfe_demande_enrolement'])) {
 
                     $filefront = $data['piece_dfe_demande_enrolement'];
 
                     //dd($filefront->extension());
 
-                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                    if ($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg") {
 
-                        $fileName1 = 'piece_dfe_demande_enrolement'. '_' . rand(111,99999) . '_' . 'piece_dfe_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
+                        $fileName1 = 'piece_dfe_demande_enrolement' . '_' . rand(111, 99999) . '_' . 'piece_dfe_demande_enrolement' . '_' . time() . '.' . $filefront->extension();
 
                         $filefront->move(public_path('pieces/piece_dfe_demande_enrolement/'), $fileName1);
 
                         $input['piece_dfe_demande_enrolement'] = $fileName1;
-                    }else{
+                    } else {
                         return redirect()->route('enrolements')
-                        ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
+                            ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
                     }
 
                 }
@@ -388,10 +374,10 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
-                if(isset($input['numero_cnps_demande_enrolement'])){
+                if (isset($input['numero_cnps_demande_enrolement'])) {
                     $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
                 }
-                if(isset($input['rccm_demande_enrolement'])){
+                if (isset($input['rccm_demande_enrolement'])) {
                     $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
                 }
                 $input['id_forme_juridique'] = $validformejuri;
@@ -400,7 +386,7 @@ class EnrolementController extends Controller
                 $rais = $input['raison_sociale_demande_enroleme'];
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher,  $rais ,</b>
                                     <br><br>Votre demande d\'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
                                     SMS dans 48h ouvrées
@@ -414,13 +400,15 @@ class EnrolementController extends Controller
                                     ";
 
 
-                    $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
+                      $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
+
+
             }
         }
 
         return redirect()->route('enrolements')
-            ->with('success', 'Votre demande d\'enrôlement a été effectuée avec succès !');
+            ->with('success', '<strong>Félicitations<strong> <br>Votre demande d\'enrôlement a été effectuée avec succès.<br>Le traitement de votre demande s\'effectuera dans un délai de 48h !');
     }
 
     /**
@@ -436,22 +424,22 @@ class EnrolementController extends Controller
      */
     public function edit($id)
     {
-        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+        $id = \App\Helpers\Crypt::UrldeCrypt($id);
         $demandeenrole = DemandeEnrolement::find($id);
 
         $statutoperations = StatutOperation::all();
         $statutoperation = "<option value=''> Selectionnez le statut </option>";
         foreach ($statutoperations as $comp) {
-            $statutoperation .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
+            $statutoperation .= "<option value='" . $comp->id_statut_operation . "'>" . $comp->libelle_statut_operation . " </option>";
         }
 
-        $motifs = Motif::where([['code_motif','=','DEN']])->get();
+        $motifs = Motif::where([['code_motif', '=', 'DEN']])->get();
         $motif = "<option value=''> Selectionnez un motif </option>";
         foreach ($motifs as $comp) {
-            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+            $motif .= "<option value='" . $comp->id_motif . "'>" . $comp->libelle_motif . " </option>";
         }
 
-        return view('enrolement.edit', compact('demandeenrole','statutoperation','motif'));
+        return view('enrolement.edit', compact('demandeenrole', 'statutoperation', 'motif'));
     }
 
     /**
@@ -459,18 +447,18 @@ class EnrolementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+        $id = \App\Helpers\Crypt::UrldeCrypt($id);
         $demandeenrole = DemandeEnrolement::find($id);
 
         if ($request->isMethod('put')) {
 
             $data = $request->all();
 
-            if($data['action'] === 'Rejeter'){
+            if ($data['action'] === 'Rejeter') {
                 $this->validate($request, [
                     'id_motif' => 'required',
                     'commentaire_demande_enrolement' => 'required'
-                ],[
+                ], [
                     'id_motif.required' => 'Veuillez selectionner le motif rejet.',
                     'commentaire_demande_enrolement.required' => 'Veuillez ajouter un commentaire.',
                 ]);
@@ -488,13 +476,13 @@ class EnrolementController extends Controller
 
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Rejet pour la demande enrolement sur e-FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
                                     <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
-                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif->libelle_motif."
-                                    <br><b>Commentaire : </b> ".@$demandeenrole1->motif->commentaire_motif."
+                                    <br><b>Motif de rejet  : </b> " . @$demandeenrole1->motif->libelle_motif . "
+                                    <br><b>Commentaire : </b> " . @$demandeenrole1->motif->commentaire_motif . "
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
@@ -515,10 +503,10 @@ class EnrolementController extends Controller
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
             }
 
-            if($data['action'] === 'Recevable'){
+            if ($data['action'] === 'Recevable') {
                 $this->validate($request, [
                     'id_motif_recevable' => 'required'
-                ],[
+                ], [
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
                 ]);
 
@@ -534,15 +522,15 @@ class EnrolementController extends Controller
                 $demandeenrole1 = DemandeEnrolement::find($id);
 
 
-                return redirect('enrolement/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
-               // return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
+                // return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }
 
-            if($data['action'] === 'NonRecevable'){
+            if ($data['action'] === 'NonRecevable') {
                 $this->validate($request, [
                     'id_motif_recevable' => 'required'
-                ],[
+                ], [
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
                 ]);
 
@@ -560,13 +548,13 @@ class EnrolementController extends Controller
 
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Recevabilité de demande enrolement sur e-FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
                                     <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
-                                    <br><b>Motif de rejet  : </b> ".@$demandeenrole1->motif1->libelle_motif."
-                                    <br><b>Commentaire : </b> ".@$demandeenrole1->motif1->commentaire_motif."
+                                    <br><b>Motif de rejet  : </b> " . @$demandeenrole1->motif1->libelle_motif . "
+                                    <br><b>Commentaire : </b> " . @$demandeenrole1->motif1->commentaire_motif . "
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
                                         fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
@@ -587,11 +575,11 @@ class EnrolementController extends Controller
                 return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }
 
-            if($data['action'] === 'Valider'){
+            if ($data['action'] === 'Valider') {
 
                 $this->validate($request, [
                     'id_motif' => 'required'
-                ],[
+                ], [
                     'id_motif.required' => 'Veuillez selectionner le motif de validation.',
                 ]);
 
@@ -628,7 +616,7 @@ class EnrolementController extends Controller
                 $insertedId = Entreprises::latest()->first()->id_entreprises;
                 $entreprise = Entreprises::latest()->first();
 
-                if(isset($demandeenrole1->piece_dfe_demande_enrolement)){
+                if (isset($demandeenrole1->piece_dfe_demande_enrolement)) {
                     Pieces::create([
                         'id_entreprises' => $insertedId,
                         'libelle_pieces' => $demandeenrole1->piece_dfe_demande_enrolement,
@@ -636,7 +624,7 @@ class EnrolementController extends Controller
                     ]);
                 }
 
-                if(isset($demandeenrole1->piece_rccm_demande_enrolement)){
+                if (isset($demandeenrole1->piece_rccm_demande_enrolement)) {
                     Pieces::create([
                         'id_entreprises' => $insertedId,
                         'libelle_pieces' => $demandeenrole1->piece_rccm_demande_enrolement,
@@ -644,7 +632,7 @@ class EnrolementController extends Controller
                     ]);
                 }
 
-                if(isset($demandeenrole1->piece_attestation_immatriculati)){
+                if (isset($demandeenrole1->piece_attestation_immatriculati)) {
                     Pieces::create([
                         'id_entreprises' => $insertedId,
                         'libelle_pieces' => $demandeenrole1->piece_attestation_immatriculati,
@@ -698,7 +686,7 @@ class EnrolementController extends Controller
 
                 if (isset($emailcli)) {
                     $sujet = "Activation de compte FDFP";
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher $name ,</b>
                                     <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
                                         succès, et il est maintenant prêt à être utilisé.
