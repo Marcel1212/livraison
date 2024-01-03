@@ -62,6 +62,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
+                            <th>Entreprise </th>
                             <th>Nom du conseiller</th>
                             <th>Antenne</th>
                             <th>Date de soumission</th>
@@ -75,6 +76,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ @$planformation->code_plan_formation }}</td>
+                                <td>{{ @$planformation->entreprise->raison_social_entreprises }}</td>
                                 <td>{{  @$planformation->userconseilplanformation->name }} {{  @$planformation->userconseilplanformation->prenom_users }}</td>
                                 <td>{{  @$planformation->agence->lib_agce }}</td>
                                 <td>{{ $planformation->date_soumis_plan_formation }}</td>
