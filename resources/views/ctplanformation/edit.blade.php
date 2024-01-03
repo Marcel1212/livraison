@@ -587,7 +587,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-12">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                             <input
                               type="text"
                               class="form-control form-control-sm"
@@ -603,7 +603,7 @@
                               disabled="disabled" />
                           </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                          <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -619,7 +619,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                          <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -635,7 +635,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" >Cout de la formation</label>
+                          <label class="form-label" >Coût de la formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -659,7 +659,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                          <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -667,7 +667,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                          <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -683,7 +683,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrément</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -692,7 +692,7 @@
                         </div>
 
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                          <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -700,7 +700,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                          <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -708,7 +708,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                          <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -716,7 +716,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
+                          <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
