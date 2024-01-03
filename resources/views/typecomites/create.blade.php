@@ -54,7 +54,7 @@
                                                             <option value="">----Selectionnez le comiten----</option>
                                                             <option value="Comitepleniere">Comite pléniere</option>
                                                             <option value="Comitedegestion">Comite de gestion</option>
-                                                            <option value="Comitepermant">Comite permant</option>
+                                                            <option value="Comitepermant">Commission permanente</option>
                                                     </select>
                                                 </div>
                                             </div>

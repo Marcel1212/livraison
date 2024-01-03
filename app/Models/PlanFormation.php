@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $commentaire_recevable_plan_formation
  * @property boolean $flag_soumis_ct_plan_formation
  * @property string $date_soumis_ct_plan_formation
+ * @property string $date_fiche_agrement
  * @property boolean $flag_valide_action_des_plan_formation
  * @property boolean $flag_plan_formation_valider_par_processus
  * @property boolean $flag_plan_validation_valider_par_comite_en_ligne
@@ -90,7 +91,7 @@ class PlanFormation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_entreprise_structure_formation_plan_formation', 'id_processus', 'id_agence', 'id_part_entreprise', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation', 'flag_valide_action_des_plan_formation', 'flag_plan_formation_valider_par_processus', 'flag_plan_validation_valider_par_comite_en_ligne', 'flag_plan_validation_rejeter_par_comite_en_ligne', 'flag_plan_formation_valider_par_comite_pleniere', 'cout_total_demande_plan_formation', 'cout_total_accorder_plan_formation', 'flag_fiche_agrement', 'date_fiche_agreement', 'id_secteur_activite'];
+    protected $fillable = ['id_type_entreprise', 'id_entreprises', 'id_motif_recevable', 'id_annee_exercice', 'id_entreprise_structure_formation_plan_formation', 'id_processus', 'id_agence', 'id_part_entreprise', 'nom_prenoms_charge_plan_formati', 'fonction_charge_plan_formation', 'nombre_salarie_plan_formation', 'masse_salariale', 'part_entreprise', 'cout_total', 'date_creation', 'id_user', 'flag_soumis_plan_formation', 'flag_valide_plan_formation', 'flag_rejeter_plan_formation', 'user_conseiller', 'conde_entreprise_plan_formation', 'code_plan_formation', 'created_at', 'updated_at', 'flag_recevablite_plan_formation', 'date_recevabilite_plan_formatio', 'date_soumis_plan_formation', 'date_valide_plan_formation', 'date_rejet_paln_formation', 'email_professionnel_charge_plan_formation', 'commentaire_recevable_plan_formation', 'flag_soumis_ct_plan_formation', 'date_soumis_ct_plan_formation', 'flag_valide_action_des_plan_formation', 'flag_plan_formation_valider_par_processus', 'flag_plan_validation_valider_par_comite_en_ligne', 'flag_plan_validation_rejeter_par_comite_en_ligne', 'flag_plan_formation_valider_par_comite_pleniere', 'cout_total_demande_plan_formation', 'cout_total_accorder_plan_formation', 'flag_fiche_agrement', 'date_fiche_agreement', 'id_secteur_activite','date_fiche_agrement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

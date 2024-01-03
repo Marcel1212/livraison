@@ -149,15 +149,16 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Activité </label>
+                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
                                         <input type="text"
                                                class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
+                                                value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation geaographique </label>
+                                        <label>Localisation géographique </label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -173,16 +174,7 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal </label>
-                                        <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
-                                               class="form-control form-control-sm"
-                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Adresse postal </label>
+                                        <label>Adresse postale </label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
@@ -199,7 +191,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Telephone  </label>
+                                                <label class="form-label">Téléphone  </label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
@@ -248,7 +240,19 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prenom du responsable formation </label>
+                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select"
+                                                data-allow-clear="true" name="id_secteur_activite"
+                                                id="id_secteur_activite" disabled="disabled">
+                                            <option value="{{@$planformation->secteurActivite->id_secteur_activite}}">{{@$planformation->secteurActivite->libelle_secteur_activite}}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Nom et prénom du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}" disabled="disabled">
                                     </div>
@@ -264,7 +268,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professsionel du responsable formation </label>
+                                        <label>Email professionnel du responsable formation </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->email_professionnel_charge_plan_formation}}" disabled="disabled">
                                     </div>
@@ -272,7 +276,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salarié </label>
+                                        <label>Nombre total de salariés </label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
                                     </div>
@@ -329,8 +333,6 @@
                                                class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
-
-
                                 <div class="col-12" align="right">
                                     <hr>
 
@@ -384,9 +386,8 @@
                             style="margin-top: 13px !important">
                             <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
@@ -394,7 +395,24 @@
                             </thead>
                             <tbody>
                             <?php $i = 0; ?>
+                            @foreach ($historiquesplanformations as $historiquesplanformation)
+                            <?php $i += 1;?>
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td>{{ $historiquesplanformation->intitule_action_formation_plan }}</td>
+                                <td>{{ $historiquesplanformation->structure_etablissement_action_ }}</td>
+                                <td>{{ $historiquesplanformation->cout_action_formation_plan }}</td>
+                                <td>{{ $historiquesplanformation->cout_accorde_action_formation }}</td>
 
+                                <td align="center">
+
+                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($historiquesplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                           class=" "
+                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
+
+                                </td>
+                            </tr>
+                            @endforeach
 
                             </tbody>
                         </table>
@@ -417,7 +435,7 @@
                                 <?php }else{?>
                                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                                         <div class="alert-body" style="text-align:center">
-                                            Validation des actions déja effectuer
+                                            Vous avez effectué votre comite technique en ligne
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -430,8 +448,8 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
