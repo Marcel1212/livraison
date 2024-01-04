@@ -386,6 +386,7 @@
                             style="margin-top: 13px !important">
                             <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Intituler de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
                                 <th>Cout de l'action</th>
