@@ -240,8 +240,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;'>&nbsp;</p>
+                    </table>
+                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:8.0pt;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;'>&nbsp;</p>
                 </div>
     </div>
 

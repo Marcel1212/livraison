@@ -58,7 +58,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
-                            <th>Nom et prenom de la charger de formation</th>
+                            <th>Entreprise</th>
+                            <th>Conseiller en charge</th>
                             <th>Montant demandée</th>
                             <th>Montant accordée</th>
                             <th>Action</th>
@@ -71,7 +72,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ @$planformation->code_plan_formation }}</td>
-                                <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
+                                <td>{{ $planformation->raison_social_entreprises }}</td>
+                                <td>{{ $planformation->name }} {{ $planformation->prenom_users }}</td>
                                 <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
                                 <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
                                 <td align="center">
@@ -80,6 +82,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
+
+                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+
                                     @endcan
                                 </td>
                             </tr>

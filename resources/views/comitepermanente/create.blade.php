@@ -11,8 +11,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des comites permanent')
-    @php($soustitre='Ajout de comite permanent')
+    @php($titre='Liste des commissions permanente')
+    @php($soustitre='Ajout de commission permanente')
     @php($lien='comitepermanente')
 
     <!-- BEGIN: Content-->
@@ -84,7 +84,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-links"
+                          class="nav-link"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
@@ -93,6 +93,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           Liste des plans de formations
                         </button>
                       </li>
+
                       <li class="nav-item">
                         <button
                           type="button"
