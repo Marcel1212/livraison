@@ -3,7 +3,7 @@
 @section('content')
     @php($Module = 'Projet de formations')
     @php($titre = 'Liste des projets de formations')
-    @php($soustitre = 'Ajouter un projet de formation ')
+    @php($soustitre = 'Projet de formation ')
     @php($lien = 'projetformation')
 
     <?php if ($projetetude->flag_soumis == true) {
@@ -59,11 +59,16 @@
                                 </div>
                                 <div class="card-body">
                                     <?php if ($projetetude->flag_soumis == true ) {?>
-                                    <div class="col-md-4 col-12">
-                                        <button type="button" class="btn rounded-pill btn-info waves-effect waves-light"
-                                            align="right" data-bs-toggle="modal" data-bs-target="#modalToggle">
+                                    <div align="right">
+                                        <button type="button"
+                                            class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#modalToggle">
                                             Voir le parcours
                                         </button>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        {{-- <button type="button" class="btn rounded-pill btn-info waves-effect waves-light" --}}
+
                                         <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
                                             aria-hidden="true">
@@ -516,7 +521,8 @@
                                                 </div>
                                                 <?php //}
                                                 ?>
-                                                <?php if ($nomrole == 'ENTREPRISE'  OR $nomrole == 'CONSEILLER EN FORMATION' ) {?>
+                                                <?php //if ($nomrole == 'ENTREPRISE'  OR $nomrole == 'CONSEILLER EN FORMATION' ) {
+                                                ?>
                                                 <div class="card accordion-item">
                                                     <h2 class="accordion-header" id="headingTwo">
                                                         <button type="button" class="accordion-button collapsed"
@@ -637,20 +643,22 @@
                                                                             </div>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <div type="button"  class="nav-link" data-bs-toggle="tab"
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-social"
                                                                                 role="tab" aria-selected="false"
                                                                                 tabindex="-1">
                                                                                 Les partenaires
-                                                                        </div>
+                                                                            </div>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <div type="button"  class="nav-link" data-bs-toggle="tab"
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-autres"
                                                                                 role="tab" aria-selected="false"
                                                                                 tabindex="-1">
                                                                                 Autres acteurs
-                                                                        </div>
+                                                                            </div>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -975,7 +983,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php }?>
+                                                <?php //}
+                                                ?>
 
                                                 <?php if ($nomrole == "DIRECTEUR" && $projetetude->flag_soumis == true) { ?>
                                                 <div class="card-body">
