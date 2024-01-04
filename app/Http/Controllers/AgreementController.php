@@ -96,10 +96,12 @@ class AgreementController extends Controller
                 ->where('plan_formation.id_plan_de_formation', $id)
                 ->first();
 
-            $plan_de_formation = DB::table('plan_formation')->where('flag_fiche_agrement', true)
+            $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
                 ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
                 ->where('id_plan_de_formation', $agreement->id_plan_de_formation)
                 ->first();
+
+//            dd($plan_de_formation);
 
             $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $agreement->id_plan_de_formation)->first();
             $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);

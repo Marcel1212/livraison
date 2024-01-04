@@ -241,7 +241,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prénom du responsable formation </label>
+                                        <label>Nom et prénoms du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}" disabled="disabled">
                                     </div>

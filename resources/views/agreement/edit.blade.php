@@ -37,7 +37,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
 @section('content')
 
-    @php($Module='Agreement')
+    @php($Module='Agrément')
     @php($titre='Liste des agreements pour les plans de formations')
     @php($soustitre='Consulter un agreement pour le plans de formation')
     @php($lien='agreement')
@@ -127,13 +127,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             type="button"
                             class="nav-link"
                             role="tab"
-
-
-                            @isset($agreement->flag_annulation_plan)
-                                @if($agreement->flag_annulation_plan==true)
-                                    disabled
-                               @endif
-                            @endisset
                             data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation"
                             aria-controls="navs-top-actionformation"
@@ -333,6 +326,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                        value="{{$infoentreprise->ncc_entreprises}}" disabled="disabled">
                             </div>
                         </div>
+
                         <div class="col-md-4 col-12">
                             <div class="mb-1">
                                 <label>Secteur activité <strong style="color:red;">*</strong></label>
@@ -351,7 +345,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 {{--                        </div>--}}
                         <div class="col-md-4 col-12">
                             <div class="mb-1">
-                                <label>Localisation geaographique </label>
+                                <label>Localisation géographique </label>
                                 <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                        class="form-control form-control-sm"
                                        value="{{$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -367,7 +361,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         </div>
                         <div class="col-md-4 col-12">
                             <div class="mb-1">
-                                <label>Adresse postal </label>
+                                <label>Adresse postale </label>
                                 <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                        class="form-control form-control-sm"
                                        value="{{$infoentreprise->adresse_postal_entreprises}}"
@@ -375,24 +369,15 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             </div>
                         </div>
 
-                        <div class="col-md-4 col-12">
-                            <div class="mb-1">
-                                <label>Adresse postal </label>
-                                <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
-                                       class="form-control form-control-sm"
-                                       value="{{$infoentreprise->adresse_postal_entreprises}}"
-                                       disabled="disabled">
-                            </div>
-                        </div>
 
                         <div class="col-md-4 col-12">
                             <div class="mb-1">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label class="form-label" for="billings-country">Indicatif</label>
-                                        <select class="select form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                        <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                             @foreach($pays as $pay)
-                                                <option value="{{$pay->id}}" @if($infoentreprise->pay->indicatif==$pay->indicatif) selected @endif>
+                                                <option value="{{$pay->id_pays}}" @if($infoentreprise->id_pays==$pay->id_pays) selected @endif>
                                                     {{$pay->indicatif}}
                                                 </option>
                                             @endforeach
@@ -416,7 +401,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <label class="form-label" for="billings-country">Indicatif</label>
                                         <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
                                             @foreach($pays as $pay)
-                                                <option value="{{$pay->id}}" @if($infoentreprise->pay->indicatif==$pay->indicatif) selected @endif>
+                                                <option value="{{$pay->id_pays}}" @if($infoentreprise->id_pays==$pay->id_pays) selected @endif>
                                                     {{$pay->indicatif}}
                                                 </option>
                                             @endforeach
@@ -456,10 +441,21 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
                             </div>
                         </div>
+                            <div class="col-md-4 col-12">
+                                <div class="mb-1">
+                                    <label>Secteur d'activité du plan <strong style="color:red;">*</strong></label>
+                                    <select class="select2 form-select"
+                                            data-allow-clear="true" name="id_secteur_activite"
+                                            id="id_secteur_activite" disabled="disabled">
+                                        <option  value="{{$plan_de_formation->secteurActivite->id_secteur_activite}}">{{$plan_de_formation->secteurActivite->libelle_secteur_activite}}</option>
+
+                                    </select>
+                                </div>
+                            </div>
 
                         <div class="col-md-4 col-12">
                             <div class="mb-1">
-                                <label>Nom et prenom du responsable formation </label>
+                                <label>Nom et prenoms du responsable formation </label>
                                 <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                        class="form-control form-control-sm"
                                        value="{{$plan_de_formation->nom_prenoms_charge_plan_formati}}"
@@ -539,6 +535,23 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                        disabled="disabled">
                             </div>
                         </div>
+                            <div class="col-md-2 col-12">
+                                <div class="mb-1">
+
+                                    <label>Le coût demandé </label>
+                                    <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
+                                           class="form-control form-control-sm" value="{{@$plan_de_formation->cout_total_demande_plan_formation}}" disabled="disabled">
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-12">
+                                <div class="mb-1">
+
+                                    <label>Le coût accordé </label>
+                                    <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
+                                           class="form-control form-control-sm" value="{{@$plan_de_formation->cout_total_accorder_plan_formation}}" disabled="disabled">
+                                </div>
+                            </div>
                         <div class="col-12" align="right">
                             <hr>
 
@@ -584,8 +597,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <th>Nombre de stagiaires</th>
                                 <th>Nombre de groupe</th>
                                 <th>Nombre d'heures par groupe</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -607,9 +620,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>
 
 {{--                                        @if()--}}
-                                        <a href="{{route("agreement.substitution",['id_plan'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)])}}"
-                                           class=" "
-                                           title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @if(@$agreement->flag_annulation_plan!=true)
+                                                <a href="{{route("agreement.substitution",['id_plan'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)])}}"
+                                                   class=" "
+                                                   title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endif
+
 
 {{--                                        @endcan--}}
 
