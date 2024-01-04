@@ -13,9 +13,9 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            
+
                             <div class="breadcrumb-wrapper">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -44,21 +44,13 @@
                                     <form action="{{ route($lien.'.store') }}" method="POST">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-5 col-12">
-                                                <div class="mb-1">
-                                                    <label>Agence </label>
-                                                    <select class="form-select" data-allow-clear="true" name="num_agce">
-                                                        <?= $agence; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 col-12">
+                                            <div class="col-md-10 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle direction </label>
                                                     <input type="text" name="libelle_direction" id="libelle_direction"
                                                            class="form-control form-control-sm" placeholder="Code">
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>

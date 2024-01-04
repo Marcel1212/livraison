@@ -3,7 +3,7 @@
 @section('content')
     @php($Module = 'Projet de formations')
     @php($titre = 'Liste des projets de formations')
-    @php($soustitre = 'Ajouter un projet de formation ')
+    @php($soustitre = 'Projet de formation ')
     @php($lien = 'projetformation')
 
     <?php if ($projetetude->flag_soumis == true) {
@@ -59,11 +59,16 @@
                                 </div>
                                 <div class="card-body">
                                     <?php if ($projetetude->flag_soumis == true ) {?>
-                                    <div class="col-md-4 col-12">
-                                        <button type="button" class="btn rounded-pill btn-info waves-effect waves-light"
+                                    <div align="right">
+                                        <button type="button"
+                                            class="btn rounded-pill btn-outline-primary waves-effect waves-light"
                                             data-bs-toggle="modal" data-bs-target="#modalToggle">
                                             Voir le parcours
                                         </button>
+                                    </div>
+                                    <div class="col-md-4 col-12">
+                                        {{-- <button type="button" class="btn rounded-pill btn-info waves-effect waves-light" --}}
+
                                         <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
                                             aria-hidden="true">
@@ -366,7 +371,7 @@
                                                         <button type="button" class="accordion-button"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionOne"
                                                             aria-expanded="true" aria-controls="accordionOne">
-                                                            Details de l'entreprise
+                                                            <strong>DETAILS DE L'ENTREPRISE</strong>
                                                         </button>
                                                     </h2>
 
@@ -449,7 +454,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionTwo"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Fiche promoteur
+                                                            <strong>FICHE PROMOTEUR </strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionTwo" class="accordion-collapse collapse"
@@ -516,13 +521,14 @@
                                                 </div>
                                                 <?php //}
                                                 ?>
-                                                <?php if ($nomrole == 'ENTREPRISE'  OR $nomrole == 'CONSEILLER EN FORMATION' ) {?>
+                                                <?php //if ($nomrole == 'ENTREPRISE'  OR $nomrole == 'CONSEILLER EN FORMATION' ) {
+                                                ?>
                                                 <div class="card accordion-item">
                                                     <h2 class="accordion-header" id="headingTwo">
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionPC"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Personne à contacter
+                                                            <strong>PERSONNE A CONTACTER</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionPC" class="accordion-collapse collapse"
@@ -581,16 +587,16 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionDP"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Description du projet
+                                                            <strong>DESCRIPTION DU PROJET</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionDP" class="accordion-collapse collapse"
                                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample"
                                                         style="">
                                                         <div class="accordion-body">
-                                                            <div class="row gy-3">
+                                                            <div class="row gy-12">
 
-                                                                <div class="col-md-6 col-12">
+                                                                <div class="col-md-12 col-12">
                                                                     <div class="mb-4">
                                                                         <label>Environnement /
                                                                             contexte <span
@@ -609,72 +615,149 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionAC"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Acteurs
+                                                            <strong>ACTEURS</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionAC" class="accordion-collapse collapse"
                                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample"
                                                         style="">
                                                         <div class="accordion-body">
-                                                            <div class="row gy-3">
-                                                                <div class="col-md-6 col-12">
-                                                                    <div class="mb-1">
-                                                                        <label>Acteurs<span style="color:red;">*</span>
-                                                                        </label>
-                                                                        <select required="required" class="form-select"
-                                                                            <?php echo $disable; ?>
-                                                                            id="exampleFormControlSelect1"
-                                                                            name="acteurs_projet"
-                                                                            aria-label="Default select example">
-                                                                            <option value="">
-                                                                                Selectionnez un
-                                                                                acteur
-                                                                            </option>
-                                                                            <option value="Les bénéficiaires">
-                                                                                Les
-                                                                                bénéficiaires
-                                                                            </option>
-                                                                            <option value="Le promoteur">
-                                                                                Le
-                                                                                promoteur
-                                                                            </option>
-                                                                            <option value="Les partenaires">
-                                                                                Les
-                                                                                partenaires
-                                                                            </option>
-                                                                            <option value="Autres acteurs">
-                                                                                Autres
-                                                                                acteurs
-                                                                            </option>
-                                                                            </option>
-                                                                        </select>
-                                                                    </div>
+                                                            <div class="card mb-3">
+                                                                <div class="card-header pt-2">
+                                                                    <ul class="nav nav-tabs card-header-tabs"
+                                                                        role="tablist">
+                                                                        <li class="nav-item">
+                                                                            <button type="button" class="nav-link active"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-personal"
+                                                                                role="tab" aria-selected="true">
+                                                                                Les beneficiaires
+                                                                            </button>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-account"
+                                                                                role="tab" tabindex="-1">
+                                                                                Le promoteur
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-social"
+                                                                                role="tab" aria-selected="false"
+                                                                                tabindex="-1">
+                                                                                Les partenaires
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="nav-item">
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
+                                                                                data-bs-target="#form-tabs-autres"
+                                                                                role="tab" aria-selected="false"
+                                                                                tabindex="-1">
+                                                                                Autres acteurs
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
                                                                 </div>
-                                                                <div class="col-md-6  col-12">
-                                                                    <div class="mb-1">
-                                                                        <label>Role <span
-                                                                                style="color:red;">*</span></label>
-                                                                        <input type="text" name="role_projet"
-                                                                            required="required" id="role"
-                                                                            class="form-control form-control-sm"
-                                                                            placeholder="ex : Perfectionnement .."
-                                                                            <?php echo $disable; ?>
-                                                                            value="{{ $projetetude->role_p }}">
+
+                                                                <div class="tab-content">
+                                                                    <div class="tab-pane fade active show"
+                                                                        id="form-tabs-personal" role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_beneficiaire"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->roles_beneficiaire; ?></textarea>
+
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_beneficiaires"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->responsabilites_beneficiaires; ?></textarea>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div
-                                                                    class="col-md-6
-                                                                            col-12">
-                                                                    <div class="mb-1">
-                                                                        <label>
-                                                                            Responsabilite
-                                                                            <span style="color:red;">*</span></label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="responsabilite_projet" style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->responsabilite; ?></textarea>
+                                                                    <div class="tab-pane fade" id="form-tabs-account"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_promoteur"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->roles_promoteur; ?></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_promoteur"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->responsabilites_promoteur; ?></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="form-tabs-social"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_partenaires"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->roles_partenaires; ?></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_partenaires"
+                                                                                    style="height: 150px;"<?php echo $disable; ?>><?php echo $projetetude->responsabilites_partenaires; ?></textarea>
+                                                                            </div>
+
+
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="form-tabs-autres"
+                                                                        role="tabpanel">
+                                                                        <div class="row g-3">
+                                                                            <div class="mb-1">
+                                                                                <label>Precisez
+                                                                                </label>
+                                                                                <input type="text" name="autre_acteur"
+                                                                                    id="autre_acteur"
+                                                                                    class="form-control form-control-sm"
+                                                                                    <?php echo $disable; ?>
+                                                                                    value="{{ $projetetude->autre_acteur }} "
+                                                                                    placeholder="ex : Panelistes">
+                                                                            </div>
+                                                                        </div> <br>
+                                                                        <div class="row g-3">
+
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-first-name">Roles</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_autres"
+                                                                                    style="height: 150px;" <?php echo $disable; ?>><?php echo $projetetude->roles_autres; ?></textarea>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label"
+                                                                                    for="formtabs-last-name">Responsabilités</label>
+                                                                                <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_autres"
+                                                                                    style="height: 150px;" <?php echo $disable; ?>><?php echo $projetetude->responsabilites_autres; ?></textarea>
+                                                                            </div>
+
+
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                     </div>
                                                 </div>
 
@@ -683,8 +766,8 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionPOD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Problèmes observes, objet de la
-                                                            demande de financement
+                                                            <strong>PROBLEMES OBSERVES, OBJET DE LA DEMANDE DE
+                                                                FINANCEMENT</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionPOD" class="accordion-collapse collapse"
@@ -696,8 +779,8 @@
                                                                     <div class="mb-1">
                                                                         <label>Problèmes
                                                                         </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="problemes_odf" style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->problemes; ?></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="problemes_odf"
+                                                                            style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->problemes; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6  col-12">
@@ -706,8 +789,8 @@
                                                                             /
                                                                             Impacts / Effet
                                                                         </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="manifestation_impacts_odf" style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->manifestation_impact_effet; ?></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="manifestation_impacts_odf"
+                                                                            style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->manifestation_impact_effet; ?></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
@@ -716,8 +799,8 @@
                                                                             probables
                                                                             de résolution
                                                                         </label>
-                                                                        <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                                            name="moyens_problemes_odf" style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->moyens_probables; ?></textarea>
+                                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="moyens_problemes_odf"
+                                                                            style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->moyens_probables; ?></textarea>
                                                                     </div>
                                                                 </div>
 
@@ -730,8 +813,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionACD"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Analyse des compétences des
-                                                            bénéficiaires
+                                                            <strong>ANALYSE DES COMPETENCES DES BENEFICIAIRES</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionACD" class="accordion-collapse collapse"
@@ -775,7 +857,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionThree"
                                                             aria-expanded="false" aria-controls="accordionThree">
-                                                            Pieces justificatives
+                                                            <strong>PIECES JUSTIFICATIVES</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionThree" class="accordion-collapse collapse"
@@ -787,10 +869,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre
                                                                         de demande de
-                                                                        financement (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        financement</label>
                                                                     <br>
                                                                     <?php if($piecesetude1 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -800,13 +879,15 @@
                                                                     <input type="file" name="doc_demande_financement"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre
-                                                                        d’engagement
-                                                                        (PDF,
-                                                                        WORD, JPG)
-                                                                        5M</label>
+                                                                        d’engagement </label>
                                                                     <br>
                                                                     <?php if($piecesetude2 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -816,15 +897,18 @@
                                                                     <input type="file" name="doc_lettre_engagement"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste
                                                                         des
                                                                         bénéficiairesselon le
                                                                         type de
-                                                                        projet (PDF, WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        projet </label>
                                                                     <br>
                                                                     <?php if($piecesetude3 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -834,15 +918,17 @@
                                                                     <input type="file" name="doc_liste_beneficiaires"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste
                                                                         de supports
                                                                         pédagogiques
-                                                                        nécessaires (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        nécessaires </label>
                                                                     <br>
                                                                     <?php if($piecesetude4 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -852,11 +938,14 @@
                                                                     <input type="file" name="doc_supports_pedagogiques"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Preuve legale
-                                                                        (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                    <label class="form-label">Preuve legale </label>
                                                                     <br>
                                                                     <?php if($piecesetude5 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -866,13 +955,15 @@
                                                                     <input type="file" name="doc_preuve_existance"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Autre
-                                                                        document (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        document </label>
                                                                     <br>
                                                                     <?php if($piecesetude6 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -882,12 +973,18 @@
                                                                     <input type="file" name="doc_autre_document"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php }?>
+                                                <?php //}
+                                                ?>
 
                                                 <?php if ($nomrole == "DIRECTEUR" && $projetetude->flag_soumis == true) { ?>
                                                 <div class="card-body">

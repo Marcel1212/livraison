@@ -13,9 +13,9 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                           
+
                             <div class="breadcrumb-wrapper">
-                               
+
                             </div>
                         </div>
                     </div>
@@ -41,19 +41,12 @@
                                     <h4 class="card-title">{{$soustitre}} </h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route($lien.'.update',$direction->num_agce) }}" method="POST">
+                                    <form action="{{ route($lien.'.update',$direction->id_direction) }}" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="row">
-                                            <div class="col-md-5 col-12">
-                                                <div class="mb-1">
-                                                    <label>Agence </label>
-                                                    <select class="form-select" data-allow-clear="true" name="num_agce">
-                                                        <?= $agence; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 col-12">
+
+                                            <div class="col-md-10 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle direction </label>
                                                     <input type="text" name="libelle_direction" id="libelle_direction"
@@ -61,7 +54,7 @@
                                                            class="form-control form-control-sm" placeholder="Code">
                                                 </div>
                                             </div>
-                                    
+
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">

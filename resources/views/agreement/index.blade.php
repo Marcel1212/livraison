@@ -10,8 +10,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module='Agreement')
-    @php($titre='Liste des agreements pour les plans de formations')
+    @php($Module='Agréement')
+    @php($titre='Liste des agréements pour les plans de formations')
     @php($lien='agreement')
 
     <!-- BEGIN: Content-->
@@ -66,8 +66,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         </tr>
                         </thead>
                         <tbody>
-
-                            <?php $i=0; ?>
                         @foreach ($agreements as $key => $planformation)
                             <tr>
                                 <td>{{ ++$i }}</td>
@@ -76,10 +74,17 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $planformation->name }} {{ $planformation->prenom_users }}</td>
                                 <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
                                 <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
+                                <td>
+                                    @isset($planformation->flag_annulation_plan)
+                                        <span class="badge bg-danger">Annulé</span>
+                                    @else
+                                        <span class="badge bg-success xs">Agrée</span>
+                                    @endisset
+                                </td>
                                 <td align="center">
-                                    @can($lien.'-edit')
+{{--                                    @can($lien.'-edit')--}}
                                         <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"
-                                           class=" "
+                                           class="me-2"
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
 

@@ -44,7 +44,7 @@
                         <thead>
                         <tr>
                             <th>No</th>
-                            <th>Agence</th>
+
                             <th>Libelle</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -54,7 +54,6 @@
                         @foreach ($Resultat as $key => $res)
                             <tr>
                                 <td>{{ $res->id_direction }}</td>
-                                <td>{{ $res->agence->lib_agce }}</td>
                                 <td>{{ $res->libelle_direction }}</td>
                                 <td align="center">
                                         <?php if($res->flag_direction == true){ ?>

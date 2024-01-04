@@ -182,7 +182,7 @@ class HomeController extends Controller
 
                     } else {
                         return redirect('/modifiermotdepasse')
-                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                            ->with('error', 'Veuillez renseigner l\'ancien mot de passe ');
                     }
 
                 }
@@ -211,7 +211,7 @@ class HomeController extends Controller
 
                     } else {
                         return redirect('/modifiermotdepasse')
-                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                            ->with('error', 'Veuillez renseigner l\'ancien mot de passe ');
                     }
                 }
 
@@ -295,7 +295,7 @@ class HomeController extends Controller
 
                     } else {
                         return redirect('/modifiermotdepasse')
-                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                            ->with('error', 'Veuillez renseigner l\'ancien mot de passe ');
                     }
 
                 }
@@ -324,7 +324,7 @@ class HomeController extends Controller
 
                     } else {
                         return redirect('/modifiermotdepasse')
-                            ->with('errors', 'Veuillez renseigner l\'ancien mot de passe ');
+                            ->with('error', 'Veuillez renseigner l\'ancien mot de passe ');
                     }
                 }
 
