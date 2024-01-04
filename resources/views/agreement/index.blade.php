@@ -62,10 +62,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <th>Conseiller en charge</th>
                             <th>Montant demandée</th>
                             <th>Montant accordée</th>
+                            <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
+                            <?php $i=0; ?>
                         @foreach ($agreements as $key => $planformation)
                             <tr>
                                 <td>{{ ++$i }}</td>
@@ -82,8 +84,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     @endisset
                                 </td>
                                 <td align="center">
-{{--                                    @can($lien.'-edit')--}}
-                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"
+                                    @can($lien.'-edit')
+                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
                                            class="me-2"
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
