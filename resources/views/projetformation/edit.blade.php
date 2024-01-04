@@ -860,10 +860,7 @@
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre
                                                                         de demande de
-                                                                        financement (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        financement</label>
                                                                     <br>
                                                                     <?php if($piecesetude1 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -873,13 +870,14 @@
                                                                     <input type="file" name="doc_demande_financement"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Lettre
-                                                                        d’engagement
-                                                                        (PDF,
-                                                                        WORD, JPG)
-                                                                        5M</label>
+                                                                        d’engagement </label>
                                                                     <br>
                                                                     <?php if($piecesetude2 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -889,15 +887,17 @@
                                                                     <input type="file" name="doc_lettre_engagement"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste
                                                                         des
                                                                         bénéficiairesselon le
                                                                         type de
-                                                                        projet (PDF, WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        projet </label>
                                                                     <br>
                                                                     <?php if($piecesetude3 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -907,15 +907,16 @@
                                                                     <input type="file" name="doc_liste_beneficiaires"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Liste
                                                                         de supports
                                                                         pédagogiques
-                                                                        nécessaires (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        nécessaires </label>
                                                                     <br>
                                                                     <?php if($piecesetude4 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -925,11 +926,13 @@
                                                                     <input type="file" name="doc_supports_pedagogiques"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label class="form-label">Preuve legale
-                                                                        (PDF, WORD, JPG)
-                                                                        5M</label>
+                                                                    <label class="form-label">Preuve legale </label>
                                                                     <br>
                                                                     <?php if($piecesetude5 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -939,13 +942,14 @@
                                                                     <input type="file" name="doc_preuve_existance"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <label class="form-label">Autre
-                                                                        document (PDF,
-                                                                        WORD,
-                                                                        JPG)
-                                                                        5M</label>
+                                                                        document </label>
                                                                     <br>
                                                                     <?php if($piecesetude6 != ''){?>
                                                                     <span class="badge bg-secondary"><a target="_blank"
@@ -955,6 +959,10 @@
                                                                     <input type="file" name="doc_autre_document"
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
+                                                                    <div id="defaultFormControlHelp" class="form-text">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
