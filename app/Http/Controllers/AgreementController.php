@@ -36,12 +36,13 @@ class AgreementController extends Controller
     public function index()
     {
         $agreements = DB::table('fiche_agrement')
-                            ->select(['plan_formation.*','fiche_agrement.*','demande_annulation_plan.*','fiche_agrement.created_at as date_valide_agrreement'])
+                            ->select(['plan_formation.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
                             ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
                             ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
                             ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
                             ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
-                            ->where('plan_formation.id_entreprises',Auth::user()->id_partenaire)
+                            ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
+                            ->join('users','plan_formation.user_conseiller','users.id')
                             ->get();
 
         return view('agreement.index', compact('agreements'));
@@ -66,9 +67,16 @@ class AgreementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $id = Crypt::UrldeCrypt($id);
+        $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
+        ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
+        ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
+        ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
+        ->get();
+
+        return view('agreement.show', compact('actionformations'));
     }
 
     /**

@@ -113,7 +113,7 @@
                           data-bs-target="#navs-top-recevabilite"
                           aria-controls="navs-top-recevabilite"
                           aria-selected="false">
-                          Agreement
+                          Agrément
                         </button>
                       </li>
                     </ul>
@@ -133,7 +133,12 @@
                       <div class="tab-pane fade show active" id="navs-top-actionformation" role="tabpanel">
 
                         <div class="col-12" align="right">
+                            <div class="row">
 
+
+                                <div class="col-7">
+                                </div>
+                                <div class="col-4">
                             <?php  if($nombreaction == $nombreactionvalider and $planformation->flag_plan_formation_valider_par_processus == true){?>
                                 <form method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     @csrf
@@ -144,8 +149,13 @@
                                     </button>
                                 </form>
                                 <?php } ?>
+                            </div>
+                            <div class="col-1"s>
                                 <a class="btn btn-sm btn-outline-secondary waves-effect" href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     Retour</a>
+
+                                </div>
+                            </div>
                         </div>
                         <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
@@ -255,7 +265,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -271,7 +281,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                            <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -287,7 +297,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -303,7 +313,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" >Cout de la formation</label>
+                            <label class="form-label" >Coût de la formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -327,7 +337,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -335,7 +345,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -351,7 +361,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                            <label class="form-label" for="cout_total_fiche_agrement">Coût total fiche agrément</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -360,7 +370,7 @@
                             </div>
 
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -368,7 +378,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -376,7 +386,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -384,7 +394,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
+                            <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -415,11 +425,11 @@
 
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
-                                    <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                    <label>Montant à accorder <strong style="color:red;">*</strong>: </label>
                                     <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                             </div>
                             <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoires)</strong></label>
 
                                 <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                     <?= $motif; ?>
