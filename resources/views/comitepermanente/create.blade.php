@@ -75,8 +75,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           class="nav-link disabled"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-actionformation"
-                          aria-controls="navs-top-actionformation"
+                          data-bs-target="#navs-top-categoriesprofessionel"
+                          aria-controls="navs-top-categoriesprofessionel"
                           aria-selected="false">
                           Personnes ressources
                         </button>
@@ -84,11 +84,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link disabled"
+                          class="nav-links"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-categoriesprofessionel"
-                          aria-controls="navs-top-categoriesprofessionel"
+                          data-bs-target="#navs-top-actionformation"
+                          aria-controls="navs-top-actionformation"
                           aria-selected="false">
                           Liste des plans de formations
                         </button>
@@ -102,7 +102,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-Soumettre"
                           aria-controls="navs-top-Soumettre"
                           aria-selected="false">
-                          Agreement
+                          Agrément
                         </button>
                       </li>
                     </ul>
@@ -152,7 +152,50 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                       </div>
                       <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
 
-                      </div>
+                        <table class="table table-bordered table-striped table-hover table-sm"
+                            id="exampleData"
+                            style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Entreprise </th>
+                                <th>Conseiller </th>
+                                <th>Code </th>
+                                <th>Date soumis</th>
+                                <th>Cout demandé</th>
+                                <th>Cout accordé</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <?php //dd($planformations);
+                            $i=0 ?>
+                            @foreach ($planformations as $key => $planformation)
+                                <tr>
+                                    <td>{{ ++$i }}</td>
+                                    <td>{{ @$planformation->entreprise->ncc_entreprises  }} / {{ @$planformation->entreprise->raison_social_entreprises  }}</td>
+                                    <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td>
+                                    <td>{{ @$planformation->code_plan_formation }}</td>
+                                    <td>{{ $planformation->date_soumis_plan_formation }}</td>
+                                    <td align="rigth">{{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
+                                    <td align="rigth">{{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                    <td align="center">
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        <div class="col-12" align="right">
+                            <hr>
+
+
+
+                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                Retour</a>
+                        </div>
+                    </div>
                       <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
 
                       </div>
