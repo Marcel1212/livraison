@@ -72,7 +72,7 @@
                                                     <tr>
                                                         <td>{{ $demandeenrole->titre_projet_etude }}</td>
 
-                                                        <td>{{ Str::substr($demandeenrole->id_entreprises()->raison_social_entreprises, 0, 40) }}
+                                                        <td>{{ /*Str::substr($demandeenrole->id_entreprises()->raison_social_entreprises, 0, 40)*/ }}
                                                         </td>
                                                         <td>{{ $demandeenrole->created_at }}</td>
                                                         <td align="center">
