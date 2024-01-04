@@ -621,7 +621,7 @@
                                                                     <ul class="nav nav-tabs card-header-tabs"
                                                                         role="tablist">
                                                                         <li class="nav-item">
-                                                                            <button class="nav-link active"
+                                                                            <button type="button" class="nav-link active"
                                                                                 data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-personal"
                                                                                 role="tab" aria-selected="true">
@@ -629,27 +629,28 @@
                                                                             </button>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                            <div type="button" class="nav-link"
+                                                                                data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-account"
                                                                                 role="tab" tabindex="-1">
                                                                                 Le promoteur
-                                                                            </button>
+                                                                            </div>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                            <div type="button"  class="nav-link" data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-social"
                                                                                 role="tab" aria-selected="false"
                                                                                 tabindex="-1">
                                                                                 Les partenaires
-                                                                            </button>
+                                                                        </div>
                                                                         </li>
                                                                         <li class="nav-item">
-                                                                            <button class="nav-link" data-bs-toggle="tab"
+                                                                            <div type="button"  class="nav-link" data-bs-toggle="tab"
                                                                                 data-bs-target="#form-tabs-autres"
                                                                                 role="tab" aria-selected="false"
                                                                                 tabindex="-1">
                                                                                 Autres acteurs
-                                                                            </button>
+                                                                        </div>
                                                                         </li>
                                                                     </ul>
                                                                 </div>
@@ -871,7 +872,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
@@ -888,7 +890,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
@@ -908,7 +911,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
@@ -927,7 +931,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
@@ -943,7 +948,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
@@ -960,7 +966,8 @@
                                                                         class="form-control" placeholder="" />
                                                                     <?php } ?>
                                                                     <div id="defaultFormControlHelp" class="form-text">
-                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG
+                                                                            <br>Taille
                                                                             maxi : 5Mo</em>
                                                                     </div>
                                                                 </div>
