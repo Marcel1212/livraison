@@ -89,12 +89,13 @@ class AgreementController extends Controller
         $type_entreprises = TypeEntreprise::all();
 
         $id = Crypt::UrldeCrypt($id);
+        //dd($id);
         $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
                                                 ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
                                                 ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
                                                 ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
                                                 ->get();
-        if(isset($id)) {
+        //if(isset($id)) {
             $agreement = DB::table('fiche_agrement')
                 ->select(['plan_formation.*', 'fiche_agrement.*', 'fiche_agrement.created_at as date_valide_agrreement'])
                 ->leftjoin('comite_gestion', 'fiche_agrement.id_comite_gestion', 'comite_gestion.id_comite_gestion')
@@ -106,17 +107,17 @@ class AgreementController extends Controller
 
             $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
                 ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
-                ->where('id_plan_de_formation', $agreement->id_plan_de_formation)
+                ->where('id_plan_de_formation', $id)
                 ->first();
 
-//            dd($plan_de_formation);
+                            dd($plan_de_formation);
 
-            $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $agreement->id_plan_de_formation)->first();
+            $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id)->first();
             $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
-            $categorieplans = CategoriePlan::where('id_plan_de_formation', $plan_de_formation->id_plan_de_formation)->get();
-            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation', $plan_de_formation->id_plan_de_formation)->get();
+            $categorieplans = CategoriePlan::where('id_plan_de_formation', $id)->get();
+            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation', $id)->get();
 
-        }
+        //}
 
         return view('agreement.edit', compact('agreement','actionformations','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
     }
