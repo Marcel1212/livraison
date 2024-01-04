@@ -85,7 +85,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
                                         and $planformation->flag_rejeter_plan_formation == false){ ?>
                                             <span class="badge bg-success">Valider</span>
-                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and
                                         $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == false){ ?>
                                         <span class="badge bg-warning">En cours de traitement</span>
@@ -101,7 +101,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
                                         and $planformation->flag_rejeter_plan_formation == true) { ?>
                                         <span class="badge bg-danger">Non recevable</span>
-                                    <?php } else { ?>
+                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == true and
+                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
+                                        and $planformation->flag_rejeter_plan_formation == false) { ?>
+
+                                    <span class="badge bg-danger">Annulé</span>
+                                    <?php }
+
+
+                                    else { ?>
                                     <span class="badge bg-danger"> </span>
                                     <?php } ?>
                                 </td>

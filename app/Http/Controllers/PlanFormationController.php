@@ -43,8 +43,7 @@ class PlanFormationController extends Controller
         //$infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
         $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
-            $planformations = PlanFormation::where('id_entreprises','=',$infoentrprise->id_entreprises)
-                ->whereNull('flag_fiche_agrement')->get();
+            $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
             return view('planformation.index',compact('planformations'));
         }else{
             return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
