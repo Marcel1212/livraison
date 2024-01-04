@@ -120,7 +120,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link "
+                          class="nav-link <?php if($idetape==3){ echo "active";}  ?>"
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-actionformation"
@@ -267,7 +267,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     Retour</a>
                             </div>
                         </div>
-                        <div class="tab-pane fade " id="navs-top-actionformation" role="tabpanel">
+                        <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} ?>" id="navs-top-actionformation" role="tabpanel">
 
                             <table class="table table-bordered table-striped table-hover table-sm"
                                 id="exampleData"

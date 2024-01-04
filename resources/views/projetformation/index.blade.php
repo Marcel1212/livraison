@@ -59,9 +59,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Titre du projet </th>
-                                                    <th>Acteurs du projet </th>
-                                                    </th>
-                                                    <th>Promoteur</th>
+
+                                                    <th>Entreprise</th>
                                                     <th>Date de creation</th>
                                                     <th>Statut Soumission</th>
                                                     <th>Statut instruction</th>
@@ -72,10 +71,8 @@
                                                 @foreach ($demandeenroles as $key => $demandeenrole)
                                                     <tr>
                                                         <td>{{ $demandeenrole->titre_projet_etude }}</td>
-                                                        <td>{{ Str::substr($demandeenrole->acteurs, 0, 30) }}
-                                                        </td>
-                                                        <td>{{ Str::substr($demandeenrole->promoteur, 0, 40) }}
-                                                        </td>
+                                                        <td></td>
+                                                        {{-- <td>{{ /*Str::substr($demandeenrole->id_entreprises()->raison_social_entreprises, 0, 40)*/ }}</td> --}}
                                                         <td>{{ $demandeenrole->created_at }}</td>
                                                         <td align="center">
                                                             <?php if ($demandeenrole->flag_soumis == true ){?>

@@ -56,6 +56,13 @@ class ProjetFormationController extends Controller
         }else if ($nomrole == 'DIRECTEUR'){
             //dd('DIRECTEUR');
             $demandeenroles = ProjetFormation::where('id_user_affecte','=',$user_id)->get();
+            // $demandeenroles = DB::table('projet_formation')
+            // ->join('entreprises', 'projet_formation.id_entreprises', '=', 'entreprises.id_entreprises')
+            // ->where(['projet_formation.id_user','=',$user_id])
+            // ->get();
+            // dd($demandeenroles);
+
+
         }else if ($nomrole == 'CHEF DE DEPARTEMENT'){
             //dd('DIRECTEUR');
             $demandeenroles = ProjetFormation::where('id_chef_departement','=',$user_id)->get();
@@ -779,19 +786,19 @@ class ProjetFormationController extends Controller
             // traitement de la soumission au conseiller de formation
             if($data['action'] === 'soumission_projet_formation_conseiller'){
                 // ID du plan
-              //dd($data);
+              //dd($data['id_conseiller']);
                $num_agce = Auth::user()->num_agce;
-               $conseiller = DB::table('users')
-               ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-               ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-               ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
-               ->get();
-               //dd($conseiller);
-                if($conseiller == ''){
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
-                }else{
-                    $idconseillerformation = $conseiller[0]->id ;
+            //    $conseiller = DB::table('users')
+            //    ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            //    ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            //    ->select('users.name', 'users.prenom_users', 'users.id')
+            //    ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
+            //    ->get();
+            //    //dd($conseiller);
+            //     if($conseiller == ''){
+            //         return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
+            //     }else{
+                    $idconseillerformation =  intval($data['id_conseiller']) ;
                     //dd($idchefserv);
                     $date_soumission = Carbon::now();
                     $projetformation = ProjetFormation::find($id);
@@ -803,7 +810,7 @@ class ProjetFormationController extends Controller
                     $projetformation->id_conseiller_formation = intval($idconseillerformation);
                     $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au conseiller avec succes');
-                }
+                //}
             }
             // Traitement de la soumission du Chef de service
             if($data['action'] === 'soumission_projet_formation_cs'){
@@ -837,7 +844,7 @@ class ProjetFormationController extends Controller
             // Traitement de la soumission du Chef de Departement
             if($data['action'] === 'soumission_projet_formation_departement'){
                 // ID du plan
-                //dd($data);
+                dd($data);
                 // Atribution au chef de departement
                 // Recuperation de l'id
                 // $user_id = Auth::user()->id;
@@ -851,6 +858,9 @@ class ProjetFormationController extends Controller
                 // $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
                 // //dd($localite_info[]);
                // $id_agence = $localite_info[0]->id_agence;
+                // Recuperation du departement
+
+               // Recuperation du chef de departement
                 $chefdedepartement = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
@@ -870,7 +880,7 @@ class ProjetFormationController extends Controller
                     $projetformation->id_departement = intval($data['id_departements']);
                     $projetformation->id_chef_departement = intval($idchefdep);
                     $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au chef de departement');
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet affecté au chef de departement');
                 }
             }
             // Traitement de la soumission du plan de formation au driecteur
