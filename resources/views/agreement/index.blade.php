@@ -84,11 +84,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     @endisset
                                 </td>
                                 <td align="center">
-                                    @can($lien.'-edit')
-                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
+{{--                                    @can($lien.'-edit')--}}
+                                        <a href="{{ route($lien.'.substitution',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
                                            class="me-2"
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
+
 
                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                         @if(!$planformation->flag_soumis_demande_annulation_plan)
@@ -96,7 +97,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                class="btn btn-danger btn-xs"
                                                title="Annuler" >Annuler l'agréement</a>
                                         @endif
-                                    @endcan
+{{--                                    @endcan--}}
                                 </td>
                             </tr>
                         @endforeach
