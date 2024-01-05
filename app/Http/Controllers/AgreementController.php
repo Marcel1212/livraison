@@ -95,7 +95,6 @@ class AgreementController extends Controller
         $type_entreprises = TypeEntreprise::all();
 
         $id = Crypt::UrldeCrypt($id);
-        //dd($id);
         $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
                                                 ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
                                                 ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
@@ -112,11 +111,11 @@ class AgreementController extends Controller
                 ->first();
 
             $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
-                ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
+//                ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
                 ->where('id_plan_de_formation', $id)
                 ->first();
 
-                            dd($plan_de_formation);
+//                            dd($plan_de_formation);
 
             $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id)->first();
             $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
