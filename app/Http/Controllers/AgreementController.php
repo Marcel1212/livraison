@@ -188,7 +188,7 @@ class AgreementController extends Controller
         $demande_annulation_plan = new DemandeAnnulationPlan();
         $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
         $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
-        $demande_annulation_plan->id_processus = 4;
+        $demande_annulation_plan->id_processus = 5;
         $demande_annulation_plan->id_plan_formation = $id;
 
         if(isset($plan_formation)){
@@ -216,7 +216,7 @@ class AgreementController extends Controller
                 $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
                 $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
                 $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
-                $demande_annulation_plan->id_processus = 4;
+                $demande_annulation_plan->id_processus = 5;
                 $demande_annulation_plan->id_plan_formation = $id_plan;
                 if(isset($plan_formation)){
                     $demande_annulation_plan->id_user = $plan_formation->user_conseiller;
@@ -299,7 +299,7 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
                 $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
-                $demande_substitution->id_processus = 4;
+                $demande_substitution->id_processus = 5;
 
 
                 if(isset($request->piece_demande_plan_substi)){
@@ -444,7 +444,7 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
                 $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
-                $demande_substitution->id_processus = 4;
+                $demande_substitution->id_processus = 5;
 
                 if (isset($request->piece_demande_plan_substi)){
                     $filefront = $request->piece_demande_plan_substi;
