@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Menu;
 use App\Http\Requests\DemandeAnnulationSauvegarderRequest;
 use App\Http\Requests\DemandeSubstitutionSauvegarderRequest;
 use App\Models\ActionFormationPlan;
@@ -35,15 +36,20 @@ class AgreementController extends Controller
      */
     public function index()
     {
+        $role = Menu::get_code_menu_profil(Auth::user()->id);
+
         $agreements = DB::table('fiche_agrement')
-                            ->select(['plan_formation.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
-                            ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
-                            ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
-                            ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
-                            ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
-                            ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
-                            ->join('users','plan_formation.user_conseiller','users.id')
-                            ->get();
+            ->select(['plan_formation.*','demande_annulation_plan.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
+            ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
+            ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
+            ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
+            ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
+            ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
+            ->join('users','plan_formation.user_conseiller','users.id');
+        if ($role== 'ENTREPRISE'){
+            $agreements = $agreements->where('plan_formation.id_entreprises',Auth::user()->id_partenaire);
+        }
+        $agreements = $agreements->get();
 
         return view('agreement.index', compact('agreements'));
     }

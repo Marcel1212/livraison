@@ -91,7 +91,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 src='/assets/img/editing.png'></a>
 
                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Modifier"><img src='/assets/img/eye-solid.png'></a>
-
+                                        @if(!$planformation->flag_soumis_demande_annulation_plan)
+                                            <a href="{{ route($lien.'.cancel',['id'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"
+                                               class="btn btn-danger btn-xs"
+                                               title="Annuler" >Annuler l'agréement</a>
+                                        @endif
                                     @endcan
                                 </td>
                             </tr>
