@@ -85,10 +85,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
 {{--                                    @can($lien.'-edit')--}}
-                                        <a href="{{ route($lien.'.substitution',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
-                                           class="me-2"
-                                           title="Modifier"><img
-                                                src='/assets/img/editing.png'></a>
+                                    <a href="{{ route($lien.'.substitution',['id_plan'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_action_formation_plan)])}}"
+                                       class="me-2"
+                                       title="Modifier"><img
+                                            src='/assets/img/editing.png'></a>
 
 
                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Modifier"><img src='/assets/img/eye-solid.png'></a>
