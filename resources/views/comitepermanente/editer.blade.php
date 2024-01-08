@@ -22,7 +22,7 @@
 
 @php($Module='Plan de formation')
 @php($titre='Liste des commissions permanente')
-@php($soustitre='Tenue de Commission permanente')
+@php($soustitre='Tenue de commission permanente')
 @php($lien='comitepermanente')
 
 
@@ -134,6 +134,12 @@
 
                         <div class="col-12" align="right">
 
+                            <div class="row">
+
+
+                                <div class="col-7">
+                                </div>
+                                <div class="col-4">
                             <?php  if($nombreaction == $nombreactionvalider and $planformation->flag_plan_formation_valider_par_processus == true){?>
                                 <form method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     @csrf
@@ -144,8 +150,13 @@
                                     </button>
                                 </form>
                                 <?php } ?>
+                            </div>
+                            <div class="col-1"s>
                                 <a class="btn btn-sm btn-outline-secondary waves-effect" href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     Retour</a>
+
+                                </div>
+                                </div>
                         </div>
                         <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
@@ -415,7 +426,7 @@
                                     <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                             </div>
                             <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire)</strong></label>
 
                                 <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                     <?= $motif; ?>

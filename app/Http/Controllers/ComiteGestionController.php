@@ -46,7 +46,13 @@ class ComiteGestionController extends Controller
      */
     public function create()
     {
-        return view('comitegestion.create');
+        $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
+        $planformations = PlanFormation::where([['flag_plan_formation_valider_par_processus','=',true],
+                                                ['flag_fiche_agrement','=',false],
+                                                ['cout_total_accorder_plan_formation','>=',$typecomiteinfos->valeur_min_type_comite],
+                                                ['cout_total_accorder_plan_formation','<=',$typecomiteinfos->valeur_max_type_comite]])
+                                            ->get();
+        return view('comitegestion.create', compact('planformations'));
     }
 
     /**
@@ -382,8 +388,19 @@ class ComiteGestionController extends Controller
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
                     $plan = PlanFormation::find($idplan);
+
+                    $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+                    $montantcouttotal = 0;
+
+                    foreach($actionformationvals as $actionformationval){
+                        $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                    }
+
                     $plan->update([
-                        'flag_fiche_agrement' => true
+                        'flag_fiche_agrement' => true,
+                        'cout_total_accorder_plan_formation' => $montantcouttotal,
+                        'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
                 return redirect('comitegestion/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Les actions ont été validée ');

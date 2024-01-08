@@ -39,7 +39,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
     @php($Module='Plan de formation')
     @php($titre='Liste des commissions permanente')
-    @php($soustitre='Tenue de Commission permanente')
+    @php($soustitre='Tenue de commission permanente')
     @php($lien='comitepermanente')
 
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Menu;
 use App\Http\Requests\DemandeAnnulationSauvegarderRequest;
 use App\Http\Requests\DemandeSubstitutionSauvegarderRequest;
 use App\Models\ActionFormationPlan;
@@ -35,14 +36,20 @@ class AgreementController extends Controller
      */
     public function index()
     {
+        $role = Menu::get_code_menu_profil(Auth::user()->id);
+
         $agreements = DB::table('fiche_agrement')
-                            ->select(['plan_formation.*','fiche_agrement.*','demande_annulation_plan.*','fiche_agrement.created_at as date_valide_agrreement'])
-                            ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
-                            ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
-                            ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
-                            ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
-                            ->where('plan_formation.id_entreprises',Auth::user()->id_partenaire)
-                            ->get();
+            ->select(['plan_formation.*','demande_annulation_plan.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
+            ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
+            ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
+            ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
+            ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
+            ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
+            ->join('users','plan_formation.user_conseiller','users.id');
+        if ($role== 'ENTREPRISE'){
+            $agreements = $agreements->where('plan_formation.id_entreprises',Auth::user()->id_partenaire);
+        }
+        $agreements = $agreements->get();
 
         return view('agreement.index', compact('agreements'));
     }
@@ -66,9 +73,16 @@ class AgreementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $id = Crypt::UrldeCrypt($id);
+        $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
+        ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
+        ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
+        ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
+        ->get();
+
+        return view('agreement.show', compact('actionformations'));
     }
 
     /**
@@ -86,7 +100,7 @@ class AgreementController extends Controller
                                                 ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
                                                 ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
                                                 ->get();
-        if(isset($id)) {
+        //if(isset($id)) {
             $agreement = DB::table('fiche_agrement')
                 ->select(['plan_formation.*', 'fiche_agrement.*', 'fiche_agrement.created_at as date_valide_agrreement'])
                 ->leftjoin('comite_gestion', 'fiche_agrement.id_comite_gestion', 'comite_gestion.id_comite_gestion')
@@ -97,18 +111,18 @@ class AgreementController extends Controller
                 ->first();
 
             $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
-                ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
-                ->where('id_plan_de_formation', $agreement->id_plan_de_formation)
+//                ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
+                ->where('id_plan_de_formation', $id)
                 ->first();
 
-//            dd($plan_de_formation);
+//                            dd($plan_de_formation);
 
-            $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $agreement->id_plan_de_formation)->first();
+            $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id)->first();
             $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
-            $categorieplans = CategoriePlan::where('id_plan_de_formation', $plan_de_formation->id_plan_de_formation)->get();
-            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation', $plan_de_formation->id_plan_de_formation)->get();
+            $categorieplans = CategoriePlan::where('id_plan_de_formation', $id)->get();
+            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation', $id)->get();
 
-        }
+        //}
 
         return view('agreement.edit', compact('agreement','actionformations','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
     }
@@ -174,7 +188,7 @@ class AgreementController extends Controller
         $demande_annulation_plan = new DemandeAnnulationPlan();
         $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
         $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
-        $demande_annulation_plan->id_processus = 4;
+        $demande_annulation_plan->id_processus = 5;
         $demande_annulation_plan->id_plan_formation = $id;
 
         if(isset($plan_formation)){
@@ -202,7 +216,7 @@ class AgreementController extends Controller
                 $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
                 $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
                 $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
-                $demande_annulation_plan->id_processus = 4;
+                $demande_annulation_plan->id_processus = 5;
                 $demande_annulation_plan->id_plan_formation = $id_plan;
                 if(isset($plan_formation)){
                     $demande_annulation_plan->id_user = $plan_formation->user_conseiller;
@@ -285,7 +299,7 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
                 $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
-                $demande_substitution->id_processus = 4;
+                $demande_substitution->id_processus = 5;
 
 
                 if(isset($request->piece_demande_plan_substi)){
@@ -430,7 +444,7 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
                 $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
-                $demande_substitution->id_processus = 4;
+                $demande_substitution->id_processus = 5;
 
                 if (isset($request->piece_demande_plan_substi)){
                     $filefront = $request->piece_demande_plan_substi;

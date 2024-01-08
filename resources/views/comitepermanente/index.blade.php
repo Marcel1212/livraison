@@ -49,7 +49,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         @can($lien.'-create')
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau comite permanent </a>
+                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle commission permanente </a>
                         @endcan
                     </small>
                 </div>

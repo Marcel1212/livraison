@@ -67,7 +67,14 @@
 
 
                 <div class="row">
-                <div class="col-xl-7">
+                    <div align="right">
+                        <button type="button"
+                                class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#modalToggle">
+                            Voir le parcours de validation
+                        </button>
+                    </div>
+                <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -543,51 +550,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-xl-5">
-                    <div class="card">
-                      <h5 class="card-header">Niveau de validation</h5>
-                      <div class="card-body pb-0">
-                        <ul class="timeline pt-3">
-                            @foreach ($ResultProssesList as $res)
-                          <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
-                            <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
-                              <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
-                            </span>
-                            <div class="timeline-event">
-                              <div class="timeline-header border-bottom mb-3">
-                                <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
-                                <span class="text-muted"><strong>{{ $res->name }}</strong></span>
-                              </div>
-                              <div class="d-flex justify-content-between flex-wrap mb-2">
-                                <div class="d-flex align-items-center">
-                                      <?php if($res->is_valide == true){ ?>
-                                          <span>Observation :<br/> {{ $res->comment_parcours }}</span>
-                                          <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
-                                          <span>Validé le <br/> {{ $res->date_valide }}</span>
-                                      <?php  } if( $res->is_valide === false) {?>
-                                          <span class="text-muted me-2">Observation : {{ $res->comment_parcours }}</span> <br>
 
-                                          <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
-                                      <?php } ?>
-                                  <!--<span>Charles de Gaulle Airport, Paris</span>
-                                  <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
-                                  <span>Heathrow Airport, London</span>-->
-                                </div>
-                                <div>
-                                  <!--<span>6:30 AM</span>-->
-                                </div>
-                              </div>
-                              <div class="d-flex align-items-center">
-
-                              </div>
-                            </div>
-                          </li>
-                          @endforeach
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
     </div>
 
 
@@ -852,6 +815,70 @@
                     });
                 })
             </script>-->
+
+
+
+					<div class="col-md-4 col-12">
+                        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Parcours de la demande de validation du plan de formation</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+                                                @foreach ($ResultProssesList as $res)
+                                                    <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
+                                                                <span class="text-muted"><strong>{{ $res->name }}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    @if($res->is_valide==true)
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation : {{ $res->comment_parcours }}</span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>Validé le  {{ $res->date_valide }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if($res->is_valide===false)
+                                                                        <div class="row">
+                                                                            <div>
+                                                                                <span>Observation : {{ $res->comment_parcours }}</span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
         @endsection
 
