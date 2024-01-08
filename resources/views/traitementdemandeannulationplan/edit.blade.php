@@ -6,23 +6,16 @@
 	}else{
 
 	}*/
-    $NumAgce = Auth::user()->num_agce;
-    use App\Helpers\ConseillerParAgence;
-    use App\Helpers\NombreActionValiderParLeConseiller;
-    $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
-    $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
-    $nombre = count($conseilleragence);
-    //dd($nombre);
 ?>
 
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Demandes')
+    @php($Module='Plan de formation')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Comite technique à valider')
-    @php($lien='ctplanformationvalider')
+    @php($soustitre='Traitement de la demande de plan de formation')
+    @php($lien='traitementdemandeannulationplan')
 
 
     <!-- BEGIN: Content-->
@@ -63,11 +56,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-
-
-
-                <div class="row">
-                <div class="col-xl-7">
+        <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -104,7 +93,7 @@
                           data-bs-target="#navs-top-histortiqueactionformation"
                           aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Historiques des actions des plans de formation
+                          Historiques des actions du plan de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -119,18 +108,18 @@
                           Actions du plan de formation
                         </button>
                       </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link active"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-recevabilite"
-                          aria-controls="navs-top-recevabilite"
-                          aria-selected="false">
-                          Traitement
-                        </button>
-                      </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link active"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-demande-annulation"
+                                aria-controls="navs-top-demande-annulation"
+                                aria-selected="false">
+                                Traitement de la demande d'annulation
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
@@ -155,10 +144,17 @@
                                                 value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
                                     </div>
                                 </div>
-
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation géographique </label>
+                                        <label>Activité </label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                                value="{{@$infoentreprise->activite->libelle_activites}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Localisation geaographique </label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -174,7 +170,16 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postale </label>
+                                        <label>Adresse postal </label>
+                                        <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
+                                               class="form-control form-control-sm"
+                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Adresse postal </label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
@@ -191,7 +196,7 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Téléphone  </label>
+                                                <label class="form-label">Telephone  </label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" disabled="disabled">
@@ -240,19 +245,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select"
-                                                data-allow-clear="true" name="id_secteur_activite"
-                                                id="id_secteur_activite" disabled="disabled">
-                                            <option value="{{@$planformation->secteurActivite->id_secteur_activite}}">{{@$planformation->secteurActivite->libelle_secteur_activite}}</option>
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Nom et prénom du responsable formation </label>
+                                        <label>Nom et prenom du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}" disabled="disabled">
                                     </div>
@@ -268,7 +261,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Email professionnel du responsable formation </label>
+                                        <label>Email professsionel du responsable formation </label>
                                         <input type="email" name="email_professionnel_charge_plan_formation" id="email_professionnel_charge_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->email_professionnel_charge_plan_formation}}" disabled="disabled">
                                     </div>
@@ -276,7 +269,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salariés </label>
+                                        <label>Nombre total de salarié </label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
                                     </div>
@@ -313,24 +306,6 @@
                                         <label>Code plan </label>
                                         <input type="text" name="code_plan_formation" id="code_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 col-12">
-                                    <div class="mb-1">
-
-                                        <label>Le coût demandé </label>
-                                        <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_demande_plan_formation}}" disabled="disabled">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2 col-12">
-                                    <div class="mb-1">
-
-                                        <label>Le coût accordé </label>
-                                        <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-12" align="right">
@@ -375,7 +350,8 @@
                         </table>
                       </div>
 
-                      <div class="tab-pane fade" id="navs-top-histortiqueactionformation" role="tabpanel">
+
+                     <div class="tab-pane fade" id="navs-top-histortiqueactionformation" role="tabpanel">
 
                         <div class="col-12" align="right">
 
@@ -387,8 +363,11 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
-                                <th>Structure ou établissement de formation</th>
+                                <th>Intitluer de l'action de formation </th>
+                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Nombre de stagiaires</th>
+                                <th>Nombre de groupe</th>
+                                <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
@@ -396,24 +375,7 @@
                             </thead>
                             <tbody>
                             <?php $i = 0; ?>
-                            @foreach ($historiquesplanformations as $historiquesplanformation)
-                            <?php $i += 1;?>
-                            <tr>
-                                <td>{{ $i }}</td>
-                                <td>{{ $historiquesplanformation->intitule_action_formation_plan }}</td>
-                                <td>{{ $historiquesplanformation->structure_etablissement_action_ }}</td>
-                                <td>{{ $historiquesplanformation->cout_action_formation_plan }}</td>
-                                <td>{{ $historiquesplanformation->cout_accorde_action_formation }}</td>
 
-                                <td align="center">
-
-                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($historiquesplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                           class=" "
-                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
-
-                                </td>
-                            </tr>
-                            @endforeach
 
                             </tbody>
                         </table>
@@ -423,24 +385,15 @@
 
                         <div class="col-12" align="right">
 
-                            <?php if($nombreaction == $nombreactionvaliderparconseiller){?>
-                                <?php if(count($conseillerplan)<1){?>
-                                    <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
-                                        @csrf
-                                        @method('put')
-                                        <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
-                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                        Valider
-                                        </button>
-                                    </form>
-                                <?php }else{?>
-                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                        <div class="alert-body" style="text-align:center">
-                                            Vous avez effectué votre comite technique en ligne
-                                        </div>
-                                    </div>
-                                <?php } ?>
-
+                            <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
+                                <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
+                                    @csrf
+                                    @method('put')
+                                    <button type="submit" name="action" value="Soumission_ct_plan_formation"
+                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                    Valider le plan de formation
+                                    </button>
+                                </form>
                             <?php } ?>
                         </div>
                         <table class="table table-bordered table-striped table-hover table-sm"
@@ -449,8 +402,11 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
-                                <th>Structure ou établissement de formation</th>
+                                <th>Intitluer de l'action de formation </th>
+                                <th>Structure ou etablissemnt de formation</th>
+                                <th>Nombre de stagiaires</th>
+                                <th>Nombre de groupe</th>
+                                <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
@@ -464,130 +420,168 @@
                                                 <td>{{ $i }}</td>
                                                 <td>{{ $actionplanformation->intitule_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->structure_etablissement_action_ }}</td>
+                                                <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
+                                                <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
+                                                <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
-
-                                                <td align="center">
-                                                    @can($lien.'-edit')
-                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                                           class=" "
-                                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
-                                                           <?php //if($planformation->flag_recevablite_plan_formation==true){ ?>
-                                                           <a type="button"
-                                                                    class="" data-bs-toggle="modal" data-bs-target="#traiterActionFomationPlan<?php echo $actionplanformation->id_action_formation_plan ?>" href="#myModal1" data-url="http://example.com">
-                                                                        <img src='/assets/img/editing.png'>
-                                                                    </a>
-
-                                                            <!--<a href="#myModal" id="btnChange"class="btn btn-default" data-toggle="modal" data-id="@$actionplanformation->id_action_formation_plan">Change Location</a>-->
-
-                                                            <?php //} ?>
-                                                    @endcan
-
-                                                </td>
                                             </tr>
                                 @endforeach
 
                             </tbody>
                         </table>
                       </div>
-                      <div class="tab-pane fade show active" id="navs-top-recevabilite" role="tabpanel">
-
-                      <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}" enctype="multipart/form-data">
-                                @csrf
-                                @method('put')
-                                <div class="row">
-                                                <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id2) }}"/>
-                                                <div class="col-md-12 col-12">
-                                                    <div class="mb-1">
-                                                        <label>Commentaire <strong style="color:red;">(obligatoire si rejeté)*</strong>: </label>
-                                                        <?php if(count($parcoursexist)<1){?>
-                                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6"></textarea>
-                                                        <?php }else{?>
-                                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
-                                                <div class="col-12" align="right">
-                                                <hr>
-                                                <?php if(count($parcoursexist)<1){?>
-                                                    <button type="submit" name="action" value="Valider"
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
-                                                        Valider
-                                                    </button>
-                                                    <button type="submit" name="action" value="Rejeter"
-                                                            class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
-                                                        Rejeter
-                                                    </button>
-                                                <?php } ?>
-                                                    <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                    href="/{{$lien }}">
-                                                        Retour</a>
-                                                </div>
-                                        <!--<div class="col-12 col-md-2" align="right"> <br>
-                                            <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
-                                        </div>-->
-
-                                </div>
-
-
-
-                        </form>
-
-
-
-
+                      <div class="tab-pane fade show active" id="navs-top-demande-annulation" role="tabpanel">
+                          <div align="right">
+                              <button type="button"
+                                      class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                      data-bs-toggle="modal" data-bs-target="#modalToggle">
+                                  Voir le parcours de validation
+                              </button>
+                          </div>
+                          <div class="col-md-12">
+                              <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
+                          </div>
+                          <div class="col-md-12">
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="row">
+                                          <div class="col-md-12 mb-3">
+                                              <div class="mb-1">
+                                                  <label> Motif de la demande d'annulation du plan</label>
+                                                  <select  class="select2 form-select-sm input-group" disabled name="id_motif_demande_annulation_plan" id="id_motif_demande_annulation_plan" >
+                                                      @foreach($motifs as $motif)
+                                                          <option value="{{$motif->id_motif}}" @if($motif->id_motif==$motif->id_motif_demande_annulation_plan) selected @endif>{{$motif->libelle_motif}}</option>
+                                                      @endforeach
+                                                  </select>
+{{--                                                  <input class="form -control" type="text"--}}
+{{--                                                         disabled @isset($demande_annulation->motif_demande_annulation_plan)value="{{$demande_annulation->motif_demande_annulation_plan}}" @endisset />--}}
+                                              </div>
+                                          </div>
+                                          <div class="col-md-12 mt-3">
+                                              <label class="form-label">Pièce justificatif
+                                                  de la demande d'annulation</label>
+                                              <br>
+                                              @isset($demande_annulation->piece_demande_annulation_plan)
+                                                  <span class="badge bg-secondary"> <a target="_blank"
+                                                                                       onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                          Voir la pièce  </a></span>
+                                              @endisset
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <div class="mb-1">
+                                          <label> Commentaire de la demande d'annulation du plan</label>
+                                          <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="evaluation_competences_odf"
+                                                    style="height: 121px;" disabled>@isset($demande_annulation->commentaire_demande_annulation_plan) {{$demande_annulation->commentaire_demande_annulation_plan}} @endisset</textarea>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-md-12">
+                              <h5 class="card-title mt-3" align="center"> Traitement de la demande d'annulation</h5>
+                          </div>
+                          <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_annulation->id_demande_annulation_plan)) }}" enctype="multipart/form-data">
+                              @csrf
+                              @method('put')
+                              <div class="row">
+                                  <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id2) }}"/>
+                                  <div class="col-md-12 col-12">
+                                      <div class="mb-1">
+                                          <label>Commentaire <strong style="color:red;">(obligatoire si rejeté)*</strong>: </label>
+                                          @if($parcoursexist->count()<1)
+                                              <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6"></textarea>
+                                          @else
+                                              <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
+                                          @endif
+                                      </div>
+                                  </div>
+                                  <div class="col-12" align="right">
+                                      <hr>
+                                      <?php if(count($parcoursexist)<1){?>
+                                      <button type="submit" name="action" value="Valider"
+                                              class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                          Valider
+                                      </button>
+                                      <button type="submit" name="action" value="Rejeter"
+                                              class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                          Rejeter
+                                      </button>
+                                      <?php } ?>
+                                      <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                         href="/{{$lien }}">
+                                          Retour</a>
+                                  </div>
+                              </div>
+                          </form>
                       </div>
-                      <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xl-5">
-                    <div class="card">
-                      <h5 class="card-header">Niveau de validation</h5>
-                      <div class="card-body pb-0">
-                        <ul class="timeline pt-3">
-                            @foreach ($ResultProssesList as $res)
-                          <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                        <div class="col-md-4 col-12">
+                            <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
+                                 aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                                 aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="card">
+                                            <h5 class="card-header">Parcours de la demande d'annulation du plan de formation</h5>
+                                            <div class="card-body pb-2">
+                                                <ul class="timeline pt-3">
+                                                    @foreach ($ResultProssesList as $res)
+                                                        <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
                             <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
                               <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
                             </span>
-                            <div class="timeline-event">
-                              <div class="timeline-header border-bottom mb-3">
-                                <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
-                                <span class="text-muted"><strong>{{ $res->name }}</strong></span>
-                              </div>
-                              <div class="d-flex justify-content-between flex-wrap mb-2">
-                                <div class="d-flex align-items-center">
-                                      <?php if($res->is_valide == true){ ?>
-                                          <span>Observation :<br/> {{ $res->comment_parcours }}</span>
-                                          <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
-                                          <span>Validé le <br/> {{ $res->date_valide }}</span>
-                                      <?php  } if( $res->is_valide === false) {?>
-                                          <span class="text-muted me-2">Observation : {{ $res->comment_parcours }}</span> <br>
+                                                            <div class="timeline-event">
+                                                                <div class="timeline-header border-bottom mb-3">
+                                                                    <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
+                                                                    <span class="text-muted"><strong>{{ $res->name }}</strong></span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                    <div class="d-flex align-items-center">
+                                                                        @if($res->is_valide==true)
+                                                                            <div class="row ">
+                                                                                <div>
+                                                                                    <span>Observation : {{ $res->comment_parcours }}</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span>Validé le  {{ $res->date_valide }}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if($res->is_valide===false)
+                                                                            <div class="row">
+                                                                                <div>
+                                                                                    <span>Observation : {{ $res->comment_parcours }}</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
 
-                                          <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
-                                      <?php } ?>
-                                  <!--<span>Charles de Gaulle Airport, Paris</span>
-                                  <i class="ti ti-arrow-right scaleX-n1-rtl mx-3"></i>
-                                  <span>Heathrow Airport, London</span>-->
-                                </div>
-                                <div>
-                                  <!--<span>6:30 AM</span>-->
-                                </div>
-                              </div>
-                              <div class="d-flex align-items-center">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
 
-                              </div>
+                                    </div>
+                                </div>
                             </div>
-                          </li>
-                          @endforeach
-                        </ul>
-                      </div>
+                        </div>
+
                     </div>
                   </div>
-                  </div>
+                </div>
     </div>
 
 
@@ -627,18 +621,19 @@
                           <input
                             type="text"
                             class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
-                            disabled="disabled" />
+                            name="intitule_action_formation_plan"
+                            value="{{@$infosactionplanformation->intitule_action_formation_plan}}" />
                         </div>
                         <div class="col-12 col-md-12">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
                             <input
                               type="text"
                               class="form-control form-control-sm"
+                              name="objectif_pedagogique_fiche_agre"
                               value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                              disabled="disabled" />
+                               />
                           </div>
-                          <div class="col-12 col-md-3">
+                        <div class="col-12 col-md-3">
                             <label class="form-label" for="part_entreprise">Part entreprise</label>
                             <input
                               type="text"
@@ -760,23 +755,6 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
-                          <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
-                            disabled="disabled" />
-                        </div>
-                        <div class="col-12 col-md-9">
-                          <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
-                          <!--<input
-                            type="number"
-                            class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
-                            disabled="disabled" />-->
-                            <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
-                        </div>
-                        <div class="col-12 col-md-3">
                                             <div class="mb-1">
                                                     <label>Facture proforma </label> <br>
                                                             <span class="badge bg-secondary"><a target="_blank"
@@ -788,34 +766,28 @@
 
                         <hr/>
 
-                        <!--<div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si actiona corrigé)</strong></label>
+                        <div class="col-md-6 col-12">
+                            <label class="form-label" for="billings-country">Motif de non-financement <strong style="color:red;">(obligatoire si le montant accordé est egal a 0*)</strong></label>
 
-                            <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
+                            <select class="form-select form-select-sm" data-allow-clear="true" name="motif_non_financement_action_formation" id="motif_non_financement_action_formation">
                                 <?= $motif; ?>
                             </select>
                         </div>
-
                         <div class="col-md-6 col-12">
                             <div class="mb-1">
+                                <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
+                        </div>
+                        <div class="col-md-12 col-12">
+                            <div class="mb-1">
                                 <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                <textarea class="form-control form-control-sm"  name="commentaire" id="commentaire" rows="6"></textarea>
+                                <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
                             </div>
-                        </div>-->
+                        </div>
 
                         <div class="col-12 text-center">
-                            <?php
-                                $conseilleraction = NombreActionValiderParLeConseiller::get_conseiller_valide_action_plan($infosactionplanformation->id_action_formation_plan , Auth::user()->id);
-                            ?>
-                          <?php if(count($conseilleraction)<1){?>
-                            <!--<button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider" class="btn btn-success me-sm-3 me-1">Valider</button>
-                            <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_rejeter" class="btn btn-danger me-sm-3 me-1">Action à corriger</button>-->
-                          <?php }else{?>
-                            <!--<div class="alert alert-info alert-dismissible fade show" role="alert">
-                                <div class="alert-body" style="text-align:center">
-                                    Action déja traité
-                                </div>
-                            </div>-->
+                        <?php if($planformation->flag_soumis_ct_plan_formation != true){?>
+                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation" class="btn btn-primary me-sm-3 me-1">Enregistrer</button>
                           <?php } ?>
                           <button
                             type="reset"
@@ -831,7 +803,9 @@
                 </div>
             </div>
           @endforeach
-            <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+
+
+            <div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-body">
@@ -851,7 +825,7 @@
                         $("#myModal").modal("show");
                     });
                 })
-            </script>-->
+            </script>
 
         @endsection
 

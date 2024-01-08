@@ -46,8 +46,10 @@ class CtplanformationController extends Controller
         $nacodes = Menu::get_code_menu_profil(Auth::user()->id);
         //dd($nacodes);
         if($nacodes === "CONSEILLER"){
-            $planformations = PlanFormation::leftJoin('plan_formation_a_valider_par_user', 'plan_formation.id_plan_de_formation', '=', 'plan_formation_a_valider_par_user.id_plan_formation')->
-            where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
+            /*$planformations = PlanFormation::leftJoin('plan_formation_a_valider_par_user', 'plan_formation.id_plan_de_formation', '=', 'plan_formation_a_valider_par_user.id_plan_formation')->
+            where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false],['id_agence','=',Auth::user()->num_agce]])->get();*/
+
+            $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false],['id_agence','=',Auth::user()->num_agce]])->get();
             //$planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',true]])->get();
         }else{
             $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();

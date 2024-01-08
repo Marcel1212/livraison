@@ -10,8 +10,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module='Agreement')
-    @php($titre='Liste des agreements pour les plans de formations')
+    @php($Module='Agréement')
+    @php($titre='Liste des agréements pour les plans de formations')
     @php($lien='agreement')
 
     <!-- BEGIN: Content-->
@@ -59,28 +59,41 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <th>No</th>
                             <th>Code </th>
                             <th>Nom et prenom de la charger de formation</th>
-                            <th>Montant demandée</th>
-                            <th>Montant accordée</th>
+                            <th>Montant demandé</th>
+                            <th>Montant accordé</th>
+                            <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-
-                            <?php $i=0; ?>
                         @foreach ($agreements as $key => $planformation)
                             <tr>
-                                <td>{{ ++$i }}</td>
-                                <td>{{ @$planformation->code_plan_formation }}</td>
+                                <td>{{ $key+1 }}</td>
+                                <td>{{ $planformation->code_plan_formation }}</td>
                                 <td>{{ $planformation->nom_prenoms_charge_plan_formati }}</td>
                                 <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
                                 <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
+                                <td>
+                                    @isset($planformation->flag_annulation_plan)
+                                        <span class="badge bg-danger">Annulé</span>
+                                    @else
+                                        <span class="badge bg-success xs">Agrée</span>
+                                    @endisset
+                                </td>
                                 <td align="center">
-                                    @can($lien.'-edit')
+{{--                                    @can($lien.'-edit')--}}
                                         <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"
-                                           class=" "
+                                           class="me-2"
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
-                                    @endcan
+{{--                                    @endcan--}}
+{{--                                    @if($planformation->)--}}
+
+                                    @if(!$planformation->flag_soumis_demande_annulation_plan)
+                                            <a href="{{ route($lien.'.cancel',['id'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)]) }}"
+                                               class="btn btn-danger btn-xs"
+                                               title="Annuler" >Annuler l'agréement</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

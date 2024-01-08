@@ -28,6 +28,7 @@ use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\ConseillerParAgence;
 use App\Helpers\GenerateCode as Gencode;
+use App\Models\FicheAgrement;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -122,6 +123,11 @@ class CtplanformationvaliderController extends Controller
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
+        $historiquesplanformations = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
+        ->join('action_formation_plan','plan_formation.id_plan_de_formation','action_formation_plan.id_plan_de_formation')
+        ->where([['plan_formation.id_entreprises','=',$planformation->id_entreprises]])->get();
+//dd($historiquesplanformations);
+
         $typeentreprises = TypeEntreprise::all();
         $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
         foreach ($typeentreprises as $comp) {
@@ -183,7 +189,7 @@ class CtplanformationvaliderController extends Controller
 
 
 
-        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller'));
+        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations'));
 
     }
 
@@ -194,6 +200,11 @@ class CtplanformationvaliderController extends Controller
 //dd($id);
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
+
+        $historiquesplanformations = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
+        ->join('action_formation_plan','plan_formation.id_plan_de_formation','action_formation_plan.id_plan_de_formation')
+        ->where([['plan_formation.id_entreprises','=',$planformation->id_entreprises]])->get();
+//dd($historiquesplanformations);
 
         $typeentreprises = TypeEntreprise::all();
         $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
@@ -272,7 +283,7 @@ class CtplanformationvaliderController extends Controller
 
         //dd($ResultProssesList);
 
-        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist'));
+        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations'));
 
     }
 

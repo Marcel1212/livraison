@@ -272,7 +272,19 @@ class EnrolementController extends Controller
                 }
                 $input['id_forme_juridique'] = $validformejuri;
 
+                 /***********************  debut de traitemente du profil collecte de taxe automatique*************/
+
+                 $input['id_user'] = 161;
+                 $input['flag_traitement_demande_enrolem'] = true;
+                 $input['flag_valider_demande_enrolement'] = true;
+                 $input['date_traitement_demande_enrolem'] = Carbon::now();
+
+                 /*********************** fin debut de traitemente du profil collecte de taxe automatique*************/
+
+
                 DemandeEnrolement::create($input);
+
+                $insertedDemandeenreolementId = DemandeEnrolement::latest()->first()->id_demande_enrolement;
 
                 $rais = $input['raison_sociale_demande_enroleme'];
                 if (isset($input['email_demande_enrolement'])) {
@@ -293,6 +305,128 @@ class EnrolementController extends Controller
 
                     $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
+
+                /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
+
+                $demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
+
+                $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
+
+                Entreprises::create([
+                    'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
+                    'numero_fdfp_entreprises' => $numfdfp,
+                    'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
+                    'raison_social_entreprises' => $demandeenrole1->raison_sociale_demande_enroleme,
+                    'tel_entreprises' => $demandeenrole1->tel_demande_enrolement,
+                    'indicatif_entreprises' => $demandeenrole1->indicatif_demande_enrolement,
+                    'numero_cnps_entreprises' => $demandeenrole1->numero_cnps_demande_enrolement,
+                    'id_localite_entreprises' => $demandeenrole1->id_localite,
+                    'id_centre_impot' => $demandeenrole1->id_centre_impot,
+                    'id_activite_entreprises' => $demandeenrole1->id_activites,
+                    'id_secteur_activite_entreprise' => $demandeenrole1->id_secteur_activite,
+                    'id_forme_juridique_entreprise' => $demandeenrole1->id_forme_juridique,
+                    'id_pays' => $demandeenrole1->indicatif_demande_enrolement,
+                    'flag_actif_entreprises' => true
+                ]);
+
+                $insertedId = Entreprises::latest()->first()->id_entreprises;
+                $entreprise = Entreprises::latest()->first();
+
+                if (isset($demandeenrole1->piece_dfe_demande_enrolement)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_dfe_demande_enrolement,
+                        'code_pieces' => 'dfe',
+                    ]);
+                }
+
+                if (isset($demandeenrole1->piece_rccm_demande_enrolement)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_rccm_demande_enrolement,
+                        'code_pieces' => 'rccm',
+                    ]);
+                }
+
+                if (isset($demandeenrole1->piece_attestation_immatriculati)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_attestation_immatriculati,
+                        'code_pieces' => 'attest_immat',
+                    ]);
+                }
+
+                $roles = Role::where([['code_roles', '=', 'ENTREPRISE']])->first();
+
+                $name = $entreprise->raison_social_entreprises;
+                $prenom_users = $entreprise->rccm_entreprises;
+                $emailcli = $demandeenrole1->email_demande_enrolement;
+                $id_partenaire = $entreprise->id_entreprises;
+                $cel_users = $entreprise->tel_entreprises;
+                $indicatif_tel_users = $entreprise->indicatif_entreprises;
+                $ncc_entreprises = $entreprise->ncc_entreprises;
+
+                $role = $roles->name;
+
+                $clientrech = DB::table('users')->where([['email', '=', $emailcli]])->get();
+
+                if (count($clientrech) > 0) {
+                    return redirect()->route('enrolements')
+                        ->with('danger', 'Echec : Cet mail est déja utilisé par une entreprise !');
+                }
+
+                $clientrechnum = DB::table('users')->where([['cel_users', '=', $cel_users]])->get();
+
+                if (count($clientrechnum) > 0) {
+                    return redirect()->route('enrolements')
+                        ->with('danger', 'Echec : Cet numero est déja utilisé par une entreprise !');
+                }
+
+                $passwordCli = Crypt::MotDePasse(); // '123456789';
+                $password = Hash::make($passwordCli);
+
+                $user = new User();
+                $user->name = $name;
+                $user->prenom_users = $prenom_users;
+                $user->email = $emailcli;
+                $user->id_partenaire = $id_partenaire;
+                $user->password = $password;
+                $user->cel_users = $cel_users;
+                $user->login_users = $ncc_entreprises;
+                $user->indicatif_tel_users = $indicatif_tel_users;
+
+                $user->assignRole($role);
+                $user->save();
+
+                $logo = Menu::get_logo();
+
+                if (isset($emailcli)) {
+                    $sujet = "Activation de compte FDFP";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                    $messageMail = "<b>Cher $name ,</b>
+                                    <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
+                                        succès, et il est maintenant prêt à être utilisé.
+                                    <br><br>
+                                    <br><br>Voici un récapitulatif de vos informations de compte :
+                                    <br><b>Nom d'utilisateur : </b> $name
+                                    <br><b>Adresse e-mail : </b> $emailcli
+                                    <br><b>Identifiant : </b> $ncc_entreprises
+                                    <br><b>Mot de passe : </b> $passwordCli
+                                    <br><b>Date de création du compte : : </b> $entreprise->created_at
+                                    <br><br>
+                                    <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
+                                            www.e-fdfp.ci
+                                    <br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                    $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+                }
+
+                /*********************** fin second partie de traitemente du profil collecte de taxe automatique*************/
             }
 
             if ($valcodeformejuri == 'PU') {
@@ -381,7 +515,19 @@ class EnrolementController extends Controller
                     $input['rccm_demande_enrolement'] = mb_strtoupper($input['rccm_demande_enrolement']);
                 }
                 $input['id_forme_juridique'] = $validformejuri;
+
+                /***********************  debut de traitemente du profil collecte de taxe automatique*************/
+
+                $input['id_user'] = 161;
+                $input['flag_traitement_demande_enrolem'] = true;
+                $input['flag_valider_demande_enrolement'] = true;
+                $input['date_traitement_demande_enrolem'] = Carbon::now();
+
+                /*********************** fin debut de traitemente du profil collecte de taxe automatique*************/
+
                 DemandeEnrolement::create($input);
+
+                $insertedDemandeenreolementId = DemandeEnrolement::latest()->first()->id_demande_enrolement;
 
                 $rais = $input['raison_sociale_demande_enroleme'];
                 if (isset($input['email_demande_enrolement'])) {
@@ -403,6 +549,127 @@ class EnrolementController extends Controller
                       $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
 
+                /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
+
+                $demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
+
+                $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
+
+                Entreprises::create([
+                    'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
+                    'numero_fdfp_entreprises' => $numfdfp,
+                    'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
+                    'raison_social_entreprises' => $demandeenrole1->raison_sociale_demande_enroleme,
+                    'tel_entreprises' => $demandeenrole1->tel_demande_enrolement,
+                    'indicatif_entreprises' => $demandeenrole1->indicatif_demande_enrolement,
+                    'numero_cnps_entreprises' => $demandeenrole1->numero_cnps_demande_enrolement,
+                    'id_localite_entreprises' => $demandeenrole1->id_localite,
+                    'id_centre_impot' => $demandeenrole1->id_centre_impot,
+                    'id_activite_entreprises' => $demandeenrole1->id_activites,
+                    'id_secteur_activite_entreprise' => $demandeenrole1->id_secteur_activite,
+                    'id_forme_juridique_entreprise' => $demandeenrole1->id_forme_juridique,
+                    'id_pays' => $demandeenrole1->indicatif_demande_enrolement,
+                    'flag_actif_entreprises' => true
+                ]);
+
+                $insertedId = Entreprises::latest()->first()->id_entreprises;
+                $entreprise = Entreprises::latest()->first();
+
+                if (isset($demandeenrole1->piece_dfe_demande_enrolement)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_dfe_demande_enrolement,
+                        'code_pieces' => 'dfe',
+                    ]);
+                }
+
+                if (isset($demandeenrole1->piece_rccm_demande_enrolement)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_rccm_demande_enrolement,
+                        'code_pieces' => 'rccm',
+                    ]);
+                }
+
+                if (isset($demandeenrole1->piece_attestation_immatriculati)) {
+                    Pieces::create([
+                        'id_entreprises' => $insertedId,
+                        'libelle_pieces' => $demandeenrole1->piece_attestation_immatriculati,
+                        'code_pieces' => 'attest_immat',
+                    ]);
+                }
+
+                $roles = Role::where([['code_roles', '=', 'ENTREPRISE']])->first();
+
+                $name = $entreprise->raison_social_entreprises;
+                $prenom_users = $entreprise->rccm_entreprises;
+                $emailcli = $demandeenrole1->email_demande_enrolement;
+                $id_partenaire = $entreprise->id_entreprises;
+                $cel_users = $entreprise->tel_entreprises;
+                $indicatif_tel_users = $entreprise->indicatif_entreprises;
+                $ncc_entreprises = $entreprise->ncc_entreprises;
+
+                $role = $roles->name;
+
+                $clientrech = DB::table('users')->where([['email', '=', $emailcli]])->get();
+
+                if (count($clientrech) > 0) {
+                    return redirect()->route('enrolements')
+                        ->with('danger', 'Echec : Cet mail est déja utilisé par une entreprise !');
+                }
+
+                $clientrechnum = DB::table('users')->where([['cel_users', '=', $cel_users]])->get();
+
+                if (count($clientrechnum) > 0) {
+                    return redirect()->route('enrolements')
+                        ->with('danger', 'Echec : Cet numero est déja utilisé par une entreprise !');
+                }
+
+                $passwordCli = Crypt::MotDePasse(); // '123456789';
+                $password = Hash::make($passwordCli);
+
+                $user = new User();
+                $user->name = $name;
+                $user->prenom_users = $prenom_users;
+                $user->email = $emailcli;
+                $user->id_partenaire = $id_partenaire;
+                $user->password = $password;
+                $user->cel_users = $cel_users;
+                $user->login_users = $ncc_entreprises;
+                $user->indicatif_tel_users = $indicatif_tel_users;
+
+                $user->assignRole($role);
+                $user->save();
+
+                $logo = Menu::get_logo();
+
+                if (isset($emailcli)) {
+                    $sujet = "Activation de compte FDFP";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                    $messageMail = "<b>Cher $name ,</b>
+                                    <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
+                                        succès, et il est maintenant prêt à être utilisé.
+                                    <br><br>
+                                    <br><br>Voici un récapitulatif de vos informations de compte :
+                                    <br><b>Nom d'utilisateur : </b> $name
+                                    <br><b>Adresse e-mail : </b> $emailcli
+                                    <br><b>Identifiant : </b> $ncc_entreprises
+                                    <br><b>Mot de passe : </b> $passwordCli
+                                    <br><b>Date de création du compte : : </b> $entreprise->created_at
+                                    <br><br>
+                                    <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
+                                            www.e-fdfp.ci
+                                    <br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                    $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+                }
+
+                /*********************** fin second partie de traitemente du profil collecte de taxe automatique*************/
 
             }
         }

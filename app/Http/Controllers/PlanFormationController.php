@@ -186,7 +186,7 @@ class PlanFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        $payss = Pays::where([['flag_actif_pays','=',true]])->get();
+        $payss = Pays::all();
         $paysc = "<option value=''> ---Selectionnez un pays--- </option>";
         foreach ($payss as $comp) {
             $paysc .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";

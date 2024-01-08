@@ -12,7 +12,7 @@
     $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
     $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
     $nombre = count($conseilleragence);
-    //dd($nombre);
+    //dd($conseillerplan);
 ?>
 
 @extends('layouts.backLayout.designadmin')
@@ -21,7 +21,7 @@
 
     @php($Module='Demandes')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Traitement de la demande de plan de formation')
+    @php($soustitre='Comite technique en ligne')
     @php($lien='ctplanformation')
 
 
@@ -103,7 +103,7 @@
                           data-bs-target="#navs-top-histortiqueactionformation"
                           aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Historiques des actions du plan de formation
+                          Historiques des actions des plans de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -303,6 +303,24 @@
                                                class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût demandé </label>
+                                        <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_demande_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût accordé </label>
+                                        <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
                                 <div class="col-12" align="right">
                                     <hr>
 
@@ -410,9 +428,9 @@
                                         </button>
                                     </form>
                                 <?php }else{?>
-                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                                         <div class="alert-body" style="text-align:center">
-                                            Validation des actions déja effectuer
+                                            Vous avez effectué votre comite technique en ligne
                                         </div>
                                     </div>
                                 <?php } ?>
@@ -569,7 +587,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-12">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                             <input
                               type="text"
                               class="form-control form-control-sm"
@@ -585,7 +603,7 @@
                               disabled="disabled" />
                           </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                          <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -601,7 +619,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                          <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -617,7 +635,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" >Cout de la formation</label>
+                          <label class="form-label" >Coût de la formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -641,7 +659,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                          <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -649,7 +667,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                          <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -665,7 +683,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrément</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -674,7 +692,7 @@
                         </div>
 
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                          <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -682,7 +700,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                          <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -690,7 +708,7 @@
                             disabled="disabled"/>
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                          <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -698,7 +716,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
+                          <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"
@@ -727,7 +745,7 @@
                         <hr/>
 
                         <div class="col-md-6 col-12">
-                            <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                            <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
 
                             <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
                                 <?= $motif; ?>

@@ -14,7 +14,7 @@
 
     @php($Module='Plan de formation')
     @php($titre='Liste des plans de formations')
-    @php($soustitre='Traitement de la demande de plan de formation')
+    @php($soustitre='Instruction')
     @php($lien='traitementplanformation')
 
 
@@ -93,7 +93,7 @@
                           data-bs-target="#navs-top-histortiqueactionformation"
                           aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Historiques des actions du plan de formation
+                          Historiques des actions des plans de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -117,7 +117,7 @@
                           data-bs-target="#navs-top-recevabilite"
                           aria-controls="navs-top-recevabilite"
                           aria-selected="false">
-                          Recevabilite
+                          Recevabilité
                         </button>
                       </li>
                     </ul>
@@ -241,7 +241,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nom et prénom du responsable formation </label>
+                                        <label>Nom et prénoms du responsable formation </label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}" disabled="disabled">
                                     </div>
@@ -302,6 +302,23 @@
                                         <label>Code plan </label>
                                         <input type="text" name="code_plan_formation" id="code_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût demandé </label>
+                                        <input type="text" name="cout_total_demande_plan_formation" id="cout_total_demande_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_demande_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Le coût accordé </label>
+                                        <input type="text" name="cout_total_accorder_plan_formation" id="cout_total_accorder_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->cout_total_accorder_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-12" align="right">
@@ -472,7 +489,7 @@
                                 @method('put')
                                 <div class="row">
                                             <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Motif de recevabilite <strong style="color:red;">*</strong></label>
+                                                    <label class="form-label" for="billings-country">Motif de Recevabilité <strong style="color:red;">*</strong></label>
 
                                                         <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
@@ -480,7 +497,7 @@
                                                 </div>
                                                 <div class="col-md-6 col-12">
                                                     <div class="mb-1">
-                                                        <label>Commentaire recevabilite <strong style="color:red;">(obligatoire si non recevable)*</strong>: </label>
+                                                        <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevable_plan_formation" id="commentaire_recevable_plan_formation" rows="6">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
                                                     </div>
                                                 </div>
