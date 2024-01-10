@@ -79,6 +79,6 @@ class ProjetFormation extends Model
      */
     public function entreprise()
     {
-        return $this->belongsTo('App\Models\Entreprise', 'id_entreprises', 'id_entreprises');
+        return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
     }
 }
