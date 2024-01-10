@@ -844,7 +844,7 @@ class ProjetFormationController extends Controller
             // Traitement de la soumission du Chef de Departement
             if($data['action'] === 'soumission_projet_formation_departement'){
                 // ID du plan
-                dd($data);
+                //dd($data);
                 // Atribution au chef de departement
                 // Recuperation de l'id
                 // $user_id = Auth::user()->id;

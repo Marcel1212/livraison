@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Session;
 use Spatie\Permission\Models\Role;
+use App\Helpers\GenerateCode as Gencode;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -105,6 +106,9 @@ class UserController extends Controller
             ]);
 
             $input = $request->all();
+            $passwordCli = $input['password'];
+            $emailcli = $input['email'];
+            $name = $input['name'] .' '. $input['prenom_users'];
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
             $exploeprofil = explode("/",$request->input('roles'));
@@ -114,6 +118,34 @@ class UserController extends Controller
             $user->assignRole($valprofile);
 
             $profile = Role::where([['name', '=', $valprofile]])->first();
+
+            $logo = Menu::get_logo();
+
+            if (isset($emailcli)) {
+                $sujet = "Activation de compte FDFP";
+                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                $messageMail = "<b>Cher $name ,</b>
+                                    <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
+                                        succès, et il est maintenant prêt à être utilisé.
+                                    <br><br>
+                                    <br><br>Voici un récapitulatif de vos informations de compte :
+                                    <br><b>Nom d'utilisateur : </b> $name
+                                    <br><b>Adresse e-mail : </b> $emailcli
+                                    <br><b>Identifiant : </b> $emailcli
+                                    <br><b>Mot de passe : </b> $passwordCli
+                                    <br><b>Date de création du compte : : </b> $user->created_at
+                                    <br><br>
+                                    <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
+                                            http://fdfp.ldfgroupe.com/
+                                    <br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+            }
 
             if(isset($profile)){
                 if($profile->code_roles == "CONSEILLER"){
