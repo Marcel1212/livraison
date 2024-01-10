@@ -1,6 +1,7 @@
 <?php
 
 use App\Helpers\Menu;
+use App\Helpers\DemandeAnnulation;
 use App\Helpers\ListePlanFormationSoumis;
 use App\Helpers\AnneeExercice;
 use Carbon\Carbon;
@@ -12,9 +13,7 @@ $numAgce = Auth::user()->num_agce;
 $planformations = ListePlanFormationSoumis::get_liste_plan_formation_soumis($IdUser,$numAgce);
 $planformationstraitement = ListePlanFormationSoumis::get_plan_en_traitement($IdUser);
 $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser);
-$demande_annulation_en_traitement = DemandeAnnualtion::get_demande_annulation_en_traitement();
-
-//dd($planformations);
+$demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en_traitement();
 ?>
 
 @php($lien='traitementplanformation')
