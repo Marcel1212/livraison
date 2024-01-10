@@ -69,43 +69,93 @@
                                                 <?php foreach ($tablvue as $key => $vue) { ?>
                                             <div class="accordion-body">
                                                 <div class="checkbox-list">
+{{--                                                    <label class="checkbox">--}}
+{{--                                                        <input type="checkbox"--}}
+{{--                                                               value="<?php echo $vue->id_sousmenu;?>"--}}
+{{--                                                               <?php if (in_array($vue->id_sousmenu, $roleSousmenus)) {--}}
+{{--                                                                   echo 'checked';--}}
+{{--                                                               } ?> name="route[<?php echo $vue->id_sousmenu;?>]"--}}
+{{--                                                               id="route<?php echo $vue->id_sousmenu;?>"/>--}}
+{{--                                                        <span></span><?php echo $vue->libelle; ?>--}}
+{{--                                                    </label><br>--}}
                                                     <label class="checkbox ">
                                                         <input type="checkbox"
                                                                value="<?php echo $vue->id_sousmenu;?>"
                                                                <?php if (in_array($vue->id_sousmenu, $roleSousmenus)) {
                                                                    echo 'checked';
-                                                               } ?> name="route[<?php echo $vue->id_sousmenu;?>]"
+                                                               } ?>
+                                                               name="route[<?php echo $vue->id_sousmenu;?>]"
                                                                id="route<?php echo $vue->id_sousmenu;?>"/>
                                                         <span class="h5 mb-0"> <?php echo $vue->libelle; ?> </span>
                                                     </label><br>
-
                                                     <div class="row">
                                                         <div class="col-2">
                                                         </div>
                                                             <?php $permission = \App\Models\Permissions::where('id_sousmenu', '=', $vue->id_sousmenu)->get(); ?>
-                                                            @foreach($permission as $value)
-                                                                <div class="col-2">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        @if($value->id==$vue->id)
-                                                                            checked
-                                                                        @endif
-                                                                        value="<?php echo $value->id;?>"
+{{--                                                        {{dd($permission)}}--}}
+                                                        @foreach($permission as $value)
+                                                            <div class="col-2">
+                                                                <input
+                                                                    type="checkbox"
+{{--                                                                    @if($value->id==$vue->id)--}}
+                                                                        checked
+{{--                                                                    @endif--}}
+                                                                    value="<?php echo $value->id;?>"
 
 
-
-                                                                        name="permission[<?php echo $value->id;?>]"
-                                                                        id="permission<?php echo $value->id;?>">
-                                                                    <span class="custom-option-header">
-                                                                        <span class="h6 mb-0">
-                                                                            <?php echo $value->lib_permission; ?></span> |
-                                                                        </span>
-                                                                </div>
-                                                            @endforeach
+                                                                    name="permission[<?php echo $value->id;?>]"
+                                                                    id="permission<?php echo $value->id;?>">
+                                                                <span class="custom-option-header">
+                                                                                                                                <span
+                                                                                                                                    class="h6 mb-0">
+                                                                                                                                    <?php echo $value->lib_permission; ?></span> |
+                                                                                                                                </span>
+                                                            </div>
+                                                        @endforeach
 
                                                     </div>
                                                     <hr>
+
                                                 </div>
+                                                {{--                                                <div class="checkbox-list">--}}
+                                                {{--                                                    <label class="checkbox ">--}}
+                                                {{--                                                        <input type="checkbox"--}}
+                                                {{--                                                               value="<?php echo $vue->id_sousmenu;?>"--}}
+                                                {{--                                                               @if($vue->id_sousmenu==$roleSousmenus)--}}
+                                                {{--                                                                   checked--}}
+                                                {{--                                                               @endif--}}
+                                                {{--                                                                name="route[<?php echo $vue->id_sousmenu;?>]"--}}
+                                                {{--                                                               id="route<?php echo $vue->id_sousmenu;?>"/>--}}
+                                                {{--                                                        <span class="h5 mb-0"> <?php echo $vue->libelle; ?> </span>--}}
+                                                {{--                                                    </label><br>--}}
+
+                                                {{--                                                    <div class="row">--}}
+                                                {{--                                                        <div class="col-2">--}}
+                                                {{--                                                        </div>--}}
+                                                {{--                                                            <?php $permission = \App\Models\Permissions::where('id_sousmenu', '=', $vue->id_sousmenu)->get(); ?>--}}
+                                                {{--                                                            @foreach($permission as $value)--}}
+                                                {{--                                                                <div class="col-2">--}}
+                                                {{--                                                                    <input--}}
+                                                {{--                                                                        type="checkbox"--}}
+                                                {{--                                                                        @if($value->id==$vue->id)--}}
+                                                {{--                                                                            checked--}}
+                                                {{--                                                                        @endif--}}
+                                                {{--                                                                        value="<?php echo $value->id;?>"--}}
+
+
+
+                                                {{--                                                                        name="permission[<?php echo $value->id;?>]"--}}
+                                                {{--                                                                        id="permission<?php echo $value->id;?>">--}}
+                                                {{--                                                                    <span class="custom-option-header">--}}
+                                                {{--                                                                        <span class="h6 mb-0">--}}
+                                                {{--                                                                            <?php echo $value->lib_permission; ?></span> |--}}
+                                                {{--                                                                        </span>--}}
+                                                {{--                                                                </div>--}}
+                                                {{--                                                            @endforeach--}}
+
+                                                {{--                                                    </div>--}}
+                                                {{--                                                    <hr>--}}
+                                                {{--                                                </div>--}}
                                             </div>
                                             <?php } ?>
                                         </div>
