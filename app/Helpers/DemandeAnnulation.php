@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Models\DemandeAnnulationPlan;
+namespace App\Helpers;
 
 class DemandeAnnulation
 {
