@@ -25,8 +25,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <!-- Basic Layout & Basic with Icons -->
-
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -45,18 +43,18 @@
                                                placeholder="Libellé " required>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-6">
-                                    @foreach($permission as $value)
-                                        <label>
-                                            <input type="checkbox" class="form-check-input"
-                                                   value="<?php echo $value->id;?>"
-                                                   name="permission[<?php echo $value->id;?>]"
-                                                   id="permission<?php echo $value->id;?>"/>
+{{--                                <div class="col-md-6 col-6">--}}
+{{--                                    @foreach($permission as $value)--}}
+{{--                                        <label>--}}
+{{--                                            <input type="checkbox" class="form-check-input"--}}
+{{--                                                   value="<?php echo $value->id;?>"--}}
+{{--                                                   name="permission[<?php echo $value->id;?>]"--}}
+{{--                                                   id="permission<?php echo $value->id;?>"/>--}}
 
-                                            {{ $value->name }}</label>
-                                        <br/>
-                                    @endforeach
-                                </div>
+{{--                                            {{ $value->name }}</label>--}}
+{{--                                        <br/>--}}
+{{--                                    @endforeach--}}
+{{--                                </div>--}}
                                 <div class="col-12" align="right">
                                     <hr>
                                     <button type="submit"
