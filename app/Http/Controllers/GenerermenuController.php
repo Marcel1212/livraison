@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menus;
 use App\Models\Role;
 use App\Models\Sousmenus;
 use App\Models\RoleSousmenu;
@@ -225,6 +226,7 @@ class GenerermenuController extends Controller
                 ->where([['roles.id','=',$idroles]])
                 ->get();
 
+
             $tabl = [];
 
             foreach ($resulat as $ligne) {
@@ -234,17 +236,12 @@ class GenerermenuController extends Controller
 
             $roles = Role::all();
             return view('generer.generer',compact('tabl','roles','naroles'));
-
-
         }
 
         public function menuprofillayout(Request $request, $id)
         {
 
-            /*$resulat = DB::table('menu')->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')->get();*/
-
             $idutil=Auth::user()->id;
-            // dd($idutil);
 
             $roles = DB::table('users')
                 ->join('model_has_roles','users.id','model_has_roles.model_id')
@@ -362,12 +359,12 @@ class GenerermenuController extends Controller
 
             $resulatsm = DB::table('menu')
                 ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
-               // ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
+                ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
+                ->select('menu.*','sousmenu.*','permissions.id')
                 //  ->join('roles','role_has_sousmenus.role_id','roles.id')
                 // ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
                 // ->where([['roles.id','=',$idroles]])
                 ->get();
-              //dd($resulatsm);
 
             //$resulatsm = DB::table('menu')
               //  ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
@@ -376,35 +373,25 @@ class GenerermenuController extends Controller
                 // ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
                 // ->where([['roles.id','=',$idroles]])
               //  ->get();
-
+//            $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
+//                ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+//                ->all();
 
 
             $tablsm = [];
 
             foreach ($resulatsm as $lignesm) {
-
                 $tablsm[$lignesm->id_menu][] = $lignesm;
-                //$tablsm[$lignesm->id_menu][$lignesm->id_sousmenu][] = $lignesm;
-                //$tablsm[$lignesm->id_menu][][$lignesm->id_sousmenu][] = $lignesm;
             }
-            //dd($id);
-           //dd($tablsm);
             $role = Role::find($id);
-            //dd($role->name);
             $nomprof = $role->name;
             $sousmenu = Sousmenus::get();
-            //$rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-            // ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-            // ->all();
 
-            //dd($permission);
-    //dd($id);
             $roleSousmenus = DB::table("role_has_sousmenus")->where("role_has_sousmenus.role_id",$id)
                 ->pluck('role_has_sousmenus.sousmenus_id_sousmenu','role_has_sousmenus.sousmenus_id_sousmenu')
                 ->all();
 
-            //dd($roleSousmenus);
-
+//            dd($tablsm);
             return view('generer.menuprofillayout',compact('tabl','role','sousmenu','id','tablmenu','tablsm','roleSousmenus','nomprof','naroles'));
         }
 

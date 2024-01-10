@@ -12,6 +12,8 @@ $numAgce = Auth::user()->num_agce;
 $planformations = ListePlanFormationSoumis::get_liste_plan_formation_soumis($IdUser,$numAgce);
 $planformationstraitement = ListePlanFormationSoumis::get_plan_en_traitement($IdUser);
 $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser);
+$demande_annulation_en_traitement = DemandeAnnualtion::get_demande_annulation_en_traitement();
+
 //dd($planformations);
 ?>
 
@@ -50,15 +52,6 @@ $planformationssoumis = ListePlanFormationSoumis::get_plan_en_soumis_ct($IdUser)
                         <div class="content-right">
                             <p class="mb-0">Plan de formation soumis au CT</p>
                             <h4 class="text-warning mb-0">{{count($planformationssoumis)}}</h4>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="bg-label-danger p-2 rounded">
-                          <i class="ti ti-license-off ti-xl"></i>
-                        </span>
-                        <div class="content-right">
-                            <p class="mb-0">Demande d'annulation de plan en attente</p>
-                            <h4 class="text-danger mb-0">0</h4>
                         </div>
                     </div>
                 </div>

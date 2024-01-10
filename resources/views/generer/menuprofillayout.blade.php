@@ -20,7 +20,6 @@
         </div>
     @endif
 
-
     <form action="{{ route('menuprofillayout',$role->id) }}" method="POST">
         @csrf
 
@@ -30,7 +29,7 @@
                 <div class="card mb-4">
 
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="mb-0">{{$titre}} / Profil : {{$role->name}}</h5>
+                        <h5 class="mb-0">Profil : {{$role->name}}</h5>
                         <small class="text-muted float-end">
                             @can('role-create')
                                 <button type="submit"
@@ -70,18 +69,42 @@
                                                 <?php foreach ($tablvue as $key => $vue) { ?>
                                             <div class="accordion-body">
                                                 <div class="checkbox-list">
-
-                                                    <label class="checkbox">
+                                                    <label class="checkbox ">
                                                         <input type="checkbox"
                                                                value="<?php echo $vue->id_sousmenu;?>"
                                                                <?php if (in_array($vue->id_sousmenu, $roleSousmenus)) {
                                                                    echo 'checked';
                                                                } ?> name="route[<?php echo $vue->id_sousmenu;?>]"
                                                                id="route<?php echo $vue->id_sousmenu;?>"/>
-                                                        <span></span><?php echo $vue->libelle; ?>
-                                                                         <?php //echo $vue->lib_permission; ?>
-                                                    </label>
+                                                        <span class="h5 mb-0"> <?php echo $vue->libelle; ?> </span>
+                                                    </label><br>
 
+                                                    <div class="row">
+                                                        <div class="col-2">
+                                                        </div>
+                                                            <?php $permission = \App\Models\Permissions::where('id_sousmenu', '=', $vue->id_sousmenu)->get(); ?>
+                                                            @foreach($permission as $value)
+                                                                <div class="col-2">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        @if($value->id==$vue->id)
+                                                                            checked
+                                                                        @endif
+                                                                        value="<?php echo $value->id;?>"
+
+
+
+                                                                        name="permission[<?php echo $value->id;?>]"
+                                                                        id="permission<?php echo $value->id;?>">
+                                                                    <span class="custom-option-header">
+                                                                        <span class="h6 mb-0">
+                                                                            <?php echo $value->lib_permission; ?></span> |
+                                                                        </span>
+                                                                </div>
+                                                            @endforeach
+
+                                                    </div>
+                                                    <hr>
                                                 </div>
                                             </div>
                                             <?php } ?>
@@ -100,11 +123,4 @@
     <!-- END: Content-->
 
 @endsection
-
-
-
-
-
-
-
 

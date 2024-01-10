@@ -15,42 +15,39 @@ $logo = Menu::get_logo();
             font-family: Arial, sans-serif;
             line-height: 1.6;
         }
-        /*.right-align {*/
-        /*    text-align: right;*/
-        /*}*/
-        /*.bold-underline {*/
-        /*    font-weight: bold;*/
-        /*    text-decoration: underline;*/
-        /*}*/
-        /*.bold-underline1 {*/
-        /*    font-weight: bold;*/
-        /*}*/
-        /*div{*/
-        /*    margin: 70px;*/
-        /*}*/
-        /*.centrer{*/
-        /*    margin: 70px;*/
-        /*}*/
-        /*.centre1{*/
-        /*    text-align: initial;*/
-        /*    margin: 70px;*/
-        /*    font-family: arial;*/
-        /*}*/
-        /*.noir{*/
-        /*    text-align: right;*/
-        /*    margin: 70px;*/
-        /*    font-family: arial;*/
-        /*    font-size: 25px;*/
-        /*}*/
         @media print {
             .visuel_bouton {
                 display: none;
             }
         }
+
     </style>
+    @isset($plan_de_formation)
+        @if($plan_de_formation->flag_annulation_plan)
+            <style>
+            .content {
+            position: relative;
+            }
+
+            .content:before {
+            content: 'Annulé';
+            position: fixed;
+            inset: 0;
+            z-index:-1 !important;
+            font-size: 160px;
+            font-weight: bold;
+            display: grid;
+            justify-content: center;
+            align-content: center;
+            opacity: 0.1;
+            transform: rotate(-45deg) scale(1);;
+            }
+            </style>
+        @endif
+    @endisset
 </head>
-<body>
-<div style="margin-bottom: 25px">
+<body >
+<div style="margin-bottom: 25px;" id="">
     <div>
         <div align="right" >
             <input name="Submit1"
@@ -64,8 +61,8 @@ $logo = Menu::get_logo();
         <br />
     </div>
 </div>
+<div class=" content" style="margin-top: 25px">
     <table width="100%" cellspacing="0" cellpadding="0" class="encadre">
-
         <tbody>
         <tr>
             <td width="50%" style="float: left;margin-top: 2px">
@@ -83,7 +80,6 @@ $logo = Menu::get_logo();
             <td width="40%" style="float: right;margin-top: 2px">
                 <div style="text-align: center">
                     Abidjan, le 13 décembre 2023
-
                 </div>
                 <br/>
             </td>
@@ -96,8 +92,6 @@ $logo = Menu::get_logo();
                 <br/>
             </td>
         </tr>
-
-
         <tr >
             <td width="40%" style="float: right;margin-top: 2px">
                 <div style="text-align: center">
@@ -337,9 +331,6 @@ $logo = Menu::get_logo();
                     </table>
                 </div>
 
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
 </body>
 </html>

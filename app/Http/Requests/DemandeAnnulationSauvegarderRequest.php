@@ -22,7 +22,7 @@ class DemandeAnnulationSauvegarderRequest extends FormRequest
 
     public function rules(): array
     {
-        if($this->id_demande){
+        if($this->id_plan_de_formation){
             return [
                 'id_motif_demande_annulation_plan' => 'required',
                 'commentaire_demande_annulation_plan' => 'required',

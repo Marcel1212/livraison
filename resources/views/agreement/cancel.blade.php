@@ -272,7 +272,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                     <div class="col-md-4 col-12">
                                         <div class="mb-1">
-                                            <label>Nombre total de salarié </label>
+                                            <label>Nombre de salariés déclarés à la CNPS </label>
                                             <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                    class="form-control form-control-sm"
                                                    value="{{$plan_de_formation->nombre_salarie_plan_formation}}"
@@ -363,8 +363,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <tr>
                                     <th>No</th>
                                     <th>Intitluer de l'action de formation </th>
-                                    <th>Structure ou etablissemnt de formation</th>
-                                    <th>Nombre de stagiaires</th>
+                                    <th>Structure ou etablissement de formation</th>
+                                    <th>Nombre de bénéficiaires de l'action de formation</th>
                                     <th>Nombre de groupe</th>
                                     <th>Nombre d'heures par groupe</th>
                                     <th>Cout de l'action</th>
