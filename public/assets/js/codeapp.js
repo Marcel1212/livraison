@@ -39,4 +39,27 @@ $(function() {
                 });
             }
 
+            $('#departement').on('change', function (e) {
+                //alert('test');
+                // alert('id_direction');
+                var id_departement = e.target.value;
+                //alert('test');
+                telUpdate1(id_departement);
+                //alert(id_direction);
+            });
+
+            function telUpdate1(id) {
+                //alert('testanc'); //exit;
+                        $.get('/servicelist/' + id, function (data) {
+                            $('#service').empty();
+                            $.each(data, function (index, tels) {
+                                $('#service').append($('<option>', {
+                                    value: tels.id_service,
+                                    text: tels.libelle_service,
+                                }));
+
+
+                            });
+                        });
+            }
 });

@@ -198,7 +198,7 @@ $idpart = Auth::user()->id_partenaire;
                           data-bs-target="#navs-top-categorieplan"
                           aria-controls="navs-top-categorieplan"
                           aria-selected="false">
-                          Effectif de l'entreprise
+                          Nombre de salariés déclarés à la CNPS
                         </button>
                       </li>
                       <li class="nav-item">
@@ -319,20 +319,7 @@ $idpart = Auth::user()->id_partenaire;
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Secteur d'activité du plan <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select"
-                                                data-allow-clear="true" name="id_secteur_activite"
-                                                id="id_secteur_activite" required>
-                                            <option value="{{@$planformation->secteurActivite->id_secteur_activite}}">{{@$planformation->secteurActivite->libelle_secteur_activite}}</option>
-                                            @foreach ($secteuractivites as $activite)
-                                                <option
-                                                    value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nom et prénom du responsable formation <strong style="color:red;">*</strong></label>
@@ -359,9 +346,9 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre total de salariés <strong style="color:red;">*</strong></label>
+                                        <label>Nombre de salariés déclarés à la CNPS <strong style="color:red;">*</strong></label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}">
+                                               class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
 
@@ -385,9 +372,9 @@ $idpart = Auth::user()->id_partenaire;
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
-                                        <input type="number"
+                                        <input type="text"
                                                class="form-control form-control-sm"
-                                                value="{{@$planformation->part_entreprise}}" disabled="disabled">
+                                                value="{{number_format(@$planformation->part_entreprise)}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <!--<div class="col-md-4 col-12">
@@ -496,7 +483,7 @@ $idpart = Auth::user()->id_partenaire;
                                                 <td>
                                                 <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
                                                <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($categorieplan->id_categorie_plan)) }}"
-                                               class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette categorie travailleurs ?")) return false;'
+                                               class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet effectif travailleur ?")) return false;'
                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                <?php } ?>
                                             </td>
@@ -528,6 +515,22 @@ $idpart = Auth::user()->id_partenaire;
                                 @method('put')
                             <div>
                             <div class="row">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget credit</strong></label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{ number_format(@$planformation->part_entreprise) }}"
+                                    disabled="disabled"/>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:red;">Budget credit restant</strong></label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{ number_format(@$planformation->part_entreprise - $montantactionplanformation) }}"
+                                    disabled="disabled"/>
+                            </div>
                             <div class="col-12 col-md-12">
                             <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation <strong style="color:red;">*</strong></label>
                             <input
@@ -539,16 +542,7 @@ $idpart = Auth::user()->id_partenaire;
                                  />
                             </div>
 
-                            <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires <strong style="color:red;">*</strong></label>
-                            <input
-                                type="number"
-                                id="nombre_stagiaire_action_formati"
-                                name="nombre_stagiaire_action_formati"
-                                class="form-control form-control-sm"
-                                value="{{ old('nombre_stagiaire_action_formati') }}"
-                                 />
-                            </div>
+
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes <strong style="color:red;">*</strong></label>
                             <input
@@ -659,16 +653,18 @@ $idpart = Auth::user()->id_partenaire;
                                 class="form-control form-control-sm"
                                  />
                             </div>-->
-                            <div class="col-12 col-md-4">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
-                            <input
-                                type="text"
-                                id="objectif_pedagogique_fiche_agre"
-                                name="objectif_pedagogique_fiche_agre"
-                                class="form-control form-control-sm"
-                                value="{{ old('objectif_pedagogique_fiche_agre') }}"
-                                 />
+                            <div class="col-md-4 col-12">
+                                <label>Secteur d'activité <strong style="color:red;">*</strong></label>
+                                <select class="select2 form-select"
+                                                data-allow-clear="true" name="id_secteur_activite"
+                                                id="id_secteur_activite">
+                                    <option value="">-- Sélectionnez un secteur d'activité </option>
+                                     @foreach ($secteuractivites as $activite)
+                                        <option value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
+
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres <strong style="color:red;">*</strong></label>
                             <input
@@ -676,6 +672,7 @@ $idpart = Auth::user()->id_partenaire;
                                 id="cadre_fiche_demande_agrement"
                                 name="cadre_fiche_demande_agrement"
                                 class="form-control form-control-sm"
+                                min="0"
                                 value="{{ old('cadre_fiche_demande_agrement') }}"
                                  />
                             </div>
@@ -686,6 +683,7 @@ $idpart = Auth::user()->id_partenaire;
                                 id="agent_maitrise_fiche_demande_ag"
                                 name="agent_maitrise_fiche_demande_ag"
                                 class="form-control form-control-sm"
+                                min="0"
                                 value="{{ old('agent_maitrise_fiche_demande_ag') }}"
                                  />
                             </div>
@@ -696,8 +694,13 @@ $idpart = Auth::user()->id_partenaire;
                                 id="employe_fiche_demande_agrement"
                                 name="employe_fiche_demande_agrement"
                                 class="form-control form-control-sm"
+                                min="0"
                                 value="{{ old('employe_fiche_demande_agrement') }}"
                                  />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
+                                <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6">{{ old('objectif_pedagogique_fiche_agre') }}</textarea>
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="file_beneficiare">Charger les bénéficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
@@ -728,7 +731,11 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Modèle de la liste des bénéficiaires à télécharger</a>
 
-                                <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                <?php $budget = $planformation->part_entreprise - $montantactionplanformation; if($budget != 0){?>
+
+                                    <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer l’action de formation</button>
+
+                                <?php } ?>
 
                                 <?php if ($actifsoumission == true){ ?>
                                     <?php if (count($actionplanformations)>=1){ ?>
@@ -769,7 +776,7 @@ $idpart = Auth::user()->id_partenaire;
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
+                                                <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
 
                                                 <td align="center">
                                                     @can($lien.'-edit')

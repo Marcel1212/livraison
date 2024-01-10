@@ -306,7 +306,7 @@ $reseaux = Menu::get_info_reseaux();
                                                             <select class="select2 form-select"
                                                                     data-allow-clear="true" name="id_localite"
                                                                     required="required">
-                                                                <option value="0">-- Sélectionnez une localité --
+                                                                <option value="">-- Sélectionnez une localité --
                                                                 </option>
                                                                 <?= $localite; ?>
                                                             </select>
@@ -319,7 +319,7 @@ $reseaux = Menu::get_info_reseaux();
                                                             <select class="select2 form-select"
                                                                     data-allow-clear="true" name="id_centre_impot"
                                                                     required="required">
-                                                                <option value="0">-- Sélectionnez un centre d'impôt --
+                                                                <option value="">-- Sélectionnez un centre d'impôt --
                                                                 </option>
                                                                 <?= $centreimpot; ?>
                                                             </select>
@@ -332,7 +332,7 @@ $reseaux = Menu::get_info_reseaux();
                                                             <select class="select2 form-select"
                                                                     data-allow-clear="true" name="id_secteur_activite"
                                                                     id="id_secteur_activite">
-                                                                <option value="0">-- Sélectionnez un secteur d'activité
+                                                                <option value="">-- Sélectionnez un secteur d'activité
                                                                     --
                                                                 </option>
                                                                 @foreach ($secteuractivites as $activite)

@@ -28,6 +28,9 @@ class DemandeAnnulationPlan extends Model
      */
     protected $keyType = 'float';
 
+    protected $fillable = ['id_plan_formation', 'id_motif_demande_annulation_plan', 'commentaire_demande_annulation_plan','id_processus','id_user','piece_demande_annulation_plan', 'updated_at', 'created_at'];
+
+
 }
 
 

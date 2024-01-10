@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permissions;
+use App\Models\Sousmenus;
 use Auth;
 use DB;
 use Hash;
@@ -82,12 +83,13 @@ class PermissionController extends Controller
      */
     public function edit(Permissions $permission)
     {
-        $SousMenu = DB::table('sousmenu')->where('is_valide', '=', true)->orderBy('libelle',)->get();
+        $SousMenu = Sousmenus::where('is_valide', '=', true)->orderBy('libelle',)->get();
         $SousMenuList = "<option value='' > -- Sélectionner --</option>";
         $val = '';
         foreach ($SousMenu as $comp) {
-            if ($comp->id_sousmenu == $permission->id_sousmenu) $val = 'selected=selected';
-            $SousMenuList .= "<option value='" . $comp->id_sousmenu . "'  $val >" . strtoupper($comp->libelle) . " </option>";
+            if ($comp->id_sousmenu == $permission->id_sousmenu)
+                $val = 'selected';
+            $SousMenuList .= "<option value='" . $comp->id_sousmenu . "'  $val >" . strtoupper($comp->libelle)." [ ".$comp->menu->menu." ] ". " </option>";
         }
         return view('permissions.edit', compact('permission', 'SousMenuList'));
     }

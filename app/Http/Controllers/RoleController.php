@@ -36,8 +36,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permission = Permission::get();
-        return view('roles.create', compact('permission'));
+//        $permission = Permission::get();
+//        return view('roles.create', compact('permission'));
+        return view('roles.create');
     }
 
 
@@ -51,13 +52,11 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|unique:roles,name',
-            'permission' => 'required',
         ]);
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
-
-        return redirect()->route('roles.index')
-            ->with('success', 'Role created successfully');
+        $role = new Role();
+        $role->name = $request->name;
+        $role->save();
+        return redirect('menuprofillayout/'.$role->id)->with('success', 'Succès : Profil ajouté avec succès. Veuillez attribuer les droits d\'accès au profil');
     }
 
     /**
