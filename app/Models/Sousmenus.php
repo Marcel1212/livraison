@@ -40,7 +40,7 @@ class Sousmenus extends Model
      */
     public function menu()
     {
-        return $this->belongsTo('App\Menu', 'menu_id_menu', 'id_menu');
+        return $this->belongsTo(Menus::class, 'menu_id_menu', 'id_menu');
     }
 
 
@@ -50,5 +50,10 @@ class Sousmenus extends Model
     public function roless()
     {
         return $this->belongsToMany('App\Models\Role', 'role_has_sousmenus');
+    }
+
+    public function permissions()
+    {
+        return $this->hasMany(Permissions::class, 'id_sousmenu', 'id');
     }
 }

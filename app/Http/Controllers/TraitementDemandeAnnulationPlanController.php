@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Crypt;
+use App\Helpers\Email;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
 use App\Models\ActionFormationPlan;
@@ -216,9 +217,38 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     $demande_annulation->flag_demande_annulation_plan_valider_par_processus = true;
                     $demande_annulation->flag_validation_demande_annulation_plan = true;
                     $demande_annulation->date_validation_demande_annulation_plan = now();
-                    $agreement->flag_annulation_plan=true;
-                    $agreement->update();
                     $demande_annulation->update();
+
+                    $planformation->flag_annulation_plan=true;
+                    $planformation->update();
+
+                }
+
+                $infoentreprise = Entreprises::find($planformation->id_entreprises);
+                $logo = Menu::get_logo();
+
+                //Envoie notification au charger de plan de formation en cas de validation
+                if (isset($planformation->email_professionnel_charge_plan_formation)) {
+                    $sujet = "Demande d'annulation du plan de formation (code:"  .
+                        @$planformation->code_plan_formation.") sur e-FDFP";
+
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'annulation du plan de formation (code: "
+                        .@$planformation->code_plan_formation.
+                        ") sur e-FDFP a été validé avec succès.
+                                     <br>
+                                     <br>
+                                        Cordialement,
+                                        <br>
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+//                    $planformation->email_professionnel_charge_plan_formation
+                    $messageMailEnvoi = Email::get_envoimailTemplate("ncho.hermann.dorgeles@gmail.com", $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
 
                 return redirect('traitementdemandeannulationplan/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/edit')->with('success', 'Succes : Operation validée avec succes ');
@@ -243,8 +273,7 @@ class TraitementDemandeAnnulationPlanController extends Controller
                 $idProComb = $infosprocessus->id_combi_proc;
                 $idProcessus = $infosprocessus->id_processus;
 
-                Parcours::create(
-                    [
+                Parcours::create([
                         'id_processus' => $idProcessus,
                         'id_user' => $idUser,
                         'id_piece' => $id,
@@ -267,8 +296,42 @@ class TraitementDemandeAnnulationPlanController extends Controller
 
                 if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
                     $demande_annulation->flag_rejeter_demande_annulation_plan = true;
+                    $demande_annulation->commentaire_final_demande_annulation_plan_formation = $request->comment_parcours;
                     $demande_annulation->date_validation_demande_annulation_plan = now();
                     $demande_annulation->update();
+                }
+
+                $infoentreprise = Entreprises::find($planformation->id_entreprises);
+                $logo = Menu::get_logo();
+
+                //Envoie notification au charger de plan de formation en cas de rejet
+                if (isset($planformation->email_professionnel_charge_plan_formation)) {
+                    $sujet = "Demande d'annulation du plan de formation (code:"  .
+                        @$planformation->code_plan_formation.") sur e-FDFP";
+
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous avons examiné votre demande d'annulation du plan de formation (code: "
+                                        .@$planformation->code_plan_formation.
+                                     ") sur e-FDFP, et malheureusement,
+                                     nous ne pouvons l'approuver pour la raison suivante :
+                                     <br>
+                                    <br><b>Commentaire : </b> ".@$demande_annulation->commentaire_final_demande_annulation_plan_formation."
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                        <br>
+                                        Cordialement,
+                                        <br>
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($planformation->email_professionnel_charge_plan_formation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
 
                 return redirect('traitementdemandeannulationplan/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/edit')->with('success', 'Succes : Operation validée avec succes ');
