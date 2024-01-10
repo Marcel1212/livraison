@@ -359,12 +359,15 @@ class GenerermenuController extends Controller
 
             $resulatsm = DB::table('menu')
                 ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
-                ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
-                ->select('menu.*','sousmenu.*','permissions.id')
-                //  ->join('roles','role_has_sousmenus.role_id','roles.id')
+                ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id')
+                // ->select('menu.*','sousmenu.*','permissions.*')
+                // ->join('roles','role_has_sousmenus.role_id','roles.id')
                 // ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
                 // ->where([['roles.id','=',$idroles]])
                 ->get();
+
+//            dd($resulatsm);
+
 
             //$resulatsm = DB::table('menu')
               //  ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
