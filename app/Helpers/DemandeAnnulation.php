@@ -3,6 +3,8 @@
 
 namespace App\Helpers;
 
+use App\Models\DemandeAnnulationPlan;
+
 class DemandeAnnulation
 {
     public static function get_demande_annulation_en_traitement(){
