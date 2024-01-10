@@ -15,7 +15,7 @@ $reseaux = Menu::get_info_reseaux();
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <?php if(isset($logo->mot_cle)){?>
-		<title><?php echo @$logo->mot_cle;?> </title>
+    <title><?php echo @$logo->mot_cle; ?> </title>
     <?php } ?>
     <meta name="author" content="BARNOIN">
     <meta name="description" content="FDFP">
@@ -27,31 +27,33 @@ $reseaux = Menu::get_info_reseaux();
 
     <!-- Favicons - Place favicon.ico in the root directory -->
     <?php if(isset($logo->logo_logo)){?>
-        <link rel="<?php echo @$logo->mot_cle;?>" type="image/x-icon" href="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}"/>
+    <link rel="<?php echo @$logo->mot_cle; ?>" type="image/x-icon" href="{{ asset('/frontend/logo/' . @$logo->logo_logo) }}" />
     <?php } ?>
     <!--==============================
-	  Google Fonts
-	============================== -->
+ Google Fonts
+ ============================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700&display=swap"
+        rel="stylesheet">
 
 
     <!--==============================
-	    All CSS File
-	============================== -->
+ All CSS File
+ ============================== -->
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/bootstrap.min.css') }}">
     <!-- Fontawesome Icon -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/fontawesome.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/fontawesome.min.css') }}">
     <!-- Magnific Popup -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/magnific-popup.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/magnific-popup.min.css') }}">
     <!-- Slick Slider -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/slick.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/slick.min.css') }}">
     <!-- Nice Select -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/nice-select.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/nice-select.min.css') }}">
     <!-- Theme Custom CSS -->
-    <link rel="stylesheet" href="{{asset('assetsfront/css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/style.css') }}">
 
 </head>
 
@@ -59,14 +61,14 @@ $reseaux = Menu::get_info_reseaux();
 
 
     <!--[if lte IE 9]>
-    	<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
 
 
 
     <!--********************************
-   		Code Start From Here
-	******************************** -->
+   Code Start From Here
+ ******************************** -->
 
 
 
@@ -74,7 +76,7 @@ $reseaux = Menu::get_info_reseaux();
     <!--==============================
      Preloader
   ==============================-->
-  <!--  <div class="preloader ">
+    <!--  <div class="preloader ">
         <button class="th-btn style3 preloaderCls">Cancel Preloader </button>
         <div class="preloader-inner">
             <span class="loader"></span>
@@ -86,10 +88,10 @@ $reseaux = Menu::get_info_reseaux();
 
     <div class="popup-search-box d-none d-lg-block">
         <button class="searchClose"><i class="fal fa-times"></i></button>
-        <form action="#">
+        {{-- <form action="#">
             <input type="text" placeholder="What are you looking for?">
             <button type="submit"><i class="fal fa-search"></i></button>
-        </form>
+        </form> --}}
     </div>
     <!--==============================
     Mobile Menu
@@ -98,22 +100,22 @@ $reseaux = Menu::get_info_reseaux();
         <div class="th-menu-area text-center">
             <button class="th-menu-toggle"><i class="fal fa-times"></i></button>
             <div class="mobile-logo">
-                <a href="{{route('/')}}"><img src="{{asset('assetsfront/img/logo.png')}}" alt="FDFP"></a>
+                <a href="{{ route('/') }}"><img src="{{ asset('assetsfront/img/logo.png') }}" alt="FDFP"></a>
             </div>
             <div class="th-mobile-menu">
                 <ul>
                     <li>
-                        <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler</a>
+                        <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler</a>
                     </li>
                     <li>
-                        <a href="{{route('connexion')}}">Se connecter</a>
+                        <a href="{{ route('connexion') }}">Se connecter</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
     <!--==============================
-	Header Area
+ Header Area
 ==============================-->
     <header class="th-header header-layout1">
         <div class="header-top">
@@ -123,7 +125,8 @@ $reseaux = Menu::get_info_reseaux();
                         <div class="header-links">
                             <ul>
                                 <!--<li><i class="far fa-phone"></i><a href="tel:+11156456825">+111 (564) 568 25</a></li>-->
-                                <li class="d-none d-xl-inline-block"><i class="far fa-envelope"></i><a href="mailto:info@fdfp.ci">info@fdfp.ci</a></li>
+                                <li class="d-none d-xl-inline-block"><i class="far fa-envelope"></i><a
+                                        href="mailto:info@fdfp.ci">info@fdfp.ci</a></li>
                                 <li><i class="far fa-clock"></i>Lundi - Vendredi: 07:30 - 16:30</li>
                             </ul>
                         </div>
@@ -134,10 +137,11 @@ $reseaux = Menu::get_info_reseaux();
                                 <li>
                                     <div class="header-social">
                                         <span class="social-title">Suivez-nous sur:</span>
-										@foreach($reseaux as $reseau)
-											<a href="{{$reseau->mot_cle}}" target="_blank"><i class="{{$reseau->titre_logo}}"></i></a>
-											<!--<a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>-->
-										@endforeach
+                                        @foreach ($reseaux as $reseau)
+                                            <a href="{{ $reseau->mot_cle }}" target="_blank"><i
+                                                    class="{{ $reseau->titre_logo }}"></i></a>
+                                            <!--<a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>-->
+                                        @endforeach
                                         <!--<a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
                                         <a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>
                                         <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>-->
@@ -159,7 +163,8 @@ $reseaux = Menu::get_info_reseaux();
                     <div class="row align-items-center justify-content-between">
                         <div class="col-auto">
                             <div class="header-logo">
-                                <a href="{{route('/')}}"><img src="{{asset('assetsfront/img/logo.png')}}" alt="Edura"></a>
+                                <a href="{{ route('/') }}"><img src="{{ asset('assetsfront/img/logo.png') }}"
+                                        alt="Edura"></a>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -169,14 +174,18 @@ $reseaux = Menu::get_info_reseaux();
                                     </nav>
                                     <!--<button type="button" class="th-menu-toggle d-block d-lg-none"><i class="far fa-bars"></i></button>-->
                                     <div class="header-button d-lg-none">
-                                        <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-1"></i></a>
-                                        <a href="{{route('connexion')}}" class="">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler<i
+                                                class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{ route('connexion') }}" class="">Se connecter<i
+                                                class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
                                 </div>
                                 <div class="col-auto d-none d-xl-block">
                                     <div class="header-button">
-                                        <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-1"></i></a>
-                                        <a href="{{route('connexion')}}" class="th-btn ml-25">Se connecter<i class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler<i
+                                                class="fas fa-arrow-right ms-1"></i></a>
+                                        <a href="{{ route('connexion') }}" class="th-btn ml-25">Se connecter<i
+                                                class="fas fa-arrow-right ms-1"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -190,117 +199,133 @@ $reseaux = Menu::get_info_reseaux();
 Hero Area
 ==============================-->
     <div class="th-hero-wrapper hero-1" id="hero">
-        <div class="hero-slider-1 th-carousel" data-fade="true" data-slide-show="1" data-md-slide-show="1" data-dots="true">
+        <div class="hero-slider-1 th-carousel" data-fade="true" data-slide-show="1" data-md-slide-show="1"
+            data-dots="true">
 
 
             <div class="th-hero-slide">
-                <div class="th-hero-bg" data-overlay="title" data-opacity="8" data-bg-src="{{asset('assetsfront/img/hero/hero_bg_1_1.jpg')}}"></div>
+                <div class="th-hero-bg" data-overlay="title" data-opacity="8"
+                    data-bg-src="{{ asset('assetsfront/img/hero/hero_bg_1_1.jpg') }}"></div>
                 <div class="container">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-6">
                             <div class="hero-style1">
-                                <span class="hero-subtitle" data-ani="slideinleft" data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
-                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
-                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la formation professionnelle depuis 1991</p>
+                                <span class="hero-subtitle" data-ani="slideinleft"
+                                    data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
+                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">
+                                    Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
+                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la
+                                    formation professionnelle depuis 1991</p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-2"></i></a>
+                                    <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler<i
+                                            class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 text-lg-end text-center">
                             <div class="hero-img1">
-                                <img src="{{asset('assetsfront/img/hero/hero_thumb_1_1.jpg')}}" alt="hero">
+                                <img src="{{ asset('assetsfront/img/hero/hero_thumb_1_1.jpg') }}" alt="hero">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="hero-shape shape1">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_1.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_1.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape2">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_2.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_2.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape3"></div>
 
                 <div class="hero-shape shape4 shape-mockup jump-reverse" data-right="3%" data-bottom="7%">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_3.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_3.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape5 shape-mockup jump-reverse" data-left="0" data-bottom="0">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_4.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_4.png') }}" alt="shape">
                 </div>
             </div>
 
             <div class="th-hero-slide">
-                <div class="th-hero-bg" data-overlay="title" data-opacity="8" data-bg-src="{{asset('assetsfront/img/hero/hero_bg_1_2.jpg')}}"></div>
+                <div class="th-hero-bg" data-overlay="title" data-opacity="8"
+                    data-bg-src="{{ asset('assetsfront/img/hero/hero_bg_1_2.jpg') }}"></div>
                 <div class="container">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-6">
                             <div class="hero-style1">
-                                <span class="hero-subtitle" data-ani="slideinleft" data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
-                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
-                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la formation professionnelle depuis 1991</p>
+                                <span class="hero-subtitle" data-ani="slideinleft"
+                                    data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
+                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">
+                                    Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
+                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la
+                                    formation professionnelle depuis 1991</p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-2"></i></a>
+                                    <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler<i
+                                            class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 text-lg-end text-center">
                             <div class="hero-img1">
-                                <img src="{{asset('assetsfront/img/hero/hero_thumb_1_1.jpg')}}" alt="hero">
+                                <img src="{{ asset('assetsfront/img/hero/hero_thumb_1_1.jpg') }}" alt="hero">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="hero-shape shape1">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_1.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_1.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape2">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_2.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_2.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape3"></div>
 
                 <div class="hero-shape shape4 shape-mockup jump-reverse" data-right="3%" data-bottom="7%">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_3.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_3.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape5 shape-mockup jump-reverse" data-left="0" data-bottom="0">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_4.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_4.png') }}" alt="shape">
                 </div>
             </div>
 
             <div class="th-hero-slide">
-                <div class="th-hero-bg" data-overlay="title" data-opacity="8" data-bg-src="{{asset('assetsfront/img/hero/hero_bg_1_3.jpg')}}"></div>
+                <div class="th-hero-bg" data-overlay="title" data-opacity="8"
+                    data-bg-src="{{ asset('assetsfront/img/hero/hero_bg_1_3.jpg') }}"></div>
                 <div class="container">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-6">
                             <div class="hero-style1">
-                                <span class="hero-subtitle" data-ani="slideinleft" data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
-                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
-                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la formation professionnelle depuis 1991</p>
+                                <span class="hero-subtitle" data-ani="slideinleft"
+                                    data-ani-delay="0.1s"><span>NOUVEAU</span>ENROLEMENT EN LIGNE</span>
+                                <h1 class="hero-title text-white" data-ani="slideinleft" data-ani-delay="0.4s">
+                                    Bienvenue sur votre <span class="text-theme">espace FDFP.</span></h1>
+                                <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Au coeur de la
+                                    formation professionnelle depuis 1991</p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{route('enrolements')}}" class="th-btn style3">S'enrôler<i class="fas fa-arrow-right ms-2"></i></a>
+                                    <a href="{{ route('enrolements') }}" class="th-btn style3">S'enrôler<i
+                                            class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 text-lg-end text-center">
                             <div class="hero-img1">
-                                <img src="{{asset('assetsfront/img/hero/hero_thumb_1_1.jpg')}}" alt="hero">
+                                <img src="{{ asset('assetsfront/img/hero/hero_thumb_1_1.jpg') }}" alt="hero">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="hero-shape shape1">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_1.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_1.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape2">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_2.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_2.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape3"></div>
 
                 <div class="hero-shape shape4 shape-mockup jump-reverse" data-right="3%" data-bottom="7%">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_3.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_3.png') }}" alt="shape">
                 </div>
                 <div class="hero-shape shape5 shape-mockup jump-reverse" data-left="0" data-bottom="0">
-                    <img src="{{asset('assetsfront/img/hero/shape_1_4.png')}}" alt="shape">
+                    <img src="{{ asset('assetsfront/img/hero/shape_1_4.png') }}" alt="shape">
                 </div>
             </div>
 
@@ -310,9 +335,10 @@ Hero Area
     </div>
 
 
-    <footer class="footer-wrapper pt-45 footer-layout1" data-bg-src="{{asset('assetsfront/img/bg/footer-bg.png')}}">
+    <footer class="footer-wrapper pt-45 footer-layout1"
+        data-bg-src="{{ asset('assetsfront/img/bg/footer-bg.png') }}">
 
-        <div class="footer-wrap  " data-bg-src="{{asset('assetsfront/img/bg/jiji.png')}}">
+        <div class="footer-wrap  " data-bg-src="{{ asset('assetsfront/img/bg/jiji.png') }}">
             <div class="widget-area">
                 <div class="container">
                     <div class="row justify-content-between">
@@ -320,15 +346,18 @@ Hero Area
                             <div class="widget footer-widget">
                                 <div class="th-widget-about">
                                     <div class="about-logo">
-                                        <a href="{{route('/')}}"><img src="{{asset('assetsfront/img/logo-white.png')}}" alt="FDFP"></a>
+                                        <a href="{{ route('/') }}"><img
+                                                src="{{ asset('assetsfront/img/logo-white.png') }}"
+                                                alt="FDFP"></a>
                                     </div>
                                     <p class="about-text">Fonds de Dévéloppement de Formation Professionnelle.</p>
                                     <div class="th-social">
                                         <h6 class="title text-white">SUIVEZ-NOUS SUR:</h6>
-										@foreach($reseaux as $reseau)
-											<a href="{{$reseau->mot_cle}}" target="_blank"><i class="{{$reseau->titre_logo}}"></i></a>
-											<!--<a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>-->
-										@endforeach
+                                        @foreach ($reseaux as $reseau)
+                                            <a href="{{ $reseau->mot_cle }}" target="_blank"><i
+                                                    class="{{ $reseau->titre_logo }}"></i></a>
+                                            <!--<a href="https://www.twitter.com/"><i class="fab fa-twitter"></i></a>-->
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -369,7 +398,8 @@ Hero Area
                 <div class="copyright-wrap">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-6">
-                            <p class="copyright-text">Copyright © <?php echo Date('Y') ;?>; <a href="{{route('/')}}">FDFP</a> Tous droits réservés.</p>
+                            <p class="copyright-text">Copyright © <?php echo Date('Y'); ?>; <a
+                                    href="{{ route('/') }}">FDFP</a> Tous droits réservés.</p>
                         </div>
                         <div class="col-md-6 text-end d-none d-md-block">
                             <div class="footer-links">
@@ -386,13 +416,15 @@ Hero Area
     </footer>
 
     <!--********************************
-			Code End  Here
-	******************************** -->
+   Code End  Here
+ ******************************** -->
 
     <!-- Scroll To Top -->
     <div class="scroll-top">
         <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;"></path>
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
+                style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;">
+            </path>
         </svg>
     </div>
 
@@ -400,31 +432,31 @@ Hero Area
     All Js File
 ============================== -->
     <!-- Jquery -->
-    <script src="{{asset('assetsfront/js/vendor/jquery-3.6.0.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/vendor/jquery-3.6.0.min.js') }}"></script>
     <!-- Slick Slider -->
-    <script src="{{asset('assetsfront/js/slick.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/slick.min.js') }}"></script>
     <!-- Bootstrap -->
-    <script src="{{asset('assetsfront/js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/bootstrap.min.js') }}"></script>
     <!-- Magnific Popup -->
-    <script src="{{asset('assetsfront/js/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/jquery.magnific-popup.min.js') }}"></script>
     <!-- Counter Up -->
-    <script src="{{asset('assetsfront/js/jquery.counterup.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/jquery.counterup.min.js') }}"></script>
     <!-- Circle Progress -->
-    <script src="{{asset('assetsfront/js/circle-progress.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/circle-progress.js') }}"></script>
     <!-- Range Slider -->
-    <script src="{{asset('assetsfront/js/jquery-ui.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/jquery-ui.min.js') }}"></script>
     <!-- Isotope Filter -->
-    <script src="{{asset('assetsfront/js/imagesloaded.pkgd.min.js')}}"></script>
-    <script src="{{asset('assetsfront/js/isotope.pkgd.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('assetsfront/js/isotope.pkgd.min.js') }}"></script>
     <!-- Tilt JS -->
-    <script src="{{asset('assetsfront/js/tilt.jquery.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/tilt.jquery.min.js') }}"></script>
     <!-- Tweenmax JS -->
-    <script src="{{asset('assetsfront/js/tweenmax.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/tweenmax.min.js') }}"></script>
     <!-- Nice Select JS -->
-    <script src="{{asset('assetsfront/js/nice-select.min.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/nice-select.min.js') }}"></script>
 
     <!-- Main Js File -->
-    <script src="{{asset('assetsfront/js/main.js')}}"></script>
+    <script src="{{ asset('assetsfront/js/main.js') }}"></script>
 
 </body>
 

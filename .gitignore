@@ -21,3 +21,4 @@ yarn-error.log
 *.jpg
 app/Http/Controllers/ConnexionController.php
 resources/views/welcome.blade.php
+app/Http/Controllers/ConnexionController.php

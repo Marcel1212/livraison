@@ -3,35 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Activites;
-use App\Models\CentreImpot;
-use App\Models\Localite;
-use App\Models\Pays;
-use App\Models\ProjetEtude;
-use App\Models\DemandeEnrolement;
-use App\Models\Entreprises;
+use App\Models\Cahier;
+use App\Models\ComitePleniere;
+use App\Models\ComitePleniereProjetFormation;
+use App\Models\ComitePleniereParticipant;
+use Hash;
+use DB;
+use App\Models\User;
+use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\Crypt;
+use App\Helpers\ConseillerParAgence;
 use App\Models\PlanFormation;
+use App\Models\Entreprises;
 use App\Models\ActionFormationPlan;
 use App\Models\FicheADemandeAgrement;
 use App\Models\BeneficiairesFormation;
 use App\Models\TypeEntreprise;
 use App\Models\ButFormation;
 use App\Models\CategorieProfessionelle;
-use App\Models\CategoriePlan;
-use App\Models\TypeFormation;
 use App\Models\ActionPlanFormationAValiderParUser;
 use App\Models\PlanFormationAValiderParUser;
-use App\Models\CtPleniere;
+use App\Models\CategoriePlan;
+use App\Models\TypeFormation;
 use App\Models\Motif;
-use App\Helpers\Crypt;
-use App\Helpers\Menu;
-use App\Helpers\Email;
-use App\Helpers\ConseillerParAgence;
-use App\Helpers\GenerateCode as Gencode;
+use App\Models\Pays;
 use Carbon\Carbon;
-use Hash;
-use DB;
-use App\Models\User;
 use Image;
 use File;
 use Auth;
@@ -43,24 +39,8 @@ class CtprojetformationController extends Controller
      */
     public function index()
     {
-        $nacodes = Menu::get_code_menu_profil(Auth::user()->id);
-        //dd($nacodes);
-        if($nacodes === "CHARGEETUDE"){
-            $projetformations = DB::table('projet_formation')
-            ->join('entreprises', 'projet_etude.id_entreprises', '=', 'entreprises.id_entreprises')
-            ->where([['projet_etude.flag_valide','=',true],['projet_etude.statut_instruction','=',true],['projet_etude.statut_instruction','=',true]])
-            ->get();
-        // dd(count($projetformations));
-            // $projetformations = ProjetEtude::leftJoin('plan_formation_a_valider_par_user', 'plan_formation.id_plan_de_formation', '=', 'plan_formation_a_valider_par_user.id_plan_formation')->
-            // where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
-            //$planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',true]])->get();
-        }else{
-            $projetformations = ProjetEtude::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
-        }
-
-        //dd($planformations);
-
-        return view('ctprojetetude.index',compact('projetformations'));
+        $Resultat = ComitePleniereProjetFormation::all();
+        return view('ctprojetformation.index', compact('Resultat'));
     }
 
     /**
@@ -68,7 +48,7 @@ class CtprojetformationController extends Controller
      */
     public function create()
     {
-        //
+        return view('ctprojetformation.create');
     }
 
     /**
@@ -76,12 +56,178 @@ class CtprojetformationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->isMethod('post')) {
+
+            $this->validate($request, [
+                'date_debut_comite_pleniere' => 'required',
+                'date_fin_comite_pleniere' => 'required',
+                'commentaire_comite_pleniere' => 'required'
+            ],[
+                'date_debut_comite_pleniere.required' => 'Veuillez ajouter une date de debut.',
+                'date_fin_comite_pleniere.required' => 'Veuillez ajouter une date de fin.',
+                'commentaire_comite_pleniere.required' => 'Veuillez ajouter un commentaire.',
+            ]);
+
+            $input = $request->all();
+            $dateanneeencours = Carbon::now()->format('Y');
+            $input['id_user_comite_pleniere'] = Auth::user()->id;
+            $input['code_comite_pleniere'] = 'CT' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+            $input['code_pieces'] = 'PF';
+
+            ComitePleniere::create($input);
+
+            $insertedId = ComitePleniere::latest()->first()->id_comite_pleniere;
+
+            return redirect('comitepleniere/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+
+        }
     }
 
     /**
      * Display the specified resource.
      */
+    /*public function show(string $id)
+    {
+        //
+    }*/
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+
+        $comitepleniere = ComitePleniere::find($id);
+
+        $comitepleniereparticipant = ComitePleniereParticipant::where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
+
+        $cahiers = Cahier::Join('plan_formation','cahier.id_demande','plan_formation.id_plan_de_formation')
+                            ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+                            ->join('users','plan_formation.user_conseiller','=','users.id')
+                            ->where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
+
+        $conseillers = ConseillerParAgence::get_conseiller_par_departement(Auth::user()->num_agce,Auth::user()->id_departement);
+//dd($conseillers);
+        $conseiller = "<option value=''> Selectionnez le but de la formation </option>";
+        foreach ($conseillers as $comp) {
+            $conseiller .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+        }
+
+        $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',true]])->get();
+
+        return view('comitepleniere.edit', compact('comitepleniere','comitepleniereparticipant','cahiers','conseiller','planformations'));
+
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+       // dd($request->all());
+
+        if ($request->isMethod('put')) {
+
+            $data = $request->all();
+
+            if ($data['action'] == 'Modifier'){
+
+                $this->validate($request, [
+                    'date_debut_comite_pleniere' => 'required',
+                    'date_fin_comite_pleniere' => 'required',
+                    'commentaire_comite_pleniere' => 'required'
+                ],[
+                    'date_debut_comite_pleniere.required' => 'Veuillez ajouter une date de debut.',
+                    'date_fin_comite_pleniere.required' => 'Veuillez ajouter une date de fin.',
+                    'commentaire_comite_pleniere.required' => 'Veuillez ajouter un commentaire.',
+                ]);
+
+                $input = $request->all();
+                $input['id_user_comite_pleniere'] = Auth::user()->id;
+                $comitepleniere = ComitePleniere::find($id);
+                $comitepleniere->update($input);
+
+                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+            }
+
+            if ($data['action'] == 'Enregistrer_conseil_poour_comite'){
+
+                $this->validate($request, [
+                    'id_user_comite_pleniere_participant' => 'required'
+                ],[
+                    'id_user_comite_pleniere_participant.required' => 'Veuillez selectionnez le conseiller.'
+                ]);
+
+                $input = $request->all();
+                $input['id_comite_pleniere'] = $id;
+                $input['flag_comite_pleniere_participant'] = true;
+
+                $verifconseillerexist = ComitePleniereParticipant::where([['id_comite_pleniere','=',$id],['id_user_comite_pleniere_participant','=',$input['id_user_comite_pleniere_participant']]])->get();
+
+                if(count($verifconseillerexist) >= 1){
+
+                    return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Erreur : Cet conseiller existe deja dans cette comite plénière ');
+
+                }
+
+                ComitePleniereParticipant::create($input);
+
+                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+
+            }
+
+            if ($data['action'] == 'Traiter_cahier_plan'){
+
+
+                $comitepleniere = ComitePleniere::find($id);
+                $comitepleniere->update(['flag_statut_comite_pleniere'=> true]);
+
+
+                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+    public function delete($id){
+
+        $idVal = Crypt::UrldeCrypt($id);
+
+        $comitepleniereParticipant = ComitePleniereParticipant::find($idVal);
+        $idcomiteplenier = $comitepleniereParticipant->id_comite_pleniere;
+        ComitePleniereParticipant::where([['id_comite_pleniere_participant','=',$idVal]])->delete();
+        return redirect('comitepleniere/'.Crypt::UrlCrypt($idcomiteplenier).'/edit')->with('success', 'Succes : Le conseiller à été du comite avec succes  supprimer avec succes ');
+    }
+
+    public function cahier($id,$id2){
+
+        /*$idplan = Crypt::UrldeCrypt($id);
+        $idcomite = Crypt::UrldeCrypt($id2);
+
+        Cahier::create([
+            'id_demande' => $idplan,
+            'id_comite_pleniere' => $idplan,
+        ]);*/
+
+    }
+
     public function show($id)
     {
         $idVal = Crypt::UrldeCrypt($id);
@@ -97,25 +243,15 @@ class CtprojetformationController extends Controller
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
 
-        return view('ctplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('comitepleniere.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+
+    public function editer($id,$id2)
     {
-
-        $id =  Crypt::UrldeCrypt($id);
-       //dd($id);
-
-       $projetetude = DB::table('projet_etude')
-            ->join('entreprises', 'projet_etude.id_entreprises', '=', 'entreprises.id_entreprises')
-            //->select('projet_etude.*', 'entreprises.raison_social_entreprises', 'posts.content')
-            ->where([['projet_etude.id_projet_etude','=',$id]])
-            ->get();
-            //dd($projetetude['0']->ncc_entreprises);
-            $projetetude = $projetetude['0'] ;
+        $id = Crypt::UrldeCrypt($id);
+        $idcomite = Crypt::UrldeCrypt($id2);
+        //dd($id);
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
@@ -177,27 +313,29 @@ class CtprojetformationController extends Controller
 
         $nombreactionvalider = count($actionvalider);
         $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
-
-        return view('ctprojetetude.edit', compact('projetetude','planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller'));
+        //dd($nombreactionvalider);
+        return view('comitepleniere.editer', compact(
+            'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
+            'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
+            'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id'
+        ));
 
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function cahierupdate(Request $request, $id, $id2)
     {
+
         $id =  Crypt::UrldeCrypt($id);
+        $id2 =  Crypt::UrldeCrypt($id2);
 
-        $NumAgce = Auth::user()->num_agce;
-        $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
-        $nombredeconseilleragence = count($conseilleragence);
-
-        if ($request->isMethod('put')) {
+       // dd($request->all());
+       if ($request->isMethod('post')) {
 
             $data = $request->all();
 
-            //dd($data);
+        //dd($data);
 
             if($data['action'] === 'Traiter_action_formation_valider'){
 
@@ -220,11 +358,12 @@ class CtprojetformationController extends Controller
                 $input['id_action_plan_formation'] = $id;
                 $input['id_plan_formation'] = $idplan;
 
+                $actionplan->update($input);
                 ActionPlanFormationAValiderParUser::create($input);
 
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
 
-                return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
+                return redirect('comitepleniere/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/editer')->with('success', 'Succes : Action de plan de formation Traité ');
 
             }
 
@@ -244,67 +383,28 @@ class CtprojetformationController extends Controller
                 $input['date_valide_plan_formation'] = Carbon::now();
 
                 PlanFormationAValiderParUser::create($input);
-
-                $nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
-                $nbrav = count($nbreplanvalide);
-                if($nbrav == $nombredeconseilleragence){
+                Cahier::create([
+                    'id_demande' => $idplan,
+                    'id_comite_pleniere' => $id2,
+                    'id_user_cahier' => Auth::user()->id,
+                    'flag_cahier'=> true
+                ]);
+                //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
+                //$nbrav = count($nbreplanvalide);
+                //if($nbrav == $nombredeconseilleragence){
                     $plan = PlanFormation::find($idplan);
                     $plan->update([
                         'id_processus' => 1,
                         'flag_valide_action_des_plan_formation' => true,
-                        'flag_plan_validation_valider_par_comite_en_ligne' => true
+                        'flag_plan_formation_valider_par_comite_pleniere' => true
                     ]);
-                }
-                return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Les actions ont été validée ');
+                //}
+                return redirect('comitepleniere/'.Crypt::UrlCrypt($id2).'/edit')->with('success', 'Succes : Les actions ont été validée ');
 
 
             }
 
-            if($data['action'] === 'Traiter_action_formation_rejeter'){
-
-                $actionplan = ActionFormationPlan::find($id);
-
-                $idplan = $actionplan->id_plan_de_formation;
-
-                $this->validate($request, [
-                    'id_motif' => 'required',
-                    'commentaire' => 'required',
-                ],[
-                    'id_motif.required' => 'Veuillez ajouter le motif.',
-                    'commentaire.required' => 'Veuillez ajouter un commentaire.',
-                ]);
-
-                $input = $request->all();
-
-                $input['flag_valide_action_plan_formation'] = false;
-                $input['flag_plan_validation_rejeter_par_comite_en_ligne'] = true;
-                $input['id_user_conseil'] = Auth::user()->id;
-                $input['id_action_plan_formation'] = $id;
-                $input['id_plan_formation'] = $idplan;
-
-                ActionPlanFormationAValiderParUser::create($input);
-
-                $plan = PlanFormation::find($idplan);
-                $plan->update([
-                    'flag_valide_action_plan_formation' => false,
-                    'flag_plan_validation_rejeter_par_comite_en_ligne' => true
-                ]);
-                /*CtPleniere::create([
-                    'id_plan_formation' => $idplan
-                ]);*/
-                //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
-
-                return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
-
-            }
         }
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }
