@@ -658,7 +658,7 @@ $idpart = Auth::user()->id_partenaire;
                                 <select class="select2 form-select"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite">
-                                    <option value="">-- Sélectionnez un secteur d'activité </option>
+                                    <option value="">-- Sélectionnez un secteur d'activité--- </option>
                                      @foreach ($secteuractivites as $activite)
                                         <option value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
                                     @endforeach
