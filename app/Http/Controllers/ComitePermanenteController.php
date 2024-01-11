@@ -292,12 +292,13 @@ class ComitePermanenteController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
                                         ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
 
         //dd($infosactionplanformations);
@@ -310,10 +311,26 @@ class ComitePermanenteController extends Controller
         $nombreactionvalider = count($actionvalider);
         $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
         //dd($nombreactionvalider);
+
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
+        $montantactionplanformation = 0;
+
+        foreach ($actionplanformations as $actionplanformation){
+            $montantactionplanformation += $actionplanformation->cout_action_formation_plan;
+        }
+
+        $montantactionplanformationacc = 0;
+
+        foreach ($actionplanformations as $actionplanformation){
+            $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
+        }
+
+
         return view('comitepermanente.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
             'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
-            'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id','idetape','idcomite'
+            'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id','idetape','idcomite','montantactionplanformation','montantactionplanformationacc'
         ));
 
     }
