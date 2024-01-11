@@ -57,28 +57,29 @@ class CtprojetformationController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
+           // dd($request->all());
 
             $this->validate($request, [
-                'date_debut_comite_pleniere' => 'required',
-                'date_fin_comite_pleniere' => 'required',
-                'commentaire_comite_pleniere' => 'required'
+                'date_debut_comite_pleniere_pf' => 'required',
+                'date_fin_comite_pleniere_pf' => 'required',
+                'commentaire_comite_pleniere_pf' => 'required'
             ],[
-                'date_debut_comite_pleniere.required' => 'Veuillez ajouter une date de debut.',
-                'date_fin_comite_pleniere.required' => 'Veuillez ajouter une date de fin.',
-                'commentaire_comite_pleniere.required' => 'Veuillez ajouter un commentaire.',
+                'date_debut_comite_pleniere_pf.required' => 'Veuillez ajouter une date de debut.',
+                'date_fin_comite_pleniere_pf.required' => 'Veuillez ajouter une date de fin.',
+                'commentaire_comite_pleniere_pf.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
             $input = $request->all();
             $dateanneeencours = Carbon::now()->format('Y');
-            $input['id_user_comite_pleniere'] = Auth::user()->id;
-            $input['code_comite_pleniere'] = 'CT' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
-            $input['code_pieces'] = 'PF';
+            $input['id_user_comite_pleniere_pf'] = Auth::user()->id;
+            $input['code_comite_pleniere_pf'] = 'CTPRF' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+            $input['code_pieces_pf'] = 'PRF';
 
-            ComitePleniere::create($input);
+            ComitePleniereProjetFormation::create($input);
 
-            $insertedId = ComitePleniere::latest()->first()->id_comite_pleniere;
+            $insertedId = ComitePleniereProjetFormation::latest()->first()->id_comite_pleniere_pf;
 
-            return redirect('comitepleniere/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            return redirect('ctprojetformation/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
 
         }
     }
@@ -97,8 +98,9 @@ class CtprojetformationController extends Controller
     public function edit($id)
     {
         $id =  Crypt::UrldeCrypt($id);
+        //dd($id);
 
-        $comitepleniere = ComitePleniere::find($id);
+        $comitepleniere = ComitePleniereProjetFormation::find($id);
 
         $comitepleniereparticipant = ComitePleniereParticipant::where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
 

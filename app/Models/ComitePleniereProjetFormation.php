@@ -34,7 +34,7 @@ class ComitePleniereProjetFormation extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id_comite_pleniere';
+    protected $primaryKey = 'id_comite_pleniere_pf';
 
     /**
      * The "type" of the auto-incrementing ID.
@@ -46,7 +46,7 @@ class ComitePleniereProjetFormation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_comite_pleniere_pf', 'date_debut_comite_pleniere_pf', 'date_fin_comite_pleniere_pf', 'commentaire_comite_pleniere_pf', 'code_comite_pleniere_pf', 'code_pieces_pf', 'flag_comite_pleniere_pf', 'flag_statut_comite_pleniere_pf', 'created_at', 'updated_at'];
+    protected $fillable = ['id_comite_pleniere_pf','id_user_comite_pleniere_pf', 'date_debut_comite_pleniere_pf', 'date_fin_comite_pleniere_pf', 'commentaire_comite_pleniere_pf', 'code_comite_pleniere_pf', 'code_pieces_pf', 'flag_comite_pleniere_pf', 'flag_statut_comite_pleniere_pf', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
