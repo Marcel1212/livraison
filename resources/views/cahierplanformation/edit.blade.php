@@ -288,7 +288,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </form>
 
                                     <?php }else{ ?>
-                                        <a onclick="NewWindow('{{ route($lien.".etat",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plan_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                        <a onclick="NewWindow('{{ route($lien.".etat",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plan_formation)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                     <?php } ?>
                                 </div>
                                 <table class="table table-bordered table-striped table-hover table-sm"

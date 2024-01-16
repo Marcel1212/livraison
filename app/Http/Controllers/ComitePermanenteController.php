@@ -49,6 +49,8 @@ class ComitePermanenteController extends Controller
     {
         $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
         $planformations = PlanFormation::where([['flag_plan_formation_valider_par_processus','=',true],
+                                                ['flag_plan_formation_valider_cahier','=',true],
+                                                ['flag_plan_formation_valider_cahier_soumis_comite_permanente','=',true],
                                                 ['flag_fiche_agrement','=',false],
                                                 ['cout_total_accorder_plan_formation','>=',$typecomiteinfos->valeur_min_type_comite],
                                                 ['cout_total_accorder_plan_formation','<=',$typecomiteinfos->valeur_max_type_comite]])
@@ -140,6 +142,8 @@ class ComitePermanenteController extends Controller
         $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
 
         $planformations = PlanFormation::where([['flag_plan_formation_valider_par_processus','=',true],
+                                                ['flag_plan_formation_valider_cahier','=',true],
+                                                ['flag_plan_formation_valider_cahier_soumis_comite_permanente','=',true],
                                                 ['flag_fiche_agrement','=',false],
                                                 ['cout_total_accorder_plan_formation','>=',$typecomiteinfos->valeur_min_type_comite],
                                                 ['cout_total_accorder_plan_formation','<=',$typecomiteinfos->valeur_max_type_comite]])

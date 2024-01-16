@@ -24,7 +24,10 @@ use App\Models\ButFormation;
 use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
 use App\Helpers\ConseillerParAgence;
+use App\Helpers\EtatCahierPlanDeFormation;
 use App\Models\ActionFormationPlan;
+use App\Models\User;
+Use DB;
 
 class CahierplanformationController extends Controller
 {
@@ -192,7 +195,7 @@ class CahierplanformationController extends Controller
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
 
-        return view('comitepermanente.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('cahierplanformation.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     public function update(Request $request, $id, $id1)
@@ -287,5 +290,22 @@ class CahierplanformationController extends Controller
 
     public function etat($id){
 
+        $id =  Crypt::UrldeCrypt($id);
+
+        $cahier = CahierPlanFormation::find($id);
+
+       $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
+
+       $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
+
+       $etatplanf = EtatCahierPlanDeFormation::get_liste_etat_plan_cahier_plan_f($id);
+
+       $etatbutformation = EtatCahierPlanDeFormation::get_liste_etat_but_formation_cahier_plan_f($id);
+
+       $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
+
+       //dd($etatsecteuractivite);
+
+        return view('cahierplanformation.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
     }
 }
