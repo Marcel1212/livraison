@@ -200,7 +200,8 @@ class CtplanformationController extends Controller
         $id =  Crypt::UrldeCrypt($id);
 
         $NumAgce = Auth::user()->num_agce;
-        $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
+        $Iddepartement = Auth::user()->id_departement;
+        $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce,$Iddepartement);
         $nombredeconseilleragence = count($conseilleragence);
 
         if ($request->isMethod('put')) {
