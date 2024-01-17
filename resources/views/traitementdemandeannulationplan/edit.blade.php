@@ -60,19 +60,47 @@
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-planformation"
-                          aria-controls="navs-top-planformation"
-                          aria-selected="true">
-                          Plan de formation
-                        </button>
-                      </li>
-                      <li class="nav-item">
+                        @isset($demande_annulation->id_action_plan)
+                            <li class="nav-item">
+                                <button
+                                    type="button"
+                                    class="nav-link"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-actionformation"
+                                    aria-controls="navs-top-actionformation"
+                                    aria-selected="true">
+                                    Action de formation
+                                </button>
+                            </li>
+                                <li class="nav-item">
+                                    <button
+                                        type="button"
+                                        class="nav-link active"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#navs-top-demande-annulation-action"
+                                        aria-controls="navs-top-demande-annulation-action"
+                                        aria-selected="false">
+                                        Traitement de la demande d'annulation de l'action
+                                    </button>
+                                </li>
+                            @endisset
+                            @isset($demande_annulation->id_plan_formation)
+                                <li class="nav-item">
+                                    <button
+                                        type="button"
+                                        class="nav-link"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#navs-top-planformation"
+                                        aria-controls="navs-top-planformation"
+                                        aria-selected="true">
+                                        Plan de formation
+                                    </button>
+                                </li>
+
+                            <li class="nav-item">
                         <button
                           type="button"
                           class="nav-link"
@@ -84,7 +112,9 @@
                           Effectif de l'entreprise
                         </button>
                       </li>
-                      <li class="nav-item">
+
+
+                            <li class="nav-item">
                         <button
                           type="button"
                           class="nav-link"
@@ -96,7 +126,7 @@
                           Historiques des actions du plan de formation
                         </button>
                       </li>
-                      <li class="nav-item">
+                            <li class="nav-item">
                         <button
                           type="button"
                           class="nav-link"
@@ -108,7 +138,7 @@
                           Actions du plan de formation
                         </button>
                       </li>
-                        <li class="nav-item">
+                            <li class="nav-item">
                             <button
                                 type="button"
                                 class="nav-link active"
@@ -117,12 +147,277 @@
                                 data-bs-target="#navs-top-demande-annulation"
                                 aria-controls="navs-top-demande-annulation"
                                 aria-selected="false">
-                                Traitement de la demande d'annulation
+                                Traitement de la demande d'annulation plan
                             </button>
                         </li>
+                            @endisset
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+                        @isset($demande_annulation->id_action_plan)
+                            <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-12 col-md-9">
+                                        <label class="form-label" for="masse_salariale">Entreprise</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->raison_social_entreprises}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="masse_salariale">Masse salariale</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->masse_salariale}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-12">
+                                        <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="part_entreprise">Part entreprise</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->part_entreprise}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->structure_etablissement_action_}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->nombre_stagiaire_action_formati}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->nombre_groupe_action_formation_}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->nombre_heure_action_formation_p}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" >Coût de la formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->cout_action_formation_plan}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" >Type de formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->type_formation}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="but_formation">But de la formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->but_formation}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->date_debut_fiche_agrement}}"
+                                            disabled="disabled"/>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->date_fin_fiche_agrement}}"
+                                            disabled="disabled"/>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
+                                        <input
+                                            type="text"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->lieu_formation_fiche_agrement}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrément</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->cadre_fiche_demande_agrement}}"
+                                            disabled="disabled"/>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->agent_maitrise_fiche_demande_ag}}"
+                                            disabled="disabled"/>
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->employe_fiche_demande_agrement}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
+                                        <input
+                                            type="number"
+                                            class="form-control form-control-sm"
+                                            value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
+                                            disabled="disabled" />
+                                    </div>
+                                    <div class="col-12 col-md-3">
+                                        <div class="mb-1">
+                                            <label>Facture proforma </label> <br>
+                                            <span class="badge bg-secondary"><a target="_blank"
+                                                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show active" id="navs-top-demande-annulation-action" role="tabpanel">
+                                        <div align="right">
+                                            <button type="button"
+                                                    class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#modalToggle">
+                                                Voir le parcours de validation
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-12 mb-3">
+                                                            <div class="mb-1">
+                                                                <label> Motif de la demande d'annulation du plan</label>
+                                                                <select  class="select2 form-select-sm input-group" disabled name="id_motif_demande_annulation_plan" id="id_motif_demande_annulation_plan" >
+                                                                    @foreach($action_motifs as $motif)
+                                                                        <option value="{{$motif->id_motif}}" @if($motif->id_motif==$motif->id_motif_demande_annulation_plan) selected @endif>{{$motif->libelle_motif}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                {{--                                                  <input class="form -control" type="text"--}}
+                                                                {{--                                                         disabled @isset($demande_annulation->motif_demande_annulation_plan)value="{{$demande_annulation->motif_demande_annulation_plan}}" @endisset />--}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12 mt-3">
+                                                            <label class="form-label">Pièce justificatif
+                                                                de la demande d'annulation</label>
+                                                            <br>
+                                                            @isset($demande_annulation->piece_demande_annulation_plan)
+                                                                <span class="badge bg-secondary"> <a target="_blank"
+                                                                                                     onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                          Voir la pièce  </a></span>
+                                                            @endisset
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-1">
+                                                        <label> Commentaire de la demande d'annulation du plan</label>
+                                                        <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="evaluation_competences_odf"
+                                                                  style="height: 121px;" disabled>@isset($demande_annulation->commentaire_demande_annulation_plan) {{$demande_annulation->commentaire_demande_annulation_plan}} @endisset</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h5 class="card-title mt-3" align="center"> Traitement de la demande d'annulation</h5>
+                                        </div>
+                                        <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_annulation->id_demande_annulation_plan)) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
+                                            <div class="row">
+                                                <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id2) }}"/>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="mb-1">
+                                                        <label>Commentaire <strong style="color:red;">(obligatoire si rejeté)*</strong>: </label>
+                                                        @if($parcoursexist->count()<1)
+                                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6"></textarea>
+                                                        @else
+                                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-12" align="right">
+                                                    <hr>
+                                                        <?php if(count($parcoursexist)<1){?>
+                                                    <button type="submit" name="action" value="Valider"
+                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                                        Valider
+                                                    </button>
+                                                    <button type="submit" name="action" value="Rejeter"
+                                                            class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                        Rejeter
+                                                    </button>
+                                                    <?php } ?>
+                                                    <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                       href="/{{$lien }}">
+                                                        Retour</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                        @endisset
+
+
+                    @isset($demande_annulation->id_plan_formation)
+
+                        <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
 
                       <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
                             @csrf
@@ -319,6 +614,8 @@
                         </form>
 
                       </div>
+                        @endisset
+                            @isset($demande_annulation->id_plan_formation)
 
                       <div class="tab-pane fade" id="navs-top-categorieplan" role="tabpanel">
 
@@ -350,6 +647,8 @@
                         </table>
                       </div>
 
+                            @endisset
+                            @isset($demande_annulation->id_plan_formation)
 
                      <div class="tab-pane fade" id="navs-top-histortiqueactionformation" role="tabpanel">
 
@@ -380,6 +679,8 @@
                             </tbody>
                         </table>
                       </div>
+                            @endisset
+                            @isset($demande_annulation->id_plan_formation)
 
                       <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
 
@@ -431,7 +732,9 @@
                             </tbody>
                         </table>
                       </div>
-                      <div class="tab-pane fade show active" id="navs-top-demande-annulation" role="tabpanel">
+                            @endisset
+                            @isset($demande_annulation->id_plan_formation)
+                            <div class="tab-pane fade show active" id="navs-top-demande-annulation" role="tabpanel">
                           <div align="right">
                               <button type="button"
                                       class="btn rounded-pill btn-outline-primary waves-effect waves-light"
@@ -517,8 +820,10 @@
                               </div>
                           </form>
                       </div>
-                        <div class="col-md-4 col-12">
-                            <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
+                            @endisset
+
+                            <div class="col-md-4 col-12">
+                                <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                  aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
                                  aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
