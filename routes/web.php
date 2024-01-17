@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\DemandeAnnulationActionPlanController;
+use App\Http\Controllers\MotDePasseOublieController;
+use App\Http\Controllers\SelectionOperateurProjetEtudeController;
+use App\Http\Controllers\TraitementSelectionOperateurProjetEtudeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
@@ -15,44 +19,56 @@ Route::get('/secteuractivilitelistes/{id}', [App\Http\Controllers\EnrolementCont
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
 Route::match(['post'], '/test', [App\Http\Controllers\PlanFormationController::class, 'test'])->name('test');
 Route::get('/deconnexion', [App\Http\Controllers\HomeController::class, 'deconnexion']);
+
+Route::get('/motdepasseoublie', [MotDePasseOublieController::class, 'index'])->name('motdepasseoublie');
+Route::post('/motdepasseoublie', [MotDePasseOublieController::class, 'verify'])->name('motdepasseoublie.verify');
+
+Route::get('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 'otp'])->name('otp');
+Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 'verifyOtpUpdatePassword'])->name('otp.verification');
+
+
+//
+//Route::get('/reset-password', function(){
+//    return view('motdepasseoublie.index');
+//});
 Route::group(['middleware' => ['auth']], function () {
     //Route::group(['middleware' => ['can:role-index']], function () {
-        Route::resources([
-            'roles' => App\Http\Controllers\RoleController::class,
-            'users' => App\Http\Controllers\UserController::class,
-            'permissions' => App\Http\Controllers\PermissionController::class,
-            'menus' => App\Http\Controllers\MenuController::class,
-            'sousmenus' => App\Http\Controllers\SousmenuController::class,
-            'agence' => App\Http\Controllers\AgenceController::class,
-            'direction' => App\Http\Controllers\DirectionController::class,
-            'departement' => App\Http\Controllers\DepartementController::class,
-            'service' => App\Http\Controllers\ServiceController::class,
-            'activites' => App\Http\Controllers\ActivitesController::class,
-            'centreimpot' => App\Http\Controllers\CentreImpotController::class,
-            'localite' => App\Http\Controllers\LocaliteController::class,
-            'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
-            'projetformation' => App\Http\Controllers\ProjetFormationController::class,
-            'enrolement' => App\Http\Controllers\EnrolementController::class,
-            'statutoperations' => App\Http\Controllers\StatutOperationController::class,
-            'motifs' => App\Http\Controllers\MotifController::class,
-            //'planformation' => App\Http\Controllers\PlanFormationController::class,
-            'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
-            'butformation' => App\Http\Controllers\ButFormationController::class,
-            'typeformation' => App\Http\Controllers\TypeFormationController::class,
-            'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
-            'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
-            'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
-            'ctprojetetude' => App\Http\Controllers\CtprojetetudeController::class,
-            'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
-            'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
-            'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
-            'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
-            'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
-            'typecomites' => App\Http\Controllers\TypeComiteController::class,
+    Route::resources([
+        'roles' => App\Http\Controllers\RoleController::class,
+        'users' => App\Http\Controllers\UserController::class,
+        'permissions' => App\Http\Controllers\PermissionController::class,
+        'menus' => App\Http\Controllers\MenuController::class,
+        'sousmenus' => App\Http\Controllers\SousmenuController::class,
+        'agence' => App\Http\Controllers\AgenceController::class,
+        'direction' => App\Http\Controllers\DirectionController::class,
+        'departement' => App\Http\Controllers\DepartementController::class,
+        'service' => App\Http\Controllers\ServiceController::class,
+        'activites' => App\Http\Controllers\ActivitesController::class,
+        'centreimpot' => App\Http\Controllers\CentreImpotController::class,
+        'localite' => App\Http\Controllers\LocaliteController::class,
+        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
+        'projetformation' => App\Http\Controllers\ProjetFormationController::class,
+        'enrolement' => App\Http\Controllers\EnrolementController::class,
+        'statutoperations' => App\Http\Controllers\StatutOperationController::class,
+        'motifs' => App\Http\Controllers\MotifController::class,
+        //'planformation' => App\Http\Controllers\PlanFormationController::class,
+        'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
+        'butformation' => App\Http\Controllers\ButFormationController::class,
+        'typeformation' => App\Http\Controllers\TypeFormationController::class,
+        'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
+        'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
+        'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
+        'ctprojetetude' => App\Http\Controllers\CtprojetetudeController::class,
+        'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
+        'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+        'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
+        'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
+        'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
+        'typecomites' => App\Http\Controllers\TypeComiteController::class,
 //            'agreement' => App\Http\Controllers\AgreementController::class,
-            //'comitegestion' => App\Http\Controllers\ComiteGestionController::class,
-            //'comitepermanente' => App\Http\Controllers\ComitePermanenteController::class,
-        ]);
+        //'comitegestion' => App\Http\Controllers\ComiteGestionController::class,
+        //'comitepermanente' => App\Http\Controllers\ComitePermanenteController::class,
+    ]);
     //});
 
 //    Route::get('agreement/{id}/cancel', [App\Http\Controllers\AgreementController::class, 'cancel'])->name('agreement.cancel');
@@ -65,22 +81,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agreement/{id_plan_de_formation}/{id_etape}/edit', [AgreementController::class, 'edit'])->name('agreement.edit');
     Route::get('agreement/{id_plan_de_formation}/show', [AgreementController::class, 'show'])->name('agreement.show');
 
+
+
+    Route::get('agreement/{id_plan}/{id_action}/{id_etape}/editaction', [AgreementController::class, 'editaction'])->name('agreement.editaction');
+
+
+//    /{id_plan_de_formation}/{id_etape}/cancel
+
     //Demande Annulation Agrément
     Route::post('agreement/{id_plan_de_formation}/{id_etape}/cancel', [AgreementController::class, 'cancel'])->name('agreement.cancel');
 
-
-
-
-
 //    Route::put('agreement/{id_demande}/{id_plan}/cancel/update', [App\Http\Controllers\AgreementController::class, 'cancelUpdate'])->name('agreement.cancel.update');
-
-
-
 
     Route::get('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitution'])->name('agreement.substitution');
     Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsStore'])->name('agreement.substitution');
     Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
+
+
 
 
     //traitement
@@ -93,6 +111,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('traitementdemandeannulationplan', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'index'])->name('traitementdemandeannulationplan.index');
     Route::get('traitementdemandeannulationplan/{id}/{id2}/edit', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'edit'])->name('traitementdemandeannulationplan.edit');
     Route::put('traitementdemandeannulationplan/{id}/update', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'update'])->name('traitementdemandeannulationplan.update');
+
+
+    //Sélection opérateur pour projet d'étude
+    Route::get('selectionoperateurprojetetude', [SelectionOperateurProjetEtudeController::class, 'index'])->name('selectionoperateurprojetetude.index');
+    Route::get('selectionoperateurprojetetude/{id_projet_etude}/edit', [SelectionOperateurProjetEtudeController::class, 'edit'])->name('selectionoperateurprojetetude.edit');
+    Route::post('selectionoperateurprojetetude/{id_projet_etude}/update', [SelectionOperateurProjetEtudeController::class, 'update'])->name('selectionoperateurprojetetude.update');
+    Route::put('selectionoperateurprojetetude/{id_projet_etude}/mark', [SelectionOperateurProjetEtudeController::class, 'mark'])->name('selectionoperateurprojetetude.mark');
+
+    //
+    Route::get('traitementselectionoperateurprojetetude', [TraitementSelectionOperateurProjetEtudeController::class, 'index'])->name('traitementselectionoperateurprojetetude.index');
+    Route::get('traitementselectionoperateurprojetetude/{id_projet_etude}/{id_combi_proc}/edit', [TraitementSelectionOperateurProjetEtudeController::class, 'edit'])->name('traitementselectionoperateurprojetetude.edit');
+    Route::put('traitementselectionoperateurprojetetude/{id_projet_etude}/update', [TraitementSelectionOperateurProjetEtudeController::class, 'update'])->name('traitementselectionoperateurprojetetude.update');
 
 
 
@@ -159,6 +189,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['get', 'post'], '/deleteactiviteentreprise/{id}', [App\Http\Controllers\HomeController::class, 'deleteactiviteentreprise'])->name('deleteactiviteentreprise');
 
 
+
     Route::group(['middleware' => ['can:role-index']], function () {
         Route::match(['get', 'post'], '/parametresysteme', [App\Http\Controllers\ParametreController::class, 'parametresysteme'])->name('parametresysteme');
         Route::match(['get', 'post'], '/creerparametresysteme', [App\Http\Controllers\ParametreController::class, 'creerparametresysteme'])->name('creerparametresysteme');
@@ -176,6 +207,7 @@ Route::group(['middleware' => ['auth']], function () {
     /*************************** demandes ***************************/
     Route::match(['get'], '/demandencours', [App\Http\Controllers\DemandeController::class, 'demandencours'])->name('demandencours');
     Route::match(['get'], '/demanderejetes', [App\Http\Controllers\DemandeController::class, 'demanderejetes'])->name('demanderejetes');
+
 
 
 });

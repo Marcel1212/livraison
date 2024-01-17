@@ -88,4 +88,9 @@ class ActionFormationPlan extends Model
     {
         return $this->belongsTo('App\Models\Motif', 'motif_non_financement_action_formation', 'id_motif');
     }
+//id_motif_demande_annulation_action_plan
+    public function demandeAnnulation()
+    {
+        return $this->belongsTo(DemandeAnnulationPlan::class,'id_action_formation_plan','id_action_plan');
+    }
 }

@@ -23,7 +23,7 @@ $couleur = Menu::get_info_couleur();
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
 
     <?php if (isset($logo->mot_cle)){ ?>
-    <title><?php echo @$logo->mot_cle; ?> | Connexion</title>
+    <title><?php echo @$logo->mot_cle; ?> | Réinitialisation du mot de passe</title>
     <?php } ?>
 
     <meta name="description" content=""/>
@@ -67,7 +67,7 @@ $couleur = Menu::get_info_couleur();
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+{{--    <script src='https://www.google.com/recaptcha/api.js'></script>--}}
 </head>
 
 <body>
@@ -103,19 +103,11 @@ $couleur = Menu::get_info_couleur();
                     </a>
                 </div>
                 <!-- /Logo -->
-                <h3 class="mb-1">Bienvenue !</h3>
-                <p class="mb-4">Connectez-vous à votre compte</p>
-                <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST"
+                <h3 class="mb-1">Mot de passe oublié ?</h3>
+                <p class="mb-4">Entrez votre e-mail et nous vous enverrons des instructions pour réinitialiser votre mot de passe</p>
+                <form id="formAuthentication" class="mb-3" action="{{ route('motdepasseoublie.verify') }}" method="POST"
                       autocomplete="off">
                     {{ csrf_field() }}
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                <b>Succès: </b> {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <div class="alert-body">
@@ -136,70 +128,30 @@ $couleur = Menu::get_info_couleur();
                         @endforeach
                     @endif
                     <div class="mb-3">
-                        <label for="username" class="form-label">Mon identifiant</label>
+                        <label for="email_mot_de_passe_oublie" class="form-label">E-mail</label>
                         <input
                             type="text"
                             class="form-control form-control-sm"
-                            id="username"
-                            name="username"
-                            placeholder="Mon identifiant"
+                            id="email_mot_de_passe_oublie"
+                            name="email_mot_de_passe_oublie"
+                            placeholder="Votre adresse e-mail"
                             autofocus/>
                     </div>
-                    <div class="mb-3 ">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label" for="password">Mon mot de passe</label>
-                            <a href="{{route('motdepasseoublie')}}">
-                                <small>Mot de passe oublié ?</small>
-                            </a>
-                        </div>
-                        <div class="input-group input-group-sm ">
-                            <input
-                                type="password"
-                                id="password"
-                                class="form-control form-control-sm"
-                                name="password"
-                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                            />
-                            <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
-                        </div>
-                    </div>
-                    <!--<div class="mb-3">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember-me" />
-                        <label class="form-check-label" for="remember-me"> Souvenez-vous de moi </label>
-                      </div>
-                    </div>-->
-                    <!--<div class="form-group mt-4 mb-4">
-                <div class="captcha">
-                    <span><?php //echo captcha_img(); ?></span>
-                    <button type="button" class="btn-label-secondary waves-effect" class="reload" id="reload">
-                    &#x21bb;
-                    </button>
-                </div>
-                </div>-->
 
-                    <!--<div class="form-group mb-4">
-                        <span></span>
-                        <label class="form-label">Saisir les caractères ci-dessus</label>
-                        <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
-                    </div>-->
-
-{{--                    <div class="form-group mb-4">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>--}}
-{{--                            @if ($errors->has('g-recaptcha-response'))--}}
-{{--                                <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>--}}
-{{--                            @endif--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-                    <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
+{{--                                        <div class="form-group mb-4">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>--}}
+{{--                                                @if ($errors->has('g-recaptcha-response'))--}}
+{{--                                                    <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+                    <button type="submit" class="btn btn-primary d-grid w-100">Valider</button>
                 </form>
 
                 <p class="text-center">
-                    <span>Vous êtes nouveau sur la plateforme ?</span> <br>
-                    <a href="{{route('enrolements')}}">
-                        <span>Enrôlez vous ici</span>
+                    <a href="{{route('login')}}">
+                        <i class="ti ti-chevron-left scaleX-n1-rtl"></i><span>Retour à la page de connexion</span>
                     </a>
                 </p>
 

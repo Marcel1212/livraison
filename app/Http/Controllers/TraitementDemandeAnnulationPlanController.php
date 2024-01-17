@@ -36,14 +36,23 @@ class TraitementDemandeAnnulationPlanController extends Controller
             ->where('id_roles', '=', $id_roles)
             ->get();
         $resultat = null;
+
         if (isset($resultat_etape)) {
             $resultat = [];
             foreach ($resultat_etape as $key => $r) {
                 $resultat[$key] = DB::table('vue_processus_liste as v')
                     ->join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
-                    ->join('demande_annulation_plan','p.id_demande','demande_annulation_plan.id_demande_annulation_plan')
-                    ->join('plan_formation','plan_formation.id_plan_de_formation','demande_annulation_plan.id_plan_formation')
-                    ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
+//                    ->join('demande_annulation_plan','p.id_demande','=','demande_annulation_plan.id_demande_annulation_plan')
+                    ->leftjoin('demande_annulation_plan', function($join){
+                        $join->on('demande_annulation_plan.id_demande_annulation_plan','=','p.id_demande'); // i want to join the users table with either of these columns
+                        $join->orOn('demande_annulation_plan.id_action_plan','=','p.id_demande');
+                    })
+                    ->leftjoin('action_formation_plan','action_formation_plan.id_action_formation_plan','demande_annulation_plan.id_action_plan')
+                    ->leftjoin('plan_formation', function($join){
+                        $join->on('plan_formation.id_plan_de_formation','=','demande_annulation_plan.id_plan_formation'); // i want to join the users table with either of these columns
+                        $join->orOn('plan_formation.id_plan_de_formation','=','action_formation_plan.id_plan_de_formation');
+                    })
+                    ->leftjoin('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
                     ->join('users','demande_annulation_plan.id_user','users.id')
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
@@ -51,11 +60,8 @@ class TraitementDemandeAnnulationPlanController extends Controller
                         ['v.code', '=', 'APF'],
                         ['p.id_roles', '=', $id_roles]
                     ])->get();
+
             }
-
-//            dd($resultat_etape);
-
-
         }
         return view('traitementdemandeannulationplan.index',compact('resultat'));
     }
@@ -64,14 +70,29 @@ class TraitementDemandeAnnulationPlanController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
         $id2 =  Crypt::UrldeCrypt($id2);
-
+        $infosactionplanformation ="";
         if(isset($id)){
             $demande_annulation = DemandeAnnulationPlan::find($id);
             if(isset($demande_annulation)){
-                $planformation = PlanFormation::find($demande_annulation->id_plan_formation);
-            }
+                if(isset($demande_annulation->id_action_plan)){
+                    $actionplanformation = ActionFormationPlan::find($demande_annulation->id_action_plan);
+                    $planformation = PlanFormation::find($actionplanformation->id_plan_de_formation);
 
+                    $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+                        ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+                        ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+                        ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+                        ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+                        ->where([['action_formation_plan.id_action_formation_plan','=',$actionplanformation->id_action_formation_plan]])->first();
+                }
+
+                if(isset($demande_annulation->id_plan_formation)){
+                    $planformation = PlanFormation::find($demande_annulation->id_plan_formation);
+                }
+            }
         }
+
 
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
@@ -111,6 +132,7 @@ class TraitementDemandeAnnulationPlanController extends Controller
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$demande_annulation->id_plan_formation]])->get();
 
         $motifs = Motif::where('code_motif','APF')->where('flag_actif_motif',true)->get();
+        $action_motifs = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
 
         $motif = "<option value=''> Selectionnez un motif </option>";
         foreach ($motifs as $comp) {
@@ -143,7 +165,6 @@ class TraitementDemandeAnnulationPlanController extends Controller
             ->orderBy('v.priorite_combi_proc', 'ASC')
             ->get();
 
-
         $idUser=Auth::user()->id;
         $idAgceCon=Auth::user()->num_agce;
         $Idroles = Menu::get_id_profil($idUser);
@@ -159,7 +180,7 @@ class TraitementDemandeAnnulationPlanController extends Controller
 
 
 
-        return view('traitementdemandeannulationplan.edit', compact('motifs','demande_annulation','planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist'));
+        return view('traitementdemandeannulationplan.edit', compact('action_motifs','infosactionplanformation','motifs','demande_annulation','planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist'));
 
     }
 
@@ -167,13 +188,23 @@ class TraitementDemandeAnnulationPlanController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
 
-//        $planformation = PlanFormation::find($id);
-
         if(isset($id)){
             $demande_annulation = DemandeAnnulationPlan::find($id);
-            if(isset($demande_annulation)){
+            if(isset($demande_annulation->id_action_plan)){
+                $actionplanformation = ActionFormationPlan::find($demande_annulation->id_action_plan);
+                $planformation = PlanFormation::find($actionplanformation->id_plan_de_formation);
+
+                $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+                    ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+                    ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+                    ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+                    ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+                    ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+                    ->where([['action_formation_plan.id_action_formation_plan','=',$actionplanformation->id_action_formation_plan]])->first();
+            }
+
+            if(isset($demande_annulation->id_plan_formation)){
                 $planformation = PlanFormation::find($demande_annulation->id_plan_formation);
-                $agreement = FicheAgrement::where('id_demande',$planformation->id_plan_de_formation)->first();
             }
 
         }
@@ -191,18 +222,17 @@ class TraitementDemandeAnnulationPlanController extends Controller
                 $idProComb = $infosprocessus->id_combi_proc;
                 $idProcessus = $infosprocessus->id_processus;
 
-                Parcours::create(
-                    [
-                        'id_processus' => $idProcessus,
-                        'id_user' => $idUser,
-                        'id_piece' => $id,
-                        'id_roles' => $Idroles,
-                        'num_agce' => $idAgceCon,
-                        'comment_parcours' => $request->input('comment_parcours'),
-                        'is_valide' => true,
-                        'date_valide' => $dateNow,
-                        'id_combi_proc' => $idProComb,
-                    ]);
+                Parcours::create([
+                    'id_processus' => $idProcessus,
+                    'id_user' => $idUser,
+                    'id_piece' => $id,
+                    'id_roles' => $Idroles,
+                    'num_agce' => $idAgceCon,
+                    'comment_parcours' => $request->input('comment_parcours'),
+                    'is_valide' => true,
+                    'date_valide' => $dateNow,
+                    'id_combi_proc' => $idProComb,
+                ]);
 
                 $ResultCptVal = DB::table('combinaison_processus as v')
                     ->select(DB::raw('max(v.priorite_combi_proc) as priorite_combi_proc'), 'a.priorite_max')
@@ -219,24 +249,32 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     $demande_annulation->date_validation_demande_annulation_plan = now();
                     $demande_annulation->update();
 
-                    $planformation->flag_annulation_plan=true;
-                    $planformation->update();
 
-                }
 
-                $infoentreprise = Entreprises::find($planformation->id_entreprises);
-                $logo = Menu::get_logo();
+                    $infoentreprise = Entreprises::find($planformation->id_entreprises);
+                    $logo = Menu::get_logo();
 
-                //Envoie notification au charger de plan de formation en cas de validation
-                if (isset($planformation->email_professionnel_charge_plan_formation)) {
-                    $sujet = "Demande d'annulation du plan de formation (code:"  .
-                        @$planformation->code_plan_formation.") sur e-FDFP";
+                    //Envoie notification au charger de plan de formation en cas de validation
+                    if (isset($planformation->email_professionnel_charge_plan_formation)) {
 
-                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                        if(isset($demande_annulation->id_plan_formation)){
+                            $actionplanformations = ActionFormationPlan::where('id_action_formation_plan',$demande_annulation->id_plan_formation);
+                            foreach ($actionplanformations as $actionplanformation){
+                                $actionplanformation_update = ActionFormationPlan::find($actionplanformation->id);
+                                $actionplanformation_update->flag_annulation_action=true;
+                                $actionplanformation_update->update();
+                            }
+                            $planformation->flag_annulation_plan=true;
+                            $planformation->update();
+
+                            $sujet = "Demande d'annulation du plan de formation (code:"  .
+                                @$planformation->code_plan_formation.") sur e-FDFP";
+
+                            $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                            $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
                                     <br><br>Nous sommes ravis de vous informer que votre demande d'annulation du plan de formation (code: "
-                        .@$planformation->code_plan_formation.
-                        ") sur e-FDFP a été validé avec succès.
+                                .@$planformation->code_plan_formation.
+                                ") sur e-FDFP a été validé avec succès.
                                      <br>
                                      <br>
                                         Cordialement,
@@ -248,7 +286,45 @@ class TraitementDemandeAnnulationPlanController extends Controller
                                     -----
                                     ";
 //                    $planformation->email_professionnel_charge_plan_formation
-                    $messageMailEnvoi = Email::get_envoimailTemplate("ncho.hermann.dorgeles@gmail.com", $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                            $messageMailEnvoi = Email::get_envoimailTemplate("ncho.hermann.dorgeles@gmail.com", $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                        }
+                        if(isset($demande_annulation->id_action_plan)){
+                                $actionplanformation_update = ActionFormationPlan::find($demande_annulation->id_action_plan);
+                                $actionplanformation_update->flag_annulation_action=true;
+                                $actionplanformation_update->update();
+
+                            $actionplanformations = ActionFormationPlan::where('id_action_formation_plan',$demande_annulation->id_plan_formation)
+                            ->where('flag_annulation_action','<>',true)->get();
+                            if($actionplanformations->count()==0){
+                                $planformation->flag_annulation_plan=true;
+                                $planformation->update();
+                            }
+
+                            $sujet = "Demande d'annulation de l'action de formation (intitulé:"  .
+                                @$actionplanformation->intitule_action_formation_plan.") sur e-FDFP";
+
+                            $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                            $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'annulation du plan de formation (intitulé: "
+                                .@$actionplanformation->intitule_action_formation_plan.
+                                ") sur e-FDFP a été validé avec succès.
+                                     <br>
+                                     <br>
+                                        Cordialement,
+                                        <br>
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+//                    $planformation->email_professionnel_charge_plan_formation
+                            $messageMailEnvoi = Email::get_envoimailTemplate("ncho.hermann.dorgeles@gmail.com", $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                        }
+                    }
+
                 }
 
                 return redirect('traitementdemandeannulationplan/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/edit')->with('success', 'Succes : Operation validée avec succes ');

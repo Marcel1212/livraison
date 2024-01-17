@@ -23,7 +23,7 @@ $couleur = Menu::get_info_couleur();
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
 
     <?php if (isset($logo->mot_cle)){ ?>
-    <title><?php echo @$logo->mot_cle; ?> | Connexion</title>
+    <title><?php echo @$logo->mot_cle; ?> | Réinitialisation du mot de passe</title>
     <?php } ?>
 
     <meta name="description" content=""/>
@@ -67,7 +67,7 @@ $couleur = Menu::get_info_couleur();
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+{{--    <script src='https://www.google.com/recaptcha/api.js'></script>--}}
 </head>
 
 <body>
@@ -103,19 +103,13 @@ $couleur = Menu::get_info_couleur();
                     </a>
                 </div>
                 <!-- /Logo -->
-                <h3 class="mb-1">Bienvenue !</h3>
-                <p class="mb-4">Connectez-vous à votre compte</p>
-                <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST"
+                <h3 class="mb-1">Vérification code </h3>
+                <p class="mb-4"> Nous avons envoyé un code de vérification sur votre adresse e-mail.
+                    Entrez le code envoyé par mail dans le champ ci-dessous.</p>
+                <form id="twoStepsForm" class="mb-3" action="{{ route('otp.verification',['email'=>\App\Helpers\Crypt::UrlCrypt($email)]) }}" method="POST"
                       autocomplete="off">
                     {{ csrf_field() }}
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                <b>Succès: </b> {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+
                     @if ($message = Session::get('error'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <div class="alert-body">
@@ -135,71 +129,33 @@ $couleur = Menu::get_info_couleur();
                             </div>
                         @endforeach
                     @endif
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Mon identifiant</label>
-                        <input
-                            type="text"
-                            class="form-control form-control-sm"
-                            id="username"
-                            name="username"
-                            placeholder="Mon identifiant"
-                            autofocus/>
-                    </div>
-                    <div class="mb-3 ">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label" for="password">Mon mot de passe</label>
-                            <a href="{{route('motdepasseoublie')}}">
-                                <small>Mot de passe oublié ?</small>
-                            </a>
+                    <div class="mb-3 fv-plugins-icon-container">
+                        <div class="auth-input-wrapper d-flex align-items-center justify-content-sm-between numeral-mask-wrapper">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1" autofocus="">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1">
+                            <input type="tel" class="form-control auth-input h-px-50 text-center numeral-mask mx-1 my-2" maxlength="1">
                         </div>
-                        <div class="input-group input-group-sm ">
-                            <input
-                                type="password"
-                                id="password"
-                                class="form-control form-control-sm"
-                                name="password"
-                                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                            />
-                            <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
-                        </div>
-                    </div>
-                    <!--<div class="mb-3">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember-me" />
-                        <label class="form-check-label" for="remember-me"> Souvenez-vous de moi </label>
-                      </div>
-                    </div>-->
-                    <!--<div class="form-group mt-4 mb-4">
-                <div class="captcha">
-                    <span><?php //echo captcha_img(); ?></span>
-                    <button type="button" class="btn-label-secondary waves-effect" class="reload" id="reload">
-                    &#x21bb;
-                    </button>
-                </div>
-                </div>-->
+                        <!-- Create a hidden field which is combined by 3 fields above -->
+                        <input type="hidden" name="otp" value="">
+                        <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
 
-                    <!--<div class="form-group mb-4">
-                        <span></span>
-                        <label class="form-label">Saisir les caractères ci-dessus</label>
-                        <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
-                    </div>-->
-
-{{--                    <div class="form-group mb-4">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>--}}
-{{--                            @if ($errors->has('g-recaptcha-response'))--}}
-{{--                                <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>--}}
-{{--                            @endif--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-                    <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
+{{--                                        <div class="form-group mb-4">--}}
+{{--                                            <div class="form-group">--}}
+{{--                                                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>--}}
+{{--                                                @if ($errors->has('g-recaptcha-response'))--}}
+{{--                                                    <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+                    <button type="submit" class="btn btn-primary d-grid w-100">Valider</button>
                 </form>
 
                 <p class="text-center">
-                    <span>Vous êtes nouveau sur la plateforme ?</span> <br>
-                    <a href="{{route('enrolements')}}">
-                        <span>Enrôlez vous ici</span>
+                    <a href="{{route('login')}}">
+                        <i class="ti ti-chevron-left scaleX-n1-rtl"></i><span>Retour à la page de connexion</span>
                     </a>
                 </p>
 
@@ -244,15 +200,18 @@ $couleur = Menu::get_info_couleur();
 <!-- endbuild -->
 
 <!-- Vendors JS -->
+<script src="{{asset('assets/vendor/libs/cleavejs/cleave.js')}}"></script>
+
 <script src="{{asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js')}}"></script>
-
 <!-- Main JS -->
 <script src="{{asset('assets/js/main.js')}}"></script>
 
 <!-- Page JS -->
 <script src="{{asset('assets/js/pages-auth.js')}}"></script>
+<script src="{{asset('assets/js/pages-auth-two-steps.js')}}"></script>
+
 
 <script type="text/javascript">
     $('#reload').click(function () {

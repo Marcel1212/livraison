@@ -84,12 +84,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
                                     <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Afficher"><img src='/assets/img/eye-solid.png'></a>
-                                    @can($lien.'-edit')
+
+{{--                                    @can($lien.'-edit')--}}
                                     <a href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(4)])}}"
                                        class="me-2"
                                        title="Modifier"><img
                                             src='/assets/img/editing.png'></a>
-                                    @endcan
+{{--                                    @endcan--}}
 {{--                                    @can($lien.'-cancel')--}}
 {{--                                        @if($anneexercice->date_fin_periode_exercice>now())--}}
                                             @if(!$planformation->flag_soumis_demande_annulation_plan)
