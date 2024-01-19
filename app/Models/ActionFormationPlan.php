@@ -24,10 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $facture_proforma_action_formati
  * @property float $cout_accorde_action_formation
  * @property string $commentaire_action_formation
+ * @property float $id_secteur_activite
  * @property FicheADemandeAgrement[] $ficheADemandeAgrements
  * @property PlanFormation $planFormation
  * @property EntrepriseHabilitation $entreprisehabilitation
  * @property Motif $motif
+ * @property SecteurActivite $secteurActivite
  */
 class ActionFormationPlan extends Model
 {
@@ -55,7 +57,7 @@ class ActionFormationPlan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente'];
+    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente','id_secteur_activite'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -87,6 +89,14 @@ class ActionFormationPlan extends Model
     public function motif()
     {
         return $this->belongsTo('App\Models\Motif', 'motif_non_financement_action_formation', 'id_motif');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function secteurActivite()
+    {
+        return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
     }
 //id_motif_demande_annulation_action_plan
     public function demandeAnnulation()

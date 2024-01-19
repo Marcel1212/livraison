@@ -78,7 +78,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Effectif de l'entreprise
+                          Nombre de salariés déclarés à la CNPS 
                         </button>
                       </li>
                       <li class="nav-item">
@@ -211,22 +211,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Secteur d'activité pour le plan <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select"
-                                                data-allow-clear="true" name="id_secteur_activite"
-                                                id="id_secteur_activite" required>
-                                            <option value="">-- Sélectionnez un secteur d'activité
-                                                --
-                                            </option>
-                                            @foreach ($secteuractivites as $activite)
-                                                <option
-                                                    value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Nom et prénoms du responsable formation <strong style="color:red;">*</strong> </label>
@@ -251,13 +236,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Nombre total de salariés <strong style="color:red;">*</strong></label>
-                                        <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
-                                               class="form-control form-control-sm" required="required">
-                                    </div>
-                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">

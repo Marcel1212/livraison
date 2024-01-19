@@ -24,6 +24,7 @@ use App\Helpers\Menu;
 use App\Helpers\Email;
 use App\Helpers\GenerateCode as Gencode;
 use App\Models\FicheAgrement;
+use App\Models\SecteurActivite;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -149,12 +150,13 @@ class TratementPlanFormationController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
                                         ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
 
         //dd($infosactionplanformations);
@@ -165,7 +167,26 @@ class TratementPlanFormationController extends Controller
 
         $nombreactionvalider = count($actionvalider);
 
-        return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations'));
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
+        $montantactionplanformation = 0;
+
+        foreach ($actionplanformations as $actionplanformation){
+            $montantactionplanformation += $actionplanformation->cout_action_formation_plan;
+        }
+
+        $montantactionplanformationacc = 0;
+
+        foreach ($actionplanformations as $actionplanformation){
+            $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
+        }
+
+                /******************** secteuractivites *********************************/
+                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                ->orderBy('libelle_secteur_activite')
+                ->get();
+
+        return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','secteuractivites','butformations'));
 
     }
 
@@ -289,6 +310,9 @@ class TratementPlanFormationController extends Controller
 
                     $input['flag_valide_action_formation_pl'] = true;
 
+                    $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+
+
                     $actionplanupdate = ActionFormationPlan::find($id);
                     $actionplanupdate->update($input);
 
@@ -300,6 +324,8 @@ class TratementPlanFormationController extends Controller
                 }else{
 
                     $input['flag_valide_action_formation_pl'] = true;
+
+                    $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
 
                     $actionplanupdate = ActionFormationPlan::find($id);
                     $actionplanupdate->update($input);

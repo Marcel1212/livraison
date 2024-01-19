@@ -78,7 +78,7 @@
                                                     <select class="select2 form-select" name="code_type_comite" id="code_type_comite" required>
                                                             <option value="">----Selectionnez un type de prestation----</option>
                                                             <option value="PF">Plan de formation</option>
-                                                            <option value="POF">Projet de formation</option>
+                                                            <option value="PRF">Projet de formation</option>
                                                             <option value="PE">Projet etude</option>
                                                     </select>
                                                 </div>

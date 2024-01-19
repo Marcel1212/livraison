@@ -9,9 +9,10 @@
 
     $idconnect = Auth::user()->id;
     $NumAgce = Auth::user()->num_agce;
+    $Iddepartement = Auth::user()->id_departement;
     use App\Helpers\ConseillerParAgence;
     use App\Helpers\NombreActionValiderParLeConseiller;
-    $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
+    $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce,$Iddepartement);
     $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
     $nombre = count($conseilleragence);
 ?>

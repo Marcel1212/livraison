@@ -95,18 +95,18 @@ class PlanFormationController extends Controller
                 'nom_prenoms_charge_plan_formati' => 'required',
                 'fonction_charge_plan_formation' => 'required',
                 'email_professionnel_charge_plan_formation' => 'required',
-                'nombre_salarie_plan_formation' => 'required',
+                //'nombre_salarie_plan_formation' => 'required',
                 'id_type_entreprise' => 'required',
                 'masse_salariale' => 'required',
-                'id_secteur_activite' => 'required',
+                //'id_secteur_activite' => 'required',
             ],[
                 'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                 'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                 'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
-                'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
+                //'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                 'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                 'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
-                'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
+                //'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
             ]);
 
 
@@ -217,6 +217,12 @@ class PlanFormationController extends Controller
 
         $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
 
+        $montantactionplanformation = 0;
+
+        foreach ($actionplanformations as $actionplanformation){
+            $montantactionplanformation += $actionplanformation->cout_action_formation_plan;
+        }
+
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
 
         /******************** secteuractivites *********************************/
@@ -224,7 +230,7 @@ class PlanFormationController extends Controller
             ->orderBy('libelle_secteur_activite')
             ->get();
 
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc'));
+        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation'));
 
     }
 
@@ -245,18 +251,18 @@ class PlanFormationController extends Controller
                     'nom_prenoms_charge_plan_formati' => 'required',
                     'fonction_charge_plan_formation' => 'required',
                     'email_professionnel_charge_plan_formation' => 'required',
-                    'nombre_salarie_plan_formation' => 'required',
+                    //'nombre_salarie_plan_formation' => 'required',
                     'id_type_entreprise' => 'required',
                     'masse_salariale' => 'required',
-                    'id_secteur_activite' => 'required',
+                    //'id_secteur_activite' => 'required',
                 ],[
                     'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                     'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                     'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
-                    'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
+                    //'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                     'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                     'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
-                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
+                    //'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                 ]);
 
                 $input = $request->all();
@@ -293,7 +299,7 @@ class PlanFormationController extends Controller
                 ],[
                     'id_categorie_professionelle.required' => 'Veuillez selectionnez la categorieprefessionnelle.',
                     'genre_plan.required' => 'Veuillez selectionnez le genre.',
-                    'nombre_plan.unique' => 'Veuillez ajoutez le nombre',
+                    'nombre_plan.required' => 'Veuillez ajoutez le nombre',
                 ]);
 
                 $input = $request->all();
@@ -305,6 +311,18 @@ class PlanFormationController extends Controller
                 if(count($verficategoriepaln)==0){
 
                     CategoriePlan::create($input);
+
+                    $listecategorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
+
+                    $nombretotalsalarie = 0;
+
+                    foreach($listecategorieplans as $listecategorieplan){
+                        $nombretotalsalarie += $listecategorieplan->nombre_plan;
+                    }
+
+                    PlanFormation::where('id_plan_de_formation',$id)->update([
+                        'nombre_salarie_plan_formation' => $nombretotalsalarie
+                    ]);
 
                     return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Operation reussi. ');
 
@@ -346,7 +364,7 @@ class PlanFormationController extends Controller
                 $this->validate($request, [
                     'intitule_action_formation_plan' => 'required',
                     'id_entreprise_structure_formation_plan_formation' => 'required',
-                    'nombre_stagiaire_action_formati' => 'required',
+                    //'nombre_stagiaire_action_formati' => 'required',
                     'nombre_groupe_action_formation_' => 'required',
                     'nombre_heure_action_formation_p' => 'required',
                     'cout_action_formation_plan' => 'required',
@@ -360,12 +378,13 @@ class PlanFormationController extends Controller
                     'cadre_fiche_demande_agrement' => 'required',
                     'agent_maitrise_fiche_demande_ag' => 'required',
                     'employe_fiche_demande_agrement' => 'required',
+                    'id_secteur_activite' => 'required',
                     'file_beneficiare' => 'required|mimes:xlsx,XLSX|max:5120',
                     'facture_proforma_action_formati' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120'
                 ],[
                     'intitule_action_formation_plan.required' => 'Veuillez ajoutez l\'intitule de l\'action.',
                     'id_entreprise_structure_formation_plan_formation.required' => 'Veuillez ajoutez une structure ou etablissement.',
-                    'nombre_stagiaire_action_formati.required' => 'Veuillez ajoutez le nombre de stagiaire.',
+                    //'nombre_stagiaire_action_formati.required' => 'Veuillez ajoutez le nombre de stagiaire.',
                     'nombre_groupe_action_formation_.required' => 'Veuillez ajoutez le nombre de groupe.',
                     'nombre_heure_action_formation_p.required' => 'Veuillez ajoutez le nombre d\'heure.',
                     'cout_action_formation_plan.required' => 'Veuillez ajoutez le cout de la formation.',
@@ -379,6 +398,7 @@ class PlanFormationController extends Controller
                     'cadre_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre de cadre.',
                     'agent_maitrise_fiche_demande_ag.required' => 'Veuillez ajoutez le nombre d\'agent de maitrise.',
                     'employe_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre d\employe .',
+                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                     'file_beneficiare.required' => 'Veuillez ajoutez le fichier excel contenant la liste des beneficiaires.',
                     'facture_proforma_action_formati.required' => 'Veuillez ajoutez la massse salariale.',
                     'file_beneficiare.mimes' => 'Les formats requises pour le fichier excel contenant la liste des beneficiaires est: xlsx,XLSX.',
@@ -396,11 +416,53 @@ class PlanFormationController extends Controller
                 $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation']]])->first();
 
                 $input['id_entreprise_structure_formation_action'] = $input['id_entreprise_structure_formation_plan_formation'];
+                $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
                 $input['intitule_action_formation_plan'] = mb_strtoupper($input['intitule_action_formation_plan']);
                 $input['structure_etablissement_action_'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
                 $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
                 $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
                 $input['id_plan_de_formation'] = $id;
+
+                if (isset($data['file_beneficiare'])){
+
+                    $file = $data['file_beneficiare'];
+
+                    $collections = (new FastExcel)->import($file);
+
+                    //dd(count($collections));
+
+                    if (count($collections)>$input['nombre_stagiaire_action_formati']){
+
+                        //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ');
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+                    }
+
+                    if (count($collections)<$input['nombre_stagiaire_action_formati']){
+
+                        //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+                    }
+                }
+
+                $planformationbg = PlanFormation::find($id);
+
+                $actionplanformationbgs = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
+                $montantactionplanformationbg = 0;
+
+                foreach ($actionplanformationbgs as $actionplanformation){
+                    $montantactionplanformationbg += $actionplanformation->cout_action_formation_plan;
+                }
+
+                $budgetrestant = $planformationbg->part_entreprise - $montantactionplanformationbg;
+
+                if($input['cout_action_formation_plan']>$budgetrestant){
+
+                    return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le coût de cette formation est plus élevé que le budget restant. ']);
+
+                }
+
+
 
                 if (isset($data['facture_proforma_action_formati'])){
 
@@ -435,6 +497,8 @@ class PlanFormationController extends Controller
                 if (isset($data['file_beneficiare'])){
 
                     $file = $data['file_beneficiare'];
+
+                    //dd($file);
 
                     $collections = (new FastExcel)->import($file);
 
@@ -550,7 +614,7 @@ class PlanFormationController extends Controller
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
-            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
     }
 
@@ -570,7 +634,7 @@ class PlanFormationController extends Controller
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
-            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
     }
 
@@ -581,7 +645,20 @@ class PlanFormationController extends Controller
         $categorieplan = CategoriePlan::find($idVal);
         $idplanformation = $categorieplan->id_plan_de_formation;
         CategoriePlan::where([['id_categorie_plan','=',$idVal]])->delete();
-        return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
+
+        $listecategorieplans = CategoriePlan::where([['id_plan_de_formation','=',$idplanformation]])->get();
+
+        $nombretotalsalarie = 0;
+
+        foreach($listecategorieplans as $listecategorieplan){
+            $nombretotalsalarie += $listecategorieplan->nombre_plan;
+        }
+
+        PlanFormation::where('id_plan_de_formation',$idplanformation)->update([
+            'nombre_salarie_plan_formation' => $nombretotalsalarie
+        ]);
+
+        return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
     }
 
 }
