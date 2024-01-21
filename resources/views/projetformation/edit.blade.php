@@ -803,6 +803,17 @@
                                                                             style="height: 121px;" <?php echo $disable; ?>><?php echo $projetetude->moyens_probables; ?></textarea>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-md-6 col-12">
+                                                                    <label>Cout de la formation <span
+                                                                            style="color:red;">*</span>
+                                                                    </label>
+                                                                    <input type="number" name="cout_projet_formation"
+                                                                        required="required" id="cout_projet_formation"
+                                                                        class="form-control form-control-sm"
+                                                                        placeholder="ex : 2000000" <?php echo $disable; ?>
+                                                                        value= {{ $projetetude->cout_projet_formation }} 
+                                                                        >
+                                                                </div>
 
                                                             </div>
                                                         </div>

@@ -36,9 +36,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 @section('content')
 
     @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des comites plénières')
-    @php($soustitre = 'Tenue de comite plénière')
-    @php($lien = 'ctprojetformation')
+    @php($titre = 'Liste des commissions permanente')
+    @php($soustitre = 'Tenue de commission permanente')
+    @php($lien = 'comitepermanentepf')
 
 
     <!-- BEGIN: Content-->
@@ -93,44 +93,50 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             <div class="nav-align-top nav-tabs-shadow mb-4">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                        <button type="button" class="nav-link <?php if ($idetape == 1) {
+                            echo 'active';
+                        } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite plénière
+                            Commission permanente
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($comitepleniereparticipant) < 1) {
+                        <button type="button" class="nav-link <?php if ($idetape == 2) {
                             echo 'active';
-                        } //dd($activetab); echo $activetab; ?>" role="tab" data-bs-toggle="tab"
+                        } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categorieplan" aria-controls="navs-top-categorieplan"
                             aria-selected="false">
-                            Liste de presence
+                            Personnes ressources
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
+                        <button type="button" class="nav-link <?php if ($idetape == 3) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
-                            Liste des projets de formations
+                            Liste des projet de formations
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
+                        <button type="button" class="nav-link <?php if ($idetape == 4) {
                             echo 'active';
+                        } else {
+                            echo 'disabled';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false">
-                            Cahier
+                            Agrément
                         </button>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+                    <div class="tab-pane fade <?php if ($idetape == 1) {
+                        echo 'show active';
+                    } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -138,26 +144,26 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_pleniere"
+                                        <input type="date" name="date_debut_comite_permanente"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitepleniere->date_debut_comite_pleniere }}" />
+                                            value="{{ $comitegestion->date_debut_comite_permanente }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_pleniere"
+                                        <input type="date" name="date_fin_comite_permanente"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitepleniere->date_fin_comite_pleniere }}" />
+                                            value="{{ $comitegestion->date_fin_comite_permanente }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm" name="commentaire_comite_pleniere" id="commentaire_comite_pleniere"
-                                            rows="6">{{ $comitepleniere->commentaire_comite_pleniere }}</textarea>
+                                        <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
+                                            rows="6">{{ $comitegestion->commentaire_comite_permanente }}</textarea>
 
                                     </div>
                                 </div>
@@ -165,34 +171,39 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <?php if($comitepleniere->flag_statut_comite_pleniere == false){?>
+                                    <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                     <button type="submit" name="action" value="Modifier"
                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Modifier
                                     </button>
                                     <?php } ?>
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
-                                        Retour</a>
+                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                        class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                            href="/{{ $lien }}">
+                                            Retour</a>
                                 </div>
+
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade <?php if (count($comitepleniereparticipant) < 1) {
+                    <div class="tab-pane fade <?php if ($idetape == 2) {
                         echo 'show active';
-                    } //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                    } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
 
-                        <?php if ($comitepleniere->flag_statut_comite_pleniere != true){ ?>
+                        <?php if ($comitegestion->flag_statut_comite_permanente != true){ ?>
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_pleniere_participant">Conseiller <strong
-                                            style="color:red;">*</strong></label>
-                                    <select id="id_user_comite_pleniere_participant"
-                                        name="id_user_comite_pleniere_participant"
+                                    <label class="form-label" for="id_user_comite_permanente_participant">Conseiller
+                                        <strong style="color:red;">*</strong></label>
+                                    <select id="id_user_comite_permanente_participant"
+                                        name="id_user_comite_permanente_participant"
                                         class="select2 form-select-sm input-group" aria-label="Default select example"
                                         required="required">
                                         <?= $conseiller ?>
@@ -224,15 +235,15 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </thead>
                             <tbody>
                                 <?php $i = 0; ?>
-                                @foreach ($comitepleniereparticipant as $key => $comitepleniereparticipan)
+                                @foreach ($comitegestionparticipant as $key => $comitegestionparticipan)
                                     <?php $i += 1; ?>
                                     <tr>
                                         <td>{{ $i }}</td>
-                                        <td>{{ $comitepleniereparticipan->user->name }}</td>
-                                        <td>{{ $comitepleniereparticipan->user->prenom_users }}</td>
+                                        <td>{{ $comitegestionparticipan->user->name }}</td>
+                                        <td>{{ $comitegestionparticipan->user->prenom_users }}</td>
                                         <td>
-                                            <?php if ($comitepleniere->flag_statut_comite_pleniere != true){ ?>
-                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitepleniereparticipan->id_comite_pleniere_participant)) }}"
+                                            <?php if ($comitegestion->flag_statut_comite_permanente != true){ ?>
+                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitegestionparticipan->id_comite_permanente_participant)) }}"
                                                 class=""
                                                 onclick='javascript:if (!confirm("Voulez-vous supprimer cet conseiller de cette commission ?")) return false;'
                                                 title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
@@ -243,9 +254,26 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                             </tbody>
                         </table>
+                        <div class="col-12" align="right">
+                            <hr>
+
+                            <?php if (count($comitegestionparticipant)>=1){ ?>
+
+
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+
+
+                                    <?php } ?>
+
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
+                                        Retour</a>
+                        </div>
                     </div>
-                    <div class="tab-pane fade <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
-                        echo 'active';
+                    <div class="tab-pane fade <?php if ($idetape == 3) {
+                        echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
 
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
@@ -254,10 +282,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-                                    {{-- <th>Conseiller </th> --}}
-                                    {{-- <th>Code </th> --}}
+
+                                    <th>Code </th>
                                     <th>Date soumis</th>
-                                    {{-- <th>Statut</th> --}}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -270,81 +297,61 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
-                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }}
-                                            {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
-                                        {{-- <td>{{ @$planformation->code_plan_formation }}</td> --}}
+                                        <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
-                                        {{-- <td align="center">
-                                            <?php //if ($planformation->flag_soumis_plan_formation == true and
-                                            //$planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){
-                                            ?>
-                                            <span class="badge bg-success">Valider</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            //  $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            //  and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){
-                                            ?>
-                                            <span class="badge bg-warning">En cours de traitement</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            // $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            //  and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == false and
-                                            // $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-primary">Non Soumis</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            //$planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == true and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-danger">Rejeter</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            // $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) {
-                                            ?>
-                                            <span class="badge bg-warning">Soumis au ct</span>
-                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                            <?php // }
-                                            ?>
-                                        </td> --}}
+
                                         <td align="center">
-                                            <?php if($comitepleniere->flag_statut_comite_pleniere == false){?>
-                                            {{-- @can($lien . '-edit') --}}
-                                            {{-- <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)]) }}"
-                                                class=" " title="Modifier"><img src='/assets/img/editing.png'></a> --}}
-                                            {{-- @endcan --}}
+                                            <?php if($comitegestion->flag_statut_comite_permanente == false){?>
+                                            @can($lien . '-edit')
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endcan
                                             <a type="button" class="" data-bs-toggle="modal"
                                                 data-bs-target="#traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>"
                                                 href="#myModal1" data-url="http://example.com">
                                                 <img src='/assets/img/editing.png'>
                                             </a>
-
                                             <?php } ?>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="col-12" align="right">
+                            <hr>
 
+                            <?php //if (count($comitegestionparticipant)>=1){
+                            ?>
+
+
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+
+
+                                    <?php //}
+                                    ?>
+
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
+                                        Retour</a>
+                        </div>
                     </div>
 
-                    <div class="tab-pane fade<?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
-                        echo 'active';
-                    } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    <div class="tab-pane fade<?php if ($idetape == 4) {
+                        echo 'show active';
+                    } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
-                        <?php  if(count($cahiers)>=1 and $comitepleniere->flag_statut_comite_pleniere == false){?>
+                        <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_permanente == false){?>
                         <div class="col-12" align="right">
                             <form method="POST" class="form"
-                                action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)) }}"
+                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <button type="submit" name="action" value="Traiter_cahier_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                    Valider le cahier de plan
+                                    Valider la commission permanente
                                 </button>
                             </form>
                         </div>
@@ -357,6 +364,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Entreprise </th>
                                     <th>Conseiller </th>
                                     <th>Code </th>
+                                    <th>Cout demandé</th>
+                                    <th>Cout accordé </th>
                                     <th>Date soumis</th>
                                 </tr>
                             </thead>
@@ -364,27 +373,43 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                 <?php //dd($planformations);
                                 $i = 0; ?>
-                                @foreach ($cahiers as $key => $planformation)
+                                @foreach ($ficheagrements as $key => $planformation)
                                     <tr>
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
-                                        <td>{{ @$planformation->code_projet_formation }}</td>
-                                        <td>{{ $planformation->date_soumis }}</td>
+                                        <td>{{ @$planformation->code_plan_formation }}</td>
+                                        <td align="rigth">
+                                            {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
+                                        <td align="rigth">
+                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                        <td>{{ $planformation->date_soumis_plan_formation }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+
+                        <div class="col-12" align="right">
+                            <hr>
+
+                            <?php if (count($ficheagrements)>=1){ ?>
+
+
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+
+                                <?php } ?>
+
+                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
+                                    Retour</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-    {{-- Modal des projets de formations --}}
 
     @foreach ($planformations as $infosactionplanformation)
         <div class="modal fade" id="traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
@@ -397,7 +422,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <p class="text-muted"></p>
                         </div>
                         <form id="editUserForm" class="row g-3" method="POST"
-                            action="{{ route($lien . '.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)]) }}">
+                            action="{{ route($lien . '.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente)]) }}">
                             @csrf
                             @method('post')
 
@@ -441,7 +466,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             </div>
                                             <div
                                                 class="col-md-6
-                                                        col-12">
+                                                    col-12">
                                                 <div class="mb-1">
                                                     <label>Beneficiaire / Cible <span style="color:red;">*</span></label>
                                                     <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
@@ -485,7 +510,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             </div>
                                             <div
                                                 class="col-md-6
-                                                        col-12">
+                                                    col-12">
                                                 <div class="mb-1">
                                                     <label>Fonction
                                                     </label>
@@ -497,7 +522,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             </div>
                                             <div
                                                 class="col-md-6
-                                                            col-12">
+                                                        col-12">
                                                 <div class="mb-1">
                                                     <label>Téléphone
                                                     </label>
@@ -511,9 +536,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
                                 </div>
                             </div>
-                            <div
-                                class="card
-                                                                accordion-item">
+                            <div class="card
+                                                            accordion-item">
                                 <h2 class="accordion-header" id="headingTwo">
                                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                         data-bs-target="#accordionDP" aria-expanded="false" aria-controls="accordionTwo">
@@ -808,6 +832,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             </div>
         </div>
     @endforeach
+
 
 
 @endsection

@@ -102,6 +102,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepleniere/{id}/{id2}/editer', [App\Http\Controllers\ComitePleniereController::class, 'editer'])->name('comitepleniere.editer');
     Route::post('comitepleniere/{id}/{id2}/cahierupdate', [App\Http\Controllers\ComitePleniereController::class, 'cahierupdate'])->name('comitepleniere.cahierupdate');
 
+
+    Route::get('ctprojetformation/{id}/delete', [App\Http\Controllers\CtprojetformationController::class, 'delete'])->name('ctprojetformation.delete');
+    Route::get('ctprojetformation/{id}/{id2}/cahier', [App\Http\Controllers\CtprojetformationController::class, 'cahier'])->name('ctprojetformation.cahier');
+    Route::get('ctprojetformation/{id}/{id2}/editer', [App\Http\Controllers\CtprojetformationController::class, 'editer'])->name('ctprojetformation.editer');
+    Route::post('ctprojetformation/{id}/{id2}/cahierupdate', [App\Http\Controllers\CtprojetformationController::class, 'cahierupdate'])->name('ctprojetformation.cahierupdate');
+
     Route::post('ajoutcabinetetrangere', [App\Http\Controllers\AjaxController::class, 'ajoutcabinetetrangere'])->name('ajoutcabinetetrangere');
 
     Route::get('/entrepriseinterneplan', [App\Http\Controllers\ListeLierController::class, 'getEntrepriseinterneplan']);
@@ -131,6 +137,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitegestion/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComiteGestionController::class, 'editer'])->name('comitegestion.editer');
     Route::post('comitegestion/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComiteGestionController::class, 'agrementupdate'])->name('comitegestion.agrementupdate');
 
+
     Route::get('comitepermanente/{id}/delete', [App\Http\Controllers\ComitePermanenteController::class, 'delete'])->name('comitepermanente.delete');
     Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
     Route::put('comitepermanente/{id}/{id1}/update', [App\Http\Controllers\ComitePermanenteController::class, 'update'])->name('comitepermanente.update');
@@ -142,6 +149,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanente/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanenteController::class, 'agrement'])->name('comitepermanente.agrement');
     Route::get('comitepermanente/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanenteController::class, 'editer'])->name('comitepermanente.editer');
     Route::post('comitepermanente/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanenteController::class, 'agrementupdate'])->name('comitepermanente.agrementupdate');
+
+    // Comite permanente projet formation
+
+    Route::get('comitepermanentepf/{id}/delete', [App\Http\Controllers\ComitePermanentePfController::class, 'delete'])->name('comitepermanentepf.delete');
+    Route::get('comitepermanentepf/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanentePfController::class, 'edit'])->name('comitepermanentepf.edit');
+    Route::put('comitepermanentepf/{id}/{id1}/update', [App\Http\Controllers\ComitePermanentePfController::class, 'update'])->name('comitepermanentepf.update');
+    Route::get('comitepermanentepf/index', [App\Http\Controllers\ComitePermanentePfController::class, 'index'])->name('comitepermanentepf.index');
+    Route::get('comitepermanentepf', [App\Http\Controllers\ComitePermanentePfController::class, 'index'])->name('comitepermanentepf');
+    Route::get('comitepermanentepf/create', [App\Http\Controllers\ComitePermanentePfController::class, 'create'])->name('comitepermanentepf.create');
+    Route::post('comitepermanentepf/store', [App\Http\Controllers\ComitePermanentePfController::class, 'store'])->name('comitepermanentepf.store');
+    Route::get('comitepermanentepf/{id}/show', [App\Http\Controllers\ComitePermanentePfController::class, 'show'])->name('comitepermanentepf.show');
+    Route::get('comitepermanentepf/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanentePfController::class, 'agrement'])->name('comitepermanentepf.agrement');
+    Route::get('comitepermanentepf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanentePfController::class, 'editer'])->name('comitepermanentepf.editer');
+    Route::post('comitepermanentepf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+   // Route::post('comitepermanentepf/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+
 
     Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [App\Http\Controllers\CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');

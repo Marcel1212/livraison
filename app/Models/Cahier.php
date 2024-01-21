@@ -20,21 +20,21 @@ class Cahier extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'cahier';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_cahier';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -42,7 +42,7 @@ class Cahier extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_comite_pleniere', 'id_user_cahier', 'id_demande', 'flag_cahier', 'commentaire_cahier', 'created_at', 'updated_at'];
+    protected $fillable = ['id_comite_pleniere', 'id_user_cahier', 'id_demande', 'flag_cahier', 'id_motif', 'commentaire_cahier', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -50,6 +50,11 @@ class Cahier extends Model
     public function comitePleniere()
     {
         return $this->belongsTo('App\Models\ComitePleniere', 'id_comite_pleniere', 'id_comite_pleniere');
+    }
+
+    public function motif()
+    {
+        return $this->belongsTo('App\Models\Motif', 'id_motif', 'id_motif');
     }
 
     /**

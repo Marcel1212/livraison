@@ -38,7 +38,8 @@ class ComitePleniereController extends Controller
      */
     public function index()
     {
-        $Resultat = ComitePleniere::all();
+        //$Resultat = ComitePleniere::all();
+        $Resultat =  $demandeenroles = ComitePleniere::where('code_pieces','=', 'PF')->get();
         return view('comitepleniere.index', compact('Resultat'));
     }
 

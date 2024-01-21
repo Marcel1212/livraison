@@ -10,10 +10,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des comites plénières')
-    @php($soustitre = 'Ajout de comite  plénière')
-    @php($lien = 'ctprojetformation')
+    @php($Module = 'Plan de formation')
+    @php($titre = 'Liste des commissions permanente')
+    @php($soustitre = 'Ajout de commission permanente')
+    @php($lien = 'comitepermanentepf')
 
     <!-- BEGIN: Content-->
 
@@ -62,27 +62,28 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite plénière
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
-                            aria-selected="false">
-                            Personnes ressouces
+                            Comite permanent
                         </button>
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categoriesprofessionel"
                             aria-controls="navs-top-categoriesprofessionel" aria-selected="false">
-                            Liste des plans de formations
+                            Personnes ressources
                         </button>
                     </li>
                     <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                            data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
+                            aria-selected="false">
+                            Liste des plans de formations
+                        </button>
+                    </li>
+
+                    <li class="nav-item">
                         <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-Soumettre" aria-controls="navs-top-Soumettre" aria-selected="false">
-                            Cahier
+                            Agrément
                         </button>
                     </li>
                 </ul>
@@ -95,7 +96,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_pleniere"
+                                        <input type="date" name="date_debut_comite_permanente"
                                             class="form-control form-control-sm" required />
                                     </div>
                                 </div>
@@ -103,7 +104,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_pleniere"
+                                        <input type="date" name="date_fin_comite_permanente"
                                             class="form-control form-control-sm" required />
                                     </div>
                                 </div>
@@ -111,7 +112,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm" name="commentaire_comite_pleniere" id="commentaire_comite_pleniere"
+                                        <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
                                             rows="6"></textarea>
 
                                     </div>
@@ -133,6 +134,51 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                     </div>
                     <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
 
+                        <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
+                            style="margin-top: 13px !important">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Entreprise </th>
+                                    {{-- <th>Conseiller </th> --}}
+                                    <th>Code comite pleiniere </th>
+                                    <th>Date soumis</th>
+                                    {{-- <th>Cout demandé</th>
+                                    <th>Cout accordé</th> --}}
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <?php //dd($planformations);
+                                $i = 0; ?>
+                                @foreach ($planformations as $key => $planformation)
+                                    <tr>
+                                        <td>{{ ++$i }}</td>
+                                        <td>{{ @$planformation->entreprise->ncc_entreprises }} /
+                                            {{ @$planformation->entreprise->raison_social_entreprises }}</td>
+                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
+                                        <td>{{ @$planformation->code_comite_pleiniere }}</td>
+                                        <td>{{ $planformation->date_soumis }}</td>
+                                        {{-- <td align="rigth">
+                                            {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
+                                        <td align="rigth">
+                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td> --}}
+                                        <td align="center">
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="col-12" align="right">
+                            <hr>
+
+
+
+                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
+                                Retour</a>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
 

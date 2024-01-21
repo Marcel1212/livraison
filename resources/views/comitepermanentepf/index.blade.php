@@ -10,8 +10,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
     @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des comites plénières')
-    @php($lien = 'ctprojetformation')
+    @php($titre = 'Liste des comites permanent')
+    @php($lien = 'comitepermanentepf')
 
     <!-- BEGIN: Content-->
 
@@ -46,10 +46,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{ $titre }}</h5>
                     <small class="text-muted float-end">
-
+                        {{-- @can($lien . '-create') --}}
                         <a href="{{ route($lien . '.create') }}" class="btn btn-sm btn-primary waves-effect waves-light">
-                            <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau comite pleniere projet formation </a>
-
+                            <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle commission permanente </a>
+                        {{-- @endcan --}}
                     </small>
                 </div>
                 <div class="card-body">
@@ -71,11 +71,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             @foreach ($Resultat as $key => $comitep)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ @$comitep->code_comite_pleniere }}</td>
-                                    <td>{{ $comitep->date_debut_comite_pleniere }}</td>
-                                    <td>{{ $comitep->date_fin_comite_pleniere }}</td>
+                                    <td>{{ @$comitep->code_comite_permanente }}</td>
+                                    <td>{{ $comitep->date_debut_comite_permanente }}</td>
+                                    <td>{{ $comitep->date_fin_comite_permanente }}</td>
                                     <td align="center">
-                                        <?php if($comitep->flag_statut_comite_pleniere == true){ ?>
+                                        <?php if($comitep->flag_statut_comite_permanente == true){ ?>
                                         <span class="badge bg-success">Terminer</span>
                                         <?php  }else{?>
                                         <span class="badge bg-warning">En cours</span>
@@ -83,7 +83,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </td>
                                     <td align="center">
                                         {{-- @can($lien . '-edit') --}}
-                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere)) }}"
+                                        <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                             class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                         {{-- @endcan --}}
                                     </td>

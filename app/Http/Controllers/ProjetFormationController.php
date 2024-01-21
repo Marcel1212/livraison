@@ -293,6 +293,8 @@ class ProjetFormationController extends Controller
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
             $input['id_user'] = $user_id;
+            $input['code_projet_formation'] = 'PRF-'.Gencode::randStrGen(4, 5);
+            $input['cout_projet_formation'] = $data['cout_projet_formation'];
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);
@@ -1076,6 +1078,7 @@ class ProjetFormationController extends Controller
                 $projetformation->fonction = $data['fonction'];
                 $projetformation->telephone = $data['telephone'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
+                $projetformation->cout_projet_formation = $data['cout_projet_formation'];
                 // $projetformation->acteurs = $data['acteurs_projet'];
                 // $projetformation->role_p = $data['role_projet'];
                 // $projetformation->responsabilite = $data['responsabilite_projet'];
