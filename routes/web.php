@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::get('agreement/{id_plan}/{id_action}/{id_etape}/editaction', [AgreementController::class, 'editaction'])->name('agreement.editaction');
+    Route::get('agreement/{id_plan_de_formation}/{id_action}/{id_etape}/editaction', [AgreementController::class, 'editaction'])->name('agreement.editaction');
 
 
 //    /{id_plan_de_formation}/{id_etape}/cancel
