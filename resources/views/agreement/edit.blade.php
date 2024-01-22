@@ -139,6 +139,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <button
                         type="button"
                         class="nav-link @if($id_etape==5) active @endif"
+                        @if(isset($agreement->flag_annulation_plan))
+                            disabled
+                        @endif
                         role="tab"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-top-annulation"
@@ -723,7 +726,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Retour</a>
                     </div>
                 </div>
-                <div class="tab-pane fade @if($id_etape==5) show active @endif" id="navs-top-annulation"
+                @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
+                    <div class="tab-pane fade @if($id_etape==5) show active @endif" id="navs-top-annulation"
                      role="tabpanel">
                     @if($demande_annulation_plan)
                         @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
@@ -928,6 +932,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             {{--                        @endif--}}
                             {{--                    @endif--}}
                 </div>
+                @endif
             </div>
         </div>
 

@@ -10,6 +10,7 @@ use App\Models\Entreprises;
 use App\Models\MotDePasseOublie;
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,33 +24,32 @@ class MotDePasseOublieController extends Controller
 
     public function verify(MotDePasseOubieRequest $request)
     {
-//        $now = Carbon::now();
+        $now = Carbon::now();
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
                     ->where('flag_expired_mot_de_passe_oublie',false)->first();
-
                 if(isset($mot_de_passe_trouv)){
-//                if($now->isAfter($mot_de_passe->date_expired_mot_de_passe_oublie)!=true){
-//                    return redirect('/modifiermotdepasse')->with('success', 'Info:  Veuillez modifier votre mot de passe à la première connexion');
-//                }
+                    if($now->isAfter($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)!=true){
+                        return redirect('/modifiermotdepasse')->with('success', 'Info:  Vous pouvez réessayer dans '.CarbonInterval::seconds(Carbon::parse($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)->diffInSeconds($now))->cascade()->forHumans());
+                    }
                     $mot_de_passe_trouv->flag_expired_mot_de_passe_oublie = true;
                     $mot_de_passe_trouv->update();
                 }
                 $mot_de_passe = new MotDePasseOublie();
                 $mot_de_passe->email_mot_de_passe_oublie = $request->email_mot_de_passe_oublie;
                 $mot_de_passe->code_mot_de_passe_oublie = $this->generateOtp();
-//              $mot_de_passe->tel_mot_de_passe_oublie =
-
-//                $mot_de_passe->mot_de_passe_mot_de_passe_oublie = Crypt::MotDePasse();
+                $mot_de_passe->tel_mot_de_passe_oublie = $now->addMinute(5);;
                 $mot_de_passe->save();
                 $logo = Menu::get_logo();
                 $user = User::where('email',$request->email_mot_de_passe_oublie)->first();
 
-                $sujet = "Code de vérification - FDFP";
+                $sujet = "Code de réinitialisation - FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                    $messageMail = "<b>CODE DE VERIFICATION</b>
-                                    <br><br>Veuillez utiliser le code ci-dessous pour finaliser la réinitialisation de votre mot de passe
+                    $messageMail = "<b>CODE DE REINITIALISATION</b>
+                                    <br><br>Veuillez utiliser le code ci-dessous pour la réinitialisation de votre mot de passe
                                     <br><br><br>
                                     <h1>$mot_de_passe->code_mot_de_passe_oublie</h1>
+                                    <br><br>Ce code exipre dans 5 minutes
+
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -138,21 +138,18 @@ class MotDePasseOublieController extends Controller
                         $mot_de_passe_oublie->flag_expired_mot_de_passe_oublie=true;
                         $mot_de_passe_oublie->update();
                     }
-                    return redirect()->route('motdepasseoublie')->with('success', 'Succès : Mot de passe réinitialiser avec succès veuillez consulter votre boite mail. ');
+                    return redirect()->route('connexion')->with('success', 'Mot de passe réinitialiser avec succès veuillez consulter votre boite mail pour vos nouveaux accès. ');
 
                 }
 
 
 
             }else{
-
+                return redirect('motdepasseoublie/'.Crypt::UrlCrypt($email).'/otp')->with('error', ' OTP saisi est incorrect.');
             }
         }
 
     }
-
-
-
 
     public function generateOtp(){
         do{
