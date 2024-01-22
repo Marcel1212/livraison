@@ -212,7 +212,14 @@ class AgreementController extends Controller
 
     public function editaction(string $id_plan_de_formation, string $id_action,string $id_etape)
     {
-        $motifs = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
+        $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
+        $butformations = ButFormation::all();
+        $fiche_a_demande_agrement = new FicheADemandeAgrement();
+        $beneficiaire_formation = new BeneficiairesFormation();
+        $motif_substitutions = Motif::where('code_motif','SAF')->get();
+        $typeformations = TypeFormation::all();
+        $categorieprofessionelles = CategorieProfessionelle::all();
+        $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
 
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
         $id_etape = Crypt::UrldeCrypt($id_etape);
@@ -225,7 +232,7 @@ class AgreementController extends Controller
             ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
             ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
         $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
-        return view('agreement.editaction', compact('id_etape','infosactionplanformation','motifs','demande_annulation_action'));
+        return view('agreement.editaction', compact('motif_substitutions','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
     }
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)

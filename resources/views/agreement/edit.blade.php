@@ -703,7 +703,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                        class=" "
                                        title="Modifier"><img src='/assets/img/editing.png'></a>
                                     @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
-
                                         <a href="{{ route($lien.'.editaction',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)])}}"
                                            class="btn btn-danger btn-xs"
                                            title="Annuler">Annuler action</a>

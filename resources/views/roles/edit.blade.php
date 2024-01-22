@@ -4,7 +4,7 @@
 
     @php($Module='Configuration')
     @php($titre='Liste des profils')
-    @php($soustitre='Modifier un profil et ses permissions')
+    @php($soustitre='Modifier un profil')
     @php($lien='roles')
 
     <!-- BEGIN: Content-->
@@ -44,20 +44,6 @@
                                         <input type="text" name="name" id="name" value="{{$role->name }}"
                                                class="form-control form-control-sm" placeholder="Libellé du profil">
                                     </div>
-                                </div>
-                                <div class="col-md-6 col-6">
-                                    @foreach($permission as $value)
-                                        <label>
-
-                                            <input type="checkbox" class="form-check-input"
-                                                   value="<?php echo $value->id;?>"
-                                                   <?php if (in_array($value->id, $rolePermissions)) {
-                                                       echo 'checked';
-                                                   } ?> name="permission[<?php echo $value->id;?>]"
-                                                   id="permission<?php echo $value->id;?>"/>{{ $value->name }}
-                                        </label>
-                                        <br/>
-                                    @endforeach
                                 </div>
                                 <div class="col-12" align="right">
                                     <hr>

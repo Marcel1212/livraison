@@ -87,11 +87,7 @@ class RoleController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $role = Role::find($id);
-        $permission = Permission::get();
-        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
-            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
-            ->all();
-        return view('roles.edit', compact( 'role', 'permission', 'rolePermissions'));
+        return view('roles.edit', compact( 'role'));
     }
 
 
@@ -107,14 +103,11 @@ class RoleController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $this->validate($request, [
             'name' => 'required',
-            'permission' => 'required',
         ]);
 
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
-        $role->syncPermissions($request->input('permission'));
-
         return redirect()->route('roles.index')
             ->with('success', 'Role updated successfully');
     }
