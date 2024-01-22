@@ -646,19 +646,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 @endisset
                                             />
                                         </div>
-                                        <div class="col-12 col-md-4">
-                                            <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation <strong style="color:red;">*</strong></label>
-                                            <input disabled
-                                                   type="number"
-                                                   id="cout_action_formation_plan_substi"
-                                                   name="cout_action_formation_plan_substi"
-                                                   class="form-control form-control-sm"
-                                                   @isset($demande_substitution->cout_action_formation_plan_substi)
-                                                       value="{{$demande_substitution->cout_action_formation_plan_substi}}"
-                                                @endisset
+{{--                                        <div class="col-12 col-md-4">--}}
+{{--                                            <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation <strong style="color:red;">*</strong></label>--}}
+{{--                                            <input disabled--}}
+{{--                                                   type="number"--}}
+{{--                                                   id="cout_action_formation_plan_substi"--}}
+{{--                                                   name="cout_action_formation_plan_substi"--}}
+{{--                                                   class="form-control form-control-sm"--}}
+{{--                                                   @isset($demande_substitution->cout_action_formation_plan_substi)--}}
+{{--                                                       value="{{$demande_substitution->cout_action_formation_plan_substi}}"--}}
+{{--                                                @endisset--}}
 
-                                            />
-                                        </div>
+{{--                                            />--}}
+{{--                                        </div>--}}
                                         <div class="col-12 col-md-4">
                                             <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
                                             <select

@@ -327,7 +327,7 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
-                $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
+//                $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
                 $demande_substitution->id_processus = 5;
 
 
