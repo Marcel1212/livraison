@@ -27,6 +27,7 @@
             @if ($message = Session::get('error'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
+                        <i class="fas fa-allergies mb-2"></i>
                         {{ $message }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -37,6 +38,7 @@
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <div class="alert-body">
+                            <i class="fab fa-angellist mb-2"></i>
                             {{ $message }}
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -45,6 +47,7 @@
                 @if ($message = Session::get('warning'))
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <div class="alert-body">
+                            <i class="fas fa-allergies mb-2"></i>
                             {{ $message }}
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -139,7 +142,7 @@
                                                                         <div class="justify-content-between flex-wrap mb-4">
                                                                             <div class="row ">
 
-                                                                                <span>Commentaires: <?php echo $projetetude->commentaire_directeur; ?>
+                                                                                <span>Commentaire: <?php echo $projetetude->commentaire_directeur; ?>
                                                                                 </span> <br>
                                                                                 <span>Date de l'affectation :
                                                                                     <span class="badge bg-label-danger">
@@ -811,8 +814,7 @@
                                                                         required="required" id="cout_projet_formation"
                                                                         class="form-control form-control-sm"
                                                                         placeholder="ex : 2000000" <?php echo $disable; ?>
-                                                                        value= {{ $projetetude->cout_projet_formation }} 
-                                                                        >
+                                                                        value={{ $projetetude->cout_projet_formation }}>
                                                                 </div>
 
                                                             </div>
@@ -1004,8 +1006,9 @@
                                                     <div class="row">
                                                         <label class="form-label">Liste des departements <span
                                                                 style="color:red;">*</span></label>
-                                                        <select id="id_departements" name="id_departements"
-                                                            class="form-select" <?php //echo $disable_cs;
+                                                        <select class="select2 select2-size-sm form-select"
+                                                            id="id_departements" name="id_departements"
+                                                            <?php //echo $disable_cs;
                                                             ?> required="required">
                                                             <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_affect_departement != true  ) {?>
                                                             <?php echo $listedepartment; ?>
@@ -1054,7 +1057,8 @@
                                                     <div class="row">
                                                         <label class="form-label">Liste des service <span
                                                                 style="color:red;">*</span></label>
-                                                        <select id="id_service" name="id_service" class="form-select"
+                                                        <select id="id_service" name="id_service"
+                                                            class="select2 select2-size-sm form-select"
                                                             <?php //echo $disable_cs;
                                                             ?> required="required">
                                                             <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_affect_departement == true  ) {?>
@@ -1106,7 +1110,8 @@
                                                         <label class="form-label">Liste des conseillers <span
                                                                 style="color:red;">*</span></label>
                                                         <select id="id_conseiller" name="id_conseiller"
-                                                            class="form-select" <?php //echo $disable_cs;
+                                                            class="select2 select2-size-sm form-select"
+                                                            <?php //echo $disable_cs;
                                                             ?> required="required">
                                                             <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_affect_departement == true  ) {?>
                                                             <?php echo $listeuserfinal; ?>
@@ -1156,7 +1161,8 @@
                                                     <div class="row">
                                                         <label class="form-label">Statut <span
                                                                 style="color:red;">*</span></label>
-                                                        <select id="statut_rec" name="statut_rec" class="form-select"
+                                                        <select id="statut_rec" name="statut_rec"
+                                                            class="select2 select2-size-sm form-select"
                                                             <?php //echo $disable_cs;
                                                             ?> required="required">
                                                             <option value=''> Selectionnez un statut </option>
@@ -1205,8 +1211,8 @@
                                                         <div class="card-body">
                                                             <?php //if ($nomrole == "DIRECTEUR" && $projetetude->flag_soumis == true  && $projetetude->flag_affect_departement == null) {
                                                             ?>
-                                                            <h5 class="card-title" align="center"> Traitement de la
-                                                                recevabilité
+                                                            <h5 class="card-title" align="center"> --- TRAITEMENT DE LA
+                                                                RECEVABILITE ---
                                                             </h5>
                                                             <div class="row">
                                                                 <div class="card accordion-item">
@@ -1217,7 +1223,8 @@
                                                                             data-bs-target="#accordionTwo22"
                                                                             aria-expanded="true"
                                                                             aria-controls="accordionTwo22">
-                                                                            Elaboration du projet de formation
+                                                                            <strong> ELABORATION DU PROJET DE FORMATION
+                                                                            </strong>
                                                                         </button>
                                                                     </h2>
                                                                     <div id="accordionTwo22"
@@ -1260,17 +1267,20 @@
                                                                     </div>
                                                                 </div>
                                                                 <br>
+                                                            </div>
+                                                            <div class="row">
                                                                 <div>
-                                                                    <h5 class="card-title" align="center"> Avis global
+                                                                    <h5 class="card-title" align="center"> <strong> Avis
+                                                                            global </strong>
                                                                     </h5>
                                                                     <div class="row">
                                                                         <label class="form-label">Statut <span
                                                                                 style="color:red;">*</span></label>
                                                                         <select id="statut_rec_global"
                                                                             name="statut_rec_global_instruction"
-                                                                            class="form-select" <?php //echo $disable_cs;
-                                                                            ?>
-                                                                            required="required">
+                                                                            class="select2 select2-size-sm form-select"
+                                                                            <?php //echo $disable_cs;
+                                                                            ?> required="required">
                                                                             <option value=''> Selectionnez un statut
                                                                             </option>
                                                                             <option value='RECEVABLE'>RECEVABLE </option>
@@ -1311,35 +1321,37 @@
 
                                                                 </div>
                                                             </div>
+
                                                         </div>
-                                                        <?php }?>
-
                                                     </div>
+                                                    <?php }?>
+
+                                                </div>
 
 
+                                                <br>
+                                                <div class="col-12" align="left">
                                                     <br>
-                                                    <div class="col-12" align="left">
-                                                        <br>
-                                                        <div class="col-12" align="right">
-                                                            <?php if($projetetude->flag_soumis != true) {
+                                                    <div class="col-12" align="right">
+                                                        <?php if($projetetude->flag_soumis != true) {
                                                     ?>
-                                                            <button type="submit" type="submit" name="action"
-                                                                value="soumettre"
-                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                Soumettre
-                                                            </button>
-                                                            <button type="submit" type="submit" name="action"
-                                                                value="modifier"
-                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                                Modifier
-                                                            </button>
+                                                        <button type="submit" type="submit" name="action"
+                                                            value="soumettre"
+                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                            Soumettre
+                                                        </button>
+                                                        <button type="submit" type="submit" name="action"
+                                                            value="modifier"
+                                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                            Modifier
+                                                        </button>
 
-                                                            <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                                href="/{{ $lien }}">
-                                                                Retour</a>
-                                                            <?php } ?>
-                                                        </div>
+                                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                            href="/{{ $lien }}">
+                                                            Retour</a>
+                                                        <?php } ?>
                                                     </div>
+                                                </div>
                                     </form>
                                 </div>
                             </div>

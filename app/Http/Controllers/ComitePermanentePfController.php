@@ -132,13 +132,13 @@ class ComitePermanentePfController extends Controller
         }
 
         $comitegestionparticipant = ComitePermanenteParticipant::where([['id_comite_permanente','=',$comitegestion->id_comite_permanente]])->get();
-        //dd($comitegestionparticipant);
+        //dd(count($comitegestionparticipant));
 
         $ficheagrements = FicheAgrement::Join('projet_formation','fiche_agrement.id_demande','projet_formation.id_projet_formation')
                             ->join('entreprises','projet_formation.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','projet_formation.id_conseiller_formation','=','users.id')
                             ->where([['fiche_agrement.id_comite_permanente','=',$comitegestion->id_comite_permanente]])->get();
-        //dd($ficheagrements);
+        //dd(count($ficheagrements));
 
         $conseillers = ConseillerParAgence::get_comite_gestion_permanente();
         //dd($conseillers);
@@ -224,6 +224,56 @@ class ComitePermanentePfController extends Controller
 
 
                 return redirect('comitepermanentepf/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+
+            }
+
+            if($data['action'] === 'Traiter_action_proj_formation_valider'){
+
+                //$actionplan = ActionFormationPlan::find($id);
+                dd( $data );
+
+                $idplan = $id;
+                $id2 = $idetape ;
+
+                $input = $request->all();
+
+                $input = $request->all();
+
+                /*$input['flag_valide_plan_formation'] = true;
+                $input['id_user_conseil'] = Auth::user()->id;
+                $input['id_plan_formation'] = $idplan;
+                $input['date_valide_plan_formation'] = Carbon::now();
+
+                PlanFormationAValiderParUser::create($input);*/
+
+                FicheAgrement::create([
+                    'id_demande' => $id,
+                    'id_comite_permanente' => $idetape,
+                    'id_user_fiche_agrement' => Auth::user()->id,
+                    'flag_fiche_agrement'=> true
+                ]);
+                //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
+                //$nbrav = count($nbreplanvalide);
+                //if($nbrav == $nombredeconseilleragence){
+                    // $plan = PlanFormation::find($idplan);
+
+                    // $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+                    // $montantcouttotal = 0;
+
+                    // foreach($actionformationvals as $actionformationval){
+                    //     $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                    // }
+
+
+                    // $plan->update([
+                    //     'flag_fiche_agrement' => true,
+                    //     'cout_total_accorder_plan_formation' => $montantcouttotal,
+                    //     'date_fiche_agrement' => Carbon::now()
+                    // ]);
+                //}
+                return redirect('comitepermanentepf/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Les actions ont été validée ');
 
 
             }
@@ -329,51 +379,20 @@ class ComitePermanentePfController extends Controller
     {
 
         $id =  Crypt::UrldeCrypt($id); // ID Projet formation
-        $id2 =  Crypt::UrldeCrypt($id2); // ID Comite
-       // $id3 =  Crypt::UrldeCrypt($id3);
+        $id2 =  Crypt::UrldeCrypt($id2); // ID Comite Permanente
 
-       //dd($request->all());
+        // Mise a jour des projet de formations pour agrement
+
        if ($request->isMethod('post')) {
 
             $data = $request->all();
 
-        //dd($data);
 
-            // if($data['action'] === 'Traiter_action_formation_valider'){
-
-            //     $actionplan = ActionFormationPlan::find($id);
-
-            //     $idplan = $actionplan->id_plan_de_formation;
-
-            //     $this->validate($request, [
-            //         'id_motif' => 'required',
-            //     ],[
-            //         'id_motif.required' => 'Veuillez ajouter le motif.',
-            //     ]);
-
-            //     $input = $request->all();
-
-            //     $input = $request->all();
-
-            //     $input['flag_valide_action_formation_pl_comite_permanente'] = true;
-            //     $input['flag_valide_action_plan_formation'] = true;
-            //     $input['id_user_conseil'] = Auth::user()->id;
-            //     $input['id_action_plan_formation'] = $id;
-            //     $input['id_plan_formation'] = $idplan;
-
-            //     $actionplan->update($input);
-            //     ActionPlanFormationAValiderParUser::create($input);
-
-            //     //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
-
-            //     return redirect('comitepermanentepf/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Action de plan de formation Traité ');
-
-            // }
 
             if($data['action'] === 'Traiter_action_proj_formation_valider'){
 
-                //$actionplan = ActionFormationPlan::find($id);
-                // dd( $data );
+
+                //dd( $data );
 
                 $idplan = $id;
 

@@ -120,7 +120,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 4) {
+                        <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
                             echo 'active';
                         } else {
                             echo 'disabled';
@@ -338,9 +338,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
 
-                    <div class="tab-pane fade<?php if ($idetape == 4) {
-                        echo 'show active';
-                    } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    <div class="tab-pane fade <?php if (count($ficheagrements) >= 1 and count($comitegestionparticipant) >= 1) {
+                        echo 'show 4';
+                    } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
                         <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_permanente == false){?>
                         <div class="col-12" align="right">
@@ -739,6 +739,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="moyens_problemes_odf"
                                                         style="height: 121px;" disabled="disabled"><?php echo $infosactionplanformation->moyens_probables; ?></textarea>
                                                 </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label>Cout de la formation <span style="color:red;">*</span>
+                                                </label>
+                                                <input type="number" name="cout_projet_formation" required="required"
+                                                    id="cout_projet_formation" class="form-control form-control-sm"
+                                                    disabled="disabled"
+                                                    value={{ $infosactionplanformation->cout_projet_formation }}>
                                             </div>
 
                                         </div>

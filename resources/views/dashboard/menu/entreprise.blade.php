@@ -105,7 +105,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 </div>
                                 <h4 class="ms-1 mb-0">Projet de formation</h4>
                             </div>
-                            <a href="{{ route($lienformation . '.create') }}" class="mb-1">
+                            <a href="{{ route($lienprojetdeformation . '.create') }}" class="mb-1">
                                 Cliquer ici pour éffectuer une
                                 demande</a>
                         </div>
