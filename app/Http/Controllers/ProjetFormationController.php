@@ -50,28 +50,31 @@ class ProjetFormationController extends Controller
         $nomrole = $roles->name ;
         //dd($nomrole);
         if ($nomrole == 'ENTREPRISE'){
-            //dd('Entreprise');
+            // Liste des projet de formation des entreprises
             $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
 
         }else if ($nomrole == 'DIRECTEUR'){
-            //dd('DIRECTEUR');
-            $demandeenroles = ProjetFormation::where('id_user_affecte','=',$user_id)->get();
-            // $demandeenroles = DB::table('projet_formation')
-            // ->join('entreprises', 'projet_formation.id_entreprises', '=', 'entreprises.id_entreprises')
-            // ->where(['projet_formation.id_user','=',$user_id])
-            // ->get();
-            // dd($demandeenroles);
-
+             // Liste des projet de formation a traiter par le directeur
+            $num_agce = Auth::user()->num_agce;
+            $num_agce = intval($num_agce);
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce]])->get();
 
         }else if ($nomrole == 'CHEF DE DEPARTEMENT'){
-            //dd('DIRECTEUR');
-            $demandeenroles = ProjetFormation::where('id_chef_departement','=',$user_id)->get();
+            // Liste des projet de formation a traiter par le chef de departement
+            $num_agce = Auth::user()->num_agce;
+            $num_agce = intval($num_agce);
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['num_agce','=',$num_agce]])->get();
+
         }else if ($nomrole == 'CHEF DE SERVICE'){
-            //dd('DIRECTEUR');
-            $demandeenroles = ProjetFormation::where('id_chef_service','=',$user_id)->get();
+             // Liste des projet de formation a traiter par le chef de service
+             $num_agce = Auth::user()->num_agce;
+             $num_agce = intval($num_agce);
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['flag_affect_service','=',true],['num_agce','=',$num_agce]])->get();
+
         }else if ($nomrole == 'CONSEILLER EN FORMATION'){
-            //dd('DIRECTEUR');
+             // Liste des projet de formation a traiter par le conseiller en formation
             $demandeenroles = ProjetFormation::where('id_conseiller_formation','=',$user_id)->get();
+
         }
 
         return view('projetformation.index', compact('demandeenroles','nomrole'));
@@ -293,6 +296,8 @@ class ProjetFormationController extends Controller
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
             $input['id_user'] = $user_id;
+            $input['code_projet_formation'] = 'PRF-'.Gencode::randStrGen(4, 5);
+            $input['cout_projet_formation'] = $data['cout_projet_formation'];
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);
@@ -423,7 +428,7 @@ class ProjetFormationController extends Controller
         $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
         //dd($entreprise);
         if($projetetude->flag_soumis == true) {
-            //dd($entreprise);
+            // Liste des agences
             $listeuser = User::all();
             $listeuserfinal = "<option value=''> Selectionnez un agent </option>";
             foreach ($listeuser as $comp) {
@@ -434,7 +439,7 @@ class ProjetFormationController extends Controller
             $listeuserfinal = "";
         }
         if($projetetude->flag_soumis == true) {
-            //dd($entreprise);
+            // Liste des departements
             $listeuser = Departement::all();
             $listedepartment = "<option value=''> Selectionnez un departement </option>";
             foreach ($listeuser as $comp) {
@@ -446,7 +451,7 @@ class ProjetFormationController extends Controller
         }
         // Liste des service
         if($projetetude->flag_soumis == true) {
-            //dd($entreprise);
+           // Liste des services
             $listeuser = Service::all();
             $listeservice = "<option value=''> Selectionnez un service </option>";
             foreach ($listeuser as $comp) {
@@ -460,7 +465,6 @@ class ProjetFormationController extends Controller
         if($projetetude->flag_soumis_chef_service == true ){
 
             $id_cs = $projetetude->id_chef_serv;
-            //dd($id_cs);
             $user_cs = User::find($id_cs);
              $user_cs_name = $user_cs->name . ' '.$user_cs->prenom_users;
         }else {
@@ -577,88 +581,6 @@ class ProjetFormationController extends Controller
 
             $data = $request->all();
             //dd($data);
-            /// Traitement de l'instruction
-        //     if($data['action'] === 'soumission_instruction'){
-        //         // ID du plan
-        //             // traitement valide
-        //             if($data['id_statut_instruction'] === '3'){
-        //                 //dd($data);
-        //                 if (isset($data['fichier_instruction'])){
-
-        //                     $filefront = $data['fichier_instruction'];
-
-        //                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
-
-        //                         $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
-
-        //                         $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
-
-        //                         $input['fichier_instruction'] = $fileName1;
-
-        //                     }else{
-        //                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
-
-        //                     }
-
-        //                 }
-
-        //                 $date_soumission = Carbon::now();
-        //                 $projetetude = ProjetEtude::find($id);
-        //                 $projetetude->statut_instruction = true;
-        //                 $projetetude->date_instruction = $date_soumission;
-        //                 $projetetude->commentaires_instruction = $data['commentaires_instruction'];
-        //                 $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
-        //                 $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
-        //                 $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
-        //                 $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
-        //                 $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
-        //                 $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
-        //                 $projetetude->cible_instruction = $data['cible_instruction'];
-        //                 $projetetude->methodologie_instruction = $data['methodologie_instruction'];
-        //                 $projetetude->piece_jointe_instruction =$fileName1;
-        //                 $projetetude->save();
-        //                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Dossier validé effectue avec succes');
-        //             }
-
-        //             // traitement rejet
-        //             if($data['id_statut_instruction'] === '5'){
-        //                 //dd($data);
-        //                 if (isset($data['fichier_instruction'])){
-
-        //                     $filefront = $data['fichier_instruction'];
-
-        //                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
-
-        //                         $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
-
-        //                         $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
-
-        //                         $input['fichier_instruction'] = $fileName1;
-
-        //                     }else{
-        //                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
-
-        //                     }
-
-        //                 }
-        //                 $date_soumission = Carbon::now();
-        //                 $projetetude = ProjetEtude::find($id);
-        //                 $projetetude->statut_instruction = false;
-        //                 $projetetude->date_instruction = $date_soumission;
-        //                 $projetetude->commentaires_instruction = $data['commentaires_instruction'];
-        //                 $projetetude->titre_projet_instruction = $data['titre_projet_instruction'];
-        //                 $projetetude->contexte_probleme_instruction = $data['contexte_probleme_instruction'];
-        //                 $projetetude->objectif_general_instruction = $data['objectif_general_instruction'];
-        //                 $projetetude->objectif_specifique_instruction = $data['objectif_specifique_instruction'];
-        //                 $projetetude->resultat_attendus_instruction = $data['resultat_attendu_instruction'];
-        //                 $projetetude->champ_etude_instruction = $data['champ_etude_instruction'];
-        //                 $projetetude->cible_instruction = $data['cible_instruction'];
-        //                 $projetetude->methodologie_instruction = $data['methodologie_instruction'];
-        //                 $projetetude->piece_jointe_instruction =$fileName1;
-        //                 $projetetude->save();
-        //                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Rejet de l\'instruction effectue avec succes');
-        //             }
-        //   }
 
             // Soumission instructions
             if($data['action'] === 'soumission_recevabilite_global_instruction'){
@@ -686,16 +608,11 @@ class ProjetFormationController extends Controller
                         'code_pieces' => '7',
                         'libelle_pieces' =>  $fileName1
                     ]);
-                    //dd($data);
-
                     $date_soumission = Carbon::now();
                     $projetformation = ProjetFormation::find($id);
-                    //dd($data['statut_rec']);
                     if($data['statut_rec_global_instruction'] === "RECEVABLE"){
                         $etat_rec = true ;
-                          //dd($etat_rec);
                     $projetformation->flag_statut_instruction = $etat_rec;
-                    //$projetformation->flag_statut_instruction = $etat_rec;
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"]; //
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
@@ -705,38 +622,52 @@ class ProjetFormationController extends Controller
                         $etat_rec = false ;
                           //dd($etat_rec);
                     $projetformation->flag_statut_instruction = $etat_rec;
-                    //$projetformation->flag_statut_instruction = $etat_rec;
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
                     $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Projet formation rejeté avec succes');
                     }
-                    //dd($etat_rec);
-                    // $projetformation->flag_statut_instruction = $etat_rec;
-                    // //$projetformation->flag_statut_instruction = $etat_rec;
-                    // $projetformation->date_instructions = $date_soumission;
-                    // $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
-                    // $projetformation->commpetences_instruction = $data["competences_instruction"];
 
-                    // $projetformation->save();
-                    // return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes');
 
             }
-             // traitement de la recevabilite
+             // Traitement de la recevabilite par le conseiller en formation
              if($data['action'] === 'soumission_recevabilite'){
                 // ID du plan
-                    //dd($data);
-                    //dd($idchefserv);
                     $date_soumission = Carbon::now();
                     $projetformation = ProjetFormation::find($id);
                     //dd($data);
                     if($data['statut_rec'] === "RECEVABLE"){
                         $etat_rec = true ;
-                         //dd($etat_rec);
                     $projetformation->flag_recevabilite = $etat_rec;
                     $projetformation->date_recevabilite = $date_soumission;
+                    $projetformation->commentaires_recevabilite = $data["commentaires_recevabilite"];
                     $projetformation->save();
+                    // Envoies du mail pour validation
+                    // Envoie du mail pour la notification
+
+                        // Recuperation des informations de l'entreprise
+                        $entreprise_info = Entreprises::find($projetformation->id_entreprises);
+                        $rais = $entreprise_info->raison_social_entreprises;
+                        $nccm = $entreprise_info->ncc_entreprises;
+                        $user = User::where('login_users','=',$nccm)->get();
+                        $email = $user[0]->email;
+                        $sujet = "Recevabilite du projet de formation" ;
+                        $titre = "INFORMATION PROJET DE FORMATION";
+
+                        $messageMail = "<b>Cher,  $rais ,</b>
+                                    <br><br>Votre projet de formation intitulé : ". $projetformation->titre_projet_etude ." a est recevable
+
+                                    Commentaire  : ". $data["commentaires_recevabilite"] . "
+
+                                    <br><br><br>
+
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                                        ";
+                        $messageMailEnvoi = Email::get_envoimailTemplate($email, $rais, $messageMail, $sujet, $titre);
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation recevable');
 
                     }else{
@@ -775,113 +706,62 @@ class ProjetFormationController extends Controller
                         return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation non recevable');
                     }
                     //dd($etat_rec);
-                    // $projetformation->flag_recevabilite = $etat_rec;
-                    // $projetformation->date_recevabilite = $date_soumission;
-                    // $projetformation->save();
-                    // return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité au conseiller avec succes');
+
 
             }
 
 
-            // traitement de la soumission au conseiller de formation
+            // Traitement de la soumission au conseiller de formation
             if($data['action'] === 'soumission_projet_formation_conseiller'){
                 // ID du plan
-              //dd($data['id_conseiller']);
-               $num_agce = Auth::user()->num_agce;
-            //    $conseiller = DB::table('users')
-            //    ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-            //    ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            //    ->select('users.name', 'users.prenom_users', 'users.id')
-            //    ->where([['roles.id','=',20],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
-            //    ->get();
-            //    //dd($conseiller);
-            //     if($conseiller == ''){
-            //         return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
-            //     }else{
-                    $idconseillerformation =  intval($data['id_conseiller']) ;
-                    //dd($idchefserv);
-                    $date_soumission = Carbon::now();
-                    $projetformation = ProjetFormation::find($id);
-                    //dd($projetformation);
-                    $projetformation->flag_affect_conseiller_formation = true;
-                    $projetformation->date_trans_conseiller_formation = $date_soumission;
-                    $projetformation->commentaire_chef_service = $data['commentaires_chef_serv'];
-                    //$projetformation->id_service = intval($data['id_service']);
-                    $projetformation->id_conseiller_formation = intval($idconseillerformation);
-                    $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au conseiller avec succes');
+                //dd($data);
+                $idconseillerformation =  intval($data['id_conseiller']) ;
+                //dd($idchefserv);
+                $date_soumission = Carbon::now();
+                $projetformation = ProjetFormation::find($id);
+                //dd($projetformation);
+                $projetformation->flag_affect_conseiller_formation = true;
+                $projetformation->date_trans_conseiller_formation = $date_soumission;
+                $projetformation->commentaire_chef_service = $data['commentaires_chef_serv'];
+                $projetformation->id_chef_service = Auth::user()->id;
+                $projetformation->id_conseiller_formation = intval($idconseillerformation);
+                $projetformation->save();
+                return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au conseiller en formation avec succes');
                 //}
             }
             // Traitement de la soumission du Chef de service
             if($data['action'] === 'soumission_projet_formation_cs'){
                 // ID du plan
-              // dd($data);
-               $num_agce = Auth::user()->num_agce;
-               $chefdeservice = DB::table('users')
-               ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-               ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-               ->select('users.name', 'users.prenom_users', 'users.id')
-               ->where([['roles.id','=',19],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
-               ->get();
-                if($chefdeservice == ''){
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de service');
-                }else{
-                    $idchefserv = $chefdeservice[0]->id ;
-                    //dd($idchefserv);
-                    $date_soumission = Carbon::now();
-                    $projetformation = ProjetFormation::find($id);
-                    //dd($projetformation);
-                    $projetformation->flag_affect_service = true;
-                    $projetformation->date_trans_service = $date_soumission;
-                    $projetformation->commentaire_directeur = $data['commentaires_directeur'];
-                    $projetformation->id_service = intval($data['id_service']);
-                    $projetformation->id_chef_service = intval($idchefserv);
-                    $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au chef de service');
-                }
+               //dd($data);
+                //dd($idchefserv);
+                $date_soumission = Carbon::now();
+                $projetformation = ProjetFormation::find($id);
+                $projetformation->flag_affect_service = true;
+                $projetformation->date_trans_service = $date_soumission;
+                $projetformation->commentaire_departement = $data['commentaires_directeur'];
+                $projetformation->id_service = intval($data['id_service']);
+                $projetformation->id_chef_departement = Auth::user()->id;
+                $projetformation->save();
+                return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au chef de service avec succès');
+
             }
 
             // Traitement de la soumission du Chef de Departement
             if($data['action'] === 'soumission_projet_formation_departement'){
                 // ID du plan
-                //dd($data);
-                // Atribution au chef de departement
-                // Recuperation de l'id
-                // $user_id = Auth::user()->id;
-                // dd(intval($data['id_chef_service']));
-                // dd($user_id);
                 // Recuperation du numero d'agence
                 $num_agce = Auth::user()->num_agce;
-                // $numncc = Auth::user()->login_users;
-                // $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
-                // $id_localite = $entreprise->id_localite_entreprises;
-                // $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-                // //dd($localite_info[]);
-               // $id_agence = $localite_info[0]->id_agence;
-                // Recuperation du departement
+                $date_soumission = Carbon::now();
+                $projetformation = ProjetFormation::find($id);
+                //dd($projetformation);
+                $projetformation->flag_affect_departement = true;
+                $projetformation->date_trans_chef_service = $date_soumission;
+                $projetformation->commentaire_directeur = $data['commentaires_directeur'];
+                $projetformation->id_departement = intval($data['id_departements']);
+                $projetformation->id_directeur = Auth::user()->id;
+                $projetformation->save();
+                return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet affecté au chef de departement avec succès');
 
-               // Recuperation du chef de departement
-                $chefdedepartement = DB::table('users')
-                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
-                ->get();
-                if($chefdedepartement == ''){
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Votre agence n\'a pas de chef de departement');
-                }else{
-                    $idchefdep = $chefdedepartement[0]->id ; // id_chef_departement
-                    $date_soumission = Carbon::now();
-                    $projetformation = ProjetFormation::find($id);
-                    //dd($projetformation);
-                    $projetformation->flag_affect_departement = true;
-                    $projetformation->date_trans_chef_service = $date_soumission;
-                    $projetformation->commentaire_directeur = $data['commentaires_directeur'];
-                    $projetformation->id_departement = intval($data['id_departements']);
-                    $projetformation->id_chef_departement = intval($idchefdep);
-                    $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet affecté au chef de departement');
-                }
             }
             // Traitement de la soumission du plan de formation au driecteur
             if($data['action'] === 'soumettre'){
@@ -894,27 +774,30 @@ class ProjetFormationController extends Controller
                 $projetformation->date_soumis = $date_soumission;
                 // Attribution au directeur
                 $num_agce = Auth::user()->num_agce;
+                //dd($num_agce);
                 // Recuperation du numero d'agence
                 $numncc = Auth::user()->login_users;
                 $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
                 $id_localite = $entreprise->id_localite_entreprises;
                 $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-                //dd($localite_info[]);
+                //dd($localite_info);
                 $id_agence = $localite_info[0]->id_agence;
+                //dd($id_agence);
                 // Requete d'affectation au directeur d'agence
-                $directeur = DB::table('users')
-                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',25],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
-                ->get();
+                // $directeur = DB::table('users')
+                // ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+                // ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                // ->select('users.name', 'users.prenom_users', 'users.id')
+                // ->where([['roles.id','=',25],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
+                // ->get();
                 //dd(intval($directeur[0]->id));
-                $projetformation->id_user_affecte = intval($directeur[0]->id);
+                //$projetformation->id_user_affecte = intval($directeur[0]->id);
+                $projetformation->num_agce = $id_agence;
                 // Recuperation de l'id Traitement a faire
                 // $user_id = Auth::user()->id;
                 $projetformation->id_processus = 4;
                 $projetformation->save();
-                return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis avec succès.');
+                return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au directeur avec succès.');
 
             }
 
@@ -1076,6 +959,7 @@ class ProjetFormationController extends Controller
                 $projetformation->fonction = $data['fonction'];
                 $projetformation->telephone = $data['telephone'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
+                $projetformation->cout_projet_formation = $data['cout_projet_formation'];
                 // $projetformation->acteurs = $data['acteurs_projet'];
                 // $projetformation->role_p = $data['role_projet'];
                 // $projetformation->responsabilite = $data['responsabilite_projet'];

@@ -33,6 +33,40 @@ Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 
 //});
 Route::group(['middleware' => ['auth']], function () {
     //Route::group(['middleware' => ['can:role-index']], function () {
+        Route::resources([
+            'roles' => App\Http\Controllers\RoleController::class,
+            'users' => App\Http\Controllers\UserController::class,
+            'permissions' => App\Http\Controllers\PermissionController::class,
+            'menus' => App\Http\Controllers\MenuController::class,
+            'sousmenus' => App\Http\Controllers\SousmenuController::class,
+            'agence' => App\Http\Controllers\AgenceController::class,
+            'direction' => App\Http\Controllers\DirectionController::class,
+            'departement' => App\Http\Controllers\DepartementController::class,
+            'service' => App\Http\Controllers\ServiceController::class,
+            'activites' => App\Http\Controllers\ActivitesController::class,
+            'centreimpot' => App\Http\Controllers\CentreImpotController::class,
+            'localite' => App\Http\Controllers\LocaliteController::class,
+            'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
+            'projetformation' => App\Http\Controllers\ProjetFormationController::class,
+            'enrolement' => App\Http\Controllers\EnrolementController::class,
+            'statutoperations' => App\Http\Controllers\StatutOperationController::class,
+            'motifs' => App\Http\Controllers\MotifController::class,
+            //'planformation' => App\Http\Controllers\PlanFormationController::class,
+            'comitegestionpe' => App\Http\Controllers\ComiteGestionPeController::class,
+            'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
+            'butformation' => App\Http\Controllers\ButFormationController::class,
+            'typeformation' => App\Http\Controllers\TypeFormationController::class,
+            'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
+            'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
+            'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
+            'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
+            'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class,
+            'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
+            'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+            'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
+            'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
+            'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
+            'typecomites' => App\Http\Controllers\TypeComiteController::class,
     Route::resources([
         'roles' => App\Http\Controllers\RoleController::class,
         'users' => App\Http\Controllers\UserController::class,
@@ -111,7 +145,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('traitementdemandeannulationplan/{id}/{id2}/edit', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'edit'])->name('traitementdemandeannulationplan.edit');
     Route::put('traitementdemandeannulationplan/{id}/update', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'update'])->name('traitementdemandeannulationplan.update');
 
+   Route::put('comitetechniquepe/{id}/update', [App\Http\Controllers\CtprojetetudeController::class, 'update'])->name('comitetechniquepe.update');
 
+    //'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
     //Sélection opérateur pour projet d'étude
     Route::get('selectionoperateurprojetetude', [SelectionOperateurProjetEtudeController::class, 'index'])->name('selectionoperateurprojetetude.index');
     Route::get('selectionoperateurprojetetude/{id_projet_etude}/edit', [SelectionOperateurProjetEtudeController::class, 'edit'])->name('selectionoperateurprojetetude.edit');
@@ -129,6 +165,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepleniere/{id}/{id2}/cahier', [App\Http\Controllers\ComitePleniereController::class, 'cahier'])->name('comitepleniere.cahier');
     Route::get('comitepleniere/{id}/{id2}/editer', [App\Http\Controllers\ComitePleniereController::class, 'editer'])->name('comitepleniere.editer');
     Route::post('comitepleniere/{id}/{id2}/cahierupdate', [App\Http\Controllers\ComitePleniereController::class, 'cahierupdate'])->name('comitepleniere.cahierupdate');
+
+
+    Route::get('ctprojetformation/{id}/delete', [App\Http\Controllers\CtprojetformationController::class, 'delete'])->name('ctprojetformation.delete');
+    Route::get('ctprojetformation/{id}/{id2}/cahier', [App\Http\Controllers\CtprojetformationController::class, 'cahier'])->name('ctprojetformation.cahier');
+    Route::get('ctprojetformation/{id}/{id2}/editer', [App\Http\Controllers\CtprojetformationController::class, 'editer'])->name('ctprojetformation.editer');
+    Route::post('ctprojetformation/{id}/{id2}/cahierupdate', [App\Http\Controllers\CtprojetformationController::class, 'cahierupdate'])->name('ctprojetformation.cahierupdate');
 
     Route::post('ajoutcabinetetrangere', [App\Http\Controllers\AjaxController::class, 'ajoutcabinetetrangere'])->name('ajoutcabinetetrangere');
 
@@ -159,6 +201,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitegestion/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComiteGestionController::class, 'editer'])->name('comitegestion.editer');
     Route::post('comitegestion/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComiteGestionController::class, 'agrementupdate'])->name('comitegestion.agrementupdate');
 
+
+    // Comite gestion projet etude
+    Route::get('comitegestionpe/{id}/delete', [App\Http\Controllers\ComiteGestionPeController::class, 'delete'])->name('comitegestionpe.delete');
+    Route::get('comitegestionpe/{id}/{id1}/edit', [App\Http\Controllers\ComiteGestionPeController::class, 'edit'])->name('comitegestionpe.edit');
+    Route::put('comitegestionpe/{id}/{id1}/update', [App\Http\Controllers\ComiteGestionPeController::class, 'update'])->name('comitegestionpe.update');
+    Route::get('comitegestionpe/index', [App\Http\Controllers\ComiteGestionPeController::class, 'index'])->name('comitegestionpe.index');
+    Route::get('comitegestionpe', [App\Http\Controllers\ComiteGestionPeController::class, 'index'])->name('comitegestionpe');
+    Route::get('comitegestionpe/create', [App\Http\Controllers\ComiteGestionPeController::class, 'create'])->name('comitegestionpe.create');
+    Route::post('comitegestionpe/store', [App\Http\Controllers\ComiteGestionPeController::class, 'store'])->name('comitegestionpe.store');
+    Route::get('comitegestionpe/{id}/show', [App\Http\Controllers\ComiteGestionPeController::class, 'show'])->name('comitegestionpe.show');
+    Route::get('comitegestionpe/{id}/{id2}/agrement', [App\Http\Controllers\ComiteGestionPeController::class, 'agrement'])->name('comitegestionpe.agrement');
+    Route::get('comitegestionpe/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComiteGestionPeController::class, 'editer'])->name('comitegestionpe.editer');
+    Route::post('comitegestionpe/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComiteGestionPeController::class, 'agrementupdate'])->name('comitegestionpe.agrementupdate');
+
+
     Route::get('comitepermanente/{id}/delete', [App\Http\Controllers\ComitePermanenteController::class, 'delete'])->name('comitepermanente.delete');
     Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
     Route::put('comitepermanente/{id}/{id1}/update', [App\Http\Controllers\ComitePermanenteController::class, 'update'])->name('comitepermanente.update');
@@ -171,6 +228,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanente/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanenteController::class, 'editer'])->name('comitepermanente.editer');
     Route::post('comitepermanente/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanenteController::class, 'agrementupdate'])->name('comitepermanente.agrementupdate');
 
+    // Comite permanente projet formation
+
+    Route::get('comitepermanentepf/{id}/delete', [App\Http\Controllers\ComitePermanentePfController::class, 'delete'])->name('comitepermanentepf.delete');
+    Route::get('comitepermanentepf/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanentePfController::class, 'edit'])->name('comitepermanentepf.edit');
+    Route::put('comitepermanentepf/{id}/{id1}/update', [App\Http\Controllers\ComitePermanentePfController::class, 'update'])->name('comitepermanentepf.update');
+    Route::get('comitepermanentepf/index', [App\Http\Controllers\ComitePermanentePfController::class, 'index'])->name('comitepermanentepf.index');
+    Route::get('comitepermanentepf', [App\Http\Controllers\ComitePermanentePfController::class, 'index'])->name('comitepermanentepf');
+    Route::get('comitepermanentepf/create', [App\Http\Controllers\ComitePermanentePfController::class, 'create'])->name('comitepermanentepf.create');
+    Route::post('comitepermanentepf/store', [App\Http\Controllers\ComitePermanentePfController::class, 'store'])->name('comitepermanentepf.store');
+    Route::get('comitepermanentepf/{id}/show', [App\Http\Controllers\ComitePermanentePfController::class, 'show'])->name('comitepermanentepf.show');
+    Route::get('comitepermanentepf/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanentePfController::class, 'agrement'])->name('comitepermanentepf.agrement');
+    Route::get('comitepermanentepf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanentePfController::class, 'editer'])->name('comitepermanentepf.editer');
+    Route::post('comitepermanentepf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+   // Route::post('comitepermanentepf/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
     Route::get('cahierplanformation/{id}/delete', [App\Http\Controllers\CahierplanformationController::class, 'delete'])->name('cahierplanformation.delete');
     Route::get('cahierplanformation/{id}/{id1}/edit', [App\Http\Controllers\CahierplanformationController::class, 'edit'])->name('cahierplanformation.edit');
     Route::put('cahierplanformation/{id}/{id1}/update', [App\Http\Controllers\CahierplanformationController::class, 'update'])->name('cahierplanformation.update');

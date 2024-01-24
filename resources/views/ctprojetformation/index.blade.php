@@ -1,9 +1,17 @@
+<?php
+
+use App\Helpers\AnneeExercice;
+
+$anneexercice = AnneeExercice::get_annee_exercice();
+
+?>
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-    @php($Module = 'Projets d\'etudes')
-    @php($titre = 'Liste des projets d\'etudes à valider')
-    @php($lien = 'comitetechniquepe')
+    @php($Module = 'Projet de formation')
+    @php($titre = 'Liste des comites plénières')
+    @php($lien = 'ctprojetformation')
 
     <!-- BEGIN: Content-->
 
@@ -21,6 +29,15 @@
         </div>
     @endif
 
+    @if (!isset($anneexercice->id_periode_exercice))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <div class="alert-body" style="text-align:center">
+                {{ $anneexercice }}
+            </div>
+            <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+        </div>
+    @endif
+
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -29,6 +46,9 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{ $titre }}</h5>
                     <small class="text-muted float-end">
+
+                        <a href="{{ route($lien . '.create') }}" class="btn btn-sm btn-primary waves-effect waves-light">
+                            <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau comite pleniere projet formation </a>
 
                     </small>
                 </div>
@@ -39,30 +59,33 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Entreprise </th>
-                                <th>Code du dossier </th>
-                                <th>Date de soumission</th>
+                                <th>Code </th>
+                                <th>Date debut</th>
+                                <th>Date fin</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php $i = 0; ?>
-                            @foreach ($projetformations as $key => $projetformation)
+                            @foreach ($Resultat as $key => $comitep)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ @$projetformation->entreprise->raison_social_entreprises }}</td>
-                                    <td>{{ @$projetformation->code_projet_etude }}</td>
-                                    <td>{{ $projetformation->date_soumis }}</td>
+                                    <td>{{ @$comitep->code_comite_pleniere }}</td>
+                                    <td>{{ $comitep->date_debut_comite_pleniere }}</td>
+                                    <td>{{ $comitep->date_fin_comite_pleniere }}</td>
                                     <td align="center">
-                                        <?php if ($projetformation->statut_instruction == true ){ ?>
-                                        <span class="badge bg-success">Dossier Instruit</span>
+                                        <?php if($comitep->flag_statut_comite_pleniere == true){ ?>
+                                        <span class="badge bg-success">Terminer</span>
+                                        <?php  }else{?>
+                                        <span class="badge bg-warning">En cours</span>
                                         <?php } ?>
                                     </td>
                                     <td align="center">
-                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($projetformation->id_projet_etude)) }}"
+                                        {{-- @can($lien . '-edit') --}}
+                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere)) }}"
                                             class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-
+                                        {{-- @endcan --}}
                                     </td>
                                 </tr>
                             @endforeach

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjetFormation;
 use Illuminate\Http\Request;
 use App\Models\Cahier;
 use App\Models\ComitePleniere;
+use App\Models\ComitePleniereProjetFormation;
 use App\Models\ComitePleniereParticipant;
 use Hash;
 use DB;
@@ -31,16 +33,16 @@ use Image;
 use File;
 use Auth;
 
-class ComitePleniereController extends Controller
+class CtprojetformationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //$Resultat = ComitePleniere::all();
-        $Resultat =  $demandeenroles = ComitePleniere::where('code_pieces','=', 'PF')->get();
-        return view('comitepleniere.index', compact('Resultat'));
+        //$Resultat = ComitePleniereProjetFormation::all();
+        $Resultat =  $demandeenroles = ComitePleniere::where('code_pieces','=', 'PRF')->get();
+        return view('ctprojetformation.index', compact('Resultat'));
     }
 
     /**
@@ -48,7 +50,7 @@ class ComitePleniereController extends Controller
      */
     public function create()
     {
-        return view('comitepleniere.create');
+        return view('ctprojetformation.create');
     }
 
     /**
@@ -57,6 +59,27 @@ class ComitePleniereController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
+           //dd($request->all());
+
+            // $this->validate($request, [
+            //     'date_debut_comite_pleniere_pf' => 'required',
+            //     'date_fin_comite_pleniere_pf' => 'required',
+            //     'commentaire_comite_pleniere_pf' => 'required'
+            // ],[
+            //     'date_debut_comite_pleniere_pf.required' => 'Veuillez ajouter une date de debut.',
+            //     'date_fin_comite_pleniere_pf.required' => 'Veuillez ajouter une date de fin.',
+            //     'commentaire_comite_pleniere_pf.required' => 'Veuillez ajouter un commentaire.',
+            // ]);
+
+            // $input = $request->all();
+            // $dateanneeencours = Carbon::now()->format('Y');
+            // $input['id_user_comite_pleniere_pf'] = Auth::user()->id;
+            // $input['code_comite_pleniere_pf'] = 'CTPRF' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+            // $input['code_pieces_pf'] = 'PRF';
+
+            // ComitePleniereProjetFormation::create($input);
+
+            // $insertedId = ComitePleniereProjetFormation::latest()->first()->id_comite_pleniere_pf;
 
             $this->validate($request, [
                 'date_debut_comite_pleniere' => 'required',
@@ -71,14 +94,14 @@ class ComitePleniereController extends Controller
             $input = $request->all();
             $dateanneeencours = Carbon::now()->format('Y');
             $input['id_user_comite_pleniere'] = Auth::user()->id;
-            $input['code_comite_pleniere'] = 'CT' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
-            $input['code_pieces'] = 'PF';
+            $input['code_comite_pleniere'] = 'CTPRF' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+            $input['code_pieces'] = 'PRF';
 
             ComitePleniere::create($input);
 
             $insertedId = ComitePleniere::latest()->first()->id_comite_pleniere;
 
-            return redirect('comitepleniere/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            return redirect('ctprojetformation/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
 
         }
     }
@@ -97,26 +120,35 @@ class ComitePleniereController extends Controller
     public function edit($id)
     {
         $id =  Crypt::UrldeCrypt($id);
+        //dd($id);
 
         $comitepleniere = ComitePleniere::find($id);
 
         $comitepleniereparticipant = ComitePleniereParticipant::where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
 
-        $cahiers = Cahier::Join('plan_formation','cahier.id_demande','plan_formation.id_plan_de_formation')
-                            ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                            ->join('users','plan_formation.user_conseiller','=','users.id')
+        $cahiers = Cahier::Join('projet_formation','cahier.id_demande','projet_formation.id_projet_formation')
+                            ->join('entreprises','projet_formation.id_entreprises','=','entreprises.id_entreprises')
+                            ->join('users','projet_formation.id_conseiller_formation','=','users.id')
                             ->where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
 
         $conseillers = ConseillerParAgence::get_conseiller_par_departement(Auth::user()->num_agce,Auth::user()->id_departement);
+
+        $motifs = Motif::all();
+        $motif = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
 //dd($conseillers);
         $conseiller = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($conseillers as $comp) {
             $conseiller .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
         }
 
-        $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',true]])->get();
+        $planformations = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_conseiller_formation','=',true],['flag_statut_instruction','=',true],['flag_comite_pleiniere','=',null]])->get();
+        //dd($planformations->entreprise);
+        //$planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',true]])->get();
 
-        return view('comitepleniere.edit', compact('comitepleniere','comitepleniereparticipant','cahiers','conseiller','planformations'));
+        return view('ctprojetformation.edit', compact('comitepleniere','comitepleniereparticipant','cahiers','conseiller','planformations','motif'));
 
     }
 
@@ -127,8 +159,6 @@ class ComitePleniereController extends Controller
     {
 
         $id =  Crypt::UrldeCrypt($id);
-
-       // dd($request->all());
 
         if ($request->isMethod('put')) {
 
@@ -151,7 +181,7 @@ class ComitePleniereController extends Controller
                 $comitepleniere = ComitePleniere::find($id);
                 $comitepleniere->update($input);
 
-                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('ctprojetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -171,13 +201,13 @@ class ComitePleniereController extends Controller
 
                 if(count($verifconseillerexist) >= 1){
 
-                    return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Erreur : Cet conseiller existe deja dans cette comite plénière ');
+                    return redirect('ctprojetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Erreur : Cet conseiller existe deja dans cette comite plénière ');
 
                 }
 
                 ComitePleniereParticipant::create($input);
 
-                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('ctprojetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
 
             }
@@ -189,7 +219,7 @@ class ComitePleniereController extends Controller
                 $comitepleniere->update(['flag_statut_comite_pleniere'=> true]);
 
 
-                return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('ctprojetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Le cahier a ete validé ');
 
 
             }
@@ -213,7 +243,7 @@ class ComitePleniereController extends Controller
         $comitepleniereParticipant = ComitePleniereParticipant::find($idVal);
         $idcomiteplenier = $comitepleniereParticipant->id_comite_pleniere;
         ComitePleniereParticipant::where([['id_comite_pleniere_participant','=',$idVal]])->delete();
-        return redirect('comitepleniere/'.Crypt::UrlCrypt($idcomiteplenier).'/edit')->with('success', 'Succes : Le conseiller à été du comite avec succes  supprimer avec succes ');
+        return redirect('ctprojetformation/'.Crypt::UrlCrypt($idcomiteplenier).'/edit')->with('success', 'Succes : Le conseiller à été du comite avec succes  supprimer avec succes ');
     }
 
     public function cahier($id,$id2){
@@ -243,7 +273,7 @@ class ComitePleniereController extends Controller
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
 
-        return view('comitepleniere.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('ctprojetformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
 
@@ -252,14 +282,15 @@ class ComitePleniereController extends Controller
         $id = Crypt::UrldeCrypt($id);
         $idcomite = Crypt::UrldeCrypt($id2);
         //dd($id);
-        $planformation = PlanFormation::find($id);
+        //$planformation = PlanFormation::find($id);
+        $planformation = ProjetFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
         $typeentreprises = TypeEntreprise::all();
-        $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
-        foreach ($typeentreprises as $comp) {
-            $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
-        }
+        // $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
+        // foreach ($typeentreprises as $comp) {
+        //     $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
+        // }
 
 
         $pays = Pays::all();
@@ -314,8 +345,8 @@ class ComitePleniereController extends Controller
         $nombreactionvalider = count($actionvalider);
         $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
         //dd($nombreactionvalider);
-        return view('comitepleniere.editer', compact(
-            'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
+        return view('ctprojetformation.editer', compact(
+            'planformation','infoentreprise','pay','typeformation','butformation', //'typeentreprise',
             'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
             'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id'
         ));
@@ -327,15 +358,90 @@ class ComitePleniereController extends Controller
     public function cahierupdate(Request $request, $id, $id2)
     {
 
-        $id =  Crypt::UrldeCrypt($id);
-        $id2 =  Crypt::UrldeCrypt($id2);
+        $id =  Crypt::UrldeCrypt($id); // id_projet_formation
+        $id2 =  Crypt::UrldeCrypt($id2); // id_comite_pleiniere
 
        // dd($request->all());
        if ($request->isMethod('post')) {
 
             $data = $request->all();
 
-        //dd($data);
+        //dd($data); // Traiter_action_proj_formation_valider
+
+        if($data['action'] === 'Traiter_action_proj_formation_valider'){
+
+            //dd($data);
+            // Recuperation des informations du comite
+            $comite = ComitePleniere::find($id2);
+            $codepleiniere = $comite->code_comite_pleniere;
+
+            // Recuperation du Projet de formation
+            $projetformation = ProjetFormation::find($id);
+            // Modification du projet de formation -- flag et ajout du code
+            $projetformation->flag_comite_pleiniere = true;
+            $projetformation->code_comite_pleiniere = $codepleiniere ;
+            $projetformation->id_processus = 6 ;
+            $projetformation->id_comite_pleiniere = $id2 ;
+            $projetformation->save();
+
+
+
+            // Modification du comite  -- Ajout dans le cahier
+
+            $this->validate($request, [
+                'id_motif' => 'required',
+            ],[
+                'id_motif.required' => 'Veuillez ajouter le motif.',
+            ]);
+            $idplan = 2;
+
+            $input = $request->all();
+
+            $input = $request->all();
+
+            Cahier::create([
+                'id_demande' => $id,
+                'id_comite_pleniere' => $id2,
+                'id_user_cahier' => Auth::user()->id,
+                'commentaire_cahier' => $data['commentaire'],
+                'id_motif' => $data['id_motif'],
+                'flag_cahier'=> true
+            ]);
+
+            return redirect('ctprojetformation/'.Crypt::UrlCrypt($id2).'/edit')->with('success', 'Succes : Projet de formation ajouté au cahier du comité ');
+
+        }
+
+        if($data['action'] === 'Traiter_action_proj_formation_rejeter'){
+            dd($data);
+
+            $actionplan = ActionFormationPlan::find($id);
+
+            $idplan = $actionplan->id_plan_de_formation;
+
+            $this->validate($request, [
+                'id_motif' => 'required',
+            ],[
+                'id_motif.required' => 'Veuillez ajouter le motif.',
+            ]);
+
+            $input = $request->all();
+
+            $input = $request->all();
+
+            $input['flag_valide_action_plan_formation'] = true;
+            $input['id_user_conseil'] = Auth::user()->id;
+            $input['id_action_plan_formation'] = $id;
+            $input['id_plan_formation'] = $idplan;
+
+            $actionplan->update($input);
+            ActionPlanFormationAValiderParUser::create($input);
+
+            //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
+
+            return redirect('ctprojetformation/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/editer')->with('error', 'Succes : Projet de formation rejeter du comité ');
+
+        }
 
             if($data['action'] === 'Traiter_action_formation_valider'){
 
@@ -363,7 +469,7 @@ class ComitePleniereController extends Controller
 
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
 
-                return redirect('comitepleniere/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/editer')->with('success', 'Succes : Action de plan de formation Traité ');
+                return redirect('ctprojetformatiob/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/editer')->with('success', 'Succes : Action de plan de formation Traité ');
 
             }
 
@@ -399,7 +505,7 @@ class ComitePleniereController extends Controller
                         'flag_plan_formation_valider_par_comite_pleniere' => true
                     ]);
                 //}
-                return redirect('comitepleniere/'.Crypt::UrlCrypt($id2).'/edit')->with('success', 'Succes : Les actions ont été validée ');
+                return redirect('ctprojetformation/'.Crypt::UrlCrypt($id2).'/edit')->with('success', 'Succes : Les actions ont été validée ');
 
 
             }
