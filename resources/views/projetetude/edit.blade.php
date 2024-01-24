@@ -405,7 +405,7 @@
                                         </div>
 
                                     </li>
-                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -443,7 +443,7 @@
                                     </div>
                                     <?php //}
                                     ?>
-                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -850,7 +850,7 @@
                                     <?php }?>
 
 
-                                    <?php if ( $projetetude->flag_soumis_charge_etude == true && $projetetude->flag_valide == false ) { ?>
+                                    <?php if ( $nomrole == "CHARGER ÉTUDE" && $projetetude->flag_soumis_charge_etude == true && $projetetude->flag_valide == false ) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement de la recevabilité du dossier
                                         </h5>
@@ -914,7 +914,7 @@
                                     </div>
                                     <?php }
                                     ?>
-                                    <?php if ($projetetude->flag_valide == true && $projetetude->flag_rejet == false) { ?>
+                                    <?php if ($nomrole == "CHARGER ÉTUDE" && $projetetude->flag_valide == true && $projetetude->flag_rejet == false) { ?>
                                     <div class="card-body">
                                         <h5 align="center"> Traitement de l'instruction du dossier
                                         </h5>
