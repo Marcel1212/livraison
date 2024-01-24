@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
         'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
         'projetformation' => App\Http\Controllers\ProjetFormationController::class,
         'enrolement' => App\Http\Controllers\EnrolementController::class,
+        'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
         'statutoperations' => App\Http\Controllers\StatutOperationController::class,
         'motifs' => App\Http\Controllers\MotifController::class,
         //'planformation' => App\Http\Controllers\PlanFormationController::class,
