@@ -79,7 +79,7 @@ class ComiteGestionPeController extends Controller
             $input['code_pieces_comite_gestion'] = 'PE';
             $typecomiteinfos = ConseillerParAgence::get_type_comite_projet_etude();
             //dd($typecomiteinfos);
-            $input['id_type_comite_comite_gestion'] = $typecomiteinfos->id_type_comite;
+            $input['id_type_comite_comite_gestion'] = intval($typecomiteinfos->id_type_comite);
 
             ComiteGestion::create($input);
 
