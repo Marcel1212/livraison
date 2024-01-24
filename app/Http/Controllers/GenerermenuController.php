@@ -243,72 +243,19 @@ class GenerermenuController extends Controller
         public function menuprofillayout(Request $request, $id)
         {
 
-            $idutil=Auth::user()->id;
-
-            $roles = DB::table('users')
-                ->join('model_has_roles','users.id','model_has_roles.model_id')
-                ->join('roles','model_has_roles.role_id','roles.id')
-                ->where([['users.id','=',$idutil]])
-                ->first();
-            $idroles = $roles->role_id;
-            //dd($idroles);
-
-            $resulat = DB::table('role_has_sousmenus')
-                ->join('sousmenu','role_has_sousmenus.sousmenus_id_sousmenu','sousmenu.id_sousmenu')
-                ->join('roles','role_has_sousmenus.role_id','roles.id')
-                ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
-                ->where([['roles.id','=',$idroles]])
-                ->get();
-
-            $tabl = [];
-
-            foreach ($resulat as $ligne) {
-
-                $tabl[$ligne->id_menu][] = $ligne;
-            }
-            //dd($id);
-    //dd($tabl);
-
             $resulat2 = DB::table('sousmenu')->get();
-
             $tablmenu = [];
-
             foreach ($resulat2 as $ligne) {
-
                 $tablmenu[$ligne->id_sousmenu][]  = $ligne;
             }
 
-            //dd($tablmenu);
-
+            $role = \App\Models\Role::find($id);
             if ($request->isMethod('post')) {
-                $roles = Role::find($id);
-                $roles->sousmenus()->sync($request->route, true);
-                $roles->permissions()->sync($request->permission,true);
-                return redirect('/menuprofil')->with('success','Attribution effectuer');
-            }
+                $role->sousmenus()->sync($request->route, true);
 
-            $idutil=Auth::user()->id;
-
-            $roles = DB::table('users')
-                ->join('model_has_roles','users.id','model_has_roles.model_id')
-                ->join('roles','model_has_roles.role_id','roles.id')
-                ->where([['users.id','=',$idutil]])
-                ->first();
-            $idroles = $roles->role_id;
-            $naroles = $roles->name;
-
-            $resulat = DB::table('role_has_sousmenus')
-                ->join('sousmenu','role_has_sousmenus.sousmenus_id_sousmenu','sousmenu.id_sousmenu')
-                ->join('roles','role_has_sousmenus.role_id','roles.id')
-                ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
-                ->where([['roles.id','=',$idroles]])
-                ->get();
-
-            $tabl = [];
-
-            foreach ($resulat as $ligne) {
-
-                $tabl[$ligne->id_menu][] = $ligne;
+                $roles = \Spatie\Permission\Models\Role::find($id);
+                $roles->syncPermissions($request->permission);
+                return redirect('/menuprofil')->with('success','Attribution effectuée avec succès');
             }
 
             $resulatsm = DB::table('menu')
@@ -322,21 +269,17 @@ class GenerermenuController extends Controller
             foreach ($resulatsm as $lignesm) {
                 $tablsm[$lignesm->id_menu][$lignesm->menu][$lignesm->libelle][] = $lignesm;
             }
-            $role = Role::find($id);
             $nomprof = $role->name;
             $sousmenu = Sousmenus::get();
 
             $roleSousmenus = DB::table("role_has_sousmenus")->where("role_has_sousmenus.role_id",$id)
                 ->pluck('role_has_sousmenus.sousmenus_id_sousmenu','role_has_sousmenus.sousmenus_id_sousmenu')
                 ->all();
-
-
             $role_permission = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
                 ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
                 ->all();
-//            dd($tablsm);
 
-            return view('generer.menuprofillayout',compact('role_permission','tabl','role','sousmenu','id','tablmenu','tablsm','roleSousmenus','nomprof','naroles'));
+            return view('generer.menuprofillayout',compact('role_permission','role','sousmenu','id','tablmenu','tablsm','roleSousmenus','nomprof'));
         }
 
 }
