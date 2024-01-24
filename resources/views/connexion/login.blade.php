@@ -79,32 +79,27 @@ $couleur = Menu::get_info_couleur();
                     <img src="{{ asset('assets/img/illustrations/bg-shape-image-light.png') }}" alt="auth-login-cover"
                         class="platform-bg" />
                 </div>
-                <!-- /Logo -->
-                <h3 class="mb-1">Bienvenue !</h3>
-                <p class="mb-4">Connectez-vous à votre compte</p>
-                <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST"
-                    autocomplete="off">
-                    {{ csrf_field() }}
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                <b>Succès: </b> {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    @endif
-                    @if ($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                <b>Echec: </b> {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
-                        </div>
-                    @endif
-                    @if ($errors->any())
-                        @foreach ($errors->all() as $error)
+            </div>
+            <!-- /Left Text -->
+
+            <!-- Login -->
+            <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
+                <div class="w-px-400 mx-auto">
+                    <!-- Logo -->
+                    <div class="app-brand mb-4">
+                        <a href="{{ route('/') }}" class="app-brand-link gap-2">
+                            <span class="app-brand-logo demo">
+                                <img src="{{ asset('/frontend/logo/' . @$logo->logo_logo) }}" width="90" />
+                            </span>
+                        </a>
+                    </div>
+                    <!-- /Logo -->
+                    <h3 class="mb-1">Bienvenue !</h3>
+                    <p class="mb-4">Connectez-vous à votre compte</p>
+                    <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST"
+                        autocomplete="off">
+                        {{ csrf_field() }}
+                        @if ($message = Session::get('error'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <div class="alert-body">
                                     <b>Echec: </b> {{ $message }}
@@ -112,24 +107,27 @@ $couleur = Menu::get_info_couleur();
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
-                        @endforeach
-                    @endif
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Mon identifiant</label>
-                        <input type="text" class="form-control form-control-sm" id="username" name="username"
-                            placeholder="Mon identifiant" autofocus />
-                    </div>
-                    <div class="mb-3 ">
-                        <div class="d-flex justify-content-between">
-                            <label class="form-label" for="password">Mon mot de passe</label>
-                            <a href="{{ route('motdepasseoublie') }}">
-                                <small>Mot de passe oublié ?</small>
-                            </a>
+                        @endif
+                        @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <div class="alert-body">
+                                        {{ $error }}
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            @endforeach
+                        @endif
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Mon identifiant</label>
+                            <input type="text" class="form-control form-control-sm" id="username" name="username"
+                                placeholder="Mon identifiant" autofocus />
                         </div>
                         <div class="mb-3 ">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label" for="password">Mon mot de passe</label>
-                                <a href="#">
+                                <a href="{{ route('motdepasseoublie') }}">
                                     <small>Mot de passe oublié ?</small>
                                 </a>
                             </div>
@@ -172,36 +170,36 @@ $couleur = Menu::get_info_couleur();
                         </div>
 
                         <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
-                </form>
+                    </form>
 
-                <p class="text-center">
-                    <span>Vous êtes nouveau sur la plateforme ?</span> <br>
-                    <a href="{{ route('enrolements') }}">
-                        <span>Enrôlez vous ici</span>
-                    </a>
-                </p>
+                    <p class="text-center">
+                        <span>Vous êtes nouveau sur la plateforme ?</span> <br>
+                        <a href="{{ route('enrolements') }}">
+                            <span>Enrôlez vous ici</span>
+                        </a>
+                    </p>
 
-                <div class="divider my-4">
-                    <div class="divider-text">Nous suivre</div>
-                </div>
+                    <div class="divider my-4">
+                        <div class="divider-text">Nous suivre</div>
+                    </div>
 
-                <div class="d-flex justify-content-center">
-                    <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
-                        <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
-                    </a>
+                    <div class="d-flex justify-content-center">
+                        <a href="javascript:;" class="btn btn-icon btn-label-facebook me-3">
+                            <i class="tf-icons fa-brands fa-facebook-f fs-5"></i>
+                        </a>
 
-                    <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
-                        <i class="tf-icons fa-brands fa-google fs-5"></i>
-                    </a>
+                        <a href="javascript:;" class="btn btn-icon btn-label-google-plus me-3">
+                            <i class="tf-icons fa-brands fa-google fs-5"></i>
+                        </a>
 
-                    <a href="javascript:;" class="btn btn-icon btn-label-twitter">
-                        <i class="tf-icons fa-brands fa-twitter fs-5"></i>
-                    </a>
+                        <a href="javascript:;" class="btn btn-icon btn-label-twitter">
+                            <i class="tf-icons fa-brands fa-twitter fs-5"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
+            <!-- /Login -->
         </div>
-        <!-- /Login -->
-    </div>
     </div>
 
     <!-- / Content -->
