@@ -193,7 +193,7 @@ class CtprojetetudeController extends Controller
         //dd($id);
 
         $NumAgce = Auth::user()->num_agce;
-        $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
+        $conseilleragence = ConseillerParAgence::get_conseiller_par_agence_u($NumAgce);
         $nombredeconseilleragence = count($conseilleragence);
 
         if ($request->isMethod('put')) {
