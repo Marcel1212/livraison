@@ -292,6 +292,7 @@ class CtprojetetudeController extends Controller
                     'flag_valide_action_plan_formation' => false,
                     'flag_plan_validation_rejeter_par_comite_en_ligne' => true
                 ]);
+                /// Mise a jour
                 /*CtPleniere::create([
                     'id_plan_formation' => $idplan
                 ]);*/
