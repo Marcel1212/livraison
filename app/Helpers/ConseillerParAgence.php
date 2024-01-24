@@ -56,6 +56,15 @@ class ConseillerParAgence
         return (isset($typecomite) ? $typecomite : '');
     }
 
+    // Projet d'etude
+    public static function get_type_comite_projet_etude()
+    {
+        $typecomite = TypeComite::where([['libelle_type_comite','=','Comitedegestion'],['code_type_comite','=','PE']])
+                            ->first();
+
+        return (isset($typecomite) ? $typecomite : '');
+    }
+
     public static function get_type_comite_per_plan_formation()
     {
         $typecomite = TypeComite::where([['libelle_type_comite','=','Comitepermant'],['code_type_comite','=','PF']])

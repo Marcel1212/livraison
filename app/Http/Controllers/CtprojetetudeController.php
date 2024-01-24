@@ -46,16 +46,17 @@ class CtprojetetudeController extends Controller
         $nacodes = Menu::get_code_menu_profil(Auth::user()->id);
         //dd($nacodes);
         if($nacodes === "CHARGEETUDE"){
-            $projetformations = DB::table('projet_etude')
-            ->join('entreprises', 'projet_etude.id_entreprises', '=', 'entreprises.id_entreprises')
-            ->where([['projet_etude.flag_valide','=',true],['projet_etude.statut_instruction','=',true],['projet_etude.statut_instruction','=',true]])
-            ->get();
-        // dd(count($projetformations));
+            // $projetformations = DB::table('projet_etude')
+            // ->join('entreprises', 'entreprises.id_entreprises', '=', 'projet_etude.id_entreprises')
+            // ->where([['projet_etude.flag_valide','=',true],['projet_etude.statut_instruction','=',true]])
+            // ->get();
+            $projetformations = ProjetEtude::where([['flag_valide','=',true],['statut_instruction','=',true]])->get();
+        // dd(($projetformations));
             // $projetformations = ProjetEtude::leftJoin('plan_formation_a_valider_par_user', 'plan_formation.id_plan_de_formation', '=', 'plan_formation_a_valider_par_user.id_plan_formation')->
             // where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
             //$planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',true]])->get();
         }else{
-            $projetformations = ProjetEtude::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
+            $projetformations = ProjetEtude::where([['flag_valide','=',true],['statut_instruction','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',false]])->get();
         }
 
         //dd($planformations);
@@ -114,16 +115,17 @@ class CtprojetetudeController extends Controller
             //->select('projet_etude.*', 'entreprises.raison_social_entreprises', 'posts.content')
             ->where([['projet_etude.id_projet_etude','=',$id]])
             ->get();
+            //dd($projetetude);
             //dd($projetetude['0']->ncc_entreprises);
             $projetetude = $projetetude['0'] ;
-        $planformation = PlanFormation::find($id);
+        $planformation = ProjetEtude::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
         $typeentreprises = TypeEntreprise::all();
-        $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
-        foreach ($typeentreprises as $comp) {
-            $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
-        }
+        // $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
+        // foreach ($typeentreprises as $comp) {
+        //     $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
+        // }
 
 
         $pays = Pays::all();
@@ -177,8 +179,8 @@ class CtprojetetudeController extends Controller
 
         $nombreactionvalider = count($actionvalider);
         $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
-
-        return view('ctprojetetude.edit', compact('projetetude','planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller'));
+        //,'typeentreprise'
+        return view('ctprojetetude.edit', compact('projetetude','planformation','infoentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller'));
 
     }
 
@@ -188,6 +190,7 @@ class CtprojetetudeController extends Controller
     public function update(Request $request, $id)
     {
         $id =  Crypt::UrldeCrypt($id);
+        //dd($id);
 
         $NumAgce = Auth::user()->num_agce;
         $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
@@ -197,7 +200,7 @@ class CtprojetetudeController extends Controller
 
             $data = $request->all();
 
-            //dd($data);
+            dd($data);
 
             if($data['action'] === 'Traiter_action_formation_valider'){
 

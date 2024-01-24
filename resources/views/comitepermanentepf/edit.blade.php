@@ -121,7 +121,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
-                            echo 'active';
+                            // echo 'active';
                         } else {
                             echo 'disabled';
                         } ?>" role="tab" data-bs-toggle="tab"
@@ -285,7 +285,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                     <th>Code </th>
                                     <th>Date soumis</th>
+                                    <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                     <th>Action</th>
+                                    <?php } ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -300,8 +302,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
 
+
+                                        <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                         <td align="center">
-                                            <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                             @can($lien . '-edit')
                                                 <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
@@ -311,8 +314,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 href="#myModal1" data-url="http://example.com">
                                                 <img src='/assets/img/editing.png'>
                                             </a>
-                                            <?php } ?>
                                         </td>
+                                        <?php } ?>
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -364,8 +368,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Entreprise </th>
                                     <th>Conseiller </th>
                                     <th>Code </th>
-                                    <th>Cout demandé</th>
-                                    <th>Cout accordé </th>
+                                    <th>Cout formation</th>
                                     <th>Date soumis</th>
                                 </tr>
                             </thead>
@@ -379,12 +382,11 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
-                                        <td>{{ @$planformation->code_plan_formation }}</td>
+                                        <td>{{ @$planformation->code_projet_formation }}</td>
+
                                         <td align="rigth">
-                                            {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
-                                        <td align="rigth">
-                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
-                                        <td>{{ $planformation->date_soumis_plan_formation }}</td>
+                                            {{ number_format($planformation->cout_projet_formation) }}</td>
+                                        <td>{{ $planformation->date_soumis }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

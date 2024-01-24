@@ -119,7 +119,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
-                            echo 'active';
+                            //echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false">
@@ -305,7 +305,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) {
                                             ?>
                                             <span class="badge bg-warning">Soumis au ct</span>
-                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                             <span class="badge bg-secondary">Soumis</span>
                                             <?php // }
                                             ?>

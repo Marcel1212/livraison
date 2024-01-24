@@ -14,6 +14,7 @@ use App\Models\Entreprises;
 use App\Models\Pieces;
 use App\Models\ProjetEtude;
 use App\Models\PiecesProjetEtude;
+use App\Models\AgenceLocalite;
 use Carbon\Carbon;
 use App\Helpers\Menu;
 use App\Helpers\Crypt;
@@ -49,11 +50,15 @@ class ProjetEtudeController extends Controller
             $demandeenroles = ProjetEtude::where('id_user','=',$user_id)->get();
 
         }else if ($nomrole == 'CHEF DE DEPARTEMENT') {
+            // Liste des projet de formation a traiter par le directeur
+            $num_agce = Auth::user()->num_agce;
+            $num_agce = intval($num_agce);
+            $demandeenroles = ProjetEtude::where([['flag_soumis','=',true],['num_agce','=',$num_agce]])->get();
             //dd('Autre');
-            $demandeenroles = ProjetEtude::where('id_user_affecte','=',$user_id)->get();
+            //$demandeenroles = ProjetEtude::where('id_user_affecte','=',$user_id)->get();
         }else if ($nomrole == 'CHEF DE SERVICE') {
             $demandeenroles = ProjetEtude::where('id_chef_serv','=',$user_id)->get();
-        }else if ($nomrole == 'CHARGER ETUDE') {
+        }else if ($nomrole == 'CHARGER ÉTUDE') {
             //dd('Autre');
             $demandeenroles = ProjetEtude::where('id_charge_etude','=',$user_id)->get();
         }
@@ -265,6 +270,7 @@ class ProjetEtudeController extends Controller
             $input['flag_valide'] = false;
             $input['flag_rejet'] = false;
             $input['id_user'] = $user_id;
+            $input['code_projet_etude'] = 'PE-'.Gencode::randStrGen(4, 5);
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['contexte_probleme_projet_etude'] = ucfirst($input['contexte_probleme']);
             $input['objectif_general_projet_etude'] = ucfirst($input['objectif_general']);
@@ -273,7 +279,7 @@ class ProjetEtudeController extends Controller
             $input['champ_etude_projet_etude'] = ucfirst($input['champ_etude']);
             $input['cible_projet_etude'] = ucfirst($input['cible']);
             $input['id_processus'] = 2;
-            $input['id_entreprise'] = 2;
+            $input['id_entreprises'] =  $id_entreprise;
             // Creation d'un numero de dossier
             $number = mt_rand(10000,999999);
             $input['code_dossier'] = $id_entreprise;
@@ -682,29 +688,23 @@ class ProjetEtudeController extends Controller
                 $projetetude->save();
                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet attribué au chef de service');
             }
-            // Traitement de la soumission
+            // Traitement de la soumission ,  attribution aux chefs de service
             if($data['action'] === 'soumission_plan_formation'){
                 // ID du plan
                 $date_soumission = Carbon::now();
                 $projetetude = ProjetEtude::find($id);
                 $projetetude->flag_soumis = true;
                 $projetetude->date_soumis = $date_soumission;
-                $num_direction = Auth::user()->id_direction;
-                // Atribution au chef de departement
-                // Recuperation de l'ID du chef de departement
-                $num_agce = Auth::user()->num_agce;
-                //dd($num_agce);
-                $chefdepartement = DB::table('users')
-                ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select('users.name', 'users.prenom_users', 'users.id')
-                ->where([['roles.id','=',21],['users.num_agce','=',$num_agce]/*,['users.num_direction','=',$num_direction]*/])
-                ->get();
-                //dd(intval($chefdepartement[0]->id));
-                $projetetude->id_user_affecte = intval($chefdepartement[0]->id);
+                $numncc = Auth::user()->login_users;
+                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+                $id_localite = $entreprise->id_localite_entreprises;
+                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+                //dd($localite_info);
+                $id_agence = $localite_info[0]->id_agence;
+                // Attribution dans l'agence
+                $projetetude->num_agce = intval($id_agence);
                 // Recuperation de l'id Traitement a faire
                 $user_id = Auth::user()->id;
-                $projetetude->id_chef_dep = intval($chefdepartement[0]->id);
                 $projetetude->save();
                 return redirect()->route('projetetude.index')->with('success', 'Projet soumis avec succès.');
 

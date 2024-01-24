@@ -46,6 +46,7 @@
             @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <div class="alert-body">
+                        <i class="fab fa-angellist mb-2"></i>
                         {{ $message }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -54,6 +55,7 @@
             @if ($message = Session::get('danger'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
+                        <i class="fas fa-allergies mb-2"></i>
                         {{ $message }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -224,7 +226,7 @@
                                                             </ul>
                                                             <?php }?>
 
-                                                            <?php if ($projetetude->flag_valide == null && $projetetude->flag_rejet == null && $projetetude->flag_attente_rec == true   ) {?>
+                                                            <?php if (/*$projetetude->flag_valide == false && $projetetude->flag_rejet == false &&*/ $projetetude->flag_attente_rec == true   ) {?>
                                                             <ul class="timeline pt-3">
 
                                                                 <li
@@ -403,7 +405,7 @@
                                         </div>
 
                                     </li>
-                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// }else if ($projetetude->flag_rejet == true &&  $projetetude->flag_valide == false && $projetetude->flag_soumis == true){?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -441,7 +443,7 @@
                                     </div>
                                     <?php //}
                                     ?>
-                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                    <?php// if ($projetetude->flag_attente_rec == true ) {?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                     <div class ="row  gy-3">
                                         <div class="col-md-4 col-12">
                                             <li class="mb-4 pb-1 d-flex justify-content-between align-items-center"
@@ -492,7 +494,7 @@
                                                         <button type="button" class="accordion-button"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionOne"
                                                             aria-expanded="true" aria-controls="accordionOne">
-                                                            Details de l'entreprise
+                                                            <strong>DETAILS DE L'ENTREPRISE</strong>
                                                         </button>
                                                     </h2>
 
@@ -560,7 +562,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionTwo"
                                                             aria-expanded="false" aria-controls="accordionTwo">
-                                                            Informations du projet d'etude
+                                                            <strong>INFORMATIONS DU PROJET D'ETUDE</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionTwo" class="accordion-collapse collapse"
@@ -641,7 +643,7 @@
                                                         <button type="button" class="accordion-button collapsed"
                                                             data-bs-toggle="collapse" data-bs-target="#accordionThree"
                                                             aria-expanded="false" aria-controls="accordionThree">
-                                                            Pieces jointes du projet
+                                                            <strong>PIECES JOINTES DU PROJET</strong>
                                                         </button>
                                                     </h2>
                                                     <div id="accordionThree" class="accordion-collapse collapse"
@@ -769,8 +771,9 @@
                                         <div class="row">
                                             <label class="form-label">Liste des chefs de service <span
                                                     style="color:red;">*</span></label>
-                                            <select id="id_chef_service" name="id_chef_service" class="form-select"
-                                                <?php echo $disable_cp; ?> required="required">
+                                            <select id="id_chef_service" name="id_chef_service"
+                                                class="select2 select2-size-sm form-select" <?php echo $disable_cp; ?>
+                                                required="required">
                                                 <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_soumis_chef_service != true) {?>
                                                 <?php echo $listeuserfinal; ?>
                                                 <?php }else{?>
@@ -810,8 +813,9 @@
                                         <div class="row">
                                             <label class="form-label">Liste des charge d'etude <span
                                                     style="color:red;">*</span></label>
-                                            <select id="id_chef_service" name="id_charge_etude" class="form-select"
-                                                <?php echo $disable_cs; ?> required="required">
+                                            <select id="id_chef_service" name="id_charge_etude"
+                                                class="select2 select2-size-sm form-select" <?php echo $disable_cs; ?>
+                                                required="required">
                                                 <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_soumis_chef_service == true  &&  $projetetude->flag_soumis_charge_etude != true ) {?>
                                                 <?php echo $listeuserfinal; ?>
                                                 <?php }else{?>
@@ -846,7 +850,7 @@
                                     <?php }?>
 
 
-                                    <?php if ($nomrole == "CHARGER ETUDE" && $projetetude->flag_soumis_charge_etude == true && $projetetude->flag_valide == null ) { ?>
+                                    <?php if ( $projetetude->flag_soumis_charge_etude == true && $projetetude->flag_valide == false ) { ?>
                                     <div class="card-body">
                                         <h5 class="card-title" align="center"> Traitement de la recevabilité du dossier
                                         </h5>
@@ -854,7 +858,8 @@
                                             <label class="form-label">Statut de la recevabilité <span
                                                     style="color:red;">*</span></label>
                                             <select required="required" id="id_charge_etude" name="id_charge_etude"
-                                                class="form-select" <?php echo $disable_rec; ?> required="required">
+                                                class="select2 select2-size-sm form-select" <?php echo $disable_rec; ?>
+                                                required="required">
                                                 <?php if($projetetude->date_valide == null && $projetetude->date_rejet == null) { ?>
                                                 ?>
                                                 <?php echo $statuts;
@@ -870,7 +875,8 @@
                                         <div class="row">
                                             <label class="form-label">Motif<span style="color:red;">*</span></label>
                                             <select required="required" id="motif_rec" name="motif_rec"
-                                                class="form-select" <?php echo $disable_rec; ?> required="required">
+                                                class="select2 select2-size-sm form-select" <?php echo $disable_rec; ?>
+                                                required="required">
                                                 <?php if($projetetude->date_valide == null && $projetetude->date_rejet == null) { ?>
                                                 <?php echo $motifs;
                                                 ?>
@@ -918,8 +924,9 @@
                                             <label class="form-label">Statut d'instruction <span
                                                     style="color:red;">*</span></label>
                                             <select required="required" id="id_charge_etude" name="id_statut_instruction"
-                                                class="form-select" <?php //echo $disable_rec;
-                                                ?> required="required">
+                                                class="select2 select2-size-sm form-select" <?php //echo $disable_rec;
+                                                ?>
+                                                required="required">
                                                 <?php if($projetetude->flag_soumis == true &&  $projetetude->flag_soumis_chef_service == true  &&  $projetetude->flag_soumis_charge_etude == true &&  $projetetude->flag_valide == true &&  $projetetude->statut_instruction == null ) {
                                             ?>
                                                 <?php echo $statutinst;

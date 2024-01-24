@@ -22,7 +22,7 @@ $nombre = count($conseilleragence);
     @php($Module = 'Demandes')
     @php($titre = 'Liste des projets d\'etudes')
     @php($soustitre = 'Traitement du projet d\'etude')
-    @php($lien = 'ctprojetetude')
+    @php($lien = 'comitetechniquepe')
 
 
     <!-- BEGIN: Content-->
@@ -78,21 +78,21 @@ $nombre = count($conseilleragence);
                             Projet d'etude
                         </button>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categorieplan" aria-controls="navs-top-categorieplan"
                             aria-selected="false">
                             Categorie des travailleurs
                         </button>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <button type="button" class="nav-link <?php //if($planformation->flag_recevablite_plan_formation==true){ echo "active";}
                         ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
                             Action du projet d'etude
                         </button>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php //if($planformation->flag_recevablite_plan_formation!=true){ echo "active";}else{ echo "disabled";}
                         ?>" role="tab" data-bs-toggle="tab"
@@ -365,10 +365,10 @@ $nombre = count($conseilleragence);
                     } ?>" id="navs-top-recevabilite" role="tabpanel">
 
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
+                            action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude)) }}"
                             enctype="multipart/form-data">
                             @csrf
-                            @method('put')
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-md-6 col-12">
                                     <label class="form-label" for="billings-country">Motif de recevabilite <strong
@@ -401,8 +401,8 @@ $nombre = count($conseilleragence);
                                         Retour</a>
                                 </div>
                                 <!--<div class="col-12 col-md-2" align="right"> <br>
-                                                                                                                <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
-                                                                                                            </div>-->
+                                                                                                                                                                        <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                                                                                                                                                    </div>-->
 
                             </div>
 
@@ -568,10 +568,10 @@ $nombre = count($conseilleragence);
                             <div class="col-12 col-md-9">
                                 <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
                                 <!--<input
-                                                                                                type="number"
-                                                                                                class="form-control form-control-sm"
-                                                                                                value="{{ @$infosactionplanformation->cout_accorde_action_formation }}"
-                                                                                                disabled="disabled" />-->
+                                                                                                                                                        type="number"
+                                                                                                                                                        class="form-control form-control-sm"
+                                                                                                                                                        value="{{ @$infosactionplanformation->cout_accorde_action_formation }}"
+                                                                                                                                                        disabled="disabled" />-->
                                 <textarea class="form-control form-control-sm" name="commentaire_action_formation" id="commentaire_action_formation"
                                     rows="6" disabled="disabled">{{ @$infosactionplanformation->commentaire_action_formation }}</textarea>
                             </div>
@@ -636,25 +636,25 @@ $nombre = count($conseilleragence);
         </div>
     @endforeach
     <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                                                                    <div class="modal-dialog">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-body">
-                                                                                                <div id='modal-content'>
+                                                                                                                                            <div class="modal-dialog">
+                                                                                                                                                <div class="modal-content">
+                                                                                                                                                    <div class="modal-body">
+                                                                                                                                                        <div id='modal-content'>
 
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
 
-                                                                                <script>
-                                                                                    $('#btnChange').click(function(eve) {
-                                                                                        var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
-                                                                                        alert(url);
-                                                                                        $("#modal-content").load(url, function() {
-                                                                                            $("#myModal").modal("show");
-                                                                                        });
-                                                                                    })
-                                                                                </script>-->
+                                                                                                                                        <script>
+                                                                                                                                            $('#btnChange').click(function(eve) {
+                                                                                                                                                var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
+                                                                                                                                                alert(url);
+                                                                                                                                                $("#modal-content").load(url, function() {
+                                                                                                                                                    $("#myModal").modal("show");
+                                                                                                                                                });
+                                                                                                                                            })
+                                                                                                                                        </script>-->
 
 @endsection
