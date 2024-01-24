@@ -43,15 +43,15 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                        <?php
-                                            $i=0;
-                                        ?>
+                                    <?php
+                                    $i = 0;
+                                    ?>
 
-                            @foreach($tablsm as $key=>$tablvue)
-                                            @foreach($tablvue as $key_vue=>$vue)
-                                                    <?php
-                                                    $i++;
-                                                    ?>
+                                @foreach($tablsm as $key=>$tablvue)
+                                    @foreach($tablvue as $key_vue=>$vue)
+                                            <?php
+                                            $i++;
+                                            ?>
                                         <div class="accordion mt-3 accordion-bordered" id="accordionStyle1">
                                             <div class="accordion-item card">
 
@@ -63,7 +63,7 @@
                                                             data-bs-target="#accordionMarginOne{{$i}}"
                                                             aria-expanded="false"
                                                             aria-controls="accordionMarginOne{{$i}}">
-                                                        {{$key_vue}}
+                                                        Module :  {{$key_vue}}
                                                     </button>
                                                 </h2>
                                                 <div id="accordionMarginOne{{$i}}"
@@ -74,12 +74,13 @@
                                                         <div class="accordion-body">
                                                             <div class="checkbox-list">
                                                                 <label class="checkbox">
+                                                                    &nbsp;&nbsp; Menu :
                                                                     <input type="checkbox"
-                                                                        @foreach($new_vue as $permission_key=>$permission)
-                                                                            value="{{$permission->id_sous_menu}}"
-                                                                               <?php if (in_array($permission->id_sous_menu, $roleSousmenus)) {
-                                                                                   echo 'checked';
-                                                                               } ?>
+                                                                           @foreach($new_vue as $permission_key=>$permission)
+                                                                               value="{{$permission->id_sous_menu}}"
+                                                                           <?php if (in_array($permission->id_sous_menu, $roleSousmenus)) {
+                                                                               echo 'checked';
+                                                                           } ?>
                                                                            name="route[{{$permission->id_sous_menu}}]"
                                                                            id="route{{$permission->id_sous_menu}}"
                                                                         @endforeach
@@ -96,6 +97,7 @@
                                                                 @isset($permission->lib_permission)
 
                                                                     <div class="col-2">
+                                                                        Permission :
                                                                         <input
                                                                             type="checkbox"
                                                                             <?php if (in_array($permission->id, $role_permission)) {
@@ -106,7 +108,8 @@
                                                                             name="permission[<?php echo $permission->id;?>]"
                                                                             id="permission<?php echo $permission->id;?>">
                                                                         <span class="custom-option-header">
-                                                                            <span class="h6 mb-0">{{$permission->lib_permission}}</span> |
+                                                                            <span
+                                                                                class="h6 mb-0">{{$permission->lib_permission}}</span> |
                                                                         </span>
                                                                     </div>
                                                                 @endisset
@@ -117,7 +120,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            @endforeach
+                                    @endforeach
                                 @endforeach
                             </div>
                         </div>
