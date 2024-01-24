@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 /**
  * @property float $id_projet_etude
  * @property float $id_entreprises
@@ -80,12 +82,19 @@ class ProjetEtude extends Model
         return $this->hasMany('App\Models\PiecesProjetEtude', 'id_projet_etude', 'id_projet_etude');
     }
 
+
       /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function agence()
     {
         return $this->belongsTo('App\Models\Agence', 'num_agce', 'num_agce');
+    }
+
+
+
+    public function operateurs():BelongsToMany{
+        return $this->belongsToMany(Entreprises::class, 'projet_etude_has_entreprises','id_projet_etude','id_entreprises');
     }
 
 

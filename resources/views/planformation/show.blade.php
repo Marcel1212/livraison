@@ -299,12 +299,12 @@ $logo = Menu::get_logo();
                                                                                         class="">&nbsp;
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
-                                                                                        nowrap="nowrap" class="">&nbsp;
+                                                                                        nowrap="nowrap" class="">Secteur d'activité
                                                                                     </td>
-                                                                                    <td align="left" class="">&nbsp;
+                                                                                    <td align="left" class="">:
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class="">&nbsp;
+                                                                                        class="">{{$actionplan->secteurActivite->libelle_secteur_activite }}
                                                                                     </td>
                                                                                 </tr>
 

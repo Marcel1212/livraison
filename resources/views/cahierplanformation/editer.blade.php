@@ -22,9 +22,9 @@
 @section('content')
 
 @php($Module='Plan de formation')
-@php($titre='Liste des commissions permanente')
-@php($soustitre='Tenue de commission permanente')
-@php($lien='comitepermanente')
+@php($titre='Liste des cahiers de plan de formation')
+@php($soustitre='Creer un cahier de plan de formation')
+@php($lien='cahierplanformation')
 
 
     <!-- BEGIN: Content-->
@@ -78,21 +78,10 @@
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Commission permanente
+                          Cahier de plan de formation
                         </button>
                       </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-categorieplan"
-                          aria-controls="navs-top-categorieplan"
-                          aria-selected="false">
-                          Personnes ressources
-                        </button>
-                      </li>
+
                       <li class="nav-item">
                         <button
                           type="button"
@@ -114,7 +103,7 @@
                           data-bs-target="#navs-top-recevabilite"
                           aria-controls="navs-top-recevabilite"
                           aria-selected="false">
-                          Agrément
+                          Cahier de plan de formation à soumettre pour le comité
                         </button>
                       </li>
                     </ul>
@@ -141,16 +130,7 @@
                                 <div class="col-7">
                                 </div>
                                 <div class="col-4">
-                            <?php  if($nombreaction == $nombreactionvalider and $planformation->flag_plan_formation_valider_par_processus == true){?>
-                                <form method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
-                                    @csrf
-                                    @method('post')
-                                    <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
-                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Valider la commission permanente pour ce plan de formation
-                                    </button>
-                                </form>
-                                <?php } ?>
+
                             </div>
                             <div class="col-1"s>
                                 <a class="btn btn-sm btn-outline-secondary waves-effect" href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
@@ -190,7 +170,7 @@
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation) }}</td>
 
                                                 <td align="center" nowrap="nowrap">
-                                                    @can($lien.'-edit')
+
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
@@ -203,6 +183,7 @@
                                                             <!--<a href="#myModal" id="btnChange"class="btn btn-default" data-toggle="modal" data-id="@$actionplanformation->id_action_formation_plan">Change Location</a>-->
 
                                                             <?php } ?>
+                                                            @can($lien.'-edit')
                                                     @endcan
 
                                                 </td>
@@ -462,31 +443,13 @@
                             <hr/>
 
 
-                            <div class="col-md-4 col-12">
-                                <div class="mb-1">
-                                    <label>Montant à accorder <strong style="color:red;">*</strong>: </label>
-                                    <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire)</strong></label>
 
-                                <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
-                                    <?= $motif; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-1">
-                                    <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                    <textarea class="form-control form-control-sm"  name="commentaire" id="commentaire" rows="6"></textarea>
-                                </div>
-                            </div>
 
                             <div class="col-12 text-center">
                                 <?php
                                     //$conseilleraction = NombreActionValiderParLeConseiller::get_conseiller_valide_action_plan($infosactionplanformation->id_action_formation_plan , Auth::user()->id);
                                 ?>
                             <?php //if($infosactionplanformation->user_conseiller == $idconnect){?>
-                                <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider" class="btn btn-success me-sm-3 me-1">Valider</button>
                                 <!--<button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_rejeter" class="btn btn-danger me-sm-3 me-1">Action à corriger</button>-->
                             <?php //}else{?>
                                 <!--<div class="alert alert-info alert-dismissible fade show" role="alert">

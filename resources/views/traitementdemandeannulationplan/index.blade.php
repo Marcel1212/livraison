@@ -2,8 +2,8 @@
 
 @section('content')
 
-    @php($Module='Plan de formation')
-    @php($titre='Liste des demandes d\'annulation des plans de formation')
+    @php($Module='Demande Annulation')
+    @php($titre='Liste des demandes d\'annulation')
     @php($lien='traitementdemandeannulationplan')
 
     <!-- BEGIN: Content-->

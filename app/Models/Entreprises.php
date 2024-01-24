@@ -151,4 +151,6 @@ class Entreprises extends Model
     {
         return $this->hasMany('App\Models\Pieces', 'id_entreprises', 'id_entreprises');
     }
+
+
 }
