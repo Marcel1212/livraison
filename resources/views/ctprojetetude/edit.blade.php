@@ -7,9 +7,11 @@
 
 	}*/
 $NumAgce = Auth::user()->num_agce;
+
 use App\Helpers\ConseillerParAgence;
 use App\Helpers\NombreActionValiderParLeConseiller;
-$conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
+$Iddepartement = Auth::user()->id_departement;
+$conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce, $Iddepartement);
 $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation, Auth::user()->id);
 $nombre = count($conseilleragence);
 //dd($nombre);
@@ -401,8 +403,8 @@ $nombre = count($conseilleragence);
                                         Retour</a>
                                 </div>
                                 <!--<div class="col-12 col-md-2" align="right"> <br>
-                                                                                                                                                                        <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
-                                                                                                                                                                    </div>-->
+                                                                                                                                                                                <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                                                                                                                                                            </div>-->
 
                             </div>
 
@@ -568,10 +570,10 @@ $nombre = count($conseilleragence);
                             <div class="col-12 col-md-9">
                                 <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
                                 <!--<input
-                                                                                                                                                        type="number"
-                                                                                                                                                        class="form-control form-control-sm"
-                                                                                                                                                        value="{{ @$infosactionplanformation->cout_accorde_action_formation }}"
-                                                                                                                                                        disabled="disabled" />-->
+                                                                                                                                                                type="number"
+                                                                                                                                                                class="form-control form-control-sm"
+                                                                                                                                                                value="{{ @$infosactionplanformation->cout_accorde_action_formation }}"
+                                                                                                                                                                disabled="disabled" />-->
                                 <textarea class="form-control form-control-sm" name="commentaire_action_formation" id="commentaire_action_formation"
                                     rows="6" disabled="disabled">{{ @$infosactionplanformation->commentaire_action_formation }}</textarea>
                             </div>
@@ -636,25 +638,25 @@ $nombre = count($conseilleragence);
         </div>
     @endforeach
     <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                                                                                                                                            <div class="modal-dialog">
-                                                                                                                                                <div class="modal-content">
-                                                                                                                                                    <div class="modal-body">
-                                                                                                                                                        <div id='modal-content'>
+                                                                                                                                                    <div class="modal-dialog">
+                                                                                                                                                        <div class="modal-content">
+                                                                                                                                                            <div class="modal-body">
+                                                                                                                                                                <div id='modal-content'>
 
+                                                                                                                                                                </div>
+                                                                                                                                                            </div>
                                                                                                                                                         </div>
                                                                                                                                                     </div>
                                                                                                                                                 </div>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
 
-                                                                                                                                        <script>
-                                                                                                                                            $('#btnChange').click(function(eve) {
-                                                                                                                                                var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
-                                                                                                                                                alert(url);
-                                                                                                                                                $("#modal-content").load(url, function() {
-                                                                                                                                                    $("#myModal").modal("show");
-                                                                                                                                                });
-                                                                                                                                            })
-                                                                                                                                        </script>-->
+                                                                                                                                                <script>
+                                                                                                                                                    $('#btnChange').click(function(eve) {
+                                                                                                                                                        var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
+                                                                                                                                                        alert(url);
+                                                                                                                                                        $("#modal-content").load(url, function() {
+                                                                                                                                                            $("#myModal").modal("show");
+                                                                                                                                                        });
+                                                                                                                                                    })
+                                                                                                                                                </script>-->
 
 @endsection
