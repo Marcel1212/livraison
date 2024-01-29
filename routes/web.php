@@ -274,10 +274,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::match(['get', 'post'], '/profil', [App\Http\Controllers\HomeController::class, 'profil'])->name('profil');
 
-    Route::group(['middleware' => ['can:attribuer']], function () {
+    //Route::group(['middleware' => ['can:attribuer']], function () {
         Route::match(['get', 'post'], '/menuprofil', [App\Http\Controllers\GenerermenuController::class, 'parametragemenu'])->name('menuprofil');
         Route::match(['get', 'post'], '/menuprofillayout/{id}', [App\Http\Controllers\GenerermenuController::class, 'menuprofillayout'])->name('menuprofillayout');
-    });
+    //});
 
 
     Route::match(['get', 'post'], '/modifiermotdepasse', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifier.mot.passe');
