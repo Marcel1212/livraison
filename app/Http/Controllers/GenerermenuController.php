@@ -11,36 +11,37 @@ use DB;
 use Auth;
 use Session;
 use Spatie\Permission\Models\Permission;
+
 //for test
 ini_set('max_execution_time', 0);
 
 class GenerermenuController extends Controller
 {
     public function index(Request $request)
-        {
+    {
 
-    //dd(pathinfo('designadmin'));
-    //dd(__DIR__);
-            //dd('test');
+        //dd(pathinfo('designadmin'));
+        //dd(__DIR__);
+        //dd('test');
 
-            //creation de fichier
+        //creation de fichier
 
-            //$view = view('layouts/backLayout/'.$groupe.".blade.php");
-            //$dir = "/resources/views/layouts/backLayout/";
+        //$view = view('layouts/backLayout/'.$groupe.".blade.php");
+        //$dir = "/resources/views/layouts/backLayout/";
 
-            $dir = __DIR__.'/../../../resources/views/layouts/backLayout/';
+        $dir = __DIR__ . '/../../../resources/views/layouts/backLayout/';
 
-            //$dir = $view;
+        //$dir = $view;
 
-            $groupe="designadmin";
+        $groupe = "designadmin";
 
-            $filename = $groupe.".blade.php";
+        $filename = $groupe . ".blade.php";
 
-            //$filename = "../../../resources/views/layouts/backLayout/designadmin.blade.php";
+        //$filename = "../../../resources/views/layouts/backLayout/designadmin.blade.php";
 
-            $pagemenu = " <?php ?>";
+        $pagemenu = " <?php ?>";
 
-            $pagemenu.='<!DOCTYPE html>
+        $pagemenu .= '<!DOCTYPE html>
     					<html dir="ltr" lang="en">
 
     					<head>
@@ -83,16 +84,16 @@ class GenerermenuController extends Controller
       @include("layouts.backLayout.headeradmin")';
 
 
-            $resulat = DB::table('menu')->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')->get();
+        $resulat = DB::table('menu')->join('sousmenu', 'menu.id_menu', 'sousmenu.menu_id_menu')->get();
 
-            $tabl = [];
+        $tabl = [];
 
-            foreach ($resulat as $ligne) {
+        foreach ($resulat as $ligne) {
 
-                $tabl[$ligne->id_menu][] = $ligne;
-            }
+            $tabl[$ligne->id_menu][] = $ligne;
+        }
 
-            $pagemenu.='<!-- ============================================================== -->
+        $pagemenu .= '<!-- ============================================================== -->
             <!-- Left Sidebar - style you can find in sidebar.scss  -->
             <!-- ============================================================== -->
             <aside class="left-sidebar" data-sidebarbg="skin5">
@@ -102,7 +103,7 @@ class GenerermenuController extends Controller
                     <nav class="sidebar-nav">
                         <ul id="sidebarnav" class="p-t-30">';
 
-            $pagemenu.='<?php $i=0; foreach ($tabl as $key => $tablvue) { $i++;?>
+        $pagemenu .= '<?php $i=0; foreach ($tabl as $key => $tablvue) { $i++;?>
                                <li class="sidebar-item">
                                <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)<?php echo $key; ?>" aria-expanded="false"><i class="mdi mdi-receipt"></i>
                                <span class="hide-menu">{{ $tablvue[0]->menu }} </span></a>
@@ -118,7 +119,7 @@ class GenerermenuController extends Controller
                             </li>
                            <?php  } ?>';
 
-            $pagemenu.='</ul>
+        $pagemenu .= '</ul>
                     </nav>
                     <!-- End Sidebar navigation -->
                 </div>
@@ -128,7 +129,7 @@ class GenerermenuController extends Controller
             <!-- End Left Sidebar - style you can find in sidebar.scss  -->
             <!-- ============================================================== -->';
 
-            $pagemenu.='@yield("content")
+        $pagemenu .= '@yield("content")
 
     @include("layouts.backLayout.footer")
 
@@ -181,162 +182,103 @@ class GenerermenuController extends Controller
     </html>';
 
 
-            //SAUVEGARDE DU REPERTOIRE
-            //$sauvegarde = "/resources/views/layouts/backLayout/tmp/";
-            // $sauvegarde = "../../../resources/views/layouts/backLayout/tmp/";
+        //SAUVEGARDE DU REPERTOIRE
+        //$sauvegarde = "/resources/views/layouts/backLayout/tmp/";
+        // $sauvegarde = "../../../resources/views/layouts/backLayout/tmp/";
 
-            $sauvegarde = __DIR__.'/../../../resources/views/layouts/backLayout/tmp/';
-            rename($dir.$filename, $sauvegarde.$filename.date('Ymd_His'));
-            //GENERATION DU FICHIER
+        $sauvegarde = __DIR__ . '/../../../resources/views/layouts/backLayout/tmp/';
+        rename($dir . $filename, $sauvegarde . $filename . date('Ymd_His'));
+        //GENERATION DU FICHIER
 
-            $monfichier = fopen($dir.$filename, 'w');
-            fwrite($monfichier, $pagemenu); // On �crit le nouveau nombre de pages vues
-            fclose($monfichier);
-            // Redirect to list
-            return redirect('/sousmenus');
-            return view('generer.generer');
+        $monfichier = fopen($dir . $filename, 'w');
+        fwrite($monfichier, $pagemenu); // On �crit le nouveau nombre de pages vues
+        fclose($monfichier);
+        // Redirect to list
+        return redirect('/sousmenus');
+        return view('generer.generer');
+    }
+
+
+    public function parametragemenu(Request $request)
+    {
+
+
+        /*$resulat = DB::table('menu')->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')->get();*/
+
+
+        $idutil = Auth::user()->id;
+        // dd($idutil);
+
+        $roles = DB::table('users')
+            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+            ->where([['users.id', '=', $idutil]])
+            ->first();
+        $idroles = $roles->role_id;
+        //dd($idroles);
+
+        $naroles = $roles->name;
+
+        $resulat = DB::table('role_has_sousmenus')
+            ->join('sousmenu', 'role_has_sousmenus.sousmenus_id_sousmenu', 'sousmenu.id_sousmenu')
+            ->join('roles', 'role_has_sousmenus.role_id', 'roles.id')
+            ->join('menu', 'sousmenu.menu_id_menu', 'menu.id_menu')
+            ->where([['roles.id', '=', $idroles]])
+            ->get();
+
+
+        $tabl = [];
+
+        foreach ($resulat as $ligne) {
+
+            $tabl[$ligne->id_menu][] = $ligne;
         }
 
+        $roles = Role::all();
+        return view('generer.generer', compact('tabl', 'roles', 'naroles'));
+    }
 
+    public function menuprofillayout(Request $request, $id)
+    {
+        /*  $resulat2 = DB::table('sousmenu')->get();
+          $tablmenu = [];
+          foreach ($resulat2 as $ligne) {
+              $tablmenu[$ligne->id_sousmenu][]  = $ligne;
+          }*/
 
-        public function parametragemenu(Request $request)
-        {
+        $role = \App\Models\Role::find($id);
+        if ($request->isMethod('post')) {
+            $role->sousmenus()->sync($request->route, true);
 
-
-
-
-            /*$resulat = DB::table('menu')->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')->get();*/
-
-
-            $idutil=Auth::user()->id;
-            // dd($idutil);
-
-            $roles = DB::table('users')
-                ->join('model_has_roles','users.id','model_has_roles.model_id')
-                ->join('roles','model_has_roles.role_id','roles.id')
-                ->where([['users.id','=',$idutil]])
-                ->first();
-            $idroles = $roles->role_id;
-            //dd($idroles);
-
-            $naroles = $roles->name;
-
-            $resulat = DB::table('role_has_sousmenus')
-                ->join('sousmenu','role_has_sousmenus.sousmenus_id_sousmenu','sousmenu.id_sousmenu')
-                ->join('roles','role_has_sousmenus.role_id','roles.id')
-                ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
-                ->where([['roles.id','=',$idroles]])
-                ->get();
-
-
-            $tabl = [];
-
-            foreach ($resulat as $ligne) {
-
-                $tabl[$ligne->id_menu][] = $ligne;
-            }
-
-            $roles = Role::all();
-            return view('generer.generer',compact('tabl','roles','naroles'));
+            $roles = \Spatie\Permission\Models\Role::find($id);
+            $roles->syncPermissions($request->permission);
+            return redirect('/menuprofil')->with('success', 'Attribution effectuée avec succès');
         }
 
-        public function menuprofillayout(Request $request, $id)
-        {
-
-            $idutil=Auth::user()->id;
-
-            $roles = DB::table('users')
-                ->join('model_has_roles','users.id','model_has_roles.model_id')
-                ->join('roles','model_has_roles.role_id','roles.id')
-                ->where([['users.id','=',$idutil]])
-                ->first();
-            $idroles = $roles->role_id;
-            //dd($idroles);
-
-            $resulat = DB::table('role_has_sousmenus')
-                ->join('sousmenu','role_has_sousmenus.sousmenus_id_sousmenu','sousmenu.id_sousmenu')
-                ->join('roles','role_has_sousmenus.role_id','roles.id')
-                ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
-                ->where([['roles.id','=',$idroles]])
-                ->get();
-
-            $tabl = [];
-
-            foreach ($resulat as $ligne) {
-
-                $tabl[$ligne->id_menu][] = $ligne;
-            }
-            //dd($id);
-    //dd($tabl);
-
-            $resulat2 = DB::table('sousmenu')->get();
-
-            $tablmenu = [];
-
-            foreach ($resulat2 as $ligne) {
-
-                $tablmenu[$ligne->id_sousmenu][]  = $ligne;
-            }
-
-            //dd($tablmenu);
-
-            if ($request->isMethod('post')) {
-                $roles = Role::find($id);
-                $roles->sousmenus()->sync($request->route, true);
-                $roles->permissions()->sync($request->permission,true);
-                return redirect('/menuprofil')->with('success','Attribution effectuer');
-            }
-
-            $idutil=Auth::user()->id;
-
-            $roles = DB::table('users')
-                ->join('model_has_roles','users.id','model_has_roles.model_id')
-                ->join('roles','model_has_roles.role_id','roles.id')
-                ->where([['users.id','=',$idutil]])
-                ->first();
-            $idroles = $roles->role_id;
-            $naroles = $roles->name;
-
-            $resulat = DB::table('role_has_sousmenus')
-                ->join('sousmenu','role_has_sousmenus.sousmenus_id_sousmenu','sousmenu.id_sousmenu')
-                ->join('roles','role_has_sousmenus.role_id','roles.id')
-                ->join('menu','sousmenu.menu_id_menu','menu.id_menu')
-                ->where([['roles.id','=',$idroles]])
-                ->get();
-
-            $tabl = [];
-
-            foreach ($resulat as $ligne) {
-
-                $tabl[$ligne->id_menu][] = $ligne;
-            }
-
-            $resulatsm = DB::table('menu')
-                ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
-                ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
-                ->select('sousmenu.*','sousmenu.id_sousmenu as id_sous_menu','menu.*','permissions.*')
-                ->get();
-
-            $tablsm = [];
-
-            foreach ($resulatsm as $lignesm) {
-                $tablsm[$lignesm->id_menu][$lignesm->menu][$lignesm->libelle][] = $lignesm;
-            }
-            $role = Role::find($id);
-            $nomprof = $role->name;
-            $sousmenu = Sousmenus::get();
-
-            $roleSousmenus = DB::table("role_has_sousmenus")->where("role_has_sousmenus.role_id",$id)
-                ->pluck('role_has_sousmenus.sousmenus_id_sousmenu','role_has_sousmenus.sousmenus_id_sousmenu')
-                ->all();
-
-
-            $role_permission = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-                ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-                ->all();
-//            dd($tablsm);
-
-            return view('generer.menuprofillayout',compact('role_permission','tabl','role','sousmenu','id','tablmenu','tablsm','roleSousmenus','nomprof','naroles'));
+        $resulatsm = DB::table('menu')
+            ->select('sousmenu.*', 'sousmenu.id_sousmenu as id_sous_menu', 'menu.*', 'permissions.*')
+            ->join('sousmenu', 'menu.id_menu', 'sousmenu.menu_id_menu')
+            ->leftjoin('permissions', 'sousmenu.id_sousmenu', 'permissions.id_sousmenu')
+            ->where('sousmenu.is_valide', true)
+            ->where('menu.is_valide', true)
+            ->orderBy('sousmenu.priorite_sousmenu')
+            ->orderBy('menu.priorite_menu')
+            ->get();
+        $tablsm = [];
+        foreach ($resulatsm as $lignesm) {
+            $tablsm[$lignesm->id_menu][$lignesm->menu][$lignesm->libelle][] = $lignesm;
         }
+        // $nomprof = $role->name;
+        //$sousmenu = Sousmenus::get();
+
+        $roleSousmenus = DB::table("role_has_sousmenus")->where("role_has_sousmenus.role_id", $id)
+            ->pluck('role_has_sousmenus.sousmenus_id_sousmenu', 'role_has_sousmenus.sousmenus_id_sousmenu')
+            ->all();
+        $role_permission = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $id)
+            ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+            ->all();
+
+        return view('generer.menuprofillayout', compact('role_permission', 'role', 'id', 'tablsm', 'roleSousmenus'));
+    }
 
 }
