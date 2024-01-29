@@ -242,12 +242,11 @@ class GenerermenuController extends Controller
 
         public function menuprofillayout(Request $request, $id)
         {
-
-            $resulat2 = DB::table('sousmenu')->get();
+          /*  $resulat2 = DB::table('sousmenu')->get();
             $tablmenu = [];
             foreach ($resulat2 as $ligne) {
                 $tablmenu[$ligne->id_sousmenu][]  = $ligne;
-            }
+            }*/
 
             $role = \App\Models\Role::find($id);
             if ($request->isMethod('post')) {
@@ -259,11 +258,11 @@ class GenerermenuController extends Controller
             }
 
             $resulatsm = DB::table('menu')
+                ->select('sousmenu.*','sousmenu.id_sousmenu as id_sous_menu','menu.*','permissions.*')
                 ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
                 ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
-                ->select('sousmenu.*','sousmenu.id_sousmenu as id_sous_menu','menu.*','permissions.*')
                 ->where('sousmenu.is_valide',true)
-                ->andwhere('menu.is_valide',true)
+                ->where('menu.is_valide',true)
                 ->get();
 
             $tablsm = [];
@@ -281,7 +280,7 @@ class GenerermenuController extends Controller
                 ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
                 ->all();
 
-            return view('generer.menuprofillayout',compact('role_permission','role','sousmenu','id','tablmenu','tablsm','roleSousmenus','nomprof'));
+            return view('generer.menuprofillayout',compact('role_permission','role','sousmenu','id', 'tablsm','roleSousmenus','nomprof'));
         }
 
 }
