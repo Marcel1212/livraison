@@ -22,21 +22,21 @@ class FicheAgrement extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'fiche_agrement';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_fiche_agrement';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -44,7 +44,7 @@ class FicheAgrement extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_comite_gestion', 'id_comite_permanente', 'id_user_fiche_agrement', 'id_demande', 'flag_fiche_agrement', 'commentaire_fiche_agrement', 'created_at', 'updated_at'];
+    protected $fillable = ['id_comite_gestion', 'id_comite_permanente', 'id_user_fiche_agrement', 'id_demande', 'flag_fiche_agrement', 'commentaire_fiche_agrement', 'created_at', 'updated_at', 'code_fiche_agrement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

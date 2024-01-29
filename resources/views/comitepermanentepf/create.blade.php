@@ -143,9 +143,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     {{-- <th>Conseiller </th> --}}
                                     <th>Code comite pleiniere </th>
                                     <th>Date soumis</th>
-                                    {{-- <th>Cout demandé</th>
-                                    <th>Cout accordé</th> --}}
-                                    <th>Action</th>
+                                    <th>Cout formation</th>
+                                    {{-- <th>Cout accordé</th> --}}
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -160,13 +160,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         {{-- <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
                                         <td>{{ @$planformation->code_comite_pleiniere }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
+                                        <td>{{ $planformation->cout_projet_formation }}</td>
                                         {{-- <td align="rigth">
                                             {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
                                         <td align="rigth">
                                             {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td> --}}
-                                        <td align="center">
+                                        {{-- <td align="center">
 
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

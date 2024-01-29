@@ -63,6 +63,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
+                    <i class="fab fa-angellist mb-2"></i>
                     {{ $message }}
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -73,6 +74,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
+                        <i class="fas fa-allergies mb-2"></i>
                         {{ $error }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -420,7 +422,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3 class="mb-2">Traitement d'une projet de formation</h3>
+                            <h3 class="mb-2">Traitement d'un projet de formation</h3>
                             <p class="text-muted"></p>
                         </div>
                         <form id="editUserForm" class="row g-3" method="POST"
@@ -429,13 +431,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('post')
 
                             <div class="card accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
+                                <h1 class="accordion-header" id="headingTwo">
                                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                         data-bs-target="#accordionTwo" aria-expanded="false"
                                         aria-controls="accordionTwo">
                                         <strong>FICHE PROMOTEUR </strong>
                                     </button>
-                                </h2>
+                                </h1>
                                 <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                                     data-bs-parent="#accordionExample" style="">
                                     <div class="accordion-body">
