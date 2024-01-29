@@ -27,7 +27,7 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{$titre}}</h5>
                     <small class="text-muted float-end">
-                        @can('role-create')
+                        @can('permission-create')
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
                                 <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
@@ -62,7 +62,7 @@
                                     <?php } ?>
                                 </td>
                                 <td align="center">
-                                    @can('role-edit')
+                                    @can('permission-edit')
                                         <a href="{{ route('permissions.edit',$permission->id) }}"
                                            class=" "
                                            title="Modifier"><img src='/assets/img/editing.png'></a>
