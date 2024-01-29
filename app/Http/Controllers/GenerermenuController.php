@@ -262,6 +262,8 @@ class GenerermenuController extends Controller
                 ->join('sousmenu','menu.id_menu','sousmenu.menu_id_menu')
                 ->leftjoin('permissions','sousmenu.id_sousmenu','permissions.id_sousmenu')
                 ->select('sousmenu.*','sousmenu.id_sousmenu as id_sous_menu','menu.*','permissions.*')
+                ->where('sousmenu.is_valide',true)
+                ->andwhere('menu.is_valide',true)
                 ->get();
 
             $tablsm = [];
