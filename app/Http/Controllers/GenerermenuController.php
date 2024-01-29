@@ -261,6 +261,7 @@ class GenerermenuController extends Controller
             ->leftjoin('permissions', 'sousmenu.id_sousmenu', 'permissions.id_sousmenu')
             ->where('sousmenu.is_valide', true)
             ->where('menu.is_valide', true)
+            ->orderBy('sousmenu.priorite_sousmenu')
             ->orderBy('menu.priorite_menu')
             ->get();
         $tablsm = [];
