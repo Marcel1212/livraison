@@ -30,7 +30,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">Profil : {{$role->name}}</h5>
                         <small class="text-muted float-end">
-                            @can('role-create')
+                            @can('attribuer')
                                 <button type="submit"
                                         class="btn btn-primary btn-sm waves-effect waves-float waves-light"><i
                                         class="la la-plus"></i>Attribuer

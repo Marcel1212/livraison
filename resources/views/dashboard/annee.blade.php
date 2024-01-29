@@ -4,8 +4,9 @@ use App\Helpers\Menu;
 use App\Helpers\AnneeExercice;
 
 $anneexercice = AnneeExercice::get_annee_exercice();
-$anneexerciceDebut = Menu::dateEnFrancais($anneexercice->date_debut_periode_exercice);
-$anneexerciceFin = Menu::dateEnFrancais($anneexercice->date_fin_periode_exercice);
+//dd($anneexercice);
+$anneexerciceDebut = Menu::dateEnFrancais(@$anneexercice->date_debut_periode_exercice);
+$anneexerciceFin = Menu::dateEnFrancais(@$anneexercice->date_fin_periode_exercice);
 
 
 ?>

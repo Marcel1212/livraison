@@ -251,6 +251,9 @@ class GenerermenuController extends Controller
             $role->sousmenus()->sync($request->route, true);
 
             $roles = \Spatie\Permission\Models\Role::find($id);
+            //dd($roles->name);
+            $roles->name = $roles->name;
+            $roles->save();
             $roles->syncPermissions($request->permission);
             return redirect('/menuprofil')->with('success', 'Attribution effectuée avec succès');
         }

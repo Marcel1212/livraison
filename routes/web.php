@@ -31,6 +31,7 @@ Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 
 //Route::get('/reset-password', function(){
 //    return view('motdepasseoublie.index');
 //});
+
 Route::group(['middleware' => ['auth']], function () {
     //Route::group(['middleware' => ['can:role-index']], function () {
         // Route::resources([
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
         //     'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
         //     'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
         //     'typecomites' => App\Http\Controllers\TypeComiteController::class,
+
     Route::resources([
         'roles' => App\Http\Controllers\RoleController::class,
         'users' => App\Http\Controllers\UserController::class,
@@ -262,12 +264,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('agence/{id}/delete', [App\Http\Controllers\AgenceController::class, 'delete'])->name('agence.delete');
     Route::get('users/{id}/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('users.delete');
     Route::get('/dashboard', [App\Http\Controllers\ConnexionController::class, 'dashboard'])->name('dashboard');
-    Route::match(['get', 'post'], '/menuprofil', [App\Http\Controllers\GenerermenuController::class, 'parametragemenu'])->name('menuprofil');
+
     Route::match(['get', 'post'], '/profil', [App\Http\Controllers\HomeController::class, 'profil'])->name('profil');
 
-
-    Route::match(['get', 'post'], '/menuprofillayout/{id}', [App\Http\Controllers\GenerermenuController::class, 'menuprofillayout'])->name('menuprofillayout');
-
+    Route::group(['middleware' => ['can:attribuer']], function () {
+        Route::match(['get', 'post'], '/menuprofil', [App\Http\Controllers\GenerermenuController::class, 'parametragemenu'])->name('menuprofil');
+        Route::match(['get', 'post'], '/menuprofillayout/{id}', [App\Http\Controllers\GenerermenuController::class, 'menuprofillayout'])->name('menuprofillayout');
+    });
 
 
     Route::match(['get', 'post'], '/modifiermotdepasse', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifier.mot.passe');
@@ -275,7 +278,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::group(['middleware' => ['can:role-index']], function () {
+    Route::group(['middleware' => ['can:parametresysteme-create']], function () {
         Route::match(['get', 'post'], '/parametresysteme', [App\Http\Controllers\ParametreController::class, 'parametresysteme'])->name('parametresysteme');
         Route::match(['get', 'post'], '/creerparametresysteme', [App\Http\Controllers\ParametreController::class, 'creerparametresysteme'])->name('creerparametresysteme');
         Route::match(['get', 'post'], '/projetetudesoumettre/{id}', [App\Http\Controllers\ProjetEtudeController::class, 'projetetudesoumettre'])->name('projetetudesoumettre');
