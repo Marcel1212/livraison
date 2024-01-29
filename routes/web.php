@@ -97,7 +97,8 @@ Route::group(['middleware' => ['auth']], function () {
         'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
         'ctprojetetude' => App\Http\Controllers\CtprojetetudeController::class,
         'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
-        'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+        //'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+        //'ctplanformationpleniere' => App\Http\Controllers\ComitePleniereController::class,
         'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
         'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
         'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
@@ -163,11 +164,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('traitementselectionoperateurprojetetude/{id_projet_etude}/update', [TraitementSelectionOperateurProjetEtudeController::class, 'update'])->name('traitementselectionoperateurprojetetude.update');
 
 
-
-    Route::get('comitepleniere/{id}/delete', [App\Http\Controllers\ComitePleniereController::class, 'delete'])->name('comitepleniere.delete');
-    Route::get('comitepleniere/{id}/{id2}/cahier', [App\Http\Controllers\ComitePleniereController::class, 'cahier'])->name('comitepleniere.cahier');
-    Route::get('comitepleniere/{id}/{id2}/editer', [App\Http\Controllers\ComitePleniereController::class, 'editer'])->name('comitepleniere.editer');
-    Route::post('comitepleniere/{id}/{id2}/cahierupdate', [App\Http\Controllers\ComitePleniereController::class, 'cahierupdate'])->name('comitepleniere.cahierupdate');
+    Route::get('ctplanformationpleniere/{id}/{id1}/edit', [App\Http\Controllers\ComitePleniereController::class, 'edit'])->name('ctplanformationpleniere.edit');
+    Route::put('ctplanformationpleniere/{id}/{id1}/update', [App\Http\Controllers\ComitePleniereController::class, 'update'])->name('ctplanformationpleniere.update');
+    Route::get('ctplanformationpleniere/index', [App\Http\Controllers\ComitePleniereController::class, 'index'])->name('ctplanformationpleniere.index');
+    Route::get('ctplanformationpleniere', [App\Http\Controllers\ComitePleniereController::class, 'index'])->name('ctplanformationpleniere');
+    Route::get('ctplanformationpleniere/create', [App\Http\Controllers\ComitePleniereController::class, 'create'])->name('ctplanformationpleniere.create');
+    Route::post('ctplanformationpleniere/store', [App\Http\Controllers\ComitePleniereController::class, 'store'])->name('ctplanformationpleniere.store');
+    Route::get('ctplanformationpleniere/{id}/show', [App\Http\Controllers\ComitePleniereController::class, 'show'])->name('ctplanformationpleniere.show');
+    Route::get('ctplanformationpleniere/{id}/delete', [App\Http\Controllers\ComitePleniereController::class, 'delete'])->name('ctplanformationpleniere.delete');
+    Route::get('ctplanformationpleniere/{id}/{id2}/{id3}/cahier', [App\Http\Controllers\ComitePleniereController::class, 'cahier'])->name('ctplanformationpleniere.cahier');
+    Route::get('ctplanformationpleniere/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePleniereController::class, 'editer'])->name('ctplanformationpleniere.editer');
+    Route::post('ctplanformationpleniere/{id}/{id2}/{id3}/cahierupdate', [App\Http\Controllers\ComitePleniereController::class, 'cahierupdate'])->name('ctplanformationpleniere.cahierupdate');
 
 
     Route::get('ctprojetformation/{id}/delete', [App\Http\Controllers\CtprojetformationController::class, 'delete'])->name('ctprojetformation.delete');

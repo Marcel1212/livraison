@@ -12,7 +12,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
     @php($Module='Plan de formation')
     @php($titre='Liste des comites plénières')
-    @php($lien='comitepleniere')
+    @php($lien='ctplanformationpleniere')
 
     <!-- BEGIN: Content-->
 
