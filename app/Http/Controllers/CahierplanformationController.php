@@ -57,7 +57,7 @@ class CahierplanformationController extends Controller
             $input = $request->all();
             $input['id_users_cahier_plan_formation'] = Auth::user()->id;
             $input['date_creer_cahier_plan_formation'] = Carbon::now();
-            $input[''] = $input['code_pieces_cahier_plan_formation']. '-' . Gencode::randStrGen(4, 5) .'_'. Carbon::now()->format('Y');
+            $input['code_cahier_plan_formation'] = $input['code_pieces_cahier_plan_formation']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
             $cahier =  CahierPlanFormation::create($input);
 
             return redirect('cahierplanformation/'.Crypt::UrlCrypt($cahier->id_cahier_plan_formation).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');

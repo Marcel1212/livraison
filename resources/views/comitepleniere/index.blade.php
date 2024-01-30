@@ -61,6 +61,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <thead>
                         <tr>
                             <th>No</th>
+                            <th>Libellé </th>
                             <th>Code </th>
                             <th>Date debut</th>
                             <th>Date fin</th>
@@ -73,6 +74,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         @foreach ($Resultat as $key => $comitep)
                             <tr>
                                 <td>{{ ++$i }}</td>
+                                <td>Plan de formation</td>
                                 <td>{{ @$comitep->code_comite_pleniere }}</td>
                                 <td>{{ $comitep->date_debut_comite_pleniere }}</td>
                                 <td>{{ $comitep->date_fin_comite_pleniere }}</td>
@@ -85,7 +87,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
                                     @can($lien.'-edit')
-                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere)) }}"
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>

@@ -61,6 +61,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <thead>
                         <tr>
                             <th>No</th>
+                            <th>Libellé </th>
                             <th>Code </th>
                             <th>Date debut</th>
                             <th>Date fin</th>
@@ -73,6 +74,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         @foreach ($Resultat as $key => $comitep)
                             <tr>
                                 <td>{{ ++$i }}</td>
+                                <td>Plan de formation</td>
                                 <td>{{ @$comitep->code_comite_permanente }}</td>
                                 <td>{{ $comitep->date_debut_comite_permanente }}</td>
                                 <td>{{ $comitep->date_fin_comite_permanente }}</td>

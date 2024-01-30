@@ -253,7 +253,7 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->masse_salariale}}"
+                                value="{{number_format(@$infosactionplanformation->masse_salariale, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
 
@@ -278,7 +278,7 @@
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->part_entreprise}}"
+                                value="{{number_format(@$infosactionplanformation->part_entreprise, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
@@ -318,7 +318,7 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_action_formation_plan}}"
+                                value="{{number_format(@$infosactionplanformation->cout_action_formation_plan, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
@@ -364,9 +364,9 @@
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
                             <input
-                                type="number"
+                                type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
+                                value="{{number_format(@$infosactionplanformation->cout_total_fiche_agrement, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
 
@@ -397,9 +397,9 @@
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
                             <input
-                                type="number"
+                                type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
+                                value="{{number_format(@$infosactionplanformation->cout_accorde_action_formation, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-9">

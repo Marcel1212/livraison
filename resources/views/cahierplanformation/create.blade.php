@@ -112,7 +112,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             aria-label="Default select example" required="required">
                                         <option value="">Selectionnez le type</option>
                                         <option value="PME">PETITE MOYENNE ENTREPRISES</option>
-                                        <option value="GM">GRANDE ENTREPRISE</option>
+                                        <option value="GE">GRANDE ENTREPRISE</option>
                                         <option value="ANT">ANTENNE</option>
                                     </select>
                                 </div>
