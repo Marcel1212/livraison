@@ -155,7 +155,10 @@ class ComitePermanentePfController extends Controller
 
         $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
 
-        $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],['flag_fiche_agrement','=',null],['cout_projet_formation','>=',500000]])->get();
+        $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
+                                                ['flag_fiche_agrement','=',null],
+                                                ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
+                                                ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite]])->get();
         //dd($planformations);
 
         return view('comitepermanentepf.edit', compact('motif','comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
@@ -431,6 +434,12 @@ class ComitePermanentePfController extends Controller
                     'flag_fiche_agrement'=> true,
                     'commentaire_fiche_agrement' => $data['commentaire'],
                     'code_fiche_agrement' => 'PRF'
+                ]);
+
+                $plan = ProjetFormation::find($id);
+                $plan->update([
+                    'flag_fiche_agrement' => true,
+
                 ]);
                 //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
                 //$nbrav = count($nbreplanvalide);

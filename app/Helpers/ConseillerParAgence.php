@@ -94,5 +94,14 @@ class ConseillerParAgence
     }
 
 
+    public static function get_type_comite_gest_projet_formation()
+    {
+        $typecomite = TypeComite::where([['libelle_type_comite','=','Comitedegestion'],['code_type_comite','=','POF']])
+                            ->first();
+
+        return (isset($typecomite) ? $typecomite : '');
+    }
+
+
 
 }

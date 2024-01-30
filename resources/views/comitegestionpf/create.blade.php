@@ -10,10 +10,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module = 'Plan de formation')
-    @php($titre = 'Liste des commissions permanente')
-    @php($soustitre = 'Ajout de commission permanente')
-    @php($lien = 'comitepermanentepf')
+    @php($Module = 'Projet de formation')
+    @php($titre = 'Liste des comites de gestion')
+    @php($soustitre = 'Ajout de comite de gestion')
+    @php($lien = 'comitegestionpf')
 
     <!-- BEGIN: Content-->
 
@@ -62,7 +62,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite permanent
+                            Comite de gestion
                         </button>
                     </li>
                     <li class="nav-item">
@@ -76,10 +76,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
-                            Liste des projets de formations
+                            Liste des plans de formations
                         </button>
                     </li>
-
                     <li class="nav-item">
                         <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-Soumettre" aria-controls="navs-top-Soumettre" aria-selected="false">
@@ -96,7 +95,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_permanente"
+                                        <input type="date" name="date_debut_comite_gestion"
                                             class="form-control form-control-sm" required />
                                     </div>
                                 </div>
@@ -104,7 +103,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_permanente"
+                                        <input type="date" name="date_fin_comite_gestion"
                                             class="form-control form-control-sm" required />
                                     </div>
                                 </div>
@@ -112,7 +111,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
+                                        <textarea class="form-control form-control-sm" name="commentaire_comite_gestion" id="commentaire_comite_gestion"
                                             rows="6"></textarea>
 
                                     </div>
@@ -133,19 +132,18 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                     </div>
                     <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
-
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-                                    {{-- <th>Conseiller </th> --}}
-                                    <th>Code comite pleiniere </th>
+                                    <th>Conseiller </th>
+                                    <th>Code </th>
                                     <th>Date soumis</th>
-                                    <th>Cout formation</th>
-                                    {{-- <th>Cout accordé</th> --}}
-                                    {{-- <th>Action</th> --}}
+                                    <th>Cout demandé</th>
+                                    <th>Cout accordé</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,17 +155,17 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
-                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
-                                        <td>{{ @$planformation->code_comite_pleiniere }}</td>
-                                        <td>{{ $planformation->date_soumis }}</td>
-                                        <td>{{ $planformation->cout_projet_formation }}</td>
-                                        {{-- <td align="rigth">
+                                        <td>{{ @$planformation->userconseilplanformation->name }}
+                                            {{ @$planformation->userconseilplanformation->prenom_users }}</td>
+                                        <td>{{ @$planformation->code_plan_formation }}</td>
+                                        <td>{{ $planformation->date_soumis_plan_formation }}</td>
+                                        <td align="rigth">
                                             {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
                                         <td align="rigth">
-                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td> --}}
-                                        {{-- <td align="center">
+                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                        <td align="center">
 
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
