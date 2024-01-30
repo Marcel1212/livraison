@@ -1,11 +1,29 @@
 <?php
 
+use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\CtprojetetudevaliderController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;
 use App\Http\Controllers\MotDePasseOublieController;
+use App\Http\Controllers\ProjetEtudeController;
 use App\Http\Controllers\SelectionOperateurProjetEtudeController;
+use App\Http\Controllers\TraitementProjetEtudeController;
 use App\Http\Controllers\TraitementSelectionOperateurProjetEtudeController;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+//
+//
+//Route::get('/testmail', function () {
+//    $mailData = [
+//        'title' => 'Mail from ItSolutionStuff.com',
+//        'body' => 'This is for testing email using smtp.'
+//    ];
+//
+//    Mail::to('yancho@ldfgroupe.com')->send(new \App\Mail\SendEmail($mailData));
+//
+//    dd("Email is sent successfully.");
+//});
+//
 
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
 
@@ -46,7 +64,6 @@ Route::group(['middleware' => ['auth']], function () {
         'activites' => App\Http\Controllers\ActivitesController::class,
         'centreimpot' => App\Http\Controllers\CentreImpotController::class,
         'localite' => App\Http\Controllers\LocaliteController::class,
-        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
         'projetformation' => App\Http\Controllers\ProjetFormationController::class,
         'enrolement' => App\Http\Controllers\EnrolementController::class,
         'statutoperations' => App\Http\Controllers\StatutOperationController::class,
@@ -69,7 +86,34 @@ Route::group(['middleware' => ['auth']], function () {
         //'comitegestion' => App\Http\Controllers\ComiteGestionController::class,
         //'comitepermanente' => App\Http\Controllers\ComitePermanenteController::class,
     ]);
-    //});
+
+    /**********PROJET D'ETUDE***********/
+    //Demande projet d'étude
+    Route::get('projetetude', [ProjetEtudeController::class, 'index'])->name('projetetude');
+    Route::get('projetetude/index', [ProjetEtudeController::class, 'index'])->name('projetetude.index');
+    Route::get('projetetude/create', [ProjetEtudeController::class, 'create'])->name('projetetude.create');
+    Route::post('projetetude/store', [ProjetEtudeController::class, 'store'])->name('projetetude.store');
+    Route::get('projetetude/{id}/{id_etape}/edit', [ProjetEtudeController::class, 'edit'])->name('projetetude.edit');
+    Route::put('projetetude/{id}/{id_etape}/update', [ProjetEtudeController::class, 'update'])->name('projetetude.update');
+    Route::get('projetetude/{id}/{id_piece_projet}/deletefpe', [ProjetEtudeController::class, 'deletefpe'])->name('projetetude.deletefpe');
+
+    //Affectation projet d'étude
+    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
+    Route::get('affectationprojetetude/index', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude.index');
+    Route::get('affectationprojetetude/{id}/{id_etape}/edit', [AffectationProjetEtudeController::class, 'edit'])->name('affectationprojetetude.edit');
+    Route::put('affectationprojetetude/{id}/update', [AffectationProjetEtudeController::class, 'update'])->name('affectationprojetetude.update');
+
+    //Traitement de projet d'étude
+    Route::get('traitementprojetetude', [TraitementProjetEtudeController::class, 'index'])->name('traitementprojetetude');
+    Route::get('traitementprojetetude/index', [TraitementProjetEtudeController::class, 'index'])->name('traitementprojetetude.index');
+    Route::get('traitementprojetetude/{id}/{id_etape}/edit', [TraitementProjetEtudeController::class, 'edit'])->name('traitementprojetetude.edit');
+    Route::put('traitementprojetetude/{id}/update', [TraitementProjetEtudeController::class, 'update'])->name('traitementprojetetude.update');
+
+    //Comité plénière projet d'étude
+    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
+    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
+
+
 
 //    Route::get('agreement/{id}/cancel', [App\Http\Controllers\AgreementController::class, 'cancel'])->name('agreement.cancel');
 //    Route::post('agreement/{id}/cancel/store', [App\Http\Controllers\AgreementController::class, 'cancelStore'])->name('agreement.cancel.store');
@@ -97,6 +141,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
 
+
+    //CT PROJET ETUDE A VALIDER
+    Route::get('ctprojetetudevalider', [CtprojetetudevaliderController::class, 'index'])->name('ctprojetetudevalider.index');
+    Route::get('ctprojetetudevalider/{id_projet_etude}/{id_combi_proc}/edit', [CtprojetetudevaliderController::class, 'edit'])->name('ctprojetetudevalider.edit');
+    Route::put('ctprojetetudevalider/{id_projet_etude}/update', [CtprojetetudevaliderController::class, 'update'])->name('ctprojetetudevalider.update');
 
 
 
@@ -170,6 +219,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanente/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanenteController::class, 'agrement'])->name('comitepermanente.agrement');
     Route::get('comitepermanente/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanenteController::class, 'editer'])->name('comitepermanente.editer');
     Route::post('comitepermanente/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanenteController::class, 'agrementupdate'])->name('comitepermanente.agrementupdate');
+
+    Route::get('cahierplanformation/{id}/delete', [App\Http\Controllers\CahierplanformationController::class, 'delete'])->name('cahierplanformation.delete');
+    Route::get('cahierplanformation/{id}/{id1}/edit', [App\Http\Controllers\CahierplanformationController::class, 'edit'])->name('cahierplanformation.edit');
+    Route::put('cahierplanformation/{id}/{id1}/update', [App\Http\Controllers\CahierplanformationController::class, 'update'])->name('cahierplanformation.update');
+    Route::get('cahierplanformation/index', [App\Http\Controllers\CahierplanformationController::class, 'index'])->name('cahierplanformation.index');
+    Route::get('cahierplanformation', [App\Http\Controllers\CahierplanformationController::class, 'index'])->name('cahierplanformation');
+    Route::get('cahierplanformation/create', [App\Http\Controllers\CahierplanformationController::class, 'create'])->name('cahierplanformation.create');
+    Route::post('cahierplanformation/store', [App\Http\Controllers\CahierplanformationController::class, 'store'])->name('cahierplanformation.store');
+    Route::get('cahierplanformation/{id}/show', [App\Http\Controllers\CahierplanformationController::class, 'show'])->name('cahierplanformation.show');
+    Route::get('cahierplanformation/{id}/etat', [App\Http\Controllers\CahierplanformationController::class, 'etat'])->name('cahierplanformation.etat');
+    Route::get('cahierplanformation/{id}/{id2}/agrement', [App\Http\Controllers\CahierplanformationController::class, 'agrement'])->name('cahierplanformation.agrement');
+    Route::get('cahierplanformation/{id}/{id2}/{id3}/editer', [App\Http\Controllers\CahierplanformationController::class, 'editer'])->name('cahierplanformation.editer');
+    Route::post('cahierplanformation/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\CahierplanformationController::class, 'agrementupdate'])->name('cahierplanformation.agrementupdate');
+
 
     Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [App\Http\Controllers\CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');

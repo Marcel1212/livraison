@@ -48,11 +48,11 @@
                                                 <td>{{ $role->id }}</td>
                                                 <td>{{ $role->name }}</td>
                                                 <td align="center">
-                                                    @can('role-edit')
+{{--                                                    @can('role-edit')--}}
                                                         <a href="{{ route('menuprofillayout',$role->id) }}"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/editing.png'></a>
-                                                    @endcan
+{{--                                                    @endcan--}}
                                                 </td>
                                             </tr>
                                         @endforeach

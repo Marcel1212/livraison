@@ -1,12 +1,9 @@
 @extends('layouts.backLayout.designadmin')
-
 @section('content')
-
-    @php($Module='Plan de formation')
-    @php($titre='Liste des demandes de substituion d\'action  de plan de formation')
-    @php($lien='traitementdemandesubstitutionplan')
-
-    <!-- BEGIN: Content-->
+    @php($Module='Projet d\'étude')
+    @php($titre='Liste des projets d\'étude')
+    @php($soustitre='Comite technique à valider')
+    @php($lien='ctprojetetudevalider')
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
@@ -38,39 +35,40 @@
                            id="exampleData"
                            style="margin-top: 13px !important">
                         <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Intitluer de l'action de formation </th>
-                            <th>Structure ou etablissement de formation </th>
-                            <th>Date soumis</th>
-                            <th>Statut</th>
-                            <th>Action</th>
-                        </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>Entreprise </th>
+                                <th>Code du dossier </th>
+                                <th>Date de soumission</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach ($resultat as $key => $res1)
-                            @foreach ($res1 as  $action_formation)
+                        <?php $i=0 ?>
+                        @foreach ($Resultat as $key => $res1)
+                            @foreach ($res1 as $key => $projetetude)
                                 <tr>
-                                    <td>{{$key+1 }}</td>
-                                    <td>{{ $action_formation->intitule_action_formation_plan  }}</td>
-                                    <td>{{ $action_formation->structure_etablissement_action_ }}</td>
-                                    <td>{{ $action_formation->date_soumis_demande_substitution_action_plan }}</td>
+                                    <td>{{ ++$i }}</td>
+                                    <td>{{ @$projetetude->raison_social_entreprises }}</td>
+                                    <td>{{ @$projetetude->code_dossier }}</td>
+                                    <td>{{ $projetetude->date_soumis }}</td>
                                     <td align="center">
                                         <span class="badge bg-warning">En attente de traitement</span>
                                     </td>
                                     <td align="center">
-                                            <a href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($action_formation->id_action_formation_plan_substi),
-'id2'=>\App\Helpers\Crypt::UrlCrypt($action_formation->id_combi_proc)]) }}"
+                                        @can($lien.'-edit')
+                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($projetetude->id_combi_proc)]) }}"
                                                class=" "
                                                title="Modifier"><img
                                                     src='/assets/img/editing.png'></a>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach
                         @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

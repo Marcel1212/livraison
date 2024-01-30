@@ -637,44 +637,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             />
                         </div>
                         <div class="col-12 col-md-4">
-                            <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation <strong style="color:red;">*</strong></label>
-                            <select class="select2 form-select-sm input-group" disabled name="structure_etablissement_plan_substi" id="structure_etablissement_plan_substi">
-
-                                @foreach($structureformations as $structureformation)
-                                    <option value="{{$structureformation->id_entreprises}}" disabled
-                                            @isset($action_formation->structure_etablissement_plan_substi)
-                                                @if($action_formation->structure_etablissement_action_==$structureformation->raison_social_entreprises)
-                                                    selected
-                                        @endif
-
-                                        @endisset>{{mb_strtoupper($structureformation->ncc_entreprises)}} / {{mb_strtoupper($structureformation->raison_social_entreprises)}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_stagiaire_action_formati_plan_substi">Nombre de stagiaires <strong style="color:red;">*</strong></label>
-                            <input disabled
-                                   type="number"
-                                   id="nombre_stagiaire_action_formati_plan_substi"
-                                   name="nombre_stagiaire_action_formati_plan_substi"
-                                   class="form-control form-control-sm"
-                                   @isset($action_formation->nombre_stagiaire_action_formati)
-                                       value="{{$action_formation->nombre_stagiaire_action_formati}}"
+                            <label class="form-label" for="nombre_groupe_action_formation_plan">Nombre de groupe  <strong style="color:red;">*</strong></label>
+                            <input
+                                type="number"
+                                disabled
+                                id="nombre_groupe_action_formation_plan"
+                                name="nombre_groupe_action_formation_plan"
+                                class="form-control form-control-sm"
+                                @isset($action_formation->nombre_groupe_action_formation_)
+                                    value="{{$action_formation->nombre_groupe_action_formation_}}"
                                 @endisset
                             />
                         </div>
-                        <div class="col-12 col-md-4">
-                            <label class="form-label" for="nombre_groupe_action_formation_plan_substi">Nombre de groupe <strong style="color:red;">*</strong></label>
-                            <input disabled
-                                   type="number"
-                                   id="nombre_groupe_action_formation_plan_substi"
-                                   name="nombre_groupe_action_formation_plan_substi"
-                                   class="form-control form-control-sm"
-                                   @isset($action_formation->nombre_groupe_action_formation_)
-                                       value="{{$action_formation->nombre_groupe_action_formation_}}"
-                                @endisset
-                            />
-                        </div>
+
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_heure_action_formation_plan_substi">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
                             <input disabled
@@ -687,6 +662,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @endisset
                             />
                         </div>
+
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation <strong style="color:red;">*</strong></label>
                             <input disabled
@@ -702,11 +678,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         </div>
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
-                            <select
+                            <select class="select2 form-select"
                                 id="id_type_formation" disabled
                                 name="id_type_formation"
-                                class="select2 form-select-sm input-group"
-                                aria-label="Default select example" >
+                                aria-label="Default select example">
                                 @foreach($typeformations as $typeformation)
                                     <option value="{{$typeformation->id_type_formation}}"
                                             @isset($fiche_a_demande_agrement_acien->id_type_formation)
@@ -717,12 +692,33 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @endforeach
                             </select>
                         </div>
+
+
+
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation <strong style="color:red;">*</strong></label>
+                            <select class="select2 form-select"
+                                    disabled name="structure_etablissement_plan_substi" id="structure_etablissement_plan_substi">
+
+                                @foreach($structureformations as $structureformation)
+                                    <option value="{{$structureformation->id_entreprises}}"
+                                            @isset($action_formation->structure_etablissement_plan_substi)
+                                                @if($action_formation->structure_etablissement_action_==$structureformation->id_entreprises)
+                                                    selected
+                                        @endif
+
+                                        @endisset>{{mb_strtoupper($structureformation->raison_social_entreprises)}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
-                            <select disabled
+                            <select class="select2 form-select"
+                                    disabled
                                     id="id_but_formation"
                                     name="id_but_formation"
-                                    class="select2 form-select-sm input-group"
                                     aria-label="Default select example" >
                                 @foreach($butformations as $butformation)
                                     <option value="{{$butformation->id_but_formation}}"
@@ -734,6 +730,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @endforeach
                             </select>
                         </div>
+
                         <div class="col-12 col-md-2">
                             <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
                             <input disabled
@@ -742,8 +739,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                    name="date_debut_fiche_agrement"
                                    class="form-control form-control-sm"
                                    @isset($fiche_a_demande_agrement->date_debut_fiche_agrement)
-                                       value="{{$fiche_a_demande_agrement->date_debut_fiche_agrement}}"
-                                @endisset
+                                       value="{{date('Y-m-d', strtotime($fiche_a_demande_agrement->date_debut_fiche_agrement))}}"
+                                   @endisset
                             />
                         </div>
                         <div class="col-12 col-md-2">
@@ -754,7 +751,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 name="date_fin_fiche_agrement"
                                 class="form-control form-control-sm"
                                 @isset($fiche_a_demande_agrement->date_fin_fiche_agrement)
-                                    value="{{$fiche_a_demande_agrement->date_fin_fiche_agrement}}"
+                                    value="{{date('Y-m-d', strtotime($fiche_a_demande_agrement->date_fin_fiche_agrement))}}"
                                 @endisset
                             />
                         </div>
@@ -770,18 +767,27 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @endisset
                             />
                         </div>
-                        <div class="col-12 col-md-4">
-                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
-                            <input
-                                type="text" disabled
-                                id="objectif_pedagogique_fiche_agre"
-                                name="objectif_pedagogique_fiche_agre"
-                                class="form-control form-control-sm"
-                                @isset($fiche_a_demande_agrement->objectif_pedagogique_fiche_agre)
-                                    value="{{$fiche_a_demande_agrement->objectif_pedagogique_fiche_agre}}"
-                                @endisset
-                            />
+
+                        <div class="col-md-4 col-12">
+                            <label>Secteur d'activité <strong style="color:red;">*</strong></label>
+                            <select class="select2 form-select"
+                                    disabled
+                                    data-allow-clear="true" name="id_secteur_activite"
+                                    id="id_secteur_activite">
+                                @foreach ($secteuractivites as $activite)
+                                    <option value="{{ $activite->id_secteur_activite }}"
+                                            @isset($action_formation->id_secteur_activite)
+                                                @if($action_formation->id_secteur_activite==$activite->id_secteur_activite)
+                                                    selected
+                                        @endif
+                                        @endisset
+                                    >{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                @endforeach
+                            </select>
                         </div>
+
+
+
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
                             <input
@@ -818,6 +824,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @endisset
                             />
                         </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
+                            <textarea  id="objectif_pedagogique_fiche_agre" disabled  rows="6" name="objectif_pedagogique_fiche_agre" class="form-control form-control-sm">@isset($fiche_a_demande_agrement->objectif_pedagogique_fiche_agre){{$fiche_a_demande_agrement->objectif_pedagogique_fiche_agre}}@endisset</textarea>
+                        </div>
+
                         <div class="col-12 col-md-4">
                             <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
                             <div class="col-md-12 mt-2">
@@ -825,7 +837,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <span class="badge bg-secondary"> <a target="_blank"
                                                                          onclick="NewWindow('{{ asset("/pieces/fichier_beneficiaire_lie_aux_action_plan_formation/". $fiche_a_demande_agrement->file_beneficiare_fiche_agrement)}}','',screen.width/2,screen.height,'yes','center',1);
                                                                                         ">
-                                          Voir la pièce précédemment enregistrée  </a></span>
+                                          Voir la pièce  </a></span>
                                 @endisset
                             </div>
                         </div>
@@ -837,235 +849,261 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <span class="badge bg-secondary"> <a target="_blank"
                                                                          onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $action_formation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);
                                                                                         ">
-                                          Voir la pièce précédemment enregistrée  </a></span>
+                                          Voir la pièce  </a></span>
                                 @endisset
                             </div>
 
                         </div>
+                        <div class="row mt-3">
+                            <h6>Nouvelle action de formation émise</h6>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="intitule_action_formation_plan_substi">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="text"
+                                    id="intitule_action_formation_plan_substi"
+                                    name="intitule_action_formation_plan_substi"
+                                    class="form-control form-control-sm"
+                                    disabled
+                                    @isset($demande_substitution->intitule_action_formation_plan_substi)
+                                        value="{{$demande_substitution->intitule_action_formation_plan_substi}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="nombre_groupe_action_formation_plan_substi">Nombre de groupe  <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="number"
+                                    disabled
 
-                            <h6 class="card-title mt-3 mb-2"> Nouvelle action de formation émise</h6>
-                        <div class="col-12 col-md-12">
-                            <label class="form-label" for="intitule_action_formation_plan_substi">Inititule de l'action de formation <strong style="color:red;">*</strong></label>
-                            <input
-                                type="text" disabled
-                                id="intitule_action_formation_plan_substi"
-                                name="intitule_action_formation_plan_substi"
-                                class="form-control form-control-sm"
-                                @isset($demande_substitution->intitule_action_formation_plan_substi)
-                                    value="{{$demande_substitution->intitule_action_formation_plan_substi}}"
-                                @endisset
-                            />
+                                    id="nombre_groupe_action_formation_plan_substi"
+                                    name="nombre_groupe_action_formation_plan_substi"
+                                    class="form-control form-control-sm"
+                                    @isset($demande_substitution->nombre_groupe_action_formation_plan_substi)
+                                        value="{{$demande_substitution->nombre_groupe_action_formation_plan_substi}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes  <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="number"
+                                    disabled
+
+                                    id="nombre_heure_action_formation_plan_substi"
+                                    name="nombre_heure_action_formation_plan_substi"
+                                    class="form-control form-control-sm"
+                                    @isset($demande_substitution->nombre_heure_action_formation_plan_substi)
+                                        value="{{$demande_substitution->nombre_heure_action_formation_plan_substi}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" >Coût de la formation <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$infosactionplanformation->cout_action_formation_plan}}"
+                                    disabled="disabled" />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                                <select
+                                    id="id_type_formation"
+                                    disabled
+                                    name="id_type_formation"
+                                    class="select2 form-select-sm input-group"
+                                    aria-label="Default select example" onchange="changeFunction();">
+                                    <option></option>
+                                    @foreach($typeformations as $typeformation)
+                                        <option value="{{$typeformation->id_type_formation}}"
+                                                @isset($fiche_a_demande_agrement->id_type_formation)
+                                                    @if($fiche_a_demande_agrement->id_type_formation==$typeformation->id_type_formation)
+                                                        selected
+                                            @endif
+
+                                            @endisset
+                                        >{{mb_strtoupper($typeformation->type_formation)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="row">
+                                    <div class="col-12 col-md-12">
+                                        <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select-sm input-group" name="structure_etablissement_plan_substi" id="structure_etablissement_plan_substi"
+                                                disabled
+
+
+                                        >
+                                            <option></option>
+                                            @foreach($structureformations as $structureformation)
+                                                <option value="{{$structureformation->id_entreprises}}"
+
+                                                        @isset($demande_substitution->id_entreprise_structure_formation_plan_substi)
+                                                            @if($demande_substitution->id_entreprise_structure_formation_plan_substi==$structureformation->id_entreprises)
+                                                                selected
+                                                    @endif
+
+                                                    @endisset
+                                                >{{mb_strtoupper($structureformation->raison_social_entreprises)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
+                                <select
+                                    id="id_but_formation"
+                                    disabled
+                                    name="id_but_formation"
+                                    class="select2 form-select-sm input-group"
+                                    aria-label="Default select example" >
+                                    <option></option>
+                                    @foreach($butformations as $butformation)
+                                        <option value="{{$butformation->id_but_formation}}"
+                                                @isset($fiche_a_demande_agrement->id_but_formation)
+                                                    @if($fiche_a_demande_agrement->id_but_formation==$butformation->id_but_formation)
+                                                        selected
+                                            @endif
+
+                                            @endisset
+                                        >{{mb_strtoupper($butformation->but_formation)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
+                                <input
+                                    disabled
+
+                                    type="date"
+                                    id="date_debut_fiche_agrement"
+                                    name="date_debut_fiche_agrement"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->date_debut_fiche_agrement)
+                                        value="{{date('Y-m-d', strtotime($fiche_a_demande_agrement->date_debut_fiche_agrement))}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="date"
+                                    disabled
+                                    id="date_fin_fiche_agrement"
+                                    name="date_fin_fiche_agrement"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->date_fin_fiche_agrement)
+                                        value="{{date('Y-m-d', strtotime($fiche_a_demande_agrement->date_fin_fiche_agrement))}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="text"
+                                    disabled
+
+                                    id="lieu_formation_fiche_agrement"
+                                    name="lieu_formation_fiche_agrement"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->lieu_formation_fiche_agrement)
+                                        value="{{$fiche_a_demande_agrement->lieu_formation_fiche_agrement}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-md-4 col-12">
+                                <label>Secteur d'activité <strong style="color:red;">*</strong></label>
+                                <select class="select2 form-select"
+                                        disabled
+                                        data-allow-clear="true" name="id_secteur_activite"
+                                        id="id_secteur_activite">
+                                    <option value="">-- Sélectionnez un secteur d'activité--- </option>
+                                    @foreach ($secteuractivites as $activite)
+                                        <option value="{{ $activite->id_secteur_activite }}"
+                                                @isset($demande_substitution->id_secteur_activite)
+                                                    @if($demande_substitution->id_secteur_activite==$activite->id_secteur_activite)
+                                                        selected
+                                            @endif
+                                            @endisset
+                                        >{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres </label>
+                                <input
+                                    disabled
+                                    type="number"
+                                    id="cadre_fiche_demande_agrement"
+                                    name="cadre_fiche_demande_agrement"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->cadre_fiche_demande_agrement)
+                                        value="{{$fiche_a_demande_agrement->cadre_fiche_demande_agrement}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
+                                <input
+                                    disabled
+                                    type="number"
+                                    id="agent_maitrise_fiche_demande_ag"
+                                    name="agent_maitrise_fiche_demande_ag"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag)
+                                        value="{{$fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers </label>
+                                <input
+                                    disabled
+                                    type="number"
+                                    id="employe_fiche_demande_agrement"
+                                    name="employe_fiche_demande_agrement"
+                                    class="form-control form-control-sm"
+                                    @isset($fiche_a_demande_agrement->employe_fiche_demande_agrement)
+                                        value="{{$fiche_a_demande_agrement->employe_fiche_demande_agrement}}"
+                                    @endisset
+                                />
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
+                                <textarea class="form-control form-control-sm" disabled name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6">@isset($fiche_a_demande_agrement->employe_fiche_demande_agrement){{$fiche_a_demande_agrement->objectif_pedagogique_fiche_agre}}@endisset</textarea>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel)</label>
+                                <div class="col-md-12 mt-2">
+                                    @isset($fiche_a_demande_agrement->file_beneficiare_fiche_agrement)
+                                        <span class="badge bg-secondary"> <a target="_blank"
+                                                                             onclick="NewWindow('{{ asset("/pieces/fichier_beneficiaire_lie_aux_action_plan_formation/". $fiche_a_demande_agrement->file_beneficiare_fiche_agrement)}}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                          Voir la pièce</a></span>
+                                    @endisset
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="facture_proforma_action_formati">Joindre les factures proforma (PDF) </label>
+
+                                <div class="col-md-12 mt-2">
+
+
+                                    @isset($demande_substitution->facture_proforma_action_plan_substi)
+                                        <span class="badge bg-secondary"> <a target="_blank"
+                                                                             onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $demande_substitution->facture_proforma_action_plan_substi)}}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                          Voir la pièce   </a></span>
+                                    @endisset
+                                </div>
+
+                            </div>
                         </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="structure_etablissement_plan_substi">Structure ou etablissement de formation <strong style="color:red;">*</strong></label>
-                                    <select class="select2 form-select-sm input-group" disabled name="structure_etablissement_plan_substi" id="structure_etablissement_plan_substi">
 
-                                        @foreach($structureformations as $structureformation)
-                                            <option value="{{$structureformation->id_entreprises}}" disabled
-                                                    @isset($demande_substitution->structure_etablissement_plan_substi)
-                                                        @if($demande_substitution->structure_etablissement_plan_substi==$structureformation->raison_social_entreprises)
-                                                            selected
-                                                @endif
 
-                                                @endisset>{{mb_strtoupper($structureformation->ncc_entreprises)}} / {{mb_strtoupper($structureformation->raison_social_entreprises)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_stagiaire_action_formati_plan_substi">Nombre de stagiaires <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="number"
-                                           id="nombre_stagiaire_action_formati_plan_substi"
-                                           name="nombre_stagiaire_action_formati_plan_substi"
-                                           class="form-control form-control-sm"
-                                           @isset($demande_substitution->nombre_stagiaire_action_formati_plan_substi)
-                                               value="{{$demande_substitution->nombre_stagiaire_action_formati_plan_substi}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_groupe_action_formation_plan_substi">Nombre de groupe <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="number"
-                                           id="nombre_groupe_action_formation_plan_substi"
-                                           name="nombre_groupe_action_formation_plan_substi"
-                                           class="form-control form-control-sm"
-                                           @isset($demande_substitution->nombre_groupe_action_formation_plan_substi)
-                                               value="{{$demande_substitution->nombre_groupe_action_formation_plan_substi}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="nombre_heure_action_formation_plan_substi">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="number"
-                                           id="nombre_heure_action_formation_plan_substi"
-                                           name="nombre_heure_action_formation_plan_substi"
-                                           class="form-control form-control-sm"
-                                           @isset($demande_substitution->nombre_heure_action_formation_plan_substi)
-                                               value="{{$demande_substitution->nombre_heure_action_formation_plan_substi}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="cout_action_formation_plan_substi">Cout de la formation <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="number"
-                                           id="cout_action_formation_plan_substi"
-                                           name="cout_action_formation_plan_substi"
-                                           class="form-control form-control-sm"
-                                           @isset($demande_substitution->cout_action_formation_plan_substi)
-                                               value="{{$demande_substitution->cout_action_formation_plan_substi}}"
-                                        @endisset
-
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
-                                    <select
-                                        id="id_type_formation" disabled
-                                        name="id_type_formation"
-                                        class="select2 form-select-sm input-group"
-                                        aria-label="Default select example" >
-                                        @foreach($typeformations as $typeformation)
-                                            <option value="{{$typeformation->id_type_formation}}"
-                                                    @isset($fiche_a_demande_agrement->id_type_formation)
-                                                        @if($fiche_a_demande_agrement->id_type_formation==$typeformation->id_type_formation)
-                                                            selected
-                                                @endif
-                                                @endisset>{{mb_strtoupper($typeformation->type_formation)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
-                                    <select disabled
-                                            id="id_but_formation"
-                                            name="id_but_formation"
-                                            class="select2 form-select-sm input-group"
-                                            aria-label="Default select example" >
-                                        @foreach($butformations as $butformation)
-                                            <option value="{{$butformation->id_but_formation}}"
-                                                    @isset($fiche_a_demande_agrement->id_but_formation)
-                                                        @if($fiche_a_demande_agrement->id_but_formation==$butformation->id_but_formation)
-                                                            selected
-                                                @endif
-                                                @endisset>{{mb_strtoupper($butformation->but_formation)}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="date"
-                                           id="date_debut_fiche_agrement"
-                                           name="date_debut_fiche_agrement"
-                                           class="form-control form-control-sm"
-                                           @isset($fiche_a_demande_agrement->date_debut_fiche_agrement)
-                                               value="{{$fiche_a_demande_agrement->date_debut_fiche_agrement}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-2">
-                                    <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation <strong style="color:red;">*</strong></label>
-                                    <input
-                                        type="date" disabled
-                                        id="date_fin_fiche_agrement"
-                                        name="date_fin_fiche_agrement"
-                                        class="form-control form-control-sm"
-                                        @isset($fiche_a_demande_agrement->date_fin_fiche_agrement)
-                                            value="{{$fiche_a_demande_agrement->date_fin_fiche_agrement}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
-                                    <input
-                                        type="text" disabled
-                                        id="lieu_formation_fiche_agrement"
-                                        name="lieu_formation_fiche_agrement"
-                                        class="form-control form-control-sm"
-                                        @isset($fiche_a_demande_agrement->lieu_formation_fiche_agrement)
-                                            value="{{$fiche_a_demande_agrement->lieu_formation_fiche_agrement}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique <strong style="color:red;">*</strong></label>
-                                    <input
-                                        type="text" disabled
-                                        id="objectif_pedagogique_fiche_agre"
-                                        name="objectif_pedagogique_fiche_agre"
-                                        class="form-control form-control-sm"
-                                        @isset($fiche_a_demande_agrement->objectif_pedagogique_fiche_agre)
-                                            value="{{$fiche_a_demande_agrement->objectif_pedagogique_fiche_agre}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre <strong style="color:red;">*</strong></label>
-                                    <input
-                                        type="number" disabled
-                                        id="cadre_fiche_demande_agrement"
-                                        name="cadre_fiche_demande_agrement"
-                                        class="form-control form-control-sm"
-                                        @isset($fiche_a_demande_agrement->cadre_fiche_demande_agrement)
-                                            value="{{$fiche_a_demande_agrement->cadre_fiche_demande_agrement}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise <strong style="color:red;">*</strong></label>
-                                    <input
-                                        type="number" disabled
-                                        id="agent_maitrise_fiche_demande_ag"
-                                        name="agent_maitrise_fiche_demande_ag"
-                                        class="form-control form-control-sm"
-                                        @isset($fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag)
-                                            value="{{$fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers <strong style="color:red;">*</strong></label>
-                                    <input disabled
-                                           type="number"
-                                           id="employe_fiche_demande_agrement"
-                                           name="employe_fiche_demande_agrement"
-                                           class="form-control form-control-sm"
-                                           @isset($fiche_a_demande_agrement->employe_fiche_demande_agrement)
-                                               value="{{$fiche_a_demande_agrement->employe_fiche_demande_agrement}}"
-                                        @endisset
-                                    />
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="file_beneficiare">Charger les beneficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
-                                    <div class="col-md-12 mt-2">
-                                        @isset($fiche_a_demande_agrement->file_beneficiare_fiche_agrement)
-                                            <span class="badge bg-secondary"> <a target="_blank"
-                                                                                 onclick="NewWindow('{{ asset("/pieces/fichier_beneficiaire_lie_aux_action_plan_formation/". $fiche_a_demande_agrement->file_beneficiare_fiche_agrement)}}','',screen.width/2,screen.height,'yes','center',1);
-                                                                                        ">
-                                          Voir la pièce précédemment enregistrée  </a></span>
-                                        @endisset
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="facture_proforma_action_formati">Jointre les factures proforma (PDF) <strong style="color:red;">*</strong></label>
-                                    <div class="col-md-12 mt-2">
-
-                                        @isset($demande_substitution->facture_proforma_action_plan_substi)
-                                            <span class="badge bg-secondary"> <a target="_blank"
-                                                                                 onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $demande_substitution->facture_proforma_action_plan_substi)}}','',screen.width/2,screen.height,'yes','center',1);
-                                                                                        ">
-                                          Voir la pièce précédemment enregistrée  </a></span>
-                                        @endisset
-                                    </div>
-
-                                </div>
-                                <div class="col-12" align="right">
-
-                                </div>
-                        <h6 class="card-title mt-5 mb-2"> Demande  de substitution</h6>
+                        <h6 class="card-title mt-5 mb-2">Information sur la demande  de substitution</h6>
 
                         <div class="row">
                                 <div class="col-md-6 col-12">
@@ -1086,7 +1124,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 @isset($demande_substitution->piece_demande_plan_substi)
                                                     <span class="badge bg-secondary">
                                                             <a target="_blank" onclick="NewWindow('{{ asset("/pieces/piece_demande_substi/". $demande_substitution->piece_demande_plan_substi)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                            Voir la pièce précédemment enregistrée
+                                                            Voir la pièce
                                                             </a>
                                                         </span>
                                                 @endisset
