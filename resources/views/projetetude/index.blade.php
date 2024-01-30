@@ -53,6 +53,7 @@
                         <tbody>
                         @foreach ($projet_etudes as $key => $projet_etude)
                             <tr>
+
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ @$projet_etude->titre_projet_etude }}</td>
                                 <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
