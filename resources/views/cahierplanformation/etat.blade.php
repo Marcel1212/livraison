@@ -20,7 +20,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
   <body>
 
     <div class="container p-5">
-        <table width="100%">
+        <table width="100%" border="1" cellpadding="5" cellspacing="0">
             <tbody>
               <tr>
                 <td width="25%">
@@ -34,8 +34,9 @@ $imagedashboard = Menu::get_info_image_dashboard();
                 <td width="25%">Date : {{ $cahier->date_soumis_cahier_plan_formation }}</td>
               </tr>
             </tbody>
-        </table>
-
+        </table> <br/>
+        <div align="right"><input type="button" name="Submit" value="Imprimer"
+        class="ecran visuel_bouton" onclick="window.print();"/></div> <br/>
         <table width="100%" border="1" cellpadding="5" cellspacing="0">
             <tbody>
               <tr>
@@ -47,28 +48,28 @@ $imagedashboard = Menu::get_info_image_dashboard();
                 <td><span  >{{ count($etatactionplan) }} </span></td>
               </tr>
               <tr>
-                <td colspan="4">&nbsp;</td>
+                <td colspan="4" align="center"><label>Nombre d'actions par type de formation </label></td>
               </tr>
               <tr>
-                <td colspan="4" align="center"><p>Nombre d'actions par type de formation </p>
+                <td colspan="4" align="center">
                   <div id="piechart" style="width: 900px; height: 300px;"></div>
                 <p>&nbsp;</p></td>
               </tr>
               <tr>
-                <td colspan="4">&nbsp;</td>
+                <td colspan="4" align="center"><label>Nombre d'actions par but de formation</label></td>
               </tr>
               <tr>
                 <td colspan="4" align="center"><span  >
-                <label>Nombre d'actions par but de formation</label>
+
                 </span>
                   <div id="piechart1" style="width: 900px; height: 300px;"></div></td>
               </tr>
               <tr>
-                <td colspan="4">&nbsp;</td>
+                <td colspan="4" align="center"><label>Nombre d'action par secteur activite</label></td>
               </tr>
               <tr>
                 <td colspan="4" align="center"><span >
-                <label>Nombre d'action par secteur activite</label>
+
                 </span>
                   <div id="piechart2" style="width: 900px; height: 300px;"></div></td>
               </tr>
@@ -153,7 +154,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
           var options = {
             title: 'But de formation',
-            is3D: false,
+            is3D: true,
           };
 
           var chart = new google.visualization.PieChart(document.getElementById('piechart1'));
