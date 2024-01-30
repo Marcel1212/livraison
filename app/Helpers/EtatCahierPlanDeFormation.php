@@ -27,7 +27,7 @@ class EtatCahierPlanDeFormation
          $planformations = DB::table("ligne_cahier_plan_formation as lcpf")
                             ->join("plan_formation as pf","lcpf.id_plan_formation","=","pf.id_plan_de_formation")
                             ->join("action_formation_plan as afp","pf.id_plan_de_formation","=","afp.id_plan_de_formation")
-                            ->selectRaw("count(afp.id_action_formation_plan) as nombre_action_formation")
+                            //->selectRaw("count(afp.id_action_formation_plan) as nombre_action_formation")
                             ->where("lcpf.id_cahier_plan_formation", $numAgce)
                             ->get();
 
@@ -38,7 +38,7 @@ class EtatCahierPlanDeFormation
     {
          $planformations = DB::table("ligne_cahier_plan_formation as lcpf")
                             ->join("plan_formation as pf","lcpf.id_plan_formation","=","pf.id_plan_de_formation")
-                            ->selectRaw("count(pf.id_plan_de_formation) as nombre_plan_formation")
+                            //->selectRaw("count(pf.id_plan_de_formation) as nombre_plan_formation")
                             ->where("lcpf.id_cahier_plan_formation", $numAgce)
                             ->get();
 

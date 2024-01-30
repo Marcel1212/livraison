@@ -1,7 +1,18 @@
 <!doctype html>
+<?php
+
+use App\Helpers\Menu;
+
+$logo = Menu::get_logo();
+$imagedashboard = Menu::get_info_image_dashboard();
+?>
 <html lang="en">
   <head>
-    <title>Laravel 10 Google Pie Chart - Tutsmake.com</title>
+    <title><?php if (isset($logo->mot_cle)) {
+        echo @$logo->mot_cle;
+    } else {
+        echo 'Application de gestion du FDFP';
+    } ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -9,31 +20,63 @@
   <body>
 
     <div class="container p-5">
-        <h5>Statistique du cahier de plan de formation : {{ $cahier->code_cahier_plan_formation }}</h5>
+        <table width="100%">
+            <tbody>
+              <tr>
+                <td width="25%">
+                    <?php if (isset($logo->logo_logo)){ ?>
+                        <img alt="Logo" src="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}" height="35"
+                         style="margin:5px; padding: 5px"/>
+                    <?php } ?>
+                </td>
+                <td width="50%" align="center" valign="middle"><p><strong>Statistique du cahier de plan de formation </strong></p>
+                <p> Code du cahier:  <strong>{{ $cahier->code_cahier_plan_formation }}</strong></p></td>
+                <td width="25%">Date : {{ $cahier->date_soumis_cahier_plan_formation }}</td>
+              </tr>
+            </tbody>
+        </table>
 
-        <div class="row">
-            <div class="col-xl-6">
-                <label> <strong> Nombre de plan de formation :</strong> </label> {{ count($etatplanf) }}
-            </div>
-            <div class="col-xl-6">
-                <label> <strong>Nombre d'actions de plan de formation :</strong>  </label> {{ count($etatactionplan) }}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xl-12">
-                <label>Nombre d'actions par type de formation </label>
-                <div id="piechart" style="width: 900px; height: 500px;"></div>
-            </div>
-            <div class="col-xl-12">
+        <table width="100%" border="1" cellpadding="5" cellspacing="0">
+            <tbody>
+              <tr>
+                <td><strong>Nombre de plan de formation </strong></td>
+                <td><span class="align-content-start">
+                  <label> </label>
+                              {{ count($etatplanf) }}</span></td>
+                <td><span  > <strong>Nombre d'actions de plan de formation</strong></span></td>
+                <td><span  >{{ count($etatactionplan) }} </span></td>
+              </tr>
+              <tr>
+                <td colspan="4">&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="4" align="center"><p>Nombre d'actions par type de formation </p>
+                  <div id="piechart" style="width: 900px; height: 300px;"></div>
+                <p>&nbsp;</p></td>
+              </tr>
+              <tr>
+                <td colspan="4">&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="4" align="center"><span  >
                 <label>Nombre d'actions par but de formation</label>
-                <div id="piechart1" style="width: 900px; height: 500px;"></div>
-            </div>
-            <div class="col-xl-6">
+                </span>
+                  <div id="piechart1" style="width: 900px; height: 300px;"></div></td>
+              </tr>
+              <tr>
+                <td colspan="4">&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="4" align="center"><span >
                 <label>Nombre d'action par secteur activite</label>
-                <div id="piechart2" style="width: 900px; height: 500px;"></div>
-            </div>
-        </div>
+                </span>
+                  <div id="piechart2" style="width: 900px; height: 300px;"></div></td>
+              </tr>
+            </tbody>
+          </table>
+          <h5>&nbsp;</h5>
+          <h5>&nbsp; </h5>
+
 
     </div>
 
