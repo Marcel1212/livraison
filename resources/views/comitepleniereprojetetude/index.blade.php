@@ -1,10 +1,18 @@
+<?php
+
+use App\Helpers\AnneeExercice;
+
+$anneexercice = AnneeExercice::get_annee_exercice();
+
+?>
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Configuration')
-    @php($titre='Liste des sous modules')
-    @php($lien='sousmenus')
+    @php($Module='Projet d\'étude')
+    @php($titre='Liste des comites plénières')
+    @php($lien='comitepleniereprojetetude')
 
     <!-- BEGIN: Content-->
 
@@ -21,6 +29,15 @@
         </div>
     @endif
 
+    @if(!isset($anneexercice->id_periode_exercice))
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <div class="alert-body" style="text-align:center">
+                 {{$anneexercice}}
+            </div>
+            <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+        </div>
+    @endif
+
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -29,50 +46,50 @@
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">{{$titre}}</h5>
                     <small class="text-muted float-end">
-                        @can('sous-module-create')
+{{--                        @can($lien.'-create')--}}
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
-                        @endcan
+                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau comite pleniere </a>
+{{--                        @endcan--}}
                     </small>
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table id="exampleData" class="table  table-bordered table-striped table-hover table-sm ">
+                    <table class="table table-bordered table-striped table-hover table-sm"
+                           id="exampleData"
+                           style="margin-top: 13px !important">
                         <thead>
                         <tr>
                             <th>No</th>
-                            <th>Module</th>
-                            <th>Sous module</th>
-                            <th>Lien</th>
-                            <th>Priorité</th>
+                            <th>Code </th>
+                            <th>Date debut</th>
+                            <th>Date fin</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-
-                        @foreach ($data as $key => $sousmenu)
+                        <?php $i=0; ?>
+                        @foreach ($comite_plenieres as $key => $comitep)
                             <tr>
-                                <td>{{ $sousmenu->id_sousmenu }}</td>
-                                <td>{{ $sousmenu->menu }}</td>
-                                <td>{{ $sousmenu->libelle }}</td>
-                                <td>{{ $sousmenu->sousmenu }}</td>
-                                <td>{{ $sousmenu->priorite_sousmenu }}</td>
+                                <td>{{ ++$i }}</td>
+                                <td>{{ @$comitep->code_comite_pleniere }}</td>
+                                <td>{{ $comitep->date_debut_comite_pleniere }}</td>
+                                <td>{{ $comitep->date_fin_comite_pleniere }}</td>
                                 <td align="center">
-                                        <?php if ($sousmenu->is_valide == true){ ?>
-                                    <span class="badge bg-success">Actif</span>
-                                    <?php } else { ?>
-                                    <span class="badge bg-danger">Inactif</span>
+                                    <?php if($comitep->flag_statut_comite_pleniere == true){ ?>
+                                        <span class="badge bg-success">Terminer</span>
+                                    <?php  }else{?>
+                                            <span class="badge bg-warning">En cours</span>
                                     <?php } ?>
                                 </td>
                                 <td align="center">
-                                    @can('role-edit')
-                                        <a href="{{ route('sousmenus.edit',$sousmenu->id_sousmenu) }}"
+{{--                                    @can($lien.'-edit')--}}
+                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere)) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
-                                    @endcan
+{{--                                    @endcan--}}
                                 </td>
                             </tr>
                         @endforeach

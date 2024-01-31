@@ -20,6 +20,7 @@ use App\Models\Motif;
 use App\Models\Parcours;
 use App\Models\Pays;
 use App\Models\PlanFormation;
+use App\Models\SecteurActivite;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 use Carbon\Carbon;
@@ -67,13 +68,14 @@ class TraitementDemandeSubstitutionPlanController extends Controller
         $id2 =  \App\Helpers\Crypt::UrldeCrypt($id2);
 
         $butformations = ButFormation::all();
+        $secteuractivites = SecteurActivite::all();
         $fiche_a_demande_agrement = new FicheADemandeAgrement();
         $beneficiaire_formation = new BeneficiairesFormation();
         $motifs = Motif::where('code_motif','SAF')->get();
         $typeformations = TypeFormation::all();
         $categorieprofessionelles = CategorieProfessionelle::all();
         $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
-
+        $motif_substitutions = Motif::where('code_motif','SAF')->get();
 //        if(isset($id_action)){
 //            $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
 //            $demande_substitution = DemandeSubstitutionActionPlanFormation::
@@ -138,7 +140,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
             ['id_combi_proc','=',$id2]
         ])->get();
 
-        return view('traitementdemandesubstitutionplan.edit', compact('ResultProssesList','action_formation','fiche_a_demande_agrement','butformations','typeformations','categorieprofessionelles','structureformations','motifs','demande_substitution','id2','ResultProssesList','parcoursexist'));
+        return view('traitementdemandesubstitutionplan.edit', compact('motif_substitutions','secteuractivites','ResultProssesList','action_formation','fiche_a_demande_agrement','butformations','typeformations','categorieprofessionelles','structureformations','motifs','demande_substitution','id2','ResultProssesList','parcoursexist'));
 
     }
 
@@ -196,15 +198,17 @@ class TraitementDemandeSubstitutionPlanController extends Controller
 
                 if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
 
-
                     $demande_substitution->flag_demande_substitution_action_valider_par_processus = true;
                     $demande_substitution->flag_validation_demande_plan_substi = true;
                     $demande_substitution->date_validation_demande_plan_substi = now();
                     $demande_substitution->update();
 
                     $plan_formation= PlanFormation::where('id_plan_de_formation',$demande_substitution->id_plan_de_formation)->first();
+
+
                     $plan_formation->flag_soumis_ct_plan_formation = false;
                     $plan_formation->update();
+
 
 
                     $action_formation->flag_annulation_action=true;
@@ -226,8 +230,13 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $action_formation_new->flag_valide_action_formation_pl = false;
                     $action_formation_new->facture_proforma_action_formati = $demande_substitution->facture_proforma_action_plan_substi;
                     $action_formation_new->save();
-                }
 
+                    $fiche_a_demande_agrement= FicheADemandeAgrement::where('id_action_formation_plan_substi',$action_formation_new->id_action_formation_plan)->first();
+                    if(isset($fiche_a_demande_agrement)){
+                        $fiche_a_demande_agrement->id_action_formation_plan = $action_formation_new->id_action_formation_plan;
+                        $fiche_a_demande_agrement->update();
+                    }
+                }
                 return redirect('traitementdemandesubstitutionplan/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/edit')->with('success', 'Succes : Operation validée avec succes ');
             }
 
