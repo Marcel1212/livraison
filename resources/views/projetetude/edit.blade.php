@@ -63,7 +63,7 @@
                         <li class="nav-item">
                             <button
                                 type="button"
-                                class="nav-link  @if($id_etape==3) active @else disabled @endif"
+                                class="nav-link  @if($id_etape==3) active @endif"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-piecesprojetetude"
@@ -123,7 +123,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
                                                 <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
-                                                    <?= $pay; ?>
+                                                        <?= $pay; ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
@@ -142,7 +142,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
                                                 <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
-                                                    <?= $pay; ?>
+                                                        <?= $pay; ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
@@ -161,7 +161,7 @@
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
                                                 <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
-                                                    <?= $pay; ?>
+                                                        <?= $pay; ?>
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
@@ -191,7 +191,7 @@
                                                @if(@$projet_etude->flag_soumis==true)
                                                    disabled
                                                @endif
-                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
 
                                                placeholder="ex : Perfectionnement ..">
                                     </div>
@@ -284,10 +284,8 @@
                                             Modifier
                                         </button>
                                     @endif
-
-                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                    {{--                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>--}}
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                         Retour</a>
                                 </div>
                             </form>
@@ -301,7 +299,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                                 <form method="POST" class="form"  enctype="multipart/form-data"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
-                                        @method('put')
+                                    @method('put')
                                     @csrf
                                     <div class="row mb-5">
                                         <div class="col-md-5">
@@ -313,7 +311,7 @@
                                                     <option value="avant_projet_tdr">Avant-projet TDR</option>
                                                 @endif
                                                 @if(!isset($courier_demande_fin))
-                                                <option value="courier_demande_fin">Courrier de demande de financement</option>
+                                                    <option value="courier_demande_fin">Courrier de demande de financement</option>
                                                 @endif
                                                 @if(!isset($dossier_intention))
                                                     <option value="dossier_intention">Dossier d’intention</option>
@@ -374,19 +372,19 @@
                                             @if($piece->code_pieces=='dossier_intention')
                                                 Dossier d’intention
                                             @endif
-                                                @if($piece->code_pieces=='lettre_engagement')
-                                                    Lettre d’engagement
-                                                @endif
-                                                @if($piece->code_pieces=='offre_technique')
-                                                    Offre technique
-                                                @endif
-                                                @if($piece->code_pieces=='offre_financiere')
-                                                    Offre financière
-                                                @endif
+                                            @if($piece->code_pieces=='lettre_engagement')
+                                                Lettre d’engagement
+                                            @endif
+                                            @if($piece->code_pieces=='offre_technique')
+                                                Offre technique
+                                            @endif
+                                            @if($piece->code_pieces=='offre_financiere')
+                                                Offre financière
+                                            @endif
                                         </td>
                                         <td>{{ $piece->libelle_pieces }}</td>
                                         <td align="center">
-{{--                                            @can($lien.'-edit')--}}
+                                            {{--                                            @can($lien.'-edit')--}}
                                             @if($piece->code_pieces=='avant_projet_tdr')
                                                 <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher"><img src='/assets/img/eye-solid.png'></a>
@@ -412,11 +410,11 @@
                                                    title="Afficher"><img src='/assets/img/eye-solid.png'></a>
                                             @endif
 
-                                                @if(@$projet_etude->flag_soumis == false)
+                                            @if(@$projet_etude->flag_soumis == false)
                                                 <a href="{{ route($lien.'.deletefpe',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_piece_projet'=>\App\Helpers\Crypt::UrlCrypt($piece->id_pieces_projet_etude)]) }}"
                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette pièce?")) return false;'
                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                               @endif
+                                            @endif
 
                                         </td>
                                     </tr>
@@ -425,22 +423,22 @@
                                 </tbody>
                             </table>
 
-                                @if(isset($avant_projet_tdr) && isset($courier_demande_fin) && isset($dossier_intention) && isset($lettre_engagement) && isset($offre_technique) && isset($offre_financiere) )
-                                    <form method="POST" class="form mt-3"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
-                                        @method('put')
-                                        @csrf
+                            @if(isset($avant_projet_tdr) && isset($courier_demande_fin) && isset($dossier_intention) && isset($lettre_engagement) && isset($offre_technique) && isset($offre_financiere) )
+                                <form method="POST" class="form mt-3"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
+                                    @method('put')
+                                    @csrf
 
 
-                                        <div  class="text-end">
-                                            <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
-                                            @if(@$projet_etude->flag_soumis == false)
-                                                <button onclick='javascript:if (!confirm("Voulez-vous soumettre le projet ? Cette action est irréversible.")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_projet_etude" class="btn btn-sm btn-success me-sm-3 me-1 "  align="right">Soumettre le projet d'étude</button>
-                                            @endif
-                                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                                Retour</a>
-                                        </div>
-                                    </form>
-                                @endif
+                                    <div  class="text-end">
+                                        <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                        @if(@$projet_etude->flag_soumis == false)
+                                            <button onclick='javascript:if (!confirm("Voulez-vous soumettre le projet ? Cette action est irréversible.")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_projet_etude" class="btn btn-sm btn-success me-sm-3 me-1 "  align="right">Soumettre le projet d'étude</button>
+                                        @endif
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                            Retour</a>
+                                    </div>
+                                </form>
+                            @endif
 
                         </div>
                     </div>

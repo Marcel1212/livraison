@@ -113,6 +113,7 @@ class ProjetEtudeController extends Controller
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
             $projet_etude->flag_rejet = false;
+            $projet_etude->flag_soumis_chef_service = false;
             $projet_etude->flag_valider_ct_pleniere_projet_etude=false;
             $projet_etude->flag_soumis_ct_pleniere = false;
             $projet_etude->flag_soumis_chef_depart = false;

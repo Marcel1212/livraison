@@ -25,6 +25,7 @@ class AffectationProjetEtudeController extends Controller
     {
         $user = Auth::user();
         $direction = Direction::where('code_profil_direction','D2EQPC')->first();
+        $role = Menu::get_menu_profil($user->id);
         if(isset($direction)){
             $role = Menu::get_menu_profil($user->id);
             $departement = Departement::where('id_departement',$user->id_departement)
@@ -47,8 +48,8 @@ class AffectationProjetEtudeController extends Controller
                         ->first();
                     if(isset($service)){
                         $projet_etudes = ProjetEtude::where('id_departement',$departement->id_departement)
-                            ->where('id_chef_serv',$user->id_chef_serv)->get();
-                        return view('affectationprojetetude.index',compact('projet_etudes'));
+                            ->where('id_chef_serv',$user->id)->get();
+                        return view('affectationprojetetude.index',compact('projet_etudes','role'));
                     }else{
                         return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'êtes pas autorisé à accéder à ce menu');
                     }
