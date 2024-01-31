@@ -1,9 +1,15 @@
 <?php
 
+use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\ComiteGestionProjetEtudeController;
+use App\Http\Controllers\ComitePleniereProjetEtudeController;
+use App\Http\Controllers\CtprojetetudevaliderController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;
 use App\Http\Controllers\MotDePasseOublieController;
+use App\Http\Controllers\ProjetEtudeController;
 use App\Http\Controllers\SelectionOperateurProjetEtudeController;
+use App\Http\Controllers\TraitementProjetEtudeController;
 use App\Http\Controllers\TraitementSelectionOperateurProjetEtudeController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,6 +107,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepleniereprojetetude/{id}/edit', [ComitePleniereProjetEtudeController::class, 'edit'])->name('comitepleniereprojetetude.edit');
     Route::put('comitepleniereprojetetude/{id}/update', [ComitePleniereProjetEtudeController::class, 'update'])->name('comitepleniereprojetetude.update');
     Route::get('comitepleniereprojetetude/{id}/delete', [ComitePleniereProjetEtudeController::class, 'delete'])->name('comitepleniereprojetetude.delete');
+    Route::get('comitepleniereprojetetude/{id}/{id2}/editer', [ComitePleniereProjetEtudeController::class, 'editer'])->name('comitepleniereprojetetude.editer');
+
+    //workflow de validation
+    Route::get('ctprojetetudevalider', [CtprojetetudevaliderController::class, 'index'])->name('ctprojetetudevalider.index');
+    Route::get('ctprojetetudevalider/{id_projet_etude}/{id_combi_proc}/edit', [CtprojetetudevaliderController::class, 'edit'])->name('ctprojetetudevalider.edit');
+    Route::put('ctprojetetudevalider/{id_projet_etude}/update', [CtprojetetudevaliderController::class, 'update'])->name('ctprojetetudevalider.update');
+
+    //comité de gestion
+
+    Route::get('comitegestionprojetetude', [ComiteGestionProjetEtudeController::class, 'index'])->name('comitegestionprojetetude');
+    Route::get('comitegestionprojetetude/index', [ComiteGestionProjetEtudeController::class, 'index'])->name('comitegestionprojetetude.index');
+    Route::get('comitegestionprojetetude/create', [ComiteGestionProjetEtudeController::class, 'create'])->name('comitegestionprojetetude.create');
+    Route::post('comitegestionprojetetude/store', [ComiteGestionProjetEtudeController::class, 'store'])->name('comitegestionprojetetude.store');
+    Route::get('comitegestionprojetetude/{id}/edit', [ComiteGestionProjetEtudeController::class, 'edit'])->name('comitegestionprojetetude.edit');
+    Route::put('comitegestionprojetetude/{id}/update', [ComiteGestionProjetEtudeController::class, 'update'])->name('comitegestionprojetetude.update');
+    Route::get('comitegestionprojetetude/{id}/delete', [ComiteGestionProjetEtudeController::class, 'delete'])->name('comitegestionprojetetude.delete');
+    Route::get('comitegestionprojetetude/{id}/{id2}/editer', [ComiteGestionProjetEtudeController::class, 'editer'])->name('comitegestionprojetetude.editer');
+
 
 
 //    Route::get('agreement/{id}/cancel', [App\Http\Controllers\AgreementController::class, 'cancel'])->name('agreement.cancel');
@@ -130,10 +154,6 @@ Route::group(['middleware' => ['auth']], function () {
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
 
 
-    //CT PROJET ETUDE A VALIDER
-    Route::get('ctprojetetudevalider', [CtprojetetudevaliderController::class, 'index'])->name('ctprojetetudevalider.index');
-    Route::get('ctprojetetudevalider/{id_projet_etude}/{id_combi_proc}/edit', [CtprojetetudevaliderController::class, 'edit'])->name('ctprojetetudevalider.edit');
-    Route::put('ctprojetetudevalider/{id_projet_etude}/update', [CtprojetetudevaliderController::class, 'update'])->name('ctprojetetudevalider.update');
 
 
 

@@ -93,18 +93,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           Liste des projet d'étude
                         </button>
                       </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-Soumettre"
-                          aria-controls="navs-top-Soumettre"
-                          aria-selected="false">
-                          Cahier
-                        </button>
-                      </li>
                     </ul>
                     <div class="tab-content">
                       <div class="tab-pane fade show active" id="navs-top-planformation" role="tabpanel">

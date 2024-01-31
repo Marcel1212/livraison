@@ -7,8 +7,10 @@ use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Models\Entreprises;
 use App\Models\Parcours;
+use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,7 +33,7 @@ class CtprojetetudevaliderController extends Controller
                     ->Join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
                     ->join('projet_etude','p.id_demande','projet_etude.id_projet_etude')
                     ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
-                    ->join('users','projet_etude.id_user','users.id')
+                    ->join('users','projet_etude.id_charge_etude','users.id')
                     ->where('projet_etude.id_departement',$user->id_departement)
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
@@ -40,6 +42,7 @@ class CtprojetetudevaliderController extends Controller
                         ['p.id_roles', '=', $Idroles]
                     ])
                     ->get();
+
             }
         }
         return view('ctprojetetudevalider.index',compact('Resultat'));
@@ -51,45 +54,37 @@ class CtprojetetudevaliderController extends Controller
         $id_combi_proc = Crypt::UrldeCrypt($id_combi_proc);
 
         if(isset($id_projet_etude)){
-            $projet_etude_valide = ProjetEtude::find($id_projet_etude);
+            $projet_etude = ProjetEtude::find($id_projet_etude);
+//
+//            $operateurs = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)
+////                    ->where('id_secteur_activite',$projet_etude->id_secteur_activite)
+//                ->get();
 
-            $operateurs = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)
-//                    ->where('id_secteur_activite',$projet_etude_valide->id_secteur_activite)
-                ->get();
-
-            $user = User::find($projet_etude_valide->id_user);
+            $user = User::find($projet_etude->id_user);
             $entreprise_mail = $user->email;
-            $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+            $infoentreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','1')->first();
-            $piecesetude1 = $piecesetude->libelle_pieces;
+            $pays = Pays::all();
+            $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+            foreach ($pays as $comp) {
+                $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+            }
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','2')->first();
-            $piecesetude2 = $piecesetude->libelle_pieces;
+            /******************** secteuractivites *********************************/
+            $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                ->orderBy('libelle_secteur_activite')
+                ->get();
+            $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+            foreach ($secteuractivites as $comp) {
+                $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+            }
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','3')->first();
-            $piecesetude3 = $piecesetude->libelle_pieces;
-
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','4')->first();
-            $piecesetude4 = $piecesetude->libelle_pieces;
-
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','5')->first();
-            $piecesetude5 = $piecesetude->libelle_pieces;
-
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','6')->first();
-            $piecesetude6 = $piecesetude->libelle_pieces;
         }
 
         $ResultProssesList = DB::table('vue_processus_validation_affichage as v')
             ->select('v.name', 'v.priorite_combi_proc', 'v.is_valide', 'v.date_valide','v.comment_parcours', 'v.id_processus')
-            ->where('v.id_processus', '=', $projet_etude_valide->id_processus_selection)
-            ->where('v.id_demande', '=', $projet_etude_valide->id_projet_etude)
+            ->where('v.id_processus', '=', $projet_etude->id_processus)
+            ->where('v.id_demande', '=', $projet_etude->id_projet_etude)
             ->orderBy('v.priorite_combi_proc', 'ASC')
             ->get();
 
@@ -98,7 +93,7 @@ class CtprojetetudevaliderController extends Controller
         $Idroles = Menu::get_id_profil($idUser);
 
         $parcoursexist=Parcours::where([
-            ['id_processus','=',$projet_etude_valide->id_processus_selection],
+            ['id_processus','=',$projet_etude->id_processus],
             ['id_user','=',$idUser],
             ['id_piece','=',$id_projet_etude],
             ['id_roles','=',$Idroles],
@@ -106,17 +101,19 @@ class CtprojetetudevaliderController extends Controller
             ['id_combi_proc','=',$id_combi_proc]
         ])->get();
 
-        return view('ctprojetetudevalider.edit', compact('projet_etude_valide','id_combi_proc','piecesetude1','piecesetude2','piecesetude3','piecesetude4','piecesetude5','piecesetude6','entreprise','entreprise_mail','operateurs','ResultProssesList','parcoursexist'));
+        $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
+
+        return view('ctprojetetudevalider.edit', compact('projet_etude','id_combi_proc',
+            'pieces_projets','pay','secteuractivite',
+        'infoentreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }
 
     public function update(Request $request, $id_projet_etude)
     {
         $id_projet_etude =  Crypt::UrldeCrypt($id_projet_etude);
-
         if(isset($id_projet_etude)){
-            $projet_etude_valide = ProjetEtude::find($id_projet_etude);
-
-            if(isset($projet_etude_valide)) {
+            $projet_etude = ProjetEtude::find($id_projet_etude);
+            if(isset($projet_etude)) {
                 if ($request->isMethod('put')) {
                     $data = $request->all();
                     if ($data['action'] === 'Valider') {
@@ -153,7 +150,9 @@ class CtprojetetudevaliderController extends Controller
                             ->first();
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-                            //TRAITEMENT A EFFECTUER APRES VALIDATION
+                            $projet_etude->flag_valider_par_processus = true;
+                            $projet_etude->date_valider_par_processus = now();
+                            $projet_etude->update();
 
                         }
 

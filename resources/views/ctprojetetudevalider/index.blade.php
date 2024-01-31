@@ -37,9 +37,9 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Entreprise </th>
-                                <th>Code du dossier </th>
-                                <th>Date de soumission</th>
+                                <th>Titre du projet </th>
+                                <th>Contexte </th>
+                                <th>Cible </th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -47,22 +47,22 @@
                         <tbody>
                         <?php $i=0 ?>
                         @foreach ($Resultat as $key => $res1)
-                            @foreach ($res1 as $key => $projetetude)
+                            @foreach ($res1 as $key => $projet_etude)
                                 <tr>
                                     <td>{{ ++$i }}</td>
-                                    <td>{{ @$projetetude->raison_social_entreprises }}</td>
-                                    <td>{{ @$projetetude->code_dossier }}</td>
-                                    <td>{{ $projetetude->date_soumis }}</td>
+                                    <td>{{ @$projet_etude->titre_projet_etude }}</td>
+                                    <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
+                                    <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
                                     <td align="center">
                                         <span class="badge bg-warning">En attente de traitement</span>
                                     </td>
                                     <td align="center">
-                                        @can($lien.'-edit')
-                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($projetetude->id_combi_proc)]) }}"
+{{--                                        @can($lien.'-edit')--}}
+                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_combi_proc)]) }}"
                                                class=" "
                                                title="Modifier"><img
                                                     src='/assets/img/editing.png'></a>
-                                        @endcan
+{{--                                        @endcan--}}
                                     </td>
                                 </tr>
                             @endforeach

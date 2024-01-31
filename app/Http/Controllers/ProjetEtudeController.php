@@ -113,6 +113,7 @@ class ProjetEtudeController extends Controller
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
             $projet_etude->flag_rejet = false;
+            $projet_etude->flag_valider_ct_pleniere_projet_etude=false;
             $projet_etude->flag_soumis_ct_pleniere = false;
             $projet_etude->flag_soumis_chef_depart = false;
             $projet_etude->flag_recevablite_projet_etude = false;
@@ -182,7 +183,10 @@ class ProjetEtudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
-                return view('projetetude.edit', compact('id_etape','avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
+                return view('projetetude.edit', compact('id_etape',
+                    'avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement',
+                    'offre_technique','offre_financiere',
+                    'pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
             }
         }
     }

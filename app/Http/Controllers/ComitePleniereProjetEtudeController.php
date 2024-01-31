@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
 use Illuminate\Http\Request;
 use App\Models\Cahier;
 use App\Models\ComitePleniere;
@@ -98,7 +100,17 @@ class ComitePleniereProjetEtudeController extends Controller
         foreach ($charger_etudes as $comp) {
             $charger_etude .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
         }
-            $projet_etudes = ProjetEtude::where('flag_soumis_ct_pleniere',true)->get();
+        if($comitepleniere->flag_statut_comite_pleniere==false){
+            $projet_etudes = ProjetEtude::where('flag_soumis_ct_pleniere',true)
+                ->where('flag_valider_ct_pleniere_projet_etude',false)
+                ->get();
+
+        }else{
+            $projet_etudes = ProjetEtude::where('flag_soumis_ct_pleniere',true)
+                ->where('flag_valider_ct_pleniere_projet_etude',true)
+                ->where('id_comite_pleniere',$id)
+                ->get();
+        }
             return view('comitepleniereprojetetude.edit', compact('charger_etude','comitepleniere','comitepleniereparticipant','projet_etudes'));
 
     }
@@ -108,15 +120,9 @@ class ComitePleniereProjetEtudeController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $id =  Crypt::UrldeCrypt($id);
-
-       // dd($request->all());
-
         if ($request->isMethod('put')) {
-
             $data = $request->all();
-
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
@@ -137,8 +143,7 @@ class ComitePleniereProjetEtudeController extends Controller
                 return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
-
-            if ($data['action'] == 'Enregistrer_charger_etude_poour_comite'){
+            if ($data['action'] == 'Enregistrer_charger_etude_pour_comite'){
 
                 $this->validate($request, [
                     'id_user_comite_pleniere_participant' => 'required'
@@ -160,9 +165,20 @@ class ComitePleniereProjetEtudeController extends Controller
 
                 return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
             }
-
-            if ($data['action'] == 'Traiter_cahier_plan'){
-
+            if ($data['action'] == 'Traiter_comite_pleniere'){
+                $this->validate($request, [
+                    'projetetude' => 'required',
+                ],[
+                    'projetetude.required' => 'Veuillez ajouter au moins un projet d\'étude',
+                ]);
+                foreach ($request->projetetude as $pe){
+                    $projetetude = ProjetEtude::find($pe);
+                    $projetetude->flag_valider_ct_pleniere_projet_etude = true;
+                    $projetetude->id_processus = 8;
+                    $projetetude->id_comite_pleniere = $id;
+                    $projetetude->date_valider_ct_pleniere_projet_etude = now();
+                    $projetetude->update();
+                }
                 $comitepleniere = ComitePleniere::find($id);
                 $comitepleniere->update(['flag_statut_comite_pleniere'=> true]);
 
@@ -184,117 +200,71 @@ class ComitePleniereProjetEtudeController extends Controller
     public function delete($id){
 
         $idVal = Crypt::UrldeCrypt($id);
-
         $comitepleniereParticipant = ComitePleniereParticipant::find($idVal);
         $idcomiteplenier = $comitepleniereParticipant->id_comite_pleniere;
         ComitePleniereParticipant::where('id_comite_pleniere_participant',$idVal)->delete();
         return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($idcomiteplenier).'/edit')->with('success', 'Succes : Le chargé d\'étude a été rétiré du comite avec succes ');
     }
 
-    public function cahier($id,$id2){
-
-        /*$idplan = Crypt::UrldeCrypt($id);
-        $idcomite = Crypt::UrldeCrypt($id2);
-
-        Cahier::create([
-            'id_demande' => $idplan,
-            'id_comite_pleniere' => $idplan,
-        ]);*/
-
-    }
-
-    public function show($id)
-    {
-        $idVal = Crypt::UrldeCrypt($id);
-        $actionplan = null;
-        $ficheagrement = null;
-        $beneficiaires = null;
-        $planformation = null;
-
-        if ($idVal != null) {
-            $actionplan = ActionFormationPlan::find($idVal);
-            $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
-            $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
-            $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
-        }
-
-        return view('comitepleniere.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
-    }
-
-
     public function editer($id,$id2)
     {
-        $id = Crypt::UrldeCrypt($id);
-        $idcomite = Crypt::UrldeCrypt($id2);
-        //dd($id);
-        $planformation = PlanFormation::find($id);
-        $infoentreprise = Entreprises::find($planformation->id_entreprises);
+        $id =  Crypt::UrldeCrypt($id);
+        $id_etape =  Crypt::UrldeCrypt($id2);
+        if(isset($id)){
+            $projet_etude = ProjetEtude::find($id);
+            if(isset($projet_etude)){
+                $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
 
-        $typeentreprises = TypeEntreprise::all();
-        $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
-        foreach ($typeentreprises as $comp) {
-            $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
+                $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','avant_projet_tdr')->first();
+                $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','courier_demande_fin')->first();
+                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','dossier_intention')->first();
+                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','lettre_engagement')->first();
+                $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_technique')->first();
+                $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_financiere')->first();
+
+                $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
+
+                $pays = Pays::all();
+                $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+                foreach ($pays as $comp) {
+                    $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+                }
+
+                /******************** secteuractivites *********************************/
+                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivites as $comp) {
+                    $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+                $motif = Motif::where('code_motif','=','PRE')->get();;
+                $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+                foreach ($motif as $comp) {
+                    $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
+                }
+
+
+                return view('comitepleniereprojetetude.editer',
+                compact('id_etape','pay','pieces_projets','avant_projet_tdr',
+                    'courier_demande_fin',
+                    'dossier_intention',
+                    'lettre_engagement',
+                    'offre_technique',
+                    'projet_etude',
+                    'motifs',
+                    'offre_financiere',
+                    'secteuractivite'));
+
         }
 
-
-        $pays = Pays::all();
-        $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
-        foreach ($pays as $comp) {
-            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
-
-        $butformations = ButFormation::all();
-        $butformation = "<option value=''> Selectionnez le but de la formation </option>";
-        foreach ($butformations as $comp) {
-            $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
-        }
-
-        $typeformations = TypeFormation::all();
-        $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
-        foreach ($typeformations as $comp) {
-            $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
-        }
-
-        $categorieprofessionelles = CategorieProfessionelle::all();
-        $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
-        foreach ($categorieprofessionelles as $comp) {
-            $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
-        }
-
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
-
-        $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
-
-        $motifs = Motif::all();
-        $motif = "<option value=''> Selectionnez un motif </option>";
-        foreach ($motifs as $comp) {
-            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
-        }
-
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
-                                        ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
-                                        ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
-                                        ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
-                                        ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
-
-        //dd($infosactionplanformations);
-
-        $nombreaction = count($actionplanformations);
-
-        $actionvalider = ActionFormationPlan::where([['id_plan_de_formation','=',$id],['flag_valide_action_formation_pl','=',true]])->get();
-        $actionvaliderparconseiller = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$id],['id_user_conseil','=',Auth::user()->id],['flag_valide_action_plan_formation','=',true]])->get();
-
-        $nombreactionvalider = count($actionvalider);
-        $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
-        //dd($nombreactionvalider);
-        return view('comitepleniere.editer', compact(
-            'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
-            'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
-            'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id'
-        ));
-
     }
     /**
      * Update the specified resource in storage.

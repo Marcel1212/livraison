@@ -82,7 +82,10 @@ class ProjetEtude extends Model
         return $this->hasMany('App\Models\PiecesProjetEtude', 'id_projet_etude', 'id_projet_etude');
     }
 
-
+    public function motif()
+    {
+        return $this->belongsTo(Motif::class, 'id_motif_recevable', 'id_motif');
+    }
       /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

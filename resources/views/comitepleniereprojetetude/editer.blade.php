@@ -1,487 +1,482 @@
-<?php
-    /*$activetab = "disabled";
-	if(count($categorieplans)>=4){
-		$activetabpane = "show active";
-		$activetab = "active";
-	}else{
-
-	}*/
-
-    $idconnect = Auth::user()->id;
-    $NumAgce = Auth::user()->num_agce;
-    use App\Helpers\ConseillerParAgence;
-    use App\Helpers\NombreActionValiderParLeConseiller;
-    $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce);
-    $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
-    $nombre = count($conseilleragence);
-?>
-
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-
-    @php($Module='Plan de formation')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Tenue de comite plénière')
-    @php($lien='comitepleniere')
-
+    @php($Module = 'Projet d\'étude')
+    @php($titre = 'Liste des projets d\'études')
+    @php($soustitre = 'Instruction')
+    @php($lien = 'comitepleniereprojetetude')
 
     <!-- BEGIN: Content-->
-
-    <h5 class="py-2 mb-1">
-        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
-    </h5>
-
-
-
-
-    <div class="content-body">
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <div class="alert-body">
-                    {{ $message }}
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if($errors->any())
-                                  @foreach ($errors->all() as $error)
-                                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <div class="alert-body">
-                                            {{ $error }}
-                                        </div>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                      </div>
-                                  @endforeach
-                              @endif
-
-             @if ($message = Session::get('error'))
+    <div class="app-content content ">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper ">
+            <h5 class="py-2 mb-1">
+                <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>
+                {{ $titre }} / {{ $soustitre }}
+            </h5>
+            @if($errors->any())
+                @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <div class="alert-body">
-                            {{ $message }}
+                            {{ $error }}
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif
-        <div class="col-xl-12">
-                  <h6 class="text-muted"></h6>
-                  <div class="nav-align-top nav-tabs-shadow mb-4">
+                @endforeach
+            @endif
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert-body">
+                        {{ $message }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if ($message = Session::get('danger'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert-body">
+                        {{ $message }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <div class="col-xl-12">
+                <h6 class="text-muted"></h6>
+                <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-planformation"
-                          aria-controls="navs-top-planformation"
-                          aria-selected="true">
-                          Comite plénière
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-categorieplan"
-                          aria-controls="navs-top-categorieplan"
-                          aria-selected="false">
-                          Liste de presence
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link active"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-actionformation"
-                          aria-controls="navs-top-actionformation"
-                          aria-selected="false">
-                          Action de formation
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-recevabilite"
-                          aria-controls="navs-top-recevabilite"
-                          aria-selected="false">
-                          Cahier
-                        </button>
-                      </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link @if($id_etape==1) active @endif"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-projetetude"
+                                aria-controls="navs-top-projetetude"
+                                aria-selected="true">
+                                Détails de l'entreprise
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link @if($id_etape==2) active @endif"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-infoprojetetude"
+                                aria-controls="navs-top-infoprojetetude"
+                                aria-selected="false">
+                                Informations du projet d'étude
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link  @if($id_etape==3) active   @endif"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-piecesprojetetude"
+                                aria-controls="navs-top-piecesprojetetude"
+                                aria-selected="false">
+                                Pièces jointes du projet
+                            </button>
+                        </li>
+                        @if(@$projet_etude->flag_recevablite_projet_etude==true)
+                            <li class="nav-item">
+                                <button
+                                    type="button"
+                                    class="nav-link  @if($id_etape==4) active @endif"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-traitementinstructionprojetetude"
+                                    aria-controls="navs-top-traitementinstructionprojetetude"
+                                    aria-selected="false">
+                                    Traitement
+
+                                </button>
+                            </li>
+                        @endif
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link  @if(@$projet_etude->flag_recevablite_projet_etude!=true && $id_etape==5) active @else disabled @endif"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-traitementprojetetude"
+                                aria-controls="navs-top-traitementprojetetude"
+                                aria-selected="false">
+                                Recevabilité
+                            </button>
+                        </li>
+
+
+
+
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-projetetude " role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude->entreprise->ncc_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude->entreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
+                                    </div>
+                                </div>
 
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Localisation géographique <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude->entreprise->localisation_geographique_entreprise}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude->entreprise->repere_acces_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude->entreprise->adresse_postal_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Téléphone <strong style="color:red;">*</strong> </label>
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@@$projet_etude->entreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Cellulaire Professionnelle <strong style="color:red;">*</strong> </label>
+                                                <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$projet_etude->entreprise->cellulaire_professionnel_entreprises}}" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                      </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
 
-                      <div class="tab-pane fade" id="navs-top-categorieplan" role="tabpanel">
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Fax  </label>
+                                                <input type="number" name="fax_entreprises" id="fax_entreprises"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$projet_etude->entreprise->fax_entreprises}}" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="col-12" align="right">
+                                    <hr>
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
+                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                </div>
 
-                      </div>
-
-
-                      <div class="tab-pane fade show active" id="navs-top-actionformation" role="tabpanel">
-
-                        <div class="col-12" align="right">
-
-                            <?php  if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation == true and $planformation->user_conseiller == $idconnect){?>
-                                <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite)]) }}">
-                                    @csrf
-                                    @method('post')
-                                    <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
-                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                             Valider le comite technique en plénière
-                                    </button>
-                                </form>
-                                <?php } ?>
-                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                    Retour</a>
+                            </div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover table-sm"
-                            id="exampleData"
-                            style="margin-top: 13px !important">
-                            <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
-                                <th>Nombre de stagiaires</th>
-                                <th>Nombre de groupe</th>
-                                <th>Nombre d'heures par groupe</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de l'action accordée</th>
-                                <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php $i = 0; ?>
-                                @foreach ($actionplanformations as $key => $actionplanformation)
-                                <?php $i += 1;?>
-                                            <tr>
-                                                <td>{{ $i }}</td>
-                                                <td>{{ $actionplanformation->intitule_action_formation_plan }}</td>
-                                                <td>{{ $actionplanformation->structure_etablissement_action_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
-                                                <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
-                                                <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
-
-                                                <td align="center">
-                                                    @can($lien.'-edit')
-                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                                           class=" "
-                                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>  &nbsp;
-                                                           <?php if($planformation->flag_recevablite_plan_formation==true){ ?>
-                                                           <a type="button"
-                                                                    class="" data-bs-toggle="modal" data-bs-target="#traiterActionFomationPlan<?php echo $actionplanformation->id_action_formation_plan ?>" href="#myModal1" data-url="http://example.com">
-                                                                        <img src='/assets/img/editing.png'>
-                                                                    </a>
-
-                                                            <!--<a href="#myModal" id="btnChange"class="btn btn-default" data-toggle="modal" data-id="@$actionplanformation->id_action_formation_plan">Change Location</a>-->
-
-                                                            <?php } ?>
-                                                    @endcan
-
-                                                </td>
-                                            </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                      </div>
-                      <div class="tab-pane fade" id="navs-top-recevabilite" role="tabpanel">
-
-
-
-                      </div>
-                      <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-    </div>
-
-
-    <!-- Edit User Modal -->
-
-        @foreach($infosactionplanformations as $infosactionplanformation)
-                <div class="modal fade" id="traiterActionFomationPlan<?php echo $infosactionplanformation->id_action_formation_plan ?>" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-simple modal-edit-user">
-                    <div class="modal-content p-3 p-md-5">
-                        <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                            <h3 class="mb-2">Traitement d'une action de plan de formation</h3>
-                            <p class="text-muted"></p>
-                        </div>
-                        <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite)]) }}">
-                            @csrf
-                            @method('post')
-                            <div class="col-12 col-md-9">
-                            <label class="form-label" for="masse_salariale">Entreprise</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->raison_social_entreprises}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="masse_salariale">Masse salariale</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->masse_salariale}}"
-                                disabled="disabled" />
-                            </div>
-
-                            <div class="col-12 col-md-12">
-                            <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->intitule_action_formation_plan}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
-                                <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="part_entreprise">Part entreprise</label>
-                                <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->part_entreprise}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->structure_etablissement_action_}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->nombre_stagiaire_action_formati}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->nombre_groupe_action_formation_}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->nombre_heure_action_formation_p}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" >Cout de la formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_action_formation_plan}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" >Type de formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->type_formation}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="but_formation">But de la formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->but_formation}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->date_debut_fiche_agrement}}"
-                                disabled="disabled"/>
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->date_fin_fiche_agrement}}"
-                                disabled="disabled"/>
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->lieu_formation_fiche_agrement}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
-                                disabled="disabled" />
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cadre_fiche_demande_agrement}}"
-                                disabled="disabled"/>
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->agent_maitrise_fiche_demande_ag}}"
-                                disabled="disabled"/>
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->employe_fiche_demande_agrement}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
-                                disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-9">
-                            <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
-                            <!--<input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
-                                disabled="disabled" />-->
-                                <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
-                            </div>
-                            <div class="col-12 col-md-3">
-                                                <div class="mb-1">
-                                                        <label>Facture proforma </label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                Voir la pièce  </a> </span>
-                                                    </div>
-                            </div>
-
-
-                            <hr/>
-
-
-                            <div class="col-md-4 col-12">
+                        <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
+                            <div class="col-md-12 col-10" align="center">
                                 <div class="mb-1">
-                                    <label>Montant accorder <strong style="color:red;">*</strong>: </label>
-                                    <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validationt <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
+                                    <label>Titre du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <input type="text" name="titre_projet"
+                                           required="required" id="titre_projet"
+                                           class="form-control form-control-sm"
+                                           disabled
+                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
 
-                                <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
-                                    <?= $motif; ?>
-                                </select>
+                                           placeholder="ex : Perfectionnement ..">
+                                </div>
                             </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-1">
-                                    <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                    <textarea class="form-control form-control-sm"  name="commentaire" id="commentaire" rows="6"></textarea>
+                            <div class="row">
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Contexte ou Problèmes constatés <span
+                                                style="color:red;">*</span></label>
+                                        <textarea class="form-control" required="required"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="contexte_probleme" >@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Objectif Général <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea required="required" class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="objectif_general" >@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Objectifs spécifiques <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea class="form-control" required="required"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="objectif_specifique" >@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Résultats attendus <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  required="required" rows="4" id="exampleFormControlTextarea"
+                                                  name="resultat_attendu" >@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Champ de l’étude <span
+                                                style="color:red;">*</span></label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea" name="champ_etude"
+                                                  required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Cible <span style="color:red;">*</span>
+                                        </label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea" name="cible"
+                                                  required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>
+
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="col-12 text-center">
-                                <?php
-                                    $conseilleraction = NombreActionValiderParLeConseiller::get_conseiller_valide_action_plan($infosactionplanformation->id_action_formation_plan , Auth::user()->id);
-                                ?>
-                            <?php if($infosactionplanformation->user_conseiller == $idconnect){?>
-                                <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider" class="btn btn-success me-sm-3 me-1">Valider</button>
-                                <!--<button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_rejeter" class="btn btn-danger me-sm-3 me-1">Action à corriger</button>-->
-                            <?php //}else{?>
-                                <!--<div class="alert alert-info alert-dismissible fade show" role="alert">
-                                    <div class="alert-body" style="text-align:center">
-                                        Action déja traité
+                        </div>
+                        <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
+                            <table class="table table-bordered table-striped table-hover table-sm"
+                                   id="exampleData"
+                                   style="margin-top: 13px !important">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Type de pièce</th>
+                                    <th>Libelle de la pièce</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($pieces_projets as $key => $piece)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>
+                                            @if($piece->code_pieces=='avant_projet_tdr')
+                                                Avant-projet TDR
+                                            @endif
+                                            @if($piece->code_pieces=='courier_demande_fin')
+                                                Courrier de demande de financement
+                                            @endif
+                                            @if($piece->code_pieces=='dossier_intention')
+                                                Dossier d’intention
+                                            @endif
+                                            @if($piece->code_pieces=='lettre_engagement')
+                                                Lettre d’engagement
+                                            @endif
+                                            @if($piece->code_pieces=='offre_technique')
+                                                Offre technique
+                                            @endif
+                                            @if($piece->code_pieces=='offre_financiere')
+                                                Offre financière
+                                            @endif
+                                        </td>
+                                        <td>{{ $piece->libelle_pieces }}</td>
+                                        <td align="center">
+                                            @if($piece->code_pieces=='avant_projet_tdr')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+                                            @if($piece->code_pieces=='courier_demande_fin')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+                                            @if($piece->code_pieces=='dossier_intention')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+                                            @if($piece->code_pieces=='lettre_engagement')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+                                            @if($piece->code_pieces=='offre_technique')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+                                            @if($piece->code_pieces=='offre_financiere')
+                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade @if(@$projet_etude->flag_recevablite_projet_etude==true  && $id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
+                            <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}" enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
+                                <div class="row">
+                                    <h5 class="text-center">Traitement de l'instruction du dossier</h5>
+
+                                    <h6>Information du projet d'étude</h6>
+
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label>Titre du projet <span style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="titre_projet_instruction"
+
+                                                   required="required" id="titre_projet_instruction" disabled class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_instruction}}">
+                                        </div>
                                     </div>
-                                </div>-->
-                            <?php } ?>
-                            <button
-                                type="reset"
-                                class="btn btn-label-secondary"
-                                data-bs-dismiss="modal"
-                                aria-label="Close">
-                                Annuler
-                            </button>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-        @endforeach
 
-            <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <div id='modal-content'>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
+                                            </label>
+                                            <input type="number" name="montant_projet_instruction" disabled required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <label class="form-label" for="fichier_instruction">Fichier d'instruction <span style="color:red;">*</span> (PDF, WORD, JPG)
+                                            5M</label>
+                                        <input type="file" name="fichier_instruction" disabled class="form-control" placeholder="" required="required">
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
+                                            <textarea class="form-control" required="required" disabled rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_instruction}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
+                                            </label>
+                                            <textarea required="required" class="form-control" disabled rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_instruction}}</textarea>
 
-                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
+                                            <textarea class="form-control" required="required" disabled rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_instruction}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
+                                            </label>
+                                            <textarea class="form-control" disabled required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendu_instruction}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
+                                            <textarea class="form-control" rows="4" disabled id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_instruction}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="cible_instruction">Cible <span style="color:red;">*</span>
+                                            </label>
+                                            <textarea class="form-control" rows="4" disabled id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_instruction}}</textarea>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
+                                            </label>
+                                            <textarea class="form-control" rows="4" disabled id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" align="right">
+                                        <hr>
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                            Retour</a>
+                                    </div>
+                                </div>
+
+                            </form>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            <script>
-                $('#btnChange').click(function (eve) {
-                    var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
-                    alert(url);
-                    $("#modal-content").load(url, function () {
-                        $("#myModal").modal("show");
-                    });
-                })
-            </script>-->
-
-        @endsection
-
+        </div>
+    </div>
+    <!-- END: Content-->
+@endsection

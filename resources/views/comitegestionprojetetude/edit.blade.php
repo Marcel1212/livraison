@@ -1,36 +1,3 @@
-<?php
-/*$activetab = "disabled";
-	if(count($categorieplans)>=4){
-		$activetabpane = "show active";
-		$activetab = "active";
-	}else{
-
-	}*/
-?>
-<?php
-
-use App\Helpers\AnneeExercice;
-use Carbon\Carbon;
-$anneexercice = AnneeExercice::get_annee_exercice();
-$dateday = Carbon::now()->format('d-m-Y');
-$actifsoumission = false;
-
-if (isset($anneexercice->id_periode_exercice)) {
-    $actifsoumission = true;
-} else {
-    $actifsoumission = false;
-}
-
-if (!empty($anneexercice->date_prolongation_periode_exercice)) {
-    $dateexercice = $anneexercice->date_prolongation_periode_exercice;
-    if ($dateday <= $dateexercice) {
-        $actifsoumission = true;
-    } else {
-        $actifsoumission = false;
-    }
-}
-
-?>
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -52,14 +19,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 
     <div class="content-body">
-        @if (!isset($anneexercice->id_periode_exercice))
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <div class="alert-body" style="text-align:center">
-                    {{ $anneexercice }}
-                </div>
-                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-            </div>
-        @endif
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
@@ -200,7 +159,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_gestion_participant">Conseiller <strong
+                                    <label class="form-label" for="id_user_comite_gestion_participant">Chargé d'étude <strong
                                             style="color:red;">*</strong></label>
                                     <select id="id_user_comite_gestion_participant"
                                         name="id_user_comite_gestion_participant"
