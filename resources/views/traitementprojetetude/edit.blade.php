@@ -52,8 +52,8 @@
                                 class="nav-link @if($id_etape==1) active @endif"
                                 role="tab"
                                 data-bs-toggle="tab"
-                                data-bs-target="#navs-top-projetetude"
-                                aria-controls="navs-top-projetetude"
+                                data-bs-target="#navs-top-entreprise"
+                                aria-controls="navs-top-entreprise"
                                 aria-selected="true">
                                 Détails de l'entreprise
                             </button>
@@ -115,7 +115,7 @@
 
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-projetetude " role="tabpanel">
+                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-entreprise " role="tabpanel">
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
