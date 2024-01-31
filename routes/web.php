@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\ComitePleniereProjetEtudeController;
 use App\Http\Controllers\CtprojetetudevaliderController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;
 use App\Http\Controllers\MotDePasseOublieController;
@@ -110,9 +111,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('traitementprojetetude/{id}/update', [TraitementProjetEtudeController::class, 'update'])->name('traitementprojetetude.update');
 
     //Comité plénière projet d'étude
-    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
-    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
-
+    Route::get('comitepleniereprojetetude', [ComitePleniereProjetEtudeController::class, 'index'])->name('comitepleniereprojetetude');
+    Route::get('comitepleniereprojetetude/index', [ComitePleniereProjetEtudeController::class, 'index'])->name('comitepleniereprojetetude.index');
+    Route::get('comitepleniereprojetetude/create', [ComitePleniereProjetEtudeController::class, 'create'])->name('comitepleniereprojetetude.create');
+    Route::post('comitepleniereprojetetude/store', [ComitePleniereProjetEtudeController::class, 'store'])->name('comitepleniereprojetetude.store');
+    Route::get('comitepleniereprojetetude/{id}/edit', [ComitePleniereProjetEtudeController::class, 'edit'])->name('comitepleniereprojetetude.edit');
+    Route::put('comitepleniereprojetetude/{id}/update', [ComitePleniereProjetEtudeController::class, 'update'])->name('comitepleniereprojetetude.update');
+    Route::get('comitepleniereprojetetude/{id}/delete', [ComitePleniereProjetEtudeController::class, 'delete'])->name('comitepleniereprojetetude.delete');
 
 
 //    Route::get('agreement/{id}/cancel', [App\Http\Controllers\AgreementController::class, 'cancel'])->name('agreement.cancel');

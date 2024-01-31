@@ -102,7 +102,7 @@ class ProjetEtudeController extends Controller
             $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
             $id_entreprise = $entreprise->id_entreprises;
             $projet_etude = new ProjetEtude();
-            $projet_etude->code_projet_etude = 'PE' . Gencode::randStrGen(4, 5);
+            $projet_etude->code_projet_etude = 'PE-' . Gencode::randStrGen(4, 5);
             $projet_etude->titre_projet_etude = $request->titre_projet;
             $projet_etude->contexte_probleme_projet_etude = $request->contexte_probleme;
             $projet_etude->objectif_general_projet_etude = $request->objectif_general;
