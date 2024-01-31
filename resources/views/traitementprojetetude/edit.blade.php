@@ -54,7 +54,7 @@
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-entreprise"
                                 aria-controls="navs-top-entreprise"
-                                aria-selected="true">
+                                aria-selected="false">
                                 Détails de l'entreprise
                             </button>
                         </li>
@@ -115,7 +115,7 @@
 
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-entreprise " role="tabpanel">
+                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-entreprise" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
