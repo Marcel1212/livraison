@@ -56,9 +56,13 @@ class TraitementProjetEtudeController extends Controller
                     ->where('code_pieces','offre_financiere')->first();
 
                 $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
-
                 $motif = Motif::where('code_motif','=','PRE')->get();;
-                $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+
+                if(isset($projet_etude->motif)){
+                    $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+                }else{
+                    $motifs = "<option value=''> Selectionnez un motif </option>";
+                }
                 foreach ($motif as $comp) {
                     $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
                 }
