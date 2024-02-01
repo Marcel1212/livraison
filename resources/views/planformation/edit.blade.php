@@ -564,7 +564,7 @@ $idpart = Auth::user()->id_partenaire;
                                  />
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="cout_action_formation_plan">Cout de la formation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="cout_action_formation_plan">Coût de la formation <strong style="color:red;">*</strong></label>
                             <input
                                 type="number"
                                 id="cout_action_formation_plan"

@@ -21,6 +21,8 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
+        //$this->middleware('can:permission-create');
+        //$this->authorize("can:permission-create", Permissions::class);
         $data = Permissions::all();
         return view('permissions.index', compact('data'));
     }

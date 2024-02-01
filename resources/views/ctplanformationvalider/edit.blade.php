@@ -674,7 +674,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" >Cout de la formation</label>
+                          <label class="form-label" >Coût de la formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -722,7 +722,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                          <label class="form-label" for="cout_total_fiche_agrement">Coût total fiche agrement</label>
                           <input
                             type="number"
                             class="form-control form-control-sm"

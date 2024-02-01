@@ -24,7 +24,7 @@
     @php($Module='Plan de formation')
     @php($titre='Liste des comites plénières')
     @php($soustitre='Tenue de comite plénière')
-    @php($lien='comitepleniere')
+    @php($lien='ctplanformationpleniere')
 
 
     <!-- BEGIN: Content-->
@@ -78,7 +78,7 @@
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite plénière
+                          Comité plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -90,7 +90,7 @@
                           data-bs-target="#navs-top-categorieplan"
                           aria-controls="navs-top-categorieplan"
                           aria-selected="false">
-                          Liste de presence
+                          Personnes ressources
                         </button>
                       </li>
                       <li class="nav-item">
@@ -102,7 +102,7 @@
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Action de formation
+                          Liste des actions de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -135,8 +135,14 @@
 
                         <div class="col-12" align="right">
 
-                            <?php  if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation == true and $planformation->user_conseiller == $idconnect){?>
-                                <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite)]) }}">
+                            <div class="row">
+
+
+                                <div class="col-7">
+                                </div>
+                                <div class="col-4">
+                            <?php  if($nombreaction == $nombreactionvaliderparconseiller and $planformation->flag_soumis_ct_plan_formation == true and $planformation->user_conseiller == $idconnect){?>
+                                <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     @csrf
                                     @method('post')
                                     <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
@@ -145,8 +151,12 @@
                                     </button>
                                 </form>
                                 <?php } ?>
-                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                            </div>
+                            <div class="col-1">
+                                <a class="btn btn-sm btn-outline-secondary waves-effect"  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     Retour</a>
+                                </div>
+                            </div>
                         </div>
                         <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
@@ -227,7 +237,7 @@
                             <h3 class="mb-2">Traitement d'une action de plan de formation</h3>
                             <p class="text-muted"></p>
                         </div>
-                        <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite)]) }}">
+                        <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                             @csrf
                             @method('post')
                             <div class="col-12 col-md-9">
@@ -243,7 +253,7 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->masse_salariale}}"
+                                value="{{number_format(@$infosactionplanformation->masse_salariale, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
 
@@ -268,7 +278,7 @@
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->part_entreprise}}"
+                                value="{{number_format(@$infosactionplanformation->part_entreprise, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
@@ -308,7 +318,7 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_action_formation_plan}}"
+                                value="{{number_format(@$infosactionplanformation->cout_action_formation_plan, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
@@ -354,9 +364,9 @@
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
                             <input
-                                type="number"
+                                type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
+                                value="{{number_format(@$infosactionplanformation->cout_total_fiche_agrement, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
 
@@ -387,9 +397,9 @@
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
                             <input
-                                type="number"
+                                type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
+                                value="{{number_format(@$infosactionplanformation->cout_accorde_action_formation, 0, ',', ' ')}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-9">

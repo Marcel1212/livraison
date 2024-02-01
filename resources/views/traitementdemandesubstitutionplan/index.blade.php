@@ -3,7 +3,7 @@
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des demandes de substituion d\'acion  de plan de formation')
+    @php($titre='Liste des demandes de substituion d\'action  de plan de formation')
     @php($lien='traitementdemandesubstitutionplan')
 
     <!-- BEGIN: Content-->
@@ -41,7 +41,7 @@
                         <tr>
                             <th>No</th>
                             <th>Intitluer de l'action de formation </th>
-                            <th>Structure ou etablissemnt de formation </th>
+                            <th>Structure ou etablissement de formation </th>
                             <th>Date soumis</th>
                             <th>Statut</th>
                             <th>Action</th>
