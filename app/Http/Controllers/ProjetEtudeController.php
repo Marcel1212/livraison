@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Models\Departement;
 use App\Models\Direction;
 use App\Models\SecteurActivite;
@@ -42,6 +43,15 @@ class ProjetEtudeController extends Controller
         $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
             $projet_etudes = ProjetEtude::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+
+            Audit::logSave([
+                'action'=>'VISITE',
+                'code_piece'=>'',
+                'menu'=>'DEMANDES PROJET ETUDE',
+                'etat'=>'Succès',
+                'objet'=>'PROJET ETUDE'
+            ]);
+
             return view('projetetude.index',compact('projet_etudes'));
         }else{
             return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
@@ -70,6 +80,15 @@ class ProjetEtudeController extends Controller
         foreach ($secteuractivites as $comp) {
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
+
+        Audit::logSave([
+            'action'=>'VISITE',
+            'code_piece'=>'',
+            'menu'=>'CREATION DEMANDES PROJET ETUDE',
+            'etat'=>'Succès',
+            'objet'=>'PROJET ETUDE'
+        ]);
+
         return view('projetetude.create', compact('infoentreprise','pay','secteuractivites'));
     }
 
@@ -126,6 +145,13 @@ class ProjetEtudeController extends Controller
             $projet_etude->save();
             $insertedId = ProjetEtude::latest()->first()->id_projet_etude;
             if ($request->action== 'Enregister'){
+                Audit::logSave([
+                    'action'=>'CREATION',
+                    'code_piece'=>$insertedId,
+                    'menu'=>'CREATION DEMANDES PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PROJET ETUDE'
+                ]);
                 return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
 
@@ -184,6 +210,15 @@ class ProjetEtudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
+
+                Audit::logSave([
+                    'action'=>'VISITE',
+                    'code_piece'=>$projet_etude->id,
+                    'menu'=>'MODIFICATION DEMANDES PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PROJET ETUDE'
+                ]);
+
                 return view('projetetude.edit', compact('id_etape',
                     'avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement',
                     'offre_technique','offre_financiere',
@@ -375,6 +410,15 @@ class ProjetEtudeController extends Controller
                     $projet_etude->id_departement = $departement->id_departement;
                 }
                 $projet_etude->update();
+
+                Audit::logSave([
+                    'action'=>'MODIFICATION',
+                    'code_piece'=>$projet_etude->id,
+                    'menu'=>'MODIFICATION DEMANDES PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PROJET ETUDE'
+                ]);
+
                 return redirect('projetetude')->with('success', 'Succes : Projet soumis avec succès ');
             }
         }
@@ -389,6 +433,15 @@ class ProjetEtudeController extends Controller
             $piece_projet = PiecesProjetEtude::find($id_piece_projet);
             if(isset($piece_projet)){
                 $piece_projet->delete();
+
+                Audit::logSave([
+                    'action'=>'SUPRESSION',
+                    'code_piece'=>$piece_projet->id,
+                    'menu'=>'SUPPRESSION PIECE PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PIECE PROJET ETUDE'
+                ]);
+
                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Suppression de la pièce réussie ');
             }else{
 

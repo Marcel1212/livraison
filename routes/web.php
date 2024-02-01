@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ComiteGestionProjetEtudeController;
 use App\Http\Controllers\ComitePleniereProjetEtudeController;
 use App\Http\Controllers\CtprojetetudevaliderController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\ProjetEtudeController;
 use App\Http\Controllers\SelectionOperateurProjetEtudeController;
 use App\Http\Controllers\TraitementProjetEtudeController;
 use App\Http\Controllers\TraitementSelectionOperateurProjetEtudeController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
@@ -76,6 +78,9 @@ Route::group(['middleware' => ['auth']], function () {
         //'comitegestion' => App\Http\Controllers\ComiteGestionController::class,
         //'comitepermanente' => App\Http\Controllers\ComitePermanenteController::class,
     ]);
+
+    Route::get('audit', [AuditController::class, 'index'])->name('audit');
+
 
     /**********PROJET D'ETUDE***********/
     //Demande projet d'étude
