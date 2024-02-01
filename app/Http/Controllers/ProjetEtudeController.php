@@ -213,7 +213,7 @@ class ProjetEtudeController extends Controller
 
                 Audit::logSave([
                     'action'=>'VISITE',
-                    'code_piece'=>$projet_etude->id,
+                    'code_piece'=>$projet_etude->id_projet_etude,
                     'menu'=>'MODIFICATION DEMANDES PROJET ETUDE',
                     'etat'=>'Succès',
                     'objet'=>'PROJET ETUDE'
@@ -272,6 +272,15 @@ class ProjetEtudeController extends Controller
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
                 $projet_etude->update();
+
+                Audit::logSave([
+                    'action'=>'MODIFICATION',
+                    'code_piece'=>$projet_etude->id_projet_etude,
+                    'menu'=>'MODIFICATION PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PROJET ETUDE'
+                ]);
+
                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
             }
 
@@ -298,6 +307,17 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='avant_projet_tdr' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -317,6 +337,18 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='courier_demande_fin' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -336,6 +368,17 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='dossier_intention' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -355,6 +398,17 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='lettre_engagement' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -374,6 +428,17 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='offre_technique' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -393,6 +458,17 @@ class ProjetEtudeController extends Controller
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='offre_financiere' ;
                         $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
                         return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
 
                     }
@@ -411,9 +487,11 @@ class ProjetEtudeController extends Controller
                 }
                 $projet_etude->update();
 
+                $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
                 Audit::logSave([
                     'action'=>'MODIFICATION',
-                    'code_piece'=>$projet_etude->id,
+                    'code_piece'=>$insertedId,
                     'menu'=>'MODIFICATION DEMANDES PROJET ETUDE',
                     'etat'=>'Succès',
                     'objet'=>'PROJET ETUDE'
@@ -434,9 +512,11 @@ class ProjetEtudeController extends Controller
             if(isset($piece_projet)){
                 $piece_projet->delete();
 
+                $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
                 Audit::logSave([
                     'action'=>'SUPRESSION',
-                    'code_piece'=>$piece_projet->id,
+                    'code_piece'=>$insertedId,
                     'menu'=>'SUPPRESSION PIECE PROJET ETUDE',
                     'etat'=>'Succès',
                     'objet'=>'PIECE PROJET ETUDE'
