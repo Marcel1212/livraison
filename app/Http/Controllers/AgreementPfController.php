@@ -91,17 +91,6 @@ class AgreementPfController extends Controller
             ->where('id_plan_de_formation', $id_plan_de_formation)
             ->first();
 
-            // Mise en place QR Code
-            $generate = new CustomeGenerate();
-            $qrcode = $generate->setType("email") // QRCode Type Generate
-            ->setData([
-                "email"=>"aymanalaiwah.dev@gmail.com",
-                "subject"=>"QRCode Monkey Api",
-                "body"=>"Test Send Mail"
-            ])
-            ->setFileType("svg")
-            ->getQRCode();
-            dd($qrcode);
         return view('agreementpf.show', compact('actionformations','plan_de_formation'));
     }
 
