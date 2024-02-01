@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
         //     'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
         //     'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
         //     'typecomites' => App\Http\Controllers\TypeComiteController::class,
+
     Route::resources([
         'roles' => App\Http\Controllers\RoleController::class,
         'users' => App\Http\Controllers\UserController::class,
