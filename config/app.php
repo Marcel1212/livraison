@@ -175,6 +175,8 @@ return [
         Spatie\Html\HtmlServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        ///////////////////////////////////
+        Prgayman\QRCodeMonkey\QRCodeMonkeyServiceProvider::class,
 
     ])->toArray(),
 

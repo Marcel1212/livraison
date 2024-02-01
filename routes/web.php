@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\AgreementPfController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;
 use App\Http\Controllers\MotDePasseOublieController;
 use App\Http\Controllers\SelectionOperateurProjetEtudeController;
@@ -131,6 +132,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsStore'])->name('agreement.substitution');
     Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
+
+
+    // Agrement projet formation
+    Route::put('agreementpf/{id_demande}/{id_plan}/cancel/update', [App\Http\Controllers\AgreementPfController::class, 'cancelUpdate'])->name('agreementpf.cancel.update');
+    Route::get('agreementpf', [App\Http\Controllers\AgreementPfController::class, 'index'])->name('agreementpf');
+    Route::get('agreementpf/index', [App\Http\Controllers\AgreementPfController::class, 'index'])->name('agreementpf.index');
+    Route::get('agreementpf/{id_plan_de_formation}/{id_etape}/edit', [App\Http\Controllers\AgreementPfController::class, 'edit'])->name('agreementpf.edit');
+    Route::get('agreementpf/{id_plan_de_formation}/show', [App\Http\Controllers\AgreementPfController::class, 'show'])->name('agreementpf.show');
+
+    Route::get('agreementpf/{id_plan_de_formation}/{id_action}/{id_etape}/editaction', [App\Http\Controllers\AgreementPfController::class, 'editaction'])->name('agreementpf.editaction');
+    Route::post('agreementpf/{id_plan_de_formation}/{id_action}/{id_etape}/editactioncancel', [App\Http\Controllers\AgreementPfController::class, 'editactionCancel'])->name('agreementpf.editactioncancel');
+
 
 
 
