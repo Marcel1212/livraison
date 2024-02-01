@@ -93,7 +93,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 {{--                                    @endcan--}}
 {{--                                    @can($lien.'-cancel')--}}
                                         @if($anneexercice->date_fin_periode_exercice>now())
-                                            @if($planformation->flag_annulation_plan)
+                                            @if(isset($planformation->flag_annulation_plan))
                                                 <a href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(5)])}}"
                                                    class="btn btn-danger btn-xs"
                                                    title="Annuler">Annuler l'agréement</a>

@@ -152,7 +152,7 @@
                                 </form>
                                 <?php } ?>
                             </div>
-                            <div class="col-1"s>
+                            <div class="col-1">
                                 <a class="btn btn-sm btn-outline-secondary waves-effect" href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     Retour</a>
 

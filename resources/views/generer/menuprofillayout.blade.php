@@ -30,7 +30,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">Profil : {{$role->name}}</h5>
                         <small class="text-muted float-end">
-                            @can('role-create')
+                            @can('attribuer')
                                 <button type="submit"
                                         class="btn btn-primary btn-sm waves-effect waves-float waves-light"><i
                                         class="la la-plus"></i>Attribuer
@@ -43,15 +43,15 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-body">
-                                    <?php
-                                    $i = 0;
-                                    ?>
+                                        <?php
+                                            $i=0;
+                                        ?>
 
-                                @foreach($tablsm as $key=>$tablvue)
-                                    @foreach($tablvue as $key_vue=>$vue)
-                                            <?php
-                                            $i++;
-                                            ?>
+                            @foreach($tablsm as $key=>$tablvue)
+                                            @foreach($tablvue as $key_vue=>$vue)
+                                                    <?php
+                                                    $i++;
+                                                    ?>
                                         <div class="accordion mt-3 accordion-bordered" id="accordionStyle1">
                                             <div class="accordion-item card">
 
@@ -63,7 +63,7 @@
                                                             data-bs-target="#accordionMarginOne{{$i}}"
                                                             aria-expanded="false"
                                                             aria-controls="accordionMarginOne{{$i}}">
-                                                        Module :  {{$key_vue}}
+                                                        {{$key_vue}}
                                                     </button>
                                                 </h2>
                                                 <div id="accordionMarginOne{{$i}}"

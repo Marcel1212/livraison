@@ -20,6 +20,7 @@ use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\PlanFormation;
 use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 use App\Models\User;
@@ -212,6 +213,7 @@ class AgreementController extends Controller
 
     public function editaction(string $id_plan_de_formation, string $id_action,string $id_etape)
     {
+
         $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
         $butformations = ButFormation::all();
         $fiche_a_demande_agrement = new FicheADemandeAgrement();
@@ -220,10 +222,18 @@ class AgreementController extends Controller
         $typeformations = TypeFormation::all();
         $categorieprofessionelles = CategorieProfessionelle::all();
         $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
-
+        $secteuractivites = SecteurActivite::all();
+        $pays = Pays::all();
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
         $id_etape = Crypt::UrldeCrypt($id_etape);
         $id_action = Crypt::UrldeCrypt($id_action);
+        $demande_substitution = DemandeSubstitutionActionPlanFormation::
+        where('id_action_formation_plan_a_substi',$id_action)
+            ->first();
+        if(isset($demande_substitution)){
+            $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
+            $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
+        }
         $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
             ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
             ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
@@ -232,7 +242,7 @@ class AgreementController extends Controller
             ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
             ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
         $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
-        return view('agreement.editaction', compact('motif_substitutions','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
+        return view('agreement.editaction', compact('fiche_a_demande_agrement','beneficiaire_formation','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
     }
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
@@ -297,7 +307,10 @@ class AgreementController extends Controller
                 $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
             }
 
+
+
             if(isset($actionplanformation)){
+                dd($demande_substitution);
                 return view('agreement.substitution',compact('beneficiaire_formation','demande_substitution','fiche_a_demande_agrement','motifs','actionplanformation','actionplanformations','structureformations','categorieprofessionelles','typeformations','butformations'));
             }
         }
@@ -309,8 +322,7 @@ class AgreementController extends Controller
         $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
         if(isset($id_action)){
             $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
-            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::
-            where('id_action_formation_plan_a_substi',$id_action)
+            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
                 ->where('id_plan_de_formation',$id_plan)
                 ->first();
 
@@ -318,18 +330,32 @@ class AgreementController extends Controller
                 $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
                 $demande_substitution = new DemandeSubstitutionActionPlanFormation();
                 $demande_substitution->id_plan_de_formation = $id_plan;
-
                 $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
+                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
+                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
                 $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
+
+                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
+
+                $demande_substitution->id_secteur_activite =$request->id_secteur_activite;
+                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
+                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
                 $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
+                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
                 $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
                 $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
-                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
-                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
-                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
-//                $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
                 $demande_substitution->id_processus = 5;
 
+                if (isset($request->file_beneficiare)){
+                    $file = $request->file_beneficiare;
+                    $collections = (new FastExcel)->import($file);
+                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+                    }
+                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+                    }
+                }
 
                 if(isset($request->piece_demande_plan_substi)){
                     $filefront = $request->piece_demande_plan_substi;
@@ -354,6 +380,7 @@ class AgreementController extends Controller
                 $demande_substitution->save();
 
                 $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
+
                 $fiche_a_demande_agrement = new FicheADemandeAgrement();
                 $fiche_a_demande_agrement->lieu_formation_fiche_agrement = mb_strtoupper($request->lieu_formation_fiche_agrement);
                 $fiche_a_demande_agrement->objectif_pedagogique_fiche_agre = mb_strtoupper($request->objectif_pedagogique_fiche_agre);
@@ -367,6 +394,7 @@ class AgreementController extends Controller
                 $fiche_a_demande_agrement->employe_fiche_demande_agrement = $request->employe_fiche_demande_agrement;
 
                 $fiche_a_demande_agrement->save();
+                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
 
                 if (isset($request->file_beneficiare)){
                     $file = $request->file_beneficiare;
@@ -415,7 +443,7 @@ class AgreementController extends Controller
                         }
 
                         $beneficiaire_formation = new BeneficiairesFormation();
-                        $beneficiaire_formation->id_fiche_agrement = $request->id_fiche_agrement;
+                        $beneficiaire_formation->id_fiche_agrement = $insertedIdFicheAgrement;
                         $beneficiaire_formation->nom_prenoms = $nom_prenom;
                         $beneficiaire_formation->genre = $genre;
                         $beneficiaire_formation->annee_naissance = $date;
@@ -445,7 +473,7 @@ class AgreementController extends Controller
                     $fiche->file_beneficiare_fiche_agrement = $filename_other;
                     $fiche->update();
                 }
-                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/substitution')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
+                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
             }
         }
     }
@@ -460,11 +488,11 @@ class AgreementController extends Controller
             where('id_action_formation_plan_a_substi',$id_action)
                 ->where('id_plan_de_formation',$id_plan)
                 ->first();
-            if(isset($demande_substitution)){
-
+            if(isset($demande_substitution)) {
                 $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
                 $demande_substitution->id_plan_de_formation = $id_plan;
                 $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
+                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
                 $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
                 $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
                 $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
@@ -472,8 +500,21 @@ class AgreementController extends Controller
                 $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
-                $demande_substitution->cout_action_formation_plan_substi = $request->cout_action_formation_plan_substi;
+                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
                 $demande_substitution->id_processus = 5;
+                $demande_substitution->id_secteur_activite =$request->id_secteur_activite;
+                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
+
+                if (isset($request->file_beneficiare)){
+                    $file = $request->file_beneficiare;
+                    $collections = (new FastExcel)->import($file);
+                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+                    }
+                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+                    }
+                }
 
                 if (isset($request->piece_demande_plan_substi)){
                     $filefront = $request->piece_demande_plan_substi;
@@ -494,7 +535,6 @@ class AgreementController extends Controller
                 if(isset($plan_formation)){
                     $demande_substitution->id_user = $plan_formation->user_conseiller;
                 }
-
                 $demande_substitution->update();
 
                 $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
@@ -511,6 +551,8 @@ class AgreementController extends Controller
                 $fiche_a_demande_agrement->employe_fiche_demande_agrement = $request->employe_fiche_demande_agrement;
 
                 $fiche_a_demande_agrement->update();
+
+                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
 
                 if (isset($request->file_beneficiare)){
                     $file = $request->file_beneficiare;
@@ -588,19 +630,16 @@ class AgreementController extends Controller
                     $fiche->update();
                 }
 
-                if($request->action=="Enregistrer_soumettre_plan_formation"){
+                if($request->action=="Enregistrer_soumettre_demande_substitution"){
                     $demande_substitution->flag_soumis_demande_substitution_action_plan = true;
                     $demande_substitution->date_soumis_demande_substitution_action_plan = now();
                 }
                 $demande_substitution->update();
-
-                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/substitution')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
             }
 
+            return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation modifié ');
         }
-//        substitution
     }
-
 
     //Projet etude
     public function indexProjetEtude(){

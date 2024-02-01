@@ -154,13 +154,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 aria-label="Default select example" required="required">
                                             <option value="{{ $cahier->code_pieces_cahier_plan_formation }}"><?php if($cahier->code_pieces_cahier_plan_formation == 'PME'){
                                                 echo 'PETITE MOYENNE ENTREPRISES';
-                                            }elseif ($cahier->code_pieces_cahier_plan_formation == 'GM') {
+                                            }elseif ($cahier->code_pieces_cahier_plan_formation == 'GE') {
                                                 echo 'GRANDE ENTREPRISE';
                                             }else{
                                                 echo 'ANTENNE';
                                             } ?></option>
                                             <option value="PME">PETITE MOYENNE ENTREPRISES</option>
-                                            <option value="GM">GRANDE ENTREPRISE</option>
+                                            <option value="GE">GRANDE ENTREPRISE</option>
                                             <option value="ANT">ANTENNE</option>
                                         </select>
                                     </div>
@@ -209,7 +209,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         style="margin-top: 13px !important">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
+                                            <th></th>
                                             <th>Entreprise </th>
                                             <th>Conseiller </th>
                                             <th>Code </th>
@@ -226,14 +226,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     $i=0 ?>
                                     @foreach ($planformations as $key => $planformation)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            <td>
+                                                <input type="checkbox"
+                                                value="<?php echo $planformation->id_plan_de_formation;?>"
+                                                name="planformation[<?php echo $planformation->id_plan_de_formation;?>]"
+                                                id="planformation<?php echo $planformation->id_plan_de_formation;?>"/>
+                                            </td>
                                             <td>{{ @$planformation->entreprise->ncc_entreprises  }} / {{ @$planformation->entreprise->raison_social_entreprises  }}</td>
                                             <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td>
                                             <td>{{ @$planformation->code_plan_formation }}</td>
                                             <td>{{ $planformation->date_soumis_plan_formation }}</td>
                                             <td>{{ $planformation->nombre_salarie_plan_formation }}</td>
-                                            <td align="rigth">{{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
-                                            <td align="rigth">{{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                            <td align="rigth">{{ number_format($planformation->cout_total_demande_plan_formation, 0, ',', ' ') }}</td>
+                                            <td align="rigth">{{ number_format($planformation->cout_total_accorder_plan_formation, 0, ',', ' ') }}</td>
                                             <td align="center" nowrap="nowrap">
 
                                                 <?php if($cahier->flag_statut_comite_permanente == false){?>
@@ -243,10 +248,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                         title="Modifier"><img
                                                             src='/assets/img/editing.png'></a>
 
-                                                    <input type="checkbox"
-                                                            value="<?php echo $planformation->id_plan_de_formation;?>"
-                                                            name="planformation[<?php echo $planformation->id_plan_de_formation;?>]"
-                                                            id="planformation<?php echo $planformation->id_plan_de_formation;?>">
+
                                                 @endcan
                                                 <?php } ?>
 
