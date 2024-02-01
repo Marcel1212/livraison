@@ -48,8 +48,14 @@ class ComitePermanentePfController extends Controller
      */
     public function create()
     {
-        $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
-        $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
+        $typecomiteinfos = ConseillerParAgence::get_type_comite_per_projet_formation();
+        //dd($typecomiteinfos);
+        $planformations = ProjetFormation::where([
+                                                 ['flag_statut_instruction','=',true],
+                                                // ['flag_plan_formation_valider_par_processus','=',true],
+                                                // ['flag_plan_formation_valider_cahier','=',true],
+                                                ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
+                                                ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite],
                                                 ['flag_fiche_agrement','=',null]])
                                             ->get();
 
@@ -78,7 +84,7 @@ class ComitePermanentePfController extends Controller
             $input['id_user_comite_permanente'] = Auth::user()->id;
             $input['code_comite_permanente'] = 'CP_PRF' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
             $input['code_pieces_comite_permanente'] = 'PRF';
-            $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
+            $typecomiteinfos = ConseillerParAgence::get_type_comite_per_projet_formation();
 
             $input['id_type_comite_comite_permanente'] = $typecomiteinfos->id_type_comite;
 
@@ -149,7 +155,10 @@ class ComitePermanentePfController extends Controller
 
         $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
 
-        $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],['flag_fiche_agrement','=',null],['cout_projet_formation','>=',500000]])->get();
+        $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
+                                                ['flag_fiche_agrement','=',null],
+                                                ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
+                                                ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite]])->get();
         //dd($planformations);
 
         return view('comitepermanentepf.edit', compact('motif','comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
@@ -218,6 +227,7 @@ class ComitePermanentePfController extends Controller
             }
 
             if ($data['action'] == 'Traiter_cahier_plan'){
+                //dd('ief ');
 
 
                 $comitegestion = ComitePermanente::find($id);
@@ -393,7 +403,16 @@ class ComitePermanentePfController extends Controller
             if($data['action'] === 'Traiter_action_proj_formation_valider'){
 
 
-                //dd( $data );
+               //dd( $data );
+
+               // Recherche de la fiche d'agrement .
+               $fiche = FicheAgrement::where([['id_demande','=',$id],['code_fiche_agrement','=','PRF']])->get();
+               //dd(count($fiche));
+
+               if (count($fiche)>=1){
+                return redirect('comitepermanentepf/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(1).'/edit')->with('error', 'Erreur : Projet de formation déjà dans la liste des agréments');
+
+               }else {
 
                 $idplan = $id;
 
@@ -412,7 +431,15 @@ class ComitePermanentePfController extends Controller
                     'id_demande' => $id,
                     'id_comite_permanente' => $id2,
                     'id_user_fiche_agrement' => Auth::user()->id,
-                    'flag_fiche_agrement'=> true
+                    'flag_fiche_agrement'=> true,
+                    'commentaire_fiche_agrement' => $data['commentaire'],
+                    'code_fiche_agrement' => 'PRF'
+                ]);
+
+                $plan = ProjetFormation::find($id);
+                $plan->update([
+                    'flag_fiche_agrement' => true,
+
                 ]);
                 //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
                 //$nbrav = count($nbreplanvalide);
@@ -435,6 +462,8 @@ class ComitePermanentePfController extends Controller
                     // ]);
                 //}
                 return redirect('comitepermanentepf/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Les actions ont été validée ');
+
+               }
 
 
             }

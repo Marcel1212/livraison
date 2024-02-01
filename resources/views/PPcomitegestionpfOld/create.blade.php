@@ -10,10 +10,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module = 'Plan de formation')
-    @php($titre = 'Liste des commissions permanente')
-    @php($soustitre = 'Ajout de commission permanente')
-    @php($lien = 'comitepermanentepf')
+    @php($Module = 'Projet de formation')
+    @php($titre = 'Liste des commissions de gestion')
+    @php($soustitre = 'Ajout de commission  de gestion')
+    @php($lien = 'comitegestionpf')
 
     <!-- BEGIN: Content-->
 
@@ -62,7 +62,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite permanent
+                            Comite de gestion
                         </button>
                     </li>
                     <li class="nav-item">

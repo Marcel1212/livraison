@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\AgreementPfController;
 use App\Http\Controllers\ComiteGestionProjetEtudeController;
 use App\Http\Controllers\ComitePleniereProjetEtudeController;
 use App\Http\Controllers\CtprojetetudevaliderController;
@@ -39,6 +40,40 @@ Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 
 //});
 Route::group(['middleware' => ['auth']], function () {
     //Route::group(['middleware' => ['can:role-index']], function () {
+        // Route::resources([
+        //     'roles' => App\Http\Controllers\RoleController::class,
+        //     'users' => App\Http\Controllers\UserController::class,
+        //     'permissions' => App\Http\Controllers\PermissionController::class,
+        //     'menus' => App\Http\Controllers\MenuController::class,
+        //     'sousmenus' => App\Http\Controllers\SousmenuController::class,
+        //     'agence' => App\Http\Controllers\AgenceController::class,
+        //     'direction' => App\Http\Controllers\DirectionController::class,
+        //     'departement' => App\Http\Controllers\DepartementController::class,
+        //     'service' => App\Http\Controllers\ServiceController::class,
+        //     'activites' => App\Http\Controllers\ActivitesController::class,
+        //     'centreimpot' => App\Http\Controllers\CentreImpotController::class,
+        //     'localite' => App\Http\Controllers\LocaliteController::class,
+        //     'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
+        //     'projetformation' => App\Http\Controllers\ProjetFormationController::class,
+        //     'enrolement' => App\Http\Controllers\EnrolementController::class,
+        //     'statutoperations' => App\Http\Controllers\StatutOperationController::class,
+        //     'motifs' => App\Http\Controllers\MotifController::class,
+        //     //'planformation' => App\Http\Controllers\PlanFormationController::class,
+        //     'comitegestionpe' => App\Http\Controllers\ComiteGestionPeController::class,
+        //     'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
+        //     'butformation' => App\Http\Controllers\ButFormationController::class,
+        //     'typeformation' => App\Http\Controllers\TypeFormationController::class,
+        //     'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
+        //     'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
+        //     'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
+        //     'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
+        //     'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
+        //     'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
+        //     'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
+        //     'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
+        //     'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
+        //     'typecomites' => App\Http\Controllers\TypeComiteController::class,
+
     Route::resources([
         'roles' => App\Http\Controllers\RoleController::class,
         'users' => App\Http\Controllers\UserController::class,
@@ -61,6 +96,7 @@ Route::group(['middleware' => ['auth']], function () {
         'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
         'butformation' => App\Http\Controllers\ButFormationController::class,
         'typeformation' => App\Http\Controllers\TypeFormationController::class,
+        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class,
         'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
@@ -152,6 +188,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsStore'])->name('agreement.substitution');
     Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
+
+
+    // Agrement projet formation
+    Route::put('agreementpf/{id_demande}/{id_plan}/cancel/update', [App\Http\Controllers\AgreementPfController::class, 'cancelUpdate'])->name('agreementpf.cancel.update');
+    Route::get('agreementpf', [App\Http\Controllers\AgreementPfController::class, 'index'])->name('agreementpf');
+    Route::get('agreementpf/index', [App\Http\Controllers\AgreementPfController::class, 'index'])->name('agreementpf.index');
+    Route::get('agreementpf/{id_plan_de_formation}/{id_etape}/edit', [App\Http\Controllers\AgreementPfController::class, 'edit'])->name('agreementpf.edit');
+    Route::get('agreementpf/{id_plan_de_formation}/show', [App\Http\Controllers\AgreementPfController::class, 'show'])->name('agreementpf.show');
+
+    Route::get('agreementpf/{id_plan_de_formation}/{id_action}/{id_etape}/editaction', [App\Http\Controllers\AgreementPfController::class, 'editaction'])->name('agreementpf.editaction');
+    Route::post('agreementpf/{id_plan_de_formation}/{id_action}/{id_etape}/editactioncancel', [App\Http\Controllers\AgreementPfController::class, 'editactionCancel'])->name('agreementpf.editactioncancel');
+
 
 
 
@@ -275,6 +323,22 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanentepf/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanentePfController::class, 'agrement'])->name('comitepermanentepf.agrement');
     Route::get('comitepermanentepf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanentePfController::class, 'editer'])->name('comitepermanentepf.editer');
     Route::post('comitepermanentepf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+
+    // Comite de gestion projet de formation
+    Route::get('comitegestionpf/{id}/delete', [App\Http\Controllers\ComiteGestionPfController::class, 'delete'])->name('comitegestionpf.delete');
+    Route::get('comitegestionpf/{id}/{id1}/edit', [App\Http\Controllers\ComiteGestionPfController::class, 'edit'])->name('comitegestionpf.edit');
+    Route::put('comitegestionpf/{id}/{id1}/update', [App\Http\Controllers\ComiteGestionPfController::class, 'update'])->name('comitegestionpf.update');
+    Route::get('comitegestionpf/index', [App\Http\Controllers\ComiteGestionPfController::class, 'index'])->name('comitegestionpf.index');
+    Route::get('comitegestionpf', [App\Http\Controllers\ComiteGestionPfController::class, 'index'])->name('comitegestionpf');
+    Route::get('comitegestionpf/create', [App\Http\Controllers\ComiteGestionPfController::class, 'create'])->name('comitegestionpf.create');
+    Route::post('comitegestionpf/store', [App\Http\Controllers\ComiteGestionPfController::class, 'store'])->name('comitegestionpf.store');
+    Route::get('comitegestionpf/{id}/show', [App\Http\Controllers\ComiteGestionPfController::class, 'show'])->name('comitegestionpf.show');
+    Route::get('comitegestionpf/{id}/{id2}/agrement', [App\Http\Controllers\ComiteGestionPfController::class, 'agrement'])->name('comitegestionpf.agrement');
+    Route::get('comitegestionpf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComiteGestionPfController::class, 'editer'])->name('comitegestionpf.editer');
+    Route::post('comitegestionpf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComiteGestionPfController::class, 'agrementupdate'])->name('comitegestionpf.agrementupdate');
+
+
+
    // Route::post('comitepermanentepf/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
     Route::get('cahierplanformation/{id}/delete', [App\Http\Controllers\CahierplanformationController::class, 'delete'])->name('cahierplanformation.delete');
     Route::get('cahierplanformation/{id}/{id1}/edit', [App\Http\Controllers\CahierplanformationController::class, 'edit'])->name('cahierplanformation.edit');

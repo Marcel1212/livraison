@@ -36,9 +36,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 @section('content')
 
     @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des commissions permanente')
-    @php($soustitre = 'Tenue de commission permanente')
-    @php($lien = 'comitepermanentepf')
+    @php($titre = 'Liste des commissions de gestion')
+    @php($soustitre = 'Tenue de commission de gestion')
+    @php($lien = 'comitegestionpf')
 
 
     <!-- BEGIN: Content-->
@@ -129,7 +129,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false">
-                            Agrément(s)
+                            Agrément
                         </button>
                     </li>
                 </ul>

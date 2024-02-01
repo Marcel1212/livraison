@@ -36,9 +36,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 @section('content')
 
     @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des commissions permanente')
-    @php($soustitre = 'Tenue de commission permanente')
-    @php($lien = 'comitepermanentepf')
+    @php($titre = 'Liste des comites de gestion')
+    @php($soustitre = 'Tenue de comite de gestion')
+    @php($lien = 'comitegestionpf')
 
 
     <!-- BEGIN: Content-->
@@ -63,7 +63,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
-                    <i class="fab fa-angellist mb-2"></i>
                     {{ $message }}
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -74,7 +73,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
-                        <i class="fas fa-allergies mb-2"></i>
                         {{ $error }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -100,7 +98,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Commission permanente
+                            Comite de gestion
                         </button>
                     </li>
                     <li class="nav-item">
@@ -118,7 +116,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
-                            Liste des projet de formations
+                            Liste des projets de formations
                         </button>
                     </li>
                     <li class="nav-item">
@@ -138,7 +136,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -146,26 +144,26 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_permanente"
+                                        <input type="date" name="date_debut_comite_gestion"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitegestion->date_debut_comite_permanente }}" />
+                                            value="{{ $comitegestion->date_debut_comite_gestion }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_permanente"
+                                        <input type="date" name="date_fin_comite_gestion"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitegestion->date_fin_comite_permanente }}" />
+                                            value="{{ $comitegestion->date_fin_comite_gestion }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
-                                            rows="6">{{ $comitegestion->commentaire_comite_permanente }}</textarea>
+                                        <textarea class="form-control form-control-sm" name="commentaire_comite_gestion" id="commentaire_comite_gestion"
+                                            rows="6">{{ $comitegestion->commentaire_comite_gestion }}</textarea>
 
                                     </div>
                                 </div>
@@ -173,13 +171,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <?php if($comitegestion->flag_statut_comite_permanente == false){?>
+                                    <?php if($comitegestion->flag_statut_comite_gestion == false){?>
                                     <button type="submit" name="action" value="Modifier"
                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Modifier
                                     </button>
                                     <?php } ?>
-                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                         class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -194,18 +192,18 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
 
-                        <?php if ($comitegestion->flag_statut_comite_permanente != true){ ?>
+                        <?php if ($comitegestion->flag_statut_comite_gestion != true){ ?>
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_permanente_participant">Conseiller
-                                        <strong style="color:red;">*</strong></label>
-                                    <select id="id_user_comite_permanente_participant"
-                                        name="id_user_comite_permanente_participant"
+                                    <label class="form-label" for="id_user_comite_gestion_participant">Conseiller <strong
+                                            style="color:red;">*</strong></label>
+                                    <select id="id_user_comite_gestion_participant"
+                                        name="id_user_comite_gestion_participant"
                                         class="select2 form-select-sm input-group" aria-label="Default select example"
                                         required="required">
                                         <?= $conseiller ?>
@@ -244,8 +242,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ $comitegestionparticipan->user->name }}</td>
                                         <td>{{ $comitegestionparticipan->user->prenom_users }}</td>
                                         <td>
-                                            <?php if ($comitegestion->flag_statut_comite_permanente != true){ ?>
-                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitegestionparticipan->id_comite_permanente_participant)) }}"
+                                            <?php if ($comitegestion->flag_statut_comite_gestion != true){ ?>
+                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitegestionparticipan->id_comite_gestion_participant)) }}"
                                                 class=""
                                                 onclick='javascript:if (!confirm("Voulez-vous supprimer cet conseiller de cette commission ?")) return false;'
                                                 title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
@@ -262,9 +260,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <?php if (count($comitegestionparticipant)>=1){ ?>
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
-                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                     class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
@@ -276,7 +274,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
                     <div class="tab-pane fade <?php if ($idetape == 3) {
                         echo 'show active';
-                    } ?>" id="navs-top-actionformation" role="tabpanel">
+                    } //if(count($planformations)>0 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-actionformation" role="tabpanel">
 
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
@@ -284,12 +282,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-
+                                    {{-- <th>Conseiller </th> --}}
                                     <th>Code </th>
                                     <th>Date soumis</th>
-                                    <?php if($comitegestion->flag_statut_comite_permanente == false){?>
+                                    <th>Cout formation</th>
+                                    {{-- <th>Cout accordé</th> --}}
                                     <th>Action</th>
-                                    <?php } ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -301,14 +299,17 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
+                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }}
+                                            {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
                                         <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
-
-
-                                        <?php if($comitegestion->flag_statut_comite_permanente == false){?>
-                                        <td align="center">
+                                        <td>{{ $planformation->cout_projet_formation }}</td>
+                                        {{-- <td align="rigth">
+                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                         --}} <td align="center">
+                                            <?php if($comitegestion->flag_statut_comite_gestion == false){?>
                                             @can($lien . '-edit')
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endcan
                                             <a type="button" class="" data-bs-toggle="modal"
@@ -316,9 +317,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 href="#myModal1" data-url="http://example.com">
                                                 <img src='/assets/img/editing.png'>
                                             </a>
+                                            <?php } ?>
                                         </td>
-                                        <?php } ?>
-
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -330,9 +330,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             ?>
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
-                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                     class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
@@ -344,20 +344,20 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
 
-                    <div class="tab-pane fade <?php if (count($ficheagrements) >= 1 and count($comitegestionparticipant) >= 1) {
-                        echo 'show 4';
-                    } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    <div class="tab-pane fade<?php if (count($ficheagrements) >= 1) {
+                        // echo 'show active';
+                    } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
-                        <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_permanente == false){?>
+                        <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_gestion == false){?>
                         <div class="col-12" align="right">
                             <form method="POST" class="form"
-                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <button type="submit" name="action" value="Traiter_cahier_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                    Valider la commission permanente
+                                    Valider le comite de gestion
                                 </button>
                             </form>
                         </div>
@@ -368,10 +368,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-                                    <th>Conseiller </th>
                                     <th>Code </th>
-                                    <th>Cout formation</th>
                                     <th>Date soumis</th>
+                                    <th>Cout formation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -383,12 +382,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
-                                        <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
-                                        <td>{{ @$planformation->code_projet_formation }}</td>
 
-                                        <td align="rigth">
-                                            {{ number_format($planformation->cout_projet_formation) }}</td>
+                                        <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
+                                        <td>{{ number_format($planformation->cout_projet_formation) }}</td>
+
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -400,7 +399,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <?php if (count($ficheagrements)>=1){ ?>
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
 
                                 <?php } ?>
@@ -426,7 +425,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <p class="text-muted"></p>
                         </div>
                         <form id="editUserForm" class="row g-3" method="POST"
-                            action="{{ route($lien . '.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente)]) }}">
+                            action="{{ route($lien . '.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion)]) }}">
                             @csrf
                             @method('post')
 
