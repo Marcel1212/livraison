@@ -7,6 +7,7 @@ use App\Helpers\Email;
 use App\Helpers\Menu;
 use App\Http\Requests\MotDePasseOubieRequest;
 use App\Models\Entreprises;
+use App\Models\HistoriqueMotDePasse;
 use App\Models\MotDePasseOublie;
 use App\Models\User;
 use Carbon\Carbon;
@@ -86,6 +87,12 @@ class MotDePasseOublieController extends Controller
                     $emailcli = $user->email;
 
                     if (isset($user->email)) {
+
+                        $histo = HistoriqueMotDePasse::create([
+                            'id_utilisateur'=> $user->id,
+                            'ancien_mot_de_passe_hash'=> $user->password
+                        ]);
+
                         if(isset($user->id_partenaire)){
                             $entreprise = Entreprises::where('id_entreprises',$user->id_partenaire)->first();
                             $name = $entreprise->raison_social_entreprises;
@@ -137,6 +144,8 @@ class MotDePasseOublieController extends Controller
 
                         $mot_de_passe_oublie->flag_expired_mot_de_passe_oublie=true;
                         $mot_de_passe_oublie->update();
+
+
                     }
                     return redirect()->route('connexion')->with('success', 'Mot de passe réinitialiser avec succès veuillez consulter votre boite mail pour vos nouveaux accès. ');
 
