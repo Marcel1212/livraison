@@ -15,7 +15,7 @@ use App\Models\Activites;
 use App\Models\ActivitesEntreprises;
 use App\Models\Pays;
 use App\Helpers\Crypt;
-
+use App\Models\HistoriqueMotDePasse;
 //use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -168,7 +168,10 @@ class HomeController extends Controller
 
                         $motpass = $key . '+' . $data['npwd'];
                         $pass = Hash::make($data['npwd']);
-
+                        $histo = HistoriqueMotDePasse::create([
+                            'id_utilisateur'=> $users->id,
+                            'ancien_mot_de_passe_hash'=> $users->password
+                        ]);
                         User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
@@ -203,7 +206,10 @@ class HomeController extends Controller
 
                         $motpass = $key . '+' . $data['npwd'];
                         $pass = Hash::make($data['npwd']);
-
+                        $histo = HistoriqueMotDePasse::create([
+                            'id_utilisateur'=> $users->id,
+                            'ancien_mot_de_passe_hash'=> $users->password
+                        ]);
                         User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
@@ -282,6 +288,10 @@ class HomeController extends Controller
                         $motpass = $key . '+' . $data['npwd'];
                         $pass = Hash::make($data['npwd']);
 
+                        $histo = HistoriqueMotDePasse::create([
+                            'id_utilisateur'=> $users->id,
+                            'ancien_mot_de_passe_hash'=> $users->password
+                        ]);
                         User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
@@ -316,7 +326,10 @@ class HomeController extends Controller
 
                         $motpass = $key . '+' . $data['npwd'];
                         $pass = Hash::make($data['npwd']);
-
+                        $histo = HistoriqueMotDePasse::create([
+                            'id_utilisateur'=> $users->id,
+                            'ancien_mot_de_passe_hash'=> $users->password
+                        ]);
                         User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
