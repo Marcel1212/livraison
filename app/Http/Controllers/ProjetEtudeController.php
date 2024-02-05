@@ -238,12 +238,12 @@ class ProjetEtudeController extends Controller
                     'lettre_engagement',
                     'offre_technique',
                     'offre_financiere',
+                    'secteuractivite',
                     'secteuractivite_projet',
                     'pieces_projets',
                     'projet_etude',
                     'infoentreprise',
-                    'pay',
-                    'secteuractivites'));
+                    'pay'));
             }
         }
     }
