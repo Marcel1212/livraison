@@ -155,6 +155,8 @@ class ComitePermanentePfController extends Controller
 
         $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
 
+        //dd($infosactionplanformation);
+
         $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
                                                 ['flag_fiche_agrement','=',null],
                                                 ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],

@@ -76,7 +76,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
-                            Liste des plans de formations
+                            Liste des projets de formations
                         </button>
                     </li>
                     <li class="nav-item">
