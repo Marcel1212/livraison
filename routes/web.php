@@ -3,6 +3,7 @@
 use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\AgreementPfController;
 use App\Http\Controllers\CahierprojetetudeController;
 use App\Http\Controllers\ComiteGestionProjetEtudeController;
 use App\Http\Controllers\ComitePleniereProjetEtudeController;
@@ -318,6 +319,14 @@ Route::group(['middleware' => ['auth']], function () {
     //});
     Route::get('agreement/{id_plan_de_formation}/{id_etape}/edit', [AgreementController::class, 'edit'])->name('agreement.edit');
     Route::get('agreement/{id_plan_de_formation}/show', [AgreementController::class, 'show'])->name('agreement.show');
+
+    // Agreement PF
+
+    //Agrément
+    Route::get('agreementpf', [AgreementPfController::class, 'index'])->name('agreementpf');
+    Route::get('agreementpf/index', [AgreementPfController::class, 'index'])->name('agreementpf.index');
+    Route::get('agreementpf/{id_plan_de_formation}/{id_etape}/edit', [AgreementPfController::class, 'edit'])->name('agreementpf.edit');
+    Route::get('agreementpf/{id_plan_de_formation}/show', [AgreementPfController::class, 'show'])->name('agreementpf.show');
 
     Route::get('agreement/{id_plan_de_formation}/{id_action}/{id_etape}/editaction', [AgreementController::class, 'editaction'])->name('agreement.editaction');
     Route::post('agreement/{id_plan_de_formation}/{id_action}/{id_etape}/editactioncancel', [AgreementController::class, 'editactionCancel'])->name('agreement.editactioncancel');
