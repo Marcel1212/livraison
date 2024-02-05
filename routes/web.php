@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth']], function () {
         'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
         'butformation' => App\Http\Controllers\ButFormationController::class,
         'typeformation' => App\Http\Controllers\TypeFormationController::class,
-        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class,
+        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
         'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
@@ -323,6 +323,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanentepf/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanentePfController::class, 'agrement'])->name('comitepermanentepf.agrement');
     Route::get('comitepermanentepf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanentePfController::class, 'editer'])->name('comitepermanentepf.editer');
     Route::post('comitepermanentepf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+
 
     // Comite de gestion projet de formation
     Route::get('comitegestionpf/{id}/delete', [App\Http\Controllers\ComiteGestionPfController::class, 'delete'])->name('comitegestionpf.delete');
