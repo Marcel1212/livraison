@@ -139,9 +139,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <button
                         type="button"
                         class="nav-link @if($id_etape==5) active @endif"
-                        @if(isset($agreement->flag_annulation_plan))
-                            disabled
-                        @endif
+
+{{--                        @if(isset($agreement->flag_annulation_plan))--}}
+{{--                            disabled--}}
+{{--                        @endif--}}
                         role="tab"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-top-annulation"
@@ -705,10 +706,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <a href="{{route($lien.".editaction",['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)])}}"
                                        class=" "
                                        title="Modifier"><img src='/assets/img/editing.png'></a>
-                                    @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
-                                        <a href="{{ route($lien.'.editaction',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)])}}"
+                                    @if($anneexercice->date_fin_periode_exercice>now())
+                                        @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
+                                            <a href="{{ route($lien.'.editaction',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)])}}"
                                            class="btn btn-danger btn-xs"
                                            title="Annuler">Annuler action</a>
+                                        @endif
                                     @endif
 
                                     {{--                                        @endcan--}}
@@ -726,7 +729,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Retour</a>
                     </div>
                 </div>
-                @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
+                    @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
                     <div class="tab-pane fade @if($id_etape==5) show active @endif" id="navs-top-annulation"
                      role="tabpanel">
                     @if($demande_annulation_plan)
@@ -769,147 +772,153 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 @csrf
                                 @endif
                                 @else
+
                                     <form method="POST" class="form"
                                           action="{{route($lien.'.cancel',['id_etape'=>\App\Helpers\Crypt::UrlCrypt(5),'id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation)])}}"
                                           enctype="multipart/form-data">
                                         @csrf
                                         @endif
-
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="mb-1">
-                                                            <label> Motif de la demande d'annulation du plan</label>
-                                                            <select class="select2 form-select-sm input-group" data-allow-clear="true"
-                                                                    name="id_motif_demande_annulation_plan"
-                                                                    id="id_motif_demande_annulation_plan"
-                                                                    @isset($demande_annulation_plan)
-                                                                        @if($demande_annulation_plan->flag_soumis_demande_annulation_plan)
-                                                                            disabled
-                                                                @endif
-                                                                @endisset
-                                                            >
-                                                                @foreach($motifs as $motif)
-                                                                    <option value="{{$motif->id_motif}}"
-                                                                            @isset($demande_annulation_plan)
-                                                                                @if($motif->id_motif==$demande_annulation_plan->id_motif_demande_annulation_plan) selected @endif
-                                                                        @endisset>{{$motif->libelle_motif}}</option>
-                                                                @endforeach
-                                                            </select>
+                                        @if($anneexercice->date_fin_periode_exercice>now())
+                                            <div class="row">
+                                                <div class="col-md-6 col-12">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="mb-1">
+                                                                <label> Motif de la demande d'annulation du plan</label>
+                                                                <select class="select2 form-select-sm input-group" data-allow-clear="true"
+                                                                        name="id_motif_demande_annulation_plan"
+                                                                        id="id_motif_demande_annulation_plan"
+                                                                        @isset($demande_annulation_plan)
+                                                                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan)
+                                                                                disabled
+                                                                    @endif
+                                                                    @endisset
+                                                                >
+                                                                    @foreach($motifs as $motif)
+                                                                        <option value="{{$motif->id_motif}}"
+                                                                                @isset($demande_annulation_plan)
+                                                                                    @if($motif->id_motif==$demande_annulation_plan->id_motif_demande_annulation_plan) selected @endif
+                                                                            @endisset>{{$motif->libelle_motif}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    @isset($demande_annulation_plan)
-                                                        @if($demande_annulation_plan->flag_soumis_demande_annulation_plan)
-                                                            <div class="col-md-12 mt-2">
-                                                                Pièce justificatif de la demande d'annulation<br>
-                                                                <span class="badge bg-secondary">
+                                                        @isset($demande_annulation_plan)
+                                                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan)
+                                                                <div class="col-md-12 mt-2">
+                                                                    Pièce justificatif de la demande d'annulation<br>
+                                                                    <span class="badge bg-secondary">
                                                 <a target="_blank" onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation_plan->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                     Voir la pièce
                                                 </a>
                                             </span>
-                                                            </div>
+                                                                </div>
+                                                            @else
+                                                                <div class="col-md-12 mt-2">
+                                                                    <label class="form-label">Pièce justificatif de la demande d'annulation <strong
+                                                                            style="color:red;"></strong></label>
+                                                                    <input type="file" name="piece_demande_annulation_plan"
+                                                                           class="form-control form-control-sm" placeholder=""
+                                                                           @isset($demande_annulation_plan->piece_demande_annulation_plan)value="{{$demande_annulation_plan->piece_demande_annulation_plan}}"@endisset/>
+                                                                    <div id="defaultFormControlHelp" class="form-text ">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
+                                                                    <span class="badge bg-secondary"> <a target="_blank"
+                                                                                                         onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation_plan->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                          Voir la pièce précédemment enregistrée  </a></span>
+                                                                </div>
+
+                                                            @endif
                                                         @else
                                                             <div class="col-md-12 mt-2">
                                                                 <label class="form-label">Pièce justificatif de la demande d'annulation <strong
                                                                         style="color:red;"></strong></label>
                                                                 <input type="file" name="piece_demande_annulation_plan"
-                                                                       class="form-control form-control-sm" placeholder=""
-                                                                       @isset($demande_annulation_plan->piece_demande_annulation_plan)value="{{$demande_annulation_plan->piece_demande_annulation_plan}}"@endisset/>
+                                                                       class="form-control form-control-sm" placeholder=""/>
                                                                 <div id="defaultFormControlHelp" class="form-text ">
                                                                     <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                                         maxi : 5Mo</em>
                                                                 </div>
-                                                                <span class="badge bg-secondary"> <a target="_blank"
-                                                                                                     onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation_plan->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
-                                                                                        ">
-                                          Voir la pièce précédemment enregistrée  </a></span>
                                                             </div>
+                                                        @endisset
+                                                    </div>
 
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="mb-1">
+                                                        <label>Commentaire de la demande d'annuation <strong
+                                                                style="color:red;">*</strong></label>
+                                                        <textarea class="form-control form-control-sm"
+                                                                  name="commentaire_demande_annulation_plan"
+                                                                  @isset($demande_annulation_plan)
+                                                                      @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
+                                                                          disabled
+                                                                  @endif
+                                                                  @endisset
+                                                                  id="commentaire_demande_annulation_plan" rows="6">@isset($demande_annulation_plan->commentaire_demande_annulation_plan){{$demande_annulation_plan->commentaire_demande_annulation_plan}}@endisset</textarea>
+                                                    </div>
+                                                </div>
+
+                                                @if($demande_annulation_plan)
+
+                                                    @if($demande_annulation_plan->flag_rejeter_demande_annulation_plan==true)
+                                                        <div class="col-md-12 col-12 mt-3">
+                                                            <div class="mb-1">
+                                                                <label>Motif du rejet</label>
+                                                                <textarea class="form-control form-control-sm"
+                                                                          name="commentaire_final_demande_annulation_plan_formation"
+                                                                          @isset($demande_annulation_plan)
+                                                                              @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
+                                                                                  disabled
+                                                                          @endif
+                                                                          @endisset
+                                                                          id="commentaire_final_demande_annulation_plan_formation" rows="6">@isset($demande_annulation_plan->commentaire_final_demande_annulation_plan_formation){{$demande_annulation_plan->commentaire_final_demande_annulation_plan_formation}}@endisset</textarea>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                @endif
+
+
+
+                                                <div class="col-12" align="right">
+                                                    <hr>
+                                                    @isset($demande_annulation_plan)
+                                                        @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
+                                                            <a class="btn btn-sm btn-primary me-sm-3 me-1"
+                                                               href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(6)])}}">Suivant</a>
+                                                        @else
+                                                            <button
+                                                                onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de ce plan de formation à un conseiller ? . Cette action est irreversible")) return false;'
+                                                                type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"
+                                                                class="btn btn-sm btn-success me-sm-3 me-1">Soumettre la demande d'annulation
+                                                            </button>
+                                                            <button type="submit"
+                                                                    class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
+                                                                Modifier
+                                                            </button>
                                                         @endif
                                                     @else
-                                                        <div class="col-md-12 mt-2">
-                                                            <label class="form-label">Pièce justificatif de la demande d'annulation <strong
-                                                                    style="color:red;"></strong></label>
-                                                            <input type="file" name="piece_demande_annulation_plan"
-                                                                   class="form-control form-control-sm" placeholder=""/>
-                                                            <div id="defaultFormControlHelp" class="form-text ">
-                                                                <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                    maxi : 5Mo</em>
-                                                            </div>
-                                                        </div>
-                                                    @endisset
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-6 col-12">
-                                                <div class="mb-1">
-                                                    <label>Commentaire de la demande d'annuation <strong
-                                                            style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm"
-                                                              name="commentaire_demande_annulation_plan"
-                                                              @isset($demande_annulation_plan)
-                                                                  @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
-                                                                      disabled
-                                                              @endif
-                                                              @endisset
-                                                              id="commentaire_demande_annulation_plan" rows="6">@isset($demande_annulation_plan->commentaire_demande_annulation_plan){{$demande_annulation_plan->commentaire_demande_annulation_plan}}@endisset</textarea>
-                                                </div>
-                                            </div>
-
-                                            @if($demande_annulation_plan)
-
-                                                @if($demande_annulation_plan->flag_rejeter_demande_annulation_plan==true)
-                                                    <div class="col-md-12 col-12 mt-3">
-                                                        <div class="mb-1">
-                                                            <label>Motif du rejet</label>
-                                                            <textarea class="form-control form-control-sm"
-                                                                      name="commentaire_final_demande_annulation_plan_formation"
-                                                                      @isset($demande_annulation_plan)
-                                                                          @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
-                                                                              disabled
-                                                                      @endif
-                                                                      @endisset
-                                                                      id="commentaire_final_demande_annulation_plan_formation" rows="6">@isset($demande_annulation_plan->commentaire_final_demande_annulation_plan_formation){{$demande_annulation_plan->commentaire_final_demande_annulation_plan_formation}}@endisset</textarea>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endif
-
-
-
-                                            <div class="col-12" align="right">
-                                                <hr>
-                                                @isset($demande_annulation_plan)
-                                                    @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
-                                                        <a class="btn btn-sm btn-primary me-sm-3 me-1"
-                                                           href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(6)])}}">Suivant</a>
-                                                    @else
-                                                        <button
-                                                            onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de ce plan de formation à un conseiller ? . Cette action est irreversible")) return false;'
-                                                            type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"
-                                                            class="btn btn-sm btn-success me-sm-3 me-1">Soumettre la demande d'annulation
-                                                        </button>
                                                         <button type="submit"
                                                                 class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
-                                                            Modifier
+                                                            Enregistrer
                                                         </button>
-                                                    @endif
-                                                @else
-                                                    <button type="submit"
-                                                            class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
-                                                        Enregistrer
-                                                    </button>
-                                                @endisset
+                                                    @endisset
 
 
-                                                <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                   href="/{{$lien }}">
-                                                    Retour</a>
+                                                    <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                       href="/{{$lien }}">
+                                                        Retour</a>
+                                                </div>
+
                                             </div>
 
-                                        </div>
+                                        @else
+                                            <h6 class="text-danger">Impossible de soumettre une demande d'annulation du plan</h6>
+
+                                        @endif
 
                                         {{--                                @if($demande_annulation_plan->flag_rejeter_demande_annulation_plan==true)--}}
                                         {{--                                    <div class="row">--}}
@@ -932,7 +941,11 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             {{--                        @endif--}}
                             {{--                    @endif--}}
                 </div>
+
+
+
                 @endif
+
             </div>
         </div>
 

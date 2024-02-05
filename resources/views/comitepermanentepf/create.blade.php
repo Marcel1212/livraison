@@ -76,14 +76,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
                             aria-selected="false">
-                            Liste des plans de formations
+                            Liste des projets de formations
                         </button>
                     </li>
 
                     <li class="nav-item">
                         <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-Soumettre" aria-controls="navs-top-Soumettre" aria-selected="false">
-                            Agrément
+                            Agrément(s)
                         </button>
                     </li>
                 </ul>
@@ -143,9 +143,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     {{-- <th>Conseiller </th> --}}
                                     <th>Code comite pleiniere </th>
                                     <th>Date soumis</th>
-                                    {{-- <th>Cout demandé</th>
-                                    <th>Cout accordé</th> --}}
-                                    <th>Action</th>
+                                    <th>Cout formation</th>
+                                    {{-- <th>Cout accordé</th> --}}
+                                    {{-- <th>Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -160,13 +160,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         {{-- <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
                                         <td>{{ @$planformation->code_comite_pleiniere }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
+                                        <td>{{ $planformation->cout_projet_formation }}</td>
                                         {{-- <td align="rigth">
                                             {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
                                         <td align="rigth">
                                             {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td> --}}
-                                        <td align="center">
+                                        {{-- <td align="center">
 
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -29,16 +29,16 @@ class MotDePasseOublieController extends Controller
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
                     ->where('flag_expired_mot_de_passe_oublie',false)->first();
                 if(isset($mot_de_passe_trouv)){
-                    if($now->isAfter($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)!=true){
-                        return redirect('/modifiermotdepasse')->with('success', 'Info:  Vous pouvez réessayer dans '.CarbonInterval::seconds(Carbon::parse($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)->diffInSeconds($now))->cascade()->forHumans());
-                    }
+//                    if($now->isAfter($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)!=true){
+//                        return redirect('/modifiermotdepasse')->with('success', 'Info:  Vous pouvez réessayer dans '.CarbonInterval::seconds(Carbon::parse($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)->diffInSeconds($now))->cascade()->forHumans());
+//                    }
                     $mot_de_passe_trouv->flag_expired_mot_de_passe_oublie = true;
                     $mot_de_passe_trouv->update();
                 }
                 $mot_de_passe = new MotDePasseOublie();
                 $mot_de_passe->email_mot_de_passe_oublie = $request->email_mot_de_passe_oublie;
                 $mot_de_passe->code_mot_de_passe_oublie = $this->generateOtp();
-                $mot_de_passe->tel_mot_de_passe_oublie = $now->addMinute(5);;
+                $mot_de_passe->tel_mot_de_passe_oublie = $now->addMinute(5);
                 $mot_de_passe->save();
                 $logo = Menu::get_logo();
                 $user = User::where('email',$request->email_mot_de_passe_oublie)->first();
@@ -150,9 +150,6 @@ class MotDePasseOublieController extends Controller
                     return redirect()->route('connexion')->with('success', 'Mot de passe réinitialiser avec succès veuillez consulter votre boite mail pour vos nouveaux accès. ');
 
                 }
-
-
-
             }else{
                 return redirect('motdepasseoublie/'.Crypt::UrlCrypt($email).'/otp')->with('error', ' OTP saisi est incorrect.');
             }

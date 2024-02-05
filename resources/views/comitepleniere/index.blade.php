@@ -86,12 +86,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <?php } ?>
                                 </td>
                                 <td align="center">
-                                    @can($lien.'-edit')
+{{--                                    @can($lien.'-edit')--}}
                                         <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_pleniere),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
-                                    @endcan
+{{--                                    @endcan--}}
                                 </td>
                             </tr>
                         @endforeach

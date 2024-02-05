@@ -63,6 +63,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <div class="alert-body">
+                    <i class="fab fa-angellist mb-2"></i>
                     {{ $message }}
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -73,6 +74,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
+                        <i class="fas fa-allergies mb-2"></i>
                         {{ $error }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -110,6 +112,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Personnes ressources
                         </button>
                     </li>
+
+                    <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if ($idetape == 3) {
                             echo 'active';
@@ -119,6 +123,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projet de formations
                         </button>
                     </li>
+                    <?php }  ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
                             // echo 'active';
@@ -127,7 +132,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false">
-                            Agrément
+                            Agrément(s)
                         </button>
                     </li>
                 </ul>
@@ -272,6 +277,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+
+                    <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
                     <div class="tab-pane fade <?php if ($idetape == 3) {
                         echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
@@ -284,6 +291,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Entreprise </th>
 
                                     <th>Code </th>
+                                    <th>Titre projet </th>
+                                    <th>Cout formation</th>
                                     <th>Date soumis</th>
                                     <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                     <th>Action</th>
@@ -300,6 +309,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->code_projet_formation }}</td>
+                                        <td>{{ @$planformation->titre_projet_etude }}</td>
+                                        <td>{{ @$planformation->cout_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
 
 
@@ -341,6 +352,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+                    <?php } ?>
 
                     <div class="tab-pane fade <?php if (count($ficheagrements) >= 1 and count($comitegestionparticipant) >= 1) {
                         echo 'show 4';
@@ -414,13 +426,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 
     @foreach ($planformations as $infosactionplanformation)
-        <div class="modal fade" id="traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="traiterActionProjetFormation<?php echo $infosactionplanformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         <div class="text-center mb-4">
-                            <h3 class="mb-2">Traitement d'une projet de formation</h3>
+                            <h3 class="mb-2">Traitement d'un projet de formation</h3>
                             <p class="text-muted"></p>
                         </div>
                         <form id="editUserForm" class="row g-3" method="POST"
@@ -429,13 +441,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('post')
 
                             <div class="card accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
+                                <h1 class="accordion-header" id="headingTwo">
                                     <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
                                         data-bs-target="#accordionTwo" aria-expanded="false"
                                         aria-controls="accordionTwo">
                                         <strong>FICHE PROMOTEUR </strong>
                                     </button>
-                                </h2>
+                                </h1>
                                 <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                                     data-bs-parent="#accordionExample" style="">
                                     <div class="accordion-body">

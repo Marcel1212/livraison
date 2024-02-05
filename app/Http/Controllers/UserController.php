@@ -24,6 +24,7 @@ use Session;
 use Spatie\Permission\Models\Role;
 use App\Helpers\GenerateCode as Gencode;
 use Illuminate\Support\Facades\Validator;
+ini_set('max_execution_time', '0');
 
 class UserController extends Controller
 {

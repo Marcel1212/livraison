@@ -307,10 +307,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                         <td align="center">
                                             <?php if($comitegestion->flag_statut_comite_gestion == false){?>
-                                            @can($lien . '-edit')
+{{--                                            @can($lien . '-edit')--}}
                                                 <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                            @endcan
+{{--                                            @endcan--}}
                                             <?php } ?>
                                         </td>
                                     </tr>

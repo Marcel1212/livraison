@@ -67,7 +67,7 @@
                                     <?php } ?>
                                 </td>
                                 <td align="center">
-                                    @can('sous-module-edit')
+                                    @can('role-edit')
                                         <a href="{{ route('sousmenus.edit',$sousmenu->id_sousmenu) }}"
                                            class=" "
                                            title="Modifier"><img
