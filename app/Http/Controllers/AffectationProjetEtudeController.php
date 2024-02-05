@@ -35,7 +35,7 @@ class AffectationProjetEtudeController extends Controller
             if($role == "CHEF DE DEPARTEMENT"){
                 if(isset($departement)){
                     $projet_etudes = ProjetEtude::where('id_departement',$departement->id_departement)->get();
-                    return view('affectationprojetetude.index',compact('projet_etudes'));
+                    return view('affectationprojetetude.index',compact('projet_etudes','role'));
                 }else{
                     return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'êtes pas autorisé à accéder à ce menu');
                 }
@@ -149,8 +149,8 @@ class AffectationProjetEtudeController extends Controller
                 if(isset($projet_etude)){
                     $projet_etude->id_charge_etude = $request->id_charge_etude;
                     $projet_etude->commentaires_cs = $request->commentaires_cs;
-                    $projet_etude->date_soumis_charge_etude = now();
-                    $projet_etude->flag_soumis_charge_etude = true;
+                    $projet_etude->date_soumis_chef_service = now();
+                    $projet_etude->flag_soumis_chef_service = true;
                     $projet_etude->update();
                     return redirect()->back()->with('Success', 'Succès : Projet attribué au chargé d\'étude');
                 }else{
