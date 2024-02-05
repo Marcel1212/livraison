@@ -215,6 +215,14 @@ class ProjetEtudeController extends Controller
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite_projet = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
                 Audit::logSave([
                     'action'=>'VISITE',
                     'code_piece'=>$projet_etude->id_projet_etude,
@@ -230,6 +238,7 @@ class ProjetEtudeController extends Controller
                     'lettre_engagement',
                     'offre_technique',
                     'offre_financiere',
+                    'secteuractivite_projet',
                     'pieces_projets',
                     'projet_etude',
                     'infoentreprise',
