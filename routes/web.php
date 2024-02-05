@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth']], function () {
         'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
         'butformation' => App\Http\Controllers\ButFormationController::class,
         'typeformation' => App\Http\Controllers\TypeFormationController::class,
+        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
         'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
@@ -306,6 +307,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanentepf/{id}/{id2}/agrement', [App\Http\Controllers\ComitePermanentePfController::class, 'agrement'])->name('comitepermanentepf.agrement');
     Route::get('comitepermanentepf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComitePermanentePfController::class, 'editer'])->name('comitepermanentepf.editer');
     Route::post('comitepermanentepf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
+
+
+    // Comite de gestion projet de formation
+    Route::get('comitegestionpf/{id}/delete', [App\Http\Controllers\ComiteGestionPfController::class, 'delete'])->name('comitegestionpf.delete');
+    Route::get('comitegestionpf/{id}/{id1}/edit', [App\Http\Controllers\ComiteGestionPfController::class, 'edit'])->name('comitegestionpf.edit');
+    Route::put('comitegestionpf/{id}/{id1}/update', [App\Http\Controllers\ComiteGestionPfController::class, 'update'])->name('comitegestionpf.update');
+    Route::get('comitegestionpf/index', [App\Http\Controllers\ComiteGestionPfController::class, 'index'])->name('comitegestionpf.index');
+    Route::get('comitegestionpf', [App\Http\Controllers\ComiteGestionPfController::class, 'index'])->name('comitegestionpf');
+    Route::get('comitegestionpf/create', [App\Http\Controllers\ComiteGestionPfController::class, 'create'])->name('comitegestionpf.create');
+    Route::post('comitegestionpf/store', [App\Http\Controllers\ComiteGestionPfController::class, 'store'])->name('comitegestionpf.store');
+    Route::get('comitegestionpf/{id}/show', [App\Http\Controllers\ComiteGestionPfController::class, 'show'])->name('comitegestionpf.show');
+    Route::get('comitegestionpf/{id}/{id2}/agrement', [App\Http\Controllers\ComiteGestionPfController::class, 'agrement'])->name('comitegestionpf.agrement');
+    Route::get('comitegestionpf/{id}/{id2}/{id3}/editer', [App\Http\Controllers\ComiteGestionPfController::class, 'editer'])->name('comitegestionpf.editer');
+    Route::post('comitegestionpf/{id}/{id2}/agrementupdate', [App\Http\Controllers\ComiteGestionPfController::class, 'agrementupdate'])->name('comitegestionpf.agrementupdate');
+
+
+
    // Route::post('comitepermanentepf/{id}/{id2}/{id3}/agrementupdate', [App\Http\Controllers\ComitePermanentePfController::class, 'agrementupdate'])->name('comitepermanentepf.agrementupdate');
     Route::get('cahierplanformation/{id}/delete', [App\Http\Controllers\CahierplanformationController::class, 'delete'])->name('cahierplanformation.delete');
     Route::get('cahierplanformation/{id}/{id1}/edit', [App\Http\Controllers\CahierplanformationController::class, 'edit'])->name('cahierplanformation.edit');
