@@ -92,7 +92,7 @@
                                     data-bs-target="#navs-top-traitementinstructionprojetetude"
                                     aria-controls="navs-top-traitementinstructionprojetetude"
                                     aria-selected="false">
-                                    Traitement du dossier
+                                    Instruction du dossier
 
                                 </button>
                             </li>
@@ -171,7 +171,7 @@
                                                 <label class="form-label">Téléphone <strong style="color:red;">*</strong> </label>
                                                 <input type="text"
                                                        class="form-control form-control-sm"
-                                                       value="{{@@$projet_etude->entreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
+                                                       value="{{@$projet_etude->entreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
@@ -215,13 +215,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="col-12" align="right">
-                                    <hr>
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
-                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
-                                </div>
-
                             </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
@@ -234,9 +227,7 @@
                                            required="required" id="titre_projet"
                                            class="form-control form-control-sm"
                                            disabled
-                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
-
-                                           placeholder="ex : Perfectionnement ..">
+                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
                                 </div>
                             </div>
                             <div class="row">
@@ -317,8 +308,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Type de pièce</th>
-                                    <th>Libelle de la pièce</th>
-                                    <th>Action</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -345,31 +335,30 @@
                                                 Offre financière
                                             @endif
                                         </td>
-                                        <td>{{ $piece->libelle_pieces }}</td>
-                                        <td align="center">
+                                        <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
                                             @endif
 
                                         </td>
@@ -386,68 +375,51 @@
                                 @csrf
                                 @method('put')
                                 <div class="row">
-                                    <h5 class="text-center">Traitement de l'instruction du dossier</h5>
-
-                                    <h6>Information du projet d'étude</h6>
-
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-12 col-12 mt-2 text-center">
                                         <div class="mb-1">
                                             <label>Titre du projet <span style="color:red;">*</span>
                                             </label>
-                                            <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="">
+                                            <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
                                         </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <label class="form-label" for="fichier_instruction">Fichier d'instruction <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
-                                        <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction"></textarea>
+                                            <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_projet_etude}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
                                             </label>
-                                            <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" ></textarea>
+                                            <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_projet_etude}}</textarea>
 
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                            <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >                                                                </textarea>
+                                            <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_projet_etud}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" ></textarea>
+                                            <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendu_projet_etude}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required"></textarea>
+                                            <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_projet_etude}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="cible_instruction">Cible <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required"> </textarea>
+                                            <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_projet_etude}}</textarea>
 
                                         </div>
                                     </div>
@@ -455,12 +427,23 @@
                                         <div class="mb-1">
                                             <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required"> </textarea>
+                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
 
                                         </div>
                                     </div>
 
-                                    <h6 class="mb-3 mt-4">Avis</h6>
+                                    <div class="col-md-4 col-12 mt-2">
+                                        <div class="mb-1">
+                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
+                                            </label>
+                                            <input type="number" name="montant_projet_instruction" min="0" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
+                                            5M</label>
+                                        <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
+                                    </div>
 
                                     <div class="row">
 
@@ -477,7 +460,7 @@
 
                                         <button onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' type="submit" name="action" value="SoumettreCT"
                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                            soumettre au CT
+                                            Soumettre au comité
                                         </button>
                                             <button type="submit" name="action" value="RejetInstruction"
                                                     class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >

@@ -11,9 +11,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Projet d\' étude')
-    @php($titre='Liste des comités gestions')
-    @php($soustitre='Ajout de comité de gestion')
-    @php($lien='comitegestionprojetetude')
+    @php($titre='Liste des comites plénières')
+    @php($soustitre='Ajout de comite  plénière')
+    @php($lien='comitepleniereprojetetude')
 
     <!-- BEGIN: Content-->
 
@@ -33,6 +33,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if(!isset($anneexercice->id_periode_exercice))
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert-body" style="text-align:center">
+                    {{$anneexercice}}
+                </div>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            </div>
+         @endif
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -58,7 +66,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite de gestion
+                          Comite plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -95,7 +103,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_gestion"
+                                        <input type="date" name="date_debut_comite_pleniere"
                                                class="form-control form-control-sm" required/>
                                     </div>
                                 </div>
@@ -103,7 +111,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_gestion"
+                                        <input type="date" name="date_fin_comite_pleniere"
                                                class="form-control form-control-sm" required/>
                                     </div>
                                 </div>
@@ -111,7 +119,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm"  name="commentaire_comite_gestion" id="commentaire_comite_gestion" rows="6"></textarea>
+                                        <textarea class="form-control form-control-sm"  name="commentaire_comite_pleniere" id="commentaire_comite_pleniere" rows="6"></textarea>
 
                                     </div>
                                 </div>

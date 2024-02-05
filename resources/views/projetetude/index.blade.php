@@ -59,12 +59,15 @@
                                 <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
                                 <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
                                 <td>{{ @$projet_etude->date_soumis }}</td>
-                                @if(@$projet_etude->flag_soumis==true)
+                                @if(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-secondary">Soumis</span></td>
-                                @endif
-                                @if(@$projet_etude->flag_soumis==false)
+
+                                @elseif(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==true )
+                                    <td><span class="badge bg-success">Agrée</span></td>
+                                @elseif(@$projet_etude->flag_soumis==false && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-primary">Non Soumis</span></td>
                                 @endif
+
 
                                 {{--                                <td>{{ @$planformation->entreprise->raison_social_entreprises }}</td>--}}
 {{--                                <td>{{  @$planformation->userconseilplanformation->name }} {{  @$planformation->userconseilplanformation->prenom_users }}</td>--}}

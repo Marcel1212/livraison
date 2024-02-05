@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class SelectionOperateurProjetEtudeController extends Controller{
     public function index(){
-        $projet_etude_valides = ProjetEtude::where('flag_valide',true)->get();
+        $projet_etude_valides = ProjetEtude::where('flag_fiche_agrement',true)->get();
         return view('selectionoperateurprojetetude.index', compact('projet_etude_valides'));
     }
 
@@ -23,10 +23,8 @@ class SelectionOperateurProjetEtudeController extends Controller{
             $projet_etude_valide = ProjetEtude::where('flag_valide',true)
                 ->where('id_projet_etude',$id_projet_etude)->first();
             if(isset($projet_etude_valide)){
-
-
                 $operateurs = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)
-//                    ->where('id_secteur_activite',$projet_etude_valide->id_secteur_activite)
+                    ->where('id_secteur_activite',$projet_etude_valide->id_secteur_activite)
                     ->get();
 
                 $user = User::find($projet_etude_valide->id_user);
