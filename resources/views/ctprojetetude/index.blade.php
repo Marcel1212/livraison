@@ -54,11 +54,11 @@
                                     <td>{{ @$projetformation->entreprise->raison_social_entreprises }}</td>
                                     <td>{{ @$projetformation->code_projet_etude }}</td>
                                     <td>{{ $projetformation->date_soumis }}</td>
-                                    <td align="center">
-                                        <?php if ($projetformation->statut_instruction == true ){ ?>
-                                        <span class="badge bg-success">Dossier Instruit</span>
-                                        <?php } ?>
-                                    </td>
+{{--                                    <td align="center">--}}
+{{--                                        <?php if ($projetformation->statut_instruction == true ){ ?>--}}
+{{--                                        <span class="badge bg-success">Dossier Instruit</span>--}}
+{{--                                        <?php } ?>--}}
+{{--                                    </td>--}}
                                     <td align="center">
                                         <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($projetformation->id_projet_etude)) }}"
                                             class=" " title="Modifier"><img src='/assets/img/editing.png'></a>

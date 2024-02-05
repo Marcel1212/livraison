@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a2dc4169f2b5cfe1327e375483539216",
+    "content-hash": "9273d5ead33ab17bf74bf11899d4c127",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -3227,6 +3227,61 @@
                 "source": "https://github.com/porwisz/eloquent-model-generator/tree/v2.0.3"
             },
             "time": "2023-03-14T21:07:59+00:00"
+        },
+        {
+            "name": "prgayman/laravel-qrcodemonkey",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prgayman/laravel-qrcodemonkey.git",
+                "reference": "34785559c4e2834537d6eb2b1944de0b9ce403b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prgayman/laravel-qrcodemonkey/zipball/34785559c4e2834537d6eb2b1944de0b9ce403b2",
+                "reference": "34785559c4e2834537d6eb2b1944de0b9ce403b2",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0@dev"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Prgayman\\QRCodeMonkey\\QRCodeMonkeyServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Prgayman\\QRCodeMonkey\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ayman Alaiwah",
+                    "email": "aymanalaiwah.dev@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel package for use Qrcode Monkey Api",
+            "homepage": "https://github.com/prgayman/laravel-qrcodemonkey",
+            "keywords": [
+                "QRCodeMonkey",
+                "laravel",
+                "monkey",
+                "qrcode"
+            ],
+            "support": {
+                "issues": "https://github.com/prgayman/laravel-qrcodemonkey/issues",
+                "source": "https://github.com/prgayman/laravel-qrcodemonkey/tree/1.0.0"
+            },
+            "time": "2020-03-21T12:14:14+00:00"
         },
         {
             "name": "psr/cache",
@@ -9346,5 +9401,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.2.0"
 }

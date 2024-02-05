@@ -159,8 +159,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
 
 //                            $infoentreprise = Entreprises::find($projet_etude_valide->id_entreprises);
-//                            $logo = Menu::get_logo();
-//
+00//
 //                            //Envoie notification au charger de plan de formation en cas de validation
 //                            if (isset($planformation->email_professionnel_charge_plan_formation)) {
 //                                $sujet = "Demande d'annulation du plan de formation (code:" .

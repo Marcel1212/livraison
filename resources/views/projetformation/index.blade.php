@@ -59,9 +59,10 @@
                                             <thead>
                                                 <tr>
                                                     <th>Titre du projet </th>
-
                                                     <th>Entreprise</th>
+                                                    <th>Code du plan</th>
                                                     <th>Date de creation</th>
+                                                    <th>Date de soumission</th>
                                                     <th>Statut Soumission</th>
                                                     <th>Statut instruction</th>
                                                     <th>Action</th>
@@ -74,6 +75,7 @@
 
                                                         <td>{{ $demandeenrole->entreprise->raison_social_entreprises }}</td>
                                                         </td>
+                                                        <td>{{ $demandeenrole->code_projet_formation }}</td>
                                                         <td>{{ $demandeenrole->created_at }}</td>
                                                         <td>{{ $demandeenrole->date_soumis }}</td>
                                                         <td align="center">

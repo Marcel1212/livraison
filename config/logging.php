@@ -118,6 +118,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        //Log Audit
+        'audit' => [
+            'driver' => 'custom',
+            'handler' => App\Logging\AuditLoggingHandler::class,
+            'via' => App\Logging\AuditLogger::class,
+            'level' => 'info',
+        ],
+
         'null' => [
             'driver' => 'monolog',
             'handler' => NullHandler::class,
