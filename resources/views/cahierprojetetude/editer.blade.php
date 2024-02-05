@@ -1,5 +1,5 @@
 <?php
-    $idconnect = Auth::user()->id;
+$idconnect = Auth::user()->id;
 ?>
 @extends('layouts.backLayout.designadmin')
 
@@ -86,19 +86,19 @@
                                 Pièces jointes du projet
                             </button>
                         </li>
-                            <li class="nav-item">
-                                <button
-                                    type="button"
-                                    class="nav-link  @if($id_etape==4) active @endif"
-                                    role="tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-traitementinstructionprojetetude"
-                                    aria-controls="navs-top-traitementinstructionprojetetude"
-                                    aria-selected="false">
-                                    Traitement
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link  @if($id_etape==4) active @endif"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-traitementinstructionprojetetude"
+                                aria-controls="navs-top-traitementinstructionprojetetude"
+                                aria-selected="false">
+                                Traitement
 
-                                </button>
-                            </li>
+                            </button>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-entreprise" role="tabpanel">
@@ -367,69 +367,54 @@
                         </div>
 
                         <div class="tab-pane fade @if($id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
-                            <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->id_charge_etude == $idconnect){?>
-                            <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}">
-                                    @csrf
-                                    @method('put')
-                                    <button type="submit" name="action" value="Traiter_valider_projet"
-                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Valider le comite technique en plénière
-                                    </button>
-                                </form>
-                            <?php } ?>
-
-
-                            <form  method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}" enctype="multipart/form-data">
-                                @csrf
-                                @method('put')
                                 <div class="row mt-2">
                                     <div class="col-md-12 text-center col-12 mt-2">
                                         <div class="mb-1">
                                             <label>Titre du projet <span style="color:red;">*</span>
                                             </label>
                                             <input type="text" name="titre_projet_instruction"
-                                                   required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_instruction}}">
+                                                   required="required" disabled  id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_instruction}}">
                                         </div>
                                     </div>
 
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_instruction}}</textarea>
+                                            <textarea class="form-control" disabled required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_instruction}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
                                             </label>
-                                            <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_instruction}}</textarea>
+                                            <textarea required="required" disabled class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_instruction}}</textarea>
 
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                            <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_instruction}}</textarea>
+                                            <textarea class="form-control" disabled required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_instruction}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendus_instruction}}</textarea>
+                                            <textarea class="form-control" disabled required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendus_instruction}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_instruction}}</textarea>
+                                            <textarea class="form-control" disabled rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_instruction}}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="cible_instruction">Cible <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_instruction}}</textarea>
+                                            <textarea class="form-control" disabled rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_instruction}}</textarea>
 
                                         </div>
                                     </div>
@@ -437,7 +422,7 @@
                                         <div class="mb-1">
                                             <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+                                            <textarea class="form-control" disabled rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
 
                                         </div>
                                     </div>
@@ -446,35 +431,28 @@
                                         <div class="mb-1">
                                             <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
                                             </label>
-                                            <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
+                                            <input type="number" disabled name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
                                         </div>
                                     </div>
                                     <div class="col-md-4 mt-2">
                                         <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
                                             5M</label>
-                                        <input type="file" name="fichier_instruction" class="form-control" placeholder="">
                                         @if($projet_etude->piece_jointe_instruction)
+                                            <div>
                                             <span class="badge bg-secondary mt-1"><a target="_blank"
-                                                                                onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                                     onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
+                                            </div>
                                         @endif
                                     </div>
 
 
                                     <div class="col-12" align="right">
                                         <hr>
-                                        <?php if($projet_etude->id_charge_etude == $idconnect){?>
-                                        <button type="submit" name="action" value="Modifier"
-                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Modifier
-                                        </button>
-                                        <?php } ?>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
                                     </div>
                                 </div>
-
-                            </form>
                         </div>
 
                     </div>

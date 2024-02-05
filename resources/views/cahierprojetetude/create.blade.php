@@ -10,10 +10,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module='Projet d\' étude')
-    @php($titre='Liste des comités gestions')
-    @php($soustitre='Ajout de comité de gestion')
-    @php($lien='comitegestionprojetetude')
+    @php($Module='Projet d\'étude')
+    @php($titre='Liste des cahiers de projet d\'étude')
+    @php($soustitre='Creer un cahier de projet d\'étude')
+    @php($lien='cahierprojetetude')
 
     <!-- BEGIN: Content-->
 
@@ -33,6 +33,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        @if(!isset($anneexercice->id_periode_exercice))
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <div class="alert-body" style="text-align:center">
+                    {{$anneexercice}}
+                </div>
+                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+            </div>
+         @endif
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -55,12 +63,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           class="nav-link active"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-planformation"
-                          aria-controls="navs-top-planformation"
+                          data-bs-target="#navs-top-projetetude"
+                          aria-controls="navs-top-projetetude"
                           aria-selected="true">
-                          Comite de gestion
+                          Cahier de projet d'étude
                         </button>
                       </li>
+
                       <li class="nav-item">
                         <button
                           type="button"
@@ -70,52 +79,51 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Personnes ressouces
+                          Liste des projets d'étude
                         </button>
                       </li>
+
                       <li class="nav-item">
                         <button
                           type="button"
                           class="nav-link disabled"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-categoriesprofessionel"
-                          aria-controls="navs-top-categoriesprofessionel"
+                          data-bs-target="#navs-top-Soumettre"
+                          aria-controls="navs-top-Soumettre"
                           aria-selected="false">
-                          Liste des projet d'étude
+                          Cahier de projet d'étude à soumettre pour le comité
                         </button>
                       </li>
                     </ul>
                     <div class="tab-content">
-                      <div class="tab-pane fade show active" id="navs-top-planformation" role="tabpanel">
+                      <div class="tab-pane fade show active" id="navs-top-projetetude" role="tabpanel">
 
                         <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
                             <div class="row">
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_gestion"
-                                               class="form-control form-control-sm" required/>
-                                    </div>
+
+                                <div class="col-md-6 col-12">
+                                    <label>Type entreprise <strong style="color:red;">*</strong></label>
+                                    <select
+                                            id="code_pieces_cahier_projet_etude"
+                                            name="code_pieces_cahier_projet_etude"
+                                            class="select2 form-select-sm input-group"
+                                            aria-label="Default select example" required="required">
+                                        <option value="">Selectionnez le type</option>
+                                        <option value="PME">PETITE MOYENNE ENTREPRISES</option>
+                                        <option value="GE">GRANDE ENTREPRISE</option>
+                                        <option value="ANT">ANTENNE</option>
+                                    </select>
                                 </div>
 
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_gestion"
-                                               class="form-control form-control-sm" required/>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 col-12">
+                                <div class="col-md-6 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm"  name="commentaire_comite_gestion" id="commentaire_comite_gestion" rows="6"></textarea>
+                                        <textarea class="form-control form-control-sm"  name="commentaire_cahier_projet_etude" id="commentaire_cahier_projet_etude" rows="6"></textarea>
 
                                     </div>
                                 </div>
-
 
                                 <div class="col-12" align="right">
                                     <hr>
@@ -132,7 +140,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                       </div>
                       <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
 
-                      </div>
+
+
+                    </div>
                       <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
 
                       </div>

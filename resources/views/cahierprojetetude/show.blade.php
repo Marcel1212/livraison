@@ -9,6 +9,9 @@ $logo = Menu::get_logo();
     <meta charset="utf-8">
     <title>Action de plan et fiche agrement A</title>
     <link media="all" href="/assets/css/style_etat.css" type="text/css" rel="stylesheet"/>
+    <style type="text/css" media="print">
+        @page { size: landscape; }
+    </style>
 </head>
 
 <body>
@@ -115,7 +118,7 @@ $logo = Menu::get_logo();
                                                                                         nowrap="nowrap" class="">
                                                                                         <div align="left"><span
                                                                                                 class=""><strong
-                                                                                                    class="">Nombre de stagiaires</strong></span>
+                                                                                                    class="">Nombre de bénéficiaires <br/> de l’action de formation</strong></span>
                                                                                         </div>
                                                                                     </td>
                                                                                     <td width="5" align="left"
@@ -307,6 +310,29 @@ $logo = Menu::get_logo();
                                                                                     </td>
                                                                                 </tr>
 
+                                                                                <tr>
+                                                                                    <td height="22" valign="middle"
+                                                                                            nowrap="nowrap" class="">
+                                                                                            <strong>Secteur d'activité</strong></td>
+                                                                                        <td align="left" class=""><span
+                                                                                                class="">: </span></td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class=""><span
+                                                                                                class="">{{ @$actionplan->secteurActivite->libelle_secteur_activite }}  </span>
+                                                                                        </td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class="">&nbsp;
+                                                                                        </td>
+                                                                                        <td height="22" valign="middle"
+                                                                                            nowrap="nowrap" class=""><strong></strong>
+                                                                                        </td>
+                                                                                        <td align="left" class="">:
+                                                                                        </td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class="">
+                                                                                        </td>
+                                                                                    </tr>
+
 
                                                                             </table>
                                                                         </td>
@@ -316,12 +342,7 @@ $logo = Menu::get_logo();
                                                         </tr>
                                                     </table>
                                                     <td valign="top">&nbsp;</td>
-                                                <td align="right" valign="top">{{\SimpleSoftwareIO\QrCode\Facades\QrCode::size(130)->generate(
-'Intitule action de formation :'. $actionplan->intitule_action_formation_plan.'
-Type de formation :'.  $ficheagrement->typeFormation->type_formation.'
-Code formation :'.  @$planformation->conde_entreprise_plan_formation.'
-Code conseiller :'.  @$planformation->code_plan_formation.'
-Date soumis :'. @$planformation->date_soumis_plan_formation )}}</td>
+
                                                 </td>
                                               <td valign="top">&nbsp;</td>
                                                 <td align="right" valign="top"></td>

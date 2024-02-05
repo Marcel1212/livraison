@@ -1,18 +1,10 @@
-<?php
-
-use App\Helpers\AnneeExercice;
-
-$anneexercice = AnneeExercice::get_annee_exercice();
-
-?>
-
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Projet d\'étude')
-    @php($titre='Liste des comites de gestion')
-    @php($lien='comitegestionprojetetude')
+    @php($titre='Liste des cahiers de projet d\'étude')
+    @php($lien='cahierprojetetude')
 
     <!-- BEGIN: Content-->
 
@@ -29,14 +21,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
         </div>
     @endif
 
-    @if(!isset($anneexercice->id_periode_exercice))
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <div class="alert-body" style="text-align:center">
-                 {{$anneexercice}}
-            </div>
-            <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-        </div>
-    @endif
 
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
@@ -49,7 +33,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 {{--                        @can($lien.'-create')--}}
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau comite gestion </a>
+                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle cahier de projet d'étude</a>
 {{--                        @endcan--}}
                     </small>
                 </div>
@@ -61,25 +45,23 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <thead>
                         <tr>
                             <th>No</th>
-                            <th>Libellé </th>
                             <th>Code </th>
-                            <th>Date debut</th>
-                            <th>Date fin</th>
+                            <th>Date creation</th>
+                            <th>Date soumis</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php $i=0; ?>
-                        @foreach ($comite_gestions as $key => $comitep)
+                        @foreach ($cahiers as $key => $cahier)
                             <tr>
                                 <td>{{ ++$i }}</td>
-                                <td>Projet d'étude</td>
-                                <td>{{ @$comitep->code_comite_gestion }}</td>
-                                <td>{{ $comitep->date_debut_comite_gestion }}</td>
-                                <td>{{ $comitep->date_fin_comite_gestion }}</td>
+                                <td>{{ @$cahier->code_cahier_projet_etude }}</td>
+                                <td>{{ $cahier->date_creer_cahier_projet_etude }}</td>
+                                <td>{{ $cahier->date_soumis_cahier_projet_etude }}</td>
                                 <td align="center">
-                                    <?php if($comitep->flag_statut_comite_gestion == true){ ?>
+                                    <?php if($cahier->flag_statut_cahier_projet_etude == true){ ?>
                                         <span class="badge bg-success">Terminer</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>
@@ -87,7 +69,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
 {{--                                    @can($lien.'-edit')--}}
-                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comitep->id_comite_gestion),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
