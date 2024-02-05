@@ -108,7 +108,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste de presence
                         </button>
                     </li>
-                    <?php if($flag_statut_comite_pleniere = false) { ?>
+                    <?php //if($flag_statut_comite_pleniere = false) {
+                    ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
                             echo 'active';
@@ -118,7 +119,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projets de formations
                         </button>
                     </li>
-                    <?php } ?>
+                    <?php //}
+                    ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
                             //echo 'active';
@@ -307,7 +309,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) {
                                             ?>
                                             <span class="badge bg-warning">Soumis au ct</span>
-                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                             <span class="badge bg-secondary">Soumis</span>
                                             <?php // }
                                             ?>
