@@ -429,7 +429,7 @@ class ComiteGestionPfController extends Controller
              if($data['action'] === 'Traiter_action_proj_formation_valider'){
 
                 //$actionplan = ActionFormationPlan::find($id);
-                dd($data);
+               //dd($data);
 
                 $idplan = $id;
                 FicheAgrement::create([

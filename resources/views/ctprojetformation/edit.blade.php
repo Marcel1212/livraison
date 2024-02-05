@@ -108,6 +108,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste de presence
                         </button>
                     </li>
+                    <?php if($flag_statut_comite_pleniere = false) { ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
                             echo 'active';
@@ -117,6 +118,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projets de formations
                         </button>
                     </li>
+                    <?php } ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
                             //echo 'active';
@@ -305,7 +307,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) {
                                             ?>
                                             <span class="badge bg-warning">Soumis au ct</span>
-                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
+                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
                                             <span class="badge bg-secondary">Soumis</span>
                                             <?php // }
                                             ?>
@@ -387,7 +389,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
     {{-- Modal des projets de formations --}}
 
     @foreach ($planformations as $infosactionplanformation)
-        <div class="modal fade" id="traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="traiterActionProjetFormation<?php echo $infosactionplanformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">

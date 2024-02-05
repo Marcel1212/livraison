@@ -31,7 +31,7 @@ $logo = Menu::get_logo();
                 }
 
                 .content:before {
-                    content: 'Annulé';
+                    content: '';
                     position: fixed;
                     inset: 0;
                     z-index: -1 !important;
@@ -154,7 +154,7 @@ $logo = Menu::get_logo();
         <div style="margin-top: 2px">
             {{ \SimpleSoftwareIO\QrCode\Facades\QrCode::size(130)->generate(
                 'Code agrement : AGREMENT
-                                        Date : 04/01/2024',
+                                                    Date : 04/01/2024',
             ) }}
         </div>
 

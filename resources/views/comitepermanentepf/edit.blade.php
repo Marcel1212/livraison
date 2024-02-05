@@ -112,6 +112,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Personnes ressources
                         </button>
                     </li>
+
+                    <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if ($idetape == 3) {
                             echo 'active';
@@ -121,6 +123,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projet de formations
                         </button>
                     </li>
+                    <?php }  ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
                             // echo 'active';
@@ -274,6 +277,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+
+                    <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
                     <div class="tab-pane fade <?php if ($idetape == 3) {
                         echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
@@ -286,6 +291,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Entreprise </th>
 
                                     <th>Code </th>
+                                    <th>Titre projet </th>
+                                    <th>Cout formation</th>
                                     <th>Date soumis</th>
                                     <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                     <th>Action</th>
@@ -302,6 +309,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->code_projet_formation }}</td>
+                                        <td>{{ @$planformation->titre_projet_etude }}</td>
+                                        <td>{{ @$planformation->cout_projet_formation }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
 
 
@@ -343,6 +352,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+                    <?php } ?>
 
                     <div class="tab-pane fade <?php if (count($ficheagrements) >= 1 and count($comitegestionparticipant) >= 1) {
                         echo 'show 4';
@@ -416,7 +426,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 
     @foreach ($planformations as $infosactionplanformation)
-        <div class="modal fade" id="traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="traiterActionProjetFormation<?php echo $infosactionplanformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">

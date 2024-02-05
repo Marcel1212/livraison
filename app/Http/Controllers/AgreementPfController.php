@@ -47,14 +47,17 @@ class AgreementPfController extends Controller
             ->select(['projet_formation.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
             ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
             ->leftjoin('comite_permanente','fiche_agrement.id_comite_permanente','comite_permanente.id_comite_permanente')
-            //->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
             ->join('projet_formation','fiche_agrement.id_demande','projet_formation.id_projet_formation')
             ->join('entreprises','projet_formation.id_entreprises','entreprises.id_entreprises')
-            ->join('users','projet_formation.id_conseiller_formation','users.id');
-        if ($role== 'ENTREPRISE'){
-            $agreements = $agreements->where('projet_formation.id_entreprises',Auth::user()->id_partenaire);
-        }
-        $agreements = $agreements->get();
+            ->join('users','projet_formation.id_conseiller_formation','users.id')
+            ->where('projet_formation.flag_fiche_agrement',true)
+            ->where('projet_formation.id_entreprises',Auth::user()->id_partenaire)
+            ->get();
+        // if ($role== 'ENTREPRISE'){
+        //     $agreements = $agreements->where(['projet_formation.flag_fiche_agrement','=',true],['projet_formation.id_entreprises','=',Auth::user()->id_partenaire,['']]);
+        // }
+        //$agreements = $agreements->get();
+        dd($agreements);
         return view('agreementpf.index', compact('agreements'));
     }
 

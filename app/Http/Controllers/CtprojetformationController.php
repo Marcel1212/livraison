@@ -120,7 +120,6 @@ class CtprojetformationController extends Controller
     public function edit($id)
     {
         $id =  Crypt::UrldeCrypt($id);
-        //dd($id);
 
         $comitepleniere = ComitePleniere::find($id);
 
@@ -361,7 +360,7 @@ class CtprojetformationController extends Controller
         $id =  Crypt::UrldeCrypt($id); // id_projet_formation
         $id2 =  Crypt::UrldeCrypt($id2); // id_comite_pleiniere
 
-       // dd($request->all());
+
        if ($request->isMethod('post')) {
 
             $data = $request->all();
@@ -370,13 +369,18 @@ class CtprojetformationController extends Controller
 
         if($data['action'] === 'Traiter_action_proj_formation_valider'){
 
-            //dd($data);
+            //dd($id2);
             // Recuperation des informations du comite
             $comite = ComitePleniere::find($id2);
+            //$comite = ComitePleniere::where(['id_comite_pleniere','=',$id2])->get();
+            //dd($comite);
+            //dd($data);
             $codepleiniere = $comite->code_comite_pleniere;
+           // dd($codepleiniere);
 
             // Recuperation du Projet de formation
             $projetformation = ProjetFormation::find($id);
+            //dd($data);
             // Modification du projet de formation -- flag et ajout du code
             $projetformation->flag_comite_pleiniere = true;
             $projetformation->code_comite_pleiniere = $codepleiniere ;

@@ -110,6 +110,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Personnes ressources
                         </button>
                     </li>
+                    <?php if ( $comitegestion->flag_statut_comite_gestion == false) { ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if ($idetape == 3) {
                             echo 'active';
@@ -119,6 +120,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projets de formations
                         </button>
                     </li>
+                    <?php } ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
                             // echo 'active';
@@ -272,6 +274,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+                    <?php if ( $comitegestion->flag_statut_comite_gestion == false) { ?>
                     <div class="tab-pane fade <?php if ($idetape == 3) {
                         echo 'show active';
                     } //if(count($planformations)>0 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-actionformation" role="tabpanel">
@@ -343,6 +346,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         Retour</a>
                         </div>
                     </div>
+                    <?php } ?>
 
                     <div class="tab-pane fade<?php if (count($ficheagrements) >= 1) {
                         // echo 'show active';
@@ -415,7 +419,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 
     @foreach ($planformations as $infosactionplanformation)
-        <div class="modal fade" id="traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="traiterActionProjetFormation<?php echo $infosactionplanformation->id_projet_formation; ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                 <div class="modal-content p-3 p-md-5">
                     <div class="modal-body">

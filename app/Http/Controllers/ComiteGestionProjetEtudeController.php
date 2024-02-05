@@ -51,7 +51,7 @@ class ComiteGestionProjetEtudeController extends Controller
 
 
 
-        ('flag_plan_formation_valider_par_processus','=',true],
+        (['flag_plan_formation_valider_par_processus','=',true],
             ['flag_plan_formation_valider_cahier','=',true],
             ['flag_plan_formation_valider_cahier_soumis_comite_permanente','=',true],
             ['flag_fiche_agrement','=',false],
