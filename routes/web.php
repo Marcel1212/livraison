@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
         //'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         //'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         //'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
+        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
         'ctprojetetude' => App\Http\Controllers\CtprojetetudeController::class,
         //'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
         //'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
