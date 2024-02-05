@@ -153,7 +153,6 @@ class CtprojetetudevaliderController extends Controller
                             $projet_etude->flag_valider_par_processus = true;
                             $projet_etude->date_valider_par_processus = now();
                             $projet_etude->update();
-
                         }
 
                         return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');

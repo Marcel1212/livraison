@@ -5,7 +5,7 @@
     @php($Module = 'Projet d\'etude')
     @php($titre = 'Liste des comites de gestion')
     @php($soustitre = 'Tenue de comite de gestion')
-    @php($lien = 'comitegestionpe')
+    @php($lien = 'comitegestionprojetetude')
 
 
     <!-- BEGIN: Content-->
@@ -79,21 +79,18 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 4) {
-                            echo 'active';
-                        } else {
-                            echo 'disabled';
-                        } ?>" role="tab" data-bs-toggle="tab"
+                        <button type="button" class="nav-link <?php if(count($ficheagrements)<1){ echo 'disabled'; }?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
-                            aria-selected="false">
-                            Agrement
+                            aria-selected="false"
+                        >
+                            Agrément
                         </button>
                     </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade <?php if ($idetape == 1) {
                         echo 'show active';
-                    } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
+                    } ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
                             action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                             enctype="multipart/form-data">
@@ -149,7 +146,7 @@
                     </div>
                     <div class="tab-pane fade <?php if ($idetape == 2) {
                         echo 'show active';
-                    } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                    } ?>" id="navs-top-categorieplan" role="tabpanel">
 
                         <?php if ($comitegestion->flag_statut_comite_gestion != true){ ?>
                         <form method="POST" class="form"
@@ -159,7 +156,7 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_gestion_participant">Chargé d'étude <strong
+                                    <label class="form-label" for="id_user_comite_gestion_participant">Participants <strong
                                             style="color:red;">*</strong></label>
                                     <select id="id_user_comite_gestion_participant"
                                         name="id_user_comite_gestion_participant"
@@ -231,9 +228,10 @@
                                         Retour</a>
                         </div>
                     </div>
-                    <div class="tab-pane fade <?php if ($idetape == 3) {
+
+                    <div class="tab-pane fade  <?php if ($idetape == 3) {
                         echo 'show active';
-                    } //if(count($planformations)>0 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-actionformation" role="tabpanel">
+                    } ?>" id="navs-top-actionformation" role="tabpanel">
 
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
@@ -241,8 +239,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-                                    {{-- <th>Conseiller </th> --}}
                                     <th>Code </th>
+                                    <th>Titre du projet </th>
                                     <th>Date soumis</th>
                                     <th>Cout du projet</th>
                                     <th>Action</th>
@@ -250,24 +248,23 @@
                             </thead>
                             <tbody>
 
-                                <?php //dd($planformations);
+                                <?php //dd($projetetudes);
                                 $i = 0; ?>
-                                @foreach ($planformations as $key => $planformation)
+                                @foreach ($projetetudes as $key => $projetetude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
-                                        <td>{{ @$planformation->entreprise->ncc_entreprises }} /
-                                            {{ @$planformation->entreprise->raison_social_entreprises }}</td>
-                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }}
-                                            {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
-                                        <td>{{ @$planformation->code_projet_etude }}</td>
-                                        <td>{{ $planformation->date_soumis }}</td>
+                                        <td>{{ @$projetetude->entreprise->ncc_entreprises }} /
+                                            {{ @$projetetude->entreprise->raison_social_entreprises }}</td>
+                                        <td>{{ @$projetetude->code_projet_etude }}</td>
+                                        <td>{{ @$projetetude->titre_projet_etude }}</td>
+                                        <td>{{ $projetetude->date_soumis }}</td>
                                         <td align="rigth">
-                                            {{ number_format($planformation->cout_projet_etude) }}</td>
+                                            {{ number_format($projetetude->montant_projet_instruction) }}</td>
 
                                         <td align="center">
                                             <?php if($comitegestion->flag_statut_comite_gestion == false){?>
 {{--                                            @can($lien . '-edit')--}}
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
 {{--                                            @endcan--}}
                                             <?php } ?>
@@ -279,8 +276,7 @@
                         <div class="col-12" align="right">
                             <hr>
 
-                            <?php //if (count($comitegestionparticipant)>=1){
-                            ?>
+
 
 
                             <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
@@ -296,10 +292,9 @@
                                         Retour</a>
                         </div>
                     </div>
-
                     <div class="tab-pane fade<?php if ($idetape == 4) {
                         echo 'show active';
-                    } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    } if(count($ficheagrements)<1 and count($comitegestionparticipant)<1){ echo 'disabled'; }?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
                         <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_gestion == false){?>
                         <div class="col-12" align="right">
@@ -308,7 +303,7 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <button type="submit" name="action" value="Traiter_cahier_plan"
+                                <button type="submit" name="action" value="Traiter_cahier_projet"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                     Valider le comite de gestion
                                 </button>
@@ -318,32 +313,35 @@
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
                             <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Entreprise </th>
-                                    <th>Conseiller </th>
-                                    <th>Code </th>
-                                    <th>Cout demandé</th>
-                                    <th>Cout accordé </th>
-                                    <th>Date soumis</th>
-                                </tr>
+                            <tr>
+                                <th>No</th>
+                                <th>Entreprise </th>
+                                <th>Code </th>
+                                <th>Titre du projet </th>
+                                <th>Cout demandé</th>
+                                <th>Cout accordé </th>
+                                <th>Date soumis</th>
+
+                            </tr>
+
                             </thead>
                             <tbody>
 
-                                <?php //dd($planformations);
+                                <?php //dd($projetetudes);
                                 $i = 0; ?>
-                                @foreach ($ficheagrements as $key => $planformation)
+                                @foreach ($ficheagrements as $key => $projetetude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
-                                        <td>{{ @$planformation->ncc_entreprises }} /
-                                            {{ @$planformation->raison_social_entreprises }}</td>
-                                        <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
-                                        <td>{{ @$planformation->code_plan_formation }}</td>
+                                        <td>{{ @$projetetude->ncc_entreprises }} /
+                                            {{ @$projetetude->raison_social_entreprises }}</td>
+                                        <td>{{ @$projetetude->code_projet_etude }}</td>
+                                        <td>{{ @$projetetude->titre_projet_etude }}</td>
                                         <td align="rigth">
-                                            {{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
+                                            {{ number_format($projetetude->montant_projet_instruction) }}</td>
                                         <td align="rigth">
-                                            {{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
-                                        <td>{{ $planformation->date_soumis_plan_formation }}</td>
+                                            {{ number_format($projetetude->montant_projet) }}</td>
+                                        <td>{{ $projetetude->date_soumis }}</td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -186,10 +186,21 @@
                                 </label>
                                 <input type="text" name="titre_projet"
                                        required="required" id="titre_projet"
-                                       class="form-control form-control-sm"
-                                       placeholder="ex : Perfectionnement ..">
+                                       class="form-control form-control-sm">
                             </div>
                         </div>
+
+                            <div class="col-md-12 col-10" align="center">
+                                <div class="mb-1">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
+                                </div>
+                            </div>
+
                         <div class="row">
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">

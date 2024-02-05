@@ -12,9 +12,6 @@ use App\Models\Activites;
 use App\Models\CentreImpot;
 use App\Models\Localite;
 use App\Models\Pays;
-use App\Models\Motif;
-use App\Models\StatutOperation;
-use App\Models\DemandeEnrolement;
 use App\Models\Entreprises;
 use App\Models\Pieces;
 use App\Models\ProjetEtude;
@@ -81,6 +78,16 @@ class ProjetEtudeController extends Controller
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
 
+
+        /******************** secteuractivites *********************************/
+        $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+            ->orderBy('libelle_secteur_activite')
+            ->get();
+        $secteuractivite_projet = "<option value=''> Selectionnez un secteur activité </option>";
+        foreach ($secteuractivite_projets as $comp) {
+            $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+        }
+
         Audit::logSave([
             'action'=>'VISITE',
             'code_piece'=>'',
@@ -89,7 +96,7 @@ class ProjetEtudeController extends Controller
             'objet'=>'PROJET ETUDE'
         ]);
 
-        return view('projetetude.create', compact('infoentreprise','pay','secteuractivites'));
+        return view('projetetude.create', compact('infoentreprise','secteuractivite_projet','pay','secteuractivites'));
     }
 
     /**
@@ -107,6 +114,8 @@ class ProjetEtudeController extends Controller
                 'resultat_attendu' => 'required',
                 'champ_etude' => 'required',
                 'cible' => 'required',
+                'id_secteur_activite' => 'required',
+
             ],[
                 'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                 'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
@@ -115,6 +124,8 @@ class ProjetEtudeController extends Controller
                 'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
                 'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
                 'cible.required' => 'Veuillez ajouter une cible',
+                'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+
             ]);
             $user = User::find(Auth::user()->id);
             $user_id = Auth::user()->id;
@@ -129,6 +140,7 @@ class ProjetEtudeController extends Controller
             $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
             $projet_etude->champ_etude_projet_etude = $request->champ_etude;
             $projet_etude->cible_projet_etude = $request->cible;
+            $projet_etude->id_secteur_activite = $request->id_secteur_activite;
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
             $projet_etude->flag_rejet = false;
@@ -159,14 +171,6 @@ class ProjetEtudeController extends Controller
                 return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -211,6 +215,14 @@ class ProjetEtudeController extends Controller
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite_projet = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
                 Audit::logSave([
                     'action'=>'VISITE',
                     'code_piece'=>$projet_etude->id_projet_etude,
@@ -220,9 +232,18 @@ class ProjetEtudeController extends Controller
                 ]);
 
                 return view('projetetude.edit', compact('id_etape',
-                    'avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement',
-                    'offre_technique','offre_financiere',
-                    'pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
+                    'avant_projet_tdr',
+                    'courier_demande_fin',
+                    'dossier_intention',
+                    'lettre_engagement',
+                    'offre_technique',
+                    'offre_financiere',
+                    'secteuractivite',
+                    'secteuractivite_projet',
+                    'pieces_projets',
+                    'projet_etude',
+                    'infoentreprise',
+                    'pay'));
             }
         }
     }
@@ -250,6 +271,7 @@ class ProjetEtudeController extends Controller
                     'resultat_attendu' => 'required',
                     'champ_etude' => 'required',
                     'cible' => 'required',
+                    'id_secteur_activite' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                     'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
@@ -258,6 +280,7 @@ class ProjetEtudeController extends Controller
                     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
                     'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
                     'cible.required' => 'Veuillez ajouter une cible',
+                    'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
                 ]);
 
                 $user = User::find(Auth::user()->id);
@@ -271,6 +294,8 @@ class ProjetEtudeController extends Controller
                 $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
+                $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+
                 $projet_etude->update();
 
                 Audit::logSave([
@@ -282,6 +307,52 @@ class ProjetEtudeController extends Controller
                 ]);
 
                 return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+            }
+            if ($request->action == 'Modifier_suivant'){
+
+                $this->validate($request, [
+                    'titre_projet' => 'required',
+                    'contexte_probleme' => 'required',
+                    'objectif_general' => 'required',
+                    'objectif_specifique' => 'required',
+                    'resultat_attendu' => 'required',
+                    'champ_etude' => 'required',
+                    'cible' => 'required',
+                    'id_secteur_activite' => 'required',
+                ],[
+                    'titre_projet.required' => 'Veuillez ajouter un titre de projet',
+                    'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
+                    'objectif_general.required' => 'Veuillez ajouter un objectif general',
+                    'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+                    'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
+                    'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+                    'cible.required' => 'Veuillez ajouter une cible',
+                    'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                ]);
+
+                $user = User::find(Auth::user()->id);
+                $user_id = Auth::user()->id;
+                $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+                $projet_etude = ProjetEtude::find($id);
+                $projet_etude->titre_projet_etude = $request->titre_projet;
+                $projet_etude->contexte_probleme_projet_etude = $request->contexte_probleme;
+                $projet_etude->objectif_general_projet_etude = $request->objectif_general;
+                $projet_etude->objectif_specifique_projet_etud = $request->objectif_specifique;
+                $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
+                $projet_etude->champ_etude_projet_etude = $request->champ_etude;
+                $projet_etude->cible_projet_etude = $request->cible;
+                $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+                $projet_etude->update();
+
+                Audit::logSave([
+                    'action'=>'MODIFICATION',
+                    'code_piece'=>$projet_etude->id_projet_etude,
+                    'menu'=>'MODIFICATION PROJET ETUDE',
+                    'etat'=>'Succès',
+                    'objet'=>'PROJET ETUDE'
+                ]);
+
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
             }
 
             if($request->action=='Enregistrer_fichier'){
