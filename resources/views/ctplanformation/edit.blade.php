@@ -15,7 +15,7 @@
     $nombre = count($conseilleragence);
     //dd($conseillerplan);
 ?>
-
+@if(auth()->user()->can('ctplanformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -840,3 +840,8 @@
 
         @endsection
 
+        @else
+        <script type="text/javascript">
+            window.location = "{{ url('/403') }}";//here double curly bracket
+        </script>
+    @endif

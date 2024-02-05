@@ -34,6 +34,8 @@ $idpart = Auth::user()->id_partenaire;
 
 //dd($idpart);
 ?>
+
+@if(auth()->user()->can('planformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -967,3 +969,8 @@ $idpart = Auth::user()->id_partenaire;
 
 
        @endsection
+    @else
+       <script type="text/javascript">
+           window.location = "{{ url('/403') }}";//here double curly bracket
+       </script>
+   @endif
