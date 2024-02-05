@@ -233,6 +233,7 @@ class CahierplanformationController extends Controller
 
                 $input = $request->all();
                 //dd($input);exit;
+                if(isset($input['planformation'])){
 
                 $verifnombre = count($input['planformation']);
 
@@ -263,7 +264,11 @@ class CahierplanformationController extends Controller
 
 
                 return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                }else{
 
+                    return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un plan de formation. ');
+
+                }
 
             }
 

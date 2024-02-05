@@ -1,3 +1,4 @@
+@if(auth()->user()->can('departement-edit'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
@@ -13,7 +14,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            
+
                             <div class="breadcrumb-wrapper">
                             </div>
                         </div>
@@ -60,7 +61,7 @@
                                                            class="form-control form-control-sm" >
                                                 </div>
                                             </div>
-                                    
+
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
@@ -93,6 +94,10 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 

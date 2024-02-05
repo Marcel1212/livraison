@@ -6,6 +6,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
 
+@if(auth()->user()->can('planformation-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -78,7 +80,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Nombre de salariés déclarés à la CNPS 
+                          Nombre de salariés déclarés à la CNPS
                         </button>
                       </li>
                       <li class="nav-item">
@@ -287,4 +289,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
         @endsection
 
-
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif
