@@ -57,7 +57,7 @@ class AgreementPfController extends Controller
         //     $agreements = $agreements->where(['projet_formation.flag_fiche_agrement','=',true],['projet_formation.id_entreprises','=',Auth::user()->id_partenaire,['']]);
         // }
         //$agreements = $agreements->get();
-        dd($agreements);
+        //dd($agreements);
         return view('agreementpf.index', compact('agreements'));
     }
 
