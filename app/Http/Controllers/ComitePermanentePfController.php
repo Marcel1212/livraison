@@ -153,7 +153,7 @@ class ComitePermanentePfController extends Controller
             $conseiller .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
         }
 
-        $typecomiteinfos = ConseillerParAgence::get_type_comite_per_plan_formation();
+        $typecomiteinfos = ConseillerParAgence::get_type_comite_per_projet_formation();
 
         //dd($infosactionplanformation);
 
