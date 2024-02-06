@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\GenerateCode as Gencode;
 use App\Models\CahierProjetetude;
-use App\Models\LigneCahierProjetetude;
+use App\Models\LigneCahierProjetEtude;
 use App\Models\PiecesProjetEtude;
 use App\Models\projetetude;
 use App\Helpers\Crypt;
@@ -70,21 +70,16 @@ class CahierProjetetudeController extends Controller
 
 
     public function edit($id, $id1){
-
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
 
-
         $cahier = CahierProjetetude::find($id);
-
         $cahierprojetetudes = LigneCahierProjetEtude::join('projet_etude','ligne_cahier_projet_etude.id_projet_etude','projet_etude.id_projet_etude')
                             ->join('entreprises','projet_etude.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','projet_etude.id_charge_etude','=','users.id')
                             ->where([['ligne_cahier_projet_etude.id_cahier_projet_etude','=',$cahier->id_cahier_projet_etude]])->get();
 
         $projetetudes = ProjetEtude::where([['flag_valider_par_processus','=',true],['flag_projet_etude_valider_cahier','=',false]])->get();
-
-
 
         return view('cahierprojetetude.edit', compact('cahier','id','idetape','projetetudes','cahierprojetetudes'));
     }
@@ -222,7 +217,7 @@ class CahierProjetetudeController extends Controller
                 $tab = $input['projetetude'];
 
                 foreach ($tab as $key => $value) {
-                    LigneCahierProjetetude::create([
+                    LigneCahierProjetEtude::create([
                         'id_cahier_projet_etude'=> $id,
                         'id_projet_etude'=> $value
                     ]);
@@ -239,7 +234,7 @@ class CahierProjetetudeController extends Controller
             if ($data['action'] == 'Traiter_cahier_projet_soumis'){
 
                 $comite = CahierProjetetude::find($id);
-                $lignecahierprojetetude = LigneCahierProjetetude::where([['id_cahier_projet_etude','=',$id]])->get();
+                $lignecahierprojetetude = LigneCahierProjetEtude::where([['id_cahier_projet_etude','=',$id]])->get();
 
                 foreach ($lignecahierprojetetude as $key => $value) {
                     $projet_etude = projetetude::find($value->id_projet_etude);

@@ -161,7 +161,7 @@ class ComitePleniereProjetEtudeController extends Controller
                 $verifconseillerexist = ComitePleniereParticipant::where([['id_comite_pleniere','=',$id],['id_user_comite_pleniere_participant','=',$input['id_user_comite_pleniere_participant']]])->get();
 
                 if(count($verifconseillerexist) >= 1){
-                    return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Erreur : Cet conseiller existe deja dans cette comite plénière ');
+                    return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cet conseiller existe deja dans cette comite plénière ');
                 }
 
                 $comitesave = ComitePleniereParticipant::create($input);
@@ -220,7 +220,7 @@ class ComitePleniereProjetEtudeController extends Controller
         $comitepleniereParticipant = ComitePleniereParticipant::find($idVal);
         $idcomiteplenier = $comitepleniereParticipant->id_comite_pleniere;
         ComitePleniereParticipant::where('id_comite_pleniere_participant',$idVal)->delete();
-        return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($idcomiteplenier).'/edit')->with('success', 'Succes : Le chargé d\'étude a été rétiré du comite avec succes ');
+        return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($idcomiteplenier).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Le chargé d\'étude a été rétiré du comite avec succes ');
     }
 
     public function editer($id,$id2,$id3)
