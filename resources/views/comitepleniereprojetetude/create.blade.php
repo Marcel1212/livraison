@@ -11,8 +11,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Projet d\' étude')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Ajout de comite  plénière')
+    @php($titre='Liste des comités plénières')
+    @php($soustitre='Ajout de comité  plénière')
     @php($lien='comitepleniereprojetetude')
 
     <!-- BEGIN: Content-->

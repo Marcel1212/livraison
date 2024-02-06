@@ -3,8 +3,8 @@
 @section('content')
 
     @php($Module='Projet d\'étude')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Tenue de comite plénière')
+    @php($titre='Liste des comités plénières')
+    @php($soustitre='Tenue de comité plénière')
     @php($lien='comitepleniereprojetetude')
 
 
@@ -56,7 +56,7 @@
                           data-bs-target="#navs-top-pleniere"
                           aria-controls="navs-top-pleniere"
                           aria-selected="true">
-                          Comite plénière
+                          Comité plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -87,7 +87,9 @@
 
 
 
-                            <button type="button" class="nav-link @if(count($cahiers)<1 ) disabled @endif"
+                            <button type="button" class="nav-link @if(count($cahiers)<1 ) disabled @else
+                             @if($idetape==4) active @endif
+                            @endif"
                                     role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                                     aria-selected="false">
@@ -238,7 +240,7 @@
                             </table>
                         </div>
                         @if(count($cahiers)>=1)
-                        <div class="tab-pane fade " id="navs-top-cahieraprescomite" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape==4) show active @endif" id="navs-top-cahieraprescomite" role="tabpanel">
                             <?php  if(count($cahiers)>=1 and $comitepleniere->flag_statut_comite_pleniere == false){?>
                             <div class="col-12" align="right">
                                 <form method="POST" class="form"

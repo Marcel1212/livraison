@@ -6,9 +6,9 @@
 
 @section('content')
     @php($Module = 'Projet d\'étude')
-    @php($titre = 'Liste des comites plénières')
-    @php($soustitre = 'Tenue de comite plénière')
-    @php($lien = 'comitepleniereprojetetude')
+    @php($titre = 'Liste des comités permanents')
+    @php($soustitre = 'Tenue de comité permanent')
+    @php($lien = 'comitepermanenteprojetetude')
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">
@@ -367,19 +367,20 @@
                         </div>
 
                         <div class="tab-pane fade @if($id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
-                            <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->id_charge_etude == $idconnect){?>
-                            <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}">
+
+                                <?php  if( $projet_etude->flag_valider_par_processus == true && $projet_etude->flag_valider_comite_permanente_projet_etude == true){?>
+                            <form method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}">
                                     @csrf
                                     @method('put')
                                     <button type="submit" name="action" value="Traiter_valider_projet"
                                             class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Valider le comite technique en plénière
+                                        Valider le comite pour ce projet d'étude
                                     </button>
                                 </form>
                             <?php } ?>
 
 
-                            <form  method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}" enctype="multipart/form-data">
+                            <form  method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="row mt-2">
@@ -437,19 +438,24 @@
                                         <div class="mb-1">
                                             <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+                                            <textarea class="form-control" rows="7" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
 
                                         </div>
                                     </div>
 
                                     <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
-                                        </div>
-                                    </div>
+                                                <div class="mb-1">
+                                                    <label for="montant_projet_instruction">Montant du projet demandé <span style="color:red;">*</span>
+                                                    </label>
+                                                    <input type="number" disabled name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
+                                                </div>
+                                            </div>
+
                                     <div class="col-md-4 mt-2">
+                                        <div class="row">
+
+                                        <div class="col-md-12">
+
                                         <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
                                             5M</label>
                                         <input type="file" name="fichier_instruction" class="form-control" placeholder="">
@@ -458,17 +464,24 @@
                                                                                 onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
                                         @endif
-                                    </div>
+                                        </div>
 
+                                        <div class="col-md-12">
+                                            <div class="mb-1 mt-3">
+                                                <label for="montant_projet_instruction">Montant à accorder<span style="color:red;">*</span>
+                                                </label>
+                                                <input type="number" name="montant_projet" required="required" id="montant_projet" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet}}">
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
 
                                     <div class="col-12" align="right">
                                         <hr>
-                                        <?php if($projet_etude->id_charge_etude == $idconnect){?>
                                         <button type="submit" name="action" value="Modifier"
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Modifier
+                                            Valider
                                         </button>
-                                        <?php } ?>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
                                     </div>

@@ -305,7 +305,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <th>Contexte </th>
                                     <th>Cible </th>
                                     <th>Date soumis</th>
-                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>

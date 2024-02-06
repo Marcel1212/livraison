@@ -77,7 +77,7 @@ class ComitePleniereProjetEtudeController extends Controller
             $input['code_pieces'] = 'PE';
             ComitePleniere::create($input);
             $insertedId = ComitePleniere::latest()->first()->id_comite_pleniere;
-            return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($insertedId).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
         }
     }
 
@@ -246,6 +246,16 @@ class ComitePleniereProjetEtudeController extends Controller
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_financiere')->first();
 
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+
                 $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
 
                 $pays = Pays::all();
@@ -277,6 +287,7 @@ class ComitePleniereProjetEtudeController extends Controller
                     'offre_technique',
                     'projet_etude',
                     'idcomite',
+                    'secteuractivite_projet',
                     'motifs',
                     'offre_financiere',
                     'secteuractivite'));

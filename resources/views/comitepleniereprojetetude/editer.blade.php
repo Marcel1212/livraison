@@ -383,12 +383,21 @@
                                 @csrf
                                 @method('put')
                                 <div class="row mt-2">
-                                    <div class="col-md-12 text-center col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label>Titre du projet <span style="color:red;">*</span>
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Titre du projet <span
+                                                    style="color:red;">*</span>
                                             </label>
-                                            <input type="text" name="titre_projet_instruction"
-                                                   required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_instruction}}">
+                                            <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
+                                        </div>
+
+                                        <div class="mb-1 col-md-6">
+                                            <label>Secteur d'activité du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
+                                                <?= $secteuractivite_projet; ?>
+                                            </select>
                                         </div>
                                     </div>
 

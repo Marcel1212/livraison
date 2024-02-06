@@ -104,7 +104,7 @@
                                         <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
                                         <input type="text"
                                                class="form-control form-control-sm"
-                                               value="{{@@$projet_etude->entreprise->ncc_entreprises}}" disabled="disabled">
+                                               value="{{@$projet_etude->entreprise->ncc_entreprises}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -207,19 +207,29 @@
                             </div>
                         </div>
                         <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
+
+                            <div class="row">
+                                <div class="col-md-6 col-10">
+                                    <div class="mb-1 ">
                                         <label>Titre du projet <span
                                                 style="color:red;">*</span>
                                         </label>
                                         <input type="text" name="titre_projet"
                                                required="required" id="titre_projet"
                                                class="form-control form-control-sm"
-                                                   disabled
-                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
-
-                                               placeholder="ex : Perfectionnement ..">
+                                               disabled
+                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
                                     </div>
+                                </div>
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" disabled>
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
+                                </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-12">
