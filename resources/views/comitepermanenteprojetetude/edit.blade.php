@@ -3,9 +3,9 @@
 @section('content')
 
     @php($Module = 'Projet d\'etude')
-    @php($titre = 'Liste des comites de gestion')
-    @php($soustitre = 'Tenue de comite de gestion')
-    @php($lien = 'comitegestionprojetetude')
+    @php($titre = 'Liste des comités permanents')
+    @php($soustitre = 'Tenue de comité permanent')
+    @php($lien = 'comitepermanenteprojetetude')
 
 
     <!-- BEGIN: Content-->
@@ -57,7 +57,7 @@
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite de gestion
+                            Comité permanent
                         </button>
                     </li>
                     <li class="nav-item">
@@ -92,7 +92,7 @@
                         echo 'show active';
                     } ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
@@ -100,26 +100,26 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_gestion"
+                                        <input type="date" name="date_debut_comite_permanente"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitegestion->date_debut_comite_gestion }}" />
+                                            value="{{ $comitepermanente->date_debut_comite_permanente }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_gestion"
+                                        <input type="date" name="date_fin_comite_permanente"
                                             class="form-control form-control-sm"
-                                            value="{{ $comitegestion->date_fin_comite_gestion }}" />
+                                            value="{{ $comitepermanente->date_fin_comite_permanente }}" />
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm" name="commentaire_comite_gestion" id="commentaire_comite_gestion"
-                                            rows="6">{{ $comitegestion->commentaire_comite_gestion }}</textarea>
+                                        <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
+                                            rows="6">{{ $comitepermanente->commentaire_comite_permanente }}</textarea>
 
                                     </div>
                                 </div>
@@ -127,13 +127,13 @@
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <?php if($comitegestion->flag_statut_comite_gestion == false){?>
+                                    <?php if($comitepermanente->flag_statut_comite_permanente == false){?>
                                     <button type="submit" name="action" value="Modifier"
                                         class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Modifier
                                     </button>
                                     <?php } ?>
-                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                         class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -148,18 +148,18 @@
                         echo 'show active';
                     } ?>" id="navs-top-categorieplan" role="tabpanel">
 
-                        <?php if ($comitegestion->flag_statut_comite_gestion != true){ ?>
+                        <?php if ($comitepermanente->flag_statut_comite_permanente != true){ ?>
                         <form method="POST" class="form"
-                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                             enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_gestion_participant">Participants <strong
+                                    <label class="form-label" for="id_user_comite_permanente_participant">Participants <strong
                                             style="color:red;">*</strong></label>
-                                    <select id="id_user_comite_gestion_participant"
-                                        name="id_user_comite_gestion_participant"
+                                    <select id="id_user_comite_permanente_participant"
+                                        name="id_user_comite_permanente_participant"
                                         class="select2 form-select-sm input-group" aria-label="Default select example"
                                         required="required">
                                         <?= $conseiller ?>
@@ -191,15 +191,15 @@
                             </thead>
                             <tbody>
                                 <?php $i = 0; ?>
-                                @foreach ($comitegestionparticipant as $key => $comitegestionparticipan)
+                                @foreach ($comitepermanenteparticipant as $key => $comitepermanenteparticipan)
                                     <?php $i += 1; ?>
                                     <tr>
                                         <td>{{ $i }}</td>
-                                        <td>{{ $comitegestionparticipan->user->name }}</td>
-                                        <td>{{ $comitegestionparticipan->user->prenom_users }}</td>
+                                        <td>{{ $comitepermanenteparticipan->user->name }}</td>
+                                        <td>{{ $comitepermanenteparticipan->user->prenom_users }}</td>
                                         <td>
-                                            <?php if ($comitegestion->flag_statut_comite_gestion != true){ ?>
-                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitegestionparticipan->id_comite_gestion_participant)) }}"
+                                            <?php if ($comitepermanente->flag_statut_comite_permanente != true){ ?>
+                                            <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comitepermanenteparticipan->id_comite_permanente_participant)) }}"
                                                 class=""
                                                 onclick='javascript:if (!confirm("Voulez-vous supprimer cet conseiller de cette commission ?")) return false;'
                                                 title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
@@ -213,12 +213,12 @@
                         <div class="col-12" align="right">
                             <hr>
 
-                            <?php if (count($comitegestionparticipant)>=1){ ?>
+                            <?php if (count($comitepermanenteparticipant)>=1){ ?>
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
-                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                     class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
@@ -262,9 +262,9 @@
                                             {{ number_format($projetetude->montant_projet_instruction) }}</td>
 
                                         <td align="center">
-                                            <?php if($comitegestion->flag_statut_comite_gestion == false && count($comitepermanenteparticipant)>=1){?>
+                                            <?php if($comitepermanente->flag_statut_comite_permanente == false && count($comitepermanenteparticipant)>=1){?>
 {{--                                            @can($lien . '-edit')--}}
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
 {{--                                            @endcan--}}
                                             <?php } ?>
@@ -279,9 +279,9 @@
 
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
-                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                     class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
@@ -294,18 +294,18 @@
                     </div>
                     <div class="tab-pane fade<?php if ($idetape == 4) {
                         echo 'show active';
-                    } if(count($ficheagrements)<1 and count($comitegestionparticipant)<1){ echo 'disabled'; }?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    } if(count($ficheagrements)<1 and count($comitepermanenteparticipant)<1){ echo 'disabled'; }?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
-                        <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_gestion == false){?>
+                        <?php  if(count($ficheagrements)>=1 and $comitepermanente->flag_statut_comite_permanente == false){?>
                         <div class="col-12" align="right">
                             <form method="POST" class="form"
-                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <button type="submit" name="action" value="Traiter_cahier_projet"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                    Valider le comite de gestion
+                                    Valider le comite de permanente
                                 </button>
                             </form>
                         </div>
@@ -353,8 +353,8 @@
                             <?php if (count($ficheagrements)>=1){ ?>
 
 
-                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                 <?php } ?>
 

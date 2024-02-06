@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ConseillerParAgence;
-use App\Models\ComiteGestion;
+use App\Models\Comitepermanente;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
 use App\Models\SecteurActivite;
@@ -16,21 +16,21 @@ use Hash;
 use DB;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Crypt;
-use App\Models\ComiteGestionParticipant;
+use App\Models\ComitepermanenteParticipant;
 use App\Models\Entreprises;
 use App\Models\FicheAgrement;
 use App\Models\Motif;
 use App\Models\Pays;
 
-class ComiteGestionProjetEtudeController extends Controller
+class ComitePermanenteProjetEtudeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $comite_gestions = ComiteGestion::where('code_pieces_comite_gestion','PE')->get();
-        return view('comitegestionprojetetude.index', compact('comite_gestions'));
+        $comite_permanentes = ComitePermanente::where('code_pieces_comite_permanente','PE')->get();
+        return view('comitepermanenteprojetetude.index', compact('comite_permanentes'));
     }
 
 
@@ -38,12 +38,12 @@ class ComiteGestionProjetEtudeController extends Controller
     {
         $projetetudes = ProjetEtude::where([['flag_valider_par_processus','=',true],
             ['flag_projet_etude_valider_cahier','=',true],
-            ['flag_projet_etude_valider_cahier_soumis_comite_gestion','=',true],
             ['flag_projet_etude_valider_cahier_soumis_comite_permanente','=',false],
+            ['flag_projet_etude_valider_cahier_soumis_comite_permanente','=',true],
             ['flag_fiche_agrement','=',false]])
             ->get();
 
-        return view('comitegestionprojetetude.create', compact('projetetudes'));
+        return view('comitepermanenteprojetetude.create', compact('projetetudes'));
     }
 
     /**
@@ -54,25 +54,25 @@ class ComiteGestionProjetEtudeController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                'date_debut_comite_gestion' => 'required',
-                'date_fin_comite_gestion' => 'required',
-                'commentaire_comite_gestion' => 'required'
+                'date_debut_comite_permanente' => 'required',
+                'date_fin_comite_permanente' => 'required',
+                'commentaire_comite_permanente' => 'required'
             ],[
-                'date_debut_comite_gestion.required' => 'Veuillez ajouter une date de debut.',
-                'date_fin_comite_gestion.required' => 'Veuillez ajouter une date de fin.',
-                'commentaire_comite_gestion.required' => 'Veuillez ajouter un commentaire.',
+                'date_debut_comite_permanente.required' => 'Veuillez ajouter une date de debut.',
+                'date_fin_comite_permanente.required' => 'Veuillez ajouter une date de fin.',
+                'commentaire_comite_permanente.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
             $input = $request->all();
             $dateanneeencours = Carbon::now()->format('Y');
-            $input['id_user_comite_gestion'] = Auth::user()->id;
-            $input['code_comite_gestion'] = 'CGPE' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
-            $input['code_pieces_comite_gestion'] = 'PE';
+            $input['id_user_comite_permanente'] = Auth::user()->id;
+            $input['code_comite_permanente'] = 'CP' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
+            $input['code_pieces_comite_permanente'] = 'PE';
             $typecomiteinfos = ConseillerParAgence::get_type_comite_projet_etude();
-            $input['id_type_comite_comite_gestion'] = intval($typecomiteinfos->id_type_comite);
-            ComiteGestion::create($input);
-            $insertedId = ComiteGestion::latest()->first()->id_comite_gestion;
-            return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            $input['id_type_comite_comite_permanente'] = intval($typecomiteinfos->id_type_comite);
+            Comitepermanente::create($input);
+            $insertedId = Comitepermanente::latest()->first()->id_comite_permanente;
+            return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
         }
     }
 
@@ -84,14 +84,14 @@ class ComiteGestionProjetEtudeController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
 
-        $comitegestion = ComiteGestion::find($id);
+        $comitepermanente = ComitePermanente::find($id);
 
-        $comitegestionparticipant = ComiteGestionParticipant::where([['id_comite_gestion','=',$comitegestion->id_comite_gestion]])->get();
+        $comitepermanenteparticipant = ComitePermanenteParticipant::where([['id_comite_permanente','=',$comitepermanente->id_comite_permanente]])->get();
 
         $ficheagrements = FicheAgrement::Join('projet_etude','fiche_agrement.id_demande','projet_etude.id_projet_etude')
                             ->join('entreprises','projet_etude.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','projet_etude.id_charge_etude','=','users.id')
-                            ->where([['id_comite_gestion','=',$comitegestion->id_comite_gestion]])->get();
+                            ->where([['id_comite_permanente','=',$comitepermanente->id_comite_permanente]])->get();
 
 
         $conseillers = ConseillerParAgence::get_comite_gestion_permanente();
@@ -102,11 +102,11 @@ class ComiteGestionProjetEtudeController extends Controller
         }
 
 
-        $projetetudes = ProjetEtude::where([['flag_projet_etude_valider_cahier_soumis_comite_gestion','=',true],
+        $projetetudes = ProjetEtude::where([['flag_projet_etude_valider_cahier_soumis_comite_permanente','=',true],
                                             ['flag_fiche_agrement','=',false]])
                                             ->get();
 
-        return view('comitegestionprojetetude.edit', compact('comitegestion','comitegestionparticipant','ficheagrements','conseiller','projetetudes','idetape'));
+        return view('comitepermanenteprojetetude.edit', compact('comitepermanente','comitepermanenteparticipant','ficheagrements','conseiller','projetetudes','idetape'));
     }
 
     /**
@@ -124,58 +124,58 @@ class ComiteGestionProjetEtudeController extends Controller
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
-                    'date_debut_comite_gestion' => 'required',
-                    'date_fin_comite_gestion' => 'required',
-                    'commentaire_comite_gestion' => 'required'
+                    'date_debut_comite_permanente' => 'required',
+                    'date_fin_comite_permanente' => 'required',
+                    'commentaire_comite_permanente' => 'required'
                 ],[
-                    'date_debut_comite_gestion.required' => 'Veuillez ajouter une date de debut.',
-                    'date_fin_comite_gestion.required' => 'Veuillez ajouter une date de fin.',
-                    'commentaire_comite_gestion.required' => 'Veuillez ajouter un commentaire.',
+                    'date_debut_comite_permanente.required' => 'Veuillez ajouter une date de debut.',
+                    'date_fin_comite_permanente.required' => 'Veuillez ajouter une date de fin.',
+                    'commentaire_comite_permanente.required' => 'Veuillez ajouter un commentaire.',
                 ]);
 
                 $input = $request->all();
-                $input['id_user_comite_gestion'] = Auth::user()->id;
-                $comitegestion = ComiteGestion::find($id);
-                $comitegestion->update($input);
+                $input['id_user_comite_permanente'] = Auth::user()->id;
+                $comitepermanente = ComitePermanente::find($id);
+                $comitepermanente->update($input);
 
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
             if ($data['action'] == 'Enregistrer_conseil_poour_comite'){
 
                 $this->validate($request, [
-                    'id_user_comite_gestion_participant' => 'required'
+                    'id_user_comite_permanente_participant' => 'required'
                 ],[
-                    'id_user_comite_gestion_participant.required' => 'Veuillez selectionnez le conseiller.'
+                    'id_user_comite_permanente_participant.required' => 'Veuillez selectionnez le conseiller.'
                 ]);
 
                 $input = $request->all();
-                $input['id_comite_gestion'] = $id;
-                $input['flag_comite_gestion_participant'] = true;
+                $input['id_comite_permanente'] = $id;
+                $input['flag_comite_permanente_participant'] = true;
 
-                $verifconseillerexist = ComiteGestionParticipant::where([['id_comite_gestion','=',$id],['id_user_comite_gestion_participant','=',$input['id_user_comite_gestion_participant']]])->get();
+                $verifconseillerexist = ComitePermanenteParticipant::where([['id_comite_permanente','=',$id],['id_user_comite_permanente_participant','=',$input['id_user_comite_permanente_participant']]])->get();
 
                 if(count($verifconseillerexist) >= 1){
 
-                    return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cette personne existe déjà dans ce comite de gestion. ');
+                    return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cette personne existe déjà dans ce comite de permanente. ');
 
                 }
 
-                ComiteGestionParticipant::create($input);
+                ComitePermanenteParticipant::create($input);
 
                 //return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
 
             }
 
             if ($data['action'] == 'Traiter_cahier_projet'){
 
-                $comitegestion = ComiteGestion::find($id);
-                $comitegestion->update(['flag_statut_comite_gestion'=> true]);
+                $comitepermanente = ComitePermanente::find($id);
+                $comitepermanente->update(['flag_statut_comite_permanente'=> true]);
 
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -186,10 +186,10 @@ class ComiteGestionProjetEtudeController extends Controller
 
         $idVal = Crypt::UrldeCrypt($id);
 
-        $comitegestionParticipant = ComiteGestionParticipant::find($idVal);
-        $idcomitegestion = $comitegestionParticipant->id_comite_gestion;
-        ComiteGestionParticipant::where([['id_comite_gestion_participant','=',$idVal]])->delete();
-        return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idcomitegestion).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La personne a été supprimée du comite avec succès ');
+        $comitepermanenteParticipant = ComitePermanenteParticipant::find($idVal);
+        $idcomitepermanente = $comitepermanenteParticipant->id_comite_permanente;
+        ComitePermanenteParticipant::where([['id_comite_permanente_participant','=',$idVal]])->delete();
+        return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idcomitepermanente).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La personne a été supprimée du comite avec succès ');
     }
 
     /**
@@ -247,7 +247,7 @@ class ComiteGestionProjetEtudeController extends Controller
                 }
 
 
-                return view('comitegestionprojetetude.editer',
+                return view('comitepermanenteprojetetude.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
                         'dossier_intention',
@@ -280,10 +280,10 @@ class ComiteGestionProjetEtudeController extends Controller
             if($data['action'] === 'Modifier'){
                 $projet_etude = ProjetEtude::find($id);
                 $idprojetetude = $projet_etude->id_projet_etude;
-                $projet_etude->flag_valider_comite_gestion_projet_etude = true;
+                $projet_etude->flag_valider_comite_permanente_projet_etude = true;
                 $input = $request->all();
                 $projet_etude->update($input);
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
             }
 
             if($data['action'] === 'Traiter_valider_projet'){
@@ -292,7 +292,7 @@ class ComiteGestionProjetEtudeController extends Controller
 
                 FicheAgrement::create([
                     'id_demande' => $idprojetetude,
-                    'id_comite_gestion' => $id2,
+                    'id_comite_permanente' => $id2,
                     'id_user_fiche_agrement' => Auth::user()->id,
                     'flag_fiche_agrement'=> true
                 ]);
@@ -303,7 +303,7 @@ class ComiteGestionProjetEtudeController extends Controller
                         'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Le projet a été validé');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Le projet a été validé');
 
 
             }

@@ -128,6 +128,16 @@ class CahierprojetetudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
+
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
                 $motif = Motif::where('code_motif','=','PRE')->get();;
                 $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
                 foreach ($motif as $comp) {
@@ -143,6 +153,7 @@ class CahierprojetetudeController extends Controller
                         'offre_technique',
                         'projet_etude',
                         'idcomite',
+                        'secteuractivite_projet',
                         'motifs',
                         'offre_financiere',
                         'secteuractivite'));
@@ -239,7 +250,7 @@ class CahierprojetetudeController extends Controller
 
                     if(isset($type_comite_gestion)){
                         if($type_comite_gestion->valeur_min_type_comite < $projet_etude->montant_projet_instruction &&
-                            $type_comite_gestion->valeur_min_type_comite >= $projet_etude->montant_projet_instruction){
+                            $type_comite_gestion->valeur_max_type_comite >= $projet_etude->montant_projet_instruction){
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_gestion = true;
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_permanente = false;
                             $projet_etude->update();
@@ -248,7 +259,7 @@ class CahierprojetetudeController extends Controller
 
                     if(isset($type_comite_permanent)){
                         if($type_comite_permanent->valeur_min_type_comite < $projet_etude->montant_projet_instruction &&
-                            $type_comite_permanent->valeur_min_type_comite >= $projet_etude->montant_projet_instruction){
+                            $type_comite_permanent->valeur_max_type_comite >= $projet_etude->montant_projet_instruction){
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_gestion = false;
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_permanente = true;
                             $projet_etude->update();

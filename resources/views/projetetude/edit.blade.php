@@ -180,32 +180,33 @@
                             <form method="POST" class="form" action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}">
                                 @csrf
                                 @method('put')
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Titre du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="titre_projet"
+                                                   required="required" id="titre_projet"
+                                                   class="form-control form-control-sm"
+                                                   @if(@$projet_etude->flag_soumis==true)
+                                                       disabled
+                                                   @endif
+                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
+                                        </div>
 
-
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
-                                        <label>Titre du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="titre_projet"
-                                               required="required" id="titre_projet"
-                                               class="form-control form-control-sm"
-                                               @if(@$projet_etude->flag_soumis==true)
-                                                   disabled
-                                               @endif
-                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
-                                        <label>Secteur d'activité du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                            <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Secteur d'activité du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                disabled
+                                                @endif>
                                                 <?= $secteuractivite_projet; ?>
                                             </select>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row">

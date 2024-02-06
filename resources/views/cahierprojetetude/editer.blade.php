@@ -86,19 +86,7 @@ $idconnect = Auth::user()->id;
                                 Pièces jointes du projet
                             </button>
                         </li>
-                        <li class="nav-item">
-                            <button
-                                type="button"
-                                class="nav-link  @if($id_etape==4) active @endif"
-                                role="tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#navs-top-traitementinstructionprojetetude"
-                                aria-controls="navs-top-traitementinstructionprojetetude"
-                                aria-selected="false">
-                                Traitement
 
-                            </button>
-                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-entreprise" role="tabpanel">
@@ -211,18 +199,21 @@ $idconnect = Auth::user()->id;
                             </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                            <div class="col-md-12 col-10" align="center">
-                                <div class="mb-1">
+                            <div class="row">
+                                <div class="mb-1 col-md-6">
                                     <label>Titre du projet <span
                                             style="color:red;">*</span>
                                     </label>
-                                    <input type="text" name="titre_projet"
-                                           required="required" id="titre_projet"
-                                           class="form-control form-control-sm"
-                                           disabled
-                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                    <input type="text" disabled name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
+                                </div>
 
-                                           placeholder="ex : Perfectionnement ..">
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" disabled class="select2 form-select-sm input-group" data-allow-clear="true">
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -232,8 +223,8 @@ $idconnect = Auth::user()->id;
                                                 style="color:red;">*</span></label>
                                         <textarea class="form-control" required="required"
                                                   disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="contexte_probleme" >@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>
+                                                  rows="3" id="exampleFormControlTextarea"
+                                                  name="contexte_probleme_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->contexte_probleme_instruction}}@endisset</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -242,8 +233,8 @@ $idconnect = Auth::user()->id;
                                                 style="color:red;">*</span> </label>
                                         <textarea required="required" class="form-control"
                                                   disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_general" >@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>
+                                                  rows="3" id="exampleFormControlTextarea"
+                                                  name="objectif_general_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_general_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
@@ -253,8 +244,8 @@ $idconnect = Auth::user()->id;
                                                 style="color:red;">*</span> </label>
                                         <textarea class="form-control" required="required"
                                                   disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_specifique" >@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>
+                                                  rows="3" id="exampleFormControlTextarea"
+                                                  name="objectif_specifique_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_specifique_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
@@ -264,8 +255,9 @@ $idconnect = Auth::user()->id;
                                         <label>Résultats attendus <span
                                                 style="color:red;">*</span> </label>
                                         <textarea class="form-control"
-                                                  required="required" rows="4" id="exampleFormControlTextarea" disabled
-                                                  name="resultat_attendu" >@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>
+                                                  disabled
+                                                  required="required" rows="3" id="exampleFormControlTextarea"
+                                                  name="resultat_attendus_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->resultat_attendus_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
@@ -275,8 +267,8 @@ $idconnect = Auth::user()->id;
                                                 style="color:red;">*</span></label>
                                         <textarea class="form-control"
                                                   disabled
-                                                  rows="4" id="exampleFormControlTextarea" name="champ_etude"
-                                                  required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>
+                                                  rows="3" id="exampleFormControlTextarea" name="champ_etude_instruction"
+                                                  style="height: 121px;" required="required">@isset($projet_etude){{$projet_etude->champ_etude_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
@@ -286,12 +278,121 @@ $idconnect = Auth::user()->id;
                                         </label>
                                         <textarea class="form-control"
                                                   disabled
-                                                  rows="4" id="exampleFormControlTextarea" name="cible"
-                                                  required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>
+                                                  rows="3" id="exampleFormControlTextarea" name="cible_instruction" style="height: 121px;"
+                                                  required="required">@isset($projet_etude){{$projet_etude->cible_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
+                                        </label>
+                                        <textarea class="form-control" rows="3" style="height: 121px;" id="methodologie_instruction" name="methodologie_instruction" disabled  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
+                                        </label>
+                                        <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" disabled value="{{@$projet_etude->montant_projet_instruction}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-2">
+                                    <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
+                                        5M</label>
+                                    @if($projet_etude->piece_jointe_instruction)
+                                        <div>
+                                        <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                 onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span></div>
+                                    @endif
+                                </div>
                             </div>
+
+{{--                            <div class="col-md-12 col-10" align="center">--}}
+{{--                                <div class="mb-1">--}}
+{{--                                    <label>Titre du projet <span--}}
+{{--                                            style="color:red;">*</span>--}}
+{{--                                    </label>--}}
+{{--                                    <input type="text" name="titre_projet"--}}
+{{--                                           required="required" id="titre_projet"--}}
+{{--                                           class="form-control form-control-sm"--}}
+{{--                                           disabled--}}
+{{--                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"--}}
+
+{{--                                           placeholder="ex : Perfectionnement ..">--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="row">--}}
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Contexte ou Problèmes constatés <span--}}
+{{--                                                style="color:red;">*</span></label>--}}
+{{--                                        <textarea class="form-control" required="required"--}}
+{{--                                                  disabled--}}
+{{--                                                  rows="4" id="exampleFormControlTextarea"--}}
+{{--                                                  name="contexte_probleme" >@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Objectif Général <span--}}
+{{--                                                style="color:red;">*</span> </label>--}}
+{{--                                        <textarea required="required" class="form-control"--}}
+{{--                                                  disabled--}}
+{{--                                                  rows="4" id="exampleFormControlTextarea"--}}
+{{--                                                  name="objectif_general" >@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>--}}
+
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Objectifs spécifiques <span--}}
+{{--                                                style="color:red;">*</span> </label>--}}
+{{--                                        <textarea class="form-control" required="required"--}}
+{{--                                                  disabled--}}
+{{--                                                  rows="4" id="exampleFormControlTextarea"--}}
+{{--                                                  name="objectif_specifique" >@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>--}}
+
+{{--                                    </div>--}}
+{{--                                </div>--}}
+
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Résultats attendus <span--}}
+{{--                                                style="color:red;">*</span> </label>--}}
+{{--                                        <textarea class="form-control"--}}
+{{--                                                  required="required" rows="4" id="exampleFormControlTextarea" disabled--}}
+{{--                                                  name="resultat_attendu" >@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>--}}
+
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Champ de l’étude <span--}}
+{{--                                                style="color:red;">*</span></label>--}}
+{{--                                        <textarea class="form-control"--}}
+{{--                                                  disabled--}}
+{{--                                                  rows="4" id="exampleFormControlTextarea" name="champ_etude"--}}
+{{--                                                  required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>--}}
+
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                                <div class="col-md-4 col-12">--}}
+{{--                                    <div class="mb-1">--}}
+{{--                                        <label>Cible <span style="color:red;">*</span>--}}
+{{--                                        </label>--}}
+{{--                                        <textarea class="form-control"--}}
+{{--                                                  disabled--}}
+{{--                                                  rows="4" id="exampleFormControlTextarea" name="cible"--}}
+{{--                                                  required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>--}}
+
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
@@ -366,94 +467,6 @@ $idconnect = Auth::user()->id;
 
                         </div>
 
-                        <div class="tab-pane fade @if($id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
-                                <div class="row mt-2">
-                                    <div class="col-md-12 text-center col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label>Titre du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="text" name="titre_projet_instruction"
-                                                   required="required" disabled  id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_instruction}}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" disabled required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_instruction}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea required="required" disabled class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_instruction}}</textarea>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                            <textarea class="form-control" disabled required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_instruction}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" disabled required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendus_instruction}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" disabled rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_instruction}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="cible_instruction">Cible <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" disabled rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_instruction}}</textarea>
-
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" disabled rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="number" disabled name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
-                                        @if($projet_etude->piece_jointe_instruction)
-                                            <div>
-                                            <span class="badge bg-secondary mt-1"><a target="_blank"
-                                                                                     onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                            Voir la pièce  </a> </span>
-                                            </div>
-                                        @endif
-                                    </div>
-
-
-                                    <div class="col-12" align="right">
-                                        <hr>
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                            Retour</a>
-                                    </div>
-                                </div>
-                        </div>
 
                     </div>
                 </div>

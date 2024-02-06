@@ -218,16 +218,25 @@
                             </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                            <div class="col-md-12 col-10" align="center">
-                                <div class="mb-1">
+                            <div class="row">
+                                <div class="mb-1 col-md-6">
                                     <label>Titre du projet <span
                                             style="color:red;">*</span>
                                     </label>
                                     <input type="text" name="titre_projet"
                                            required="required" id="titre_projet"
                                            class="form-control form-control-sm"
-                                           disabled
+                                               disabled
                                            value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
+                                </div>
+
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" disabled>
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -375,11 +384,21 @@
                                 @csrf
                                 @method('put')
                                 <div class="row">
-                                    <div class="col-md-12 col-12 mt-2 text-center">
-                                        <div class="mb-1">
-                                            <label>Titre du projet <span style="color:red;">*</span>
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Titre du projet <span
+                                                    style="color:red;">*</span>
                                             </label>
                                             <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
+                                        </div>
+
+                                        <div class="mb-1 col-md-6">
+                                            <label>Secteur d'activité du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
+                                                <?= $secteuractivite_projet; ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12 mt-2">

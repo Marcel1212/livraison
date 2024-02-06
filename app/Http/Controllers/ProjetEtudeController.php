@@ -218,7 +218,8 @@ class ProjetEtudeController extends Controller
                 $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
                     ->orderBy('libelle_secteur_activite')
                     ->get();
-                $secteuractivite_projet = "<option value=''> Selectionnez un secteur activité </option>";
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
                 foreach ($secteuractivite_projets as $comp) {
                     $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
