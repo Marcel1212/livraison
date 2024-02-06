@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AffectationProjetEtudeController;
 use App\Http\Controllers\AgreementController;
+use App\Http\Controllers\AgreementPfController;
+use App\Http\Controllers\AgreementProjetEtudeController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\CahierprojetetudeController;
 use App\Http\Controllers\ComiteGestionProjetEtudeController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\SelectionOperateurProjetEtudeController;
 use App\Http\Controllers\TraitementProjetEtudeController;
 use App\Http\Controllers\TraitementSelectionOperateurProjetEtudeController;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
@@ -165,6 +168,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanenteprojetetude/{id}/{id2}/{id3}/editer', [ComitePermanenteProjetEtudeController::class, 'editer'])->name('comitepermanenteprojetetude.editer');
     Route::post('comitepermanenteprojetetude/{id}/{id2}/{id3}/agrementupdate', [ComitePermanenteProjetEtudeController::class, 'agrementupdate'])->name('comitepermanenteprojetetude.agrementupdate');
 
+    //agrement
+    Route::get('agreementprojetetude', [AgreementProjetEtudeController::class, 'index'])->name('agreementprojetetude');
+    Route::get('agreementprojetetude/index', [AgreementProjetEtudeController::class, 'index'])->name('agreementprojetetude.index');
+    Route::get('agreementprojetetude/{id}/{id1}/edit', [AgreementProjetEtudeController::class, 'edit'])->name('agreementprojetetude.edit');
+    Route::get('agreementprojetetude/{id}/show', [AgreementProjetEtudeController::class, 'show'])->name('agreementprojetetude.show');
+
     //Sélection opérateur
     Route::get('selectionoperateurprojetetude', [SelectionOperateurProjetEtudeController::class, 'index'])->name('selectionoperateurprojetetude.index');
     Route::get('selectionoperateurprojetetude/{id_projet_etude}/edit', [SelectionOperateurProjetEtudeController::class, 'edit'])->name('selectionoperateurprojetetude.edit');
@@ -175,6 +184,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('traitementselectionoperateurprojetetude', [TraitementSelectionOperateurProjetEtudeController::class, 'index'])->name('traitementselectionoperateurprojetetude.index');
     Route::get('traitementselectionoperateurprojetetude/{id_projet_etude}/{id_combi_proc}/edit', [TraitementSelectionOperateurProjetEtudeController::class, 'edit'])->name('traitementselectionoperateurprojetetude.edit');
     Route::put('traitementselectionoperateurprojetetude/{id_projet_etude}/update', [TraitementSelectionOperateurProjetEtudeController::class, 'update'])->name('traitementselectionoperateurprojetetude.update');
+
 
     /**********PROJET D'ETUDE FIN***********/
 
@@ -359,10 +369,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsStore'])->name('agreement.substitution');
     Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
-
-
-
-
 
     //traitement
 
