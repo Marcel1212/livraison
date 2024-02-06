@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GenerateCode as Gencode;
-use App\Models\Cahierprojetetude;
-use App\Models\LigneCahierprojetetude;
+use App\Models\CahierProjetetude;
+use App\Models\LigneCahierProjetetude;
 use App\Models\PiecesProjetEtude;
 use App\Models\projetetude;
 use App\Helpers\Crypt;
@@ -32,7 +32,7 @@ use App\Models\ActionFormationPlan;
 use App\Models\User;
 Use DB;
 
-class CahierprojetetudeController extends Controller
+class CahierProjetetudeController extends Controller
 {
     public function index(){
 
@@ -202,7 +202,7 @@ class CahierprojetetudeController extends Controller
                 $input = $request->all();
                 $input['id_users_cahier_projet_etude'] = Auth::user()->id;
                 $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'_'. Carbon::now()->format('Y');
-                $comitegestion = Cahierprojetetude::find($id);
+                $comitegestion = CahierProjetetude::find($id);
                 $comitegestion->update($input);
 
                 return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
@@ -222,7 +222,7 @@ class CahierprojetetudeController extends Controller
                 $tab = $input['projetetude'];
 
                 foreach ($tab as $key => $value) {
-                    LigneCahierprojetetude::create([
+                    LigneCahierProjetetude::create([
                         'id_cahier_projet_etude'=> $id,
                         'id_projet_etude'=> $value
                     ]);
@@ -238,8 +238,8 @@ class CahierprojetetudeController extends Controller
 
             if ($data['action'] == 'Traiter_cahier_projet_soumis'){
 
-                $comite = Cahierprojetetude::find($id);
-                $lignecahierprojetetude = LigneCahierprojetetude::where([['id_cahier_projet_etude','=',$id]])->get();
+                $comite = CahierProjetetude::find($id);
+                $lignecahierprojetetude = LigneCahierProjetetude::where([['id_cahier_projet_etude','=',$id]])->get();
 
                 foreach ($lignecahierprojetetude as $key => $value) {
                     $projet_etude = projetetude::find($value->id_projet_etude);
@@ -276,25 +276,25 @@ class CahierprojetetudeController extends Controller
 
         }
     }
-
-    public function etat($id){
-
-        $id =  Crypt::UrldeCrypt($id);
-
-        $cahier = Cahierprojetetude::find($id);
-
-       $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
-
-       $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
-
-       $etatplanf = EtatCahierPlanDeFormation::get_liste_etat_plan_cahier_plan_f($id);
-
-       $etatbutformation = EtatCahierPlanDeFormation::get_liste_etat_but_formation_cahier_plan_f($id);
-
-       $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
-
-       //dd($etatsecteuractivite);
-
-        return view('cahierprojetetude.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
-    }
+//
+//    public function etat($id){
+//
+//        $id =  Crypt::UrldeCrypt($id);
+//
+//        $cahier = CahierProjetetude::find($id);
+//
+//       $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
+//
+//       $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
+//
+//       $etatplanf = EtatCahierPlanDeFormation::get_liste_etat_plan_cahier_plan_f($id);
+//
+//       $etatbutformation = EtatCahierPlanDeFormation::get_liste_etat_but_formation_cahier_plan_f($id);
+//
+//       $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
+//
+//       //dd($etatsecteuractivite);
+//
+//        return view('cahierprojetetude.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
+//    }
 }

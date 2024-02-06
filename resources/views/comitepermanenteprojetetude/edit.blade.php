@@ -321,14 +321,10 @@
                                 <th>Cout demandé</th>
                                 <th>Cout accordé </th>
                                 <th>Date soumis</th>
-
                             </tr>
 
                             </thead>
                             <tbody>
-
-                                <?php //dd($projetetudes);
-                                $i = 0; ?>
                                 @foreach ($ficheagrements as $key => $projetetude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
