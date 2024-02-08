@@ -32,7 +32,7 @@ use App\Models\ActionFormationPlan;
 use App\Models\User;
 Use DB;
 
-class CahierProjetetudeController extends Controller
+class CahierprojetetudeController extends Controller
 {
     public function index(){
 
