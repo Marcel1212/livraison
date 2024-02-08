@@ -6,7 +6,7 @@ use App\Helpers\GenerateCode as Gencode;
 use App\Models\CahierProjetetude;
 use App\Models\LigneCahierProjetEtude;
 use App\Models\PiecesProjetEtude;
-use App\Models\projetetude;
+use App\Models\projetEtude;
 use App\Helpers\Crypt;
 use App\Models\SecteurActivite;
 use App\Models\TypeComite;
