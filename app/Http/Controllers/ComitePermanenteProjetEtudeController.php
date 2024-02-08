@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ConseillerParAgence;
-use App\Models\Comitepermanente;
+use App\Models\ComitePermanente;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
 use App\Models\SecteurActivite;
@@ -16,7 +16,7 @@ use Hash;
 use DB;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Crypt;
-use App\Models\ComitepermanenteParticipant;
+use App\Models\ComitePermanenteParticipant;
 use App\Models\Entreprises;
 use App\Models\FicheAgrement;
 use App\Models\Motif;
@@ -70,8 +70,8 @@ class ComitePermanenteProjetEtudeController extends Controller
             $input['code_pieces_comite_permanente'] = 'PE';
             $typecomiteinfos = ConseillerParAgence::get_type_comite_projet_etude();
             $input['id_type_comite_comite_permanente'] = intval($typecomiteinfos->id_type_comite);
-            Comitepermanente::create($input);
-            $insertedId = Comitepermanente::latest()->first()->id_comite_permanente;
+            ComitePermanente::create($input);
+            $insertedId = ComitePermanente::latest()->first()->id_comite_permanente;
             return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
         }
     }

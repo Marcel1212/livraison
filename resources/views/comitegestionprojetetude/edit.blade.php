@@ -250,19 +250,21 @@
 
                                 <?php //dd($projetetudes);
                                 $i = 0; ?>
+{{--                                {{dd($projetetudes)}}--}}
+
                                 @foreach ($projetetudes as $key => $projetetude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$projetetude->entreprise->ncc_entreprises }} /
-                                            {{ @$projetetude->entreprise->raison_social_entreprises }}</td>
+                                            {{ @$projetetude->entreprise->raison_social_entreprises }}
+                                        </td>
                                         <td>{{ @$projetetude->code_projet_etude }}</td>
                                         <td>{{ @$projetetude->titre_projet_etude }}</td>
                                         <td>{{ $projetetude->date_soumis }}</td>
                                         <td align="rigth">
                                             {{ number_format($projetetude->montant_projet_instruction) }}</td>
-
                                         <td align="center">
-                                            <?php if($comitegestion->flag_statut_comite_gestion == false && count($comitepermanenteparticipant)>=1){?>
+                                            <?php if($comitegestion->flag_statut_comite_gestion == false && count($comitegestionparticipant)>=1){?>
 {{--                                            @can($lien . '-edit')--}}
                                                 <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
