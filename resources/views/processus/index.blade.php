@@ -1,3 +1,5 @@
+@if(auth()->user()->can('processus-index'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -9,7 +11,7 @@
     <!-- BEGIN: Content-->
                 <h5 class="py-2 mb-1">
                     <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
-                </h5> 
+                </h5>
 
 
                 @if ($message = Session::get('success'))
@@ -22,7 +24,7 @@
                 @endif
 
 
-            
+
 
                                 <div class="row">
                             <!-- Basic Layout -->
@@ -39,7 +41,7 @@
                                         </small>
                                     </div>
                                     <div class="card-body">
-                                                                           
+
                                     <!--begin: Datatable-->
                                     <table class="table table-bordered table-striped table-hover table-sm "
                                            id="exampleData"
@@ -85,5 +87,9 @@
 
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 

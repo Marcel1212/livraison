@@ -1,3 +1,5 @@
+@if(auth()->user()->can('centreimpot-create'))
+
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Parametrage')
@@ -14,7 +16,7 @@
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
                             <div class="breadcrumb-wrapper">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -78,14 +80,18 @@
                             </div>
                         </div>
                     </div>
-                
+
             </div>
         </div>
-    
+
     <!-- END: Content-->
 
 @endsection
-
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif
 
 
 
