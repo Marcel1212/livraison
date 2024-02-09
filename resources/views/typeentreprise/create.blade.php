@@ -1,3 +1,4 @@
+@if(auth()->user()->can('typeentreprise-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -42,7 +43,7 @@
                                                 <div class="mb-1">
                                                     <label>Type entreprise</label>
                                                     <input type="text" name="lielle_type_entrepise" id="lielle_type_entrepise"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
                                             </div>
@@ -73,7 +74,11 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

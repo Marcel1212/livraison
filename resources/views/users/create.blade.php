@@ -1,3 +1,5 @@
+@if(auth()->user()->can('users-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -234,7 +236,11 @@
 </script>-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

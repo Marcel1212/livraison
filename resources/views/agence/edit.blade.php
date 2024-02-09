@@ -1,3 +1,5 @@
+@if(auth()->user()->can('agence-edit'))
+
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
@@ -211,6 +213,10 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+       <script type="text/javascript">
+           window.location = "{{ url('/403') }}";//here double curly bracket
+       </script>
+   @endif
 
 

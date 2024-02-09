@@ -1,3 +1,4 @@
+@if(auth()->user()->can('typeformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -46,8 +47,8 @@
                                                            class="form-control form-control-sm" value="{{$typeformation->type_formation}}"
                                                            required>
                                                 </div>
-                                            </div>                                            
-                                            
+                                            </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
@@ -75,4 +76,8 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
