@@ -116,7 +116,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
+                                        <label>N° de compte contribuable (NCC) </label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->ncc_entreprises}}" disabled="disabled">
@@ -124,7 +124,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
+                                        <label>Secteur activité </label>
                                         <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
@@ -133,7 +133,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Localisation géographique <strong style="color:red;">*</strong></label>
+                                        <label>Localisation géographique </label>
                                         <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->localisation_geographique_entreprise}}" disabled="disabled">
@@ -141,7 +141,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
+                                        <label>Repère d'accès </label>
                                         <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->repere_acces_entreprises}}" disabled="disabled">
@@ -149,7 +149,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
+                                        <label>Adresse postal </label>
                                         <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
@@ -167,7 +167,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Téléphone <strong style="color:red;">*</strong> </label>
+                                                <label class="form-label">Téléphone  </label>
                                                 <input type="text"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
@@ -186,7 +186,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 </select>
                                             </div>
                                             <div class="col-md-8">
-                                                <label class="form-label">Cellulaire Professionnelle <strong style="color:red;">*</strong> </label>
+                                                <label class="form-label">Cellulaire Professionnelle  </label>
                                                 <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
                                                class="form-control form-control-sm"
                                                 value="{{@$infoentreprise->cellulaire_professionnel_entreprises}}" disabled="disabled">
