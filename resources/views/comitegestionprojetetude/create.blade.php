@@ -11,7 +11,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Projet d\' étude')
-    @php($titre='Liste des comités gestions')
+    @php($titre='Liste des comités de gestions')
     @php($soustitre='Ajout de comité de gestion')
     @php($lien='comitegestionprojetetude')
 
@@ -58,7 +58,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite de gestion
+                          Comité de gestion
                         </button>
                       </li>
                       <li class="nav-item">
@@ -119,7 +119,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregistrer"
+                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                        Enregistrer
+                                    </button>
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>

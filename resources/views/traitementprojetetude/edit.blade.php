@@ -216,6 +216,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                    Retour</a>
+                            </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
                             <div class="row">
@@ -307,7 +313,11 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
@@ -345,27 +355,27 @@
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
 
@@ -375,174 +385,186 @@
 
                                 </tbody>
                             </table>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                @if(@$projet_etude->flag_recevablite_projet_etude!=true)
+                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                    @else
+                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                @endif
 
-                        </div>
+</div>
+</div>
 
-                        <div class="tab-pane fade @if(@$projet_etude->flag_recevablite_projet_etude==true  && $id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
-                            <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}" enctype="multipart/form-data">
-                                @csrf
-                                @method('put')
-                                <div class="row">
-                                    <div class="row">
-                                        <div class="mb-1 col-md-6">
-                                            <label>Titre du projet <span
-                                                    style="color:red;">*</span>
-                                            </label>
-                                            <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
-                                        </div>
+<div class="tab-pane fade @if(@$projet_etude->flag_recevablite_projet_etude==true  && $id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
+<form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}" enctype="multipart/form-data">
+   @csrf
+   @method('put')
+   <div class="row">
+       <div class="row">
+           <div class="mb-1 col-md-6">
+               <label>Titre du projet <span
+                       style="color:red;">*</span>
+               </label>
+               <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
+           </div>
 
-                                        <div class="mb-1 col-md-6">
-                                            <label>Secteur d'activité du projet <span
-                                                    style="color:red;">*</span>
-                                            </label>
-                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
-                                                <?= $secteuractivite_projet; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_projet_etude}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_projet_etude}}</textarea>
+           <div class="mb-1 col-md-6">
+               <label>Secteur d'activité du projet <span
+                       style="color:red;">*</span>
+               </label>
+               <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
+                   <?= $secteuractivite_projet; ?>
+               </select>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
+               <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_projet_etude}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
+               </label>
+               <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_projet_etude}}</textarea>
 
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                            <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_projet_etud}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendu_projet_etude}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_projet_etude}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="cible_instruction">Cible <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_projet_etude}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
+               <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_projet_etud}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
+               </label>
+               <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendu_projet_etude}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
+               <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_projet_etude}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="cible_instruction">Cible <span style="color:red;">*</span>
+               </label>
+               <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_projet_etude}}</textarea>
 
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+           </div>
+       </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
+               </label>
+               <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
 
-                                        </div>
-                                    </div>
+           </div>
+       </div>
 
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="number" name="montant_projet_instruction" min="0" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
-                                        <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
-                                    </div>
+       <div class="col-md-4 col-12 mt-2">
+           <div class="mb-1">
+               <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
+               </label>
+               <input type="number" name="montant_projet_instruction" min="0" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="">
+           </div>
+       </div>
+       <div class="col-md-4 mt-2">
+           <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
+               5M</label>
+           <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
+       </div>
 
-                                    <div class="row">
+       <div class="row">
 
-                                        <div class="col-md-12 col-12">
-                                            <div class="mb-1">
-                                                <label>Commentaires <strong style="color:red;">(Obligatoire si rejeté)*</strong>: </label>
-                                                <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="6">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12" align="right">
-                                        <hr>
-                                        @if($projet_etude->flag_soumis_ct_projet_etude != true)
+           <div class="col-md-12 col-12">
+               <div class="mb-1">
+                   <label>Commentaires <strong style="color:red;">(Obligatoire si rejeté)*</strong>: </label>
+                   <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="6">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
+               </div>
+           </div>
+       </div>
+       <div class="col-12" align="right">
+           <hr>
+           @if($projet_etude->flag_soumis_ct_projet_etude != true)
 
-                                        <button onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' type="submit" name="action" value="SoumettreCT"
-                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                            Soumettre au comité
-                                        </button>
-                                            <button type="submit" name="action" value="RejetInstruction"
-                                                    class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
-                                                Rejeter
-                                            </button>
-                                        @endif
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                            Retour</a>
-                                    </div>
-                                </div>
+           <button onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' type="submit" name="action" value="SoumettreCT"
+                   class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+               Soumettre au comité
+           </button>
+               <button type="submit" name="action" value="RejetInstruction"
+                       class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                   Rejeter
+               </button>
+           @endif
+           <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
+           <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+               Retour</a>
+       </div>
+   </div>
 
-                            </form>
-                        </div>
-
-
-                        <div class="tab-pane fade @if(@$projet_etude->flag_recevablite_projet_etude!=true  && $id_etape==5) show active @endif" id="navs-top-traitementprojetetude" role="tabpanel">
-                            <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}" enctype="multipart/form-data">
-                                @csrf
-                                @method('put')
-                                <div class="row">
-                                    <div class="col-md-6 col-12">
-                                        <label class="form-label" for="billings-country">Motif de Recevabilité <strong style="color:red;">*</strong></label>
-
-                                        <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
-                                            <?= $motifs; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="mb-1">
-                                            <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
-                                            <textarea class="form-control form-control-sm"  name="commentaires_recevabilite" id="commentaire_recevable_plan_formation" rows="6">{{@$projet_etude->commentaires_recevabilite}}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-12" align="right">
-                                        <hr>
-                                        <button type="submit" name="action" value="Recevable"
-                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
-                                            Recevable
-                                        </button>
-                                        <button type="submit" name="action" value="MettreEnAttente"
-                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light" >
-                                            Mettre en attente
-                                        </button>
-                                        <button type="submit" name="action" value="NonRecevable"
-                                                class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
-                                            Non recevable
-                                        </button>
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                           href="/{{$lien }}">
-                                            Retour</a>
-                                    </div>
-                                </div>
+</form>
+</div>
 
 
+<div class="tab-pane fade @if(@$projet_etude->flag_recevablite_projet_etude!=true  && $id_etape==5) show active @endif" id="navs-top-traitementprojetetude" role="tabpanel">
+<form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}" enctype="multipart/form-data">
+   @csrf
+   @method('put')
+   <div class="row">
+       <div class="col-md-6 col-12">
+           <label class="form-label" for="billings-country">Motif de Recevabilité <strong style="color:red;">*</strong></label>
 
-                            </form>
-                        </div>
+           <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+               <?= $motifs; ?>
+           </select>
+       </div>
+       <div class="col-md-6 col-12">
+           <div class="mb-1">
+               <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+               <textarea class="form-control form-control-sm"  name="commentaires_recevabilite" id="commentaire_recevable_plan_formation" rows="6">{{@$projet_etude->commentaires_recevabilite}}</textarea>
+           </div>
+       </div>
+       <div class="col-12" align="right">
+           <hr>
+           <button type="submit" name="action" value="Recevable"
+                   class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+               Recevable
+           </button>
+           <button type="submit" name="action" value="MettreEnAttente"
+                   class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light" >
+               Mettre en attente
+           </button>
+           <button type="submit" name="action" value="NonRecevable"
+                   class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+               Non recevable
+           </button>
+           <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
+
+           <a class="btn btn-sm btn-outline-secondary waves-effect"
+              href="/{{$lien }}">
+               Retour</a>
+       </div>
+   </div>
 
 
-                    </div>
-                </div>
-            </div>
 
-        </div>
-    </div>
-    <!-- END: Content-->
+</form>
+</div>
+
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<!-- END: Content-->
 @endsection

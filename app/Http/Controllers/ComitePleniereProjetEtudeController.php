@@ -77,7 +77,12 @@ class ComitePleniereProjetEtudeController extends Controller
             $input['code_pieces'] = 'PE';
             ComitePleniere::create($input);
             $insertedId = ComitePleniere::latest()->first()->id_comite_pleniere;
-            return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            if($request->action=="Enregistrer"){
+                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
+            if($request->action=="Enregistrer_suivant"){
+                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
         }
     }
 
@@ -126,7 +131,7 @@ class ComitePleniereProjetEtudeController extends Controller
 
         if ($request->isMethod('put')) {
             $data = $request->all();
-            if ($data['action'] == 'Modifier'){
+            if ($data['action'] == 'Modifier' || $data['action'] == 'Suivant'){
 
                 $this->validate($request, [
                     'date_debut_comite_pleniere' => 'required',
@@ -142,9 +147,12 @@ class ComitePleniereProjetEtudeController extends Controller
                 $input['id_user_comite_pleniere'] = Auth::user()->id;
                 $comitepleniere = ComitePleniere::find($id);
                 $comitepleniere->update($input);
-
-                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
-
+                if($data['action'] == 'Modifier'){
+                    return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                }
+                if($data['action'] == 'Suivant'){
+                    return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                }
             }
             if ($data['action'] == 'Enregistrer_charger_etude_pour_comite'){
 
@@ -177,9 +185,9 @@ class ComitePleniereProjetEtudeController extends Controller
                     $sujet = "Tenue de comite plénière";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher, $nom_prenom  ,</b>
-                                    <br><br>Vous êtes convié au comite technique des plans de formation qui se déroulera du  ".$comiteencours->date_debut_comite_pleniere." au ".$comiteencours->date_fin_comite_pleniere.".
+                                    <br><br>Vous êtes convié au comite technique des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_pleniere." au ".$comiteencours->date_fin_comite_pleniere.".
 
-                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des plans de formations.
+                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des projets d'étude.
                                     <br>
 
                                     <br><br><br>
@@ -187,9 +195,7 @@ class ComitePleniereProjetEtudeController extends Controller
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-//                    $usernotifie->email
-
-                    $messageMailEnvoi = Email::get_envoimailTemplate("yancho@ldfgroupe.com", $nom_prenom, $messageMail, $sujet, $titre);
+                    $messageMailEnvoi = Email::get_envoimailTemplate($usernotifie->email, $nom_prenom, $messageMail, $sujet, $titre);
                 }
 
 
@@ -330,8 +336,7 @@ class ComitePleniereProjetEtudeController extends Controller
                     }
                 }
                 $projet_etude->update();
-
-                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude modifié avec succès ');
+                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(4).'/editer')->with('success', 'Succes : Projet d\'étude modifié avec succès ');
 
             }
 
