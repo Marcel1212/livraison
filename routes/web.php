@@ -194,13 +194,13 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::group(['middleware' => ['can:role-create']], function () {
+    Route::group(['middleware' => ['can:role-index']], function () {
         Route::resources([
             'roles' => App\Http\Controllers\RoleController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:users-create']], function () {
+    Route::group(['middleware' => ['can:users-index']], function () {
         Route::resources([
             'users' => App\Http\Controllers\UserController::class,
         ]);
@@ -432,6 +432,28 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('planformation/store', [App\Http\Controllers\PlanFormationController::class, 'store'])->name('planformation.store');
         Route::get('planformation/{id}/show', [App\Http\Controllers\PlanFormationController::class, 'show'])->name('planformation.show');
         Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
+    });
+
+    Route::group(['middleware' => ['can:cotisation-index']], function () {
+        Route::get('cotisation', [App\Http\Controllers\CotisationController::class, 'index'])->name('cotisation');
+        Route::get('cotisation/index', [App\Http\Controllers\CotisationController::class, 'index'])->name('cotisation.index');
+        Route::get('cotisation/create', [App\Http\Controllers\CotisationController::class, 'create'])->name('cotisation.create');
+        Route::post('cotisation/store', [App\Http\Controllers\CotisationController::class, 'store'])->name('cotisation.store');
+        Route::get('cotisation/{id}/show', [App\Http\Controllers\CotisationController::class, 'show'])->name('cotisation.show');
+    });
+
+    /*Route::group(['middleware' => ['can:clederepartitionfinancement-index']], function () {
+        Route::get('clederepartitionfinancement', [App\Http\Controllers\CotisationController::class, 'index'])->name('clederepartitionfinancement');
+        Route::get('clederepartitionfinancement/index', [App\Http\Controllers\CotisationController::class, 'index'])->name('clederepartitionfinancement.index');
+        Route::get('clederepartitionfinancement/create', [App\Http\Controllers\CotisationController::class, 'create'])->name('clederepartitionfinancement.create');
+        Route::post('clederepartitionfinancement/store', [App\Http\Controllers\CotisationController::class, 'store'])->name('clederepartitionfinancement.store');
+        Route::get('clederepartitionfinancement/{id}/show', [App\Http\Controllers\CotisationController::class, 'show'])->name('clederepartitionfinancement.show');
+    });*/
+
+    Route::group(['middleware' => ['can:clederepartitionfinancement-index']], function () {
+        Route::resources([
+            'clederepartitionfinancement' => App\Http\Controllers\CleDeRepartitionFinancementController::class,
+        ]);
     });
 
     Route::group(['middleware' => ['can:comitegestion-create']], function () {

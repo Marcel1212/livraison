@@ -14,7 +14,4 @@ class InfosEntreprise
         return (isset($infoentrprise) ? $infoentrprise : '');
     }
 
-
-    
-
 }
