@@ -39,7 +39,7 @@
                                     <li class="nav-item">
                                         <button
                                             type="button"
-                                            class="nav-link"
+                                            class="nav-link @if($idetape=="1") active @endif"
                                             role="tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#navs-top-entreprise"
@@ -51,7 +51,7 @@
                                     <li class="nav-item">
                                         <button
                                             type="button"
-                                            class="nav-link"
+                                            class="nav-link @if($idetape=="2") active @endif"
                                             role="tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#navs-top-infoprojetetude"
@@ -63,7 +63,7 @@
                                     <li class="nav-item">
                                         <button
                                             type="button"
-                                            class="nav-link"
+                                            class="nav-link @if($idetape=="3") active @endif"
                                             role="tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#navs-top-piecesprojetetude"
@@ -75,7 +75,7 @@
                                     <li class="nav-item">
                                         <button
                                             type="button"
-                                            class="nav-link active"
+                                            class="nav-link @if($idetape=="4") active @endif"
                                             role="tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#navs-top-selectionoperateurprojetetude"
@@ -86,7 +86,7 @@
                                     </li>
                                 </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="navs-top-entreprise" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape=="1")show active @endif" id="navs-top-entreprise" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
@@ -187,8 +187,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
                         </div>
-                        <div class="tab-pane fade" id="navs-top-infoprojetetude" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape=="2")show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
                             <div class="row">
                                 <div class="mb-1 col-md-6">
                                     <label>Titre du projet <span
@@ -298,8 +303,7 @@
 
                                 <div class="col-md-4 mt-2">
                                     <div class="mb-1">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
+                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
                                         @if($projet_etude_valide->piece_jointe_instruction)
                                             <div>
                                                 <span class="badge bg-secondary mt-1"><a target="_blank"
@@ -307,12 +311,20 @@
                                                             Voir la pièce  </a> </span>
                                             </div>
                                         @endif
+                                        <div id="defaultFormControlHelp" class="form-text">
+                                            <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                maxi : 5Mo</em>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
                         </div>
-                        <div class="tab-pane fade" id="navs-top-piecesprojetetude" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape=="3") show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
                                    style="margin-top: 13px !important">
                                 <thead>
@@ -377,9 +389,13 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
                         </div>
-                        <div class="tab-pane fade active show" id="navs-top-selectionoperateurprojetetude" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape=="4") show active @endif" id="navs-top-selectionoperateurprojetetude" role="tabpanel">
                             @if(@$projet_etude_valide->flag_selection_operateur_valider_par_processus==true && @$projet_etude_valide->flag_validation_selection_operateur==false )
                                 <form action="{{route($lien.'.mark',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
                                     @method('put')

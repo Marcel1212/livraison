@@ -66,7 +66,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite plénière
+                          Comité plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -127,7 +127,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregistrer"
+                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                        Enregistrer
+                                    </button>
+                                    <button type="submit" value="Enregistrer_suivant"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>

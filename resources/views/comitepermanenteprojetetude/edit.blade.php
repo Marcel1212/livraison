@@ -120,10 +120,8 @@
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
                                         <textarea class="form-control form-control-sm" name="commentaire_comite_permanente" id="commentaire_comite_permanente"
                                             rows="6">{{ $comitepermanente->commentaire_comite_permanente }}</textarea>
-
                                     </div>
                                 </div>
-
 
                                 <div class="col-12" align="right">
                                     <hr>
@@ -134,7 +132,7 @@
                                     </button>
                                     <?php } ?>
                                     <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
-                                        class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                        class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
                                             href="/{{ $lien }}">
@@ -217,9 +215,9 @@
 
 
                             <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
                                 <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                                     <?php } ?>
@@ -280,9 +278,9 @@
 
 
                             <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(2)]) }}"
-                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
                                 <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
-                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                                     <?php //}
@@ -362,6 +360,4 @@
             </div>
         </div>
     </div>
-
-
 @endsection

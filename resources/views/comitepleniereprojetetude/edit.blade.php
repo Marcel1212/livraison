@@ -74,7 +74,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link  @if($idetape==3) active @endif"
+                          class="nav-link @if(count($comitepleniereparticipant)<1) disabled @else @if($idetape==3) active @endif  @endif "
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-liste"
@@ -134,6 +134,10 @@
                                             <button type="submit" name="action" value="Modifier"
                                                     class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                 Modifier
+                                            </button>
+                                            <button type="submit" name="action" value="Suivant"
+                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                Suivant
                                             </button>
                                         <?php } ?>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">

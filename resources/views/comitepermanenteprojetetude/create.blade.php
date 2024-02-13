@@ -105,10 +105,13 @@
                                     </div>
                                 </div>
 
-
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregistrer"
+                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                        Enregistrer
+                                    </button>
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>
