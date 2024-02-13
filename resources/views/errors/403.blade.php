@@ -66,7 +66,7 @@
         <a href="{{ route('dashboard') }}" class="btn btn-primary mb-4">Retour à l'accueil</a>
         <div class="mt-4">
           <img
-            src="{{asset('/assets/img/page-misc-error.png')}}"
+            src="{{asset('/assets/img/403.png')}}"
             alt="page-misc-error"
             width="720"
             class="img-fluid" />
