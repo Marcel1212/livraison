@@ -321,7 +321,7 @@ class ComiteGestionProjetEtudeController extends Controller
                 $projet_etude->flag_valider_comite_gestion_projet_etude = true;
                 $input = $request->all();
                 $projet_etude->update($input);
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
+                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(4).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
             }
 
             if($data['action'] === 'Traiter_valider_projet'){
