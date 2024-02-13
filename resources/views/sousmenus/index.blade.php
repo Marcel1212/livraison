@@ -1,3 +1,4 @@
+@if(auth()->user()->can('sous-module-index'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -67,7 +68,7 @@
                                     <?php } ?>
                                 </td>
                                 <td align="center">
-                                    @can('role-edit')
+                                    @can('sous-module-edit')
                                         <a href="{{ route('sousmenus.edit',$sousmenu->id_sousmenu) }}"
                                            class=" "
                                            title="Modifier"><img
@@ -85,7 +86,10 @@
     </div>
 
 @endsection
-
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
