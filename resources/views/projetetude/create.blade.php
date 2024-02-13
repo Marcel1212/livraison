@@ -2,8 +2,8 @@
 @section('content')
 
     @php($Module='Demandes')
-    @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de plan de formation')
+    @php($titre='Liste des projets d\'études')
+    @php($soustitre='Demande de projet d\'étude')
     @php($lien='projetetude')
 
     <!-- BEGIN: Content-->

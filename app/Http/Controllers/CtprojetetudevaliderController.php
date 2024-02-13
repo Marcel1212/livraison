@@ -22,7 +22,7 @@ class CtprojetetudevaliderController extends Controller
     public function index(){
         $user =  Auth::user();
         $Idroles = Menu::get_id_profil($user->id);
-        $Resultat = null;
+            $Resultat = null;
         $ResultatEtap = DB::table('vue_processus')
             ->where('id_roles', '=', $Idroles)
             ->get();
@@ -34,10 +34,11 @@ class CtprojetetudevaliderController extends Controller
                     ->join('projet_etude','p.id_demande','projet_etude.id_projet_etude')
                     ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
                     ->join('users','projet_etude.id_charge_etude','users.id')
-                    ->where('projet_etude.id_departement',$user->id_departement)
+//                    ->where('projet_etude.id_departement',$user->id_departement)
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
                         ['v.id_processus', '=', $r->id_processus],
+                        ['p.id_combi_proc', '=', $r->id_combi_proc],
                         ['v.code', '=', 'PE'],
                         ['p.id_roles', '=', $Idroles]
                     ])
