@@ -1,3 +1,5 @@
+@if(auth()->user()->can('formejuridique-index'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -88,3 +90,8 @@
     </div>
     <!-- END: Content-->
 @endsection
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif

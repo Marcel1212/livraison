@@ -1,144 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<html
+  lang="fr"
+  class="light-style layout-wide customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{{asset('/assets/')}}"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  <title>404</title>
+    <title></title>
 
-  <style id="" media="all">
-    /* cyrillic-ext */
-    @font-face {
-      font-family: 'Montserrat';
-      font-style: normal;
-      font-weight: 900;
-      font-display: swap;
-      src: url(/fonts.gstatic.com/s/montserrat/v25/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCvC73w0aXpsog.woff2) format('woff2');
-      unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
-    }
+    <meta name="description" content="" />
 
-    * {
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box
-    }
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{asset('/assets/img/favicon/favicon.ico')}}" />
 
-    body {
-      padding: 0;
-      margin: 0
-    }
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
+        rel="stylesheet"/>
 
-    #notfound {
-      position: relative;
-      height: 100vh
-    }
+    <!-- Icons -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/fontawesome.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/tabler-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/flag-icons.css')}}" />
 
-    #notfound .notfound {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%)
-    }
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{asset('/assets/css/demo.css')}}" />
 
-    .notfound {
-      max-width: 520px;
-      width: 100%;
-      line-height: 1.4;
-      text-align: center
-    }
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/node-waves/node-waves.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/typeahead-js/typeahead.css')}}" />
 
-    .notfound .notfound-404 {
-      position: relative;
-      height: 240px
-    }
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/pages/page-misc.css')}}" />
 
-    .notfound .notfound-404 h1 {
-      font-family: montserrat, sans-serif;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-      font-size: 252px;
-      font-weight: 900;
-      margin: 0;
-      color: #262626;
-      text-transform: uppercase;
-      letter-spacing: -40px;
-      margin-left: -20px
-    }
+    <!-- Helpers -->
+    <script src="{{asset('/assets/vendor/js/helpers.js')}}"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="{{asset('/assets/vendor/js/template-customizer.js')}}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{asset('/assets/js/config.js')}}"></script>
+  </head>
 
-    .notfound .notfound-404 h1>span {
-      text-shadow: -8px 0 0 #fff
-    }
+  <body style="background-color: rgba(255,242,223,0.65)">
+    <!-- Content -->
 
-    .notfound .notfound-404 h3 {
-      font-family: cabin, sans-serif;
-      position: relative;
-      font-size: 16px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #262626;
-      margin: 0;
-      letter-spacing: 3px;
-      padding-left: 6px
-    }
-
-    .notfound h2 {
-      font-family: cabin, sans-serif;
-      font-size: 20px;
-      font-weight: 400;
-      text-transform: uppercase;
-      color: #000;
-      margin-top: 0;
-      margin-bottom: 25px
-    }
-
-    @media only screen and (max-width: 767px) {
-      .notfound .notfound-404 {
-        height: 200px
-      }
-
-      .notfound .notfound-404 h1 {
-        font-size: 200px
-      }
-    }
-
-    @media only screen and (max-width: 480px) {
-      .notfound .notfound-404 {
-        height: 162px
-      }
-
-      .notfound .notfound-404 h1 {
-        font-size: 162px;
-        height: 150px;
-        line-height: 162px
-      }
-
-      .notfound h2 {
-        font-size: 16px
-      }
-    }
-  </style>
-  <meta name="robots" content="noindex, follow">
-</head>
-
-<body>
-  <div id="notfound">
-    <div class="notfound">
-      <div class="notfound-404">
-        <h3>Oops! Page non trouvée</h3>
-        <h1><span>4</span><span>0</span><span>4</span></h1>
+    <!-- Error -->
+    <div class="container-xxl container-p-y " >
+      <div class="misc-wrapper">
+        <h2 class="mb-1 mt-4">Page non trouvée</h2>
+        <p class="mb-4 mx-2">Oups ! 😖 L'URL demandée n'a pas été trouvée sur ce serveur.</p>
+        <a href="{{ route('dashboard') }}" class="btn btn-primary mb-4">Retour à l'accueil</a>
+        <div class="mt-4">
+          <img
+            src="{{asset('/assets/img/page-misc-error.png')}}"
+            alt="page-misc-error"
+            width="720"
+            class="img-fluid" />
+        </div>
       </div>
-      <h2>nous sommes désolés, mais la page que vous avez demandée n'a pas été trouvée</h2>
-
-      <h3>Veuillez contactez l'administrateur</h3>
     </div>
-  </div>
-</body>
 
+  </body>
 </html>

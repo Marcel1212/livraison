@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
 
 Route::view("/403", "errors.403")->name('403');
+Route::view("/404", "errors.404")->name('404');
+Route::view("/500", "errors.500")->name('500');
 //Route::get('/403', function () { return redirect('/home/dashboard'); });
 
 Route::match(['get', 'post'], '/', [App\Http\Controllers\IndexController::class, 'index'])->name('/');

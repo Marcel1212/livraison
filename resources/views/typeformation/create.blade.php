@@ -1,3 +1,4 @@
+@if(auth()->user()->can('typeformation-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -42,10 +43,10 @@
                                                 <div class="mb-1">
                                                     <label>type de formation </label>
                                                     <input type="text" name="type_formation" id="type_formation"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
-                                            </div>                                            
+                                            </div>
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
@@ -72,7 +73,11 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

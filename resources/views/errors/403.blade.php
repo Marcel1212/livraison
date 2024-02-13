@@ -1,161 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://fonts.googleapis.com/css?family=Raleway:500,800" rel="stylesheet">
-  <title>403</title>
-  <style>
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&family=Roboto:wght@100;300&display=swap");
-:root {
-  --button: #b3b3b3;
-  --button-color: #0a0a0a;
-  --shadow: #000;
-  --bg: #737373;
-  --header: #7a7a7a;
-  --color: #fafafa;
-  --lit-header: #e6e6e6;
-  --speed: 2s;
-}
-* {
-  box-sizing: border-box;
-  transform-style: preserve-3d;
-}
-@property --swing-x {
-  initial-value: 0;
-  inherits: false;
-  syntax: '<integer>';
-}
-@property --swing-y {
-  initial-value: 0;
-  inherits: false;
-  syntax: '<integer>';
-}
-body {
-  min-height: 100vh;
-  display: flex;
-  font-family: 'Roboto', sans-serif;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
-  color: var(--color);
-  perspective: 1200px;
-}
-a {
-  text-transform: uppercase;
-  text-decoration: none;
-  background: var(--button);
-  color: var(--button-color);
-  padding: 1rem 4rem;
-  border-radius: 4rem;
-  font-size: 0.875rem;
-  letter-spacing: 0.05rem;
-}
-p {
-  font-weight: 100;
-}
-h1 {
-  -webkit-animation: swing var(--speed) infinite alternate ease-in-out;
-          animation: swing var(--speed) infinite alternate ease-in-out;
-  font-size: clamp(5rem, 40vmin, 20rem);
-  font-family: 'Open Sans', sans-serif;
-  margin: 0;
-  margin-bottom: 1rem;
-  letter-spacing: 1rem;
-  transform: translate3d(0, 0, 0vmin);
-  --x: calc(50% + (var(--swing-x) * 0.5) * 1%);
-  background: radial-gradient(var(--lit-header), var(--header) 45%) var(--x) 100%/200% 200%;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-h1:after {
-  -webkit-animation: swing var(--speed) infinite alternate ease-in-out;
-          animation: swing var(--speed) infinite alternate ease-in-out;
-  content: "404";
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: var(--shadow);
-  filter: blur(1.5vmin);
-  transform: scale(1.05) translate3d(0, 12%, -10vmin) translate(calc((var(--swing-x, 0) * 0.05) * 1%), calc((var(--swing-y) * 0.05) * 1%));
-}
-.cloak {
-  animation: swing var(--speed) infinite alternate-reverse ease-in-out;
-  height: 100%;
-  width: 100%;
-  transform-origin: 50% 30%;
-  transform: rotate(calc(var(--swing-x) * -0.25deg));
-  background: radial-gradient(40% 40% at 50% 42%, transparent, #000 35%);
-}
-.cloak__wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: hidden;
-}
-.cloak__container {
-  height: 250vmax;
-  width: 250vmax;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.info {
-  text-align: center;
-  line-height: 1.5;
-  max-width: clamp(16rem, 90vmin, 25rem);
-}
-.info > p {
-  margin-bottom: 3rem;
-}
-@-webkit-keyframes swing {
-  0% {
-    --swing-x: -100;
-    --swing-y: -100;
-  }
-  50% {
-    --swing-y: 0;
-  }
-  100% {
-    --swing-y: -100;
-    --swing-x: 100;
-  }
-}
-@keyframes swing {
-  0% {
-    --swing-x: -100;
-    --swing-y: -100;
-  }
-  50% {
-    --swing-y: 0;
-  }
-  100% {
-    --swing-y: -100;
-    --swing-x: 100;
-  }
-}
 
+<html
+  lang="fr"
+  class="light-style layout-wide customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{{asset('/assets/')}}"
+  data-template="vertical-menu-template">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-  </style>
-</head>
-<body>
+    <title></title>
 
-<h1>403</h1>
-<div class="cloak__wrapper">
-  <div class="cloak__container">
-    <div class="cloak"></div>
-  </div>
-</div>
-<div class="info">
-  <h2>ACCÈS REFUSÉ.</h2>
-  <p>Oups, vous n'êtes pas autorisé à accéder à cette page.</p><a href="{{ route('dashboard') }}" rel="noreferrer noopener">
-ALLER À LA PAGE D'ACCUEIL</a>
-</div>
-</body>
+    <meta name="description" content="" />
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{asset('/assets/img/favicon/favicon.ico')}}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
+        rel="stylesheet"/>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/fontawesome.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/tabler-icons.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/flag-icons.css')}}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/rtl/theme-default.css')}}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{asset('/assets/css/demo.css')}}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/node-waves/node-waves.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}" />
+    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/typeahead-js/typeahead.css')}}" />
+
+    <!-- Page CSS -->
+    <!-- Page -->
+    <link rel="stylesheet" href="{{asset('/assets/vendor/css/pages/page-misc.css')}}" />
+
+    <!-- Helpers -->
+    <script src="{{asset('/assets/vendor/js/helpers.js')}}"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="{{asset('/assets/vendor/js/template-customizer.js')}}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{asset('/assets/js/config.js')}}"></script>
+  </head>
+
+  <body style="background-color: rgba(255,242,223,0.65)">
+    <!-- Content -->
+
+    <!-- Error -->
+    <div class="container-xxl container-p-y " >
+      <div class="misc-wrapper">
+        <h2 class="mb-1 mt-4">Acces refusé</h2>
+        <p class="mb-4 mx-2">Oups ! 😖 Vous n'avez pas droit a cette page.</p>
+        <a href="{{ route('dashboard') }}" class="btn btn-primary mb-4">Retour à l'accueil</a>
+        <div class="mt-4">
+          <img
+            src="{{asset('/assets/img/page-misc-error.png')}}"
+            alt="page-misc-error"
+            width="720"
+            class="img-fluid" />
+        </div>
+      </div>
+    </div>
+
+  </body>
 </html>
