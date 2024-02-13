@@ -205,24 +205,36 @@
                                 <div class="col-12" align="right">
                                     <hr>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
-                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                    <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
                                 </div>
 
                             </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                            <div class="col-md-12 col-10" align="center">
-                                <div class="mb-1">
-                                    <label>Titre du projet <span
+                            <div class="row">
+                                <div class="col-md-6 col-10">
+                                    <div class="mb-1">
+                                        <label>Titre du projet <span
+                                                style="color:red;">*</span>
+                                        </label>
+                                        <input type="text" name="titre_projet"
+                                               required="required" id="titre_projet"
+                                               class="form-control form-control-sm"
+                                               disabled
+                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+
+                                               placeholder="ex : Perfectionnement ..">
+                                    </div>
+                                </div>
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
                                             style="color:red;">*</span>
                                     </label>
-                                    <input type="text" name="titre_projet"
-                                           required="required" id="titre_projet"
-                                           class="form-control form-control-sm"
-                                           disabled
-                                           value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
-
-                                           placeholder="ex : Perfectionnement ..">
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                        disabled
+                                        @endif>
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
@@ -293,17 +305,21 @@
                                 </div>
                             </div>
 
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
+
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
-                                   id="exampleData"
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Type de pièce</th>
-                                    <th>Libelle de la pièce</th>
-                                    <th>Action</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -330,31 +346,30 @@
                                                 Offre financière
                                             @endif
                                         </td>
-                                        <td>{{ $piece->libelle_pieces }}</td>
                                         <td align="center">
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
 
                                         </td>
@@ -363,19 +378,33 @@
 
                                 </tbody>
                             </table>
-
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
                         </div>
 
                         <div class="tab-pane fade @if($id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
                             <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->id_charge_etude == $idconnect){?>
-                            <form method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}">
-                                    @csrf
-                                    @method('put')
-                                    <button type="submit" name="action" value="Traiter_valider_projet"
-                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Valider le comite technique en plénière
-                                    </button>
-                                </form>
+                            <div class="col-12" align="right">
+                                <div class="row">
+
+
+                                    <div class="col-8">
+                                    </div>
+                                    <div class="col-4" align="right">
+                                <form method="POST" class="form mb-2" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}">
+                                        @csrf
+                                        @method('put')
+                                        <button type="submit" name="action" value="Traiter_valider_projet"
+                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Valider le comité technique plénière
+                                        </button>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
                             <?php } ?>
 
 
@@ -459,14 +488,18 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 mt-2">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
+                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
                                         <input type="file" name="fichier_instruction" class="form-control" placeholder="">
                                         @if($projet_etude->piece_jointe_instruction)
                                             <span class="badge bg-secondary mt-1"><a target="_blank"
                                                                                 onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
+
                                         @endif
+                                        <div id="defaultFormControlHelp" class="form-text">
+                                            <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                maxi : 5Mo</em>
+                                        </div>
                                     </div>
 
 
@@ -478,6 +511,8 @@
                                             Modifier
                                         </button>
                                         <?php } ?>
+                                        <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
+
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
                                     </div>

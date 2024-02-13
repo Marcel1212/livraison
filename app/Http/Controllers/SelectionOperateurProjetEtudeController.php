@@ -18,8 +18,9 @@ class SelectionOperateurProjetEtudeController extends Controller{
         return view('selectionoperateurprojetetude.index', compact('projet_etude_valides'));
     }
 
-    public function edit($id_projet_etude){
+    public function edit($id_projet_etude,$idetape){
         $id_projet_etude = Crypt::UrldeCrypt($id_projet_etude);
+        $idetape = Crypt::UrldeCrypt($idetape);
 
         if(isset($id_projet_etude)){
             $projet_etude_valide = ProjetEtude::where('flag_fiche_agrement',true)
@@ -55,7 +56,11 @@ class SelectionOperateurProjetEtudeController extends Controller{
                     ->where('projet_etude_has_entreprises.id_projet_etude','=',$id_projet_etude)
                     ->get();
 
-                $operateur_valider = "<option value='".$projet_etude_valide->operateur->id_entreprises."'> " . $projet_etude_valide->operateur->raison_social_entreprises . "</option>";
+                if(isset($projet_etude_valide->operateur)){
+                    $operateur_valider = "<option value='".$projet_etude_valide->operateur->id_entreprises."'> " . $projet_etude_valide->operateur->raison_social_entreprises . "</option>";
+                }else{
+                    $operateur_valider = "<option value=''> Selectionnez un opérateur </option>";
+                }
                 foreach ($operateur_validers as $op) {
                     $operateur_valider .= "<option value='" .$op->id_entreprises. "'>" . mb_strtoupper($op->raison_social_entreprises) . " </option>";
                 }
@@ -78,7 +83,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 }
 
 
-                return view('selectionoperateurprojetetude.edit', compact('operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
+                return view('selectionoperateurprojetetude.edit', compact('idetape','operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
             }else{
 
             }

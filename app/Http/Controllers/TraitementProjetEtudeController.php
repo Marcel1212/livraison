@@ -142,7 +142,7 @@ class TraitementProjetEtudeController extends Controller
                                     ";
                             $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                         }else{}
-                        return redirect()->route('traitementprojetetude.index')->with('success', 'Recevabilité effectué avec succès.');
+                        return redirect()->route('traitementprojetetude.index')->with('success', 'Recevabilité effectuée avec succès.');
 
                     }
                 }
@@ -170,7 +170,7 @@ class TraitementProjetEtudeController extends Controller
                             $sujet = "Recevabilité du projet d'étude sur e-FDFP";
                             $titre = "Bienvenue sur ".@$logo->mot_cle;
                             $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre projet d'étude de formation sur e-FDFP, et il a été
+                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
                                    mis en attente nous vous prions de bien vouloir patienter.
 
                                     <br><b>Motif de la mise en attente  : </b> ".@$projet_etude->motif->libelle_motif."

@@ -62,8 +62,13 @@ class CahierprojetetudeController extends Controller
             $input['date_creer_cahier_projet_etude'] = Carbon::now();
             $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
             $cahier =  CahierProjetetude::create($input);
+            if($request->action=="Enregistrer"){
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
 
-            return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            if($request->action=="Enregistrer_suivant"){
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
 
         }
     }
@@ -87,7 +92,7 @@ class CahierprojetetudeController extends Controller
     public function editer($id,$id2,$id3)
     {
         $id =  Crypt::UrldeCrypt($id);
-        $idcomite = Crypt::UrldeCrypt($id2);
+        $id_cahier_projet_etude = Crypt::UrldeCrypt($id2);
         $id_etape = Crypt::UrldeCrypt($id3);
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
@@ -147,7 +152,7 @@ class CahierprojetetudeController extends Controller
                         'lettre_engagement',
                         'offre_technique',
                         'projet_etude',
-                        'idcomite',
+                        'id_cahier_projet_etude',
                         'secteuractivite_projet',
                         'motifs',
                         'offre_financiere',

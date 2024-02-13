@@ -197,6 +197,7 @@
                                 </div>
 
                             </div>
+
                         </div>
                         <div class="tab-pane fade " id="navs-top-infoprojetetude" role="tabpanel">
                             <div class="row">
@@ -309,6 +310,11 @@
                                                                                  onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span></div>
                                     @endif
+
+                                    <div id="defaultFormControlHelp" class="form-text">
+                                        <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                            maxi : 5Mo</em>
+                                    </div>
                                 </div>
                                 </div>
                         </div>
@@ -321,8 +327,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Type de pièce</th>
-                                    <th>Libelle de la pièce</th>
-                                    <th>Action</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -349,32 +354,30 @@
                                                 Offre financière
                                             @endif
                                         </td>
-                                        <td>{{ $piece->libelle_pieces }}</td>
                                         <td align="center">
-                                            {{--                                            @can($lien.'-edit')--}}
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
 
                                             @if(@$projet_etude->flag_soumis == false)
