@@ -140,7 +140,7 @@ $logo = Menu::get_logo();
     </div>
     <div class="col-xl-12">
         <h3>Titre du projet: {{@$agreement->titre_projet_instruction}}</h3>
-        <p class="text-danger" style="color:red; font-weight: bold">Montant Alloué au projet : {{@$agreement->montant_projet}}</p>
+        <p class="text-danger" style="color:red; font-weight: bold">Montant Alloué au projet : {{@number_format($agreement->montant_projet)}} XOF</p>
     </div>
 
     <div class="col-xl-12">
