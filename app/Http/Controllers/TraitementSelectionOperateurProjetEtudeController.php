@@ -7,8 +7,10 @@ use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Models\Entreprises;
 use App\Models\Parcours;
+use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,6 +40,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                         ['v.code', '=', 'SOPE'],
                         ['p.id_roles', '=', $id_roles]
                     ])->get();
+
             }
         }
         return view('traitementselectionoperateurprojetetude.index', compact('resultat'));
@@ -51,37 +54,26 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
         if(isset($id_projet_etude)){
             $projet_etude_valide = ProjetEtude::find($id_projet_etude);
 
-            $operateurs = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)
-//                    ->where('id_secteur_activite',$projet_etude_valide->id_secteur_activite)
-                ->get();
-
             $user = User::find($projet_etude_valide->id_user);
             $entreprise_mail = $user->email;
             $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','1')->first();
-            $piecesetude1 = $piecesetude->libelle_pieces;
+            $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude_valide->id_projet_etude)->get();
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','2')->first();
-            $piecesetude2 = $piecesetude->libelle_pieces;
+            $pays = Pays::all();
+            $pay = "<option value='".$entreprise->pay->id_pays."'> " . $entreprise->pay->indicatif . "</option>";
+            foreach ($pays as $comp) {
+                $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+            }
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','3')->first();
-            $piecesetude3 = $piecesetude->libelle_pieces;
+            $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                ->orderBy('libelle_secteur_activite')
+                ->get();
 
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','4')->first();
-            $piecesetude4 = $piecesetude->libelle_pieces;
-
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','5')->first();
-            $piecesetude5 = $piecesetude->libelle_pieces;
-
-            $piecesetude = PiecesProjetEtude::where('id_projet_etude',$id_projet_etude)
-                ->where('code_pieces','6')->first();
-            $piecesetude6 = $piecesetude->libelle_pieces;
+            $secteuractivite_projet = "<option value='".$projet_etude_valide->secteurActivite->id_secteur_activite."'> " . $projet_etude_valide->secteurActivite->libelle_secteur_activite . "</option>";
+            foreach ($secteuractivite_projets as $comp) {
+                $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+            }
         }
 
         $ResultProssesList = DB::table('vue_processus_validation_affichage as v')
@@ -104,7 +96,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
             ['id_combi_proc','=',$id_combi_proc]
         ])->get();
 
-        return view('traitementselectionoperateurprojetetude.edit', compact('projet_etude_valide','id_combi_proc','piecesetude1','piecesetude2','piecesetude3','piecesetude4','piecesetude5','piecesetude6','entreprise','entreprise_mail','operateurs','ResultProssesList','parcoursexist'));
+        return view('traitementselectionoperateurprojetetude.edit', compact('secteuractivite_projet','pay','pieces_projets','projet_etude_valide','id_combi_proc','entreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }
 
     public function update(Request $request, $id_projet_etude)
@@ -151,7 +143,6 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                             ->first();
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-
                             $projet_etude_valide->flag_selection_operateur_valider_par_processus = true;
                             $projet_etude_valide->flag_validation_selection_operateur = true;
                             $projet_etude_valide->date_validation_selection_operateur = now();
@@ -159,7 +150,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
 
 //                            $infoentreprise = Entreprises::find($projet_etude_valide->id_entreprises);
-00//
+//
 //                            //Envoie notification au charger de plan de formation en cas de validation
 //                            if (isset($planformation->email_professionnel_charge_plan_formation)) {
 //                                $sujet = "Demande d'annulation du plan de formation (code:" .

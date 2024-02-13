@@ -311,7 +311,6 @@
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
-                                   id="exampleData"
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>

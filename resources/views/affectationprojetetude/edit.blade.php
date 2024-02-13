@@ -200,8 +200,9 @@
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
                                     <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect  ms-sm-3 me-1" href="/{{$lien }}">Retour</a>
+
                                 </div>
 
                             </div>
@@ -311,7 +312,6 @@
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
-                                   id="exampleData"
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>
@@ -413,15 +413,18 @@
                                             <br>
 
                                             <div class="col-12" align="right">
-                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary " align="right">Précédent</a>
+                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1 " align="right">Précédent</a>
                                                 @if(@$projet_etude->flag_soumis_chef_depart==false)
 
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chef de service sélectionné ? . Cette action est irréversible.")) return false;'  type="submit" name="action"
                                                         value="soumission_projet_etude_cd"
-                                                        class="ms-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Soumettre au chef de service
                                                 </button>
                                                 @endif
+
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
+
 
                                             </div>
                                         </div>
@@ -462,10 +465,13 @@
 
                                                 <button type="submit" name="action"
                                                         value="soumission_projet_etude_cs"
-                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Soumettre au  chargé d'étude
                                                 </button>
                                                     @endif
+
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
+
                                             </div>
                                         </div>
                                     </form>
