@@ -244,7 +244,7 @@
                                         <textarea class="form-control" required="required"
                                                   disabled
                                                   rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_specifique" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_specifiqueinstructiond}}@endisset</textarea>
+                                                  name="objectif_specifique" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_specifique_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
