@@ -376,7 +376,10 @@
                                     <th>No</th>
                                     <th>Type de pièce</th>
                                     <th>&nbsp;</th>
+                                    @if(@$projet_etude->flag_soumis == false)
+
                                     <th>Action</th>
+                                        @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -429,14 +432,16 @@
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                         </td>
+                                        @if(@$projet_etude->flag_soumis == false)
+
                                         <td class="text-center">
-                                            @if(@$projet_etude->flag_soumis == false)
                                                 <a href="{{ route($lien.'.deletefpe',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_piece_projet'=>\App\Helpers\Crypt::UrlCrypt($piece->id_pieces_projet_etude)]) }}"
                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette pièce?")) return false;'
                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                            @endif
 
                                         </td>
+                                        @endif
+
                                     </tr>
                                 @endforeach
 

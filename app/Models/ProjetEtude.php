@@ -99,6 +99,10 @@ class ProjetEtude extends Model
         return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
     }
 
+    public function operateur()
+    {
+        return $this->belongsTo(Entreprises::class, 'id_operateur_selection', 'id_entreprises');
+    }
 
 
 

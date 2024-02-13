@@ -178,9 +178,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Sélection opérateur
     Route::get('selectionoperateurprojetetude', [SelectionOperateurProjetEtudeController::class, 'index'])->name('selectionoperateurprojetetude.index');
-    Route::get('selectionoperateurprojetetude/{id_projet_etude}/edit', [SelectionOperateurProjetEtudeController::class, 'edit'])->name('selectionoperateurprojetetude.edit');
-    Route::post('selectionoperateurprojetetude/{id_projet_etude}/update', [SelectionOperateurProjetEtudeController::class, 'update'])->name('selectionoperateurprojetetude.update');
+    Route::get('selectionoperateurprojetetude/{id_projet_etude}/{id_etape}/edit', [SelectionOperateurProjetEtudeController::class, 'edit'])->name('selectionoperateurprojetetude.edit');
+    Route::put('selectionoperateurprojetetude/{id_projet_etude}/update', [SelectionOperateurProjetEtudeController::class, 'update'])->name('selectionoperateurprojetetude.update');
     Route::put('selectionoperateurprojetetude/{id_projet_etude}/mark', [SelectionOperateurProjetEtudeController::class, 'mark'])->name('selectionoperateurprojetetude.mark');
+    Route::get('selectionoperateurprojetetude/{id_projet_etude}/{id_operateur}/deleteoperateurpe', [SelectionOperateurProjetEtudeController::class, 'deleteoperateurpe'])->name('selectionoperateurprojetetude.deleteoperateurpe');
+
 
     //Traitement sélection opérateur
     Route::get('traitementselectionoperateurprojetetude', [TraitementSelectionOperateurProjetEtudeController::class, 'index'])->name('traitementselectionoperateurprojetetude.index');
