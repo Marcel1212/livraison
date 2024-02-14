@@ -88,22 +88,21 @@ $reseaux = Menu::get_info_reseaux();
             let id_forme_juridiques = myArray[1];
 
             if (code_forme_juridique === 'PR') {
-                document.getElementById("rccm_demande_enrolement").disabled = false;
-                document.getElementById("numero_cnps_demande_enrolement").disabled = false;
-                document.getElementById("piece_rccm_demande_enrolement").disabled = false;
-                document.getElementById("piece_attestation_immatriculati").disabled = false;
+                document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
+                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
+                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
+                document.getElementById("piece_attestation_immatriculati_div").style.display = 'block';
             } else if (code_forme_juridique === 'PU') {
-                document.getElementById("rccm_demande_enrolement").disabled = true;
-                document.getElementById("numero_cnps_demande_enrolement").disabled = true;
-                document.getElementById("piece_rccm_demande_enrolement").disabled = true;
-                document.getElementById("piece_attestation_immatriculati").disabled = true;
+                document.getElementById("rccm_demande_enrolement_div").style.display = 'none';
+                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'none';
+                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'none';
+                document.getElementById("piece_attestation_immatriculati_div").style.display = 'none';
             } else {
-                document.getElementById("rccm_demande_enrolement").disabled = false;
-                document.getElementById("numero_cnps_demande_enrolement").disabled = false;
-                document.getElementById("piece_rccm_demande_enrolement").disabled = false;
-                document.getElementById("piece_attestation_immatriculati").disabled = false;
+                document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
+                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
+                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
+                document.getElementById("piece_attestation_immatriculati_div").style.display = 'block';
             }
-
         }
 
     </script>
@@ -362,12 +361,12 @@ $reseaux = Menu::get_info_reseaux();
                                                                     value="{{ old('ncc_demande_enrolement') }}"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 col-md-4">
+                                                        <div class="col-4 col-md-4" id="rccm_demande_enrolement_div">
                                                             <div class="mb-3">
                                                                 <label class="form-label"
                                                                        for="collapsible-rccm-name">Numéro du registre de
                                                                     commerce (RCCM)<strong
-                                                                        style="color:red;">*</strong></label>
+                                                                        style="color:red;" id="rccm_demande_enrolement_label">*</strong></label>
                                                                 <input
                                                                     type="text"
                                                                     class="form-control form-control-sm"
@@ -378,11 +377,11 @@ $reseaux = Menu::get_info_reseaux();
                                                                     value="{{ old('rccm_demande_enrolement') }}"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-4 col-md-4">
+                                                        <div class="col-4 col-md-4" id="numero_cnps_demande_enrolement_div">
                                                             <div class="mb-3">
                                                                 <label class="form-label"
                                                                        for="collapsible-cnps-name">Numéro CNPS <strong
-                                                                        style="color:red;">*</strong></label>
+                                                                        style="color:red;" id="numero_cnps_demande_enrolement_label">*</strong></label>
 
                                                                 <input
                                                                     type="text"
@@ -421,9 +420,9 @@ $reseaux = Menu::get_info_reseaux();
                                                                 maxi : 5Mo</em>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" id="piece_rccm_demande_enrolement_div">
                                                         <label class="form-label"> Pièce du RCCM <strong
-                                                                style="color:red;">*</strong></label>
+                                                                style="color:red;"  id="piece_rccm_demande_enrolement_label">*</strong></label>
                                                         <input type="file" name="piece_rccm_demande_enrolement"
                                                                id="piece_rccm_demande_enrolement"
                                                                class="form-control form-control-sm" placeholder=""
@@ -434,9 +433,9 @@ $reseaux = Menu::get_info_reseaux();
                                                                 maxi : 5Mo</em>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4" id="piece_attestation_immatriculati_div">
                                                         <label class="form-label">Pièce d'attestation immatriculation
-                                                            <strong style="color:red;">*</strong></label>
+                                                            <strong style="color:red;" id="piece_attestation_immatriculati_label">*</strong></label>
                                                         <input type="file" name="piece_attestation_immatriculati"
                                                                id="piece_attestation_immatriculati"
                                                                class="form-control form-control-sm" placeholder=""

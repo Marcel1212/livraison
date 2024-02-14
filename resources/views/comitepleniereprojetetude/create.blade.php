@@ -131,8 +131,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Enregistrer
                                     </button>
-                                    <button type="submit" value="Enregistrer_suivant"
-                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
+                                            class="btn   btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
