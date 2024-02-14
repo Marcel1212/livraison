@@ -477,9 +477,12 @@
            </div>
        </div>
        <div class="col-md-4 mt-2">
-           <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-               5M</label>
+           <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
            <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
+           <div id="defaultFormControlHelp" class="form-text">
+               <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                   maxi : 5Mo</em>
+           </div>
        </div>
 
        <div class="row">
