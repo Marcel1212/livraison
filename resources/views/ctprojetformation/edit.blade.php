@@ -258,8 +258,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <tr>
                                     <th>No</th>
                                     <th>Entreprise </th>
-                                    {{-- <th>Conseiller </th> --}}
-                                    {{-- <th>Code </th> --}}
+                                    <th>Titre du projet </th>
+                                    <th>Code </th>
+                                    <th>Cout entreprise </th>
+                                    <th>Cout proposition conseiller (Instruction) </th>
                                     <th>Date soumis</th>
                                     {{-- <th>Statut</th> --}}
                                     <th>Action</th>
@@ -274,52 +276,16 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->entreprise->ncc_entreprises }} /
                                             {{ @$planformation->entreprise->raison_social_entreprises }}</td>
-                                        {{-- <td>{{ @$planformation->userconseilplanformation->name }}
-                                            {{ @$planformation->userconseilplanformation->prenom_users }}</td> --}}
-                                        {{-- <td>{{ @$planformation->code_plan_formation }}</td> --}}
+                                        <td>{{ $planformation->titre_projet_etude }}</td>
+                                        <td>{{ $planformation->code_projet_formation }}</td>
+                                        <td>{{ $planformation->cout_projet_formation }}</td>
+                                        <td>{{ $planformation->cout_projet_instruction }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
-                                        {{-- <td align="center">
-                                            <?php //if ($planformation->flag_soumis_plan_formation == true and
-                                            //$planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){
-                                            ?>
-                                            <span class="badge bg-success">Valider</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            //  $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            //  and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false){
-                                            ?>
-                                            <span class="badge bg-warning">En cours de traitement</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            // $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            //  and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == false and
-                                            // $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-primary">Non Soumis</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            //$planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == true and $planformation->flag_soumis_ct_plan_formation==false) {
-                                            ?>
-                                            <span class="badge bg-danger">Rejeter</span>
-                                            <?php //} elseif ($planformation->flag_soumis_plan_formation == true and
-                                            // $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            // and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_soumis_ct_plan_formation==true) {
-                                            ?>
-                                            <span class="badge bg-warning">Soumis au ct</span>
-                                            <?php// } else { ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?> ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                            <?php // }
-                                            ?>
-                                        </td> --}}
+
                                         <td align="center">
                                             <?php if($comitepleniere->flag_statut_comite_pleniere == false){?>
-                                            {{-- @can($lien . '-edit') --}}
-                                            {{-- <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)]) }}"
-                                                class=" " title="Modifier"><img src='/assets/img/editing.png'></a> --}}
-                                            {{-- @endcan --}}
+
+
                                             <a type="button" class="" data-bs-toggle="modal"
                                                 data-bs-target="#traiterActionProjetFormation<?php echo $planformation->id_projet_formation; ?>"
                                                 href="#myModal1" data-url="http://example.com">
@@ -348,7 +314,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 @method('put')
                                 <button type="submit" name="action" value="Traiter_cahier_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                    Valider le cahier de plan
+                                    Valider le cahier du comité
                                 </button>
                             </form>
                         </div>
@@ -360,7 +326,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>No</th>
                                     <th>Entreprise </th>
                                     <th>Conseiller </th>
+                                    <th>Titre du projet </th>
                                     <th>Code </th>
+                                    <th>Cout entreprise </th>
+                                    <th>Cout proposition conseiller (Instruction) </th>
                                     <th>Date soumis</th>
                                 </tr>
                             </thead>
@@ -374,7 +343,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
-                                        <td>{{ @$planformation->code_projet_formation }}</td>
+                                        <td>{{ $planformation->titre_projet_etude }}</td>
+                                        <td>{{ $planformation->code_projet_formation }}</td>
+                                        <td>{{ $planformation->cout_projet_formation }}</td>
+                                        <td>{{ $planformation->cout_projet_instruction }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
                                     </tr>
                                 @endforeach

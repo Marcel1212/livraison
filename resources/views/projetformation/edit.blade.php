@@ -12,6 +12,12 @@
         $disable = '';
     } ?>
 
+    <?php if ($projetetude->flag_statut_instruction != null) {
+        $disable_ins = 'disabled';
+    } else {
+        $disable_ins = '';
+    } ?>
+
     <!-- BEGIN: Content-->
     <div class="app-content content ">
 
@@ -1204,15 +1210,16 @@
                                                 <br>
 
 
-                                                <?php if ($nomrole == "CONSEILLER EN FORMATION" && $projetetude->flag_affect_conseiller_formation == true  && $projetetude->flag_recevabilite == true  && $projetetude->flag_statut_instruction == null ) { ?>
+                                                <?php if ($nomrole == "CONSEILLER EN FORMATION" && $projetetude->flag_affect_conseiller_formation == true  && $projetetude->flag_recevabilite == true  ) { ?>
                                                 <div class="row">
 
                                                     <div class="accordion mt-3" id="accordionExample">
                                                         <div class="card-body">
                                                             <?php //if ($nomrole == "DIRECTEUR" && $projetetude->flag_soumis == true  && $projetetude->flag_affect_departement == null) {
                                                             ?>
-                                                            <h5 class="card-title" align="center"> --- TRAITEMENT DE LA
-                                                                RECEVABILITE ---
+                                                            <h5 class="card-title" align="center"> <strong>TRAITEMENT DE
+                                                                    LA
+                                                                    RECEVABILITE </strong>
                                                             </h5>
                                                             <div class="row">
                                                                 <div class="card accordion-item">
@@ -1244,20 +1251,48 @@
                                                                                             required="required"
                                                                                             id="titre_projet_instruction"
                                                                                             class="form-control form-control-sm"
-                                                                                            placeholder="ex : Perfectionnement ..">
+                                                                                            placeholder="ex : Perfectionnement .."
+                                                                                            <?php echo $disable_ins; ?>
+                                                                                            value="{{ $projetetude->titre_projet_instruction }}">
                                                                                     </div>
+                                                                                    <br>
 
-                                                                                    <div class="col-md-4">
+                                                                                    <div class="col-md-12">
                                                                                         <label class="form-label">Piece
-                                                                                            jointe
+                                                                                            jointe instruction
                                                                                             (PDF,
                                                                                             WORD,
                                                                                             JPG)
-                                                                                            5M</label>
+                                                                                            5M</label> <br>
+
+                                                                                        <?php if($piecesetude7 != ''){?>
+                                                                                        <span class="badge bg-secondary"><a
+                                                                                                target="_blank"
+                                                                                                onclick="NewWindow('{{ asset('/pieces_projet_formation/autre_doc_instruction/' . $piecesetude7) }}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                                                Voir la pièce </a> </span>
+                                                                                        <br>
+                                                                                        <?php } else { ?>
+
+
                                                                                         <input type="file"
                                                                                             name="doc_autre_document_instruction"
                                                                                             class="form-control"
                                                                                             placeholder="" />
+                                                                                        <?php } ?> <br>
+
+                                                                                        <label>Cout du projet <span
+                                                                                                style="color:red;">*</span>
+                                                                                        </label>
+                                                                                        <input
+                                                                                            name="cout_projet_instruction"
+                                                                                            required="required"
+                                                                                            type="number"
+                                                                                            id="cout_projet_instruction"
+                                                                                            class="form-control form-control-sm"
+                                                                                            <?php echo $disable_ins; ?>
+                                                                                            value="{{ $projetetude->cout_projet_instruction }}"
+                                                                                            placeholder="200000">
+
                                                                                     </div>
 
                                                                                 </div>
@@ -1268,8 +1303,11 @@
                                                                 </div>
                                                                 <br>
                                                             </div>
+
+                                                            <?php if ($projetetude->flag_statut_instruction == null ) { ?>
                                                             <div class="row">
                                                                 <div>
+                                                                    <br>
                                                                     <h5 class="card-title" align="center"> <strong> Avis
                                                                             global </strong>
                                                                     </h5>
@@ -1321,6 +1359,7 @@
 
                                                                 </div>
                                                             </div>
+                                                            <?php }?>
 
                                                         </div>
                                                     </div>
