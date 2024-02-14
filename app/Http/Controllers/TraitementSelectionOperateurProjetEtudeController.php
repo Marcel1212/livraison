@@ -144,8 +144,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
                             $projet_etude_valide->flag_selection_operateur_valider_par_processus = true;
-                            $projet_etude_valide->flag_validation_selection_operateur = true;
-                            $projet_etude_valide->date_validation_selection_operateur = now();
+                            $projet_etude_valide->flag_validation_selection_operateur = false;
                             $projet_etude_valide->update();
 
 
