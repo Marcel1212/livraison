@@ -207,7 +207,7 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
-    Route::group(['middleware' => ['can:permission-create']], function () {
+    Route::group(['middleware' => ['can:permission-index']], function () {
         Route::resources([
             'permissions' => App\Http\Controllers\PermissionController::class,
         ]);
@@ -339,6 +339,12 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
+    Route::group(['middleware' => ['can:caracteristiquetypeformation-index']], function () {
+        Route::resources([
+            'caracteristiquetypeformation' => App\Http\Controllers\CaracteristiqueTypeFormationController::class,
+        ]);
+    });
+
 //    Route::get('agreement/{id}/cancel', [App\Http\Controllers\AgreementController::class, 'cancel'])->name('agreement.cancel');
 //    Route::post('agreement/{id}/cancel/store', [App\Http\Controllers\AgreementController::class, 'cancelStore'])->name('agreement.cancel.store');
     Route::put('agreement/{id_demande}/{id_plan}/cancel/update', [App\Http\Controllers\AgreementController::class, 'cancelUpdate'])->name('agreement.cancel.update');
@@ -420,6 +426,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/entreprisecabinetformation', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetformation']);
     Route::get('/entreprisecabinetetrangerformation', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetetrangerformation']);
     Route::get('/entreprisecabinetetrangerformationmax', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetetrangerformationmax']);
+    Route::get('/caracteristiqueTypeFormationlist/{id}', [App\Http\Controllers\ListeLierController::class, 'getCaracteristiqueTypeFormation']);
     Route::get('/departementlist/{id}', [App\Http\Controllers\ListeLierController::class, 'getDepartements']);
     Route::get('/servicelist/{id}', [App\Http\Controllers\ListeLierController::class, 'getServices']);
 
