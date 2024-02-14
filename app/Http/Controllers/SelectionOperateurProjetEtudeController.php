@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+@ini_set('max_execution_time',0);
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Models\Entreprises;
@@ -30,42 +30,38 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 $entreprise_mail = $user->email;
                 $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
 
-                $operateur_selecteds = Entreprises::select('entreprises.*','entreprises.id_entreprises as id_entreprises','projet_etude_has_entreprises.id_entreprises as id_has_entreprise')
-                        ->where('flag_operateur',true)->where('flag_actif_entreprises',true)
-                    ->leftjoin('projet_etude_has_entreprises','projet_etude_has_entreprises.id_entreprises','entreprises.id_entreprises')
-                    ->where('id_secteur_activite_entreprise',$projet_etude_valide->id_secteur_activite)
-                    ->where(function($q) use ($id_projet_etude) {
-                        $q->where('projet_etude_has_entreprises.id_projet_etude','<>',$id_projet_etude)
-                        ->orWhereNull('projet_etude_has_entreprises.id_projet_etude');
-                    })
-                    ->get();
-
-
+                $operateur_selecteds = Entreprises::whereNotExists(function ($query) use ($id_projet_etude){
+                    $query->select('*')
+                        ->from('projet_etude_has_entreprises')
+                        ->whereColumn('projet_etude_has_entreprises.id_entreprises','=','entreprises.id_entreprises')
+                        ->where('projet_etude_has_entreprises.id_projet_etude',$id_projet_etude);
+                })->where('flag_operateur',true)->where('flag_actif_entreprises',true)
+                  ->where('id_secteur_activite_entreprise',$projet_etude_valide->id_secteur_activite)
+                  ->get();
 
                 $operateur_selected = "<option value=''> Selectionnez un opérateur </option>";
-                foreach ($operateur_selecteds as $op) {
-                    $operateur_selected .= "<option value='" .$op->id_entreprises. "'>" . mb_strtoupper($op->raison_social_entreprises) . " </option>";
+                foreach ($operateur_selecteds as $operateur) {
+                    $operateur_selected .= "<option value='" .$operateur->id_entreprises. "'>" . mb_strtoupper($operateur->raison_social_entreprises) . " </option>";
                 }
 
 
-
-                $operateur_validers = Entreprises::select('entreprises.*','entreprises.id_entreprises as id_entreprises','projet_etude_has_entreprises.id_entreprises as id_has_entreprise')
-                    ->where('flag_operateur',true)->where('flag_actif_entreprises',true)
-                    ->leftjoin('projet_etude_has_entreprises','projet_etude_has_entreprises.id_entreprises','entreprises.id_entreprises')
+                $operateur_validers = Entreprises::whereExists(function ($query) use ($id_projet_etude){
+                    $query->select('*')
+                        ->from('projet_etude_has_entreprises')
+                        ->whereColumn('projet_etude_has_entreprises.id_entreprises','=','entreprises.id_entreprises')
+                        ->where('projet_etude_has_entreprises.id_projet_etude',$id_projet_etude);
+                })->where('flag_operateur',true)->where('flag_actif_entreprises',true)
                     ->where('id_secteur_activite_entreprise',$projet_etude_valide->id_secteur_activite)
-                    ->where('projet_etude_has_entreprises.id_projet_etude','=',$id_projet_etude)
                     ->get();
 
-                if(isset($projet_etude_valide->operateur)){
-                    $operateur_valider = "<option value='".$projet_etude_valide->operateur->id_entreprises."'> " . $projet_etude_valide->operateur->raison_social_entreprises . "</option>";
-                }else{
-                    $operateur_valider = "<option value=''> Selectionnez un opérateur </option>";
-                }
+
+                $operateur_valider = "<option value=''> Selectionnez un opérateur </option>";
+
                 foreach ($operateur_validers as $op) {
                     $operateur_valider .= "<option value='" .$op->id_entreprises. "'>" . mb_strtoupper($op->raison_social_entreprises) . " </option>";
                 }
 
-                $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude_valide->id_projet_etude)->get();
+                $pieces_projets = PiecesProjetEtude::where('id_projet_etude',$projet_etude_valide->id_projet_etude)->get();
 
                 $pays = Pays::all();
                 $pay = "<option value='".$entreprise->pay->id_pays."'> " . $entreprise->pay->indicatif . "</option>";
