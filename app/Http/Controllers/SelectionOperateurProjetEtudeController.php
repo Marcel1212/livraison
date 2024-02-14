@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-@ini_set('max_execution_time',0);
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Models\Entreprises;
