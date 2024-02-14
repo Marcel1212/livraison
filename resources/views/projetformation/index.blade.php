@@ -58,9 +58,10 @@
                                             id="exampleData" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
+                                                    <th>No</th>
                                                     <th>Titre du projet </th>
                                                     <th>Entreprise</th>
-                                                    <th>Code du plan</th>
+                                                    <th>Code</th>
                                                     <th>Date de creation</th>
                                                     <th>Date de soumission</th>
                                                     <th>Statut Soumission</th>
@@ -69,8 +70,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $i = 0; ?>
                                                 @foreach ($demandeenroles as $key => $demandeenrole)
                                                     <tr>
+                                                        <td>{{ ++$i }}</td>
                                                         <td>{{ $demandeenrole->titre_projet_etude }}</td>
 
                                                         <td>{{ $demandeenrole->entreprise->raison_social_entreprises }}</td>

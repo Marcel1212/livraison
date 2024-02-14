@@ -419,7 +419,15 @@ class ProjetFormationController extends Controller
         $piecesetude5 = $piecesetude['0']['libelle_pieces'];
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','6']])->get();
         $piecesetude6 = $piecesetude['0']['libelle_pieces'];
-        //dd($piecesetude['0']['libelle_pieces']);
+        $piecesetude_ins = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','7']])->get();
+        //dd($piecesetude_ins->count());
+        if($piecesetude_ins->count()> 0){
+            $piecesetude7 = $piecesetude_ins['0']['libelle_pieces'];
+        }else {
+            $piecesetude7 = null ;
+        }
+        // $piecesetude7 = $piecesetude_ins['0']['libelle_pieces'];
+        // dd($piecesetude7);
         // Pieces Projet Etudes
         //dd($projetetude->piecesProjetEtudes['0']->libelle_pieces);
         //dd($projetetude->flag_soumis);
@@ -452,7 +460,12 @@ class ProjetFormationController extends Controller
         // Liste des service
         if($projetetude->flag_soumis == true) {
            // Liste des services
-            $listeuser = Service::all();
+            //$listeuser = Service::all();
+            // Selection du departement
+            $id_departement = $projetetude->id_departement;
+            //dd($id_departement);
+            $listeuser = Service::where('id_departement','=', $id_departement)->get();
+            //dd($listeuser);
             $listeservice = "<option value=''> Selectionnez un service </option>";
             foreach ($listeuser as $comp) {
                 $listeservice .= "<option value='" . $comp->id_service  . "'>" . $comp->libelle_service ." </option>";
@@ -522,7 +535,11 @@ class ProjetFormationController extends Controller
 
         // Recuperation des conseillers
 
-        $num_agce = Auth::user()->num_agce;
+        // Note : Recuperer les conseillers en fonction de l'agence de l'entreprise
+
+        // $num_agce = Auth::user()->num_agce;
+        $num_agce = $projetetude->num_agce;
+
         $num_direction = Auth::user()->id_direction;
         $chargetude = DB::table('users')
         ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -564,7 +581,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('conseiller_name','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6'));
+        return view('projetformation.edit', compact('conseiller_name','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
     }
 
 
@@ -585,6 +602,8 @@ class ProjetFormationController extends Controller
             // Soumission instructions
             if($data['action'] === 'soumission_recevabilite_global_instruction'){
                 // ID du plan
+
+                //dd($data);
 
                     // Docuemnt
                     if (isset($data['doc_autre_document_instruction'])){
@@ -616,6 +635,7 @@ class ProjetFormationController extends Controller
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"]; //
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
+                    $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
                     $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes, vous pouvez passer a l\'instruction');
                     }else{
@@ -625,6 +645,7 @@ class ProjetFormationController extends Controller
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
+                    $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
                     $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Projet formation rejeté avec succes');
                     }
