@@ -10,6 +10,7 @@ use App\Models\Entreprises;
 use App\Models\HistoriqueMotDePasse;
 use App\Models\MotDePasseOublie;
 use App\Models\User;
+use App\Rules\Recaptcha;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
@@ -25,6 +26,13 @@ class MotDePasseOublieController extends Controller
 
     public function verify(MotDePasseOubieRequest $request)
     {
+        $this->validate($request, [
+            'email_mot_de_passe_oublie' => 'required',
+            'g-recaptcha-response' => ['required', new ReCaptcha]
+        ], [
+            'email_mot_de_passe_oublie.required' => 'Veuillez saisir votre adresse email.',
+            'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
+        ]);
         $now = Carbon::now();
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
                     ->where('flag_expired_mot_de_passe_oublie',false)->first();
