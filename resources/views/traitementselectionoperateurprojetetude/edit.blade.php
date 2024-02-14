@@ -256,7 +256,7 @@
                                         <textarea class="form-control" required="required"
                                                   disabled
                                                   rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_specifique" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_specifiqueinstructiond}}@endisset</textarea>
+                                                  name="objectif_specifique" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_specifique_instruction}}@endisset</textarea>
 
                                     </div>
                                 </div>
@@ -315,8 +315,7 @@
 
                                 <div class="col-md-4 mt-2">
                                     <div class="mb-1">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
-                                            5M</label>
+                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
                                         @if($projet_etude_valide->piece_jointe_instruction)
                                             <div>
                                                 <span class="badge bg-secondary mt-1"><a target="_blank"
@@ -324,6 +323,10 @@
                                                             Voir la pièce  </a> </span>
                                             </div>
                                         @endif
+                                        <div id="defaultFormControlHelp" class="form-text">
+                                            <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                maxi : 5Mo</em>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -365,27 +368,27 @@
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
 
