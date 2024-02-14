@@ -1,13 +1,3 @@
-<?php
-
- use App\Helpers\GrilleDeRepartitionFC;
-
-$grille = GrilleDeRepartitionFC::get_calcul_financement(148000);
-
-//dd($grille);
-
-?>
-
 @if(auth()->user()->can('clederepartitionfinancement-index'))
 
 @extends('layouts.backLayout.designadmin')

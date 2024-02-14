@@ -30,13 +30,17 @@ class GrilleDeRepartitionFC
 
             $montantbudget = ($resultat->coefficient * $montantcotisation) + ($signe * $resultat->montant_fc);
 
-            $montantbudgetfinal = $montantbudget + $montantcotisation;
+            $montantbudgetfinal1 = $montantbudget + $montantcotisation;
+
+            $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
 
         }else{
 
             $montantbudget = $resultat->montant_fc + ($montantcotisation - $resultat->marge_inferieur)*$resultat->coefficient;
 
-            $montantbudgetfinal = $montantbudget + $montantcotisation;
+            $montantbudgetfinal1 = $montantbudget + $montantcotisation;
+
+            $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
         }
 
         return (isset($montantbudgetfinal) ? $montantbudgetfinal : '');

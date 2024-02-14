@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaracteristiqueTypeFormation;
 use App\Models\Entreprises;
 use Illuminate\Http\Request;
 use App\Models\PageSelect;
@@ -61,5 +62,13 @@ class ListeLierController extends Controller
 
         return $services = PageSelect::getService($departement);
 
+    }
+
+    public function getCaracteristiqueTypeFormation($typeformation=0)
+    {
+
+         $caracteristiques = CaracteristiqueTypeFormation::where([['id_type_formation','=',$typeformation],['flag_ctf','=','true']])->get();
+
+         return $caracteristiques;
     }
 }
