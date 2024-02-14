@@ -274,10 +274,10 @@ class EnrolementController extends Controller
 
                  /***********************  debut de traitemente du profil collecte de taxe automatique*************/
 
-                 $input['id_user'] = 161;
+                 /*$input['id_user'] = 161;
                  $input['flag_traitement_demande_enrolem'] = true;
                  $input['flag_valider_demande_enrolement'] = true;
-                 $input['date_traitement_demande_enrolem'] = Carbon::now();
+                 $input['date_traitement_demande_enrolem'] = Carbon::now();*/
 
                  /*********************** fin debut de traitemente du profil collecte de taxe automatique*************/
 
@@ -308,7 +308,7 @@ class EnrolementController extends Controller
 
                 /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
 
-                $demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
+                /*$demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
 
                 $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
 
@@ -424,7 +424,7 @@ class EnrolementController extends Controller
 
 
                     $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
-                }
+                }*/
 
                 /*********************** fin second partie de traitemente du profil collecte de taxe automatique*************/
             }
@@ -518,10 +518,10 @@ class EnrolementController extends Controller
 
                 /***********************  debut de traitemente du profil collecte de taxe automatique*************/
 
-                $input['id_user'] = 161;
+                /*$input['id_user'] = 161;
                 $input['flag_traitement_demande_enrolem'] = true;
                 $input['flag_valider_demande_enrolement'] = true;
-                $input['date_traitement_demande_enrolem'] = Carbon::now();
+                $input['date_traitement_demande_enrolem'] = Carbon::now();*/
 
                 /*********************** fin debut de traitemente du profil collecte de taxe automatique*************/
 
@@ -551,7 +551,7 @@ class EnrolementController extends Controller
 
                 /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
 
-                $demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
+                /*$demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
 
                 $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
 
@@ -667,7 +667,7 @@ class EnrolementController extends Controller
 
 
                     $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
-                }
+                }*/
 
                 /*********************** fin second partie de traitemente du profil collecte de taxe automatique*************/
 
