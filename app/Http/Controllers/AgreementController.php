@@ -283,7 +283,7 @@ class AgreementController extends Controller
                 $demande_annulation_action->date_soumis_demande_annulation_plan = now();
                 $demande_annulation_action->update();
             }
-            return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation de plan de formation effectuée');
+            return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation effectuée');
     }
 
     public function substitution(string $id_plan, string $id_action)
