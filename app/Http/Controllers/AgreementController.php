@@ -227,6 +227,10 @@ class AgreementController extends Controller
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
         $id_etape = Crypt::UrldeCrypt($id_etape);
         $id_action = Crypt::UrldeCrypt($id_action);
+
+        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
+
+
         $demande_substitution = DemandeSubstitutionActionPlanFormation::
         where('id_action_formation_plan_a_substi',$id_action)
             ->first();
@@ -242,7 +246,8 @@ class AgreementController extends Controller
             ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
             ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
         $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
-        return view('agreement.editaction', compact('fiche_a_demande_agrement','beneficiaire_formation','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
+        return view('agreement.editaction', compact('fiche_a_demande_agrement',
+            'demande_annulation_plan','beneficiaire_formation','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
     }
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)

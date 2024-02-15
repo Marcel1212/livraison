@@ -146,8 +146,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </li>
                 <li class="nav-item">
                     <button
-
-
                         type="button"
                         class="nav-link"
                         role="tab"
@@ -159,6 +157,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         @if($anneexercice->date_fin_periode_exercice<now())
                             disabled
                         @endif
+                        @if($demande_annulation_plan)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                                disabled
+                           @endif
+                        @endif
+
                             data-bs-toggle="tab"
                         data-bs-target="#navs-top-substitution"
                         aria-controls="navs-top-substitution"
@@ -172,24 +176,17 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
+                        @if($demande_annulation_plan)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                                disabled
+                           @endif
+                        @endif
                         data-bs-target="#navs-top-annulation"
                         aria-controls="navs-top-annulation"
                         aria-selected="false">
                         Demande d'annulation d'action
                     </button>
                 </li>
-                {{--                    <li class="nav-item">--}}
-                {{--                        <button--}}
-                {{--                            type="button"--}}
-                {{--                            class="nav-link"--}}
-                {{--                            role="tab"--}}
-                {{--                            data-bs-toggle="tab"--}}
-                {{--                            data-bs-target="#navs-top-annulation"--}}
-                {{--                            aria-controls="navs-top-annulation"--}}
-                {{--                            aria-selected="true">--}}
-                {{--                            Demande d'annulation--}}
-                {{--                        </button>--}}
-                {{--                    </li>--}}
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade active show" id="navs-top-action" role="tabpanel">
@@ -1543,7 +1540,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <div class="d-flex justify-content-between w-100 flex-wrap">
                                             <h6 class="mb-0 ms-3">Demande d'annulation rejetée</h6>
                                         </div>
-
                                     </li>
                                 </div>
                             @endif

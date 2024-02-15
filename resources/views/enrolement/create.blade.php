@@ -434,7 +434,7 @@ $reseaux = Menu::get_info_reseaux();
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4" id="piece_attestation_immatriculati_div">
-                                                        <label class="form-label">Pièce d'attestation immatriculation
+                                                        <label class="form-label">Pièce d'attestation immatriculation CNPS
                                                             <strong style="color:red;" id="piece_attestation_immatriculati_label">*</strong></label>
                                                         <input type="file" name="piece_attestation_immatriculati"
                                                                id="piece_attestation_immatriculati"
