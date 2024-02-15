@@ -20,6 +20,8 @@ use App\Models\CategoriePlan;
 use App\Models\TypeFormation;
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
+use App\Helpers\MoyenCotisation;
+use App\Helpers\GrilleDeRepartitionFC;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -109,10 +111,15 @@ class PlanFormationController extends Controller
                 //'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
             ]);
 
+            $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+            $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
+
+            if($mttprevisionnelcotisation==0){
+                return redirect()->route('planformation.index')->with('error', 'Plan de formation non soumis car nous n\etes pas a jour dans les cotisations.');
+            }
 
             $input = $request->all();
-
-            $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
 
             $input['date_creation'] = Carbon::now();
             $input['id_entreprises'] = $infoentrprise->id_entreprises;
@@ -123,6 +130,13 @@ class PlanFormationController extends Controller
             $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
             $entreprise = Entreprises::find($infoentrprise->id_entreprises);
             $entreprise->update($input);
+
+            $buget = GrilleDeRepartitionFC::get_calcul_financement($mttprevisionnelcotisation);
+            //dd($buget);
+            $bugetseparer = explode("/",$buget);
+            //dd($bugetseparer);
+            $input['id_cle_de_repartition_financement'] = $bugetseparer[1];
+            $input['montant_financement_budget'] = round($bugetseparer[0]);
 
             PlanFormation::create($input);
 
@@ -454,7 +468,7 @@ class PlanFormationController extends Controller
                     $montantactionplanformationbg += $actionplanformation->cout_action_formation_plan;
                 }
 
-                $budgetrestant = $planformationbg->part_entreprise - $montantactionplanformationbg;
+                $budgetrestant = $planformationbg->montant_financement_budget - $montantactionplanformationbg;
 
                 if($input['cout_action_formation_plan']>$budgetrestant){
 
