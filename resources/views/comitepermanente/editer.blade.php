@@ -172,6 +172,7 @@
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de l'action accordée</th>
+                                <th>Cout de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -187,6 +188,7 @@
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
+                                                <td>{{ number_format($actionplanformation->montant_attribuable_fdfp) }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation) }}</td>
 
                                                 <td align="center" nowrap="nowrap">
@@ -247,7 +249,7 @@
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget) }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
@@ -271,7 +273,7 @@
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise-$montantactionplanformationacc) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget-$montantactionplanformationacc) }}"
                                     disabled="disabled"/>
                             </div>
 
@@ -288,7 +290,7 @@
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->masse_salariale}}"
+                                value="{{number_format(@$infosactionplanformation->masse_salariale)}}"
                                 disabled="disabled" />
                             </div>
 
@@ -327,7 +329,7 @@
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->part_entreprise}}"
+                                value="{{number_format(@$infosactionplanformation->part_entreprise)}}"
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
@@ -356,6 +358,14 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
+                                <label class="form-label" for="nombre_jour_action_formation">Nombre de jours</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{@$infosactionplanformation->nombre_jour_action_formation}}"
+                                  disabled="disabled" />
+                              </div>
+                            <div class="col-12 col-md-3">
                             <label class="form-label" >Coût de la formation</label>
                             <input
                                 type="text"
@@ -371,6 +381,14 @@
                                 value="{{@$infosactionplanformation->type_formation}}"
                                 disabled="disabled" />
                             </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Caracteristique type de formation</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}"
+                                  disabled="disabled" />
+                              </div>
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="but_formation">But de la formation</label>
                             <input
@@ -403,14 +421,7 @@
                                 value="{{@$infosactionplanformation->lieu_formation_fiche_agrement}}"
                                 disabled="disabled" />
                             </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_total_fiche_agrement">Coût total fiche agrément</label>
-                            <input
-                                type="number"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
-                                disabled="disabled" />
-                            </div>
+
 
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
@@ -437,6 +448,14 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
+                                <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{number_format(@$infosactionplanformation->montant_attribuable_fdfp)}}"
+                                  disabled="disabled" />
+                              </div>
+                            <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_accorde_action_formation">Montant accordé</label>
                             <input
                                 type="number"
@@ -444,19 +463,20 @@
                                 value="{{@$infosactionplanformation->cout_accorde_action_formation}}"
                                 disabled="disabled" />
                             </div>
-                            <div class="col-12 col-md-9">
+                            <div class="col-12 col-md-3">
+                                <div class="mb-1">
+                                        <label>Facture proforma </label> <br>
+                                                <span class="badge bg-secondary"><a target="_blank"
+                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                Voir la pièce  </a> </span>
+                                    </div>
+            </div>
+                            <div class="col-12 col-md-12">
                             <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
 
                                 <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
                             </div>
-                            <div class="col-12 col-md-3">
-                                                <div class="mb-1">
-                                                        <label>Facture proforma </label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                Voir la pièce  </a> </span>
-                                                    </div>
-                            </div>
+
 
 
                             <hr/>

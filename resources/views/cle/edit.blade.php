@@ -50,7 +50,7 @@
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Marge inférieure</label>
-                                                    <input type="number" name="marge_inferieur" id="marge_inferieur"
+                                                    <input type="number" min="0" name="marge_inferieur" id="marge_inferieur"
                                                     class="form-control form-control-sm" value="{{$cle->marge_inferieur}}">
                                                 </div>
                                             </div>

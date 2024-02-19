@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CaracteristiqueMargeDepartement;
+use App\Models\CaracteristiqueTypeFormation;
 use Illuminate\Http\Request;
 use App\Models\Departement;
 use App\Models\Direction;
@@ -71,7 +73,10 @@ class DepartementController extends Controller
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
         }
-        return view('departement.edit', compact('departement','direction'));
+
+        $carateristiquedepartements = CaracteristiqueMargeDepartement::where([['id_departement','=',$departement->id_departement]])->get();
+
+        return view('departement.edit', compact('departement','direction','carateristiquedepartements'));
     }
 
     /**

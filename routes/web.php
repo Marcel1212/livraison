@@ -241,6 +241,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resources([
             'departement' => App\Http\Controllers\DepartementController::class,
         ]);
+
+        Route::resources([
+            'caracteristiquemargedepartement' => App\Http\Controllers\CaracteristiqueMargeDepartementController::class,
+        ]);
     });
 
     Route::group(['middleware' => ['can:service-index']], function () {
@@ -423,6 +427,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('ajoutcabinetetrangere', [App\Http\Controllers\AjaxController::class, 'ajoutcabinetetrangere'])->name('ajoutcabinetetrangere');
 
     Route::get('/entrepriseinterneplan', [App\Http\Controllers\ListeLierController::class, 'getEntrepriseinterneplan']);
+    Route::get('/listedepartement', [App\Http\Controllers\ListeLierController::class, 'getDepartement']);
+    Route::get('/listeagencedepartement/{id}', [App\Http\Controllers\ListeLierController::class, 'getAgenceDepartement']);
     Route::get('/entreprisecabinetformation', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetformation']);
     Route::get('/entreprisecabinetetrangerformation', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetetrangerformation']);
     Route::get('/entreprisecabinetetrangerformationmax', [App\Http\Controllers\ListeLierController::class, 'getEntreprisecabinetetrangerformationmax']);

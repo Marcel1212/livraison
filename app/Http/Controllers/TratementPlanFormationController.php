@@ -23,6 +23,7 @@ use App\Helpers\Crypt;
 use App\Helpers\Menu;
 use App\Helpers\Email;
 use App\Helpers\GenerateCode as Gencode;
+use App\Models\CaracteristiqueTypeFormation;
 use App\Models\FicheAgrement;
 use App\Models\SecteurActivite;
 use Carbon\Carbon;
@@ -314,6 +315,60 @@ class TratementPlanFormationController extends Controller
 
 
                     $actionplanupdate = ActionFormationPlan::find($id);
+
+                    $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                    $input['nombre_jour_action_formation'] = $nombredejour;
+
+                    $infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                    $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                    if($infoscaracteristique->code_ctf == "CGF"){
+
+                        $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CSF"){
+
+                        $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CFD"){
+
+                        $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CCEF"){
+
+                        $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CSEF"){
+
+                        $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                    }
+
+                    $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                    $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                    if($coutaccordeactionformation > $montantcoutactionattribuable){
+                        $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                    }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                        $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                    }else{
+                        $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                    }
+
+                    //dd($input['cout_accorde_action_formation'],$input['montant_attribuable_fdfp']);
+
                     $actionplanupdate->update($input);
 
                     $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
@@ -328,6 +383,58 @@ class TratementPlanFormationController extends Controller
                     $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
 
                     $actionplanupdate = ActionFormationPlan::find($id);
+
+                    $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                    $input['nombre_jour_action_formation'] = $nombredejour;
+
+                    $infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                    $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                    if($infoscaracteristique->code_ctf == "CGF"){
+
+                        $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CSF"){
+
+                        $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CFD"){
+
+                        $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CCEF"){
+
+                        $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                    }
+
+                    if($infoscaracteristique->code_ctf == "CSEF"){
+
+                        $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                    }
+
+                    $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                    $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                    if($coutaccordeactionformation > $montantcoutactionattribuable){
+                        $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                    }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                        $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                    }else{
+                        $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                    }
+
                     $actionplanupdate->update($input);
 
                     $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();

@@ -97,7 +97,7 @@ $logo = Menu::get_logo();
                                                                                         <span class="">: </span></td>
                                                                                     <td valign="middle" class=""><span
                                                                                             class="entete2"><span
-                                                                                                class="">{{$actionplan->intitule_action_formation_plan }} </span></span>
+                                                                                                class=""> <?php echo wordwrap($actionplan->intitule_action_formation_plan ,84,"<br>\n"); ?> </span></span>
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">&nbsp;
@@ -157,13 +157,13 @@ $logo = Menu::get_logo();
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class=""><span
-                                                                                            class=""><strong>Cout de l'action</strong></span>
+                                                                                            class=""><strong>Nombre de jour</strong></span>
                                                                                     </td>
                                                                                     <td width="5" align="left" class="">
                                                                                         <span class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class=""><span
-                                                                                            class="">  {{$actionplan->cout_action_formation_plan }}  </span>
+                                                                                            class="">  {{$actionplan->nombre_jour_action_formation }}  </span>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -245,7 +245,7 @@ $logo = Menu::get_logo();
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class=""><span
-                                                                                            class="">{{$ficheagrement->objectif_pedagogique_fiche_agre }}  </span>
+                                                                                            class=""><?php echo wordwrap($ficheagrement->objectif_pedagogique_fiche_agre,84,"<br>\n"); ?>  </span>
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class="">&nbsp;
