@@ -4,7 +4,7 @@ $logo = Menu::get_logo();
 ?>
 
     <!DOCTYPE html>
-<html>
+<html >
 <head>
     <meta charset="utf-8">
     <title>Action de plan et fiche agrement A</title>
@@ -19,7 +19,6 @@ $logo = Menu::get_logo();
             .visuel_bouton {
                 display: none;
             }
-        }
 
         @media print {
             .visuel_bouton {
@@ -170,6 +169,8 @@ $logo = Menu::get_logo();
 <br>
 <br>
 <br>
+    <br>
+    <br>
 <br>
 <br>
 <br>
@@ -198,7 +199,7 @@ $logo = Menu::get_logo();
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>N&deg; ACTION</p>
                             </td>
                             <td rowspan="2" style="width: 118.55pt;border-top: 1pt solid windowtext;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-image: initial;border-left: none;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
-                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>INTITULE DE L4ACTION</p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>INTITULE DE L'ACTION</p>
                             </td>
                             <td colspan="4" style="width: 133.25pt;border-top: 1pt solid windowtext;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-image: initial;border-left: none;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>PERSONNES CONCERNER</p>
@@ -245,17 +246,19 @@ $logo = Menu::get_logo();
                         <?php $i=000; $total1=0; $total2=0; $total3=0; $total4=0; $total5=0; $total6=0; $total7=0; $total8=0; $total9=0; ?>
                         @foreach ($actionformations as $actionformation)
                                 <?php
-                                $total1 += $actionformation->cadre_fiche_demande_agrement;
-                                $total2 += $actionformation->agent_maitrise_fiche_demande_ag;
-                                $total3 += $actionformation->employe_fiche_demande_agrement;
-                                $total4 += $actionformation->cadre_fiche_demande_agrement + $actionformation->employe_fiche_demande_agrement + $actionformation->agent_maitrise_fiche_demande_ag;
-                                $total5 += $actionformation->nombre_heure_action_formation_p;
-                                $total6 += $actionformation->cout_action_formation_plan;
-                                $total7 += $actionformation->cout_accorde_action_formation;
-                                $total8 += $actionformation->cout_accorde_action_formation;
-                                $total9 += 0;
+                                if($actionformation->flag_annulation_action==false){
+                                    $total1 += $actionformation->cadre_fiche_demande_agrement;
+                                    $total2 += $actionformation->agent_maitrise_fiche_demande_ag;
+                                    $total3 += $actionformation->employe_fiche_demande_agrement;
+                                    $total4 += $actionformation->cadre_fiche_demande_agrement + $actionformation->employe_fiche_demande_agrement + $actionformation->agent_maitrise_fiche_demande_ag;
+                                    $total5 += $actionformation->nombre_heure_action_formation_p;
+                                    $total6 += $actionformation->cout_action_formation_plan;
+                                    $total7 += $actionformation->cout_accorde_action_formation;
+                                    $total8 += $actionformation->cout_accorde_action_formation;
+                                    $total9 += 0;
+                                    }
                                 ?>
-                            <tr>
+                            <tr @if($actionformation->flag_annulation_action==true) style="text-decoration: line-through;" @endif>
                                 <td style="width: 56.3pt;border-right: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-left: 1pt solid windowtext;border-image: initial;border-top: none;padding: 0cm 5.4pt;vertical-align: top;">
                                     <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ ++$i }}</p>
                                 </td>

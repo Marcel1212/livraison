@@ -154,7 +154,7 @@
                                       @method('put')
                                       <div class="row">
                                           <div class="col-12 col-md-10">
-                                              <label class="form-label" for="id_user_comite_pleniere_participant">Charger d'étude <strong style="color:red;">*</strong></label>
+                                              <label class="form-label" for="id_user_comite_pleniere_participant">Chargé d'étude <strong style="color:red;">*</strong></label>
                                               <select
                                                   id="id_user_comite_pleniere_participant"
                                                   name="id_user_comite_pleniere_participant"

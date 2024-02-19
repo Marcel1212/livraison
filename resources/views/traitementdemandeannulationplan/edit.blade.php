@@ -24,9 +24,6 @@
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
     </h5>
 
-
-
-
     <div class="content-body">
         @if ($message = Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -57,7 +54,13 @@
                     </div>
                 @endif
         <div class="col-xl-12">
-                  <h6 class="text-muted"></h6>
+                    <div align="right" class="mb-3">
+                        <button type="button"
+                                class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#modalToggle">
+                            Voir le parcours de validation
+                        </button>
+                    </div>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
                         @isset($demande_annulation->id_action_plan)
@@ -327,15 +330,8 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade show active" id="navs-top-demande-annulation-action" role="tabpanel">
-                                        <div align="right">
-                                            <button type="button"
-                                                    class="btn rounded-pill btn-outline-primary waves-effect waves-light"
-                                                    data-bs-toggle="modal" data-bs-target="#modalToggle">
-                                                Voir le parcours de validation
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
+                                        <div class="col-md-12" align="center">
+                                            <h6 class="card-title mb-3"> Détail de la demande d'annulation</h6>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="row">
@@ -362,6 +358,12 @@
                                                                                                      onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
                                                                                         ">
                                           Voir la pièce  </a></span>
+                                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        maxi : 5Mo</em>
+                                                                </div>
+
+
                                                             @endisset
                                                         </div>
                                                     </div>
@@ -375,8 +377,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <h5 class="card-title mt-3" align="center"> Traitement de la demande d'annulation</h5>
+                                        <div class="col-md-12 mb-3" align="center">
+                                            <h6 class="card-title mt-3"> Traitement de la demande d'annulation</h6>
                                         </div>
                                         <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_annulation->id_demande_annulation_plan)) }}" enctype="multipart/form-data">
                                             @csrf
@@ -735,15 +737,9 @@
                             @endisset
                             @isset($demande_annulation->id_plan_formation)
                             <div class="tab-pane fade show active" id="navs-top-demande-annulation" role="tabpanel">
-                          <div align="right">
-                              <button type="button"
-                                      class="btn rounded-pill btn-outline-primary waves-effect waves-light"
-                                      data-bs-toggle="modal" data-bs-target="#modalToggle">
-                                  Voir le parcours de validation
-                              </button>
-                          </div>
+
                           <div class="col-md-12">
-                              <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
+                              <h6 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h6>
                           </div>
                           <div class="col-md-12">
                               <div class="row">
@@ -770,6 +766,11 @@
                                                                                        onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);
                                                                                         ">
                                           Voir la pièce  </a></span>
+
+                                                  <div id="defaultFormControlHelp" class="form-text ">
+                                                      <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                          maxi : 5Mo</em>
+                                                  </div>
                                               @endisset
                                           </div>
                                       </div>
@@ -783,8 +784,8 @@
                                   </div>
                               </div>
                           </div>
-                          <div class="col-md-12">
-                              <h5 class="card-title mt-3" align="center"> Traitement de la demande d'annulation</h5>
+                          <div class="col-md-12 mb-3" align="center">
+                              <h6 class="card-title mt-3"> Traitement de la demande d'annulation</h6>
                           </div>
                           <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_annulation->id_demande_annulation_plan)) }}" enctype="multipart/form-data">
                               @csrf
