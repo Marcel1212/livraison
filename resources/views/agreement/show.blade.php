@@ -21,6 +21,17 @@ $logo = Menu::get_logo();
             }
         }
 
+        @media print {
+            .visuel_bouton {
+                display: none;
+            }
+
+            @page {
+                margin-top: 0.3in !important;
+                margin-bottom: 0.3in !important;
+            }
+        }
+
     </style>
     @isset($plan_de_formation)
         @if($plan_de_formation->flag_annulation_plan)

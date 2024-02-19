@@ -377,6 +377,8 @@ class ComitePleniereController extends Controller
 
                 $idplan = $actionplan->id_plan_de_formation;
 
+
+
                 $this->validate($request, [
                     'id_motif' => 'required',
                 ],[
@@ -391,6 +393,18 @@ class ComitePleniereController extends Controller
                 $input['id_user_conseil'] = Auth::user()->id;
                 $input['id_action_plan_formation'] = $id;
                 $input['id_plan_formation'] = $idplan;
+
+                $montantcoutactionattribuable = $actionplan->montant_attribuable_fdfp;
+
+                $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                if($coutaccordeactionformation > $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }else{
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }
 
                 $actionplan->update($input);
                 ActionPlanFormationAValiderParUser::create($input);
