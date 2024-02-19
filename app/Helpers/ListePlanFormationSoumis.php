@@ -13,7 +13,8 @@ class ListePlanFormationSoumis
     {
         //$infossecteur = SecteurActiviteUserConseiller::where([['id_user_conseiller','=',$idUser],['id_secteur_activite','=',$idsecteuractivite]])->first();
         //$planformations = DB::table('vue_planfomation_soumis_conseiller')->where([['id_user_conseiller','=',$idUser]])->get();
-        $planformations = DB::table('vue_plan_formation_soumis_au_conseiller')->where([['id_user_conseiller','=',$idUser],['num_agce','=',$numAgce]])->get();
+        //$planformations = DB::table('vue_plan_formation_soumis_au_conseiller')->where([['id_user_conseiller','=',$idUser],['num_agce','=',$numAgce]])->get();
+        $planformations = DB::table('vue_plan_formation_soumis_au_conseiller')->where([['id_user_conseiller','=',$idUser],['id_agence','=',$numAgce]])->get();
         //dd($planformations);
         return (isset($planformations) ? $planformations : '');
     }
