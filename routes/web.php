@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
         'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
         'ctprojetetude' => App\Http\Controllers\CtprojetetudeController::class,
         'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
+        'ctprojetformationvalider' => App\Http\Controllers\CtprojetformationvaliderController::class,
         //'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
         //'ctplanformationpleniere' => App\Http\Controllers\ComitePleniereController::class,
         'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
@@ -350,6 +351,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [App\Http\Controllers\CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');
+    Route::get('ctprojetformationvalider/{id}/{id2}/editer', [App\Http\Controllers\CtprojetformationvaliderController::class, 'editer'])->name('ctprojetformationvalider.editer');
     Route::get('agence/{id}/delete', [App\Http\Controllers\AgenceController::class, 'delete'])->name('agence.delete');
     Route::get('users/{id}/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('users.delete');
     Route::get('/dashboard', [App\Http\Controllers\ConnexionController::class, 'dashboard'])->name('dashboard');

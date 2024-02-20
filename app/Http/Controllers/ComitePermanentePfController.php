@@ -56,9 +56,10 @@ class ComitePermanentePfController extends Controller
                                                 // ['flag_plan_formation_valider_cahier','=',true],
                                                 ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
                                                 ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite],
-                                                ['flag_fiche_agrement','=',null]])
+                                                ['flag_fiche_agrement','=',null],
+                                                ['flag_processus_etape','=',true]])
                                             ->get();
-
+            //dd($planformations);
         return view('comitepermanentepf.create', compact('planformations'));
     }
 
@@ -159,6 +160,7 @@ class ComitePermanentePfController extends Controller
 
         $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
                                                 ['flag_fiche_agrement','=',null],
+                                                ['flag_processus_etape','=',true],
                                                 ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
                                                 ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite]])->get();
         //dd($planformations);
