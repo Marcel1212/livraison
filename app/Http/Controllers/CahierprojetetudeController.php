@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GenerateCode as Gencode;
-use App\Models\Cahierprojetetude;
-use App\Models\LigneCahierprojetetude;
+use App\Models\CahierProjetetude;
+use App\Models\LigneCahierProjetEtude;
 use App\Models\PiecesProjetEtude;
-use App\Models\projetetude;
+use App\Models\ProjetEtude;
 use App\Helpers\Crypt;
 use App\Models\SecteurActivite;
 use App\Models\TypeComite;
@@ -62,21 +62,23 @@ class CahierprojetetudeController extends Controller
             $input['date_creer_cahier_projet_etude'] = Carbon::now();
             $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
             $cahier =  CahierProjetetude::create($input);
+            if($request->action=="Enregistrer"){
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
 
-            return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            if($request->action=="Enregistrer_suivant"){
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
 
         }
     }
 
 
     public function edit($id, $id1){
-
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
 
-
         $cahier = CahierProjetetude::find($id);
-
         $cahierprojetetudes = LigneCahierProjetEtude::join('projet_etude','ligne_cahier_projet_etude.id_projet_etude','projet_etude.id_projet_etude')
                             ->join('entreprises','projet_etude.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','projet_etude.id_charge_etude','=','users.id')
@@ -84,15 +86,13 @@ class CahierprojetetudeController extends Controller
 
         $projetetudes = ProjetEtude::where([['flag_valider_par_processus','=',true],['flag_projet_etude_valider_cahier','=',false]])->get();
 
-
-
         return view('cahierprojetetude.edit', compact('cahier','id','idetape','projetetudes','cahierprojetetudes'));
     }
 
     public function editer($id,$id2,$id3)
     {
         $id =  Crypt::UrldeCrypt($id);
-        $idcomite = Crypt::UrldeCrypt($id2);
+        $id_cahier_projet_etude = Crypt::UrldeCrypt($id2);
         $id_etape = Crypt::UrldeCrypt($id3);
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
@@ -128,6 +128,16 @@ class CahierprojetetudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
+
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
                 $motif = Motif::where('code_motif','=','PRE')->get();;
                 $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
                 foreach ($motif as $comp) {
@@ -142,7 +152,8 @@ class CahierprojetetudeController extends Controller
                         'lettre_engagement',
                         'offre_technique',
                         'projet_etude',
-                        'idcomite',
+                        'id_cahier_projet_etude',
+                        'secteuractivite_projet',
                         'motifs',
                         'offre_financiere',
                         'secteuractivite'));
@@ -191,7 +202,7 @@ class CahierprojetetudeController extends Controller
                 $input = $request->all();
                 $input['id_users_cahier_projet_etude'] = Auth::user()->id;
                 $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'_'. Carbon::now()->format('Y');
-                $comitegestion = Cahierprojetetude::find($id);
+                $comitegestion = CahierProjetetude::find($id);
                 $comitegestion->update($input);
 
                 return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
@@ -211,7 +222,7 @@ class CahierprojetetudeController extends Controller
                 $tab = $input['projetetude'];
 
                 foreach ($tab as $key => $value) {
-                    LigneCahierprojetetude::create([
+                    LigneCahierProjetEtude::create([
                         'id_cahier_projet_etude'=> $id,
                         'id_projet_etude'=> $value
                     ]);
@@ -227,8 +238,8 @@ class CahierprojetetudeController extends Controller
 
             if ($data['action'] == 'Traiter_cahier_projet_soumis'){
 
-                $comite = Cahierprojetetude::find($id);
-                $lignecahierprojetetude = LigneCahierprojetetude::where([['id_cahier_projet_etude','=',$id]])->get();
+                $comite = CahierProjetetude::find($id);
+                $lignecahierprojetetude = LigneCahierProjetEtude::where([['id_cahier_projet_etude','=',$id]])->get();
 
                 foreach ($lignecahierprojetetude as $key => $value) {
                     $projet_etude = projetetude::find($value->id_projet_etude);
@@ -239,7 +250,7 @@ class CahierprojetetudeController extends Controller
 
                     if(isset($type_comite_gestion)){
                         if($type_comite_gestion->valeur_min_type_comite < $projet_etude->montant_projet_instruction &&
-                            $type_comite_gestion->valeur_min_type_comite >= $projet_etude->montant_projet_instruction){
+                            $type_comite_gestion->valeur_max_type_comite >= $projet_etude->montant_projet_instruction){
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_gestion = true;
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_permanente = false;
                             $projet_etude->update();
@@ -248,7 +259,7 @@ class CahierprojetetudeController extends Controller
 
                     if(isset($type_comite_permanent)){
                         if($type_comite_permanent->valeur_min_type_comite < $projet_etude->montant_projet_instruction &&
-                            $type_comite_permanent->valeur_min_type_comite >= $projet_etude->montant_projet_instruction){
+                            $type_comite_permanent->valeur_max_type_comite >= $projet_etude->montant_projet_instruction){
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_gestion = false;
                             $projet_etude->flag_projet_etude_valider_cahier_soumis_comite_permanente = true;
                             $projet_etude->update();
@@ -265,25 +276,25 @@ class CahierprojetetudeController extends Controller
 
         }
     }
-
-    public function etat($id){
-
-        $id =  Crypt::UrldeCrypt($id);
-
-        $cahier = Cahierprojetetude::find($id);
-
-       $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
-
-       $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
-
-       $etatplanf = EtatCahierPlanDeFormation::get_liste_etat_plan_cahier_plan_f($id);
-
-       $etatbutformation = EtatCahierPlanDeFormation::get_liste_etat_but_formation_cahier_plan_f($id);
-
-       $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
-
-       //dd($etatsecteuractivite);
-
-        return view('cahierprojetetude.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
-    }
+//
+//    public function etat($id){
+//
+//        $id =  Crypt::UrldeCrypt($id);
+//
+//        $cahier = CahierProjetetude::find($id);
+//
+//       $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
+//
+//       $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
+//
+//       $etatplanf = EtatCahierPlanDeFormation::get_liste_etat_plan_cahier_plan_f($id);
+//
+//       $etatbutformation = EtatCahierPlanDeFormation::get_liste_etat_but_formation_cahier_plan_f($id);
+//
+//       $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
+//
+//       //dd($etatsecteuractivite);
+//
+//        return view('cahierprojetetude.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
+//    }
 }

@@ -93,7 +93,7 @@
                                                     <td>{{ $projet_etude_valide->date_soumis_selection_operateur }}</td>
 
                                                     <td align="center">
-                                                        <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)) }}"
+                                                        <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                                            class=" " title="Modifier"><img
                                                                 src='/assets/img/editing.png'></a>
                                                     </td>

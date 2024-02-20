@@ -1,3 +1,4 @@
+@if(auth()->user()->can('statutoperations-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -17,9 +18,9 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            
+
                             <div class="breadcrumb-wrapper">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -53,15 +54,15 @@
                                                 <div class="mb-1">
                                                     <label>Libelle </label>
                                                     <input type="text" name="libelle_statut_operation" id="libelle_statut_operation"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Code </label>
                                                     <input type="text" name="code_statut_operation" id="code_statut_operation"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
                                             </div>
@@ -95,7 +96,11 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

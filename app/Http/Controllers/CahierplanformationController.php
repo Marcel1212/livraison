@@ -26,6 +26,8 @@ use App\Models\CategorieProfessionelle;
 use App\Helpers\ConseillerParAgence;
 use App\Helpers\EtatCahierPlanDeFormation;
 use App\Models\ActionFormationPlan;
+use App\Models\Departement;
+use App\Models\Direction;
 use App\Models\User;
 Use DB;
 
@@ -40,7 +42,11 @@ class CahierplanformationController extends Controller
 
     public function create(){
 
-        return view("cahierplanformation.create");
+        $departements = Direction::join('departement','direction.id_direction','departement.id_direction')->where([
+            ['direction.id_direction','=','4'],['departement.flag_departement','=',true]
+            ])->get();
+
+        return view("cahierplanformation.create",compact('departements'));
 
     }
 
@@ -49,15 +55,19 @@ class CahierplanformationController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                'code_pieces_cahier_plan_formation' => 'required',
+                'id_departement' => 'required',
+                'id_agence' => 'required',
             ],[
-                'code_pieces_cahier_plan_formation.required' => 'Veuillez sélectionner le type entreprise.',
+                'id_departement.required' => 'Veuillez sélectionner un departement.',
+                'id_agence' => 'veuillez sélectionner une agence',
             ]);
 
+
             $input = $request->all();
+            $departement = Departement::find($input['id_departement']);
             $input['id_users_cahier_plan_formation'] = Auth::user()->id;
             $input['date_creer_cahier_plan_formation'] = Carbon::now();
-            $input['code_cahier_plan_formation'] = $input['code_pieces_cahier_plan_formation']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
+            $input['code_cahier_plan_formation'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
             $cahier =  CahierPlanFormation::create($input);
 
             return redirect('cahierplanformation/'.Crypt::UrlCrypt($cahier->id_cahier_plan_formation).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
@@ -71,6 +81,10 @@ class CahierplanformationController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
 
+        $departements = Direction::join('departement','direction.id_direction','departement.id_direction')->where([
+            ['direction.id_direction','=','4'],['departement.flag_departement','=',true]
+            ])->get();
+
 
         $cahier = CahierPlanFormation::find($id);
 
@@ -79,12 +93,18 @@ class CahierplanformationController extends Controller
                             ->join('users','plan_formation.user_conseiller','=','users.id')
                             ->where([['ligne_cahier_plan_formation.id_cahier_plan_formation','=',$cahier->id_cahier_plan_formation]])->get();
 
-        $planformations = PlanFormation::where([['flag_plan_formation_valider_par_processus','=',true],['flag_plan_formation_valider_cahier','=',false]])->get();
+
+        $planformations = PlanFormation::Join('users','plan_formation.user_conseiller','users.id')->where([
+            ['flag_plan_formation_valider_par_processus','=',true],
+            ['flag_plan_formation_valider_cahier','=',false],
+            ['users.id_departement','=',$cahier->id_departement],
+            ['users.num_agce','=',$cahier->id_agence]
+            ])->get();
 
         //dd($planformations);
 
 
-        return view('cahierplanformation.edit', compact('cahier','id','idetape','planformations','cahierplansformations'));
+        return view('cahierplanformation.edit', compact('cahier','id','idetape','planformations','cahierplansformations','departements'));
     }
 
     public function editer($id,$id2,$id3)
@@ -210,16 +230,19 @@ class CahierplanformationController extends Controller
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
-                    'code_pieces_cahier_plan_formation' => 'required',
+                    'id_departement' => 'required',
+                    'id_agence' => 'required',
                 ],[
-                    'code_pieces_cahier_plan_formation.required' => 'Veuillez sélectionner le type entreprise.',
+                    'id_departement.required' => 'Veuillez sélectionner un departement.',
+                    'id_agence' => 'veuillez sélectionner une agence',
                 ]);
 
 
                 $input = $request->all();
+                $departement = Departement::find($input['id_departement']);
                 $input['id_users_cahier_plan_formation'] = Auth::user()->id;
                 //$input['date_creer_cahier_plan_formation'] = Carbon::now();
-                $input['code_cahier_plan_formation'] = $input['code_pieces_cahier_plan_formation']. '-' . Gencode::randStrGen(4, 5) .'_'. Carbon::now()->format('Y');
+                $input['code_cahier_plan_formation'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
                 $comitegestion = CahierPlanFormation::find($id);
                 $comitegestion->update($input);
 
@@ -233,6 +256,7 @@ class CahierplanformationController extends Controller
 
                 $input = $request->all();
                 //dd($input);exit;
+                if(isset($input['planformation'])){
 
                 $verifnombre = count($input['planformation']);
 
@@ -263,7 +287,11 @@ class CahierplanformationController extends Controller
 
 
                 return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                }else{
 
+                    return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un plan de formation. ');
+
+                }
 
             }
 
@@ -295,6 +323,8 @@ class CahierplanformationController extends Controller
         $cahier = CahierPlanFormation::find($id);
 
        $etatsecteuractivite =  EtatCahierPlanDeFormation::get_liste_etat_secteur_activite_cahier_plan_f($id);
+
+       //dd($etatsecteuractivite);
 
        $etatactionplan = EtatCahierPlanDeFormation::get_liste_etat_action_cahier_plan_f($id);
 

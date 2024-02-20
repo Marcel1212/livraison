@@ -3,8 +3,8 @@
 @section('content')
 
     @php($Module = 'Projet d\'etude')
-    @php($titre = 'Liste des comites de gestion')
-    @php($soustitre = 'Tenue de comite de gestion')
+    @php($titre = 'Liste des comités de gestion')
+    @php($soustitre = 'Tenue de comité de gestion')
     @php($lien = 'comitegestionprojetetude')
 
 
@@ -57,7 +57,7 @@
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite de gestion
+                            Comité de gestion
                         </button>
                     </li>
                     <li class="nav-item">
@@ -79,7 +79,9 @@
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if(count($ficheagrements)<1){ echo 'disabled'; }?>" role="tab" data-bs-toggle="tab"
+                        <button type="button" class="nav-link <?php if ($idetape == 4) {
+                        echo ' active';
+                    } if(count($ficheagrements)<1){ echo 'disabled'; }?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false"
                         >
@@ -217,9 +219,9 @@
 
 
                             <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
                                 <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                                     <?php } ?>
@@ -250,19 +252,21 @@
 
                                 <?php //dd($projetetudes);
                                 $i = 0; ?>
+{{--                                {{dd($projetetudes)}}--}}
+
                                 @foreach ($projetetudes as $key => $projetetude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$projetetude->entreprise->ncc_entreprises }} /
-                                            {{ @$projetetude->entreprise->raison_social_entreprises }}</td>
+                                            {{ @$projetetude->entreprise->raison_social_entreprises }}
+                                        </td>
                                         <td>{{ @$projetetude->code_projet_etude }}</td>
                                         <td>{{ @$projetetude->titre_projet_etude }}</td>
                                         <td>{{ $projetetude->date_soumis }}</td>
                                         <td align="rigth">
                                             {{ number_format($projetetude->montant_projet_instruction) }}</td>
-
                                         <td align="center">
-                                            <?php if($comitegestion->flag_statut_comite_gestion == false){?>
+                                            <?php if($comitegestion->flag_statut_comite_gestion == false && count($comitegestionparticipant)>=1){?>
 {{--                                            @can($lien . '-edit')--}}
                                                 <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>

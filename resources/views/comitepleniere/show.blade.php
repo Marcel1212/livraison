@@ -9,6 +9,19 @@ $logo = Menu::get_logo();
     <meta charset="utf-8">
     <title>Action de plan et fiche agrement A</title>
     <link media="all" href="/assets/css/style_etat.css" type="text/css" rel="stylesheet"/>
+    <style type="text/css" media="print">
+        @page { size: landscape; }
+        @media print {
+            .visuel_bouton {
+                display: none;
+            }
+
+            @page {
+                margin-top: 0.3in !important;
+                margin-bottom: 0.3in !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -28,9 +41,9 @@ $logo = Menu::get_logo();
                                                     <img
                                                         src="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}"
                                                         width="95" height="43"
-                                                        alt="{{@$logo->mot_cle}}"/> 
+                                                        alt="{{@$logo->mot_cle}}"/>
                                                 <?php } ?>
-                                          
+
 
                                                         <br/>
                                                         {{@$logo->mot_cle}}<br/>
@@ -65,10 +78,10 @@ $logo = Menu::get_logo();
                                                                                         nowrap="nowrap" class="">&nbsp;
                                                                                     </td>
                                                                                     <td align="left" class="entete2">&nbsp;
-                                                                                        
+
                                                                                     </td>
                                                                                     <td valign="middle" class="">&nbsp;
-                                                                                        
+
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">&nbsp;
@@ -94,7 +107,7 @@ $logo = Menu::get_logo();
                                                                                         <span class="">: </span></td>
                                                                                     <td valign="middle" class=""><span
                                                                                             class="entete2"><span
-                                                                                                class="">{{$actionplan->intitule_action_formation_plan }} </span></span>
+                                                                                                class=""> <?php echo wordwrap($actionplan->intitule_action_formation_plan,84,"<br>\n"); ?>  </span></span>
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">&nbsp;
@@ -115,7 +128,7 @@ $logo = Menu::get_logo();
                                                                                         nowrap="nowrap" class="">
                                                                                         <div align="left"><span
                                                                                                 class=""><strong
-                                                                                                    class="">Nombre de stagiaires</strong></span>
+                                                                                                    class="">Nombre de bénéficiaires <br/> de l’action de formation</strong></span>
                                                                                         </div>
                                                                                     </td>
                                                                                     <td width="5" align="left"
@@ -154,13 +167,13 @@ $logo = Menu::get_logo();
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class=""><span
-                                                                                            class=""><strong>Cout de l'action</strong></span>
+                                                                                            class=""><strong>Nombre de jour</strong></span>
                                                                                     </td>
                                                                                     <td width="5" align="left" class="">
                                                                                         <span class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class=""><span
-                                                                                            class="">  {{$actionplan->cout_action_formation_plan }}  </span>
+                                                                                            class="">  {{$actionplan->nombre_jour_action_formation }}  </span>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -185,7 +198,7 @@ $logo = Menu::get_logo();
                                                                                         class=""><span
                                                                                             class="">{{$ficheagrement->butFormation->but_formation }}  </span>
                                                                                     </td>
-                                                                                </tr>                                                                                
+                                                                                </tr>
                                                                                 <tr>
                                                                                 <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">
@@ -208,8 +221,8 @@ $logo = Menu::get_logo();
                                                                                         class=""><span
                                                                                             class="">{{$ficheagrement->date_fin_fiche_agrement }}  </span>
                                                                                     </td>
-                                                                                </tr>                                                                                
-                                                                               
+                                                                                </tr>
+
                                                                                 <tr>
                                                                                 <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">
@@ -232,8 +245,8 @@ $logo = Menu::get_logo();
                                                                                         class=""><span
                                                                                             class="">{{$ficheagrement->cout_total_fiche_agrement }}  </span>
                                                                                     </td>
-                                                                                </tr>                                                                                
-                                                                                
+                                                                                </tr>
+
                                                                                 <tr>
                                                                                 <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">
@@ -242,7 +255,7 @@ $logo = Menu::get_logo();
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class=""><span
-                                                                                            class="">{{$ficheagrement->objectif_pedagogique_fiche_agre }}  </span>
+                                                                                            class=""><?php echo wordwrap($ficheagrement->objectif_pedagogique_fiche_agre,84,"<br>\n"); ?>   </span>
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class="">&nbsp;
@@ -256,8 +269,8 @@ $logo = Menu::get_logo();
                                                                                         class=""><span
                                                                                             class="">{{$ficheagrement->cadre_fiche_demande_agrement }}  </span>
                                                                                     </td>
-                                                                                </tr>                                                                                
-                                                                                   
+                                                                                </tr>
+
                                                                                 <tr>
                                                                                 <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">
@@ -280,8 +293,8 @@ $logo = Menu::get_logo();
                                                                                         class=""><span
                                                                                             class="">{{$ficheagrement->employe_fiche_demande_agrement }}  </span>
                                                                                     </td>
-                                                                                </tr>                                                                                
-                                                                                
+                                                                                </tr>
+
                                                                                 <tr>
                                                                                 <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">
@@ -305,8 +318,31 @@ $logo = Menu::get_logo();
                                                             href="{{ asset("/pieces/facture_proforma_action_formation/". $actionplan->facture_proforma_action_formati)}}">
                                                             Voir la pièce  </a></span>
                                                                                     </td>
-                                                                                </tr>                                                                                
-                                                                                
+                                                                                </tr>
+
+                                                                                <tr>
+                                                                                    <td height="22" valign="middle"
+                                                                                            nowrap="nowrap" class="">
+                                                                                            <strong>Secteur d'activité</strong></td>
+                                                                                        <td align="left" class=""><span
+                                                                                                class="">: </span></td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class=""><span
+                                                                                                class="">{{ @$actionplan->secteurActivite->libelle_secteur_activite }}  </span>
+                                                                                        </td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class="">&nbsp;
+                                                                                        </td>
+                                                                                        <td height="22" valign="middle"
+                                                                                            nowrap="nowrap" class=""><strong></strong>
+                                                                                        </td>
+                                                                                        <td align="left" class="">:
+                                                                                        </td>
+                                                                                        <td valign="middle" nowrap="nowrap"
+                                                                                            class="">
+                                                                                        </td>
+                                                                                    </tr>
+
 
                                                                             </table>
                                                                         </td>
@@ -316,12 +352,7 @@ $logo = Menu::get_logo();
                                                         </tr>
                                                     </table>
                                                     <td valign="top">&nbsp;</td>
-                                                <td align="right" valign="top">{{\SimpleSoftwareIO\QrCode\Facades\QrCode::size(130)->generate(
-'Intitule action de formation :'. $actionplan->intitule_action_formation_plan.'
-Type de formation :'.  $ficheagrement->typeFormation->type_formation.'
-Code formation :'.  @$planformation->conde_entreprise_plan_formation.'
-Code conseiller :'.  @$planformation->code_plan_formation.'
-Date soumis :'. @$planformation->date_soumis_plan_formation )}}</td>
+
                                                 </td>
                                               <td valign="top">&nbsp;</td>
                                                 <td align="right" valign="top"></td>
@@ -366,13 +397,13 @@ Date soumis :'. @$planformation->date_soumis_plan_formation )}}</td>
                             <td align="center" nowrap="nowrap" class="encadrecmpl">
                                 &nbsp;<?php echo $res->annee_naissance; ?></td>
                             <td align="center" nowrap="nowrap" class="encadrehautligne">
-                                &nbsp;<?php echo $res->nationalite; ?></td>                            
+                                &nbsp;<?php echo $res->nationalite; ?></td>
                             <td align="center" nowrap="nowrap" class="encadrehautligne">
-                                &nbsp;<?php echo $res->fonction; ?></td>                            
+                                &nbsp;<?php echo $res->fonction; ?></td>
                             <td align="center" nowrap="nowrap" class="encadrehautligne">
-                                &nbsp;<?php echo $res->categorie; ?></td>                            
+                                &nbsp;<?php echo $res->categorie; ?></td>
                             <td align="center" nowrap="nowrap" class="encadrehautligne">
-                                &nbsp;<?php echo $res->annee_embauche; ?></td>                            
+                                &nbsp;<?php echo $res->annee_embauche; ?></td>
                             <td align="center" nowrap="nowrap" class="encadrehautligne">
                                 &nbsp;<?php echo $res->matricule_cnps; ?></td>
                         </tr>
@@ -382,10 +413,10 @@ Date soumis :'. @$planformation->date_soumis_plan_formation )}}</td>
                         <td colspan="12" align="left" nowrap="nowrap" class="encadrecmpl">&nbsp;</td>
 
                     </tr>
-                    
+
 
                 </table>
-                
+
             </td>
         </tr>
     </table>

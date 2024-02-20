@@ -49,7 +49,7 @@
                         <li class="nav-item">
                             <button
                                 type="button"
-                                class="nav-link @if($id_etape==1) active   @endif"
+                                class="nav-link @if($id_etape==1) active @endif"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-entreprise"
@@ -97,14 +97,14 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-entreprise" role="tabpanel">
+                        <div class="tab-pane fade  @if($id_etape==1) show active @endif" id="navs-top-entreprise" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
                                         <input type="text"
                                                class="form-control form-control-sm"
-                                               value="{{@@$projet_etude->entreprise->ncc_entreprises}}" disabled="disabled">
+                                               value="{{@$projet_etude->entreprise->ncc_entreprises}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
@@ -200,26 +200,37 @@
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
                                     <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                                    <a class="btn btn-sm btn-outline-secondary waves-effect  ms-sm-3 me-1" href="/{{$lien }}">Retour</a>
+
                                 </div>
 
                             </div>
                         </div>
                         <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
+
+                            <div class="row">
+                                <div class="col-md-6 col-10">
+                                    <div class="mb-1 ">
                                         <label>Titre du projet <span
                                                 style="color:red;">*</span>
                                         </label>
                                         <input type="text" name="titre_projet"
                                                required="required" id="titre_projet"
                                                class="form-control form-control-sm"
-                                                   disabled
-                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
-
-                                               placeholder="ex : Perfectionnement ..">
+                                               disabled
+                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
                                     </div>
+                                </div>
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" disabled>
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
+                                </div>
+
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 col-12">
@@ -301,7 +312,6 @@
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
                             <table class="table table-bordered table-striped table-hover table-sm"
-                                   id="exampleData"
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>
@@ -336,27 +346,27 @@
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
                                         </td>
@@ -403,15 +413,18 @@
                                             <br>
 
                                             <div class="col-12" align="right">
-                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary " align="right">Précédent</a>
+                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1 " align="right">Précédent</a>
                                                 @if(@$projet_etude->flag_soumis_chef_depart==false)
 
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chef de service sélectionné ? . Cette action est irréversible.")) return false;'  type="submit" name="action"
                                                         value="soumission_projet_etude_cd"
-                                                        class="ms-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Soumettre au chef de service
                                                 </button>
                                                 @endif
+
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
+
 
                                             </div>
                                         </div>
@@ -450,12 +463,15 @@
                                                 <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
                                                 @if(@$projet_etude->flag_soumis_chef_service==false)
 
-                                                <button type="submit" name="action"
+                                                <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chargé d étude sélectionné ? . Cette action est irréversible.")) return false;' type="submit" name="action"
                                                         value="soumission_projet_etude_cs"
-                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                        class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Soumettre au  chargé d'étude
                                                 </button>
                                                     @endif
+
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
+
                                             </div>
                                         </div>
                                     </form>

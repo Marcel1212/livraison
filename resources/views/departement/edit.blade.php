@@ -1,9 +1,11 @@
+@if(auth()->user()->can('departement-edit'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
     @php($titre='Liste des departements')
     @php($soustitre='Modifier une departement')
     @php($lien='departement')
+    @php($lien1='caracteristiquemargedepartement')
     <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -13,7 +15,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            
+
                             <div class="breadcrumb-wrapper">
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                                                            class="form-control form-control-sm" >
                                                 </div>
                                             </div>
-                                    
+
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
@@ -82,6 +84,81 @@
                                             </div>
                                         </div>
                                     </form>
+
+                                    @can($lien1.'-index')
+                                    <hr>
+                                    <form action="{{ route($lien1.'.store') }}" method="POST">
+                                        @csrf
+                                        @method('POST')
+                                        <div class="row">
+
+                                            <input type="hidden" name="id_departement" value="{{ $departement->id_departement }}" />
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Marge inférieure</label>
+                                                    <input type="number" min="0" name="marge_inferieur_cmd" id="marge_inferieur_cmd"
+                                                    class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="mb-1">
+                                                    <label>Marge supérieure</label>
+                                                    <input type="number" min="0" name="marge_superieur_cmd" id="marge_superieur_cmd"
+                                                    class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12" align="right">
+                                                <hr>
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                    Ajouter
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
+
+                                        <table class="table table-bordered table-striped table-hover table-sm" id="exampleData" >
+                                            <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Marge inférieure</th>
+                                                <th>Marge supérieure</th>
+                                                <th>Statut</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $i=0; ?>
+                                            @foreach ($carateristiquedepartements as $key => $res)
+                                                <tr>
+                                                    <td>{{ ++$i }}</td>
+                                                    <td>{{ number_format($res->marge_inferieur_cmd) }}</td>
+                                                    <td>{{ number_format($res->marge_superieur_cmd) }}</td>
+                                                    <td align="center">
+                                                        <?php if($res->flag_cmd == true){ ?>
+                                                            <span class="badge bg-success">Actif</span>
+                                                        <?php  }else{?>
+                                                            <span class="badge bg-danger">Inactif</span>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td align="center">
+                                                        @can($lien1.'-delete')
+
+                                                            <a href="{{ route($lien1.'.delete',$res->id_caracteristique_marge_departement) }}"
+                                                            class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
+                                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+
+                                                        @endcan
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                        @endcan
                                 </div>
                             </div>
                         </div>
@@ -93,6 +170,10 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 

@@ -3,8 +3,8 @@
 @section('content')
 
     @php($Module='Projet d\'étude')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Tenue de comite plénière')
+    @php($titre='Liste des comités plénières')
+    @php($soustitre='Tenue de comité plénière')
     @php($lien='comitepleniereprojetetude')
 
 
@@ -56,7 +56,7 @@
                           data-bs-target="#navs-top-pleniere"
                           aria-controls="navs-top-pleniere"
                           aria-selected="true">
-                          Comite plénière
+                          Comité plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -74,7 +74,7 @@
                       <li class="nav-item">
                         <button
                           type="button"
-                          class="nav-link  @if($idetape==3) active @endif"
+                          class="nav-link @if(count($comitepleniereparticipant)<1) disabled @else @if($idetape==3) active @endif  @endif "
                           role="tab"
                           data-bs-toggle="tab"
                           data-bs-target="#navs-top-liste"
@@ -87,7 +87,9 @@
 
 
 
-                            <button type="button" class="nav-link @if(count($cahiers)<1 ) disabled @endif"
+                            <button type="button" class="nav-link @if(count($cahiers)<1 ) disabled @else
+                             @if($idetape==4) active @endif
+                            @endif"
                                     role="tab" data-bs-toggle="tab"
                                     data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                                     aria-selected="false">
@@ -133,6 +135,10 @@
                                                     class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                 Modifier
                                             </button>
+                                            <button type="submit" name="action" value="Suivant"
+                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                Suivant
+                                            </button>
                                         <?php } ?>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
@@ -148,7 +154,7 @@
                                       @method('put')
                                       <div class="row">
                                           <div class="col-12 col-md-10">
-                                              <label class="form-label" for="id_user_comite_pleniere_participant">Charger d'étude <strong style="color:red;">*</strong></label>
+                                              <label class="form-label" for="id_user_comite_pleniere_participant">Chargé d'étude <strong style="color:red;">*</strong></label>
                                               <select
                                                   id="id_user_comite_pleniere_participant"
                                                   name="id_user_comite_pleniere_participant"
@@ -238,7 +244,7 @@
                             </table>
                         </div>
                         @if(count($cahiers)>=1)
-                        <div class="tab-pane fade " id="navs-top-cahieraprescomite" role="tabpanel">
+                        <div class="tab-pane fade @if($idetape==4) show active @endif" id="navs-top-cahieraprescomite" role="tabpanel">
                             <?php  if(count($cahiers)>=1 and $comitepleniere->flag_statut_comite_pleniere == false){?>
                             <div class="col-12" align="right">
                                 <form method="POST" class="form"

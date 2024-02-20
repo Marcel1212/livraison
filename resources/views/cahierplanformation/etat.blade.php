@@ -16,6 +16,18 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        @media print {
+            .visuel_bouton {
+                display: none;
+            }
+
+            @page {
+                margin-top: 0.3in !important;
+                margin-bottom: 0.3in !important;
+            }
+        }
+    </style>
   </head>
   <body>
 
@@ -109,32 +121,6 @@ $imagedashboard = Menu::get_info_image_dashboard();
         }
     </script>
 
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([
-            ['Secteur activite', 'Nombre'],
-
-                @php
-                foreach($etatsecteuractivite as $d) {
-                    echo "['".$d->secteur_activite."', ".$d->nombre."],";
-                }
-                @endphp
-        ]);
-
-          var options = {
-            title: 'Secteur activite',
-            is3D: true,
-          };
-
-          var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
-
-          chart.draw(data, options);
-        }
-    </script>
 
     <script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
@@ -163,6 +149,30 @@ $imagedashboard = Menu::get_info_image_dashboard();
         }
     </script>
 
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Secteur activite', 'Nombre'],
+
+                @foreach ($etatsecteuractivite as $category) // On parcourt les catégories
+                [ "{{ $category->secteur_activite }}", {{ $category->nombre }} ], // Proportion des produits de la catégorie
+                @endforeach
+        ]);
+
+          var options = {
+            title: 'Secteur activite',
+            is3D: true,
+          };
+
+          var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+          chart.draw(data, options);
+        }
+    </script>
 
 </body>
 </html>

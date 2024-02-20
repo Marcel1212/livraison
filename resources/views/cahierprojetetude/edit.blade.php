@@ -182,10 +182,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 Modifier
                                             </button>
                                         <?php } ?>
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
-
+                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
-
                                     </div>
 
                                 </div>
@@ -261,17 +259,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <div class="col-12" align="right">
                                 <hr>
 
-                                <?php //if (count($comitegestionparticipant)>=1){ ?>
 
+                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+                                @if(count($cahierprojetetudes)>=1)
 
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                @endif
 
-
-                                <?php //} ?>
-
-                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                    Retour</a>
                             </div>
                         </div>
                         @if(count($cahierprojetetudes)>=1)
@@ -305,7 +299,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <th>Contexte </th>
                                     <th>Cible </th>
                                     <th>Date soumis</th>
-                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>

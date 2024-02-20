@@ -9,6 +9,7 @@ use Carbon\Carbon;
 $imagedashboard = Menu::get_info_image_dashboard();
 $IdUser = Auth::user()->id;
 $numAgce = Auth::user()->num_agce;
+//dd($IdUser,$numAgce);
 
 $planformations = ListePlanFormationSoumis::get_liste_plan_formation_soumis($IdUser,$numAgce);
 $planformationstraitement = ListePlanFormationSoumis::get_plan_en_traitement($IdUser);

@@ -2,8 +2,8 @@
 @section('content')
 
     @php($Module='Demandes')
-    @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de plan de formation')
+    @php($titre='Liste des projets d\'études')
+    @php($soustitre='Demande de projet d\'étude')
     @php($lien='projetetude')
 
     <!-- BEGIN: Content-->
@@ -179,19 +179,18 @@
                     <div class="tab-pane fade show active" id="navs-top-infoprojetetude" role="tabpanel">
                         <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
-                        <div class="col-md-12 col-10" align="center">
-                            <div class="mb-1">
-                                <label>Titre du projet <span
-                                        style="color:red;">*</span>
-                                </label>
-                                <input type="text" name="titre_projet"
-                                       required="required" id="titre_projet"
-                                       class="form-control form-control-sm">
-                            </div>
-                        </div>
+                        <div class="col-md-12 col-10">
+                            <div class="row">
+                                <div class="mb-1 col-md-6">
+                                    <label>Titre du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <input type="text" name="titre_projet"
+                                           required="required" id="titre_projet"
+                                           class="form-control form-control-sm">
+                                </div>
 
-                            <div class="col-md-12 col-10" align="center">
-                                <div class="mb-1">
+                                <div class="mb-1 col-md-6">
                                     <label>Secteur d'activité du projet <span
                                             style="color:red;">*</span>
                                     </label>
@@ -200,6 +199,8 @@
                                     </select>
                                 </div>
                             </div>
+
+                        </div>
 
                         <div class="row">
                             <div class="col-md-4 col-12">

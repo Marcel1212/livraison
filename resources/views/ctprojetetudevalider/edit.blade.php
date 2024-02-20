@@ -197,35 +197,35 @@
                                 </div>
 
                             </div>
+
                         </div>
                         <div class="tab-pane fade " id="navs-top-infoprojetetude" role="tabpanel">
-                            <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
-                                        <label>Titre du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="titre_projet"
-                                               required="required" id="titre_projet"
-                                               class="form-control form-control-sm"
-                                               @if(@$projet_etude->flag_soumis==true)
-                                                   disabled
-                                               @endif
-                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
-
-                                               placeholder="ex : Perfectionnement ..">
-                                    </div>
+                            <div class="row">
+                                <div class="mb-1 col-md-6">
+                                    <label>Titre du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <input type="text" disabled name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
                                 </div>
+
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" disabled class="select2 form-select-sm input-group" data-allow-clear="true">
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row">
                                     <div class="col-md-4 col-12">
                                         <div class="mb-1">
                                             <label>Contexte ou Problèmes constatés <span
                                                     style="color:red;">*</span></label>
                                             <textarea class="form-control" required="required"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
                                                       rows="3" id="exampleFormControlTextarea"
-                                                      name="contexte_probleme" style="height: 121px;">@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>
+                                                      name="contexte_probleme_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->contexte_probleme_instruction}}@endisset</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-12">
@@ -233,11 +233,9 @@
                                             <label>Objectif Général <span
                                                     style="color:red;">*</span> </label>
                                             <textarea required="required" class="form-control"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
                                                       rows="3" id="exampleFormControlTextarea"
-                                                      name="objectif_general" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>
+                                                      name="objectif_general_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_general_instruction}}@endisset</textarea>
 
                                         </div>
                                     </div>
@@ -246,11 +244,9 @@
                                             <label>Objectifs spécifiques <span
                                                     style="color:red;">*</span> </label>
                                             <textarea class="form-control" required="required"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
                                                       rows="3" id="exampleFormControlTextarea"
-                                                      name="objectif_specifique" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>
+                                                      name="objectif_specifique_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_specifique_instruction}}@endisset</textarea>
 
                                         </div>
                                     </div>
@@ -260,11 +256,9 @@
                                             <label>Résultats attendus <span
                                                     style="color:red;">*</span> </label>
                                             <textarea class="form-control"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
                                                       required="required" rows="3" id="exampleFormControlTextarea"
-                                                      name="resultat_attendu" style="height: 121px;">@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>
+                                                      name="resultat_attendus_instruction" style="height: 121px;">@isset($projet_etude){{$projet_etude->resultat_attendus_instruction}}@endisset</textarea>
 
                                         </div>
                                     </div>
@@ -273,11 +267,9 @@
                                             <label>Champ de l’étude <span
                                                     style="color:red;">*</span></label>
                                             <textarea class="form-control"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
-                                                      rows="3" id="exampleFormControlTextarea" name="champ_etude"
-                                                      style="height: 121px;" required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>
+                                                      rows="3" id="exampleFormControlTextarea" name="champ_etude_instruction"
+                                                      style="height: 121px;" required="required">@isset($projet_etude){{$projet_etude->champ_etude_instruction}}@endisset</textarea>
 
                                         </div>
                                     </div>
@@ -286,14 +278,44 @@
                                             <label>Cible <span style="color:red;">*</span>
                                             </label>
                                             <textarea class="form-control"
-                                                      @if(@$projet_etude->flag_soumis==true)
                                                           disabled
-                                                      @endif
-                                                      rows="3" id="exampleFormControlTextarea" name="cible" style="height: 121px;"
-                                                      required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>
+                                                      rows="3" id="exampleFormControlTextarea" name="cible_instruction" style="height: 121px;"
+                                                      required="required">@isset($projet_etude){{$projet_etude->cible_instruction}}@endisset</textarea>
 
                                         </div>
                                     </div>
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
+                                        </label>
+                                        <textarea class="form-control" rows="3" style="height: 121px;" id="methodologie_instruction" name="methodologie_instruction" disabled  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
+                                        </label>
+                                        <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" disabled value="{{@$projet_etude->montant_projet_instruction}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-2">
+                                    <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span> (PDF, WORD, JPG)
+                                        5M</label>
+                                    @if($projet_etude->piece_jointe_instruction)
+                                        <div>
+                                        <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                 onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span></div>
+                                    @endif
+
+                                    <div id="defaultFormControlHelp" class="form-text">
+                                        <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                            maxi : 5Mo</em>
+                                    </div>
+                                </div>
                                 </div>
                         </div>
                         <div class="tab-pane fade" id="navs-top-piecesprojetetude" role="tabpanel">
@@ -305,8 +327,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Type de pièce</th>
-                                    <th>Libelle de la pièce</th>
-                                    <th>Action</th>
+                                    <th>&nbsp;</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -333,32 +354,30 @@
                                                 Offre financière
                                             @endif
                                         </td>
-                                        <td>{{ $piece->libelle_pieces }}</td>
                                         <td align="center">
-                                            {{--                                            @can($lien.'-edit')--}}
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
 
                                             @if(@$projet_etude->flag_soumis == false)

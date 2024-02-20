@@ -1,3 +1,5 @@
+@if(auth()->user()->can('processus-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -41,9 +43,9 @@
                                             <div class="mb-1">
                                                 <label>Libellé </label>
                                                 <input type="text" name="lib_processus" id="lib_processus"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
-                                                
+
                                             </div>
                                         </div>
 
@@ -111,7 +113,7 @@
                                                 Retour</a>
                                         </div>
                                     </div>
-                                    
+
                                     </form>
                                     </div>
                 </div>
@@ -120,6 +122,10 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif
 
 

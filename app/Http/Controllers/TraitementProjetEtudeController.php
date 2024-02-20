@@ -73,6 +73,16 @@ class TraitementProjetEtudeController extends Controller
                     $statutinst .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
                 }
 
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+
 
                 $pays = Pays::all();
                 $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
@@ -88,7 +98,9 @@ class TraitementProjetEtudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
-                return view('traitementprojetetude.edit', compact('statutinst','motifs','id_etape','avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
+                return view('traitementprojetetude.edit', compact(
+                    'secteuractivite_projet',
+                'statutinst','motifs','id_etape','avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
             }
         }
     }
@@ -130,7 +142,7 @@ class TraitementProjetEtudeController extends Controller
                                     ";
                             $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                         }else{}
-                        return redirect()->route('traitementprojetetude.index')->with('success', 'Recevabilité effectué avec succès.');
+                        return redirect()->route('traitementprojetetude.index')->with('success', 'Recevabilité effectuée avec succès.');
 
                     }
                 }
@@ -158,7 +170,7 @@ class TraitementProjetEtudeController extends Controller
                             $sujet = "Recevabilité du projet d'étude sur e-FDFP";
                             $titre = "Bienvenue sur ".@$logo->mot_cle;
                             $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre projet d'étude de formation sur e-FDFP, et il a été
+                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
                                    mis en attente nous vous prions de bien vouloir patienter.
 
                                     <br><b>Motif de la mise en attente  : </b> ".@$projet_etude->motif->libelle_motif."
@@ -243,6 +255,8 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->cible_instruction = $request->cible_instruction;
                         $projet_etude->methodologie_instruction = $request->methodologie_instruction;
                         $projet_etude->montant_projet_instruction = $request->montant_projet_instruction;
+                        $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+
                         if (isset($request->fichier_instruction)){
                             $filefront = $request->fichier_instruction;
                             if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){

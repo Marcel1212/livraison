@@ -7,7 +7,7 @@
 
 	}*/
 ?>
-
+@if(auth()->user()->can('traitementplanformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -285,15 +285,17 @@
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->part_entreprise)}}" disabled="disabled">
                                     </div>
                                 </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
 
-                                        <label>Code plan </label>
-                                        <input type="text" name="code_plan_formation" id="code_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
+                                        <label>Budget de financement </label>
+                                        <input type="text" name="montant_financement_budget" id="montant_financement_budget"
+                                               class="form-control form-control-sm" value="{{number_format(@$planformation->montant_financement_budget)}}" disabled="disabled">
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
+
+                                <div class="col-md-2 col-12">
                                     <div class="mb-1">
 
                                         <label>Le coût demandé </label>
@@ -302,7 +304,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
+                                <div class="col-md-2 col-12">
                                     <div class="mb-1">
 
                                         <label>Le coût accordé </label>
@@ -310,6 +312,16 @@
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->cout_total_accorder_plan_formation)}}" disabled="disabled">
                                     </div>
                                 </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Code plan </label>
+                                        <input type="text" name="code_plan_formation" id="code_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
                                 <div class="col-12" align="right">
                                     <hr>
 
@@ -371,6 +383,7 @@
                                 <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
+                                <th>Cout de financement</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
@@ -387,6 +400,7 @@
                                 <td>{{ $historiquesplanformation->nombre_groupe_action_formation_ }}</td>
                                 <td>{{ $historiquesplanformation->nombre_heure_action_formation_p }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_action_formation_plan) }}</td>
+                                <td>{{ number_format($historiquesplanformation->montant_attribuable_fdfp) }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_accorde_action_formation) }}</td>
 
                                 <td align="center">
@@ -430,6 +444,7 @@
                                 <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
+                                <th>Cout de financement</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
@@ -446,6 +461,7 @@
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
+                                                <td>{{ number_format($actionplanformation->montant_attribuable_fdfp) }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation) }}</td>
 
                                                 <td align="center" nowrap="nowrap">
@@ -547,7 +563,7 @@
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget) }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
@@ -571,7 +587,7 @@
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise-$montantactionplanformationacc) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget-$montantactionplanformationacc) }}"
                                     disabled="disabled"/>
                             </div>
                         <div class="col-12 col-md-9">
@@ -674,12 +690,21 @@
                               value="{{@$infosactionplanformation->employe_fiche_demande_agrement}}"/>
                           </div>
 
+                          <div class="col-12 col-md-3">
+                            <label class="form-label" for="nombre_jour_action_formation">Nombre de jours</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->nombre_jour_action_formation}}"
+                              disabled="disabled" />
+                          </div>
+
                         <div class="col-12 col-md-3">
                             <label class="form-label" for="part_entreprise">Part entreprise</label>
                             <input
                               type="text"
                               class="form-control form-control-sm"
-                              value="{{@$infosactionplanformation->part_entreprise}}"
+                              value="{{number_format(@$infosactionplanformation->part_entreprise)}}"
                               disabled="disabled" />
                           </div>
                         <div class="col-12 col-md-3">
@@ -695,7 +720,7 @@
                           <input
                             type="text"
                             class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->cout_action_formation_plan}}"
+                            value="{{number_format(@$infosactionplanformation->cout_action_formation_plan)}}"
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
@@ -706,7 +731,14 @@
                             value="{{@$infosactionplanformation->type_formation}}"
                             disabled="disabled" />
                         </div>
-
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Caracteristique type de formation</label>
+                            <input
+                              type="text"
+                              class="form-control form-control-sm"
+                              value="{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}"
+                              disabled="disabled" />
+                          </div>
                         <div class="col-12 col-md-3">
                           <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
                           <input
@@ -732,11 +764,11 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
+                          <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
                           <input
-                            type="number"
+                            type="text"
                             class="form-control form-control-sm"
-                            value="{{@$infosactionplanformation->cout_total_fiche_agrement}}"
+                            value="{{number_format(@$infosactionplanformation->montant_attribuable_fdfp)}}"
                             disabled="disabled" />
                         </div>
 
@@ -814,3 +846,8 @@
 
         @endsection
 
+    @else
+        <script type="text/javascript">
+            window.location = "{{ url('/403') }}";//here double curly bracket
+        </script>
+    @endif

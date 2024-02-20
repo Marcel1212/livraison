@@ -94,7 +94,15 @@ class ProjetEtude extends Model
         return $this->belongsTo('App\Models\Agence', 'num_agce', 'num_agce');
     }
 
+    public function SecteurActivite()
+    {
+        return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
+    }
 
+    public function operateur()
+    {
+        return $this->belongsTo(Entreprises::class, 'id_operateur_selection', 'id_entreprises');
+    }
 
     public function operateurs():BelongsToMany{
         return $this->belongsToMany(Entreprises::class, 'projet_etude_has_entreprises','id_projet_etude','id_entreprises');

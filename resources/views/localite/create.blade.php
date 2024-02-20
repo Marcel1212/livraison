@@ -1,3 +1,5 @@
+@if(auth()->user()->can('localite-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -19,7 +21,7 @@
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
                             <div class="breadcrumb-wrapper">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -55,7 +57,7 @@
                                                 <div class="mb-1">
                                                     <label>Localite </label>
                                                     <input type="text" name="libelle_localite" id="libelle_localite"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
                                             </div>
@@ -88,7 +90,11 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

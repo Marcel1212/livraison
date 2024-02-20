@@ -1,3 +1,5 @@
+@if(auth()->user()->can('periodeexercice-edit'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -23,7 +25,7 @@
                     </div>
                 @endif
 
-                
+
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -33,7 +35,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif  
+                              @endif
 
              @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -62,19 +64,19 @@
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de debut </label>
-                                                    <input type="text" 
+                                                    <input type="text"
                                                            class="form-control form-control-sm" value="{{$periodeexercice->date_debut_periode_exercice}}"
                                                            disabled="disabled">
                                                 </div>
-                                            </div>                                             
+                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de fin </label>
-                                                    <input type="date" 
+                                                    <input type="date"
                                                            class="form-control form-control-sm" value="{{$periodeexercice->date_fin_periode_exercice}}"
                                                            disabled="disabled">
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de prolongation </label>
@@ -82,13 +84,13 @@
                                                            class="form-control form-control-sm" value="{{$periodeexercice->date_prolongation_periode_exercice}}"
                                                            required>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Commentaire </label>
                                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled="disabled">{{$periodeexercice->commentaire_periode_exercice}}</textarea>
                                                 </div>
-                                            </div>                                           
+                                            </div>
                                              <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Motif de prolongation </label>
@@ -115,4 +117,8 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif

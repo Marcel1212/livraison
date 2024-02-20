@@ -33,6 +33,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
 
 ?>
+
+@if(auth()->user()->can('cahierplanformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -42,7 +44,35 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
     @php($soustitre='Creer un cahier de plan de formation')
     @php($lien='cahierplanformation')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
+    <script type="text/javascript">
+
+       // document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+        function changeFunction() {
+            //alert('code');exit;
+
+            var selectBox = document.getElementById("id_departement");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            //alert(selectedValue);
+
+            $.get('/listeagencedepartement/'+selectedValue, function (data) {
+                     //alert(data); //exit;
+                    $('#id_agence').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_agence').append($('<option>', {
+                            value: tels.num_agce,
+                            text: tels.lib_agce,
+                        }));
+                    });
+                });
+
+
+        };
+    </script>
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
@@ -138,34 +168,36 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @method('put')
                                 <div class="row">
 
-                                    <div class="col-md-4 col-12">
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Code <strong style="color:red;">*</strong></label>
                                             <input type="text" class="form-control form-control-sm" value="{{ @$cahier->code_cahier_plan_formation }}" disabled="disabled"/>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4 col-12">
-                                        <label>Type entreprise <strong style="color:red;">*</strong></label>
+                                    <div class="col-md-3 col-12">
+                                        <label>Liste des departements <strong style="color:red;">*</strong></label>
                                         <select
-                                                id="code_pieces_cahier_plan_formation"
-                                                name="code_pieces_cahier_plan_formation"
+                                                id="id_departement"
+                                                name="id_departement"
                                                 class="select2 form-select-sm input-group"
-                                                aria-label="Default select example" required="required">
-                                            <option value="{{ $cahier->code_pieces_cahier_plan_formation }}"><?php if($cahier->code_pieces_cahier_plan_formation == 'PME'){
-                                                echo 'PETITE MOYENNE ENTREPRISES';
-                                            }elseif ($cahier->code_pieces_cahier_plan_formation == 'GE') {
-                                                echo 'GRANDE ENTREPRISE';
-                                            }else{
-                                                echo 'ANTENNE';
-                                            } ?></option>
-                                            <option value="PME">PETITE MOYENNE ENTREPRISES</option>
-                                            <option value="GE">GRANDE ENTREPRISE</option>
-                                            <option value="ANT">ANTENNE</option>
+                                                aria-label="Default select example" required="required" onchange="changeFunction();">
+                                                <option value="{{ $cahier->departement->id_departement }}">{{ $cahier->departement->libelle_departement }}   </option>
+                                                @foreach ($departements as $departement)
+                                                    <option value="{{ $departement->id_departement }}">{{ $departement->libelle_departement }}</option>
+                                                @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4 col-12">
+                                    <div class="col-md-3 col-12">
+                                        <label>LIste des agences <strong style="color:red;">*</strong></label>
+
+                                        <select id="id_agence" name="id_agence" class="select2 form-select-sm input-group">
+                                            <option value='{{ $cahier->agence->num_agce }}'>{{ $cahier->agence->lib_agce }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Commentaire <strong style="color:red;">*</strong></label>
                                             <textarea class="form-control form-control-sm"  name="commentaire_cahier_plan_formation" id="commentaire_cahier_plan_formation" rows="6">{{ $cahier->commentaire_cahier_plan_formation }}</textarea>
@@ -347,3 +379,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
         @endsection
 
+        @else
+        <script type="text/javascript">
+            window.location = "{{ url('/403') }}";//here double curly bracket
+        </script>
+    @endif

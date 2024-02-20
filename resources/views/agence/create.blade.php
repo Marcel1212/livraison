@@ -1,3 +1,5 @@
+@if(auth()->user()->can('agence-create'))
+
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
@@ -48,7 +50,7 @@
                                                     <input type="text" name="code_agce" id="code_agce"
                                                            class="form-control form-control-sm" placeholder="Code">
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Localisation </label>
@@ -116,3 +118,8 @@
     <!-- END: Content-->
 
 @endsection
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif

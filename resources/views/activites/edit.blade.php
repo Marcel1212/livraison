@@ -1,3 +1,5 @@
+@if(auth()->user()->can('activites-edit'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -87,4 +89,8 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+       <script type="text/javascript">
+           window.location = "{{ url('/403') }}";//here double curly bracket
+       </script>
+   @endif

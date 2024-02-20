@@ -1,3 +1,5 @@
+@if(auth()->user()->can('users-index'))
+
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
@@ -88,3 +90,8 @@
     </div>
     <!-- END: Content-->
 @endsection
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif

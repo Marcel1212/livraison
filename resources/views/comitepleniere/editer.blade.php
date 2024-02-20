@@ -170,6 +170,7 @@
                                 <th>Nombre de groupe</th>
                                 <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
+                                <th>Cout de financement</th>
                                 <th>Cout de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
@@ -185,8 +186,9 @@
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
-                                                <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
+                                                <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
+                                                <td>{{ number_format($actionplanformation->montant_attribuable_fdfp) }}</td>
+                                                <td>{{ number_format($actionplanformation->cout_accorde_action_formation) }}</td>
 
                                                 <td align="center">
                                                     @can($lien.'-edit')
@@ -240,7 +242,7 @@
                         <form id="editUserForm" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                             @csrf
                             @method('post')
-                            <div class="col-12 col-md-9">
+                            <div class="col-12 col-md-12">
                             <label class="form-label" for="masse_salariale">Entreprise</label>
                             <input
                                 type="text"
@@ -248,14 +250,7 @@
                                 value="{{@$infosactionplanformation->raison_social_entreprises}}"
                                 disabled="disabled" />
                             </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="masse_salariale">Masse salariale</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{number_format(@$infosactionplanformation->masse_salariale, 0, ',', ' ')}}"
-                                disabled="disabled" />
-                            </div>
+
 
                             <div class="col-12 col-md-12">
                             <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
@@ -273,6 +268,14 @@
                                 value="{{@$infosactionplanformation->objectif_pedagogique_fiche_agre}}"
                                 disabled="disabled" />
                             </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="masse_salariale">Masse salariale</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{number_format(@$infosactionplanformation->masse_salariale, 0, ',', ' ')}}"
+                                    disabled="disabled" />
+                                </div>
                             <div class="col-12 col-md-3">
                                 <label class="form-label" for="part_entreprise">Part entreprise</label>
                                 <input
@@ -314,6 +317,14 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
+                                <label class="form-label" for="nombre_jour_action_formation">Nombre de jours</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{@$infosactionplanformation->nombre_jour_action_formation}}"
+                                  disabled="disabled" />
+                              </div>
+                            <div class="col-12 col-md-3">
                             <label class="form-label" >Cout de la formation</label>
                             <input
                                 type="text"
@@ -329,6 +340,14 @@
                                 value="{{@$infosactionplanformation->type_formation}}"
                                 disabled="disabled" />
                             </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Caracteristique type de formation</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}"
+                                  disabled="disabled" />
+                              </div>
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="but_formation">But de la formation</label>
                             <input
@@ -361,14 +380,6 @@
                                 value="{{@$infosactionplanformation->lieu_formation_fiche_agrement}}"
                                 disabled="disabled" />
                             </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{number_format(@$infosactionplanformation->cout_total_fiche_agrement, 0, ',', ' ')}}"
-                                disabled="disabled" />
-                            </div>
 
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
@@ -395,12 +406,28 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
+                                <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{number_format(@$infosactionplanformation->montant_attribuable_fdfp, 0, ',', ' ')}}"
+                                  disabled="disabled" />
+                              </div>
+                            <div class="col-12 col-md-3">
                             <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
                                 value="{{number_format(@$infosactionplanformation->cout_accorde_action_formation, 0, ',', ' ')}}"
                                 disabled="disabled" />
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="mb-1">
+                                        <label>Facture proforma </label> <br>
+                                                <span class="badge bg-secondary"><a target="_blank"
+                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                Voir la pièce  </a> </span>
+                                    </div>
                             </div>
                             <div class="col-12 col-md-9">
                             <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
@@ -411,14 +438,7 @@
                                 disabled="disabled" />-->
                                 <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6" disabled="disabled">{{@$infosactionplanformation->commentaire_action_formation}}</textarea>
                             </div>
-                            <div class="col-12 col-md-3">
-                                                <div class="mb-1">
-                                                        <label>Facture proforma </label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                Voir la pièce  </a> </span>
-                                                    </div>
-                            </div>
+
 
 
                             <hr/>

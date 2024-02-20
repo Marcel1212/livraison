@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_action_formation_plan
  * @property float $id_plan_de_formation
  * @property float $id_entreprise_structure_formation_action
+ * @property float $id_caracteristique_type_formation
  * @property float $motif_non_financement_action_formation
  * @property string $intitule_action_formation_plan
  * @property string $structure_etablissement_action_
@@ -23,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $numero_action_formation_plan
  * @property string $facture_proforma_action_formati
  * @property float $cout_accorde_action_formation
+ * @property float $montant_attribuable_fdfp
+ * @property float $nombre_jour_action_formation
  * @property string $commentaire_action_formation
  * @property float $id_secteur_activite
  * @property FicheADemandeAgrement[] $ficheADemandeAgrements
@@ -30,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property EntrepriseHabilitation $entreprisehabilitation
  * @property Motif $motif
  * @property SecteurActivite $secteurActivite
+ * @property CaracteristiqueTypeFormation $caracteristiqueTypeFormation
  */
 class ActionFormationPlan extends Model
 {
@@ -57,7 +61,7 @@ class ActionFormationPlan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente','id_secteur_activite'];
+    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente','id_secteur_activite','id_caracteristique_type_formation','nombre_jour_action_formation','montant_attribuable_fdfp'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -102,5 +106,13 @@ class ActionFormationPlan extends Model
     public function demandeAnnulation()
     {
         return $this->belongsTo(DemandeAnnulationPlan::class,'id_action_formation_plan','id_action_plan');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function caracteristiqueTypeFormation()
+    {
+        return $this->belongsTo('App\Models\CaracteristiqueTypeFormation', 'id_caracteristique_type_formation', 'id_caracteristique_type_formation');
     }
 }

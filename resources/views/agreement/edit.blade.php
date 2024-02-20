@@ -151,18 +151,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         Demande d'annulation du plan
                     </button>
                 </li>
-                <li class="nav-item">
-                    <button
-                        type="button"
-                        class="nav-link @if($id_etape==6) active @endif"
-                        role="tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-top-histortiqueactionformation"
-                        aria-controls="navs-top-histortiqueactionformation"
-                        aria-selected="false">
-                        Historiques des actions du plan de formation
-                    </button>
-                </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-agreement" role="tabpanel">
@@ -703,7 +691,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 {{--                                       class=" "--}}
 {{--                                       title="Modifier"><img src='/assets/img/editing.png'></a>--}}
                                     {{--                                        @if()--}}
-                                    <a href="{{route($lien.".editaction",['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)])}}"
+                                    <a href="{{route($lien.".editaction",['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)])}}"
                                        class=" "
                                        title="Modifier"><img src='/assets/img/editing.png'></a>
                                     @if($anneexercice->date_fin_periode_exercice>now())
@@ -724,31 +712,26 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <div class="col-12" align="right">
                         <hr>
                         <a class="btn btn-sm btn-primary me-sm-3 me-1"
-                           href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(5)])}}">Suivant</a>
+                           href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(5)])}}">
+                            Suivant
+                        </a>
                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                            Retour</a>
+                            Retour
+                        </a>
                     </div>
                 </div>
-                    @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
+{{--                    @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))--}}
                     <div class="tab-pane fade @if($id_etape==5) show active @endif" id="navs-top-annulation"
                      role="tabpanel">
                     @if($demande_annulation_plan)
                         @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
-                            <div class="col-md-12">
-                                <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
-                            </div>
                             @if($demande_annulation_plan->flag_validation_demande_annulation_plan==true)
                                 <div class="row">
-                                    <li class="mb-4 pb-1 d-flex justify-content-between  align-items-center"
-                                        align="center">
-                                        <div class="badge bg-label-success rounded p-2"><i
-                                                class="ti ti-circle-check"></i>
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                            <div class="alert-body text-center">
+                                                Demande d'annulation du plan de formation a été validée avec succès
+                                            </div>
                                         </div>
-                                        <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Demande d'annulation validée</h6>
-                                        </div>
-
-                                    </li>
                                 </div>
                             @endif
                             @if($demande_annulation_plan->flag_rejeter_demande_annulation_plan==true)
@@ -813,6 +796,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     Voir la pièce
                                                 </a>
                                             </span>
+                                                                    <div id="defaultFormControlHelp" class="form-text ">
+                                                                        <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                            maxi : 5Mo</em>
+                                                                    </div>
                                                                 </div>
                                                             @else
                                                                 <div class="col-md-12 mt-2">
@@ -886,10 +873,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 <div class="col-12" align="right">
                                                     <hr>
                                                     @isset($demande_annulation_plan)
-                                                        @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true)
-                                                            <a class="btn btn-sm btn-primary me-sm-3 me-1"
-                                                               href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(6)])}}">Suivant</a>
-                                                        @else
+                                                        @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==false)
                                                             <button
                                                                 onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de ce plan de formation à un conseiller ? . Cette action est irreversible")) return false;'
                                                                 type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"
@@ -944,7 +928,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 
 
-                @endif
+{{--                @endif--}}
 
             </div>
         </div>

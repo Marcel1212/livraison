@@ -135,7 +135,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 <li class="nav-item">
                     <button
                         type="button"
-                        class="nav-link active"
+                        class="nav-link @if($id_etape==1)  active @endif"
                         role="tab"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-top-action"
@@ -146,10 +146,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </li>
                 <li class="nav-item">
                     <button
-
-
                         type="button"
-                        class="nav-link"
+                        class="nav-link @if($id_etape==2)  active @endif"
                         role="tab"
                         @if($demande_annulation_action)
                             @if($demande_annulation_action->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
@@ -159,6 +157,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         @if($anneexercice->date_fin_periode_exercice<now())
                             disabled
                         @endif
+                        @if($demande_annulation_plan)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                                disabled
+                           @endif
+                        @endif
+
                             data-bs-toggle="tab"
                         data-bs-target="#navs-top-substitution"
                         aria-controls="navs-top-substitution"
@@ -169,30 +173,23 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 <li class="nav-item">
                     <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link @if($id_etape==3)  active @endif"
                         role="tab"
                         data-bs-toggle="tab"
+                        @if($demande_annulation_plan)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                                disabled
+                           @endif
+                        @endif
                         data-bs-target="#navs-top-annulation"
                         aria-controls="navs-top-annulation"
                         aria-selected="false">
                         Demande d'annulation d'action
                     </button>
                 </li>
-                {{--                    <li class="nav-item">--}}
-                {{--                        <button--}}
-                {{--                            type="button"--}}
-                {{--                            class="nav-link"--}}
-                {{--                            role="tab"--}}
-                {{--                            data-bs-toggle="tab"--}}
-                {{--                            data-bs-target="#navs-top-annulation"--}}
-                {{--                            aria-controls="navs-top-annulation"--}}
-                {{--                            aria-selected="true">--}}
-                {{--                            Demande d'annulation--}}
-                {{--                        </button>--}}
-                {{--                    </li>--}}
             </ul>
             <div class="tab-content">
-                <div class="tab-pane fade active show" id="navs-top-action" role="tabpanel">
+                <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-action" role="tabpanel">
                     <div class="row">
                     <div class="col-12 col-md-9">
                         <label class="form-label" for="masse_salariale">Entreprise</label>
@@ -367,7 +364,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                 </div>
                 </div>
-                <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+                <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-planformation" role="tabpanel">
 {{--                    <div class="row">--}}
 {{--                        <div class="col-md-4 col-12">--}}
 {{--                            <div class="mb-1">--}}
@@ -1516,9 +1513,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                      role="tabpanel">
                     @if($demande_annulation_action)
                         @if($demande_annulation_action->flag_soumis_demande_annulation_plan==true)
-                            <div class="col-md-12">
-                                <h5 class="card-title mb-3" align="center"> Détail de la demande d'annulation</h5>
-                            </div>
                             @if($demande_annulation_action->flag_validation_demande_annulation_plan==true)
                                 <div class="row">
                                     <li class="mb-4 pb-1 d-flex justify-content-between  align-items-center"
@@ -1543,7 +1537,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <div class="d-flex justify-content-between w-100 flex-wrap">
                                             <h6 class="mb-0 ms-3">Demande d'annulation rejetée</h6>
                                         </div>
-
                                     </li>
                                 </div>
                             @endif
@@ -1594,7 +1587,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 <a target="_blank" onclick="NewWindow('{{ asset("/pieces/piece_justificatif_demande_annulation/". $demande_annulation_action->piece_demande_annulation_plan)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                     Voir la pièce
                                                 </a>
+
+
                                             </span>
+                                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        maxi : 5Mo</em>
+                                                                </div>
                                                             </div>
                                                         @else
                                                             <div class="col-md-12 mt-2">

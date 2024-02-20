@@ -30,6 +30,8 @@ use App\Models\Pays;
 use App\Models\PlanFormation;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
+use App\Helpers\Menu;
+use App\Helpers\Email;
 
 class ComitePermanenteController extends Controller
 {
@@ -205,7 +207,34 @@ class ComitePermanenteController extends Controller
 
                 }
 
-                ComitePermanenteParticipant::create($input);
+                $comitesave  = ComitePermanenteParticipant::create($input);
+
+
+                $usernotifie = User::where([['id','=',$comitesave->id_user_comite_permanente_participant]])->first();
+
+                $comiteencours = ComitePermanente::find($id);
+
+                $logo = Menu::get_logo();
+
+                if (isset($usernotifie->email)) {
+                    $nom_prenom = $usernotifie->name .' '. $usernotifie->prenom_users;
+                    $sujet = "Tenue de comission de permanante";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                    $messageMail = "<b>Cher, $nom_prenom  ,</b>
+                                    <br><br>Vous êtes convié a la commission permanente des plans de formation qui se déroulera du  ".$comiteencours->date_debut_comite_permanente." au ".$comiteencours->date_fin_comite_permanente.".
+
+                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des plans de formation.
+                                    <br>
+
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                    $messageMailEnvoi = Email::get_envoimailTemplate($usernotifie->email, $nom_prenom, $messageMail, $sujet, $titre);
+                }
 
                 //return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
@@ -368,6 +397,12 @@ class ComitePermanenteController extends Controller
                 $input = $request->all();
 
                 $input = $request->all();
+
+                if($input['cout_accorde_action_formation'] > $actionplan->cout_accorde_action_formation ){
+
+                    return redirect('comitepermanente/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('error', 'Erreur : le Montant accordé est superiéur au montant ');
+
+                }
 
                 $input['flag_valide_action_formation_pl_comite_permanente'] = true;
                 $input['flag_valide_action_plan_formation'] = true;

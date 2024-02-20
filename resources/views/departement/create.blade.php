@@ -1,3 +1,4 @@
+@if(auth()->user()->can('departement-create'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
@@ -13,9 +14,9 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                            
+
                             <div class="breadcrumb-wrapper">
-                                
+
                             </div>
                         </div>
                     </div>
@@ -58,7 +59,7 @@
                                                     <input type="text" name="libelle_departement" id="libelle_departement"
                                                            class="form-control form-control-sm" >
                                                 </div>
-                                            </div>                                            
+                                            </div>
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
@@ -76,7 +77,7 @@
                                                 </button>
                                                 <a class="btn btn-sm btn-outline-secondary waves-effect"
                                                    href="/{{$lien }}">
-                                                    Retour</a> 
+                                                    Retour</a>
                                             </div>
                                         </div>
                                     </form>
@@ -91,3 +92,8 @@
     <!-- END: Content-->
 
 @endsection
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif

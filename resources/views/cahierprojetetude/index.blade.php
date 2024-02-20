@@ -33,7 +33,7 @@
 {{--                        @can($lien.'-create')--}}
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle cahier de projet d'étude</a>
+                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau cahier de projet d'étude</a>
 {{--                        @endcan--}}
                     </small>
                 </div>
