@@ -156,7 +156,8 @@ class ComiteGestionPfController extends Controller
         $planformations = ProjetFormation::where([['flag_comite_pleiniere','=',true],
                                                 ['flag_fiche_agrement','=',null],
                                                 ['cout_projet_formation','>=',intval($typecomiteinfos->valeur_min_type_comite)],
-                                                ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite]])
+                                                ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite],
+                                                ['flag_processus_etape','=',true]])
                                             ->get();
 
         return view('comitegestionpf.edit', compact('motif','comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));

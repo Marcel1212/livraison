@@ -126,7 +126,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <?php }  ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
-                            // echo 'active';
+                             echo 'active';
                         } else {
                             echo 'disabled';
                         } ?>" role="tab" data-bs-toggle="tab"
@@ -379,6 +379,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>No</th>
                                     <th>Entreprise </th>
                                     <th>Conseiller </th>
+                                    <th>Titre du projet </th>
                                     <th>Code </th>
                                     <th>Cout formation</th>
                                     <th>Date soumis</th>
@@ -394,6 +395,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
                                         <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
+                                        <td>{{ @$planformation->titre_projet_etude }}</td>
                                         <td>{{ @$planformation->code_projet_formation }}</td>
 
                                         <td align="rigth">
