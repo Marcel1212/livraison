@@ -49,11 +49,20 @@ class AgreementController extends Controller
             ->leftjoin('demande_annulation_plan','demande_annulation_plan.id_plan_formation','fiche_agrement.id_demande')
             ->join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
             ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
-            ->join('users','plan_formation.user_conseiller','users.id');
+            ->join('users','plan_formation.user_conseiller','users.id')
+            ->where('plan_formation.flag_plan_sup',false);
+
+
+//            ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
+//                $query->where('id_plan_de_formation', $id_plan_de_formation)
+//                    ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
+//            })->get();
+//            ->whereNotNull('plan_formation.id_plan_formation_supplementaire');
         if ($role== 'ENTREPRISE'){
             $agreements = $agreements->where('plan_formation.id_entreprises',Auth::user()->id_partenaire);
         }
         $agreements = $agreements->get();
+
         return view('agreement.index', compact('agreements'));
     }
 
@@ -79,16 +88,17 @@ class AgreementController extends Controller
     public function show($id_plan_de_formation)
     {
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
-        $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
-            ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
-            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
-            ->where('action_formation_plan.id_plan_de_formation','=',$id_plan_de_formation)
-//            ->where('action_formation_plan.flag_annulation_action','<>',true)
-            ->get();
-
         $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
             ->where('id_plan_de_formation', $id_plan_de_formation)
             ->first();
+
+        $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
+            ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
+//            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
+            ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
+                $query->where('id_plan_de_formation', $id_plan_de_formation)
+                      ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
+            })->get();
 
         return view('agreement.show', compact('actionformations','plan_de_formation'));
     }
@@ -105,13 +115,6 @@ class AgreementController extends Controller
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
         $id_etape = Crypt::UrldeCrypt($id_etape);
 
-
-        $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
-            ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
-            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
-            ->where([['action_formation_plan.id_plan_de_formation','=',$id_plan_de_formation]])
-            ->get();
-
         $agreement = DB::table('fiche_agrement')
             ->select(['plan_formation.*', 'fiche_agrement.*', 'fiche_agrement.created_at as date_valide_agrreement'])
             ->leftjoin('comite_gestion', 'fiche_agrement.id_comite_gestion', 'comite_gestion.id_comite_gestion')
@@ -120,18 +123,35 @@ class AgreementController extends Controller
             ->where('plan_formation.id_entreprises', Auth::user()->id_partenaire)
             ->where('plan_formation.id_plan_de_formation', $id_plan_de_formation)
             ->first();
-
         $plan_de_formation = PlanFormation::where('flag_fiche_agrement', true)
             ->where('id_plan_de_formation', $id_plan_de_formation)
             ->first();
 
+
+        $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
+            ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
+//            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
+            ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
+                $query->where('id_plan_de_formation', $id_plan_de_formation)
+                    ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
+            })->get();
+
+
         $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
-        $actionplanformations = ActionFormationPlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
 
+        $demande_annulation_exist =false;
 
-        return view('agreement.edit', compact('agreement','id_etape','actionformations','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
+        foreach ($actionplanformations as $actionplanformation) {
+            $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $actionplanformation->id_action_formation_plan)
+                ->whereNull('flag_demande_annulation_plan_valider_par_processus')->first();
+            if(isset($demande_annulation_action)){
+                $demande_annulation_exist = true;
+            }
+        }
+        return view('agreement.edit', compact('agreement','demande_annulation_exist','id_etape','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
+
     }
 
     /**
@@ -154,7 +174,6 @@ class AgreementController extends Controller
             $extension_file = $piece_demande_annulation_plan->extension();
             $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
             $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
-
         }else{
             $file_name =  $demande_annulation_plan->piece_demande_annulation_plan;
         }
@@ -164,6 +183,8 @@ class AgreementController extends Controller
                 'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
                 'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
                 'id_processus'=>4,
+                'flag_soumis_demande_annulation_plan'=>false,
+                'flag_validation_demande_annulation_plan'=>false,
                 'id_user'=>$plan_formation->user_conseiller,
                 'piece_demande_annulation_plan'=>$file_name,
             ]
@@ -229,7 +250,6 @@ class AgreementController extends Controller
         $id_action = Crypt::UrldeCrypt($id_action);
 
         $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
-
 
         $demande_substitution = DemandeSubstitutionActionPlanFormation::
         where('id_action_formation_plan_a_substi',$id_action)
@@ -342,7 +362,7 @@ class AgreementController extends Controller
 
                 $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
 
-                $demande_substitution->id_secteur_activite =$request->id_secteur_activite;
+                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
                 $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
                 $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
                 $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;

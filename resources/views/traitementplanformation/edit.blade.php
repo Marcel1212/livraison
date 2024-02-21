@@ -542,7 +542,6 @@
                 </div>
     </div>
 
-
     <!-- Edit User Modal -->
           @foreach($infosactionplanformations as $infosactionplanformation)
             <div class="modal fade" id="traiterActionFomationPlan<?php echo $infosactionplanformation->id_action_formation_plan ?>" tabindex="-1" aria-hidden="true">
