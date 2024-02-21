@@ -213,25 +213,25 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
-    Route::group(['middleware' => ['can:module-create']], function () {
+    Route::group(['middleware' => ['can:module-index']], function () {
         Route::resources([
             'menus' => App\Http\Controllers\MenuController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:sous-module-create']], function () {
+    Route::group(['middleware' => ['can:sous-module-index']], function () {
         Route::resources([
             'sousmenus' => App\Http\Controllers\SousmenuController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:agence-create']], function () {
+    Route::group(['middleware' => ['can:agence-index']], function () {
         Route::resources([
             'agence' => App\Http\Controllers\AgenceController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:direction-create']], function () {
+    Route::group(['middleware' => ['can:direction-index']], function () {
         Route::resources([
             'direction' => App\Http\Controllers\DirectionController::class,
         ]);
@@ -253,79 +253,79 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
-    Route::group(['middleware' => ['can:activites-create']], function () {
+    Route::group(['middleware' => ['can:activites-index']], function () {
         Route::resources([
             'activites' => App\Http\Controllers\ActivitesController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:centreimpot-create']], function () {
+    Route::group(['middleware' => ['can:centreimpot-index']], function () {
         Route::resources([
             'centreimpot' => App\Http\Controllers\CentreImpotController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:localite-create']], function () {
+    Route::group(['middleware' => ['can:localite-index']], function () {
         Route::resources([
             'localite' => App\Http\Controllers\LocaliteController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:statutoperations-create']], function () {
+    Route::group(['middleware' => ['can:statutoperations-index']], function () {
         Route::resources([
             'statutoperations' => App\Http\Controllers\StatutOperationController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:motifs-create']], function () {
+    Route::group(['middleware' => ['can:motifs-index']], function () {
         Route::resources([
             'motifs' => App\Http\Controllers\MotifController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:typeentreprise-create']], function () {
+    Route::group(['middleware' => ['can:typeentreprise-index']], function () {
         Route::resources([
             'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:butformation-create']], function () {
+    Route::group(['middleware' => ['can:butformation-index']], function () {
         Route::resources([
             'butformation' => App\Http\Controllers\ButFormationController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:typeformation-create']], function () {
+    Route::group(['middleware' => ['can:typeformation-index']], function () {
         Route::resources([
             'typeformation' => App\Http\Controllers\TypeFormationController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:periodeexercice-create']], function () {
+    Route::group(['middleware' => ['can:periodeexercice-index']], function () {
         Route::resources([
             'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:formejuridique-create']], function () {
+    Route::group(['middleware' => ['can:formejuridique-index']], function () {
         Route::resources([
             'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:secteuractivite-create']], function () {
+    Route::group(['middleware' => ['can:secteuractivite-index']], function () {
         Route::resources([
             'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:partentreprise-create']], function () {
+    Route::group(['middleware' => ['can:partentreprise-index']], function () {
         Route::resources([
             'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
         ]);
     });
 
-    Route::group(['middleware' => ['can:typecomites-create']], function () {
+    Route::group(['middleware' => ['can:typecomites-index']], function () {
         Route::resources([
             'typecomites' => App\Http\Controllers\TypeComiteController::class,
         ]);
@@ -337,7 +337,7 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
-    Route::group(['middleware' => ['can:ctplanformation-edit']], function () {
+    Route::group(['middleware' => ['can:ctplanformation-index']], function () {
         Route::resources([
             'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
         ]);
@@ -470,7 +470,7 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
-    Route::group(['middleware' => ['can:comitegestion-create']], function () {
+    Route::group(['middleware' => ['can:comitegestion-index']], function () {
         Route::get('comitegestion/{id}/delete', [App\Http\Controllers\ComiteGestionController::class, 'delete'])->name('comitegestion.delete');
         Route::get('comitegestion/{id}/{id1}/edit', [App\Http\Controllers\ComiteGestionController::class, 'edit'])->name('comitegestion.edit');
         Route::put('comitegestion/{id}/{id1}/update', [App\Http\Controllers\ComiteGestionController::class, 'update'])->name('comitegestion.update');
@@ -575,7 +575,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
-    Route::group(['middleware' => ['can:parametresysteme-create']], function () {
+    Route::group(['middleware' => ['can:parametresysteme-index']], function () {
         Route::match(['get', 'post'], '/parametresysteme', [App\Http\Controllers\ParametreController::class, 'parametresysteme'])->name('parametresysteme');
         Route::match(['get', 'post'], '/creerparametresysteme', [App\Http\Controllers\ParametreController::class, 'creerparametresysteme'])->name('creerparametresysteme');
         Route::match(['get', 'post'], '/projetetudesoumettre/{id}', [App\Http\Controllers\ProjetEtudeController::class, 'projetetudesoumettre'])->name('projetetudesoumettre');
@@ -585,7 +585,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     /*************************** Processus ***************************/
-    Route::group(['middleware' => ['can:processus-create']], function () {
+    Route::group(['middleware' => ['can:processus-index']], function () {
         Route::match(['get'], '/processus', [App\Http\Controllers\ProcessusController::class, 'index'])->name('processus');
         Route::match(['get', 'post'], '/processus/create', [App\Http\Controllers\ProcessusController::class, 'create'])->name('processusadd');
         Route::match(['get', 'post'], '/processus/edit/{id}', [App\Http\Controllers\ProcessusController::class, 'edit'])->name('processusedit');
