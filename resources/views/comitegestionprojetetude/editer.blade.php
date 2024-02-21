@@ -381,7 +381,7 @@
                                         @method('put')
                                         <button type="submit" name="action" value="Traiter_valider_projet"
                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                            Valider le comité pour ce projet d'étude
+                                            Valider le projet
                                         </button>
                                     </form>
                                 </div>
@@ -511,7 +511,7 @@
                                         <hr>
                                         <button type="submit" name="action" value="Modifier"
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Valider
+                                            Enregistrer
                                         </button>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
@@ -524,8 +524,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <!-- END: Content-->
 @endsection

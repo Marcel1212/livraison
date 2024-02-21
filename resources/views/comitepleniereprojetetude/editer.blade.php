@@ -399,7 +399,7 @@
                                         @method('put')
                                         <button type="submit" name="action" value="Traiter_valider_projet"
                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                            Valider le comité technique plénière
+                                            Valider le projet
                                         </button>
                                     </form>
                                     </div>
