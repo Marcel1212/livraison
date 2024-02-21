@@ -62,7 +62,7 @@ class CotisationController extends Controller
 
             $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
 
-            $verifis = Cotisation::where([['annee_cotisation','=',$annee],['mois_cotisation','=',$mois]])->get();
+            $verifis = Cotisation::where([['annee_cotisation','=',$annee],['mois_cotisation','=',$mois],['id_entreprise','=',$infoentrprise->id_entreprises]])->get();
 
             if(count($verifis)>=1){
                 return redirect()->route('cotisation.create')->with('error', 'Erreur : Cette ligne de cotisation existe deja');
