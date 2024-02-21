@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Helpers\Crypt;
+use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
+use App\Helpers\Menu;
 use App\Models\Entreprises;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -101,6 +103,33 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 }
 
                 if($request->action=="Enregistrer_soumettre_selection"){
+                    $logo = Menu::get_logo();
+
+                    foreach ($projet_etude_valide->operateurs() as $operateur){
+                        $entreprise = Entreprises::where('id_entreprises',$operateur->id_entreprises)->first();
+                        $name = $entreprise->raison_social_entreprises;
+
+                        if (isset($entreprise->email)) {
+                            $sujet = "Sélection opérateur";
+                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                            $messageMail = "<b>Cher, $name  ,</b>
+                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->date_debut_comite_gestion.".
+
+                                    <br><br>Nous vous prions de bien vouloir vous rendre au siège de FDFP afin de recupérer le dossier d'appel d'offre dudit projet.
+                                    <br>
+
+                                    <br><br><br>
+                                    -----
+
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                            $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                        }
+                    }
+
+
+
                     $projet_etude_valide->id_processus_selection = 7;
                     $projet_etude_valide->flag_soumis_selection_operateur = true;
                     $projet_etude_valide->date_soumis_selection_operateur = now();

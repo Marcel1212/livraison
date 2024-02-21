@@ -158,7 +158,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             disabled
                         @endif
                         @if($demande_annulation_plan)
-                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_plan->flag_validation_demande_annulation_plan==true)
                                 disabled
                            @endif
                         @endif
@@ -177,7 +177,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         role="tab"
                         data-bs-toggle="tab"
                         @if($demande_annulation_plan)
-                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
+                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_plan->flag_validation_demande_annulation_plan==true)
                                 disabled
                            @endif
                         @endif
@@ -615,7 +615,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
 {{--                @if(!$demande_annulation_action)--}}
 {{--                    @if($demande_annulation_action->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)--}}
-                        <div class="tab-pane fade" id="navs-top-substitution" role="tabpanel">
+                        <div class="tab-pane fade @if($id_etape==2)  show active @endif" id="navs-top-substitution"  role="tabpanel">
                             @isset($demande_substitution)
                                 @if($demande_substitution->flag_soumis_demande_substitution_action_plan==true)
                                     <div class="row">

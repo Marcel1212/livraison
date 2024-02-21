@@ -35,7 +35,10 @@ class AffectationProjetEtudeController extends Controller
 
             if($role == "CHEF DE DEPARTEMENT"){
                 if(isset($departement)){
-                    $projet_etudes = ProjetEtude::where('id_departement',$departement->id_departement)->get();
+                    $projet_etudes = ProjetEtude::where('id_departement',$departement->id_departement)
+                        ->where('flag_soumis_chef_depart',false)
+                        ->get();
+
                     return view('affectationprojetetude.index',compact('projet_etudes','role'));
                 }else{
                     return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'êtes pas autorisé à accéder à ce menu');
@@ -49,6 +52,7 @@ class AffectationProjetEtudeController extends Controller
                         ->first();
                     if(isset($service)){
                         $projet_etudes = ProjetEtude::where('id_departement',$departement->id_departement)
+                            ->where('flag_soumis_chef_service',false)
                             ->where('id_chef_serv',$user->id)->get();
                         return view('affectationprojetetude.index',compact('projet_etudes','role'));
                     }else{

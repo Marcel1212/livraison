@@ -83,7 +83,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <div class="nav-align-top nav-tabs-shadow mb-4">
+            <div align="right" class=" mb-3">
+                <button type="button"
+                        class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                        data-bs-toggle="modal" data-bs-target="#modalToggle">
+                    Voir le parcours de validation
+                </button>
+            </div>
+        <div class="nav-align-top nav-tabs-shadow ">
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
                     <button
@@ -134,18 +141,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         Demande de substitution d'une action de formation
                     </button>
                 </li>
-                <li class="nav-item">
-                    <button
-                        type="button"
-                        class="nav-link"
-                        role="tab" disabled
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-top-histortiquesubstitution"
-                        aria-controls="navs-top-histortiquesubstitution"
-                        aria-selected="false">
-                        Historiques des actions du plan de formation
-                    </button>
-                </li>
+
                 {{--                    <li class="nav-item">--}}
                 {{--                        <button--}}
                 {{--                            type="button"--}}
@@ -160,9 +156,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 {{--                    </li>--}}
             </ul>
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="navs-top-agreement" role="tabpanel">
+                <div class="tab-pane fade " id="navs-top-agreement" role="tabpanel">
                     <div class="col-xl-12">
-                        <h6 class="text-muted"></h6>
                         {{--                        <table width="100%" style="border-collapse:collapse;border:none;">--}}
                         {{--                            <tbody>--}}
                         {{--                            <tr>--}}
@@ -611,16 +606,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                     {{--                        @endforeach--}}
                     {{--                        </tbody>--}}
                     {{--                    </table>--}}
-                    <div align="right">
-                        <button type="button"
-                                class="btn rounded-pill btn-outline-primary waves-effect waves-light"
-                                data-bs-toggle="modal" data-bs-target="#modalToggle">
-                            Voir le parcours de validation
-                        </button>
-                    </div>
+
 
                     <div class="col-md-12">
-                        <h5 class="card-title mt-3" align="center"> Détail de la demande de substitution</h5>
+                        <h6 class="card-title" align="center"> Détail de la demande de substitution</h6>
                     </div>
                     <div class="row">
                         <h6 class="card-title mt-3 mb-2"> Ancienne action de formation </h6>
@@ -1143,7 +1132,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </div>
 
                             <div class="col-md-12">
-                                <h5 class="card-title mt-3" align="center"> Traitement de la demande de substitution</h5>
+                                <h6 class="card-title mt-3" align="center"> Traitement de la demande de substitution</h6>
                             </div>
                             <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_substitution->id_action_formation_plan_substi)) }}" enctype="multipart/form-data">
                                 @csrf

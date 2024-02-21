@@ -420,10 +420,21 @@ class ComitePermanenteController extends Controller
             }
 
             if($data['action'] === 'Traiter_action_formation_valider_plan'){
-
-                //$actionplan = ActionFormationPlan::find($id);
-
                 $idplan = $id;
+
+
+                $plan = PlanFormation::find($idplan);
+
+                $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])
+                    ->orWhere('id_plan_de_formation',$plan->id_plan_formation_supplementaire)
+                    ->where(function ($query) {
+                        $query->where('flag_annulation_action', false)
+                            ->orwhereNull('flag_annulation_action');
+                    })->get();
+
+                $plan_old = PlanFormation::find($plan->id_plan_formation_supplementaire);
+                $plan_old->flag_plan_sup = true;
+                $plan_old->update();
 
                 $input = $request->all();
 
@@ -445,9 +456,7 @@ class ComitePermanenteController extends Controller
                 //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
-                    $plan = PlanFormation::find($idplan);
 
-                    $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
 
                     $montantcouttotal = 0;
 

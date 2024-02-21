@@ -34,7 +34,7 @@ class CtprojetetudevaliderController extends Controller
                     ->join('projet_etude','p.id_demande','projet_etude.id_projet_etude')
                     ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
                     ->join('users','projet_etude.id_charge_etude','users.id')
-//                    ->where('projet_etude.id_departement',$user->id_departement)
+                    ->where('projet_etude.id_departement',$user->id_departement)
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
                         ['v.id_processus', '=', $r->id_processus],
