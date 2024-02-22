@@ -816,7 +816,7 @@ class ProjetFormationController extends Controller
                 $projetformation->num_agce = $id_agence;
                 // Recuperation de l'id Traitement a faire
                 // $user_id = Auth::user()->id;
-                $projetformation->id_processus = 4;
+                $projetformation->id_processus = 10;
                 $projetformation->save();
                 return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au directeur avec succès.');
 
