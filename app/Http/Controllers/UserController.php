@@ -109,6 +109,7 @@ class UserController extends Controller
             $input = $request->all();
             $passwordCli = $input['password'];
             $emailcli = $input['email'];
+            $loginusers = $input['login_users'];
             $name = $input['name'] .' '. $input['prenom_users'];
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
@@ -132,7 +133,7 @@ class UserController extends Controller
                                     <br><br>Voici un récapitulatif de vos informations de compte :
                                     <br><b>Nom d'utilisateur : </b> $name
                                     <br><b>Adresse e-mail : </b> $emailcli
-                                    <br><b>Identifiant : </b> $emailcli
+                                    <br><b>Identifiant : </b> $loginusers
                                     <br><b>Mot de passe : </b> $passwordCli
                                     <br><b>Date de création du compte : : </b> $user->created_at
                                     <br><br>

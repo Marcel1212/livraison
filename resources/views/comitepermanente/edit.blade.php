@@ -33,6 +33,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
 
 ?>
+@if(auth()->user()->can('comitepermanente-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -396,3 +397,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
         @endsection
 
+        @else
+        <script type="text/javascript">
+            window.location = "{{ url('/403') }}";//here double curly bracket
+        </script>
+    @endif

@@ -26,6 +26,7 @@ class AffectationProjetEtudeController extends Controller
         $user = Auth::user();
         $direction = Direction::where('code_profil_direction','D2EQPC')->first();
         $role = Menu::get_menu_profil($user->id);
+
         if(isset($direction)){
             $role = Menu::get_menu_profil($user->id);
             $departement = Departement::where('id_departement',$user->id_departement)
@@ -70,6 +71,15 @@ class AffectationProjetEtudeController extends Controller
         if($role == "CHEF DE DEPARTEMENT") {
             if (isset($id)) {
                 $projet_etude = ProjetEtude::find($id);
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
                 if (isset($projet_etude)) {
                     $chef_services = DB::table('users')
                         ->where('id_departement', $projet_etude->id_departement)
@@ -85,7 +95,10 @@ class AffectationProjetEtudeController extends Controller
                     foreach ($pays as $comp) {
                         $pay .= "<option value='" . $comp->id_pays . "'>" . $comp->indicatif . " </option>";
                     }
-                    return view('affectationprojetetude.edit', compact('chef_services', 'pieces_projets', 'id_etape', 'pay', 'role', 'projet_etude'));
+                    return view('affectationprojetetude.edit', compact('chef_services',
+                        'secteuractivite_projet',
+
+                        'pieces_projets', 'id_etape', 'pay', 'role', 'projet_etude'));
                 }
             }
         }
@@ -93,6 +106,16 @@ class AffectationProjetEtudeController extends Controller
             if (isset($id)) {
                 $projet_etude = ProjetEtude::find($id);
                 if (isset($projet_etude)) {
+
+                    $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                        ->orderBy('libelle_secteur_activite')
+                        ->get();
+
+                    $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                    foreach ($secteuractivite_projets as $comp) {
+                        $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                    }
+
                     $charger_etudes = DB::table('users')
                         ->where('id_departement', $projet_etude->id_departement)
                         ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -107,7 +130,14 @@ class AffectationProjetEtudeController extends Controller
                     foreach ($pays as $comp) {
                         $pay .= "<option value='" . $comp->id_pays . "'>" . $comp->indicatif . " </option>";
                     }
-                    return view('affectationprojetetude.edit', compact('charger_etudes', 'pieces_projets', 'id_etape', 'pay', 'role', 'projet_etude'));
+                    return view('affectationprojetetude.edit',
+                        compact('charger_etudes',
+                            'pieces_projets',
+                            'id_etape',
+                            'pay',
+                            'role',
+                            'secteuractivite_projet',
+                            'projet_etude'));
                 }
             }
         }

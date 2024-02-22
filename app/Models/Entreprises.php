@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property float $id_entreprises
@@ -151,6 +152,5 @@ class Entreprises extends Model
     {
         return $this->hasMany('App\Models\Pieces', 'id_entreprises', 'id_entreprises');
     }
-
 
 }

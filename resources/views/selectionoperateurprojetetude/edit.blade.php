@@ -32,390 +32,503 @@
                 </div>
             @endif
 
-            <div class="content-body">
 
-                <section id="multiple-column-form">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title" align="center"> Details du projet d'etude</h5>
+            <div class="col-xl-12">
+                <div class="nav-align-top nav-tabs-shadow mb-4">
+                    <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <button
+                                            type="button"
+                                            class="nav-link @if($idetape=="1") active @endif"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#navs-top-entreprise"
+                                            aria-controls="navs-top-entreprise"
+                                            aria-selected="false">
+                                            Détails de l'entreprise
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button
+                                            type="button"
+                                            class="nav-link @if($idetape=="2") active @endif"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#navs-top-infoprojetetude"
+                                            aria-controls="navs-top-infoprojetetude"
+                                            aria-selected="false">
+                                            Informations du projet d'étude
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button
+                                            type="button"
+                                            class="nav-link @if($idetape=="3") active @endif"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#navs-top-piecesprojetetude"
+                                            aria-controls="navs-top-piecesprojetetude"
+                                            aria-selected="false">
+                                            Pièces jointes du projet
+                                        </button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button
+                                            type="button"
+                                            class="nav-link @if($idetape=="4") active @endif"
+                                            role="tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#navs-top-selectionoperateurprojetetude"
+                                            aria-controls="navs-top-selectionoperateurprojetetude"
+                                            aria-selected="false">
+                                            Sélection opérateur
+                                        </button>
+                                    </li>
+                                </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade @if($idetape=="1")show active @endif" id="navs-top-entreprise" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>N° de compte contribuable (NCC) <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude_valide->entreprise->ncc_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Secteur activité <strong style="color:red;">*</strong></label>
+                                        <input type="text"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude_valide->entreprise->secteurActivite->libelle_secteur_activite}}" disabled="disabled">
+                                    </div>
                                 </div>
 
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="accordion mt-3" id="accordionExample">
-                                            <div class="card accordion-item active">
-                                                <h2 class="accordion-header" id="headingOne">
-                                                    <button type="button" class="accordion-button"
-                                                            data-bs-toggle="collapse" data-bs-target="#accordionOne"
-                                                            aria-expanded="true" aria-controls="accordionOne">
-                                                        Details de l'entreprise
-                                                    </button>
-                                                </h2>
-
-                                                <div id="accordionOne" class="accordion-collapse collapse show"
-                                                     data-bs-parent="#accordionExample" style="">
-                                                    <div class="accordion-body">
-                                                        <div class="row gy-3">
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Numero de compte
-                                                                            contribuable: </b> </label> <br>
-                                                                    <label> <?php echo $entreprise->ncc_entreprises; ?></label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Raison sociale: </b>
-                                                                    </label> <br>
-                                                                    <label> <?php echo $entreprise->raison_social_entreprises; ?></label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Numéro de téléphone: </b>
-                                                                    </label> <br>
-                                                                    <label> <?php echo $entreprise->tel_entreprises; ?></label>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Email: </b>
-                                                                    </label> <br>
-                                                                    <label> <?php echo $entreprise_mail;
-                                                                            ?></label>
-
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Situation géographique:
-                                                                        </b>
-                                                                    </label> <br>
-                                                                    <label> <?php echo $entreprise->localisation_geographique_entreprise; ?></label>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label> <b class="term">Numéro CNPS:
-                                                                        </b>
-                                                                    </label> <br>
-                                                                    <label> <?php echo $entreprise->numero_cnps_entreprises; ?></label>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Localisation géographique <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="localisation_geographique_entreprise" id="localisation_geographique_entreprise"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude_valide->entreprise->localisation_geographique_entreprise}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Repère d'accès <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="repere_acces_entreprises" id="repere_acces_entreprises"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude_valide->entreprise->repere_acces_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Adresse postal <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="adresse_postal_entreprises" id="adresse_postal_entreprises"
+                                               class="form-control form-control-sm"
+                                               value="{{@$projet_etude_valide->entreprise->adresse_postal_entreprises}}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
+                                                </select>
                                             </div>
-                                            <div class="card accordion-item">
-                                                <h2 class="accordion-header" id="headingTwo">
-                                                    <button type="button" class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse" data-bs-target="#accordionTwo"
-                                                            aria-expanded="false" aria-controls="accordionTwo">
-                                                        Informations du projet d'etude
-                                                    </button>
-                                                </h2>
-                                                <div id="accordionTwo" class="accordion-collapse collapse"
-                                                     aria-labelledby="headingTwo" data-bs-parent="#accordionExample"
-                                                     style="">
-                                                    <div class="accordion-body">
-                                                        <div class="row gy-3">
-                                                            <div class="col-md-12 col-10" align="center">
-                                                                <div class="mb-1">
-                                                                    <label>Titre du projet </label>
-                                                                    <input type="text" name="titre_projet"
-                                                                           id="titre_projet"
-                                                                           class="form-control form-control-sm"
-                                                                           disabled
-                                                                           value="{{ $projet_etude_valide->titre_projet_etude }}">
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Contexte ou Problèmes constatés</label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="contexte_probleme"
-                                                                              style="height: 121px;" disabled><?php echo $projet_etude_valide->contexte_probleme_projet_etude; ?></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Objectif Général </label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="objectif_general"
-                                                                              style="height: 121px;" disabled><?php echo $projet_etude_valide->objectif_general_projet_etude; ?></textarea>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Objectifs spécifiques </label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="objectif_specifique"
-                                                                              style="height: 121px;" disabled><?php echo $projet_etude_valide->objectif_specifique_projet_etud; ?></textarea>
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Résultats attendus </label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="resultat_attendu"
-                                                                              style="height: 121px;" disabled><?php echo $projet_etude_valide->resultat_attendu_projet_etude; ?></textarea>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Champ de l’étude </label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="champ_etude"
-                                                                              style="height: 121px;" disabled><?php echo $projet_etude_valide->champ_etude_projet_etude; ?></textarea>
-
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-4 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Cible </label>
-
-                                                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="cible" style="height: 121px;"
-                                                                              disabled><?php echo $projet_etude_valide->cible_projet_etude; ?></textarea>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card accordion-item">
-                                                <h2 class="accordion-header" id="headingThree">
-                                                    <button type="button" class="accordion-button collapsed"
-                                                            data-bs-toggle="collapse" data-bs-target="#accordionThree"
-                                                            aria-expanded="false" aria-controls="accordionThree">
-                                                        Pieces jointes du projet
-                                                    </button>
-                                                </h2>
-                                                <div id="accordionThree" class="accordion-collapse collapse"
-                                                     aria-labelledby="headingThree" data-bs-parent="#accordionExample"
-                                                     style="">
-                                                    <div class="accordion-body">
-                                                        <div class="row gy-3">
-
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Avant-projet TDR</label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/avant_projet_tdr/' . $piecesetude1) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Courrier de demande de
-                                                                    financement</label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/courier_demande_fin/' . $piecesetude2) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Dossier d’intention </label>
-                                                                <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/dossier_intention/' . $piecesetude3) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Lettre d’engagement</label>
-                                                                <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/lettre_engagement/' . $piecesetude4) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Offre technique</label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/offre_technique/' . $piecesetude5) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-                                                            </div>
-                                                            <div class="col-md-4">
-                                                                <label class="form-label">Offre financière</label> <br>
-                                                                <span class="badge bg-secondary"><a target="_blank"
-                                                                                                    onclick="NewWindow('{{ asset('/pieces_projet/offre_financiere/' . $piecesetude6) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce </a> </span>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div> <br>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Téléphone <strong style="color:red;">*</strong> </label>
+                                                <input type="text"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$projet_etude_valide->entreprise->tel_entreprises}}" name="tel_entreprises" disabled="disabled">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                </div>
 
-                                        <div class="card-body mt-3">
-                                            @isset($projet_etude_valide->flag_soumis_selection_operateur)
-                                                @if($projet_etude_valide->flag_soumis_selection_operateur==true && $projet_etude_valide->flag_selection_operateur_valider_par_processus==true)
-                                                    <form action="{{route($lien.'.mark',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
-                                                        @method('put')
-                                                        @csrf
-                                                        @else
-                                                            <form action="{{route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
-                                                                @csrf
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Cellulaire Professionnelle <strong style="color:red;">*</strong> </label>
+                                                <input type="number" name="cellulaire_professionnel_entreprises" id="cellulaire_professionnel_entreprises"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$projet_etude_valide->entreprise->cellulaire_professionnel_entreprises}}" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="form-label" for="billings-country">Indicatif</label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $pay; ?>
+
+                                                </select>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Fax  </label>
+                                                <input type="number" name="fax_entreprises" id="fax_entreprises"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$projet_etude_valide->entreprise->fax_entreprises}}" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1" href="/{{$lien }}">Retour</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade @if($idetape=="2")show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
+                            <div class="row">
+                                <div class="mb-1 col-md-6">
+                                    <label>Titre du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <input type="text" name="titre_projet"
+                                           required="required" id="titre_projet"
+                                           class="form-control form-control-sm"
+                                           disabled
+                                           value ="@isset($projet_etude_valide){{$projet_etude_valide->titre_projet_instruction}}@endisset">
+                                </div>
+
+                                <div class="mb-1 col-md-6">
+                                    <label>Secteur d'activité du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" disabled>
+                                        <?= $secteuractivite_projet; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Contexte ou Problèmes constatés <span
+                                                style="color:red;">*</span></label>
+                                        <textarea class="form-control" required="required"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="contexte_probleme" >@isset($projet_etude_valide){{$projet_etude_valide->contexte_probleme_instruction}}@endisset</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Objectif Général <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea required="required" class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="objectif_general" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_general_instruction}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Objectifs spécifiques <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea class="form-control" required="required"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea"
+                                                  name="objectif_specifique" >@isset($projet_etude_valide){{$projet_etude_valide->objectif_specifique_instruction}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Résultats attendus <span
+                                                style="color:red;">*</span> </label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  required="required" rows="4" id="exampleFormControlTextarea"
+                                                  name="resultat_attendu" >@isset($projet_etude_valide){{$projet_etude_valide->resultat_attendus_instruction}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Champ de l’étude <span
+                                                style="color:red;">*</span></label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea" name="champ_etude"
+                                                  required="required">@isset($projet_etude_valide){{$projet_etude_valide->champ_etude_instruction}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Cible <span style="color:red;">*</span>
+                                        </label>
+                                        <textarea class="form-control"
+                                                  disabled
+                                                  rows="4" id="exampleFormControlTextarea" name="cible"
+                                                  required="required">@isset($projet_etude_valide){{$projet_etude_valide->cible_instruction}}@endisset</textarea>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
+                                        </label>
+                                        <textarea class="form-control" rows="7" disabled id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude_valide->methodologie_instruction}}</textarea>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="montant_projet">Montant du projet <span style="color:red;">*</span>
+                                        </label>
+                                        <input type="number" disabled name="montant_projet" required="required" id="montant_projet" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude_valide->montant_projet}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mt-2">
+                                    <div class="mb-1">
+                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
+                                        @if($projet_etude_valide->piece_jointe_instruction)
+                                            <div>
+                                                <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                         onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude_valide->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                                            </div>
+                                        @endif
+                                        <div id="defaultFormControlHelp" class="form-text">
+                                            <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                maxi : 5Mo</em>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade @if($idetape=="3") show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
+                            <table class="table table-bordered table-striped table-hover table-sm"
+                                   style="margin-top: 13px !important">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Type de pièce</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($pieces_projets as $key => $piece)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>
+                                            @if($piece->code_pieces=='avant_projet_tdr')
+                                                Avant-projet TDR
+                                            @endif
+                                            @if($piece->code_pieces=='courier_demande_fin')
+                                                Courrier de demande de financement
+                                            @endif
+                                            @if($piece->code_pieces=='dossier_intention')
+                                                Dossier d’intention
+                                            @endif
+                                            @if($piece->code_pieces=='lettre_engagement')
+                                                Lettre d’engagement
+                                            @endif
+                                            @if($piece->code_pieces=='offre_technique')
+                                                Offre technique
+                                            @endif
+                                            @if($piece->code_pieces=='offre_financiere')
+                                                Offre financière
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($piece->code_pieces=='avant_projet_tdr')
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+                                            @if($piece->code_pieces=='courier_demande_fin')
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+                                            @if($piece->code_pieces=='dossier_intention')
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+                                            @if($piece->code_pieces=='lettre_engagement')
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+                                            @if($piece->code_pieces=='offre_technique')
+                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+                                            @if($piece->code_pieces=='offre_financiere')
+                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du ficher</a>
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                <a  href="{{ route($lien.'.edit',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade @if($idetape=="4") show active @endif" id="navs-top-selectionoperateurprojetetude" role="tabpanel">
+                            @if(@$projet_etude_valide->flag_selection_operateur_valider_par_processus==true && @$projet_etude_valide->flag_validation_selection_operateur==false )
+                                <form action="{{route($lien.'.mark',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
+                                    @method('put')
+                                    @csrf
+                                    <div class="row mb-5">
+                                        <div class="col-md-11">
+                                            <label class="form-label">Opérateurs<span style="color:red;">*</span></label>
+                                            <select class="select2 form-select-sm input-group" name="operateur">
+                                                    <?=$operateur_valider?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 mt-4" align="right">
+                                            <button type="submit" value="Enregistrer_selection" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
+                                                Valider
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            @endif
+
+                            @if(@$projet_etude_valide->operateurs->count()!=5)
+
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <div class="alert-body text-center">
+                                        Info : Il vous faut sélectionner  cinq opérateurs avant de soumettre la sélection
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+
+                            <form action="{{route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
+                                    @method('put')
+                                    @csrf
+                                    <div class="row mb-5">
+                                        <div class="col-md-11">
+                                            <label class="form-label">Opérateurs<span style="color:red;">*</span></label>
+                                            <select class="select2 form-select-sm input-group" name="operateur">
+                                                <?=$operateur_selected?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 mt-4" align="right">
+                                            <button type="submit" value="Enregistrer_selection" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
+                                                Enregistrer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <hr/>
+                            @endif
+
+                            <table class="table table-bordered table-striped table-hover table-sm"
+                                   style="margin-top: 13px !important">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Opérateur </th>
+                                    @if(@$projet_etude_valide->flag_selection_operateur_valider_par_processus==true && isset($projet_etude_valide->id_operateur_selection))
+                                        <th>Statut </th>
+                                    @endif
+                                    @if(@$projet_etude_valide->flag_soumis_selection_operateur == false)
+                                    <th>Action </th>
+                                        @endif
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @isset($projet_etude_valide->operateurs)
+                                        @foreach ($projet_etude_valide->operateurs as $key => $operateur)
+                                            <tr>
+                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $operateur->ncc_entreprises }} / {{ $operateur->raison_social_entreprises }}</td>
+                                                @if(@$projet_etude_valide->flag_selection_operateur_valider_par_processus==true && isset($projet_etude_valide->id_operateur_selection))
+                                                   @if($projet_etude_valide->id_operateur_selection==$operateur->id_entreprises)
+                                                        <td>
+                                                            <i class="menu-icon tf-icons ti ti-circle-check text-success"></i>
+                                                        </td>
+                                                    @else
+                                                        <td>
+                                                            <i class="menu-icon tf-icons ti ti-x text-danger"></i>
+                                                        </td>
+                                                    @endif
                                                 @endif
-                                            @else
-                                                    <form action="{{route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
-                                                                @csrf
-                                            @endisset
-                                                                <h5 class="card-title" align="center"> Sélection des opérateurs pour le projet d'étude</h5>
-                                                                <br>
-                                                                <div class="row">
-                                                                    <label class="form-label">Opérateurs  <strong style="color:red;">*</strong></label>
-                                                                    @isset($projet_etude_valide->flag_soumis_selection_operateur)
-                                                                        @if($projet_etude_valide->flag_soumis_selection_operateur==true &&
-                                                                            $projet_etude_valide->flag_selection_operateur_valider_par_processus==true)
-                                                                            @isset($projet_etude_valide->operateurs)
+                                                @if(@$projet_etude_valide->flag_soumis_selection_operateur == false)
 
+                                                <td class="text-center">
+                                                    <a href="{{ route($lien.'.deleteoperateurpe',[\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($operateur->id_entreprises)]) }}"
+                                                       class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet opérateur?")) return false;'
+                                                       title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
 
-                                                                                <table class="table table-bordered table-striped  table-sm" style="margin-top: 13px !important">
-                                                                                    <thead>
-                                                                                    <tr>
-                                                                                        <th>No</th>
-                                                                                        <th>Localité </th>
-                                                                                        <th>NCC </th>
-                                                                                        <th>Raison sociale </th>
-                                                                                        <th>Action </th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    @foreach ($projet_etude_valide->operateurs as $key => $operateur)
-                                                                                        <tr class="@isset($projet_etude_valide->id_operateur_selection)
-                                                                                                @if($projet_etude_valide->id_operateur_selection==$operateur->id_entreprises)
-                                                                                                    bg-success text-white
-                                                                                            @endif
-                                                                                            @endisset">
-                                                                                            <td>{{ $key+1 }}</td>
-                                                                                            <td>@isset($operateur->localite) {{ $operateur->localite->libelle_localite }} @endisset</td>
-                                                                                            <td>{{ $operateur->ncc_entreprises }}</td>
-                                                                                            <td>{{ $operateur->raison_social_entreprises }}</td>
-                                                                                            <td>
-                                                                                                <input type="radio" id="operateur" name="operateur" value="{{$operateur->id_entreprises}}"
-                                                                                                    @isset($projet_etude_valide->id_operateur_selection)
-                                                                                                        disabled
-                                                                                                            @if($projet_etude_valide->id_operateur_selection==$operateur->id_entreprises)
-                                                                                                                checked
-                                                                                                            @endif
-                                                                                                        @endisset
+                                                </td>
+                                                    @endif
+                                            </tr>
+                                        @endforeach
+                                    @endisset
+                                </tbody>
+                            </table>
+                                @if(@$projet_etude_valide->operateurs->count()==5 && @$projet_etude_valide->flag_soumis_selection_operateur == false)
+                                    <hr>
+                                    <form method="POST" class="form mt-3"  action="{{ route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
+                                        @method('put')
+                                        @csrf
+                                        <div  class="text-end">
+                                                <button onclick='javascript:if (!confirm("Voulez-vous soumettre cette sélection ? Cette action est irréversible.")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_selection" class="btn btn-sm btn-success me-sm-3 me-1 "  align="right">Soumettre la sélection</button>
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                    Retour</a>
 
-
-                                                                                                    />
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    @endforeach
-                                                                                    </tbody></table>
-                                                                            @endisset
-                                                                        @elseif($projet_etude_valide->flag_soumis_selection_operateur==false && $projet_etude_valide->flag_selection_operateur_valider_par_processus==false)
-                                                                            @isset($operateurs)
-                                                                                <select class="select2 form-select-sm input-group" name="operateurs[]"
-                                                                                        data-maximum-selection-length="5" data-allow-clear="true" multiple>
-                                                                                    @foreach($operateurs as $operateur)
-                                                                                        <option value="{{$operateur->id_entreprises}}"
-                                                                                                @isset($projet_etude_valide->operateurs)
-                                                                                                    @foreach($projet_etude_valide->operateurs as $operateur_projet)
-                                                                                                        @if($operateur_projet->id_entreprises == $operateur->id_entreprises)
-                                                                                                            selected
-                                                                                            @endif
-                                                                                            @endforeach
-                                                                                            @endisset
-
-                                                                                        >{{$operateur->raison_social_entreprises}}</option>
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            @endisset
-                                                                        @elseif($projet_etude_valide->flag_soumis_selection_operateur==true && $projet_etude_valide->flag_selection_operateur_valider_par_processus==false)
-                                                                            <select class="select2 form-select-sm input-group" disabled name="operateurs[]"
-                                                                                    data-maximum-selection-length="5" data-allow-clear="true" multiple>
-                                                                                @foreach($operateurs as $operateur)
-                                                                                    <option value="{{$operateur->id_entreprises}}"
-                                                                                            @isset($projet_etude_valide->operateurs)
-                                                                                                @foreach($projet_etude_valide->operateurs as $operateur_projet)
-                                                                                                    @if($operateur_projet->id_entreprises == $operateur->id_entreprises)
-                                                                                                        selected
-                                                                                        @endif
-                                                                                        @endforeach
-                                                                                        @endisset
-
-                                                                                    >{{$operateur->raison_social_entreprises}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        @endif
-
-                                                                    @else
-                                                                        @isset($operateurs)
-                                                                            <select class="select2 form-select-sm input-group" name="operateurs[]"
-                                                                                    data-maximum-selection-length="5" data-allow-clear="true" multiple>
-                                                                                @foreach($operateurs as $operateur)
-                                                                                    <option value="{{$operateur->id_entreprises}}"
-                                                                                            @isset($projet_etude_valide->operateurs)
-                                                                                                @foreach($projet_etude_valide->operateurs as $operateur_projet)
-                                                                                                    @if($operateur_projet->id_entreprises == $operateur->id_entreprises)
-                                                                                                        selected
-                                                                                        @endif
-                                                                                        @endforeach
-                                                                                        @endisset
-
-                                                                                    >{{$operateur->raison_social_entreprises}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        @endisset
-                                                                    @endif
-
-                                                                </div>
-                                                                <div class="col-12" align="left">
-                                                                    <br>
-                                                                    <div class="col-12" align="right">
-                                                                        @isset($projet_etude_valide->flag_soumis_selection_operateur)
-                                                                            @if($projet_etude_valide->flag_soumis_selection_operateur==false && $projet_etude_valide->flag_selection_operateur_valider_par_processus==false)
-                                                                                <button
-                                                                                    onclick='javascript:if (!confirm("Voulez-vous soumettre la sélection de ces opérateurs au chef de service ? . Cette action est irreversible")) return false;'
-                                                                                    type="submit" name="action" value="Enregistrer_soumettre_selection"
-                                                                                    class="btn btn-sm btn-success me-sm-3 me-1">Soumettre la sélection
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                        name="action" value="Enregistrer_selection"
-                                                                                        class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
-                                                                                    Modifier
-                                                                                </button>
-                                                                            @elseif($projet_etude_valide->flag_soumis_selection_operateur==true && $projet_etude_valide->flag_selection_operateur_valider_par_processus==true)
-                                                                               @if(!isset($projet_etude_valide->id_operateur_selection))
-                                                                                    <button
-                                                                                        onclick='javascript:if (!confirm("Voulez-vous selectionner cet opérateur comme opérateur final pour ce projet ? . Cette action est irreversible")) return false;'
-                                                                                        type="submit" name="action" value="Enregistrer_soumettre_selection"
-                                                                                        class="btn btn-sm btn-success me-sm-3 me-1">Sélection opérateur
-                                                                                    </button>
-                                                                                @endif
-                                                                            @endif
-                                                                        @else
-                                                                            <button type="submit"
-                                                                                    name="action" value="Enregistrer_selection"
-                                                                                    class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
-                                                                                Enregistrer
-                                                                            </button>
-                                                                        @endisset
-
-                                                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                                           href="/{{$lien }}">
-                                                                            Retour</a>
-
-                                                                    </div>
-                                                                </div>
-                                                            </form>
                                         </div>
+                                    </form>
+                                @endif
 
-                                    </div>
+                                @if(@$projet_etude_valide->flag_selection_operateur_valider_par_processus==true && isset($projet_etude_valide->id_operateur_selection))
+                                    <hr>
+
+                                    <form action="{{route($lien.'.mark',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
+                                        @method('put')
+                                        @csrf
+                                        <div class="row mb-5">
+                                            <div class="col-md-12" align="right">
+                                                @if(@$projet_etude_valide->flag_validation_selection_operateur==false)
+                                                    <button value="Valider_selection" name="action"  onclick='javascript:if (!confirm("Voulez-vous soumettre cette sélection ? Cette action est irréversible.")) return false;'  type="submit" class="btn btn-sm btn-success me-sm-3 me-1 "  align="right">
+                                                        Soumettre la sélection finale
+                                                    </button>
+                                                @endif
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                    Retour</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
                                 </div>
                             </div>
                         </div>

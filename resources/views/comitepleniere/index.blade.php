@@ -5,7 +5,7 @@ use App\Helpers\AnneeExercice;
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
-
+@if(auth()->user()->can('ctplanformationpleniere-index'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -105,6 +105,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @endsection
 
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif
 
 
 

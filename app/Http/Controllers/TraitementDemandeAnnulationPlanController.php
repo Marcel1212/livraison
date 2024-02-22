@@ -222,7 +222,7 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     ->first();
                 $idProComb = $infosprocessus->id_combi_proc;
                 $idProcessus = $infosprocessus->id_processus;
-
+                $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$demande_annulation->id_plan_formation)->get();
                 Parcours::create([
                     'id_processus' => $idProcessus,
                     'id_user' => $idUser,
@@ -245,6 +245,8 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     ->first();
 
                 if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
+
+
                     $demande_annulation->flag_demande_annulation_plan_valider_par_processus = true;
                     $demande_annulation->flag_validation_demande_annulation_plan = true;
                     $demande_annulation->date_validation_demande_annulation_plan = now();
@@ -259,9 +261,8 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     if (isset($planformation->email_professionnel_charge_plan_formation)) {
 
                         if(isset($demande_annulation->id_plan_formation)){
-                            $actionplanformations = ActionFormationPlan::where('id_action_formation_plan',$demande_annulation->id_plan_formation);
                             foreach ($actionplanformations as $actionplanformation){
-                                $actionplanformation_update = ActionFormationPlan::find($actionplanformation->id);
+                                $actionplanformation_update = ActionFormationPlan::find($actionplanformation->id_action_formation_plan);
                                 $actionplanformation_update->flag_annulation_action=true;
                                 $actionplanformation_update->update();
                             }
@@ -291,12 +292,18 @@ class TraitementDemandeAnnulationPlanController extends Controller
 
                         }
                         if(isset($demande_annulation->id_action_plan)){
-                                $actionplanformation_update = ActionFormationPlan::find($demande_annulation->id_action_plan);
-                                $actionplanformation_update->flag_annulation_action=true;
-                                $actionplanformation_update->update();
+                            $actionplanformation_update = ActionFormationPlan::find($demande_annulation->id_action_plan);
 
-                            $actionplanformations = ActionFormationPlan::where('id_action_formation_plan',$demande_annulation->id_plan_formation)
-                            ->where('flag_annulation_action','<>',true)->get();
+
+                            $actionplanformation_update->flag_annulation_action=true;
+                            $actionplanformation_update->update();
+
+                            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$actionplanformation->id_plan_de_formation)
+                                ->where(function($query){
+                                    $query->where('flag_annulation_action','<>',true)
+                                          ->orwhereNull('flag_annulation_action');
+                                })
+                                ->get();
                             if($actionplanformations->count()==0){
                                 $planformation->flag_annulation_plan=true;
                                 $planformation->update();

@@ -1,10 +1,13 @@
 <?php
 
 use App\Helpers\AnneeExercice;
+use App\Models\PlanFormation;
 
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
+
+@if(auth()->user()->can('cahierplanformation-create'))
 
 @extends('layouts.backLayout.designadmin')
 
@@ -14,6 +17,36 @@ $anneexercice = AnneeExercice::get_annee_exercice();
     @php($titre='Liste des cahiers de plan de formation')
     @php($soustitre='Creer un cahier de plan de formation')
     @php($lien='cahierplanformation')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+    <script type="text/javascript">
+
+       // document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+        function changeFunction() {
+            //alert('code');exit;
+
+            var selectBox = document.getElementById("id_departement");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            //alert(selectedValue);
+
+            $.get('/listeagencedepartement/'+selectedValue, function (data) {
+                     //alert(data); //exit;
+                    $('#id_agence').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_agence').append($('<option>', {
+                            value: tels.num_agce,
+                            text: tels.lib_agce,
+                        }));
+                    });
+                });
+
+
+        };
+    </script>
 
     <!-- BEGIN: Content-->
 
@@ -104,18 +137,29 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
 
                                 <div class="col-md-6 col-12">
-                                    <label>Type entreprise <strong style="color:red;">*</strong></label>
+                                    <label>Liste des departements <strong style="color:red;">*</strong></label>
                                     <select
-                                            id="code_pieces_cahier_plan_formation"
-                                            name="code_pieces_cahier_plan_formation"
+                                            id="id_departement"
+                                            name="id_departement"
                                             class="select2 form-select-sm input-group"
-                                            aria-label="Default select example" required="required">
-                                        <option value="">Selectionnez le type</option>
-                                        <option value="PME">PETITE MOYENNE ENTREPRISES</option>
-                                        <option value="GE">GRANDE ENTREPRISE</option>
-                                        <option value="ANT">ANTENNE</option>
+                                            aria-label="Default select example" required="required" onchange="changeFunction();">
+                                        <option value="">Selectionnez un departement</option>
+                                        @foreach ($departements as $departement)
+                                            <option value="{{ $departement->id_departement }}">{{ $departement->libelle_departement }}</option>
+                                        @endforeach
+
+
                                     </select>
                                 </div>
+
+                                <div class="col-md-6 col-12">
+                                    <label>LIste des agences <strong style="color:red;">*</strong></label>
+
+                                    <select id="id_agence" name="id_agence" class="select2 form-select-sm input-group">
+                                        <option value='0'></option>
+                                    </select>
+                                </div>
+
 
                                 <div class="col-md-6 col-12">
                                     <div class="mb-1">
@@ -155,4 +199,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
         @endsection
 
-
+        @else
+        <script type="text/javascript">
+            window.location = "{{ url('/403') }}";//here double curly bracket
+        </script>
+    @endif

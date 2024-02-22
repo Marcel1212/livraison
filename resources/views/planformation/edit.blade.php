@@ -34,6 +34,8 @@ $idpart = Auth::user()->id_partenaire;
 
 //dd($idpart);
 ?>
+
+@if(auth()->user()->can('planformation-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -56,7 +58,18 @@ $idpart = Auth::user()->id_partenaire;
             var selectBox = document.getElementById("id_type_formation");
             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
-            //alert(selectedValue);
+           // alert(selectedValue);
+
+            $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
+                     //alert(data); //exit;
+                    $('#id_caracteristique_type_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_caracteristique_type_formation').append($('<option>', {
+                            value: tels.id_caracteristique_type_formation,
+                            text: tels.libelle_ctf,
+                        }));
+                    });
+                });
 
             if(selectedValue == 3){
 
@@ -520,7 +533,7 @@ $idpart = Auth::user()->id_partenaire;
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget) }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-6">
@@ -528,7 +541,7 @@ $idpart = Auth::user()->id_partenaire;
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->part_entreprise - $montantactionplanformation) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget - $montantactionplanformation) }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-12">
@@ -585,13 +598,19 @@ $idpart = Auth::user()->id_partenaire;
                             </select>
                             </div>
                             <div class="col-12 col-md-4">
+                                <label class="form-label" for="id_caracteristique_type_formation">Caracteristique type de formation <strong style="color:red;">*</strong></label>
+                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group">
+                                    <option value='0'></option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
                                 <div class="row">
                                     <div class="col-12 col-md-10">
                                         <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
 
                                         <select class="select2 form-select-sm input-group" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
                                             <option value='0'></option>
-                                            <?php echo $structureformation; ?>
+                                            <?php //echo $structureformation; ?>
                                         </select>
 
                                     </div>
@@ -698,10 +717,7 @@ $idpart = Auth::user()->id_partenaire;
                                 value="{{ old('employe_fiche_demande_agrement') }}"
                                  />
                             </div>
-                            <div class="col-12 col-md-4">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
-                                <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6">{{ old('objectif_pedagogique_fiche_agre') }}</textarea>
-                            </div>
+
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="file_beneficiare">Charger les bénéficiaires de la formation (Excel) <strong style="color:red;">*</strong></label>
                             <input
@@ -720,6 +736,10 @@ $idpart = Auth::user()->id_partenaire;
                                 class="form-control form-control-sm"
                                  />
                             </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
+                                <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6">{{ old('objectif_pedagogique_fiche_agre') }}</textarea>
+                            </div>
                                 </div>
 <hr>
 
@@ -731,7 +751,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Modèle de la liste des bénéficiaires à télécharger</a>
 
-                                <?php $budget = $planformation->part_entreprise - $montantactionplanformation; if($budget != 0){?>
+                                <?php $budget = $planformation->montant_financement_budget - $montantactionplanformation; if($budget > 0){?>
 
                                     <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer l’action de formation</button>
 
@@ -967,3 +987,8 @@ $idpart = Auth::user()->id_partenaire;
 
 
        @endsection
+    @else
+       <script type="text/javascript">
+           window.location = "{{ url('/403') }}";//here double curly bracket
+       </script>
+   @endif

@@ -67,7 +67,7 @@ $couleur = Menu::get_info_couleur();
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
-{{--    <script src='https://www.google.com/recaptcha/api.js'></script>--}}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
 <body>
@@ -146,14 +146,14 @@ $couleur = Menu::get_info_couleur();
                             autofocus/>
                     </div>
 
-{{--                                        <div class="form-group mb-4">--}}
-{{--                                            <div class="form-group">--}}
-{{--                                                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>--}}
-{{--                                                @if ($errors->has('g-recaptcha-response'))--}}
-{{--                                                    <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>--}}
-{{--                                                @endif--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
+                    <div class="form-group mb-4">
+                        <div class="form-group">
+                            <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                            @if ($errors->has('g-recaptcha-response'))
+                                <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                            @endif
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary d-grid w-100">Valider</button>
                 </form>
 

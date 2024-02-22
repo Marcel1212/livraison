@@ -22,7 +22,7 @@ class CtprojetetudevaliderController extends Controller
     public function index(){
         $user =  Auth::user();
         $Idroles = Menu::get_id_profil($user->id);
-        $Resultat = null;
+            $Resultat = null;
         $ResultatEtap = DB::table('vue_processus')
             ->where('id_roles', '=', $Idroles)
             ->get();
@@ -34,10 +34,11 @@ class CtprojetetudevaliderController extends Controller
                     ->join('projet_etude','p.id_demande','projet_etude.id_projet_etude')
                     ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
                     ->join('users','projet_etude.id_charge_etude','users.id')
-                    ->where('projet_etude.id_departement',$user->id_departement)
+//                    ->where('projet_etude.id_departement',$user->id_departement)
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
                         ['v.id_processus', '=', $r->id_processus],
+                        ['p.id_combi_proc', '=', $r->id_combi_proc],
                         ['v.code', '=', 'PE'],
                         ['p.id_roles', '=', $Idroles]
                     ])
@@ -79,6 +80,16 @@ class CtprojetetudevaliderController extends Controller
                 $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
             }
 
+            $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                ->orderBy('libelle_secteur_activite')
+                ->get();
+
+            $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+            foreach ($secteuractivite_projets as $comp) {
+                $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+            }
+
+
         }
 
         $ResultProssesList = DB::table('vue_processus_validation_affichage as v')
@@ -103,7 +114,9 @@ class CtprojetetudevaliderController extends Controller
 
         $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
 
-        return view('ctprojetetudevalider.edit', compact('projet_etude','id_combi_proc',
+        return view('ctprojetetudevalider.edit', compact(
+            'secteuractivite_projet',
+            'projet_etude','id_combi_proc',
             'pieces_projets','pay','secteuractivite',
         'infoentreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }

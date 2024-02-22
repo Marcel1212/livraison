@@ -11,8 +11,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Projet d\' étude')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Ajout de comite  plénière')
+    @php($titre='Liste des comités plénières')
+    @php($soustitre='Ajout de comité  plénière')
     @php($lien='comitepleniereprojetetude')
 
     <!-- BEGIN: Content-->
@@ -66,7 +66,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite plénière
+                          Comité plénière
                         </button>
                       </li>
                       <li class="nav-item">
@@ -127,8 +127,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregistrer"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                        Enregistrer
+                                    </button>
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
+                                            class="btn   btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">

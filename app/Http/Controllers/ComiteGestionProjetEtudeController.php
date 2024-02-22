@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ConseillerParAgence;
+use App\Helpers\Email;
+use App\Helpers\Menu;
 use App\Models\ComiteGestion;
+use App\Models\ComitePleniere;
+use App\Models\ComitePleniereParticipant;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
 use App\Models\SecteurActivite;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Image;
@@ -14,24 +19,13 @@ use File;
 use Auth;
 use Hash;
 use DB;
-use App\Models\User;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Crypt;
-use App\Models\ActionFormationPlan;
-use App\Models\ActionPlanFormationAValiderParUser;
-use App\Models\BeneficiairesFormation;
-use App\Models\ButFormation;
-use App\Models\CategoriePlan;
-use App\Models\CategorieProfessionelle;
 use App\Models\ComiteGestionParticipant;
 use App\Models\Entreprises;
-use App\Models\FicheADemandeAgrement;
 use App\Models\FicheAgrement;
 use App\Models\Motif;
 use App\Models\Pays;
-use App\Models\PlanFormation;
-use App\Models\TypeEntreprise;
-use App\Models\TypeFormation;
 
 class ComiteGestionProjetEtudeController extends Controller
 {
@@ -50,7 +44,7 @@ class ComiteGestionProjetEtudeController extends Controller
         $projetetudes = ProjetEtude::where([['flag_valider_par_processus','=',true],
             ['flag_projet_etude_valider_cahier','=',true],
             ['flag_projet_etude_valider_cahier_soumis_comite_gestion','=',true],
-            ['flag_projet_etude_valider_cahier_soumis_comite_permanente','=',true],
+            ['flag_projet_etude_valider_cahier_soumis_comite_permanente','=',false],
             ['flag_fiche_agrement','=',false]])
             ->get();
 
@@ -83,7 +77,15 @@ class ComiteGestionProjetEtudeController extends Controller
             $input['id_type_comite_comite_gestion'] = intval($typecomiteinfos->id_type_comite);
             ComiteGestion::create($input);
             $insertedId = ComiteGestion::latest()->first()->id_comite_gestion;
-            return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+
+            if($input['action']=="Enregistrer"){
+                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
+
+            if($input['action']=="Enregistrer_suivant"){
+                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            }
+
         }
     }
 
@@ -168,17 +170,32 @@ class ComiteGestionProjetEtudeController extends Controller
                 $verifconseillerexist = ComiteGestionParticipant::where([['id_comite_gestion','=',$id],['id_user_comite_gestion_participant','=',$input['id_user_comite_gestion_participant']]])->get();
 
                 if(count($verifconseillerexist) >= 1){
-
                     return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cette personne existe déjà dans ce comite de gestion. ');
-
                 }
 
-                ComiteGestionParticipant::create($input);
+                $comitesave = ComiteGestionParticipant::create($input);
+                $usernotifie = User::where('id',$comitesave->id_user_comite_gestion_participant)->first();
+                $comiteencours = ComiteGestion::find($id);
+                $logo = Menu::get_logo();
 
-                //return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                if (isset($usernotifie->email)) {
+                    $nom_prenom = $usernotifie->name .' '. $usernotifie->prenom_users;
+                    $sujet = "Tenue de comité de gestion";
+                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                    $messageMail = "<b>Cher, $nom_prenom  ,</b>
+                                    <br><br>Vous êtes convié au comité de gestion des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_gestion." au ".$comiteencours->date_fin_comite_gestion.".
+
+                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des projets d'étude.
+                                    <br>
+
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($usernotifie->email, $nom_prenom, $messageMail, $sujet, $titre);
+                }
                 return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
-
-
             }
 
             if ($data['action'] == 'Traiter_cahier_projet'){
@@ -221,7 +238,6 @@ class ComiteGestionProjetEtudeController extends Controller
             $projet_etude = ProjetEtude::find($id);
             if(isset($projet_etude)){
                 $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
-
                 $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','avant_projet_tdr')->first();
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -257,6 +273,16 @@ class ComiteGestionProjetEtudeController extends Controller
                     $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
                 }
 
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+
 
                 return view('comitegestionprojetetude.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',
@@ -264,6 +290,7 @@ class ComiteGestionProjetEtudeController extends Controller
                         'dossier_intention',
                         'lettre_engagement',
                         'offre_technique',
+                        'secteuractivite_projet',
                         'projet_etude',
                         'idcomite',
                         'motifs',
@@ -294,7 +321,7 @@ class ComiteGestionProjetEtudeController extends Controller
                 $projet_etude->flag_valider_comite_gestion_projet_etude = true;
                 $input = $request->all();
                 $projet_etude->update($input);
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
+                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt(4).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
             }
 
             if($data['action'] === 'Traiter_valider_projet'){
@@ -314,7 +341,7 @@ class ComiteGestionProjetEtudeController extends Controller
                         'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
-                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Le projet a été validé ont été validée ');
+                return redirect('comitegestionprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Le projet a été validé');
 
 
             }

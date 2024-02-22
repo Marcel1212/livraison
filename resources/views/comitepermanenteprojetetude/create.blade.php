@@ -1,28 +1,17 @@
-<?php
-
-use App\Helpers\AnneeExercice;
-
-$anneexercice = AnneeExercice::get_annee_exercice();
-
-?>
-
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Projet d\' étude')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Ajout de comite  plénière')
-    @php($lien='comitepleniereprojetetude')
+    @php($titre='Liste des comités permanents')
+    @php($soustitre='Ajout de comité de permanent')
+    @php($lien='comitepermanenteprojetetude')
 
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
     </h5>
-
-
-
 
     <div class="content-body">
         @if ($message = Session::get('success'))
@@ -33,14 +22,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        @if(!isset($anneexercice->id_periode_exercice))
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <div class="alert-body" style="text-align:center">
-                    {{$anneexercice}}
-                </div>
-                <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-            </div>
-         @endif
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -66,7 +47,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite plénière
+                          Comité permanent
                         </button>
                       </li>
                       <li class="nav-item">
@@ -103,7 +84,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite_pleniere"
+                                        <input type="date" name="date_debut_comite_permanente"
                                                class="form-control form-control-sm" required/>
                                     </div>
                                 </div>
@@ -111,7 +92,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_pleniere"
+                                        <input type="date" name="date_fin_comite_permanente"
                                                class="form-control form-control-sm" required/>
                                     </div>
                                 </div>
@@ -119,15 +100,18 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm"  name="commentaire_comite_pleniere" id="commentaire_comite_pleniere" rows="6"></textarea>
+                                        <textarea class="form-control form-control-sm"  name="commentaire_comite_permanente" id="commentaire_comite_permanente" rows="6"></textarea>
 
                                     </div>
                                 </div>
 
-
                                 <div class="col-12" align="right">
                                     <hr>
-                                    <button type="submit"
+                                    <button type="submit" name="action" value="Enregistrer"
+                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                        Enregistrer
+                                    </button>
+                                    <button type="submit" name="action" value="Enregistrer_suivant"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                         Suivant
                                     </button>

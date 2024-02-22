@@ -1,3 +1,4 @@
+@if(auth()->user()->can('statutoperations-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -17,7 +18,7 @@
                 <div class="content-header-left col-md-9 col-12 mb-1">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
-                           
+
                             <div class="breadcrumb-wrapper">
                             </div>
                         </div>
@@ -57,7 +58,7 @@
                                                            class="form-control form-control-sm" value="{{$statutoperation->libelle_statut_operation}}"
                                                            required>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle activite </label>
@@ -97,4 +98,8 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif

@@ -1,3 +1,5 @@
+@if(auth()->user()->can('periodeexercice-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -32,7 +34,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                       </div>
                                   @endforeach
-                              @endif  
+                              @endif
 
              @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -61,26 +63,26 @@
                                                 <div class="mb-1">
                                                     <label>Date de debut </label>
                                                     <input type="date" name="date_debut_periode_exercice" id="date_debut_periode_exercice"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
-                                            </div>                                            
+                                            </div>
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de fin </label>
                                                     <input type="date" name="date_fin_periode_exercice" id="date_fin_periode_exercice"
-                                                           class="form-control form-control-sm" 
+                                                           class="form-control form-control-sm"
                                                            required>
                                                 </div>
-                                            </div>                                             
+                                            </div>
                                             <div class="col-md-12 col-12">
                                                 <div class="mb-1">
                                                     <label>Commentaire </label>
                                                     <textarea name="commentaire_periode_exercice" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                                                 </div>
-                                            </div>                                            
+                                            </div>
 
-                                        
+
                                             <div class="col-12" align="right">
                                                 <hr>
                                                 <button type="submit"
@@ -100,7 +102,11 @@
     <!-- END: Content-->
 
 @endsection
-
+@else
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
+@endif
 
 
 

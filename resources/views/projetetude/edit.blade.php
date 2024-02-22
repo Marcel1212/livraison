@@ -39,7 +39,7 @@
                         <li class="nav-item">
                             <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link @if($id_etape==1) active @endif"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-projetetude"
@@ -74,7 +74,7 @@
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="navs-top-projetetude" role="tabpanel">
+                        <div class="tab-pane fade @if($id_etape==1) show active @endif" id="navs-top-projetetude" role="tabpanel">
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
@@ -175,37 +175,44 @@
                                 </div>
 
                             </div>
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                    Retour</a>
+                            </div>
                         </div>
                         <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
                             <form method="POST" class="form" action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}">
                                 @csrf
                                 @method('put')
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Titre du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="titre_projet"
+                                                   required="required" id="titre_projet"
+                                                   class="form-control form-control-sm"
+                                                   @if(@$projet_etude->flag_soumis==true)
+                                                       disabled
+                                                   @endif
+                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
+                                        </div>
 
-
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
-                                        <label>Titre du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="titre_projet"
-                                               required="required" id="titre_projet"
-                                               class="form-control form-control-sm"
-                                               @if(@$projet_etude->flag_soumis==true)
-                                                   disabled
-                                               @endif
-                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 col-10" align="center">
-                                    <div class="mb-1">
-                                        <label>Secteur d'activité du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                            <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Secteur d'activité du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                disabled
+                                                @endif>
                                                 <?= $secteuractivite_projet; ?>
                                             </select>
+                                        </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row">
@@ -296,6 +303,9 @@
                                             Modifier
                                         </button>
                                     @endif
+
+                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+
                                     @if(@$projet_etude->flag_soumis==false)
 
                                     <button type="submit" name="action" value="Modifier_suivant"
@@ -303,11 +313,10 @@
                                         Suivant
                                     </button>
                                     @else
-                                        <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+
+                                        <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
 
                                     @endif
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                        Retour</a>
                                 </div>
                             </form>
                         </div>
@@ -353,11 +362,14 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Pièce jointe <span
-                                                    style="color:red;">*</span> (PDF, WORD, JPG)
-                                                5M</label>
+                                                    style="color:red;">*</span></label>
                                             <input type="file" name="pieces"
                                                    class="form-control form-control-sm"
                                                    required="required" />
+                                            <div id="defaultFormControlHelp" class="form-text">
+                                                <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                    maxi : 5Mo</em>
+                                            </div>
                                         </div>
                                         <div class="col-md-1 mt-4" align="right">
                                             <button type="submit" value="Enregistrer_fichier" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
@@ -375,7 +387,10 @@
                                     <th>No</th>
                                     <th>Type de pièce</th>
                                     <th>&nbsp;</th>
+                                    @if(@$projet_etude->flag_soumis == false)
+
                                     <th>Action</th>
+                                        @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -404,38 +419,40 @@
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='dossier_intention')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='lettre_engagement')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
-                                                <a href="" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_technique/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
-                                                <a href=""  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du ficher</a>
+                                                <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                   title="Afficher">Aperçu du fichier</a>
                                             @endif
                                         </td>
+                                        @if(@$projet_etude->flag_soumis == false)
+
                                         <td class="text-center">
-                                            @if(@$projet_etude->flag_soumis == false)
                                                 <a href="{{ route($lien.'.deletefpe',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_piece_projet'=>\App\Helpers\Crypt::UrlCrypt($piece->id_pieces_projet_etude)]) }}"
                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette pièce?")) return false;'
                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                            @endif
 
                                         </td>
+                                        @endif
+
                                     </tr>
                                 @endforeach
 

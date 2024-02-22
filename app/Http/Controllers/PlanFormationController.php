@@ -20,6 +20,8 @@ use App\Models\CategoriePlan;
 use App\Models\TypeFormation;
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
+use App\Helpers\MoyenCotisation;
+use App\Helpers\GrilleDeRepartitionFC;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -30,6 +32,7 @@ use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Helpers\AnneeExercice;
 use App\Helpers\PartEntreprisesHelper;
+use App\Models\CaracteristiqueTypeFormation;
 use App\Models\SecteurActivite;
 
 class PlanFormationController extends Controller
@@ -109,10 +112,15 @@ class PlanFormationController extends Controller
                 //'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
             ]);
 
+            $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+            $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
+
+            if($mttprevisionnelcotisation==0){
+                return redirect()->route('planformation.index')->with('error', 'Plan de formation non soumis car nous n\etes pas a jour dans les cotisations.');
+            }
 
             $input = $request->all();
-
-            $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
 
             $input['date_creation'] = Carbon::now();
             $input['id_entreprises'] = $infoentrprise->id_entreprises;
@@ -123,6 +131,13 @@ class PlanFormationController extends Controller
             $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
             $entreprise = Entreprises::find($infoentrprise->id_entreprises);
             $entreprise->update($input);
+
+            $buget = GrilleDeRepartitionFC::get_calcul_financement($mttprevisionnelcotisation);
+            //dd($buget);
+            $bugetseparer = explode("/",$buget);
+            //dd($bugetseparer);
+            $input['id_cle_de_repartition_financement'] = $bugetseparer[1];
+            $input['montant_financement_budget'] = round($bugetseparer[0]);
 
             PlanFormation::create($input);
 
@@ -364,6 +379,7 @@ class PlanFormationController extends Controller
                 $this->validate($request, [
                     'intitule_action_formation_plan' => 'required',
                     'id_entreprise_structure_formation_plan_formation' => 'required',
+                    'id_caracteristique_type_formation' => 'required',
                     //'nombre_stagiaire_action_formati' => 'required',
                     'nombre_groupe_action_formation_' => 'required',
                     'nombre_heure_action_formation_p' => 'required',
@@ -383,6 +399,7 @@ class PlanFormationController extends Controller
                     'facture_proforma_action_formati' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120'
                 ],[
                     'intitule_action_formation_plan.required' => 'Veuillez ajoutez l\'intitule de l\'action.',
+                    'id_caracteristique_type_formation.required' => 'Veuillez sélectionner une caractéristique.',
                     'id_entreprise_structure_formation_plan_formation.required' => 'Veuillez ajoutez une structure ou etablissement.',
                     //'nombre_stagiaire_action_formati.required' => 'Veuillez ajoutez le nombre de stagiaire.',
                     'nombre_groupe_action_formation_.required' => 'Veuillez ajoutez le nombre de groupe.',
@@ -454,7 +471,7 @@ class PlanFormationController extends Controller
                     $montantactionplanformationbg += $actionplanformation->cout_action_formation_plan;
                 }
 
-                $budgetrestant = $planformationbg->part_entreprise - $montantactionplanformationbg;
+                $budgetrestant = $planformationbg->montant_financement_budget - $montantactionplanformationbg;
 
                 if($input['cout_action_formation_plan']>$budgetrestant){
 
@@ -462,7 +479,43 @@ class PlanFormationController extends Controller
 
                 }
 
+                $nombredejour = $input['nombre_heure_action_formation_p']/8;
 
+                $input['nombre_jour_action_formation'] = $nombredejour;
+
+                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
+
+                if($infoscaracteristique->code_ctf == "CGF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CFD"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CCEF"){
+
+                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSEF"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
 
                 if (isset($data['facture_proforma_action_formati'])){
 
