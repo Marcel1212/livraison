@@ -31,21 +31,21 @@ class FicheADemandeAgrement extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'fiche_a_demande_agrement';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_fiche_agrement';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -53,7 +53,7 @@ class FicheADemandeAgrement extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_formation', 'id_but_formation', 'id_action_formation_plan', 'date_debut_fiche_agrement', 'date_fin_fiche_agrement', 'lieu_formation_fiche_agrement', 'cout_total_fiche_agrement', 'objectif_pedagogique_fiche_agre', 'flag_valide_fiche_agrement', 'created_at', 'updated_at', 'cadre_fiche_demande_agrement', 'agent_maitrise_fiche_demande_ag', 'employe_fiche_demande_agrement', 'total_beneficiaire_fiche_demand','file_beneficiare_fiche_agrement'];
+    protected $fillable = ['id_type_formation', 'id_but_formation','id_action_formation_plan_substi', 'id_action_formation_plan', 'date_debut_fiche_agrement', 'date_fin_fiche_agrement', 'lieu_formation_fiche_agrement', 'cout_total_fiche_agrement', 'objectif_pedagogique_fiche_agre', 'flag_valide_fiche_agrement', 'created_at', 'updated_at', 'cadre_fiche_demande_agrement', 'agent_maitrise_fiche_demande_ag', 'employe_fiche_demande_agrement', 'total_beneficiaire_fiche_demand','file_beneficiare_fiche_agrement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
