@@ -137,9 +137,6 @@ class AgreementController extends Controller
                     ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
             })->get();
 
-        dd($actionplanformations);
-
-
         $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
