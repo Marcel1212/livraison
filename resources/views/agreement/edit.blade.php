@@ -671,15 +671,15 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
                                 <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
                                 <td>
-                                    @if($actionplanformation->flag_annulation_action==true && $actionplanformation->flag_substitution==false)
-                                        <span class="badge bg-danger">Annulé</span>
-                                    @elseif($actionplanformation->flag_annulation_action==false)
-                                        @if($actionplanformation->demandeSubstitution)
+                                        @if($actionplanformation->flag_annulation_action!=null)
+                                            <span class="badge bg-danger">Annulé</span>
+                                        @elseif($actionplanformation->demandeSubstitution!=null && $actionplanformation->flag_substitution==false)
                                             <span class="badge bg-warning">demande substitution</span>
-                                        @elseif($actionplanformation->flag_substitution==true )
-                                            <span class="badge bg-success xs">Substitué</span>
+                                        @elseif($actionplanformation->flag_substitution==true)
+                                            <span class="badge bg-primary xs">Substitué</span>
+                                        @else
+                                            <span class="badge bg-success xs">Valide</span>
                                         @endif
-                                    @endif
                                 </td>
                                 <td align="center">
                                     {{--                                        @can($lien.'-edit')--}}
