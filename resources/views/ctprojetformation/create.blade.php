@@ -15,6 +15,19 @@ $anneexercice = AnneeExercice::get_annee_exercice();
     @php($soustitre = 'Ajout de comite  plénière')
     @php($lien = 'ctprojetformation')
 
+
+    <style>
+        /* Style pour l'arrière-plan obscurci */
+        .overlay {
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.135s ease-in-out;
+            transform: scale(1.001);
+        }
+    </style>
+
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
@@ -96,15 +109,29 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <div class="mb-1">
                                         <label>Date de debut <strong style="color:red;">*</strong></label>
                                         <input type="date" name="date_debut_comite_pleniere"
-                                            class="form-control form-control-sm" required />
+                                            id="date_debut_comite_pleniere" class="form-control form-control-sm"
+                                            onchange="verifierDate()" required />
+                                    </div>
+                                    <div class="overlay">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#Message" id="Btn1"
+                                            style="display: none;">
+
+                                        </button>
+
+                                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#MessageFirst" id="Btn2"
+                                            style="display: none;">
+
+                                        </button>
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_pleniere"
-                                            class="form-control form-control-sm" required />
+                                        <input type="date" name="date_fin_comite_pleniere" id="date_fin_comite_pleniere"
+                                            class="form-control form-control-sm" onchange="verifierDateFin()" required />
                                     </div>
                                 </div>
 
@@ -142,6 +169,115 @@ $anneexercice = AnneeExercice::get_annee_exercice();
         </div>
     </div>
 
+    <!-- Date anterieur a date du jour -->
+    <div class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" id="MessageFirst">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Veuillez selectionner une autre date car celle-ci est
+                        déjà passé
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary waves-effect" data-bs-dismiss="modal">
+                        Fermer
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message erreur date de fin sup a fin-->
+    <div class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" id="Message">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">La date de fin doit être superieur à la date de debut
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary waves-effect" data-bs-dismiss="modal">
+                        Fermer
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- END: Content-->
+
+    <script>
+        function verifierDate() {
+            // Obtenez la date actuelle
+            var dateDuJour = new Date();
+
+            // Obtenez la date sélectionnée (à des fins de démonstration, vous pouvez remplacer cela par la manière dont vous obtenez la date sélectionnée dans votre application)
+            var dateSelectionnee = new Date(document.getElementById("date_debut_comite_pleniere").value);
+            //alert(dateSelectionnee);
+
+            // Comparez les dates
+            if (dateSelectionnee.getTime() === dateDuJour.getTime()) {
+                console.log("La date sélectionnée est la même que la date du jour.");
+            } else if (dateSelectionnee.getTime() > dateDuJour.getTime()) {
+                console.log("La date sélectionnée est dans le futur.");
+            } else {
+                //console.log("La date sélectionnée est dans le passé.");
+                //alert("Veuillez selectionner une autre date car celle-ci est déjà passé");
+
+                //var overlay = document.getElementById('Message');
+                // overlay.style.display = 'flex';
+                document.getElementById("Btn2").click();
+                var champ = document.getElementById("date_debut_comite_pleniere");
+                champ.value = "";
+            }
+
+            var dateFin = new Date(document.getElementById("date_fin_comite_pleniere").value);
+            //alert(dateFin.getTime());
+            if (isNaN(dateFin.getTime())) {
+                dateFin.getTime() = "";
+            } else {
+                verifierDateFin();
+            }
+        }
+
+
+        function verifierDateFin() {
+            // Obtenez la date actuelle
+            var dateDuJour = new Date();
+
+            // Obtenez la date sélectionnée (à des fins de démonstration, vous pouvez remplacer cela par la manière dont vous obtenez la date sélectionnée dans votre application)
+            var dateSelectionnee = new Date(document.getElementById("date_fin_comite_pleniere").value);
+            //alert(dateSelectionnee);
+
+            // Comparez les dates
+            if (dateSelectionnee.getTime() === dateDuJour.getTime()) {
+                console.log("La date sélectionnée est la même que la date du jour.");
+            } else if (dateSelectionnee.getTime() > dateDuJour.getTime()) {
+                console.log("La date sélectionnée est dans le futur.");
+            } else {
+                //console.log("La date sélectionnée est dans le passé.");
+                //alert("Veuillez selectionner une autre date car celle-ci est déjà passé");
+                document.getElementById("Btn2").click();
+                var champ = document.getElementById("date_fin_comite_pleniere");
+                champ.value = "";
+            }
+
+            var dateDebut = new Date(document.getElementById("date_debut_comite_pleniere").value);
+            var dateFin = new Date(document.getElementById("date_fin_comite_pleniere").value);
+            //alert(dateDebut);
+            if (dateFin.getTime() < dateDebut.getTime()) {
+                //alert('La date de fin doit être superieur à la date de debut');
+                document.getElementById("Btn1").click();
+                var champFin = document.getElementById("date_fin_comite_pleniere");
+                champFin.value = "";
+            }
+        }
+    </script>
 
 @endsection
