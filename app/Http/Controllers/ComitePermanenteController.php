@@ -440,8 +440,10 @@ class ComitePermanenteController extends Controller
                     })->get();
 
                 $plan_old = PlanFormation::find($plan->id_plan_formation_supplementaire);
-                $plan_old->flag_plan_sup = true;
-                $plan_old->update();
+                if(isset($plan_old)){
+                    $plan_old->flag_plan_sup = true;
+                    $plan_old->update();
+                }
 
                 $input = $request->all();
 
