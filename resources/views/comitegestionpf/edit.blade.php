@@ -202,8 +202,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_gestion_participant">Conseiller <strong
-                                            style="color:red;">*</strong></label>
+                                    <label class="form-label" for="id_user_comite_gestion_participant">Personnes
+                                        ressources <strong style="color:red;">*</strong></label>
                                     <select id="id_user_comite_gestion_participant"
                                         name="id_user_comite_gestion_participant"
                                         class="select2 form-select-sm input-group" aria-label="Default select example"
