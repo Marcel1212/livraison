@@ -4,6 +4,7 @@ use App\Helpers\Menu;
 use App\Helpers\AnneeExercice;
 use Carbon\Carbon;
 use App\Models\ProjetEtude;
+use App\Models\ProjetFormation;
 
 $imagedashboard = Menu::get_info_image_dashboard();
 $iduser = Auth::user()->id;
@@ -11,6 +12,12 @@ $projetetudeenattente = ProjetEtude::where([['id_user', '=', $iduser], ['flag_at
 $projetetuderecevable = ProjetEtude::where([['id_user', '=', $iduser], ['flag_valide', '=', true]])->get();
 $projetetudesoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_soumis', '=', true]])->get();
 $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_soumis', '=', false]])->get();
+
+// Projet formation
+$projetformationsoumis = ProjetFormation::where([['id_user', '=', $iduser], ['flag_soumis', '=', true]])->get();
+$projetformationnonsoumis = ProjetFormation::where([['id_user', '=', $iduser], ['flag_soumis', '=', false]])->get();
+$projetformationrecevable = ProjetFormation::where([['id_user', '=', $iduser], ['flag_soumis', '=', true], ['flag_recevabilite', '=', true], ['flag_statut_instruction', '=', true]])->get();
+$projetformationrejete = ProjetFormation::where([['id_user', '=', $iduser], ['flag_rejet', '=', true]])->get();
 
 //dd(count($projetetudeenattente));
 
@@ -237,7 +244,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                             </td>
                             <td class="text-end pt-2">
                                 <div class="user-progress mt-lg-4">
-                                    <p class="mb-0 fw-medium">0</p>
+                                    <p class="mb-0 fw-medium"><?php echo count($projetformationsoumis); ?></p>
                                 </div>
                             </td>
                         </tr>
@@ -252,7 +259,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                             </td>
                             <td class="text-end">
                                 <div class="user-progress">
-                                    <p class="mb-0 fw-medium">0</p>
+                                    <p class="mb-0 fw-medium"><?php echo count($projetformationnonsoumis); ?></p>
                                 </div>
                             </td>
                         </tr>
@@ -261,13 +268,13 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                                 <div class="d-flex justify-content-start align-items-center">
 
                                     <div class="d-flex flex-column">
-                                        <h6 class="mb-0">Projet en attente</h6>
+                                        <h6 class="mb-0">Projet rejete </h6>
                                     </div>
                                 </div>
                             </td>
                             <td class="text-end">
                                 <div class="user-progress">
-                                    <p class="mb-0 fw-medium">0</p>
+                                    <p class="mb-0 fw-medium"><?php echo count($projetformationrejete); ?></p>
                                 </div>
                             </td>
                         </tr>
@@ -282,7 +289,7 @@ $projetetudenonsoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_so
                             </td>
                             <td class="text-end">
                                 <div class="user-progress">
-                                    <p class="mb-0 fw-medium">0</p>
+                                    <p class="mb-0 fw-medium"><?php echo count($projetformationrecevable); ?></p>
                                 </div>
                             </td>
                         </tr>
