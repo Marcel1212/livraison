@@ -384,10 +384,9 @@ class ComitePermanenteController extends Controller
 
             if($data['action'] === 'Traiter_action_formation_valider'){
 
-                $actionplan = ActionFormationPlan::find($id);
-
-                if($actionplan->demandeSubstitution() !== null){
-                    $old_action_id = $actionplan->demandeSubstitution()->id_action_formation_plan_a_substi;
+                $actionplan = ActionFormationPlan::where('id_action_formation_plan',$id)->with('demandeSubstitution')->first();
+                if(isset($actionplan->demandeSubstitution)){
+                    $old_action_id = $actionplan->demandeSubstitution->id_action_formation_plan_a_substi;
                     $old_action = ActionFormationPlan::find($old_action_id);
                     $old_action->flag_substitution = true;
                     $old_action->update();
