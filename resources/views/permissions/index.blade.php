@@ -5,7 +5,7 @@
 
     @php($Module='Configuration')
     @php($titre='Liste des permissions')
-    @php($lien='permission')
+    @php($lien='permissions')
 
     <!-- BEGIN: Content-->
     <h5 class="py-2 mb-1">

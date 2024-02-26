@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\Audit;
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Envoisms;
@@ -49,11 +49,50 @@ class ConnexionController extends Controller
                 $flag = $dbinfo->flag_mdp;
                 if ($flag == true) {
                     Session::put('userSession', $data['username']);
+
+                    Audit::logSave([
+
+                        'action'=>'CONNEXION',
+
+                        'menu'=>'CONNEXION',
+
+                        'etat'=>'Succès',
+
+                    ]);
+
                 } else {
+                    Audit::logSave([
+
+                        'action'=>'CONNEXION',
+
+                        'menu'=>'CONNEXION',
+
+                        'etat'=>'Succès',
+
+                    ]);
                     return redirect('/modifiermotdepasse')->with('success', 'Info:  Veuillez modifier votre mot de passe à la première connexion');
+
                 }
+                Audit::logSave([
+
+                    'action'=>'CONNEXION',
+
+                    'menu'=>'CONNEXION',
+
+                    'etat'=>'Succès',
+
+                ]);
                 return redirect('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
             } else {
+                Audit::logSave([
+
+                    'action'=>'CONNEXION',
+
+                    'menu'=>'CONNEXION',
+
+                    'etat'=>'Echec',
+
+                ]);
                 return redirect('/connexion')->with('error', 'Identifiant ou mot de passe  incorrect');
             }
         }
