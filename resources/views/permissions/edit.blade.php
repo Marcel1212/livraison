@@ -6,7 +6,7 @@
     @php($Module='Configuration')
     @php($titre='Liste des  permissions')
     @php($soustitre='Modifier une permission  ')
-    @php($lien='permissions')
+    @php($lien='permission')
 
 
     <!-- BEGIN: Content-->
@@ -83,10 +83,10 @@
                                             </div>
                                         </div>
                                     </form>
-                                    </div>
-                </div>
-            </div>
-        </div>
+                             </div>
+                       </div>
+                 </div>
+           </div>
     <!-- END: Content-->
 
 @endsection
@@ -95,3 +95,4 @@
         window.location = "{{ url('/403') }}";//here double curly bracket
     </script>
 @endif
+

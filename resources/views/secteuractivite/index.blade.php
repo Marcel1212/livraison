@@ -77,11 +77,11 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <!--end: Datatable-->
-                                    </div>
-            </div>
-        </div>
-    </div>
+                            <!--end: Datatable-->
+                        </div>
+                   </div>
+              </div>
+         </div>
     <!-- END: Content-->
 @endsection
 @else

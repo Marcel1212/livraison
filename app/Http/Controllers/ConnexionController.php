@@ -33,7 +33,11 @@ class ConnexionController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'password' => 'required',
+/*<<<<<<< Updated upstream
 //                'g-recaptcha-response' => ['required', new ReCaptcha]
+=======
+                //'g-recaptcha-response' => ['required', new ReCaptcha]
+>>>>>>> Stashed changes*/
                 //'captcha' => 'required|captcha'
             ], [
                 'username.required' => 'Veuillez saisir votreidentifiant.',

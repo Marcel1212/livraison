@@ -1,3 +1,8 @@
+
+
+@php
+ini_set('max_execution_time', '0');
+@endphp
 @if(auth()->user()->can('permission-index'))
 @extends('layouts.backLayout.designadmin')
 
@@ -5,7 +10,7 @@
 
     @php($Module='Configuration')
     @php($titre='Liste des permissions')
-    @php($lien='permissions')
+    @php($lien='permission')
 
     <!-- BEGIN: Content-->
     <h5 class="py-2 mb-1">

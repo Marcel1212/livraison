@@ -1,4 +1,5 @@
 @if(auth()->user()->can('permission-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
@@ -6,7 +7,7 @@
     @php($Module='Configuration')
     @php($titre='Liste des  permissions')
     @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($lien='permission')
 
 
     <!-- BEGIN: Content-->
