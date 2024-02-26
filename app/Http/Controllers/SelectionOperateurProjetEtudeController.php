@@ -26,6 +26,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
         if(isset($id_projet_etude)){
             $projet_etude_valide = ProjetEtude::where('flag_fiche_agrement',true)
                 ->where('id_projet_etude',$id_projet_etude)->first();
+
             if(isset($projet_etude_valide)){
                 $user = User::find($projet_etude_valide->id_user);
                 $entreprise_mail = $user->email;
@@ -104,15 +105,16 @@ class SelectionOperateurProjetEtudeController extends Controller{
 
                 if($request->action=="Enregistrer_soumettre_selection"){
                     $logo = Menu::get_logo();
+                    $operateurs = $projet_etude_valide->operateurs()->get();
+                    if(isset($operateurs)){
+                        foreach ($operateurs as $operateur){
+                            $entreprise = Entreprises::where('id_entreprises',$operateur->id_entreprises)->first();
+                            $name = $entreprise->raison_social_entreprises;
 
-                    foreach ($projet_etude_valide->operateurs() as $operateur){
-                        $entreprise = Entreprises::where('id_entreprises',$operateur->id_entreprises)->first();
-                        $name = $entreprise->raison_social_entreprises;
-
-                        if (isset($entreprise->email)) {
-                            $sujet = "Sélection opérateur";
-                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                            $messageMail = "<b>Cher, $name  ,</b>
+                            if (isset($entreprise->email)) {
+                                $sujet = "Sélection opérateur";
+                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                $messageMail = "<b>Cher, $name  ,</b>
                                     <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->date_debut_comite_gestion.".
 
                                     <br><br>Nous vous prions de bien vouloir vous rendre au siège de FDFP afin de recupérer le dossier d'appel d'offre dudit projet.
@@ -124,11 +126,10 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-                            $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                                $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                            }
                         }
                     }
-
-
 
                     $projet_etude_valide->id_processus_selection = 7;
                     $projet_etude_valide->flag_soumis_selection_operateur = true;
