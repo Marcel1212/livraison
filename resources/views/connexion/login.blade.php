@@ -133,7 +133,7 @@ $couleur = Menu::get_info_couleur();
                             <input type="text" class="form-control form-control-sm" id="username" name="username"
                                 placeholder="Mon identifiant" autofocus />
                         </div>
-                        <div class="mb-3 ">
+                        <div class="mb-3 form-password-toggle">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label" for="password">Mon mot de passe</label>
                                 <a href="{{ route('motdepasseoublie') }}">

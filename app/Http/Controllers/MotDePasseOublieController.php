@@ -57,7 +57,6 @@ class MotDePasseOublieController extends Controller
                                     <br><br>Veuillez utiliser le code ci-dessous pour la réinitialisation de votre mot de passe
                                     <br><br><br>
                                     <h1>$mot_de_passe->code_mot_de_passe_oublie</h1>
-                                    <br><br>Ce code exipre dans 5 minutes
 
                                     <br><br><br>
                                     -----
@@ -65,7 +64,9 @@ class MotDePasseOublieController extends Controller
                                     Dans le cas où vous n'avez tentez de réinitialiser votre mot de passe veuillez ignorer ce mail
                                     -----
                                     ";
-                    $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $user->name, $messageMail, $sujet, $titre);
+        //                                    <br><br>Ce code exipre dans 5 minutes
+
+        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $user->name, $messageMail, $sujet, $titre);
             return redirect('motdepasseoublie/'.Crypt::UrlCrypt($request->email_mot_de_passe_oublie).'/otp');
     }
     public function otp($email){
