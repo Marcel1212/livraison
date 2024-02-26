@@ -110,12 +110,13 @@ class SelectionOperateurProjetEtudeController extends Controller{
                         foreach ($operateurs as $operateur){
                             $entreprise = Entreprises::where('id_entreprises',$operateur->id_entreprises)->first();
                             $name = $entreprise->raison_social_entreprises;
+                            $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
 
-                            if (isset($entreprise->email)) {
+                            if (isset($user->email)) {
                                 $sujet = "Sélection opérateur";
                                 $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                                 $messageMail = "<b>Cher, $name  ,</b>
-                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->date_debut_comite_gestion.".
+                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->titre_projet_etude_instruction.".
 
                                     <br><br>Nous vous prions de bien vouloir vous rendre au siège de FDFP afin de recupérer le dossier d'appel d'offre dudit projet.
                                     <br>
@@ -126,7 +127,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-                                $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                                $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
                             }
                         }
                     }
@@ -147,6 +148,8 @@ class SelectionOperateurProjetEtudeController extends Controller{
 
     public function mark(Request $request,$id_projet_etude){
         $id_projet_etude = Crypt::UrldeCrypt($id_projet_etude);
+        $logo = Menu::get_logo();
+
         if(isset($id_projet_etude)){
             $projet_etude_valide = ProjetEtude::where('flag_fiche_agrement',true)
                 ->where('id_projet_etude',$id_projet_etude)->first();
@@ -160,6 +163,25 @@ class SelectionOperateurProjetEtudeController extends Controller{
                     $projet_etude_valide->flag_validation_selection_operateur = true;
                     $projet_etude_valide->date_validation_selection_operateur = now();
                     $projet_etude_valide->update();
+
+                    $entreprise = Entreprises::where('id_entreprises',$projet_etude_valide->id_operateur_selection)->first();
+                    $name = $entreprise->raison_social_entreprises;
+                    $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
+
+                    if (isset($user->email)) {
+                        $sujet = "Sélection opérateur";
+                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        $messageMail = "<b>Cher, $name  ,</b>
+                                    <br><br>Vous avez été retenu pour l'exécution du projet d'étude intitulé : ".$projet_etude_valide->titre_projet_etude_instruction.".
+                                    <br>
+                                    <br><br><br>
+                                    -----
+
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                    }
                 }
                 return redirect('/selectionoperateurprojetetude/'.Crypt::UrlCrypt($id_projet_etude).'/'.Crypt::UrlCrypt(4).'/edit')->with('success','Succès: Sélection effectuée');
             }else{
