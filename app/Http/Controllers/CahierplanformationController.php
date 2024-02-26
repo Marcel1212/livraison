@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\Audit;
 use App\Models\CahierPlanFormation;
 use App\Models\LigneCahierPlanFormation;
 use App\Models\PlanFormation;
@@ -37,6 +38,20 @@ class CahierplanformationController extends Controller
 
         $cahiers = CahierPlanFormation::all();
 
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
         return view("cahierplanformation.index", compact("cahiers"));
     }
 
@@ -45,6 +60,20 @@ class CahierplanformationController extends Controller
         $departements = Direction::join('departement','direction.id_direction','departement.id_direction')->where([
             ['direction.id_direction','=','4'],['departement.flag_departement','=',true]
             ])->get();
+
+            Audit::logSave([
+
+                'action'=>'CREER',
+
+                'code_piece'=>'',
+
+                'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
 
         return view("cahierplanformation.create",compact('departements'));
 
@@ -69,6 +98,21 @@ class CahierplanformationController extends Controller
             $input['date_creer_cahier_plan_formation'] = Carbon::now();
             $input['code_cahier_plan_formation'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
             $cahier =  CahierPlanFormation::create($input);
+
+            Audit::logSave([
+
+                'action'=>'CREATION',
+
+                'code_piece'=>'',
+
+                'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
 
             return redirect('cahierplanformation/'.Crypt::UrlCrypt($cahier->id_cahier_plan_formation).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
 
@@ -102,6 +146,20 @@ class CahierplanformationController extends Controller
             ])->get();
 
         //dd($planformations);
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
 
         return view('cahierplanformation.edit', compact('cahier','id','idetape','planformations','cahierplansformations','departements'));
@@ -191,6 +249,19 @@ class CahierplanformationController extends Controller
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
         }
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id.'/'.$idcomite,
+
+            'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('cahierplanformation.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
@@ -214,6 +285,20 @@ class CahierplanformationController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('cahierplanformation.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
@@ -246,6 +331,20 @@ class CahierplanformationController extends Controller
                 $comitegestion = CahierPlanFormation::find($id);
                 $comitegestion->update($input);
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                 return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
@@ -263,6 +362,20 @@ class CahierplanformationController extends Controller
                 //dd($verifnombre);exit;
 
                 if($verifnombre < 1){
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Cahier de plan de formation : Vous devez sélectionner au moins un plan de formation.)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                        ]);
 
                     return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un plan de formation. ');
 
@@ -285,9 +398,37 @@ class CahierplanformationController extends Controller
 
                 }
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                 return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
-                }else{
+
+            }else{
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Cahier de plan de formation : Vous devez sélectionner au moins un plan de formation.)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                        ]);
 
                     return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un plan de formation. ');
 
@@ -308,6 +449,20 @@ class CahierplanformationController extends Controller
                 }
 
                 $comitegestion->update(['flag_statut_cahier_plan_formation'=> true,'date_soumis_cahier_plan_formation'=>Carbon::now()]);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                 return redirect('cahierplanformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
@@ -335,6 +490,19 @@ class CahierplanformationController extends Controller
        $etattypeformation = EtatCahierPlanDeFormation::get_liste_etat_type_formation_cahier_plan_f($id);
 
        //dd($etatsecteuractivite);
+       Audit::logSave([
+
+        'action'=>'CONSULTER',
+
+        'code_piece'=>$id,
+
+        'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
+
+        'etat'=>'Succès',
+
+        'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('cahierplanformation.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
     }

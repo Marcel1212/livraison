@@ -315,7 +315,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plan_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
                                         @csrf
                                         @method('put')
-                                        <button type="submit" name="action" value="Traiter_cahier_plan_soumis"
+                                        <button onclick='javascript:if (!confirm("Vous allez soumettre ce cahier à la commission permanente ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Traiter_cahier_plan_soumis"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                             Soumettre le cahier à la commission permanente
                                         </button>

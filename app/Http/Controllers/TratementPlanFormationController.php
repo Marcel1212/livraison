@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\Audit;
 use App\Models\Activites;
 use App\Models\CentreImpot;
 use App\Models\Localite;
@@ -46,9 +47,24 @@ class TratementPlanFormationController extends Controller
         //dd($nacodes);
         if($nacodes === "CONSEILLER"){
             $planformations = PlanFormation::where([['user_conseiller','=',Auth::user()->id],['flag_soumis_ct_plan_formation','=',false]])->get();
+
         }else{
             $planformations = PlanFormation::all();
         }
+
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Instruction )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('traitementplanformation.index',compact('planformations'));
     }
@@ -86,6 +102,20 @@ class TratementPlanFormationController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Instruction)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
@@ -191,6 +221,20 @@ class TratementPlanFormationController extends Controller
                 ->orderBy('libelle_secteur_activite')
                 ->get();
 
+                Audit::logSave([
+
+                    'action'=>'MODIFIER',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
         return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','secteuractivites','butformations'));
 
     }
@@ -224,6 +268,20 @@ class TratementPlanFormationController extends Controller
 
                 $planformation = PlanFormation::find($id);
                 $planformation->update($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: Recevabilité effectué avec succès.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
 
                 return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
             }
@@ -278,6 +336,20 @@ class TratementPlanFormationController extends Controller
                                     ";
                     $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: La non-recevabilité a été effectué avec succès.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
 
                 return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
 
@@ -448,6 +520,20 @@ class TratementPlanFormationController extends Controller
 
                 }
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: Action de plan de formation Traité.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
             }
 
@@ -465,6 +551,20 @@ class TratementPlanFormationController extends Controller
                     'flag_soumis_ct_plan_formation' => true,
                     'cout_total_accorder_plan_formation' => $montantcouttotal,
                     'date_soumis_ct_plan_formation' => Carbon::now()
+                ]);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: Plan de formation soumis au comite technique en ligne.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
                 ]);
 
                 return redirect()->route('traitementplanformation.index')->with('success', 'Succes : Plan de formation soumis ');

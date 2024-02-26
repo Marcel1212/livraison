@@ -22,7 +22,7 @@
 @section('content')
 
 @php($Module='Plan de formation')
-@php($titre='Liste des commissions permanente')
+@php($titre='Liste des commissions permanentes')
 @php($soustitre='Tenue de commission permanente')
 @php($lien='comitepermanente')
 
@@ -145,7 +145,7 @@
                                 <form method="POST" class="form" action="{{ route($lien.'.agrementupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                     @csrf
                                     @method('post')
-                                    <button type="submit" name="action" value="Traiter_action_formation_valider_plan"
+                                    <button onclick='javascript:if (!confirm("Vous allez effectuer la validation de la commission permanente pour ce plan de formation ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Traiter_action_formation_valider_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                         Valider la commission permanente pour ce plan de formation
                                     </button>
@@ -187,9 +187,9 @@
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
-                                                <td>{{ number_format($actionplanformation->montant_attribuable_fdfp) }}</td>
-                                                <td>{{ number_format($actionplanformation->cout_accorde_action_formation) }}</td>
+                                                <td>{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($actionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
 
                                                 <td align="center" nowrap="nowrap">
                                                     @can($lien.'-edit')
@@ -245,35 +245,35 @@
                             @method('post')
 
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget credit</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget crédit</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->montant_financement_budget) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget, 0, ',', ' ') }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:red;">Budget credit sollicité</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:red;">Budget crédit sollicité</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format($montantactionplanformation) }}"
+                                    value="{{ number_format($montantactionplanformation, 0, ',', ' ') }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:blue;">Budget credit accordé</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:blue;">Budget crédit accordé</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format($montantactionplanformationacc) }}"
+                                    value="{{ number_format($montantactionplanformationacc, 0, ',', ' ') }}"
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:orange;">Budget credit restant</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:orange;">Budget crédit restant</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
-                                    value="{{ number_format(@$planformation->montant_financement_budget-$montantactionplanformationacc) }}"
+                                    value="{{ number_format(@$planformation->montant_financement_budget-$montantactionplanformationacc, 0, ',', ' ') }}"
                                     disabled="disabled"/>
                             </div>
 

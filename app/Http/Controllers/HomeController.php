@@ -168,7 +168,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 
@@ -212,7 +212,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 
@@ -299,7 +299,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 

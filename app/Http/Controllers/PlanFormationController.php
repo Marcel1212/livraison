@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Activites;
 use App\Models\CentreImpot;
@@ -47,8 +48,34 @@ class PlanFormationController extends Controller
         $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
             $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'PLAN DE FORMATION',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
             return view('planformation.index',compact('planformations'));
         }else{
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'PLAN DE FORMATION',
+
+                'etat'=>'Echec',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
             return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
         }
 
@@ -82,7 +109,19 @@ class PlanFormationController extends Controller
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
 
+        Audit::logSave([
 
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('planformation.create', compact('infoentreprise','typeentreprise','pay','secteuractivites'));
     }
@@ -117,6 +156,19 @@ class PlanFormationController extends Controller
             $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
 
             if($mttprevisionnelcotisation==0){
+                Audit::logSave([
+
+                    'action'=>'CREER',
+
+                    'code_piece'=>'',
+
+                    'menu'=>'PLAN DE FORMATION (Soumission de plan de formation: Plan de formation non soumis car nous n\etes pas a jour dans les cotisations )',
+
+                    'etat'=>'Echec',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
                 return redirect()->route('planformation.index')->with('error', 'Plan de formation non soumis car nous n\etes pas a jour dans les cotisations.');
             }
 
@@ -145,10 +197,38 @@ class PlanFormationController extends Controller
 
             if ($input['action'] == 'Enregister'){
 
+                Audit::logSave([
+
+                    'action'=>'ENREGISTER',
+
+                    'code_piece'=>'',
+
+                    'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
 
             if ($input['action'] == 'Enregistrer_suivant'){
+
+                Audit::logSave([
+
+                    'action'=>'ENREGISTER',
+
+                    'code_piece'=>'',
+
+                    'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
 
                 return redirect('planformation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
@@ -171,6 +251,20 @@ class PlanFormationController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         //dd($planformation);
         return view('planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
@@ -245,6 +339,20 @@ class PlanFormationController extends Controller
             ->orderBy('libelle_secteur_activite')
             ->get();
 
+            Audit::logSave([
+
+                'action'=>'MODIFIER',
+
+                'code_piece'=>$id,
+
+                'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
         return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation'));
 
     }
@@ -302,6 +410,20 @@ class PlanFormationController extends Controller
                 $infoentreprise->update($input);
                 $planformation->update($input);
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
@@ -339,9 +461,38 @@ class PlanFormationController extends Controller
                         'nombre_salarie_plan_formation' => $nombretotalsalarie
                     ]);
 
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                     return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Operation reussi. ');
 
                 }else{
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : La ligne du nombre de salarie a deja ete saisie.)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                     return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cela a deja ete saisie. ');
                 }
 
@@ -366,8 +517,38 @@ class PlanFormationController extends Controller
                         'id_annee_exercice' => $anneexercice->id_periode_exercice,
                         'date_soumis_plan_formation' => Carbon::now()
                     ]);
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Plan de formation soumis avec succès.)',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                     return redirect()->route('planformation.index')->with('success', 'Plan de formation soumis avec succès.');
                 }else{
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Plan de formation non soumis car l\'annee d\'execrcie n\'est pas encore ouver)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                     return redirect()->route('planformation.index')->with('error', 'Plan de formation non soumis car l\'annee d\'execrcie n\'est pas encore ouvert.');
                 }
 
@@ -386,8 +567,8 @@ class PlanFormationController extends Controller
                     'cout_action_formation_plan' => 'required',
                     'id_type_formation' => 'required',
                     'id_but_formation' => 'required',
-                    'date_debut_fiche_agrement' => 'required',
-                    'date_fin_fiche_agrement' => 'required',
+                    'date_debut_fiche_agrement' => 'required|date|after_or_equal:now',
+                    'date_fin_fiche_agrement' => 'required|date|after:date_debut_fiche_agrement',
                     'lieu_formation_fiche_agrement' => 'required',
                     //'cout_total_fiche_agrement' => 'required',
                     'objectif_pedagogique_fiche_agre' => 'required',
@@ -407,8 +588,12 @@ class PlanFormationController extends Controller
                     'cout_action_formation_plan.required' => 'Veuillez ajoutez le cout de la formation.',
                     'id_type_formation.required' => 'Veuillez selectionnez un type de formation.',
                     'id_but_formation.required' => 'Veuillez selectionnez le but de la formation.',
-                    'date_debut_fiche_agrement.unique' => 'Veuillez ajoutez la date de debut',
+                    'date_debut_fiche_agrement.required' => 'Veuillez ajoutez la date de debut',
+                    'date_debut_fiche_agrement.date' => 'Cela doit etre une date valide',
+                    'date_debut_fiche_agrement.after_or_equal' => 'Vous ne pouvez pas choisir une date inférieure à celle du jour.',
                     'date_fin_fiche_agrement.required' => 'Veuillez ajoutez la date de fin .',
+                    'date_fin_fiche_agrement.date' => 'Cela doit etre une date valide',
+                    'date_fin_fiche_agrement.after' => 'Vous ne pouvez pas choisir une date inférieure a la date de debut',
                     'lieu_formation_fiche_agrement.required' => 'Veuillez ajoutez le lieu de formation.',
                     //'cout_total_fiche_agrement.required' => 'Veuillez ajoutez le cout total de la fiche d\'agrement.',
                     'objectif_pedagogique_fiche_agre.required' => 'Veuillez ajoutez l\'objectif pedagogique.',
@@ -451,11 +636,37 @@ class PlanFormationController extends Controller
                     if (count($collections)>$input['nombre_stagiaire_action_formati']){
 
                         //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ');
+                        Audit::logSave([
+
+                            'action'=>'MISE A JOUR',
+
+                            'code_piece'=>$id,
+
+                            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi.)',
+
+                            'etat'=>'Echec',
+
+                            'objet'=>'PLAN DE FORMATION'
+
+                        ]);
                         return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
                     }
 
                     if (count($collections)<$input['nombre_stagiaire_action_formati']){
 
+                        Audit::logSave([
+
+                            'action'=>'MISE A JOUR',
+
+                            'code_piece'=>$id,
+
+                            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi.)',
+
+                            'etat'=>'Echec',
+
+                            'objet'=>'PLAN DE FORMATION'
+
+                        ]);
                         //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
                         return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
                     }
@@ -474,6 +685,20 @@ class PlanFormationController extends Controller
                 $budgetrestant = $planformationbg->montant_financement_budget - $montantactionplanformationbg;
 
                 if($input['cout_action_formation_plan']>$budgetrestant){
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Le coût de cette formation est plus élevé que le budget restant.)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                     return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le coût de cette formation est plus élevé que le budget restant. ']);
 
@@ -641,6 +866,20 @@ class PlanFormationController extends Controller
                     }
                }
 
+               Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Action de plan de formation ajouté.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
                return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Action de plan de formation ajouté ');
 
 
@@ -667,6 +906,20 @@ class PlanFormationController extends Controller
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
+            Audit::logSave([
+
+                'action'=>'SUPPRIMER',
+
+                'code_piece'=>$idplanformation,
+
+                'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Action de plan de formation supprimer avec succesé.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
             return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
     }
@@ -686,6 +939,20 @@ class PlanFormationController extends Controller
 
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
+
+            Audit::logSave([
+
+                'action'=>'SUPPRIMER',
+
+                'code_piece'=>$idplanformation,
+
+                'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Action de plan de formation supprimer avec succes.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
 
             return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation supprimer avec succes ');
 
@@ -709,6 +976,20 @@ class PlanFormationController extends Controller
 
         PlanFormation::where('id_plan_de_formation',$idplanformation)->update([
             'nombre_salarie_plan_formation' => $nombretotalsalarie
+        ]);
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idplanformation,
+
+            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : La categorie des traivailleurs à été  supprimer avec succes.)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
         ]);
 
         return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
