@@ -3,8 +3,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des status operations')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des status opérations')
     @php($lien='statutoperations')
 
     <!-- BEGIN: Content-->
@@ -45,7 +45,7 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Code</th>
                                             <th>Statut</th>
                                             <th >Action</th>

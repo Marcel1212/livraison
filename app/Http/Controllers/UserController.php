@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Helpers\Audit;
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Envoisms;
@@ -40,6 +40,20 @@ class UserController extends Controller
                 ->where([['flag_demission_users', '=', false], ['flag_admin_users', '=', false]])
                 ->get();
        //dd($data);
+       Audit::logSave([
+
+        'action'=>'INDEX',
+
+        'code_piece'=>'',
+
+        'menu'=>'LISTE DES UTILISATEURS',
+
+        'etat'=>'Succès',
+
+        'objet'=>'ADMINISTRATION'
+
+    ]);
+
         return view('users.index', compact('data'));
     }
 
@@ -71,6 +85,19 @@ class UserController extends Controller
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
         }*/
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES UTILISATEURS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('users.create', compact('roles', 'Entite','directions'));
     }
 
@@ -158,6 +185,19 @@ class UserController extends Controller
             }else{
                 return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
             }
+            Audit::logSave([
+
+                'action'=>'CREER',
+
+                'code_piece'=>$user->id,
+
+                'menu'=>'LISTE DES UTILISATEURS',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
 
         }
     }
@@ -172,6 +212,7 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
+
         return view('users.show', compact('user'));
     }
 
@@ -213,6 +254,20 @@ class UserController extends Controller
         $nacodes = Menu::get_code_menu_profil($id);
         $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id]])->get();
         $directions = Direction::where([['flag_direction', '=', true]])->get();
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES UTILISATEURS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTARTION'
+
+        ]);
+
         return view('users.edit', compact('user', 'roles', 'userRole', 'Entite','Roless','directions','SecteursActivite','secteurlierusers','nacodes'));
     }
 
@@ -277,6 +332,19 @@ class UserController extends Controller
                 $valcodeprofile = $exploeprofil[1];
                 //$user->assignRole($request->input('roles'));
                 $user->assignRole($valprofile);
+                Audit::logSave([
+
+                    'action'=>'MODIFIER',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'LISTE DES UTILISATEURS',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'ADMINISTRATION'
+
+                ]);
                 return redirect()->route('users.index')->with('success', 'Succes : Enregistrement reussi');
 
             }
@@ -295,10 +363,35 @@ class UserController extends Controller
                 $countst =  $secteurlierusers = SecteurActiviteUserConseiller::where([['id_user_conseiller', '=', $id],['id_secteur_activite', '=', $input['id_secteur_activite']]])->get();
                 if(count($countst)==0){
                     SecteurActiviteUserConseiller::create($input);
+                    Audit::logSave([
 
+                        'action'=>'CREER',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'LISTE DES UTILISATEURS(ajout de secteur d\'activité  à un utilisateur)',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'ADMINISTRATION'
+
+                    ]);
                     return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($id))->with('success', 'Succes : Operation reussi. ');
                 }else{
-                    return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($id))->with('error', 'Erreur : Seteur deja attribuer. ');
+                    Audit::logSave([
+
+                        'action'=>'CREER',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'LISTE DES UTILISATEURS(ajout de secteur d\'activité  à un utilisateur)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'ADMINISTRATION'
+
+                    ]);
+                    return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($id))->with('error', 'Erreur : Secteur déja attribuer. ');
                 }
 
             }
@@ -314,8 +407,21 @@ class UserController extends Controller
 
         $SecteurActiviteUserConseiller = SecteurActiviteUserConseiller::find($id);
         $iduserconseiller = $SecteurActiviteUserConseiller->id_user_conseiller;
-        SecteurActiviteUserConseiller::where([['id_secteur_user_consseiller','=',$id]])->delete();
+        SecteurActiviteUserConseiller::where([['id_secteur_user_conseiller','=',$id]])->delete();
 
+Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$SecteurActiviteUserConseiller->id_secteur_user_conseiller,
+
+            'menu'=>'LISTE DES UTILISATEURS(suppression de secteur d\'activité  à un utilisateur)',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('users.edit',\App\Helpers\Crypt::UrlCrypt($iduserconseiller))->with('success', 'Succes : Operation reussi. ');
     }
 

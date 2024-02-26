@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Motif;
 
@@ -13,6 +14,19 @@ class MotifController extends Controller
     public function index()
     {
         $motifs = Motif::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES MOTIFS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('motifs.index', compact('motifs'));
     }
 
@@ -21,6 +35,19 @@ class MotifController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES MOTIFS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('motifs.create');
     }
 
@@ -29,8 +56,21 @@ class MotifController extends Controller
      */
     public function store(Request $request)
     {
-        Motif::create($request->all());
+        $motif = Motif::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$motif->id_motif,
+
+            'menu'=>'LISTE DES MOTIFS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('motifs.index')
             ->with('success', 'Motif ajouté avec succès.');
     }
@@ -50,7 +90,20 @@ class MotifController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $motif = Motif::find($id);
-        return view('motifs.edit', compact('motif'));   
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES MOTIFS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return view('motifs.edit', compact('motif'));
     }
 
     /**
@@ -61,7 +114,19 @@ class MotifController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $motif = Motif::find($id);
         $motif->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES MOTIFS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('motifs.index')
             ->with('success', 'Motif mis à jour avec succès.');
     }

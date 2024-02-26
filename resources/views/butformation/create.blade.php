@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des buts de la formation')
     @php($soustitre='Ajouter un but de formation')
     @php($lien='butformation')

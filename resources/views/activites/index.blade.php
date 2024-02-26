@@ -3,7 +3,7 @@
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-    @php($Module = 'Parametrage')
+    @php($Module = 'Paramétrage')
     @php($titre = 'Liste des activités')
     @php($lien = 'activites')
 
@@ -45,7 +45,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Secteur activité</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>

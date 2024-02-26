@@ -6,7 +6,7 @@
     @php($Module='Configuration')
     @php($titre='Liste des  permissions')
     @php($soustitre='Ajouter une permission  ')
-    @php($lien='permissions')
+    @php($lien='permission')
 
 
     <!-- BEGIN: Content-->

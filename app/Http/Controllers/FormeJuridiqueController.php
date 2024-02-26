@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\FormeJuridique;
 
@@ -13,6 +14,19 @@ class FormeJuridiqueController extends Controller
     public function index()
     {
         $formejuridiques = FormeJuridique::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES FORMES JURIDIQUES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('formejuridique.index', compact('formejuridiques'));
     }
 
@@ -21,6 +35,19 @@ class FormeJuridiqueController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES FORMES JURIDIQUES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('formejuridique.create');
     }
 
@@ -29,9 +56,21 @@ class FormeJuridiqueController extends Controller
      */
     public function store(Request $request)
     {
-        FormeJuridique::create($request->all());
+        $formejuridique = FormeJuridique::create($request->all());
+        Audit::logSave([
 
-        return redirect()->route('formejuridique.index')->with('success', 'Forme juridique ajouté avec succès.');
+            'action'=>'CREER',
+
+            'code_piece'=>$formejuridique->id_formejuridique,
+
+            'menu'=>'LISTE DES FORMES JURIDIQUES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return redirect()->route('formejuridique.index')->with('success', 'Forme juridique ajoutée avec succès.');
     }
 
     /**
@@ -49,6 +88,19 @@ class FormeJuridiqueController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $formejuridique = FormeJuridique::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES FORMES JURIDIQUES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('formejuridique.edit', compact('formejuridique'));
     }
 
@@ -60,8 +112,20 @@ class FormeJuridiqueController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $formejuridique = FormeJuridique::find($id);
         $formejuridique->update($request->all());
+        Audit::logSave([
 
-        return redirect()->route('formejuridique.index')->with('success', 'forme juridiquen mis à jour avec succès.');
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES FORMES JURIDIQUES(forme juridique mise à jour avec succès.)',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return redirect()->route('formejuridique.index')->with('success', 'forme juridiquen mise à jour avec succès.');
     }
 
     /**

@@ -573,10 +573,36 @@ class AgreementController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
             }
 
-            if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
-                return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
-            }
-        }
+            if(isset($actionplanformation)){
+                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
+                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
+                $demande_substitution->id_plan_de_formation = $id_plan;
+                $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
+                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
+                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
+                $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
+
+                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
+
+                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
+                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
+                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
+                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
+                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
+                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
+                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
+                $demande_substitution->id_processus = 5;
+
+                if (isset($request->file_beneficiare)){
+                    $file = $request->file_beneficiare;
+                    $collections = (new FastExcel)->import($file);
+                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+                    }
+                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
+                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+                    }
+                }
 
         if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
             return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le cout de la formation que vous souhaitez substituer ']);

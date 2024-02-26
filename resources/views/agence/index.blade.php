@@ -5,7 +5,7 @@
 @section('content')
 
     @php($Module='Paramétrage')
-    @php($titre='Liste des agences')
+    @php($titre='Liste des antennes')
     @php($lien='agence')
 
     <!-- BEGIN: Content-->
@@ -44,12 +44,12 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Code</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Adresse</th>
                                             <th>Localisation</th>
                                             <th>Coordonnée GPS</th>
                                             <th>Contact</th>
-                                            <th>Siege</th>
+                                            <th>Siège</th>
                                             <th>Statut</th>
                                             <th>Action</th>
                                         </tr>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Helpers\AnneeExercice;
 use App\Helpers\Crypt;
 use App\Models\CleDeRepartitionFinancement;
@@ -15,7 +16,19 @@ class CleDeRepartitionFinancementController extends Controller
     public function index()
     {
         $cles = CleDeRepartitionFinancement::get();
+        Audit::logSave([
 
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('cle.index',compact('cles'));
     }
 
@@ -24,6 +37,19 @@ class CleDeRepartitionFinancementController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('cle.create');
     }
 
@@ -52,6 +78,19 @@ class CleDeRepartitionFinancementController extends Controller
             $anneexercice  = AnneeExercice::get_annee_exercice();
 
             if(!isset($anneexercice->id_periode_exercice)){
+                Audit::logSave([
+
+                    'action'=>'CREER',
+
+                    'code_piece'=>$anneexercice->id_periode_exercice,
+
+                    'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+                    'etat'=>'Echec',
+
+                    'objet'=>'ADMINISTRATION'
+
+                ]);
                 return redirect()->route('cle.create')->with('error', 'Erreur : L\'année d\'exercice n\' a pas encore démarré');
             }
 
@@ -59,8 +98,20 @@ class CleDeRepartitionFinancementController extends Controller
 
             $input['id_periode_exercice'] = $anneexercice->id_periode_exercice;
 
-            CleDeRepartitionFinancement::create($input);
+            $clederepartitionfinancement = CleDeRepartitionFinancement::create($input);
+            Audit::logSave([
 
+                'action'=>'CREER',
+
+                'code_piece'=>$clederepartitionfinancement->id_clederepartitionfinancement,
+
+                'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('clederepartitionfinancement.index')->with('success', 'Succes : Enregistrement reussi');
 
         }
@@ -81,7 +132,19 @@ class CleDeRepartitionFinancementController extends Controller
     {
         $id = Crypt::UrldeCrypt($id);
         $cle = CleDeRepartitionFinancement::find($id);
+        Audit::logSave([
 
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('cle.edit', compact('cle'));
     }
 
@@ -111,7 +174,19 @@ class CleDeRepartitionFinancementController extends Controller
             $cle = CleDeRepartitionFinancement::find($id);
 
             $cle->update($input);
+            Audit::logSave([
 
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES CLES DE REPARTITION FINANCEMENT',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('clederepartitionfinancement.index')->with('success', 'Succes : Enregistrement reussi');
         }
     }

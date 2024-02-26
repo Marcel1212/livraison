@@ -3,9 +3,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types de comites')
-    @php($soustitre='Ajouter un type de comite')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types de comités')
+    @php($soustitre='Ajouter un type de comité')
     @php($lien='typecomites')
 
 
@@ -53,8 +53,8 @@
                                                     <label>Libelle</label>
                                                     <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
                                                             <option value="">----Selectionnez le comiten----</option>
-                                                            <option value="Comitepleniere">Comite pléniere</option>
-                                                            <option value="Comitedegestion">Comite de gestion</option>
+                                                            <option value="Comitepleniere">Comité pléniere</option>
+                                                            <option value="Comitedegestion">Comité de gestion</option>
                                                             <option value="Comitepermant">Commission permanente</option>
                                                     </select>
                                                 </div>
@@ -80,7 +80,7 @@
                                                             <option value="">----Selectionnez un type de prestation----</option>
                                                             <option value="PF">Plan de formation</option>
                                                             <option value="PRF">Projet de formation</option>
-                                                            <option value="PE">Projet etude</option>
+                                                            <option value="PE">Projet étude</option>
                                                     </select>
                                                 </div>
                                             </div>

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
-use App\Models\CentreImpot; 
+use App\Models\CentreImpot;
 
 class CentreImpotController extends Controller
 {
@@ -12,7 +13,20 @@ class CentreImpotController extends Controller
      */
     public function index()
     {
-        $centreimpots = CentreImpot::all(); 
+        $centreimpots = CentreImpot::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CENTRES D\'IMPOTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('centreimpot.index', compact('centreimpots'));
     }
 
@@ -21,6 +35,19 @@ class CentreImpotController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CENTRES D\'IMPOTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('centreimpot.create');
     }
 
@@ -29,8 +56,21 @@ class CentreImpotController extends Controller
      */
     public function store(Request $request)
     {
-        CentreImpot::create($request->all());
+        $centreimpot = CentreImpot::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$centreimpot->id_centreimpot,
+
+            'menu'=>'LISTE DES CENTRES D\'IMPOTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('centreimpot.index')
             ->with('success', 'Centre impot ajouté avec succès.');
 
@@ -51,6 +91,19 @@ class CentreImpotController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $centreimpot = CentreImpot::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES CENTRES D\'IMPOTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('centreimpot.edit', compact('centreimpot'));
     }
 
@@ -62,7 +115,19 @@ class CentreImpotController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $centreimpot = CentreImpot::find($id);
         $centreimpot->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES CENTRES D\'IMPOTS',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('centreimpot.index')
             ->with('success', 'Centre impot mis à jour avec succès.');
     }

@@ -73,7 +73,7 @@
                                                 <tr>
                                                     <th>Action</th>
                                                     <th>Priorité</th>
-                                                    <th>Roles</th>
+                                                    <th>Rôles</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

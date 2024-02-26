@@ -3,9 +3,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types de comites')
-    @php($soustitre='Modifier  un type de comite')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types de comités')
+    @php($soustitre='Modifier  un type de comité')
     @php($lien='typecomites')
 
 
@@ -44,7 +44,7 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle</label>
+                                                    <label>Libellé</label>
                                                     <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
                                                             <option value="<?php if($typecomite->libelle_type_comite=="Comitepleniere"){
                                                                 echo "Comite pléniere";
@@ -55,8 +55,8 @@
                                                             }else {
                                                                 echo "";
                                                             }?>">----Selectionnez le comiten----</option>
-                                                            <option value="Comitepleniere">Comite pléniere</option>
-                                                            <option value="Comitedegestion">Comite de gestion</option>
+                                                            <option value="Comitepleniere">Comité plénière</option>
+                                                            <option value="Comitedegestion">Comité de gestion</option>
                                                             <option value="Comitepermant">Commission permanente</option>
                                                     </select>
                                                 </div>
@@ -100,7 +100,7 @@
                                                                             }?></option>
                                                             <option value="PF">Plan de formation</option>
                                                             <option value="POF">Projet de formation</option>
-                                                            <option value="PE">Projet etude</option>
+                                                            <option value="PE">Projet étude</option>
                                                     </select>
                                                 </div>
                                             </div>

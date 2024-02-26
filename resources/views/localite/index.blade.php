@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des localites')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des localités')
     @php($lien='localite')
 
    <!-- BEGIN: Content-->
@@ -46,7 +46,7 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Statut</th>
                                             <th >Action</th>
                                         </tr>

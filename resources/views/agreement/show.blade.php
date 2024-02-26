@@ -20,6 +20,12 @@ $logo = Menu::get_logo();
                 display: none;
             }
 
+            @page {
+                margin-top: 0.3in !important;
+                margin-bottom: 0.3in !important;
+            }
+        }
+
         @media print {
             .visuel_bouton {
                 display: none;

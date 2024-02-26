@@ -2,7 +2,7 @@
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des centres d\'impots')
     @php($soustitre='Modifier un centre d\'impot')
     @php($lien='centreimpot')
@@ -48,7 +48,7 @@
                                         <div class="row">
                                             <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libéllé activité </label>
                                                     <input type="text" name="libelle_centre_impot" id="libelle_centre_impot"
                                                            class="form-control form-control-sm" value="{{$centreimpot->libelle_centre_impot}}"
                                                            required>

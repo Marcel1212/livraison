@@ -3,9 +3,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des status operations')
-    @php($soustitre='Modifier statut operation')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des status opérations')
+    @php($soustitre='Modifier statut opération')
     @php($lien='statutoperations')
 
 
@@ -53,7 +53,7 @@
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libellé activité </label>
                                                     <input type="text" name="libelle_statut_operation" id="libelle_statut_operation"
                                                            class="form-control form-control-sm" value="{{$statutoperation->libelle_statut_operation}}"
                                                            required>
@@ -61,7 +61,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libellé activité </label>
                                                     <input type="text" name="code_statut_operation" id="code_statut_operation"
                                                            class="form-control form-control-sm" value="{{$statutoperation->code_statut_operation}}"
                                                            required>

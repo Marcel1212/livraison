@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des parts entreprises')
     @php($soustitre='Modifier une part entreprise')
     @php($lien='partentreprise')
@@ -44,7 +44,7 @@
 
                                             <div class="col-md-5 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle </label>
+                                                    <label>Libellé </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm"
                                                            value="{{$part->libelle_part_entreprise}}"

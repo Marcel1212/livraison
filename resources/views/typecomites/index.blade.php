@@ -3,8 +3,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types de comites')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types de comités')
     @php($lien='typecomites')
 
     <!-- BEGIN: Content-->
@@ -45,9 +45,9 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Valeur min</th>
-                                            <th>Valeur min</th>
+                                            <th>Valeur max</th>
                                             <th>Type de prestation</th>
                                             <th>Statut</th>
                                             <th >Action</th>

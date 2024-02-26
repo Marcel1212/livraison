@@ -260,6 +260,8 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $action_formation_new->flag_valide_action_formation_pl_comite_gestion = false;
                     $action_formation_new->flag_valide_action_formation_pl_comite_permanente = false;
                     $action_formation_new->flag_valide_action_formation_pl = false;
+                    $action_formation_new->id_secteur_activite = $demande_substitution->id_secteur_activite;
+
                     $action_formation_new->facture_proforma_action_formati = $demande_substitution->facture_proforma_action_plan_substi;
                     $action_formation_new->save();
 

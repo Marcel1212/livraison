@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des periodes d\'excercices')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des périodes d\'excercices')
     @php($lien='periodeexercice')
 
     <!-- BEGIN: Content-->
@@ -47,7 +47,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Année </th>
-                                            <th>Date de debut </th>
+                                            <th>Date de début </th>
                                             <th>Date de fin </th>
                                             <th>Date de prolongation </th>
                                             <th>Commentaire </th>

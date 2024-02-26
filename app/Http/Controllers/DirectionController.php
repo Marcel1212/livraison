@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Agence;
 use App\Models\Direction;
@@ -14,6 +15,19 @@ class DirectionController extends Controller
     public function index()
     {
         $Resultat = Direction::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES DIRECTIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>' ADMINISTRATION'
+
+        ]);
         return view('direction.index', compact('Resultat'));
     }
 
@@ -22,6 +36,19 @@ class DirectionController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES DIRECTIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('direction.create');
     }
 
@@ -37,7 +64,20 @@ class DirectionController extends Controller
             ]);
             $input = $request->all();
             $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']);
-            Direction::create($input);
+            $dir=Direction::create($input);
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$dir->id_direction,
+
+                'menu'=>'LISTE DES DIRECTIONS',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('direction.index')->with('success', 'Direction ajoutée avec succès.');
         }
     }
@@ -57,6 +97,19 @@ class DirectionController extends Controller
      */
     public function edit(Direction $direction)
     {
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$direction->id_direction,
+
+            'menu'=>'LISTE DES DIRECTIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('direction.edit', compact('direction'));
     }
 
@@ -76,6 +129,19 @@ class DirectionController extends Controller
         $input = $request->all();
         $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']);
         $direction->update($input);
+        Audit::logSave([
+
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$direction->id_direction,
+
+            'menu'=>'LISTE DES DIRECTIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('direction.index')->with('success', 'Direction mis à jour avec succès.');
     }
 
