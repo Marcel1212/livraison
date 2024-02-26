@@ -63,7 +63,7 @@ class Menu
             ->join('roles', 'model_has_roles.role_id', 'roles.id')
             ->where([['users.id', '=', $idutil]])
             ->first();
-        $coderoles = $roles->code_roles;
+        $coderoles = @$roles->code_roles;
         return (isset($coderoles) ? $coderoles : '');
     }
 
