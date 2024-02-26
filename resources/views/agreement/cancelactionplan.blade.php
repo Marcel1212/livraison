@@ -720,30 +720,20 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </div>
                             @if($demande_annulation_plan->flag_validation_demande_annulation_plan==true)
                                 <div class="row">
-                                    <li class="mb-4 pb-1 d-flex justify-content-between  align-items-center"
-                                        align="center">
-                                        <div class="badge bg-label-success rounded p-2"><i
-                                                class="ti ti-circle-check"></i>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <div class="alert-body">
+                                            Demande d'annulation validée
                                         </div>
-                                        <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Demande d'annulation validée</h6>
-                                        </div>
-
-                                    </li>
+                                    </div>
                                 </div>
                             @endif
                             @if($demande_annulation_plan->flag_rejeter_demande_annulation_plan==true)
                                 <div class="row">
-                                    <li class="mb-4 pb-1 d-flex justify-content-between  align-items-center"
-                                        align="center">
-                                        <div class="badge bg-label-danger rounded p-2"><i
-                                                class="ti ti-ban ti-sm"></i>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <div class="alert-body">
+                                            Demande d'annulation rejetée
                                         </div>
-                                        <div class="d-flex justify-content-between w-100 flex-wrap">
-                                            <h6 class="mb-0 ms-3">Demande d'annulation rejetée</h6>
-                                        </div>
-
-                                    </li>
+                                    </div>
                                 </div>
                             @endif
                         @else

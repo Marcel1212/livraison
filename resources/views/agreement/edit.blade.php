@@ -671,11 +671,15 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
                                 <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
                                 <td>
-                                    @isset($actionplanformation->flag_annulation_action)
-                                        <span class="badge bg-danger">Annulé</span>
-                                    @else
-                                        <span class="badge bg-success xs">Valide</span>
-                                    @endisset
+                                        @if($actionplanformation->flag_annulation_action!=null)
+                                            <span class="badge bg-danger">Annulé</span>
+                                        @elseif($actionplanformation->demandeSubstitution!=null && $actionplanformation->flag_substitution==false)
+                                            <span class="badge bg-warning">demande substitution</span>
+                                        @elseif($actionplanformation->flag_substitution==true)
+                                            <span class="badge bg-primary xs">Substitué</span>
+                                        @else
+                                            <span class="badge bg-success xs">Valide</span>
+                                        @endif
                                 </td>
                                 <td align="center">
                                     {{--                                        @can($lien.'-edit')--}}
@@ -683,15 +687,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                        target="_blank"
                                        class=" "
                                        title="Modifier"><img src='/assets/img/eye-solid.png'></a>
-{{--                                    <a href="{{route($lien.".editaction",['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)])}}"--}}
-{{--                                       class=" "--}}
-{{--                                       title="Modifier"><img src='/assets/img/editing.png'></a>--}}
-                                    {{--                                        @if()--}}
+                                    @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true)
                                     <a href="{{route($lien.".editaction",['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)])}}"
                                        class=" "
                                        title="Modifier"><img src='/assets/img/editing.png'></a>
-                                    @if($anneexercice->date_fin_periode_exercice>now())
-                                        @if(!isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
+                                    @endif
+
+                                @if($anneexercice->date_fin_periode_exercice>now())
+                                        @if(!isset($actionplanformation->demandeSubstitution) && !isset($agreement->flag_annulation_plan) && $actionplanformation->flag_annulation_action!=true && $actionplanformation->flag_annulation_action!=true && !isset($demande_annulation_plan->flag_soumis_demande_annulation_plan) && !isset($actionplanformation->demandeAnnulation->flag_soumis_demande_annulation_plan))
                                             <a href="{{ route($lien.'.editaction',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($plan_de_formation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)])}}"
                                            class="btn btn-danger btn-xs"
                                            title="Annuler">Annuler action</a>

@@ -1,5 +1,4 @@
 @if(auth()->user()->can('permission-create'))
-
 @extends('layouts.backLayout.designadmin')
 
 @section('content')

@@ -108,6 +108,11 @@ class ActionFormationPlan extends Model
         return $this->belongsTo(DemandeAnnulationPlan::class,'id_action_formation_plan','id_action_plan');
     }
 
+    public function demandeSubstitution()
+    {
+        return $this->belongsTo(DemandeSubstitutionActionPlanFormation::class,'id_action_formation_plan','id_action_formation_plan_a_substi');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -188,20 +188,19 @@ class TraitementDemandeAnnulationPlanController extends Controller
     public function update(Request $request, $id)
     {
         $id =  Crypt::UrldeCrypt($id);
-
         if(isset($id)){
             $demande_annulation = DemandeAnnulationPlan::find($id);
             if(isset($demande_annulation->id_action_plan)){
                 $actionplanformation = ActionFormationPlan::find($demande_annulation->id_action_plan);
-                $planformation = PlanFormation::find($actionplanformation->id_plan_de_formation);
-
-                $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
-                    ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
-                    ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
-                    ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                    ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
-                    ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                    ->where([['action_formation_plan.id_action_formation_plan','=',$actionplanformation->id_action_formation_plan]])->first();
+                $planformation = PlanFormation::where('id_plan_de_formation',$actionplanformation->id_plan_de_formation)
+                ->first();
+//                $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+//                    ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+//                    ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+//                    ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+//                    ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+//                    ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+//                    ->where([['action_formation_plan.id_action_formation_plan','=',$actionplanformation->id_action_formation_plan]])->first();
             }
 
             if(isset($demande_annulation->id_plan_formation)){
@@ -252,8 +251,6 @@ class TraitementDemandeAnnulationPlanController extends Controller
                     $demande_annulation->date_validation_demande_annulation_plan = now();
                     $demande_annulation->update();
 
-
-
                     $infoentreprise = Entreprises::find($planformation->id_entreprises);
                     $logo = Menu::get_logo();
 
@@ -298,16 +295,31 @@ class TraitementDemandeAnnulationPlanController extends Controller
                             $actionplanformation_update->flag_annulation_action=true;
                             $actionplanformation_update->update();
 
-                            $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$actionplanformation->id_plan_de_formation)
-                                ->where(function($query){
+                            $actionplanformations = ActionFormationPlan::
+                                where(function ($query) use ($planformation) {
+                                    $query->where('id_plan_de_formation', $planformation->id_plan_de_formation)
+                                        ->orWhere('id_plan_de_formation', $planformation->id_plan_formation_supplementaire);
+                                })
+                                ->
+                                where(function($query){
                                     $query->where('flag_annulation_action','<>',true)
                                           ->orwhereNull('flag_annulation_action');
                                 })
                                 ->get();
+
+
                             if($actionplanformations->count()==0){
                                 $planformation->flag_annulation_plan=true;
-                                $planformation->update();
                             }
+
+                            $montantactionplanformationacc = 0;
+
+                            foreach ($actionplanformations as $actionplanformation){
+                                $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
+                            }
+
+                            $planformation->cout_total_accorder_plan_formation =$montantactionplanformationacc;
+                            $planformation->update();
 
                             $sujet = "Demande d'annulation de l'action de formation (intitulé:"  .
                                 @$actionplanformation->intitule_action_formation_plan.") sur e-FDFP";

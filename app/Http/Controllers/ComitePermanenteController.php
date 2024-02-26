@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ComitePermanente;
+use App\Models\DemandeSubstitutionActionPlanFormation;
 use Illuminate\Http\Request;
 use App\Helpers\ConseillerParAgence;
 use Carbon\Carbon;
@@ -385,6 +386,12 @@ class ComitePermanenteController extends Controller
             if($data['action'] === 'Traiter_action_formation_valider'){
 
                 $actionplan = ActionFormationPlan::find($id);
+                $actionplan_old = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_substi',$id)->first();
+                if(isset($actionplan_old)){
+                    $old_action = ActionFormationPlan::find($actionplan_old->id_action_formation_plan_a_substi);
+                    $old_action->flag_substitution = true;
+                    $old_action->update();
+                }
 
                 $idplan = $actionplan->id_plan_de_formation;
 
@@ -422,7 +429,6 @@ class ComitePermanenteController extends Controller
             if($data['action'] === 'Traiter_action_formation_valider_plan'){
                 $idplan = $id;
 
-
                 $plan = PlanFormation::find($idplan);
 
                 $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])
@@ -433,8 +439,10 @@ class ComitePermanenteController extends Controller
                     })->get();
 
                 $plan_old = PlanFormation::find($plan->id_plan_formation_supplementaire);
-                $plan_old->flag_plan_sup = true;
-                $plan_old->update();
+                if(isset($plan_old)){
+                    $plan_old->flag_plan_sup = true;
+                    $plan_old->update();
+                }
 
                 $input = $request->all();
 

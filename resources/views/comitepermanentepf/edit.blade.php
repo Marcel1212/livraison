@@ -126,7 +126,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <?php }  ?>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
-                             echo 'active';
+                            echo 'active';
                         } else {
                             echo 'disabled';
                         } ?>" role="tab" data-bs-toggle="tab"
@@ -205,7 +205,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_permanente_participant">Conseiller
+                                    <label class="form-label" for="id_user_comite_permanente_participant">Personnes
+                                        ressources
                                         <strong style="color:red;">*</strong></label>
                                     <select id="id_user_comite_permanente_participant"
                                         name="id_user_comite_permanente_participant"

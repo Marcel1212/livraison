@@ -1,8 +1,3 @@
-
-
-@php
-ini_set('max_execution_time', '0');
-@endphp
 @if(auth()->user()->can('permission-index'))
 @extends('layouts.backLayout.designadmin')
 

@@ -1194,7 +1194,7 @@
                                                             <button type="submit" type="submit" name="action"
                                                                 value="soumission_recevabilite"
                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                Valider
+                                                                Confirmer
                                                             </button>
 
                                                             <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -1346,7 +1346,7 @@
                                                                                 name="action"
                                                                                 value="soumission_recevabilite_global_instruction"
                                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                                Valider
+                                                                                Confirmer
                                                                             </button>
 
                                                                             <a class="btn btn-sm btn-outline-secondary waves-effect"

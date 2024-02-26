@@ -95,4 +95,3 @@
         window.location = "{{ url('/403') }}";//here double curly bracket
     </script>
 @endif
-
