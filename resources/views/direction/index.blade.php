@@ -47,7 +47,7 @@
                         <tr>
                             <th>No</th>
 
-                            <th>Libelle</th>
+                            <th>Libellé</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>

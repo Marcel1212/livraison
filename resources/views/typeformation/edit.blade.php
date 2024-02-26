@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des types de  formation')
     @php($soustitre='Modifier un type de formation')
     @php($lien='typeformation')

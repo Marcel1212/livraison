@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\ButFormation;
 
@@ -12,8 +13,21 @@ class ButFormationController extends Controller
      */
     public function index()
     {
-        $butformations = ButFormation::all(); 
-        return view('butformation.index', compact('butformations')); 
+        $butformations = ButFormation::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES BUTS DE LA FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return view('butformation.index', compact('butformations'));
     }
 
     /**
@@ -21,6 +35,19 @@ class ButFormationController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES BUTS DE LA FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('butformation.create');
     }
 
@@ -29,8 +56,21 @@ class ButFormationController extends Controller
      */
     public function store(Request $request)
     {
-        ButFormation::create($request->all());
+        $butformation = ButFormation::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$butformation->id_butformation,
+
+            'menu'=>'LISTE DES  BUTS DE LA FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('butformation.index')
         ->with('success', 'But de formation ajouté avec succès.');
     }
@@ -50,6 +90,19 @@ class ButFormationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $butformation = ButFormation::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES  BUTS DE LA FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('butformation.edit', compact('butformation'));
     }
 
@@ -61,7 +114,19 @@ class ButFormationController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $butformation = ButFormation::find($id);
         $butformation->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES  BUTS DE LA FORMATION',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('butformation.index')
             ->with('success', 'But de formation mis à jour avec succès.');
     }

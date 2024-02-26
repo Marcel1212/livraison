@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\TypeEntreprise;
 
@@ -12,7 +13,20 @@ class TypeEntrepriseController extends Controller
      */
     public function index()
     {
-        $typeentreprises = TypeEntreprise::all(); 
+        $typeentreprises = TypeEntreprise::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typeentreprise.index', compact('typeentreprises'));
     }
 
@@ -21,6 +35,19 @@ class TypeEntrepriseController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typeentreprise.create');
     }
 
@@ -29,8 +56,21 @@ class TypeEntrepriseController extends Controller
      */
     public function store(Request $request)
     {
-        TypeEntreprise::create($request->all());
+        $typeentreprise = TypeEntreprise::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$typeentreprise->id_typeentreprise,
+
+            'menu'=>'LISTE DES TYPES ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('typeentreprise.index')
             ->with('success', 'Type entreprise ajouté avec succès.');
     }
@@ -50,6 +90,19 @@ class TypeEntrepriseController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typeentreprise = TypeEntreprise::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typeentreprise.edit', compact('typeentreprise'));
     }
 
@@ -61,7 +114,19 @@ class TypeEntrepriseController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typeentreprise = TypeEntreprise::find($id);
         $typeentreprise->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES ENTREPRISES(Type entreprise mis à jour avec succès.)',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('typeentreprise.index')
             ->with('success', 'Type entreprise mis à jour avec succès.');
     }

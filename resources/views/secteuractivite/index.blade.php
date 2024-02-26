@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des secteurs activités')
     @php($lien='secteuractivite')
 

@@ -3,8 +3,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types entreprises')
     @php($soustitre='Ajouter un type entreprise')
     @php($lien='typeentreprise')
 

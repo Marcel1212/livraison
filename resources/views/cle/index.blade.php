@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des clés de répartitions de financement')
     @php($lien='clederepartitionfinancement')
 
@@ -48,8 +48,8 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Année d'exercice</th>
-                                            <th>Marge inferieur</th>
-                                            <th>Marge superieur</th>
+                                            <th>Marge inférieure</th>
+                                            <th>Marge supérieure</th>
                                             <th>Montant FC</th>
                                             <th>coefficient</th>
                                             <th>Statut</th>

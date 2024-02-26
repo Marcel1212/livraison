@@ -4,9 +4,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des localites')
-    @php($soustitre='Ajouter une localite')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des localités')
+    @php($soustitre='Ajouter une localité')
     @php($lien='localite')
 
 
@@ -55,7 +55,7 @@
                                         <div class="row">
                                               <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>Localite </label>
+                                                    <label>Localité </label>
                                                     <input type="text" name="libelle_localite" id="libelle_localite"
                                                            class="form-control form-control-sm"
                                                            required>

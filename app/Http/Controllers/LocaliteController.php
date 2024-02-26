@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Localite;
 
 class LocaliteController extends Controller
 {
-    /** 
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $localites = Localite::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES LOCALITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('localite.index', compact('localites'));
     }
 
@@ -21,6 +35,19 @@ class LocaliteController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES LOCALITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('localite.create');
     }
 
@@ -29,8 +56,21 @@ class LocaliteController extends Controller
      */
     public function store(Request $request)
     {
-        Localite::create($request->all());
+        $localite = Localite::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$localite->id_localite,
+
+            'menu'=>'LISTE DES LOCALITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('localite.index')
             ->with('success', 'Localite ajouté avec succès.');
     }
@@ -50,6 +90,19 @@ class LocaliteController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $localite = Localite::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES LOCALITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('localite.edit', compact('localite'));
     }
 
@@ -62,6 +115,19 @@ class LocaliteController extends Controller
         $localite = Localite::find($id);
         $localite->update($request->all());
 
+        Audit::logSave([
+
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES LOCALITES',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('localite.index')
             ->with('success', 'Localite mis à jour avec succès.');
     }

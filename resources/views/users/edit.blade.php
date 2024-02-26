@@ -155,7 +155,7 @@
                                         </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label" for="state">Departement</label>
+                                    <label class="form-label" for="state">Département</label>
                                     <select class="select2 form-select" id='departement' name='id_departement'
                                             class="form-control">
                                         <option

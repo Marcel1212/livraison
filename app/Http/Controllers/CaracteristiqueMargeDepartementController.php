@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Models\CaracteristiqueMargeDepartement;
 use Illuminate\Http\Request;
 
@@ -57,8 +58,21 @@ class CaracteristiqueMargeDepartementController extends Controller
 
             $input['flag_cmd'] = true;
 
-            CaracteristiqueMargeDepartement::create($input);
+            $lcmde=CaracteristiqueMargeDepartement::create($input);
 
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$lcmde->id_caracteristique_marge_departement,
+
+                'menu'=>'LISTE DES DEPARTEMENTS(enregistrement de la marge lié au département)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('departement.edit',$iddepartement)->with('success', 'Succes : Enregistrement reussi');
 
 
@@ -99,6 +113,19 @@ class CaracteristiqueMargeDepartementController extends Controller
         $iddepartement = $infoscaracteristique->id_departement;
 
         CaracteristiqueMargeDepartement::where([['id_caracteristique_marge_departement','=',$id]])->delete();
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$infoscaracteristique->id_caracteristique_marge_departement,
+
+            'menu'=>'LISTE DES DEPARTEMENTS(suppression de la marge lié au département)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
 
         return redirect()->route('departement.edit',$iddepartement)->with('success', 'Succes : Enregistrement reussi');
 

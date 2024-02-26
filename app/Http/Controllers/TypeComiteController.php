@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\TypeComite;
 
@@ -13,6 +14,19 @@ class TypeComiteController extends Controller
     public function index()
     {
         $typecomites = TypeComite::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES DE COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typecomites.index', compact('typecomites'));
     }
 
@@ -21,6 +35,19 @@ class TypeComiteController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES DE COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typecomites.create');
     }
 
@@ -32,12 +59,40 @@ class TypeComiteController extends Controller
         $typeverifie = TypeComite::where([['libelle_type_comite','=', $request->libelle_type_comite],['code_type_comite','=', $request->code_type_comite]])->get();
 
         if(count($typeverifie) == 0){
-            TypeComite::create($request->all());
-        }else{
+           $typecomite = TypeComite::create($request->all());
+
+           Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$typecomite->id_type_comite,
+
+            'menu'=>'LISTE DES TYPES DE COMITES(Type de comité ajouté avec succès)',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return redirect()->route('typecomites.index')->with('success', 'Type de comité ajouté avec succès.');
+
+    }else{
+            Audit::logSave([
+
+                'action'=>'CREER',
+
+                'code_piece'=>'',
+
+                'menu'=>'LISTE DES TYPES DE COMITES(Erreur : Cette combinaison existe déjà.)',
+
+                'etat'=>'Echec',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('typecomites.create')->with('error', 'Erreur : Cette combinaison existe déjà. ');
         }
 
-        return redirect()->route('typecomites.index')->with('success', 'Type de comité ajouté avec succès.');
     }
 
     /**
@@ -55,6 +110,19 @@ class TypeComiteController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typecomite = TypeComite::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES DE COMITES',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typecomites.edit', compact('typecomite'));
     }
 
@@ -66,7 +134,19 @@ class TypeComiteController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typecomite = TypeComite::find($id);
         $typecomite->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES DE COMITES(Type de comité mis à jour avec succès)',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('typecomites.index')->with('success', 'Type de comité mis à jour avec succès.');
     }
 

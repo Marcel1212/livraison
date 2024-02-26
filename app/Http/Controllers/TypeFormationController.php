@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\TypeFormation;
 
@@ -12,8 +13,21 @@ class TypeFormationController extends Controller
      */
     public function index()
     {
-        $typeformations = TypeFormation::all(); 
-        return view('typeformation.index', compact('typeformations')); 
+        $typeformations = TypeFormation::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return view('typeformation.index', compact('typeformations'));
     }
 
     /**
@@ -21,6 +35,19 @@ class TypeFormationController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES TYPES DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typeformation.create');
     }
 
@@ -29,8 +56,21 @@ class TypeFormationController extends Controller
      */
     public function store(Request $request)
     {
-        TypeFormation::create($request->all());
+        $typeformation = TypeFormation::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$typeformation->id_typeformation,
+
+            'menu'=>'LISTE DES TYPES DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('typeformation.index')
         ->with('success', 'Type de formation ajouté avec succès.');
     }
@@ -50,6 +90,19 @@ class TypeFormationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typeformation = TypeFormation::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('typeformation.edit', compact('typeformation'));
     }
 
@@ -61,7 +114,19 @@ class TypeFormationController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typeformation = TypeFormation::find($id);
         $typeformation->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES TYPES DE FORMATION',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('typeformation.index')
             ->with('success', 'Type de formation mis à jour avec succès.');
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Models\CaracteristiqueMargeDepartement;
 use App\Models\CaracteristiqueTypeFormation;
 use Illuminate\Http\Request;
@@ -16,6 +17,19 @@ class DepartementController extends Controller
     public function index()
     {
         $Resultat = Departement::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES DEPARTEMENTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>' ADMINISTRATION'
+
+        ]);
         return view('departement.index', compact('Resultat'));
     }
 
@@ -29,6 +43,19 @@ class DepartementController extends Controller
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
         }
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES DEPARTEMENTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('departement.create', compact('direction'));
     }
 
@@ -46,8 +73,21 @@ class DepartementController extends Controller
 
             $input['libelle_departement'] = mb_strtoupper($input['libelle_departement']);
 
-            Departement::create($input);
+            $dep = Departement::create($input);
 
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$dep->id_departement,
+
+                'menu'=>'LISTE DES DEPARTEMENTS',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('departement.index')->with('success', 'Departement ajouté avec succès.');
         }
     }
@@ -76,6 +116,19 @@ class DepartementController extends Controller
 
         $carateristiquedepartements = CaracteristiqueMargeDepartement::where([['id_departement','=',$departement->id_departement]])->get();
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$departement->id_departement,
+
+            'menu'=>'LISTE DES DEPARTEMENTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('departement.edit', compact('departement','direction','carateristiquedepartements'));
     }
 
@@ -98,6 +151,19 @@ class DepartementController extends Controller
 
         $departement->update($input);
 
+        Audit::logSave([
+
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$departement->id_departement,
+
+            'menu'=>'LISTE DES DEPARTEMENTS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('departement.index')->with('success', 'Departement mise a jour avec succès.');
     }
 

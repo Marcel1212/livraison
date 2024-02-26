@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des formes juridiques')
     @php($soustitre='Modifier une forme juridique')
     @php($lien='formejuridique')

@@ -3,8 +3,8 @@
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
-    @php($titre='Liste des agences')
-    @php($soustitre='Ajouter une agence')
+    @php($titre='Liste des antennes')
+    @php($soustitre='Ajouter une antenne')
     @php($lien='agence')
     <!-- BEGIN: Content-->
 

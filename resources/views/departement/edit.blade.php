@@ -2,8 +2,8 @@
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
-    @php($titre='Liste des departements')
-    @php($soustitre='Modifier une departement')
+    @php($titre='Liste des départements')
+    @php($soustitre='Modifier un département')
     @php($lien='departement')
     @php($lien1='caracteristiquemargedepartement')
     <!-- BEGIN: Content-->
@@ -56,7 +56,7 @@
                                             </div>
                                             <div class="col-md-5 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle direction </label>
+                                                    <label>Libellé direction </label>
                                                     <input type="text" name="libelle_departement" id="libelle_departement"
                                                            value="{{$departement->libelle_departement }}"
                                                            class="form-control form-control-sm" >

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\TypeFormation;
 use Illuminate\Http\Request;
@@ -15,7 +16,19 @@ class CaracteristiqueTypeFormationController extends Controller
     public function index()
     {
         $caracteristiques = CaracteristiqueTypeFormation::get();
+        Audit::logSave([
 
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CARACTERISTIQUES DE TYPE DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('caracteristiquetypeformation.index', compact('caracteristiques'));
     }
 
@@ -25,7 +38,19 @@ class CaracteristiqueTypeFormationController extends Controller
     public function create()
     {
         $typeformations = TypeFormation::where([['flag_actif_formation','=','true']])->get();
+        Audit::logSave([
 
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES CARACTERISTIQUES DE TYPE DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('caracteristiquetypeformation.create', compact('typeformations'));
     }
 
@@ -47,8 +72,20 @@ class CaracteristiqueTypeFormationController extends Controller
             ]);
 
 
-            CaracteristiqueTypeFormation::create($request->all());
+            $caracteristiquetypeformation = CaracteristiqueTypeFormation::create($request->all());
+            Audit::logSave([
 
+                'action'=>'CREER',
+
+                'code_piece'=>$caracteristiquetypeformation->id_caracteristiquetypeformation,
+
+                'menu'=>'LISTE DES CARACTERISTIQUES DE TYPE DE FORMATION',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('caracteristiquetypeformation.index')->with('success', 'Succes : Enregistrement reussi');
         }
     }
@@ -70,7 +107,19 @@ class CaracteristiqueTypeFormationController extends Controller
         $caracteristique = CaracteristiqueTypeFormation::find($id);
         $typeformations = TypeFormation::where([['flag_actif_formation','=','true']])->get();
 
+        Audit::logSave([
 
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES CARACTERISTIQUES DE TYPE DE FORMATION',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('caracteristiquetypeformation.edit',compact('caracteristique','typeformations'));
     }
 
@@ -95,7 +144,19 @@ class CaracteristiqueTypeFormationController extends Controller
             $caracteristique = CaracteristiqueTypeFormation::find($id);
 
             $caracteristique->update($request->all());
+            Audit::logSave([
 
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES CARACTERISTIQUES DE TYPE DE FORMATION',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('caracteristiquetypeformation.index')->with('success', 'Succes : Enregistrement reussi');
 
         }

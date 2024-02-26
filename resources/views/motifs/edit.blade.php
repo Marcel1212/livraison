@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des motifs')
     @php($soustitre='Modifier motif')
     @php($lien='motifs')
@@ -62,7 +62,7 @@
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libellé activité </label>
                                                     <input type="text" name="libelle_motif" id="libelle_motif"
                                                            class="form-control form-control-sm" value="{{$motif->libelle_motif}}"
                                                            required>
@@ -70,7 +70,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libellé activité </label>
                                                     <input type="text" name="code_motif" id="code_motif"
                                                            class="form-control form-control-sm" value="{{$motif->code_motif}}"
                                                            required>

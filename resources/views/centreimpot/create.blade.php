@@ -2,7 +2,7 @@
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des centres d\'impots')
     @php($soustitre='Ajouter un centre d\'impot')
     @php($lien='centreimpot')

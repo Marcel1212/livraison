@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\StatutOperation;
 
@@ -13,6 +14,19 @@ class StatutOperationController extends Controller
     public function index()
     {
         $statutoperations = StatutOperation::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES STATUTS OPERATIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('statutoperations.index', compact('statutoperations'));
     }
 
@@ -21,6 +35,19 @@ class StatutOperationController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES STATUTS OPERATIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('statutoperations.create');
     }
 
@@ -29,8 +56,21 @@ class StatutOperationController extends Controller
      */
     public function store(Request $request)
     {
-        StatutOperation::create($request->all());
+        $statutoperation = StatutOperation::create($request->all());
 
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>$statutoperation->id_statutoperation,
+
+            'menu'=>'LISTE DES STATUTS OPERATIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('statutoperations.index')
             ->with('success', 'Statut Operation ajouté avec succès.');
     }
@@ -50,7 +90,20 @@ class StatutOperationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $statutoperation = StatutOperation::find($id);
-        return view('statutoperations.edit', compact('statutoperation'));        
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES STATUTS OPERATIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return view('statutoperations.edit', compact('statutoperation'));
     }
 
     /**
@@ -61,7 +114,19 @@ class StatutOperationController extends Controller
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $statutoperation = StatutOperation::find($id);
         $statutoperation->update($request->all());
+        Audit::logSave([
 
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES STATUTS OPERATIONS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return redirect()->route('statutoperations.index')
             ->with('success', 'Statut Operation mis à jour avec succès.');
     }

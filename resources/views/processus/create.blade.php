@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des processus')
     @php($soustitre='Enregistrer un processus')
     @php($lien='processus')
@@ -66,7 +66,7 @@
                                                 <tr>
                                                     <th>Action</th>
                                                     <th>Priorité</th>
-                                                    <th>Roles</th>
+                                                    <th>Rôles</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

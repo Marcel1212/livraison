@@ -48,7 +48,7 @@
                                         <div class="row">
                                             <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle direction </label>
+                                                    <label>Libellé direction </label>
                                                     <input type="text" name="libelle_direction" id="libelle_direction"
                                                            class="form-control form-control-sm" placeholder="Code">
                                                 </div>

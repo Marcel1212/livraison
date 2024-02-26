@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Activites;
 use App\Models\SecteurActivite;
@@ -14,6 +15,19 @@ class ActivitesController extends Controller
     public function index()
     {
         $activites = Activites::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES ACTIVITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('activites.index', compact('activites'));
     }
 
@@ -27,6 +41,19 @@ class ActivitesController extends Controller
         foreach ($secteuractivites as $comp) {
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
         }
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES ACTIVITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('activites.create', compact('secteuractivite'));
     }
 
@@ -45,8 +72,21 @@ class ActivitesController extends Controller
                 'id_secteur_activite.required' => 'Veuillez sélectionner un secteur activité.'
             ]);
 
-            Activites::create($request->all());
+            $activites = Activites::create($request->all());
 
+            Audit::logSave([
+
+                'action'=>'CREER',
+
+                'code_piece'=>$activites->id_activites,
+
+                'menu'=>'LISTE DES ACTIVITES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('activites.index')
                 ->with('success', 'Activités ajoutées avec succès.');
         }
@@ -73,6 +113,19 @@ class ActivitesController extends Controller
         foreach ($secteuractivites as $comp) {
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite  . "'>" . mb_strtoupper($comp->libelle_secteur_activite) ." </option>";
         }
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES ACTIVITES',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('activites.edit', compact('activite','secteuractivite'));
     }
 
@@ -100,6 +153,19 @@ class ActivitesController extends Controller
 
             $activite->update($input);
 
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES ACTIVITES',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('activites.index')->with('success', 'Activités mises à jour avec succès.');
         }
     }

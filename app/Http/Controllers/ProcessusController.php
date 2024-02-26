@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use App\Helpers\Crypt;
 use App\Helpers\GenerateCode as Gencode;
 use App\Models\CombinaisonProcessus;
@@ -28,6 +29,19 @@ class ProcessusController extends Controller
     public function index()
     {
         $Resultat = DB::table('processus')->get();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PROCESSUS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('processus.index', compact('Resultat'));
     }
 
@@ -52,7 +66,7 @@ class ProcessusController extends Controller
                 $request->validate([
                     'lib_processus' => 'required',
                 ]);
-                Processus::create([
+                $processus = Processus::create([
                     'lib_processus' => $request->input(['lib_processus']),
                     'is_valide' => $request->has('is_valide')
                 ]);
@@ -74,8 +88,34 @@ class ProcessusController extends Controller
                 }
             }
 
+            Audit::logSave([
+
+                'action'=>'CREER',
+
+                'code_piece'=>$insertedId,
+
+                'menu'=>'LISTE DES PROCESSUS',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect('processus/edit/' . $insertedId)->with('success', 'Succes : Enregistrement reussi');
         }
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PROCESSUS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('processus.create', compact('ResPatient', 'ResPro',  'ResRole'));
     }
 
@@ -123,8 +163,34 @@ class ProcessusController extends Controller
                     ]);
                 }
             }
+            Audit::logSave([
+
+                'action'=>'MODIFIER',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES PROCESSUS',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect('processus/edit/' . \App\Helpers\Crypt::UrlCrypt($IdProc))->with('success', 'Succes : Enregistrement reussi');
         }
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES PROCESSUS',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('processus.edit', compact('ResPatient', 'ResPro'));
     }
 

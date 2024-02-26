@@ -44,8 +44,8 @@
                                             <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Departement</th>
-                                                <th>Libelle</th>
+                                                <th>Département</th>
+                                                <th>Libellé</th>
                                                 <th>Statut</th>
                                                 <th>Action</th>
                                             </tr>
