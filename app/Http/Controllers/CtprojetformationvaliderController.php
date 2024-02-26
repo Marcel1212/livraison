@@ -275,7 +275,7 @@ class CtprojetformationvaliderController extends Controller
         ->select('v.name', 'v.priorite_combi_proc', 'v.is_valide', 'v.date_valide',
             'v.comment_parcours', 'v.id_processus')
         ->where('v.id_processus', '=', $planformation->id_processus)
-        ->where('v.id_demande', '=', $planformation->id_plan_de_formation)
+        ->where('v.id_demande', '=', $planformation->id_projet_formation)
         ->orderBy('v.priorite_combi_proc', 'ASC')
         ->get();
         //dd($ResultProssesList);
