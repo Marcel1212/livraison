@@ -39,7 +39,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des commissions permanente')
+    @php($titre='Liste des commissions permanentes')
     @php($soustitre='Tenue de commission permanente')
     @php($lien='comitepermanente')
 
@@ -279,7 +279,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <th>Entreprise </th>
                                     <th>Conseiller </th>
                                     <th>Code </th>
-                                    <th>Date soumis</th>
+                                    <th>Date soumise</th>
                                     <th>Cout demandé</th>
                                     <th>Cout accordé</th>
                                     <th>Action</th>
@@ -296,8 +296,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$planformation->userconseilplanformation->name }} {{ @$planformation->userconseilplanformation->prenom_users }}</td>
                                         <td>{{ @$planformation->code_plan_formation }}</td>
                                         <td>{{ $planformation->date_soumis_plan_formation }}</td>
-                                        <td align="rigth">{{ number_format($planformation->cout_total_demande_plan_formation) }}</td>
-                                        <td align="rigth">{{ number_format($planformation->cout_total_accorder_plan_formation) }}</td>
+                                        <td align="rigth">{{ number_format($planformation->cout_total_demande_plan_formation, 0, ',', ' ') }}</td>
+                                        <td align="rigth">{{ number_format($planformation->cout_total_accorder_plan_formation, 0, ',', ' ') }}</td>
                                         <td align="center">
                                             <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                             @can($lien.'-edit')
@@ -336,7 +336,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_permanente),\App\Helpers\Crypt::UrlCrypt(4)]) }}" enctype="multipart/form-data">
                                     @csrf
                                     @method('put')
-                                    <button type="submit" name="action" value="Traiter_cahier_plan"
+                                    <button onclick='javascript:if (!confirm("Vous allez Valider la commission permanente ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Traiter_cahier_plan"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                         Valider la commission permanente
                                     </button>

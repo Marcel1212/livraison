@@ -44,7 +44,7 @@
                             <th>Entreprise </th>
                             <th>Conseiller </th>
                             <th>Code </th>
-                            <th>Date soumis</th>
+                            <th>Date soumise</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
