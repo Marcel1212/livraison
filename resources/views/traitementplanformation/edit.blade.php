@@ -560,7 +560,7 @@
                             @method('put')
 
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget credit</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget crédit</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
@@ -609,7 +609,7 @@
                         </div>
 
                         <div class="col-12 col-md-12">
-                          <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
+                          <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -675,7 +675,7 @@
                               value="{{@$infosactionplanformation->cadre_fiche_demande_agrement}}"/>
                           </div>
                           <div class="col-12 col-md-3">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maîtrise</label>
                             <input
                               type="number"
                               class="form-control form-control-sm"
@@ -717,7 +717,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" >Cout de la formation</label>
+                          <label class="form-label" >Coût de la formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -765,7 +765,7 @@
                             disabled="disabled" />
                         </div>
                         <div class="col-12 col-md-3">
-                          <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
+                          <label class="form-label" for="cout_total_fiche_agrement">Coût de financement</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
@@ -795,7 +795,7 @@
                         </div>
                         <div class="col-md-6 col-12">
                             <div class="mb-1">
-                                <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                <label>Montant accordé <strong style="color:red;">*</strong>: </label>
                                 <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                         </div>
                         <div class="col-md-12 col-12">
