@@ -104,7 +104,7 @@ $couleur = Menu::get_info_couleur();
                 </div>
                 <!-- /Logo -->
                 <h3 class="mb-1">Vérification code </h3>
-                <p class="mb-4"> Nous avons envoyé un code de vérification sur votre adresse e-mail.
+                <p class="mb-4"> Nous avons envoyé un code de vérification sur votre adresse mail.
                     Entrez le code envoyé par mail dans le champ ci-dessous.</p>
                 <form id="twoStepsForm" class="mb-3" action="{{ route('otp.verification',['email'=>\App\Helpers\Crypt::UrlCrypt($email)]) }}" method="POST"
                       autocomplete="off">

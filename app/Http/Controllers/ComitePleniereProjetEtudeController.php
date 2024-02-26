@@ -185,9 +185,9 @@ class ComitePleniereProjetEtudeController extends Controller
                     $sujet = "Tenue de comite plénière";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher, $nom_prenom  ,</b>
-                                    <br><br>Vous êtes convié au comite technique des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_pleniere." au ".$comiteencours->date_fin_comite_pleniere.".
+                                    <br><br>Vous êtes conviés au comité technique des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_pleniere." au ".$comiteencours->date_fin_comite_pleniere.".
 
-                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des projets d'étude.
+                                    <br><br> Vous êtes priés de bien vouloir  prendre connaissance des projets d'étude.
                                     <br>
 
                                     <br><br><br>
