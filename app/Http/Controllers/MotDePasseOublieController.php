@@ -156,7 +156,7 @@ class MotDePasseOublieController extends Controller
 
 
                     }
-                    return redirect()->route('connexion')->with('success', 'Mot de passe réinitialisé avec succès veuillez consulter votre boite mail pour vos nouveaux accès. ');
+                    return redirect()->route('connexion')->with('success', 'Mot de passe réinitialisé avec succès veuillez consulter votre boîte mail pour vos nouveaux accès. ');
 
                 }
             }else{
