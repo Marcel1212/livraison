@@ -98,7 +98,7 @@ class AgreementController extends Controller
 //            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
             ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
                 $query->where('id_plan_de_formation', $id_plan_de_formation)
-                      ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
+                    ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
             })->get();
 
         return view('agreement.show', compact('actionformations','plan_de_formation'));
@@ -273,38 +273,38 @@ class AgreementController extends Controller
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
     {
-            $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
-            $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
-            $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
-            $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
-            $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan',$id_action)->first();
+        $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
+        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
+        $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
+        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
+        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan',$id_action)->first();
 
         if(isset($request->piece_demande_annulation_plan)){
-                $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
-                $extension_file = $piece_demande_annulation_plan->extension();
-                $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
-                $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
+            $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
+            $extension_file = $piece_demande_annulation_plan->extension();
+            $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
+            $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
 
-            }else{
-                $file_name =  $demande_annulation_action->piece_demande_annulation_plan;
-            }
-            DemandeAnnulationPlan::updateOrCreate(
-                ['id_action_plan'=>$id_action],
-                [
-                    'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
-                    'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
-                    'id_processus'=>4,
-                    'id_user'=>$plan_formation->user_conseiller,
-                    'piece_demande_annulation_plan'=>$file_name,
-                ]
-            );
+        }else{
+            $file_name =  $demande_annulation_action->piece_demande_annulation_plan;
+        }
+        DemandeAnnulationPlan::updateOrCreate(
+            ['id_action_plan'=>$id_action],
+            [
+                'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
+                'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
+                'id_processus'=>4,
+                'id_user'=>$plan_formation->user_conseiller,
+                'piece_demande_annulation_plan'=>$file_name,
+            ]
+        );
 
-            if($request->action=="Enregistrer_soumettre_demande_annulation"){
-                $demande_annulation_action->flag_soumis_demande_annulation_plan = true;
-                $demande_annulation_action->date_soumis_demande_annulation_plan = now();
-                $demande_annulation_action->update();
-            }
-            return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation effectuée');
+        if($request->action=="Enregistrer_soumettre_demande_annulation"){
+            $demande_annulation_action->flag_soumis_demande_annulation_plan = true;
+            $demande_annulation_action->date_soumis_demande_annulation_plan = now();
+            $demande_annulation_action->update();
+        }
+        return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation effectuée');
     }
 
     public function substitution(string $id_plan, string $id_action)
@@ -573,36 +573,10 @@ class AgreementController extends Controller
                 return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
             }
 
-            if(isset($actionplanformation)){
-                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
-                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
-                $demande_substitution->id_plan_de_formation = $id_plan;
-                $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
-                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
-                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
-                $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
-
-                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
-
-                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
-                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
-                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
-                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
-                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
-                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
-                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
-                $demande_substitution->id_processus = 5;
-
-                if (isset($request->file_beneficiare)){
-                    $file = $request->file_beneficiare;
-                    $collections = (new FastExcel)->import($file);
-                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
-                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
-                    }
-                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
-                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
-                    }
-                }
+            if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
+                return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+            }
+        }
 
         if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
             return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le coût de la formation que vous souhaitez substituer ']);
@@ -929,18 +903,18 @@ class AgreementController extends Controller
                 $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan_substi'];
 
                 FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)
-                ->update([
-                    'id_type_formation' => $input['id_type_formation'],
-                    'id_but_formation' => $input['id_but_formation'],
-                    'date_debut_fiche_agrement' => $input['date_debut_fiche_agrement'],
-                    'date_fin_fiche_agrement' => $input['date_fin_fiche_agrement'],
-                    'lieu_formation_fiche_agrement' => $input['lieu_formation_fiche_agrement'],
-                    'cout_total_fiche_agrement' => $input['cout_total_fiche_agrement'],
-                    'objectif_pedagogique_fiche_agre' => $input['objectif_pedagogique_fiche_agre'],
-                    'cadre_fiche_demande_agrement' => $input['cadre_fiche_demande_agrement'],
-                    'agent_maitrise_fiche_demande_ag' => $input['agent_maitrise_fiche_demande_ag'],
-                    'employe_fiche_demande_agrement' => $input['employe_fiche_demande_agrement'],
-                ]);
+                    ->update([
+                        'id_type_formation' => $input['id_type_formation'],
+                        'id_but_formation' => $input['id_but_formation'],
+                        'date_debut_fiche_agrement' => $input['date_debut_fiche_agrement'],
+                        'date_fin_fiche_agrement' => $input['date_fin_fiche_agrement'],
+                        'lieu_formation_fiche_agrement' => $input['lieu_formation_fiche_agrement'],
+                        'cout_total_fiche_agrement' => $input['cout_total_fiche_agrement'],
+                        'objectif_pedagogique_fiche_agre' => $input['objectif_pedagogique_fiche_agre'],
+                        'cadre_fiche_demande_agrement' => $input['cadre_fiche_demande_agrement'],
+                        'agent_maitrise_fiche_demande_ag' => $input['agent_maitrise_fiche_demande_ag'],
+                        'employe_fiche_demande_agrement' => $input['employe_fiche_demande_agrement'],
+                    ]);
 
                 $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
 
@@ -1181,7 +1155,7 @@ class AgreementController extends Controller
 //                $demande_substitution->update();
 //            }
 
-        }
+            }
         }
     }
 
