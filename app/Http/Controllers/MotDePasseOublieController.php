@@ -28,10 +28,10 @@ class MotDePasseOublieController extends Controller
     {
         $this->validate($request, [
             'email_mot_de_passe_oublie' => 'required',
-            //'g-recaptcha-response' => ['required', new ReCaptcha]
+            'g-recaptcha-response' => ['required', new ReCaptcha]
         ], [
             'email_mot_de_passe_oublie.required' => 'Veuillez saisir votre adresse email.',
-           // 'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
+            'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
         ]);
         $now = Carbon::now();
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
