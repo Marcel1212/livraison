@@ -362,7 +362,7 @@
                                 </div>
                                 </div>
                                 </div>
-                            </div>
+                                </div>
                                 <br/>
                                 <?php if ($naroles == "ENTREPRISE"){ ?>
                                 <div class="card">
