@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function () {
         //'users' => App\Http\Controllers\UserController::class,
         //'permissions' => App\Http\Controllers\PermissionController::class,
         'audits' => App\Http\Controllers\AuditController::class,
+
         //'sousmenus' => App\Http\Controllers\SousmenuController::class,
         //'agence' => App\Http\Controllers\AgenceController::class,
         //'direction' => App\Http\Controllers\DirectionController::class,
