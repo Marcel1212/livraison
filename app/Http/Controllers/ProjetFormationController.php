@@ -677,7 +677,7 @@ class ProjetFormationController extends Controller
                         $titre = "INFORMATION PROJET DE FORMATION";
 
                         $messageMail = "<b>Cher,  $rais ,</b>
-                                    <br><br>Votre projet de formation intitulé : ". $projetformation->titre_projet_etude ." a est recevable
+                                    <br><br>Votre projet de formation intitulé : ". $projetformation->titre_projet_etude ." a est recévable
 
                                     Commentaire  : ". $data["commentaires_recevabilite"] . "
 
