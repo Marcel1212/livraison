@@ -11,7 +11,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des commissions permanente')
+    @php($titre='Liste des commissions permanentes')
     @php($soustitre='Ajout de commission permanente')
     @php($lien='comitepermanente')
 
@@ -66,7 +66,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comite permanent
+                          Commission permanente
                         </button>
                       </li>
                       <li class="nav-item">
@@ -115,7 +115,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Date de debut <strong style="color:red;">*</strong></label>
+                                        <label>Date de début <strong style="color:red;">*</strong></label>
                                         <input type="date" name="date_debut_comite_permanente"
                                                class="form-control form-control-sm" required/>
                                     </div>

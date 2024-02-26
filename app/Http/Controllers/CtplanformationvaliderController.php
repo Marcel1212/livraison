@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Helpers\Menu;
+use App\Helpers\Audit;
 use App\Models\Activites;
 use App\Models\CentreImpot;
 use App\Models\Localite;
@@ -70,7 +71,19 @@ class CtplanformationvaliderController extends Controller
        // dd($Resultat);
         }
 
+        Audit::logSave([
 
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Validation par le processus )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('ctplanformationvalider.index',compact('Resultat'));
 
@@ -109,6 +122,20 @@ class CtplanformationvaliderController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>$idVal,
+
+            'menu'=>'PLAN DE FORMATION (Validation par le processus )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('ctplanformationvalider.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
@@ -201,6 +228,20 @@ class CtplanformationvaliderController extends Controller
         foreach ($actionplanformations as $actionplanformation){
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
         }
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Validation par le processus )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
@@ -311,6 +352,20 @@ class CtplanformationvaliderController extends Controller
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
         }
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id.'/'.$id2,
+
+            'menu'=>'PLAN DE FORMATION (Validation par le processus )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
         return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
     }
@@ -370,6 +425,19 @@ class CtplanformationvaliderController extends Controller
 
                     }
 
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Validation par le processus : VALIDER )',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                     return redirect('ctplanformationvalider/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/editer')->with('success', 'Succes : Operation validée avec succes ');
 
@@ -408,6 +476,20 @@ class CtplanformationvaliderController extends Controller
                         'id_combi_proc' => $idProComb,
                     ]);
 
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Validation par le processus : REJETER )',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                     return redirect('ctplanformationvalider/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/editer')->with('success', 'Succes : Operation validée avec succes ');
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ComitePermanente;
+use App\Helpers\Audit;
 use App\Models\DemandeSubstitutionActionPlanFormation;
 use Illuminate\Http\Request;
 use App\Helpers\ConseillerParAgence;
@@ -42,6 +43,19 @@ class ComitePermanenteController extends Controller
     public function index()
     {
         $Resultat = ComitePermanente::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
         return view('comitepermanente.index', compact('Resultat'));
     }
 
@@ -59,6 +73,20 @@ class ComitePermanenteController extends Controller
                                                 ['cout_total_accorder_plan_formation','<=',$typecomiteinfos->valeur_max_type_comite]])
                                             ->get();
 
+                                            Audit::logSave([
+
+                                                'action'=>'CREER',
+
+                                                'code_piece'=>'',
+
+                                                'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+                                                'etat'=>'Succès',
+
+                                                'objet'=>'PLAN DE FORMATION'
+
+                                            ]);
+
         return view('comitepermanente.create', compact('planformations'));
     }
 
@@ -70,12 +98,14 @@ class ComitePermanenteController extends Controller
         if ($request->isMethod('post')) {
 
             $this->validate($request, [
-                'date_debut_comite_permanente' => 'required',
-                'date_fin_comite_permanente' => 'required',
+                'date_debut_comite_permanente' => 'required|date|after_or_equal:now',
+                'date_fin_comite_permanente' => 'required|date|after:date_debut_comite_permanente',
                 'commentaire_comite_permanente' => 'required'
             ],[
                 'date_debut_comite_permanente.required' => 'Veuillez ajouter une date de debut.',
+                'date_debut_comite_permanente.after_or_equal' => 'Vous ne pouvez pas choisir une date inférieure à celle du jour.',
                 'date_fin_comite_permanente.required' => 'Veuillez ajouter une date de fin.',
+                'date_fin_comite_permanente.after' => 'Vous ne pouvez pas choisir une date inférieure a la date de debut',
                 'commentaire_comite_permanente.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
@@ -91,6 +121,20 @@ class ComitePermanenteController extends Controller
             ComitePermanente::create($input);
 
             $insertedId = ComitePermanente::latest()->first()->id_comite_permanente;
+
+            Audit::logSave([
+
+                'action'=>'CREATION',
+
+                'code_piece'=>$insertedId,
+
+                'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
 
             return redirect('comitepermanente/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
 
@@ -114,6 +158,21 @@ class ComitePermanenteController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>$idVal,
+
+            'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
 
         return view('comitepermanente.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
@@ -152,6 +211,21 @@ class ComitePermanenteController extends Controller
                                                 ['cout_total_accorder_plan_formation','<=',$typecomiteinfos->valeur_max_type_comite]])
                                             ->get();
 
+                                            Audit::logSave([
+
+                                                'action'=>'MODIFIER',
+
+                                                'code_piece'=>$id,
+
+                                                'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+                                                'etat'=>'Succès',
+
+                                                'objet'=>'PLAN DE FORMATION'
+
+                                            ]);
+
+
         return view('comitepermanente.edit', compact('comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
     }
 
@@ -184,6 +258,21 @@ class ComitePermanenteController extends Controller
                 $comitegestion = ComitePermanente::find($id);
                 $comitegestion->update($input);
 
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
@@ -203,6 +292,20 @@ class ComitePermanenteController extends Controller
                 $verifconseillerexist = ComitePermanenteParticipant::where([['id_comite_permanente','=',$id],['id_user_comite_permanente_participant','=',$input['id_user_comite_permanente_participant']]])->get();
 
                 if(count($verifconseillerexist) >= 1){
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Commission permanente : Cette personne existe déjà dans ce comite de gestion)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
 
                     return redirect('comitepermanente/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Erreur : Cette personne existe déjà dans ce comite de gestion. ');
 
@@ -237,6 +340,20 @@ class ComitePermanenteController extends Controller
                     $messageMailEnvoi = Email::get_envoimailTemplate($usernotifie->email, $nom_prenom, $messageMail, $sujet, $titre);
                 }
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Commission permanente )',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 //return redirect('comitepleniere/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
@@ -249,6 +366,19 @@ class ComitePermanenteController extends Controller
                 $comitegestion = ComitePermanente::find($id);
                 $comitegestion->update(['flag_statut_comite_permanente'=> true]);
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Commission permanente : Agreement generer)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
 
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
@@ -265,6 +395,21 @@ class ComitePermanenteController extends Controller
         $comitegestionParticipant = ComitePermanenteParticipant::find($idVal);
         $idcomitegestion = $comitegestionParticipant->id_comite_permanente;
         ComitePermanenteParticipant::where([['id_comite_permanente_participant','=',$idVal]])->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Commission permanente)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
         return redirect('comitepermanente/'.Crypt::UrlCrypt($idcomitegestion).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La personne a été supprimée du comite avec succès ');
     }
 
@@ -360,6 +505,19 @@ class ComitePermanenteController extends Controller
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
         }
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Commission permanente : consulter action du plan de formation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('comitepermanente.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
@@ -407,6 +565,20 @@ class ComitePermanenteController extends Controller
 
                 if($input['cout_accorde_action_formation'] > $actionplan->cout_accorde_action_formation ){
 
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'PLAN DE FORMATION (Commission permanente : le Montant accordé est superiéur au montant)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'PLAN DE FORMATION'
+
+                    ]);
+
                     return redirect('comitepermanente/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('error', 'Erreur : le Montant accordé est superiéur au montant ');
 
                 }
@@ -421,6 +593,21 @@ class ComitePermanenteController extends Controller
                 ActionPlanFormationAValiderParUser::create($input);
 
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Commission permanente : Action de plan de formation Traité)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
 
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Action de plan de formation Traité ');
 
@@ -494,6 +681,21 @@ class ComitePermanenteController extends Controller
                         'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Commission permanente : Les actions ont été validée)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('comitepermanente/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Les actions ont été validée ');
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\Audit;
 use App\Models\Activites;
 use App\Models\CentreImpot;
 use App\Models\Localite;
@@ -57,6 +58,20 @@ class CtplanformationController extends Controller
 
         //dd($planformations);
 
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Comite technique )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
         return view('ctplanformation.index',compact('planformations'));
     }
 
@@ -93,6 +108,20 @@ class CtplanformationController extends Controller
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
+
+        Audit::logSave([
+
+            'action'=>'CONSULTER',
+
+            'code_piece'=>'',
+
+            'menu'=>'PLAN DE FORMATION (Comite technique )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
 
         return view('ctplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
@@ -188,6 +217,20 @@ class CtplanformationController extends Controller
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
         }
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'PLAN DE FORMATION (Comite technique )',
+
+            'etat'=>'Succès',
+
+            'objet'=>'PLAN DE FORMATION'
+
+        ]);
+
         return view('ctplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
     }
@@ -235,6 +278,20 @@ class CtplanformationController extends Controller
 
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Comite technique : Action de plan de formation Traité)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
 
             }
@@ -266,6 +323,21 @@ class CtplanformationController extends Controller
                         'flag_plan_validation_valider_par_comite_en_ligne' => true
                     ]);
                 }
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Comite technique : Action de plan de formation Traité)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
                 return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Les actions ont été validée ');
 
 
@@ -304,6 +376,20 @@ class CtplanformationController extends Controller
                     'id_plan_formation' => $idplan
                 ]);*/
                 //$nbreactionvalide = ActionPlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['id_plan_formation','=',$idplan]])->get();
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Comite technique : Action de plan de formation Traité)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
 
                 return redirect('ctplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
 

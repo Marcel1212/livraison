@@ -387,7 +387,7 @@ $idpart = Auth::user()->id_partenaire;
                                         <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
                                         <input type="text"
                                                class="form-control form-control-sm"
-                                                value="{{number_format(@$planformation->part_entreprise)}}" disabled="disabled">
+                                                value="{{number_format(@$planformation->part_entreprise, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
                                 </div>
                                 <!--<div class="col-md-4 col-12">
@@ -529,7 +529,7 @@ $idpart = Auth::user()->id_partenaire;
                             <div>
                             <div class="row">
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget credit</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget crédit</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
@@ -537,7 +537,7 @@ $idpart = Auth::user()->id_partenaire;
                                     disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:red;">Budget credit restant</strong></label>
+                                <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:red;">Budget crédit restant</strong></label>
                                 <input
                                     type="text"
                                     class="form-control form-control-sm"
@@ -598,7 +598,7 @@ $idpart = Auth::user()->id_partenaire;
                             </select>
                             </div>
                             <div class="col-12 col-md-4">
-                                <label class="form-label" for="id_caracteristique_type_formation">Caracteristique type de formation <strong style="color:red;">*</strong></label>
+                                <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
                                 <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group">
                                     <option value='0'></option>
                                 </select>
@@ -796,7 +796,7 @@ $idpart = Auth::user()->id_partenaire;
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ number_format($actionplanformation->cout_action_formation_plan) }}</td>
+                                                <td align="rigth">{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
 
                                                 <td align="center">
                                                     @can($lien.'-edit')

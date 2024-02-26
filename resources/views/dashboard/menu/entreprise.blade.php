@@ -5,9 +5,14 @@ use App\Helpers\AnneeExercice;
 use Carbon\Carbon;
 use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
+use App\Helpers\InfosEntreprise;
 
-$imagedashboard = Menu::get_info_image_dashboard();
 $iduser = Auth::user()->id;
+$iduserpart = Auth::user()->id_partenaire;
+$imagedashboard = Menu::get_info_image_dashboard();
+$nbretraitementencours = InfosEntreprise::get_nombre_demande_en_cours_traitement($iduserpart);
+$nbretraiter = InfosEntreprise::get_nombre_demande_traiter($iduserpart);
+
 $projetetudeenattente = ProjetEtude::where([['id_user', '=', $iduser], ['flag_attente_rec', '=', true]])->get();
 $projetetuderecevable = ProjetEtude::where([['id_user', '=', $iduser], ['flag_valide', '=', true]])->get();
 $projetetudesoumis = ProjetEtude::where([['id_user', '=', $iduser], ['flag_soumis', '=', true]])->get();
@@ -57,7 +62,7 @@ $projetformationrejete = ProjetFormation::where([['id_user', '=', $iduser], ['fl
                     </span>
                     <div class="content-right">
                         <p class="mb-0">Demande en cours de traitement</p>
-                        <h4 class="text-info mb-0">82</h4>
+                        <h4 class="text-info mb-0">{{ count($nbretraitementencours) }}</h4>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-3">
@@ -66,7 +71,7 @@ $projetformationrejete = ProjetFormation::where([['id_user', '=', $iduser], ['fl
                     </span>
                     <div class="content-right">
                         <p class="mb-0">Demandes traitées</p>
-                        <h4 class="text-warning mb-0">14</h4>
+                        <h4 class="text-warning mb-0">{{ count($nbretraiter) }}</h4>
                     </div>
                 </div>
             </div>
