@@ -416,7 +416,7 @@ class HomeController extends Controller
 //dd($infoentreprise);
         //if(isset($infoentreprise)){
 
-            $activites = Activites::where([['id_secteur_activite','=',@$infoentreprise->id_secteur_activite_entreprise],['flag_activites','=',true]])->get();
+            $activites = Activites::where([['flag_activites','=',true]])->get();
             $activite = "<option value=''> -- Sélectionnez une activité -- </option>";
             foreach ($activites as $comp) {
                 $activite .= "<option value='" . @$comp->id_activites  . "'>" . @$comp->libelle_activites ." </option>";
