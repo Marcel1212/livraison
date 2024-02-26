@@ -232,11 +232,42 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     PlanFormation::create($input);
                     $insertedId = PlanFormation::latest()->first()->id_plan_de_formation;
 
+                    $plan = PlanFormation::where('id_plan_de_formation',$insertedId)
+                        ->with('planformationSupplementaireDescendants')
+                        ->first();
+
+                    $montantcouttotal = 0;
+
+                    if(isset($plan->planformationSupplementaireDescendants)){
+                        while($plan->planformationSupplementaireDescendants->first()) {
+                            $datas =  PlanFormation::where('id_plan_formation_supplementaire',$plan->planformationSupplementaireDescendants->first()->id_plan_de_formation)
+                                ->where('id_plan_de_formation','<>',$id)
+                                ->where('flag_plan_sup',false)->get();
+                            foreach ($datas as $data) {
+                                //Calcul montant accordé en cas de substitution
+                                $actionformationvals = ActionFormationPlan::where('id_plan_de_formation','=',$data->id_plan_de_formation)
+                                    ->where(function ($query) {
+                                        $query->where('flag_annulation_action', false)
+                                            ->orwhere('flag_substitution', false)
+                                            ->orwhereNull('flag_annulation_action');
+                                    })->get();
+                                foreach($actionformationvals as $actionformationval){
+                                    $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                                }
+                            }
+                            if ($plan->planformationSupplementaireDescendants->first()) {
+                                $plan = $plan->planformationSupplementaireDescendants->first();
+                            }
+                        }
+                    }
+
+
                     PlanFormation::where('id_plan_de_formation',$insertedId)->update([
                         'flag_soumis_plan_formation' => true,
                         'user_conseiller' => $plan_formation->user_conseiller,
                         'cout_total_demande_plan_formation' => $plan_formation->cout_total_demande_plan_formation,
                         'id_annee_exercice' => $plan_formation->id_periode_exercice,
+                        'cout_total_accorder_plan_formation' => $montantcouttotal,
                         'date_soumis_plan_formation' => Carbon::now()
                     ]);
 

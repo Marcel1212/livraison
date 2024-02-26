@@ -605,7 +605,7 @@ class AgreementController extends Controller
                 }
 
         if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
-            return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le cout de la formation que vous souhaitez substituer ']);
+            return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le coût de la formation que vous souhaitez substituer ']);
         }
 
         $nombredejour = $input['nombre_heure_action_formation_p_substi']/8;

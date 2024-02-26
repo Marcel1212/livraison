@@ -217,4 +217,15 @@ class PlanFormation extends Model
     {
         return $this->belongsTo('App\Models\CleDeRepartitionFinancement', 'id_cle_de_repartition_financement', 'id_cle_de_repartition_financement');
     }
+
+
+    public function planformationSupplementaire()
+    {
+        return $this->hasMany(PlanFormation::class, 'id_plan_de_formation', 'id_plan_formation_supplementaire');
+    }
+
+    public function planformationSupplementaireDescendants()
+    {
+        return $this->planformationSupplementaire()->with('planformationSupplementaireDescendants');
+    }
 }

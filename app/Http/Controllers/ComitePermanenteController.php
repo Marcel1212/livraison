@@ -429,23 +429,47 @@ class ComitePermanenteController extends Controller
             if($data['action'] === 'Traiter_action_formation_valider_plan'){
                 $idplan = $id;
 
-                $plan = PlanFormation::find($idplan);
+//                $plan = PlanFormation::find($idplan);
 
-                $actionformationvals = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])
-                    ->orWhere('id_plan_de_formation',$plan->id_plan_formation_supplementaire)
-                    ->where(function ($query) {
-                        $query->where('flag_annulation_action', false)
-                            ->orwhereNull('flag_annulation_action');
-                    })->get();
+                $plan = PlanFormation::where('id_plan_de_formation',$idplan)
+                  ->with('planformationSupplementaireDescendants')
+                  ->first();
 
-                $plan_old = PlanFormation::find($plan->id_plan_formation_supplementaire);
-                if(isset($plan_old)){
-                    $plan_old->flag_plan_sup = true;
-                    $plan_old->update();
+                $montantcouttotal = 0;
+
+                if($plan->planformationSupplementaireDescendants->first()!=null){
+                    while($plan->planformationSupplementaireDescendants->first()) {
+                        $datas =  PlanFormation::where('id_plan_formation_supplementaire',$plan->planformationSupplementaireDescendants->first()->id_plan_de_formation)
+                            ->where('id_plan_de_formation','<>',$id)
+                            ->where('flag_plan_sup',false)->get();
+                        foreach ($datas as $data) {
+                            //Calcul montant accordé en cas de substitution
+                            $actionformationvals = ActionFormationPlan::where('id_plan_de_formation','=',$data->id_plan_de_formation)
+                                ->where(function ($query) {
+                                    $query->where('flag_annulation_action', false)
+                                        ->orwhereNull('flag_annulation_action');
+                                })->get();
+                            foreach($actionformationvals as $actionformationval){
+                                $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                            }
+                            $data->flag_plan_sup = true;
+                            $data->update();
+                        }
+                        if ($plan->planformationSupplementaireDescendants->first()) {
+                            $plan = $plan->planformationSupplementaireDescendants->first();
+                        }
+                    }
+                }else{
+                    //Calcul montant accordé lors de la soumission d'un nouveau plan
+                    $actionformationvals = ActionFormationPlan::where('id_plan_de_formation','=',$idplan)
+                        ->where(function ($query) {
+                            $query->where('flag_annulation_action', false)
+                                ->orwhereNull('flag_annulation_action');
+                        })->get();
+                    foreach($actionformationvals as $actionformationval){
+                        $montantcouttotal += $actionformationval->cout_accorde_action_formation;
+                    }
                 }
-
-                $input = $request->all();
-
                 $input = $request->all();
 
                 /*$input['flag_valide_plan_formation'] = true;
@@ -464,15 +488,6 @@ class ComitePermanenteController extends Controller
                 //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
-
-
-                    $montantcouttotal = 0;
-
-                    foreach($actionformationvals as $actionformationval){
-                        $montantcouttotal += $actionformationval->cout_accorde_action_formation;
-                    }
-
-
                     $plan->update([
                         'flag_fiche_agrement' => true,
                         'cout_total_accorder_plan_formation' => $montantcouttotal,
