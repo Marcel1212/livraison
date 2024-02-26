@@ -99,6 +99,15 @@ $couleur = Menu::get_info_couleur();
                     <form id="formAuthentication" class="mb-3" action="{{ url('connexion') }}" method="POST"
                         autocomplete="off">
                         {{ csrf_field() }}
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert-body">
+                                    <b>Succès: </b> {{ $message }}
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        @endif
                         @if ($message = Session::get('error'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <div class="alert-body">
