@@ -143,7 +143,10 @@ class TratementPlanFormationController extends Controller
                     ->orwhereNull('flag_annulation_action');
             })->get();
 
-        $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id]])->get();
+        $categorieplans = CategoriePlan::where(function ($query) use ($id,$planformation) {
+            $query->where('id_plan_de_formation', $id)
+                ->orwhere('id_plan_de_formation', @$planformation->id_plan_formation_supplementaire);
+            })->get();
 
         $motifs = Motif::where([['code_motif','=','PAF']])->get();
         $motif = "<option value=''> Selectionnez un motif </option>";
@@ -160,7 +163,8 @@ class TratementPlanFormationController extends Controller
                                         ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
 
-        //dd($infosactionplanformations);
+
+//        dd($infosactionplanformations);
 
         $nombreaction = count($actionplanformations);
 

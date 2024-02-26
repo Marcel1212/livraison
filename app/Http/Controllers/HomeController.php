@@ -164,6 +164,14 @@ class HomeController extends Controller
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
                     ]);
 
+                    /***** verification du mot de passe */
+
+                    $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
+
+                    if($verifmdp != true){
+                        return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
+                    }
+
                     if (Hash::check($data['cpwd'], $users->password)) {
 
                         $motpass = $key . '+' . $data['npwd'];
@@ -201,6 +209,12 @@ class HomeController extends Controller
                         'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
                     ]);
+
+                    $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
+
+                    if($verifmdp != true){
+                        return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
+                    }
 
                     if (Hash::check($data['cpwd'], $users->password)) {
 
@@ -283,6 +297,12 @@ class HomeController extends Controller
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
                     ]);
 
+                    $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
+
+                    if($verifmdp != true){
+                        return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
+                    }
+
                     if (Hash::check($data['cpwd'], $users->password)) {
 
                         $motpass = $key . '+' . $data['npwd'];
@@ -321,6 +341,12 @@ class HomeController extends Controller
                         'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
                     ]);
+
+                    $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
+//dd($verifmdp);
+                    if($verifmdp != "mot de passe correcte"){
+                        return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
+                    }
 
                     if (Hash::check($data['cpwd'], $users->password)) {
 

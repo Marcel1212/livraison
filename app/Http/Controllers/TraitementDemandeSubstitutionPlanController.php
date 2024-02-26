@@ -9,6 +9,7 @@ use App\Models\ActionFormationPlan;
 use App\Models\ActionPlanFormationAValiderParUser;
 use App\Models\BeneficiairesFormation;
 use App\Models\ButFormation;
+use App\Models\CaracteristiqueTypeFormation;
 use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
 use App\Models\DemandeAnnulationPlan;
@@ -30,7 +31,6 @@ use Illuminate\Support\Facades\DB;
 
 class TraitementDemandeSubstitutionPlanController extends Controller
 {
-    //
     public function index()
     {
         $id_user=Auth::user()->id;
@@ -66,6 +66,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
 
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $id2 =  \App\Helpers\Crypt::UrldeCrypt($id2);
+        $caracteristiques = CaracteristiqueTypeFormation::All();
 
         $butformations = ButFormation::all();
         $secteuractivites = SecteurActivite::all();
@@ -100,6 +101,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
             $demande_substitution = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_substi',$id)->first();
             if(isset($demande_substitution)){
                 $action_formation = ActionFormationPlan::where('id_action_formation_plan',$demande_substitution->id_action_formation_plan_a_substi)->first();
+                $fiche_a_demande_agrement_acien = FicheADemandeAgrement::where('id_action_formation_plan',$action_formation->id_action_formation_plan)->first();
                 $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
                 $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
             }
@@ -140,7 +142,10 @@ class TraitementDemandeSubstitutionPlanController extends Controller
             ['id_combi_proc','=',$id2]
         ])->get();
 
-        return view('traitementdemandesubstitutionplan.edit', compact('motif_substitutions','secteuractivites','ResultProssesList','action_formation','fiche_a_demande_agrement','butformations','typeformations','categorieprofessionelles','structureformations','motifs','demande_substitution','id2','ResultProssesList','parcoursexist'));
+        return view('traitementdemandesubstitutionplan.edit', compact('motif_substitutions',
+            'caracteristiques',
+            'fiche_a_demande_agrement_acien',
+            'secteuractivites','ResultProssesList','action_formation','fiche_a_demande_agrement','butformations','typeformations','categorieprofessionelles','structureformations','motifs','demande_substitution','id2','ResultProssesList','parcoursexist'));
 
     }
 
@@ -203,28 +208,55 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $demande_substitution->date_validation_demande_plan_substi = now();
                     $demande_substitution->update();
 
+                    //Creation plan complementaire
                     $plan_formation= PlanFormation::where('id_plan_de_formation',$demande_substitution->id_plan_de_formation)->first();
 
 
-                    $plan_formation->flag_soumis_ct_plan_formation = false;
-                    $plan_formation->update();
+                    $input = $request->all();
+                    $input['date_creation'] = Carbon::now();
+                    $input['id_entreprises'] = $plan_formation->id_entreprises;
+                    $input['nom_prenoms_charge_plan_formati'] = $plan_formation->nom_prenoms_charge_plan_formati;
+                    $input['fonction_charge_plan_formation'] = $plan_formation->fonction_charge_plan_formation;
+                    $input['id_part_entreprise'] = $plan_formation->id_part_entreprise;
+                    $input['part_entreprise'] = $plan_formation->part_entreprise;
+                    $input['id_cle_de_repartition_financement'] = $plan_formation->id_cle_de_repartition_financement;
+                    $input['montant_financement_budget'] = $plan_formation->montant_financement_budget;
+                    $input['nombre_salarie_plan_formation'] = $plan_formation->nombre_salarie_plan_formation;
+                    $input['masse_salariale'] = $plan_formation->masse_salariale;
+                    $input['id_annee_exercice'] = $plan_formation->id_annee_exercice;
+                    $input['id_agence'] = $plan_formation->id_agence;
+                    $input['email_professionnel_charge_plan_formation'] = $plan_formation->email_professionnel_charge_plan_formation;
+                    $input['id_type_entreprise'] = $plan_formation->id_type_entreprise;
+                    $input['id_plan_formation_supplementaire'] = $plan_formation->id_plan_de_formation;
 
+                    PlanFormation::create($input);
+                    $insertedId = PlanFormation::latest()->first()->id_plan_de_formation;
 
+                    PlanFormation::where('id_plan_de_formation',$insertedId)->update([
+                        'flag_soumis_plan_formation' => true,
+                        'user_conseiller' => $plan_formation->user_conseiller,
+                        'cout_total_demande_plan_formation' => $plan_formation->cout_total_demande_plan_formation,
+                        'id_annee_exercice' => $plan_formation->id_periode_exercice,
+                        'date_soumis_plan_formation' => Carbon::now()
+                    ]);
 
-                    $action_formation->flag_annulation_action=true;
-                    $action_formation->update();
+//                    $action_formation->flag_annulation_action=true;
+//                    $action_formation->update();
 
                     $action_formation_new = new ActionFormationPlan();
-
                     $action_formation_new->id_action_formation_plan = $demande_substitution->id_action_formation_plan_substi;
-                    $action_formation_new->id_plan_de_formation = $demande_substitution->id_plan_de_formation;
+                    $action_formation_new->id_plan_de_formation = $insertedId;
                     $action_formation_new->intitule_action_formation_plan =$demande_substitution->intitule_action_formation_plan_substi;
-                    $action_formation_new->structure_etablissement_action_ =$demande_substitution->structure_etablissement_plan_substi;
-                    $action_formation_new->nombre_stagiaire_action_formati =$demande_substitution->nombre_stagiaire_action_formati_plan_substi;
-                    $action_formation_new->nombre_groupe_action_formation_ =$demande_substitution->nombre_groupe_action_formation_plan_substi;
+                    $action_formation_new->structure_etablissement_action_ =$demande_substitution->structure_etablissement_action_substi;
+                    $action_formation_new->nombre_stagiaire_action_formati =$demande_substitution->nombre_stagiaire_action_formati_substi;
+                    $action_formation_new->nombre_groupe_action_formation_ =$demande_substitution->nombre_groupe_action_formation_substi;
                     $action_formation_new->cout_action_formation_plan =$demande_substitution->cout_action_formation_plan_substi;
-                    $action_formation_new->nombre_heure_action_formation_p =  $demande_substitution->nombre_heure_action_formation_plan_substi;
-                    $action_formation_new->numero_action_formation_plan = $demande_substitution->numero_action_formation_plan_substi;
+                    $action_formation_new->id_caracteristique_type_formation = $demande_substitution->id_caracteristique_type_formation_substi;
+                    $action_formation_new->nombre_jour_action_formation = $demande_substitution->nombre_jour_action_formation_substi;
+                    $action_formation_new->id_entreprise_structure_formation_action = $demande_substitution->id_entreprise_structure_formation_action_substi;
+                    $action_formation_new->montant_attribuable_fdfp = $demande_substitution->montant_attribuable_fdfp_substi;
+                    $action_formation_new->id_secteur_activite = $demande_substitution->id_secteur_activite_substi;
+                    $action_formation_new->nombre_heure_action_formation_p =  $demande_substitution->nombre_heure_action_formation_p_substi;
                     $action_formation_new->flag_valide_action_formation_pl_comite_gestion = false;
                     $action_formation_new->flag_valide_action_formation_pl_comite_permanente = false;
                     $action_formation_new->flag_valide_action_formation_pl = false;

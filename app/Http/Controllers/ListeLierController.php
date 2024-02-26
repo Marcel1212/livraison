@@ -93,7 +93,7 @@ class ListeLierController extends Controller
                                             ->select('agence.num_agce','agence.lib_agce','users.id_departement')
                                             ->where([
                                             ['plan_formation.flag_plan_formation_valider_par_processus','=',true],
-                                            ['plan_formation.flag_plan_formation_valider_cahier','=',true],
+                                            ['plan_formation.flag_plan_formation_valider_cahier','=',false],
                                             ['users.id_departement','=',$iddepartement]
                                             ])->groupBy('agence.num_agce','users.id_departement')->get()
                                             ;
