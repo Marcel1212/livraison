@@ -72,7 +72,13 @@ class PartEntrepriseController extends Controller
                 ]);
             }
 
-            $partentreprise = PartEntreprise::create($request->all());
+            $input = $request->all();
+
+            if(!isset($input['flag_actif_part_entreprise'])){
+                $input['flag_actif_part_entreprise'] = true;
+            }
+
+            $partentreprise = PartEntreprise::create($input);
             Audit::logSave([
 
                 'action'=>'ENREGISTRER',
@@ -142,9 +148,9 @@ class PartEntrepriseController extends Controller
 
             $partvals = PartEntreprise::get();
 
-            foreach ($partvals as $part) {
+            foreach ($partvals as $parte) {
 
-                PartEntreprise::where([['id_part_entreprise','=',$part->id_part_entreprise]])->update([
+                PartEntreprise::where([['id_part_entreprise','=',$parte->id_part_entreprise]])->update([
                     'flag_actif_part_entreprise' => false
                 ]);
             }

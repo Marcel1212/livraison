@@ -143,7 +143,13 @@ class CaracteristiqueTypeFormationController extends Controller
 
             $caracteristique = CaracteristiqueTypeFormation::find($id);
 
-            $caracteristique->update($request->all());
+            $input = $request->all();
+
+            if(!isset($input['flag_ctf'])){
+                $input['flag_ctf'] = false;
+            }
+
+            $caracteristique->update($input);
             Audit::logSave([
 
                 'action'=>'MISE A JOUR',

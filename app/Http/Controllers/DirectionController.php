@@ -127,6 +127,10 @@ class DirectionController extends Controller
           //  'num_agce' => 'required'
         ]);
         $input = $request->all();
+        //dd($input);
+        if(!isset($input['flag_direction'])){
+            $input['flag_direction'] = false;
+        }
         $input['libelle_direction'] = mb_strtoupper($input['libelle_direction']);
         $direction->update($input);
         Audit::logSave([

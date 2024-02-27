@@ -111,7 +111,13 @@ class FormeJuridiqueController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $formejuridique = FormeJuridique::find($id);
-        $formejuridique->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_actif_forme_juridique'])){
+            $input['flag_actif_forme_juridique'] = false;
+        }
+
+        $formejuridique->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

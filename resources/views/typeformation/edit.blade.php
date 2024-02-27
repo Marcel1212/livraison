@@ -42,7 +42,7 @@
                                         <div class="row">
                                             <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>But de formation </label>
+                                                    <label>Type de formation </label>
                                                     <input type="text" name="type_formation" id="type_formation"
                                                            class="form-control form-control-sm" value="{{$typeformation->type_formation}}"
                                                            required>

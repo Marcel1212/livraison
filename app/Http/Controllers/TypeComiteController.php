@@ -133,7 +133,12 @@ class TypeComiteController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typecomite = TypeComite::find($id);
-        $typecomite->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_actif_type_comite'])){
+            $input['flag_actif_type_comite'] = false;
+        }
+        $typecomite->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

@@ -38,7 +38,7 @@ class DepartementController extends Controller
      */
     public function create()
     {
-        $directions = Direction::all();
+        $directions = Direction::where([['flag_direction','=',true]])->get();
         $direction = "<option value=''> Selectionnez une direction </option>";
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
@@ -108,7 +108,7 @@ class DepartementController extends Controller
      */
     public function edit(Departement $departement)
     {
-        $directions = Direction::all();
+        $directions = Direction::where([['flag_direction','=',true]])->get();
         $direction = "<option value='".@$departement->direction->id_direction."'> ".@$departement->direction->libelle_direction." </option>";
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
@@ -146,6 +146,10 @@ class DepartementController extends Controller
         ]);
 
         $input = $request->all();
+
+        if(!isset($input['flag_departement'])){
+            $input['flag_departement'] = false;
+        }
 
         $input['libelle_departement'] = mb_strtoupper($input['libelle_departement']);
 

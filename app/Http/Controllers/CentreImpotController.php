@@ -114,7 +114,13 @@ class CentreImpotController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $centreimpot = CentreImpot::find($id);
-        $centreimpot->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_centre_impot'])){
+            $input['flag_centre_impot'] = false;
+        }
+
+        $centreimpot->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

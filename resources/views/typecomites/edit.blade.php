@@ -47,14 +47,22 @@
                                                     <label>Libellé</label>
                                                     <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
                                                             <option value="<?php if($typecomite->libelle_type_comite=="Comitepleniere"){
-                                                                echo "Comite pléniere";
-                                                            }elseif ($typecomite->code_type_comite=="Comitedegestion") {
-                                                                echo "Comite de gestion";
-                                                            }elseif ($typecomite->code_type_comite=="Comitepermant") {
-                                                                echo "Commission permanente";
+                                                                echo "Comitepleniere";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comitedegestion") {
+                                                                echo "Comitedegestion";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comitepermant") {
+                                                                echo "Comitepermant";
                                                             }else {
                                                                 echo "";
-                                                            }?>">----Selectionnez le comiten----</option>
+                                                            }?>"><?php if($typecomite->libelle_type_comite=="Comitepleniere"){
+                                                                echo "Comite pléniere";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comitedegestion") {
+                                                                echo "Comite de gestion";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comitepermant") {
+                                                                echo "Commission permanente";
+                                                            }else {
+                                                                echo "----Selectionnez le comiten----";
+                                                            }?></option>
                                                             <option value="Comitepleniere">Comité plénière</option>
                                                             <option value="Comitedegestion">Comité de gestion</option>
                                                             <option value="Comitepermant">Commission permanente</option>

@@ -53,7 +53,7 @@
                                                 <div class="mb-1">
                                                     <label>Valeur </label>
                                                     <input type="number" name="valeur_part_entreprise" id="valeur_part_entreprise"
-                                                           class="form-control form-control-sm" step="0.0001"
+                                                           class="form-control form-control-sm" step="0.0001" min="0"
                                                            required>
                                                 </div>
                                             </div>

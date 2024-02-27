@@ -36,7 +36,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $departements = Departement::all();
+        $departements = Departement::where([['flag_departement','=',true]])->get();
         $departement = "<option value=''> Selectionnez un departement </option>";
         foreach ($departements as $comp) {
             $departement .= "<option value='" . $comp->id_departement  . "'>" . $comp->libelle_departement ." </option>";
@@ -106,7 +106,7 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        $departements = Departement::all();
+        $departements = Departement::where([['flag_departement','=',true]])->get();
         $departement = "<option value='".@$service->departement->id_departement."'> ".@$service->departement->libelle_departement." </option>";
         foreach ($departements as $comp) {
             $departement .= "<option value='" . $comp->id_departement  . "'>" . $comp->libelle_departement ." </option>";
@@ -143,6 +143,10 @@ class ServiceController extends Controller
         ]);
 
         $input = $request->all();
+
+        if(!isset($input['flag_service'])){
+            $input['flag_service'] = false;
+        }
 
         $input['libelle_service'] = mb_strtoupper($input['libelle_service']);
 

@@ -79,7 +79,7 @@ class UserController extends Controller
 
 
 
-        $directions = Direction::all();
+        $directions = Direction::where([['flag_direction','=',true]])->get();
         /*$direction = "<option value=''> Selectionnez une direction </option>";
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
