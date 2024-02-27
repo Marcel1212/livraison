@@ -37,7 +37,7 @@
                                     <div class="card-body">
                                     <!--begin: Datatable-->
                                     <table class="table table-bordered table-striped table-hover table-sm "
-                                           id="exampleData" >
+                                           id="" >
                                         <thead>
                                         <tr>
                                             <th>N°</th>
@@ -111,6 +111,11 @@
                                         </tbody>
                                     </table>
                                     <!--end: Datatable-->
+                                    </div>
+                                    <div class="mt-2">
+                                        @isset($logs)
+                                            {{@$logs->links('pagination::bootstrap-5')}}
+                                        @endisset
                                     </div>
             </div>
         </div>
