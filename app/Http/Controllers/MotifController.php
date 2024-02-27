@@ -113,7 +113,12 @@ class MotifController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $motif = Motif::find($id);
-        $motif->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_actif_motif'])){
+            $input['flag_actif_motif'] = false;
+        }
+        $motif->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

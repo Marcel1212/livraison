@@ -112,8 +112,13 @@ class TypeEntrepriseController extends Controller
     public function update(Request $request, $id)
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
+        $input = $request->all();
+
+        if(!isset($input['flag_type_entreprise'])){
+            $input['flag_type_entreprise'] = false;
+        }
         $typeentreprise = TypeEntreprise::find($id);
-        $typeentreprise->update($request->all());
+        $typeentreprise->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

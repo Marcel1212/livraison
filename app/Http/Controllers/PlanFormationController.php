@@ -86,7 +86,7 @@ class PlanFormationController extends Controller
      */
     public function create()
     {
-        $typeentreprises = TypeEntreprise::all();
+        $typeentreprises = TypeEntreprise::where([['flag_type_entreprise','=',true]])->get();
         $typeentreprise = "<option value=''> Selectionnez le type d'entreprise </option>";
         foreach ($typeentreprises as $comp) {
             $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
@@ -282,7 +282,7 @@ class PlanFormationController extends Controller
         $planformation = PlanFormation::find($id);
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
-        $typeentreprises = TypeEntreprise::all();
+        $typeentreprises = TypeEntreprise::where([['flag_type_entreprise','=',true]])->get();
         $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
         foreach ($typeentreprises as $comp) {
             $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
@@ -300,13 +300,13 @@ class PlanFormationController extends Controller
         foreach ($payss as $comp) {
             $paysc .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
-        $butformations = ButFormation::all();
+        $butformations = ButFormation::where([['flag_actif_but_formation','=',true]])->get();
         $butformation = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($butformations as $comp) {
             $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
         }
 
-        $typeformations = TypeFormation::all();
+        $typeformations = TypeFormation::where([['flag_actif_formation','=',true]])->get();
         $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
         foreach ($typeformations as $comp) {
             $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";

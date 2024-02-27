@@ -61,7 +61,7 @@
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_agce"
+                                                    <input type="checkbox" class="form-check-input" name="flag_direction"
                                                            id="colorCheck1" {{  ($direction->flag_direction == true ? ' checked' : '') }}>
                                                 </div>
                                             </div>

@@ -113,7 +113,12 @@ class StatutOperationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $statutoperation = StatutOperation::find($id);
-        $statutoperation->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_statut_operation'])){
+            $input['flag_statut_operation'] = false;
+        }
+        $statutoperation->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

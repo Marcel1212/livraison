@@ -113,7 +113,12 @@ class TypeFormationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $typeformation = TypeFormation::find($id);
-        $typeformation->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_actif_formation'])){
+            $input['flag_actif_formation'] = false;
+        }
+        $typeformation->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

@@ -113,7 +113,12 @@ class ButFormationController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $butformation = ButFormation::find($id);
-        $butformation->update($request->all());
+        $input = $request->all();
+
+        if(!isset($input['flag_actif_but_formation'])){
+            $input['flag_actif_but_formation'] = false;
+        }
+        $butformation->update($input);
         Audit::logSave([
 
             'action'=>'MISE A JOUR',

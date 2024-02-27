@@ -113,7 +113,14 @@ class LocaliteController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $localite = Localite::find($id);
-        $localite->update($request->all());
+
+        $input = $request->all();
+
+        if(!isset($input['flag_localite'])){
+            $input['flag_localite'] = false;
+        }
+
+        $localite->update($input);
 
         Audit::logSave([
 
