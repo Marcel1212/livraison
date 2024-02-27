@@ -88,16 +88,31 @@ $reseaux = Menu::get_info_reseaux();
             let id_forme_juridiques = myArray[1];
 
             if (code_forme_juridique === 'PR') {
+                document.getElementById("rccm_demande_enrolement").removeAttribute('disabled');
+                document.getElementById("piece_attestation_immatriculati").removeAttribute('disabled');
+                document.getElementById("numero_cnps_demande_enrolement").removeAttribute('disabled');
+                document.getElementById("piece_rccm_demande_enrolement").removeAttribute('disabled');
+
                 document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
                 document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
                 document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
                 document.getElementById("piece_attestation_immatriculati_div").style.display = 'block';
             } else if (code_forme_juridique === 'PU') {
+                document.getElementById("rccm_demande_enrolement").disabled = 'true';
+                document.getElementById("piece_attestation_immatriculati").disabled = 'true';
+                document.getElementById("numero_cnps_demande_enrolement").disabled = 'true';
+                document.getElementById("piece_rccm_demande_enrolement").disabled = 'true';
+
                 document.getElementById("rccm_demande_enrolement_div").style.display = 'none';
                 document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'none';
                 document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'none';
                 document.getElementById("piece_attestation_immatriculati_div").style.display = 'none';
             } else {
+                document.getElementById("rccm_demande_enrolement").removeAttribute('disabled');
+                document.getElementById("piece_attestation_immatriculati").removeAttribute('disabled');
+                document.getElementById("numero_cnps_demande_enrolement").removeAttribute('disabled');
+                document.getElementById("piece_rccm_demande_enrolement").removeAttribute('disabled');
+
                 document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
                 document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
                 document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
