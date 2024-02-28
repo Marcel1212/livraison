@@ -448,8 +448,10 @@ class EnrolementController extends Controller
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
+                    'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
                     'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
+                    'tel_demande_enrolement.unique' => 'Cet contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
                     'id_localite.required' => 'Veuillez selectionnez une localite.',
                     'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
                     //'id_activites.required' => 'Veuillez selectionner une activité.',
@@ -457,6 +459,7 @@ class EnrolementController extends Controller
                     'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
                     'ncc_demande_enrolement.min' => 'Le numero NCC doit avoir au moins 6 caractère.',
                     'ncc_demande_enrolement.max' => 'Le numero NCC doit avoir au plus 9 caractère.',
+                    'ncc_demande_enrolement.unique' => 'Cet numero NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
                     'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
