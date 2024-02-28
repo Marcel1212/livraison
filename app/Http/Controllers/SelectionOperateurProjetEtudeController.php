@@ -116,7 +116,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                 $sujet = "Sélection opérateur";
                                 $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                                 $messageMail = "<b>Cher, $name  ,</b>
-                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->titre_projet_etude_instruction.".
+                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->titre_projet_instruction.".
 
                                     <br><br>Nous vous prions de bien vouloir vous rendre au siège de FDFP afin de recupérer le dossier d'appel d'offre dudit projet.
                                     <br>
@@ -172,7 +172,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                         $sujet = "Sélection opérateur";
                         $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                         $messageMail = "<b>Cher, $name  ,</b>
-                                    <br><br>Vous avez été retenu pour l'exécution du projet d'étude intitulé : ".$projet_etude_valide->titre_projet_etude_instruction.".
+                                    <br><br>Vous avez été retenu pour l'exécution du projet d'étude intitulé : ".$projet_etude_valide->titre_projet_instruction.".
                                     <br>
                                     <br><br><br>
                                     -----

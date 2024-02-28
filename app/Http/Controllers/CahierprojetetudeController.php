@@ -212,27 +212,31 @@ class CahierprojetetudeController extends Controller
             if ($data['action'] == 'Traiter_cahier_projet'){
 
                 $input = $request->all();
-                $verifnombre = count($input['projetetude']);
-                if($verifnombre < 1){
+                if(isset($input['projetetude'])){
+                    $verifnombre = count($input['projetetude']);
+                    if($verifnombre < 1){
 
+                        return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un projet d\'étude. ');
+
+                    }
+
+                    $tab = $input['projetetude'];
+
+                    foreach ($tab as $key => $value) {
+                        LigneCahierProjetEtude::create([
+                            'id_cahier_projet_etude'=> $id,
+                            'id_projet_etude'=> $value
+                        ]);
+                        projetetude::where('id_projet_etude', $value)->update([
+                            'flag_projet_etude_valider_cahier'=> true
+                        ]);
+
+                    }
+
+                    return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise à jour avec succès ');
+                }else{
                     return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un projet d\'étude. ');
-
                 }
-
-                $tab = $input['projetetude'];
-
-                foreach ($tab as $key => $value) {
-                    LigneCahierProjetEtude::create([
-                        'id_cahier_projet_etude'=> $id,
-                        'id_projet_etude'=> $value
-                    ]);
-                    projetetude::where('id_projet_etude', $value)->update([
-                        'flag_projet_etude_valider_cahier'=> true
-                    ]);
-
-                }
-
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 

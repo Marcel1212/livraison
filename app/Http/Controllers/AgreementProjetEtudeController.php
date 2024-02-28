@@ -41,6 +41,7 @@ class AgreementProjetEtudeController extends Controller
      */
     public function index()
     {
+        $role = Menu::get_code_menu_profil(Auth::user()->id);
         $agreements = DB::table('fiche_agrement')
             ->select(['projet_etude.*','entreprises.raison_social_entreprises','entreprises.ncc_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
             ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
@@ -48,9 +49,12 @@ class AgreementProjetEtudeController extends Controller
             ->join('projet_etude','fiche_agrement.id_demande','projet_etude.id_projet_etude')
             ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
             ->join('users','projet_etude.id_charge_etude','users.id')
-            ->where('projet_etude.flag_fiche_agrement',true)
-            ->where('projet_etude.id_entreprises',Auth::user()->id_partenaire)
-            ->get();
+            ->where('projet_etude.flag_fiche_agrement',true);
+
+        if ($role== 'ENTREPRISE'){
+            $agreements = $agreements->where('projet_etude.id_entreprises',Auth::user()->id_partenaire);
+        }
+        $agreements = $agreements->get();
         return view('agreementprojetetude.index', compact('agreements'));
     }
 
