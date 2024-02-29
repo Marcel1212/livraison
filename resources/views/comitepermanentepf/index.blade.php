@@ -10,7 +10,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
     @php($Module = 'Projet de formation')
-    @php($titre = 'Liste des comites permanent')
+    @php($titre = 'Liste des commission permanente')
     @php($lien = 'comitepermanentepf')
 
     <!-- BEGIN: Content-->
