@@ -100,7 +100,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($comitepleniereparticipant) < 1) {
+                        <button type="button" class="nav-link <?php if (count($comitepleniereparticipant) < 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
                             echo 'active';
                         } //dd($activetab); echo $activetab; ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categorieplan" aria-controls="navs-top-categorieplan"
@@ -111,7 +111,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <?php //if($flag_statut_comite_pleniere = false) {
                     ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
+                        <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
@@ -122,8 +122,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <?php //}
                     ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
-                            //echo 'active';
+                        <button type="button" class="nav-link <?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == true) {
+                            echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                             aria-selected="false">
@@ -181,7 +181,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade <?php if (count($comitepleniereparticipant) < 1) {
+                    <div class="tab-pane fade <?php if (count($comitepleniereparticipant) < 1 and count($comitepleniereparticipant) == 0 and $comitepleniere->flag_statut_comite_pleniere == false) {
                         echo 'show active';
                     } //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
 
@@ -248,8 +248,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1) {
-                        echo 'active';
+                    <div class="tab-pane fade  <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
+                        echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
 
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
@@ -261,7 +261,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Titre du projet </th>
                                     <th>Code </th>
                                     <th>Cout entreprise </th>
-                                    <th>Cout proposition conseiller (Instruction) </th>
+                                    <th>Proposition financiere du conseiller </th>
                                     <th>Date soumis</th>
                                     {{-- <th>Statut</th> --}}
                                     <th>Action</th>
@@ -301,8 +301,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                     </div>
 
-                    <div class="tab-pane fade<?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1) {
-                        echo 'active';
+                    <div class="tab-pane fade<?php if (count($cahiers) >= 1 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == true) {
+                        echo 'show active';
                     } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
                         <?php  if(count($cahiers)>=1 and $comitepleniere->flag_statut_comite_pleniere == false){?>
@@ -329,7 +329,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Titre du projet </th>
                                     <th>Code </th>
                                     <th>Cout entreprise </th>
-                                    <th>Cout proposition conseiller (Instruction) </th>
+                                    <th>Proposition financiere du conseiller </th>
                                     <th>Date soumis</th>
                                 </tr>
                             </thead>
