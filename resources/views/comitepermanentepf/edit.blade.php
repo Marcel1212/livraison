@@ -95,18 +95,18 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             <div class="nav-align-top nav-tabs-shadow mb-4">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 1) {
+                        <button type="button" class="nav-link <?php if (count($ficheagrements) == 0 and count($comitegestionparticipant) < 1 and $comitegestion->flag_comite_permanente == false and $comitegestion->date_debut_comite_permanente == null) {
                             echo 'active';
-                        } ?>" role="tab" data-bs-toggle="tab"
+                        } //dd($activetab); echo $activetab; ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
                             Commission permanente
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 2) {
+                        <button type="button" class="nav-link <?php if (count($comitegestionparticipant) < 1 and $comitegestion->flag_statut_comite_permanente == false and $comitegestion->date_debut_comite_permanente !== null) {
                             echo 'active';
-                        } ?>" role="tab" data-bs-toggle="tab"
+                        } //dd($activetab); echo $activetab; ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categorieplan" aria-controls="navs-top-categorieplan"
                             aria-selected="false">
                             Personnes ressources
@@ -115,7 +115,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                     <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 3) {
+                        <button type="button" class="nav-link <?php if (count($comitegestionparticipant) >= 1 and count($ficheagrements) == 0 and $comitegestion->flag_statut_comite_permanente == false) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
@@ -125,7 +125,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                     <?php }  ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($ficheagrements) >= 1) {
+                        <button type="button" class="nav-link <?php if (count($ficheagrements) > 0 and count($comitegestionparticipant) > 0) {
                             echo 'active';
                         } else {
                             echo 'disabled';
@@ -137,7 +137,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade <?php if ($idetape == 1) {
+                    <div class="tab-pane fade <?php if (count($ficheagrements) == 0 and count($comitegestionparticipant) < 1 and $comitegestion->flag_statut_comite_permanente == false and $comitegestion->date_debut_comite_permanente == null) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
@@ -193,7 +193,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade <?php if ($idetape == 2) {
+                    <div class="tab-pane fade <?php if (count($comitegestionparticipant) < 1 and $comitegestion->flag_statut_comite_permanente == false and $comitegestion->date_debut_comite_permanente !== null) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
 
@@ -280,7 +280,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
 
                     <?php if($comitegestion->flag_statut_comite_permanente == false) { ?>
-                    <div class="tab-pane fade <?php if ($idetape == 3) {
+                    <div class="tab-pane fade <?php if (count($comitegestionparticipant) >= 1 and count($ficheagrements) == 0 and $comitegestion->flag_statut_comite_permanente == false) {
                         echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
 
@@ -355,8 +355,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
                     <?php } ?>
 
-                    <div class="tab-pane fade <?php if (count($ficheagrements) >= 1 and count($comitegestionparticipant) >= 1) {
-                        echo 'show 4';
+                    <div class="tab-pane fade <?php if (count($ficheagrements) > 0 and count($comitegestionparticipant) > 0) {
+                        echo 'show active';
                     } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
                         <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_permanente == false){?>
