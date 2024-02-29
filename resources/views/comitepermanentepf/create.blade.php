@@ -74,7 +74,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                             aria-selected="true">
-                            Comite permanent
+                            Comission permanente
                         </button>
                     </li>
                     <li class="nav-item">
