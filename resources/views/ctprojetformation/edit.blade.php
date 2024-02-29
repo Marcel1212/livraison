@@ -111,7 +111,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     <?php //if($flag_statut_comite_pleniere = false) {
                     ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
+                        <button type="button" class="nav-link <?php if (/*count($planformations) > 0 and */ count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
@@ -248,7 +248,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade  <?php if (count($planformations) > 0 and count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
+                    <div class="tab-pane fade  <?php if (/*count($planformations) > 0 and */ count($comitepleniereparticipant) >= 1 and $comitepleniere->flag_statut_comite_pleniere == false) {
                         echo 'show active';
                     } ?>" id="navs-top-actionformation" role="tabpanel">
 
