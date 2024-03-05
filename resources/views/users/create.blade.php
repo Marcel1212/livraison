@@ -205,7 +205,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label>
+                                                    <label>Actif </label>
                                                     <select name="flag_actif_users" class="select2 select2-size-sm form-select">
                                                         <option value=true>Actif</option>
                                                         <option value=false>Inactif</option>

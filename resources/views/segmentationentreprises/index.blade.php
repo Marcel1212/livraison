@@ -1,11 +1,11 @@
-@if(auth()->user()->can('departement-index'))
+@if(auth()->user()->can('segmentationentreprises-index'))
     @extends('layouts.backLayout.designadmin')
 
     @section('content')
 
         @php($Module='Paramétrage')
-        @php($titre='Liste des départements')
-        @php($lien='departement')
+        @php($titre='Liste des segmentations des entreprises')
+        @php($lien='segmentationentreprises')
 
 
 
@@ -30,7 +30,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">{{$titre}}</h5>
                         <small class="text-muted float-end">
-                            @can('departement-create')
+                            @can($lien.'-create')
                                 <a href="{{ route($lien.'.create') }}"
                                 class="btn btn-sm btn-primary waves-effect waves-light">
                                     <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
@@ -44,20 +44,23 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Direction</th>
-                                <th>Libellé</th>
+                                <th>Departement</th>
+                                <th>Marge inférieure</th>
+                                <th>Marge supérieure</th>
                                 <th>Actif</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($Resultat as $key => $res)
+                                <?php $i=0; ?>
+                            @foreach ($segementations as $key => $res)
                                 <tr>
-                                    <td>{{ $res->id_departement }}</td>
-                                    <td>{{ @$res->direction->libelle_direction }}</td>
-                                    <td>{{ $res->libelle_departement }}</td>
+                                    <td>{{ ++$i }}</td>
+                                    <td>{{ @$res->departement->libelle_departement }}</td>
+                                    <td>{{ number_format($res->marge_inferieur_cmd, 0, ',', ' ') }}</td>
+                                    <td>{{ number_format($res->marge_superieur_cmd, 0, ',', ' ') }}</td>
                                     <td align="center">
-                                            <?php if($res->flag_departement == true){ ?>
+                                            <?php if($res->flag_cmd == true){ ?>
                                         <span class="badge bg-success">Actif</span>
                                         <?php  }else{?>
                                         <span class="badge bg-danger">Inactif</span>
@@ -65,7 +68,7 @@
                                     </td>
                                     <td align="center">
                                         @can($lien.'-edit')
-                                            <a href="{{ route($lien.'.edit',$res->id_departement) }}"
+                                            <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($res->id_caracteristique_marge_departement)) }}"
                                             class="text-warning "
                                             title="Modifier"><img src='/assets/img/editing.png'></a>
                                         @endcan

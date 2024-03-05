@@ -80,7 +80,9 @@ class AgenceController extends Controller
                     'coordonne_gps_agce' => $request->input('coordonne_gps_agce'),
                     'localisation_agce' => $request->input('localisation_agce'),
                     'flag_agce' =>  $request->input('flag_agce'),
-                    'flag_siege_agce' => $request->input('flag_siege_agce')
+                    'flag_siege_agce' => $request->input('flag_siege_agce'),
+                    'longitude_agce' => $request->input('longitude_agce'),
+                    'latitude_agce' => $request->input('latitude_agce')
                 ]
             );
             Audit::logSave([
@@ -170,7 +172,9 @@ class AgenceController extends Controller
                         'coordonne_gps_agce' => $request->input('coordonne_gps_agce'),
                         'localisation_agce' => $request->input('localisation_agce'),
                         'flag_agce' =>  $request->input('flag_agce'),
-                        'flag_siege_agce' => $request->input('flag_siege_agce')
+                        'flag_siege_agce' => $request->input('flag_siege_agce'),
+                        'longitude_agce' => $request->input('longitude_agce'),
+                        'latitude_agce' => $request->input('latitude_agce')
                 ]);
                 Audit::logSave([
 

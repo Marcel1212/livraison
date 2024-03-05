@@ -50,7 +50,7 @@
                                             <th>Coordonnée GPS</th>
                                             <th>Contact</th>
                                             <th>Siège</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>

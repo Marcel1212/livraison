@@ -5,7 +5,7 @@
 @section('content')
 
     @php($Module='Paramétrage')
-    @php($titre='Liste des processus')
+    @php($titre='Liste des circuits de validation')
     @php($lien='processus')
 
     <!-- BEGIN: Content-->

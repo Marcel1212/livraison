@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Statut </label>
+                                        <label>Actif </label>
                                         <select name="flag_actif_users"
                                                 class="form-control form-control-sm ">
                                             <option value=true
