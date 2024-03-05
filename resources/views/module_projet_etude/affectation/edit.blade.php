@@ -12,9 +12,14 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper ">
             <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>
-                {{ $titre }}
+{{--                <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>--}}
+{{--                {{ $titre }}--}}
+                <span class="text-muted fw-light">
+                    <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
+                   <a href="{{route($lien)}}"> {{$Module}}</a> /  {{$titre}}
+                </span>
             </h5>
+
             @if($errors->any())
                 @foreach ($errors->all() as $error)
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -419,7 +424,7 @@
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chef de service sélectionné ? . Cette action est irréversible.")) return false;'  type="submit" name="action"
                                                         value="soumission_projet_etude_cd"
                                                         class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Soumettre au chef de service
+                                                    Imputer au chef de service
                                                 </button>
                                                 @endif
 
@@ -466,7 +471,7 @@
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chargé d étude sélectionné ? . Cette action est irréversible.")) return false;' type="submit" name="action"
                                                         value="soumission_projet_etude_cs"
                                                         class="ms-sm-3   me-sm-3 ms-1 btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Soumettre au  chargé d'étude
+                                                    Imputer au  chargé d'étude
                                                 </button>
                                                     @endif
 

@@ -333,6 +333,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                 FicheAgrement::create([
                     'id_demande' => $idprojetetude,
                     'id_comite_permanente' => $id2,
+                    'code_fiche_agrement' => 'PE',
                     'id_user_fiche_agrement' => Auth::user()->id,
                     'flag_fiche_agrement'=> true
                 ]);

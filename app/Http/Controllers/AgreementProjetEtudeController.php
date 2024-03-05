@@ -49,6 +49,7 @@ class AgreementProjetEtudeController extends Controller
             ->join('projet_etude','fiche_agrement.id_demande','projet_etude.id_projet_etude')
             ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
             ->join('users','projet_etude.id_charge_etude','users.id')
+            ->where('fiche_agrement.code_fiche_agrement','PE')
             ->where('projet_etude.flag_fiche_agrement',true);
 
         if ($role== 'ENTREPRISE'){
@@ -80,6 +81,7 @@ class AgreementProjetEtudeController extends Controller
     public function show($id)
     {
         $id = Crypt::UrldeCrypt($id);
+        $role = Menu::get_code_menu_profil(Auth::user()->id);
         $agreement = DB::table('fiche_agrement')
             ->select(['projet_etude.*','entreprises.raison_social_entreprises','users.name','users.prenom_users','fiche_agrement.created_at as date_valide_agrreement'])
             ->leftjoin('comite_gestion','fiche_agrement.id_comite_gestion','comite_gestion.id_comite_gestion')
@@ -88,11 +90,12 @@ class AgreementProjetEtudeController extends Controller
             ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
             ->join('users','projet_etude.id_charge_etude','users.id')
             ->where('projet_etude.flag_fiche_agrement',true)
-            ->where('projet_etude.id_entreprises',Auth::user()->id_partenaire)
-            ->where('id_projet_etude', $id)
-            ->first();
-
-
+            ->where('fiche_agrement.code_fiche_agrement','PE')
+            ->where('id_projet_etude', $id);
+                if ($role== 'ENTREPRISE'){
+                    $agreement = $agreement->where('projet_etude.id_entreprises',Auth::user()->id_partenaire);
+                }
+        $agreement = $agreement->first();
         return view('agreementprojetetude.show', compact('agreement'));
     }
 

@@ -30,7 +30,7 @@ Route::view("/500", "errors.500")->name('500');
 Route::match(['get', 'post'], '/', [App\Http\Controllers\IndexController::class, 'index'])->name('/');
 Route::match(['get', 'post'], '/login', [App\Http\Controllers\ConnexionController::class, 'login'])->name('login');
 Route::match(['get', 'post'], '/enrolements', [App\Http\Controllers\EnrolementController::class, 'create'])->name('enrolements');
-Route::match(['get', 'post'], '/projetetude', [App\Http\Controllers\ProjetEtudeController::class, 'index'])->name('projetetude.index');
+//Route::match(['get', 'post'], '/projetetude', [App\Http\Controllers\ProjetEtudeController::class, 'index'])->name('projetetude.index');
 Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
 Route::get('/secteuractivilitelistes/{id}', [App\Http\Controllers\EnrolementController::class, 'getsecteuractivilitelistes']);
 //Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
@@ -65,7 +65,7 @@ Route::group(['middleware' => ['auth']], function () {
         //'activites' => App\Http\Controllers\ActivitesController::class,
         //'centreimpot' => App\Http\Controllers\CentreImpotController::class,
         //'localite' => App\Http\Controllers\LocaliteController::class,
-        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
+//        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
         'projetformation' => App\Http\Controllers\ProjetFormationController::class,
         'enrolement' => App\Http\Controllers\EnrolementController::class,
         'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
@@ -96,19 +96,19 @@ Route::group(['middleware' => ['auth']], function () {
     /**********PROJET D'ETUDE DEBUT***********/
 
     //Demande projet d'étude
-    Route::get('projetetude', [ProjetEtudeController::class, 'index'])->name('projetetude');
-    Route::get('projetetude/index', [ProjetEtudeController::class, 'index'])->name('projetetude.index');
-    Route::get('projetetude/create', [ProjetEtudeController::class, 'create'])->name('projetetude.create');
-    Route::post('projetetude/store', [ProjetEtudeController::class, 'store'])->name('projetetude.store');
-    Route::get('projetetude/{id}/{id_etape}/edit', [ProjetEtudeController::class, 'edit'])->name('projetetude.edit');
-    Route::put('projetetude/{id}/{id_etape}/update', [ProjetEtudeController::class, 'update'])->name('projetetude.update');
-    Route::get('projetetude/{id}/{id_piece_projet}/deletefpe', [ProjetEtudeController::class, 'deletefpe'])->name('projetetude.deletefpe');
+//    Route::get('projetetude', [ProjetEtudeController::class, 'index'])->name('projetetude');
+//    Route::get('projetetude/index', [ProjetEtudeController::class, 'index'])->name('projetetude.index');
+//    Route::get('projetetude/create', [ProjetEtudeController::class, 'create'])->name('projetetude.create');
+//    Route::post('projetetude/store', [ProjetEtudeController::class, 'store'])->name('projetetude.store');
+//    Route::get('projetetude/{id}/{id_etape}/edit', [ProjetEtudeController::class, 'edit'])->name('projetetude.edit');
+//    Route::put('projetetude/{id}/{id_etape}/update', [ProjetEtudeController::class, 'update'])->name('projetetude.update');
+//    Route::get('projetetude/{id}/{id_piece_projet}/deletefpe', [ProjetEtudeController::class, 'deletefpe'])->name('projetetude.deletefpe');
 
     //Affectation projet d'étude
-    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
-    Route::get('affectationprojetetude/index', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude.index');
-    Route::get('affectationprojetetude/{id}/{id_etape}/edit', [AffectationProjetEtudeController::class, 'edit'])->name('affectationprojetetude.edit');
-    Route::put('affectationprojetetude/{id}/update', [AffectationProjetEtudeController::class, 'update'])->name('affectationprojetetude.update');
+//    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
+//    Route::get('affectationprojetetude/index', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude.index');
+//    Route::get('affectationprojetetude/{id}/{id_etape}/edit', [AffectationProjetEtudeController::class, 'edit'])->name('affectationprojetetude.edit');
+//    Route::put('affectationprojetetude/{id}/update', [AffectationProjetEtudeController::class, 'update'])->name('affectationprojetetude.update');
 
     //Traitement de projet d'étude
     Route::get('traitementprojetetude', [TraitementProjetEtudeController::class, 'index'])->name('traitementprojetetude');
@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('comitepermanenteprojetetude/{id}/show', [ComitePermanenteProjetEtudeController::class, 'show'])->name('comitepermanenteprojetetude.show');
     Route::get('comitepermanenteprojetetude/{id}/{id2}/agrement', [ComitePermanenteProjetEtudeController::class, 'agrement'])->name('comitepermanenteprojetetude.agrement');
     Route::get('comitepermanenteprojetetude/{id}/{id2}/{id3}/editer', [ComitePermanenteProjetEtudeController::class, 'editer'])->name('comitepermanenteprojetetude.editer');
-    Route::post('comitepermanenteprojetetude/{id}/{id2}/{id3}/agrementupdate', [ComitePermanenteProjetEtudeController::class, 'agrementupdate'])->name('comitepermanenteprojetetude.agrementupdate');
+    Route::put('comitepermanenteprojetetude/{id}/{id2}/{id3}/agrementupdate', [ComitePermanenteProjetEtudeController::class, 'agrementupdate'])->name('comitepermanenteprojetetude.agrementupdate');
 
     //agrement
     Route::get('agreementprojetetude', [AgreementProjetEtudeController::class, 'index'])->name('agreementprojetetude');
