@@ -47,7 +47,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Secteurs activités</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

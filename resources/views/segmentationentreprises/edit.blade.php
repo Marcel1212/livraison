@@ -1,11 +1,11 @@
-@if(auth()->user()->can('direction-create'))
-
+@if(auth()->user()->can('segmentationentreprises-edit'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
-    @php($titre='Liste des directions')
-    @php($soustitre='Ajouter une direction')
-    @php($lien='direction')
+    @php($titre='Liste des segmentations des entreprises')
+    @php($soustitre='Modifier une segmentation entreprises')
+    @php($lien='segmentationentreprises')
+    @php($lien1='caracteristiquemargedepartement')
     <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -17,15 +17,14 @@
                         <div class="col-12">
 
                             <div class="breadcrumb-wrapper">
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <h5 class="py-2 mb-1">
-                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
-                </h5>
+                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+            </h5>
             <div class="content-body">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -43,23 +42,37 @@
                                     <h4 class="card-title">{{$soustitre}} </h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route($lien.'.store') }}" method="POST">
+                                    <form action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($segementation->id_caracteristique_marge_departement)) }}" method="POST">
                                         @csrf
+                                        @method('PUT')
                                         <div class="row">
-                                            <div class="col-md-10 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libellé direction </label>
-                                                    <input type="text" name="libelle_direction" id="libelle_direction"
-                                                           class="form-control form-control-sm" placeholder="Code">
+                                                    <label>Direction </label>
+                                                    <select class="select2 form-select" data-allow-clear="true" name="id_departement">
+                                                        <?= $departement; ?>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 col-12">
+
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Actif </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_direction"
-                                                           id="flag_direction"  >
+                                                    <label>Marge inférieure</label>
+                                                    <input type="number" min="0" name="marge_inferieur_cmd" id="marge_inferieur_cmd"
+                                                    value="{{$segementation->marge_inferieur_cmd }}"
+                                                    class="form-control form-control-sm" >
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Marge supérieure</label>
+                                                    <input type="number" min="0" name="marge_superieur_cmd" id="marge_superieur_cmd"
+                                                    value="{{$segementation->marge_superieur_cmd }}"
+                                                    class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-12" align="right">
                                                 <hr>
@@ -73,6 +86,8 @@
                                             </div>
                                         </div>
                                     </form>
+
+
                                 </div>
                             </div>
                         </div>
@@ -85,7 +100,9 @@
 
 @endsection
 @else
-    <script type="text/javascript">
-        window.location = "{{ url('/403') }}";//here double curly bracket
-    </script>
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
 @endif
+
+

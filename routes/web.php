@@ -243,10 +243,18 @@ Route::group(['middleware' => ['auth']], function () {
             'departement' => App\Http\Controllers\DepartementController::class,
         ]);
 
-        Route::resources([
+        /*Route::resources([
             'caracteristiquemargedepartement' => App\Http\Controllers\CaracteristiqueMargeDepartementController::class,
+        ]);*/
+    });
+
+    Route::group(['middleware' => ['can:segmentationentreprises-index']], function () {
+        Route::resources([
+            'segmentationentreprises' => App\Http\Controllers\CaracteristiqueMargeDepartementController::class,
         ]);
     });
+
+
 
     Route::group(['middleware' => ['can:service-index']], function () {
         Route::resources([

@@ -1,11 +1,10 @@
-@if(auth()->user()->can('direction-create'))
-
+@if(auth()->user()->can('segmentationentreprises-create'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
-    @php($titre='Liste des directions')
-    @php($soustitre='Ajouter une direction')
-    @php($lien='direction')
+    @php($titre='Liste des segmentations des entreprises')
+    @php($soustitre='Ajouter une segmentation entreprises')
+    @php($lien='segmentationentreprises')
     <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>
@@ -46,18 +45,28 @@
                                     <form action="{{ route($lien.'.store') }}" method="POST">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-md-10 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libellé direction </label>
-                                                    <input type="text" name="libelle_direction" id="libelle_direction"
-                                                           class="form-control form-control-sm" placeholder="Code">
+                                                    <label>Direction </label>
+                                                    <select class="select2 form-select" data-allow-clear="true" name="id_departement">
+                                                        <?= $departement; ?>
+                                                    </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 col-12">
+
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Actif </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_direction"
-                                                           id="flag_direction"  >
+                                                    <label>Marge inférieure</label>
+                                                    <input type="number" min="0" name="marge_inferieur_cmd" id="marge_inferieur_cmd"
+                                                    class="form-control form-control-sm" >
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Marge supérieure</label>
+                                                    <input type="number" min="0" name="marge_superieur_cmd" id="marge_superieur_cmd"
+                                                    class="form-control form-control-sm" >
                                                 </div>
                                             </div>
 
@@ -85,7 +94,7 @@
 
 @endsection
 @else
-    <script type="text/javascript">
-        window.location = "{{ url('/403') }}";//here double curly bracket
-    </script>
+ <script type="text/javascript">
+    window.location = "{{ url('/403') }}";//here double curly bracket
+</script>
 @endif

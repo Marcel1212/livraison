@@ -8,6 +8,7 @@ use App\Models\CaracteristiqueTypeFormation;
 use Illuminate\Http\Request;
 use App\Models\Departement;
 use App\Models\Direction;
+use App\Models\Service;
 
 class DepartementController extends Controller
 {
@@ -129,7 +130,10 @@ class DepartementController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return view('departement.edit', compact('departement','direction','carateristiquedepartements'));
+
+        $services = Service::where([['id_departement','=',$departement->id_departement]])->orderBy('libelle_service',)->get();
+
+        return view('departement.edit', compact('departement','direction','carateristiquedepartements','services'));
     }
 
     /**

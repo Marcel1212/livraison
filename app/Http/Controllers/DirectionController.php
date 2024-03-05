@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Agence;
+use App\Models\Departement;
 use App\Models\Direction;
 
 class DirectionController extends Controller
@@ -110,7 +111,10 @@ class DirectionController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return view('direction.edit', compact('direction'));
+
+        $departementss = Departement::where([['id_direction','=',$direction->id_direction]])->orderBy('libelle_departement',)->get();
+        //dd($departementss);
+        return view('direction.edit', compact('direction','departementss'));
     }
 
     /**

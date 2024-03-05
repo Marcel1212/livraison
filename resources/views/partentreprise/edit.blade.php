@@ -64,7 +64,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input"
                                                            name="flag_actif_part_entreprise"
                                                            {{  ($part->flag_actif_part_entreprise == true ? ' checked' : '') }}

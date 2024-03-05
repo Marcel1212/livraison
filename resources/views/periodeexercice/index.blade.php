@@ -52,7 +52,7 @@
                                             <th>Date de prolongation </th>
                                             <th>Commentaire </th>
                                             <th>Motif prolongation </th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
