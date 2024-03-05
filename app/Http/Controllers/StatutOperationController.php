@@ -71,8 +71,7 @@ class StatutOperationController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return redirect()->route('statutoperations.index')
-            ->with('success', 'Statut Operation ajouté avec succès.');
+        return redirect()->route('statutoperations.index')->with('success', 'Statut Operation ajouté avec succès.');
     }
 
     /**
@@ -132,8 +131,7 @@ class StatutOperationController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return redirect()->route('statutoperations.index')
-            ->with('success', 'Statut Operation mis à jour avec succès.');
+        return redirect()->route('statutoperations.index')->with('success', 'Statut Operation mis à jour avec succès.');
     }
 
     /**
