@@ -19,6 +19,7 @@ use App\Helpers\Email;
 use App\Helpers\GenerateCode as Gencode;
 use App\Models\FormeJuridique;
 use App\Models\SecteurActivite;
+use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 use App\Rules\Recaptcha;
 use Hash;
@@ -49,44 +50,29 @@ class EnrolementController extends Controller
      */
     public function create()
     {
-        /******************** secteuractivites *********************************/
+        //Secteur d'activité
         $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-            ->orderBy('libelle_secteur_activite')
-            ->get();
-        $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
-        foreach ($secteuractivites as $comp) {
-            $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
-        }
-        /******************** CentreImpot *********************************/
+                                           ->orderBy('libelle_secteur_activite')
+                                           ->get();
+
+        //Centre des impots
         $centreimpots = CentreImpot::where('flag_centre_impot', '=', true)
-            ->orderBy('libelle_centre_impot')
-            ->get();
-        $centreimpot = "<option value=''> Selectionnez un centre impot </option>";
-        foreach ($centreimpots as $comp) {
-            $centreimpot .= "<option value='" . $comp->id_centre_impot . "'>" . mb_strtoupper($comp->libelle_centre_impot) . " </option>";
-        }
-        /******************** Localite *********************************/
+                                   ->orderBy('libelle_centre_impot')
+                                   ->get();
+
+        //Localités
         $localites = Localite::where('flag_localite', '=', true)
-            ->orderBy('libelle_localite')
-            ->get();
-        $localite = "<option value=''> Selectionnez une localite </option>";
-        foreach ($localites as $comp) {
-            $localite .= "<option value='" . $comp->id_localite . "'>" . mb_strtoupper($comp->libelle_localite) . " </option>";
-        }
-        /******************** FormeJuridique *********************************/
-        $formejuridiques = FormeJuridique::where('flag_actif_forme_juridique', '=', true)->orderBy('libelle_forme_juridique',)->get();
-        $formejuridique = "<option value=''> Selectionnez une forme juridique </option>";
-        foreach ($formejuridiques as $comp) {
-            $formejuridique .= "<option value='" . $comp->code_forme_juridique . '/' . $comp->id_forme_juridique . "'>" . mb_strtoupper($comp->libelle_forme_juridique) . " </option>";
-        }
+                             ->orderBy('libelle_localite')
+                             ->get();
+        //Forme juridiques
+        $formejuridiques = FormeJuridique::where('flag_actif_forme_juridique', '=', true)
+                                         ->orderBy('libelle_forme_juridique')
+                                         ->get();
+        //Pays
+        $pays = Pays::where('flag_actif_pays', '=', true)
+                    ->get();
 
-        /******************** Pays *********************************/
-        $pays = Pays::where('flag_actif_pays', '=', true)->get();
-        foreach ($pays as $comp) {
-            $pay = "<option value='" . $comp->id_pays . "'> +" . $comp->indicatif . " </option>";
-        }
-
-        return view('enrolement.create', compact('secteuractivite', 'secteuractivites', 'centreimpot', 'localite', 'pay', 'formejuridique'));
+        return view('enrolement.create', compact('secteuractivites', 'centreimpots', 'localites', 'pays', 'formejuridiques'));
     }
 
 
@@ -104,7 +90,6 @@ class EnrolementController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
-
             $this->validate($request, [
                 'id_forme_juridique' => 'required',
             ], [
@@ -115,94 +100,108 @@ class EnrolementController extends Controller
             $valcodeformejuri = $exploeformejuri[0];
             $validformejuri = $exploeformejuri[1];
             if ($valcodeformejuri == 'PR') {
+                $data = $request->all();
+
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
-                    'email_demande_enrolement' => 'required|email|unique:users,email',
+                    'email_demande_enrolement' =>['required','email', 'unique:users,email',
+                            Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                                $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
+                                    ->where('flag_valider_demande_enrolement',true);
+                            })
+                        ],
                     'indicatif_demande_enrolement' => 'required',
-                    'tel_demande_enrolement' => 'required|unique:users,tel_users',
+                    'tel_demande_enrolement' => ['required', 'unique:users,tel_users',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('tel_demande_enrolement',$data['tel_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],
                     'id_localite' => 'required',
                     'id_centre_impot' => 'required',
-                    //'id_activites' => 'required',
                     'id_secteur_activite' => 'required',
-                    'ncc_demande_enrolement' => 'required|min:6|max:9||unique:users,login_users',
-                    'rccm_demande_enrolement' => 'required',
-                    'numero_cnps_demande_enrolement' => 'required',
+                    'ncc_demande_enrolement' =>['required', 'min:6', 'max:9', 'unique:users,login_users',
+                            Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                                $query->where('ncc_demande_enrolement',$data['ncc_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                            })
+                    ], 'rccm_demande_enrolement' => ['required',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('rccm_demande_enrolement',$data['rccm_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],'numero_cnps_demande_enrolement' => ['required',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('numero_cnps_demande_enrolement',$data['numero_cnps_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],
+
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_rccm_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                    //'captcha' => 'required|captcha',
                     'g-recaptcha-response' => ['required', new ReCaptcha]
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
-                    'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
+                    'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
                     'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
-                    'tel_demande_enrolement.unique' => 'Cet contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
-                    'id_localite.required' => 'Veuillez selectionnez une localite.',
-                    'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
-                    //'id_activites.required' => 'Veuillez selectionner une activité.',
-                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
-                    'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
-                    'ncc_demande_enrolement.min' => 'Le numero NCC doit avoir au moins 6 caractère.',
-                    'ncc_demande_enrolement.max' => 'Le numero NCC doit avoir au plus 9 caractère.',
-                    'ncc_demande_enrolement.unique' => 'Cet numero NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
-                    //'ncc_demande_enrolement.unique' => 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
+                    'tel_demande_enrolement.unique' => 'Ce contact est déjà utilisé dans le système. Veuillez contacter l\'administrateur.',
+                    'id_localite.required' => 'Veuillez sélectionner une localité.',
+                    'id_centre_impot.required' => 'Veuillez sélectionner un centre impot.',
+                    'id_secteur_activite.required' => 'Veuillez sélectionner un secteur activité.',
+                    'ncc_demande_enrolement.required' => 'Veuillez ajouter un numéro de compte contribuable (NCC)',
+                    'ncc_demande_enrolement.min' => 'Le numéro de compte contribuable (NCC) doit avoir au moins 6 caractères',
+                    'ncc_demande_enrolement.max' => 'Le numéro de compte contribuable (NCC) doit avoir au plus 9 caractères',
+                    'ncc_demande_enrolement.unique' => 'Cet numéro compte contribuable (NCC) est déjà utilisé dans le système. Veuillez contacter l\'administrateur.',
                     'rccm_demande_enrolement.required' => 'Veuillez ajouter un RCCM.',
-                    'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numero cnps.',
+                    'numero_cnps_demande_enrolement.required' => 'Veuillez ajouter un numéro cnps.',
                     'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
                     'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
-                    'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une piéce attestation RCCM.',
-                    'piece_rccm_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce attestation RCCM.',
-                    'piece_attestation_immatriculati.required' => 'Veuillez ajouter une piéce attestation immatriculation.',
-                    'piece_attestation_immatriculati.uploaded' => 'Veuillez ajouter une piéce attestation immatriculation.',
-                    'piece_attestation_immatriculati.mimes' => 'Les formats requises pour la pièce de l\'attestataion immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_attestation_immatriculati.max' => 'la taille maximale doit etre 5 MegaOctets.',
-                    'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
-                    'piece_rccm_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la RCCM est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_rccm_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
-                    //'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
-                    //'captcha.required' => 'Veuillez saisir le vérificateur de securité .',
-                    //'captcha.captcha' => 'Vérificateur de securité saisi incorrect.',
+                    'piece_rccm_demande_enrolement.required' => 'Veuillez ajouter une pièce attestation RCCM.',
+                    'piece_rccm_demande_enrolement.uploaded' => 'Veuillez ajouter une pièce attestation RCCM.',
+                    'piece_attestation_immatriculati.required' => 'Veuillez ajouter une pièce attestation immatriculation.',
+                    'piece_attestation_immatriculati.uploaded' => 'Veuillez ajouter une pièce attestation immatriculation.',
+                    'piece_attestation_immatriculati.mimes' => 'Les formats requis pour la pièce de l\'attestation immatriculation est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                    'piece_attestation_immatriculati.max' => 'la taille maximale doit être 5 MegaOctets.',
+                    'piece_dfe_demande_enrolement.mimes' => 'Les formats requis pour la pièce de la DFE sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit être 5 MegaOctets.',
+                    'piece_rccm_demande_enrolement.mimes' => 'Les formats requis pour la pièce de la RCCM sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
+                    'piece_rccm_demande_enrolement.max' => 'la taille maximale doit être de 5 MegaOctets.',
+                    'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
                 ]);
 
-                $data = $request->all();
 
-                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfiencc) >= 1) {
+//                    return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
-                if (count($verfiencc) >= 1) {
+//                $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement', '=', $data['rccm_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccrcm) >= 1) {
+//                    return redirect()->route('enrolements')->with('error', 'Ce numéro RCCM est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
-                    return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
-
-                $verfienccrcm = DemandeEnrolement::where([['rccm_demande_enrolement', '=', $data['rccm_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccrcm) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Ce numéro RCCM est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
-
-                $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement', '=', $data['numero_cnps_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccCNPS) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Ce numéro CNPS est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
-
-                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccNumerotel) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
-
-                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccEmail) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
+//                $verfienccCNPS = DemandeEnrolement::where([['numero_cnps_demande_enrolement', '=', $data['numero_cnps_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccCNPS) >= 1) {
+//                    return redirect()->route('enrolements')->with('error', 'Ce numéro CNPS est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
+//
+//                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccNumerotel) >= 1) {
+//                    return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
+//
+//                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccEmail) >= 1) {
+//                    return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
                 $input = $request->all();
 
@@ -433,61 +432,76 @@ class EnrolementController extends Controller
             }
 
             if ($valcodeformejuri == 'PU') {
+                $data = $request->all();
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
-                    'email_demande_enrolement' => 'required|email|unique:users,email',
+                    'email_demande_enrolement' =>['required','email', 'unique:users,email',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],
                     'indicatif_demande_enrolement' => 'required',
-                    'tel_demande_enrolement' => 'required|unique:users,tel_users',
+                    'tel_demande_enrolement' => ['required', 'unique:users,tel_users',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('tel_demande_enrolement',$data['tel_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],
                     'id_localite' => 'required',
                     'id_centre_impot' => 'required',
                     //'id_activites' => 'required',
                     'id_secteur_activite' => 'required',
-                    'ncc_demande_enrolement' => 'required|min:6|max:9||unique:users,login_users',
+                    'ncc_demande_enrolement' =>['required', 'min:6', 'max:9', 'unique:users,login_users',
+                        Rule::unique('demande_enrolement')->where(function($query) use ($data) {
+                            $query->where('ncc_demande_enrolement',$data['ncc_demande_enrolement'])
+                                ->where('flag_valider_demande_enrolement',true);
+                        })
+                    ],
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'g-recaptcha-response' => ['required', new Recaptcha],
                 ], [
-                    'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
-                    'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
-                    'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
-                    'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
-                    'tel_demande_enrolement.required' => 'Veuillez ajouter un contact.',
-                    'tel_demande_enrolement.unique' => 'Cet contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
-                    'id_localite.required' => 'Veuillez selectionnez une localite.',
-                    'id_centre_impot.required' => 'Veuillez selectionner un centre impot.',
-                    //'id_activites.required' => 'Veuillez selectionner une activité.',
-                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
-                    'ncc_demande_enrolement.required' => 'Veuillez ajouter un NCC.',
-                    'ncc_demande_enrolement.min' => 'Le numero NCC doit avoir au moins 6 caractère.',
-                    'ncc_demande_enrolement.max' => 'Le numero NCC doit avoir au plus 9 caractère.',
-                    'ncc_demande_enrolement.unique' => 'Cet numero NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.',
-                    'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE.',
-                    'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE.',
-                    'piece_dfe_demande_enrolement.mimes' => 'Les formats requises pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
-                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit etre 5 MegaOctets.',
+                    'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale',
+                    'email_demande_enrolement.required' => 'Veuillez ajouter un email',
+                    'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur',
+                    'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif',
+                    'tel_demande_enrolement.required' => 'Veuillez ajouter un contact',
+                    'tel_demande_enrolement.unique' => 'Cet contact est déjà utilisé dans le système. Veuillez contacter l\'administrateur',
+                    'id_localite.required' => 'Veuillez sélectionner une localité',
+                    'id_centre_impot.required' => 'Veuillez sélectionner un centre d\'impôt',
+                    'id_secteur_activite.required' => 'Veuillez sélectionner un secteur d\'activité',
+                    'ncc_demande_enrolement.required' => 'Veuillez ajouter un numéro de compte contribuable (NCC)',
+                    'ncc_demande_enrolement.min' => 'Le numéro de compte contribuable (NCC) doit avoir au moins 6 caractères',
+                    'ncc_demande_enrolement.max' => 'Le numéro de compte contribuable (NCC) doit avoir au plus 9 caractères',
+                    'ncc_demande_enrolement.unique' => 'Ce numéro de compte contribuable (NCC) est déjà utilisé dans le système. Veuillez contactez l\'administrateur',
+                    'piece_dfe_demande_enrolement.required' => 'Veuillez ajouter une piéce DFE',
+                    'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE',
+                    'piece_dfe_demande_enrolement.mimes' => 'Les formats requis pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'piece_dfe_demande_enrolement.max' => 'la taille maximale doit être de 5 MégaOctets',
+                    'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité'
                 ]);
 
-                $data = $request->all();
 
-                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//                $verfiencc = DemandeEnrolement::where([['ncc_demande_enrolement', '=', $data['ncc_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
 
-                if (count($verfiencc) >= 1) {
+//                if (count($verfiencc) >= 1) {
+//
+//                    return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
-                    return redirect()->route('enrolements')->with('error', 'Ce numéro NCC est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
+//                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccNumerotel) >= 1) {
+//
+//                    return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
-                $verfienccNumerotel = DemandeEnrolement::where([['tel_demande_enrolement', '=', $data['tel_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccNumerotel) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Ce contact est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
-
-                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
-
-                if (count($verfienccEmail) >= 1) {
-
-                    return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
-                }
+//                $verfienccEmail = DemandeEnrolement::where([['email_demande_enrolement', '=', $data['email_demande_enrolement']], ['flag_valider_demande_enrolement', '=', true]])->get();
+//
+//                if (count($verfienccEmail) >= 1) {
+//
+//                    return redirect()->route('enrolements')->with('error', 'Cet mail est déjà utilisé dans le système. Veuillez contactez l\'administrateur.');
+//                }
 
                 $input = $request->all();
 
@@ -506,7 +520,7 @@ class EnrolementController extends Controller
                         $input['piece_dfe_demande_enrolement'] = $fileName1;
                     } else {
                         return redirect()->route('enrolements')
-                            ->with('error', 'l\extension du fichier de la DFE n\'est pas correcte');
+                            ->with('error', 'l\'extension du fichier de la DFE n\'est pas correcte');
                     }
 
                 }
@@ -540,18 +554,14 @@ class EnrolementController extends Controller
                     $sujet = "Enrolement FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher,  $rais ,</b>
-                                    <br><br>Votre demande d\'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
+                                    <br><br>Votre demande d'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
                                     SMS dans 48h ouvrées
-
                                     <br><br><br>
-
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-
-
                       $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
 
@@ -681,7 +691,7 @@ class EnrolementController extends Controller
         }
 
         return redirect()->route('enrolements')
-            ->with('success', '<strong>Félicitations<strong> <br>Votre demande d\'enrôlement a été effectuée avec succès.<br>Le traitement de votre demande s\'effectuera dans un délai de 48h !');
+            ->with('success', '<strong>Félicitations <br>Votre demande d\'enrôlement a été effectuée avec succès.<br>Le traitement de votre demande s\'effectuera dans un délai de 48h !</strong>');
     }
 
     /**

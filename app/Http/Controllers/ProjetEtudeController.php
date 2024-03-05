@@ -8,27 +8,19 @@ use App\Models\Direction;
 use App\Models\SecteurActivite;
 use App\Models\TypeEntreprise;
 use Illuminate\Http\Request;
-use App\Models\Activites;
-use App\Models\CentreImpot;
-use App\Models\Localite;
 use App\Models\Pays;
 use App\Models\Entreprises;
-use App\Models\Pieces;
 use App\Models\ProjetEtude;
 use App\Models\PiecesProjetEtude;
-use Carbon\Carbon;
-use App\Helpers\Menu;
 use App\Helpers\Crypt;
-use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\GenerateCode as Gencode;
-use Spatie\Permission\Models\Role;
 use Hash;
 use DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Image;
 use File;
-use Auth;
 
 class ProjetEtudeController extends Controller
 {
@@ -37,9 +29,12 @@ class ProjetEtudeController extends Controller
      */
     public function index()
     {
-        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
-        if(!empty($infoentrprise)){
-            $projet_etudes = ProjetEtude::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+        //Récupérer l'utilisateur connecté
+        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+
+        if(isset($infoentreprise)){
+            //Récupérer les projets d'études soumis par une entreprise
+            $projet_etudes = ProjetEtude::where([['id_entreprises','=',$infoentreprise->id_entreprises]])->get();
 
             Audit::logSave([
                 'action'=>'VISITE',
@@ -49,11 +44,10 @@ class ProjetEtudeController extends Controller
                 'objet'=>'PROJET ETUDE'
             ]);
 
-            return view('projetetude.index',compact('projet_etudes'));
+            return view('module_projet_etude.demande.index',compact('projet_etudes'));
         }else{
             return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
         }
-
     }
 
     /**
@@ -61,10 +55,17 @@ class ProjetEtudeController extends Controller
      */
     public function create()
     {
-        $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
-
         $pays = Pays::all();
+        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+
         $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+
         foreach ($pays as $comp) {
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
@@ -77,7 +78,6 @@ class ProjetEtudeController extends Controller
         foreach ($secteuractivites as $comp) {
             $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
-
 
         /******************** secteuractivites *********************************/
         $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
@@ -96,7 +96,7 @@ class ProjetEtudeController extends Controller
             'objet'=>'PROJET ETUDE'
         ]);
 
-        return view('projetetude.create', compact('infoentreprise','secteuractivite_projet','pay','secteuractivites'));
+        return view('module_projet_etude.demande.create', compact('infoentreprise','secteuractivite_projet','pay','secteuractivites'));
     }
 
     /**
@@ -233,7 +233,7 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PROJET ETUDE'
                 ]);
 
-                return view('projetetude.edit', compact('id_etape',
+                return view('module_projet_etude.demande.edit', compact('id_etape',
                     'avant_projet_tdr',
                     'courier_demande_fin',
                     'dossier_intention',
@@ -603,14 +603,5 @@ class ProjetEtudeController extends Controller
         }else{
 
         }
-    }
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

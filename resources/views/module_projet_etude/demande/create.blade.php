@@ -1,15 +1,20 @@
+@if(auth()->user()->can('projetetude-create'))
 @extends('layouts.backLayout.designadmin')
 @section('content')
 
     @php($Module='Demandes')
-    @php($titre='Liste des plans de formations')
-    @php($soustitre='Demande de plan de formation')
+    @php($titre='Liste des projets d\'études')
+    @php($soustitre='Demande de projet d\'étude')
     @php($lien='projetetude')
 
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
-        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+        <h5 class="py-2 mb-1">
+        <span class="text-muted fw-light">
+            <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
+           <a href="{{route($lien)}}"> {{$Module}}</a> /  {{$titre}}</span>
+        </h5>
     </h5>
 
     <div class="content-body">
@@ -121,6 +126,18 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Type de forme juridique </label>
+                                                <input type="number" name="fax_entreprises" id="fax_entreprises"
+                                                       class="form-control form-control-sm"
+                                                       value="{{@$infoentreprise->fax_entreprises}}" disabled="disabled">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
                                                 <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
@@ -179,17 +196,43 @@
                     <div class="tab-pane fade show active" id="navs-top-infoprojetetude" role="tabpanel">
                         <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
-                        <div class="col-md-12 col-10" align="center">
-                            <div class="mb-1">
-                                <label>Titre du projet <span
-                                        style="color:red;">*</span>
-                                </label>
-                                <input type="text" name="titre_projet"
-                                       required="required" id="titre_projet"
-                                       class="form-control form-control-sm"
-                                       placeholder="ex : Perfectionnement ..">
+                        <div class="col-md-12 col-10">
+                            <div class="row">
+                                <div class="mb-1 col-md-12">
+                                    <label>Titre du projet <span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <input type="text" name="titre_projet"
+                                           required="required" id="titre_projet"
+                                           class="form-control form-control-sm">
+                                </div>
                             </div>
+
                         </div>
+
+                            <div class="col-md-12 col-10">
+                                <div class="row">
+                                    <div class="mb-1 col-md-6">
+                                        <label>Montant du projet <span
+                                                style="color:red;">*</span>
+                                        </label>
+                                        <input type="text" name="montant_projet"
+                                               required="required" id="montant_projet"
+                                               class="form-control form-control-sm">
+                                    </div>
+
+                                    <div class="mb-1 col-md-6">
+                                        <label>Secteur d'activité du projet <span
+                                                style="color:red;">*</span>
+                                        </label>
+                                        <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
+                                                <?= $secteuractivite_projet; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         <div class="row">
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
@@ -266,5 +309,9 @@
         </div>
     </div>
 @endsection
-
+@else
+    <script type="text/javascript">
+        window.location = "{{ url('/403') }}";//here double curly bracket
+    </script>
+@endif
 

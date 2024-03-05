@@ -9,7 +9,8 @@
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
-        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
+        <span class="text-muted fw-light">
+            <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> / {{$Module}} /  {{$titre}}</span>
     </h5>
 
     @if ($message = Session::get('success'))
