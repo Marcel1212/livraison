@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use Illuminate\Http\Request;
 use App\Helpers\Audit;
@@ -35,6 +35,7 @@ use Image;
 use File;
 use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
+use App\Http\Controllers\Controller;
 
 class TratementPlanFormationController extends Controller
 {
@@ -66,7 +67,7 @@ class TratementPlanFormationController extends Controller
 
         ]);
 
-        return view('traitementplanformation.index',compact('planformations'));
+        return view('planformations.traitementplanformation.index',compact('planformations'));
     }
 
     /**
@@ -117,7 +118,7 @@ class TratementPlanFormationController extends Controller
 
         ]);
 
-        return view('traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -235,7 +236,7 @@ class TratementPlanFormationController extends Controller
 
                 ]);
 
-        return view('traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','secteuractivites','butformations'));
+        return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','secteuractivites','butformations'));
 
     }
 

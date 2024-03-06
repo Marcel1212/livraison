@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\Direction;
 use App\Models\Entreprises;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PageSelect;
 use App\Models\PlanFormation;

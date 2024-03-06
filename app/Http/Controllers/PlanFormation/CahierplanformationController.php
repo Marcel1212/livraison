@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Audit;
@@ -31,6 +31,7 @@ use App\Models\Departement;
 use App\Models\Direction;
 use App\Models\User;
 Use DB;
+use App\Http\Controllers\Controller;
 
 class CahierplanformationController extends Controller
 {
@@ -52,7 +53,7 @@ class CahierplanformationController extends Controller
 
         ]);
 
-        return view("cahierplanformation.index", compact("cahiers"));
+        return view("planformations.cahierplanformation.index", compact("cahiers"));
     }
 
     public function create(){
@@ -75,7 +76,7 @@ class CahierplanformationController extends Controller
 
             ]);
 
-        return view("cahierplanformation.create",compact('departements'));
+        return view("planformations.cahierplanformation.create",compact('departements'));
 
     }
 
@@ -162,7 +163,7 @@ class CahierplanformationController extends Controller
         ]);
 
 
-        return view('cahierplanformation.edit', compact('cahier','id','idetape','planformations','cahierplansformations','departements'));
+        return view('planformations.cahierplanformation.edit', compact('cahier','id','idetape','planformations','cahierplansformations','departements'));
     }
 
     public function editer($id,$id2,$id3)
@@ -263,7 +264,7 @@ class CahierplanformationController extends Controller
 
         ]);
 
-        return view('cahierplanformation.editer', compact(
+        return view('planformations.cahierplanformation.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
             'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
             'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id','idetape','idcomite','montantactionplanformation','montantactionplanformationacc'
@@ -300,7 +301,7 @@ class CahierplanformationController extends Controller
 
         ]);
 
-        return view('cahierplanformation.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.cahierplanformation.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     public function update(Request $request, $id, $id1)
@@ -504,6 +505,6 @@ class CahierplanformationController extends Controller
 
         ]);
 
-        return view('cahierplanformation.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
+        return view('planformations.cahierplanformation.etat',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
     }
 }

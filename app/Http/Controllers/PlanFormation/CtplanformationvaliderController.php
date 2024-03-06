@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use Illuminate\Http\Request;
 use App\Helpers\Menu;
@@ -37,6 +37,7 @@ use App\Models\User;
 use Image;
 use File;
 use Auth;
+use App\Http\Controllers\Controller;
 
 class CtplanformationvaliderController extends Controller
 {
@@ -85,7 +86,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('ctplanformationvalider.index',compact('Resultat'));
+        return view('planformations.ctplanformationvalider.index',compact('Resultat'));
 
     }
 
@@ -137,7 +138,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('ctplanformationvalider.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.ctplanformationvalider.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -243,7 +244,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
+        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
     }
 
@@ -366,7 +367,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
+        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
     }
 

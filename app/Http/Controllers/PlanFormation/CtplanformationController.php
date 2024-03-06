@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use Illuminate\Http\Request;
 use App\Helpers\Audit;
@@ -36,6 +36,7 @@ use App\Models\User;
 use Image;
 use File;
 use Auth;
+use App\Http\Controllers\Controller;
 
 class CtplanformationController extends Controller
 {
@@ -72,7 +73,7 @@ class CtplanformationController extends Controller
 
         ]);
 
-        return view('ctplanformation.index',compact('planformations'));
+        return view('planformations.ctplanformation.index',compact('planformations'));
     }
 
     /**
@@ -123,7 +124,7 @@ class CtplanformationController extends Controller
 
         ]);
 
-        return view('ctplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.ctplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -231,7 +232,7 @@ class CtplanformationController extends Controller
 
         ]);
 
-        return view('ctplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
+        return view('planformations.ctplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
 
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use Illuminate\Http\Request;
 use App\Models\Cahier;
@@ -32,6 +32,7 @@ use Carbon\Carbon;
 use Image;
 use File;
 use Auth;
+use App\Http\Controllers\Controller;
 
 class ComitePleniereController extends Controller
 {
@@ -42,7 +43,7 @@ class ComitePleniereController extends Controller
     {
         //$Resultat = ComitePleniere::all();
         $Resultat =  $demandeenroles = ComitePleniere::where('code_pieces','=', 'PF')->get();
-        return view('comitepleniere.index', compact('Resultat'));
+        return view('planformations.comitepleniere.index', compact('Resultat'));
     }
 
     /**
@@ -53,7 +54,7 @@ class ComitePleniereController extends Controller
 
         $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',true]])->get();
 
-        return view('comitepleniere.create', compact('planformations'));
+        return view('planformations.comitepleniere.create', compact('planformations'));
     }
 
     /**
@@ -122,7 +123,7 @@ class ComitePleniereController extends Controller
 
         $planformations = PlanFormation::where([['flag_soumis_ct_plan_formation','=',true],['flag_valide_action_des_plan_formation','=',false],['flag_plan_validation_rejeter_par_comite_en_ligne','=',true]])->get();
 
-        return view('comitepleniere.edit', compact('comitepleniere','comitepleniereparticipant','cahiers','conseiller','planformations','idetape'));
+        return view('planformations.comitepleniere.edit', compact('comitepleniere','comitepleniereparticipant','cahiers','conseiller','planformations','idetape'));
 
     }
 
@@ -276,7 +277,7 @@ class ComitePleniereController extends Controller
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
         }
 
-        return view('comitepleniere.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.comitepleniere.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
 
@@ -348,7 +349,7 @@ class ComitePleniereController extends Controller
         $nombreactionvalider = count($actionvalider);
         $nombreactionvaliderparconseiller = count($actionvaliderparconseiller);
         //dd($nombreactionvalider);
-        return view('comitepleniere.editer', compact(
+        return view('planformations.comitepleniere.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
             'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
             'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id','idetape'
