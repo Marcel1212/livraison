@@ -125,7 +125,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_ctf" {{  ($caracteristique->flag_ctf == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>

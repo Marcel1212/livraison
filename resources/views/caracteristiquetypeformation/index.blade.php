@@ -48,7 +48,7 @@
                                             <th>Type de formation</th>
                                             <th>Libellé</th>
                                             <th>Montant</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
