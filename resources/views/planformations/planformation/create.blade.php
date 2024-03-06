@@ -3,15 +3,20 @@
 use App\Helpers\AnneeExercice;
 use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
+use App\Helpers\PartEntreprisesHelper;
 
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
 
-$mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
+//$mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
+
+$mttprevisionnelcotisation = MoyenCotisation::get_verif_cotisation($infoentrprise->id_entreprises);
 
 //dd($mttprevisionnelcotisation);
 
+$part = PartEntreprisesHelper::get_part_entreprise();
+//dd($part->valeur_part_entreprise);
 ?>
 
 @if(auth()->user()->can('planformation-create'))
@@ -65,11 +70,28 @@ $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoe
                     @if($mttprevisionnelcotisation==0)
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                             <div class="alert-body" style="text-align:center">
-                              <stong>Attention : </stong>  Cher(e) client, sauf erreur ou omission de notre part, vous n'êtes pas à jour de votre cotisation. <br/> Vous êtes prié(e) de  le faire dans les plus brefs délais. <br/> Si vous l'avez fait dans l'intervalle, merci de ne pas tenir compte de ce message.
+                              <stong>Attention : </stong>  Pour pouvoir bénéficier de nos services, nous vous prions de bien vouloir vous mettre à jour.
                             </div>
                             <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
                         </div>
                     @else
+
+                    <script type="text/javascript">
+
+                        function FuncCalculPartENtre(valeurpart) {
+
+                            var ValueMS = document.getElementById("masse_salariale").value;
+
+                            var partEntreprise = ValueMS*valeurpart;
+
+                            document.getElementById('part_entreprise').setAttribute('value', partEntreprise);
+
+
+                        };
+
+                    </script>
+
+
                         <div class="col-xl-12">
                         <h6 class="text-muted"></h6>
                         <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -83,7 +105,7 @@ $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoe
                                 data-bs-target="#navs-top-planformation"
                                 aria-controls="navs-top-planformation"
                                 aria-selected="true">
-                                Plan de formation
+                                Informations sur l'entreprise
                                 </button>
                             </li>
                             <li class="nav-item">
@@ -231,6 +253,15 @@ $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoe
 
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
+                                                <label>Type entreprises <strong style="color:red;">*</strong></label> <br>
+                                                <select class="select2 form-select-sm form-select" name="id_type_entreprise" id="id_type_entreprise" required="required">
+                                                    <?php echo $typeentreprise; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-12">
+                                            <div class="mb-1">
                                                 <label>Nom et prénoms du responsable formation <strong style="color:red;">*</strong> </label>
                                                 <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                     class="form-control form-control-sm" required="required">
@@ -254,21 +285,23 @@ $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoe
                                         </div>
 
 
+
+
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
-                                                <label>Type entreprises <strong style="color:red;">*</strong></label> <br>
-                                                <select class="select2 form-select-sm form-select" name="id_type_entreprise" id="id_type_entreprise" required="required">
-                                                    <?php echo $typeentreprise; ?>
-                                                </select>
+
+                                                <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
+                                                <input type="number" name="masse_salariale" id="masse_salariale" onkeyup="FuncCalculPartENtre(<?php echo $part->valeur_part_entreprise; ?>);"
+                                                    class="form-control form-control-sm" required="required">
                                             </div>
                                         </div>
 
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
-
-                                                <label>Masse salariale <strong style="color:red;">*</strong></label>
-                                                <input type="number" name="masse_salariale" id="masse_salariale"
-                                                    class="form-control form-control-sm" required="required">
+                                                <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
+                                                <input type="text" name="part_entreprise" id="part_entreprise"
+                                                       class="form-control form-control-sm"
+                                                         disabled="disabled">
                                             </div>
                                         </div>
 

@@ -63,11 +63,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Responsable formation </th>
                                 <th>Code </th>
-                                <th>Entreprise </th>
                                 <th>Nom du conseiller</th>
-                                <th>Antenne</th>
+                                <th>Date de création</th>
                                 <th>Date de soumission</th>
+                                <th>Date d'agrément</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -77,40 +78,45 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             @foreach ($planformations as $key => $planformation)
                                 <tr>
                                     <td>{{ ++$i }}</td>
+                                    <td>{{ @$planformation->nom_prenoms_charge_plan_formati }}</td>
                                     <td>{{ @$planformation->code_plan_formation }}</td>
-                                    <td>{{ @$planformation->entreprise->raison_social_entreprises }}</td>
                                     <td>{{  @$planformation->userconseilplanformation->name }} {{  @$planformation->userconseilplanformation->prenom_users }}</td>
-                                    <td>{{  @$planformation->agence->lib_agce }}</td>
-                                    <td>{{ $planformation->date_soumis_plan_formation }}</td>
+                                    <td>{{ @$planformation->created_at }}</td>
+                                    <td>{{ @$planformation->date_soumis_plan_formation }}</td>
+                                    <td>{{ @$planformation->date_fiche_agrement }}</td>
                                     <td align="center">
                                             <?php if ($planformation->flag_soumis_plan_formation == true and
                                             $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true
-                                            and $planformation->flag_rejeter_plan_formation == false){ ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false){ ?>
                                                 <span class="badge bg-success">Valider</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and
                                             $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            and $planformation->flag_rejeter_plan_formation == false){ ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false){ ?>
                                             <span class="badge bg-warning">En cours de traitement</span>
+                                        <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and
+                                            $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == true){ ?>
+                                            <span class="badge bg-success">Agrée</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == true and
                                             $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            and $planformation->flag_rejeter_plan_formation == false) { ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false) { ?>
                                             <span class="badge bg-secondary">Soumis</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == false and
                                             $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false
-                                            and $planformation->flag_rejeter_plan_formation == false) { ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false) { ?>
                                             <span class="badge bg-primary">Non Soumis</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == true and
                                             $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            and $planformation->flag_rejeter_plan_formation == true) { ?>
+                                            and $planformation->flag_rejeter_plan_formation == true and $planformation->flag_fiche_agrement == false) { ?>
                                             <span class="badge bg-danger">Non recevable</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == true and
                                             $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false
-                                            and $planformation->flag_rejeter_plan_formation == false) { ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false) { ?>
 
                                         <span class="badge bg-danger">Annulé</span>
                                         <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and
                                             $planformation->flag_recevablite_plan_formation == true and $planformation->flag_annulation_plan == true
-                                            and $planformation->flag_rejeter_plan_formation == false) { ?>
+                                            and $planformation->flag_rejeter_plan_formation == false and $planformation->flag_fiche_agrement == false) { ?>
 
                                         <span class="badge bg-danger">Annulé</span>
                                         <?php }

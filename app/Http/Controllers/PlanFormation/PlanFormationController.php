@@ -22,6 +22,7 @@ use App\Models\TypeFormation;
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\MoyenCotisation;
+use App\Helpers\MasseSalarialeCotisation;
 use App\Helpers\GrilleDeRepartitionFC;
 use Carbon\Carbon;
 use Hash;
@@ -154,9 +155,13 @@ class PlanFormationController extends Controller
 
             $infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
 
-            $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
+           // $mttprevisionnelcotisation = MoyenCotisation::get_calcul_moyen_cotisation($infoentrprise->id_entreprises);
 
-            if($mttprevisionnelcotisation==0){
+            $mttprevisionnelMassesalariale = MasseSalarialeCotisation::get_calcul_moyen_masse_salariale($infoentrprise->id_entreprises);
+
+            $verfi_cotisation = MoyenCotisation::get_verif_cotisation($infoentrprise->id_entreprises);
+
+            if($verfi_cotisation==0){
                 Audit::logSave([
 
                     'action'=>'CREER',
@@ -185,12 +190,16 @@ class PlanFormationController extends Controller
             $entreprise = Entreprises::find($infoentrprise->id_entreprises);
             $entreprise->update($input);
 
-            $buget = GrilleDeRepartitionFC::get_calcul_financement($mttprevisionnelcotisation);
+            $partEntreprise = $input['masse_salariale'] * $part->valeur_part_entreprise;
+
+            $buget = GrilleDeRepartitionFC::get_calcul_financement($partEntreprise);
             //dd($buget);
             $bugetseparer = explode("/",$buget);
             //dd($bugetseparer);
             $input['id_cle_de_repartition_financement'] = $bugetseparer[1];
             $input['montant_financement_budget'] = round($bugetseparer[0]);
+            $input['masse_salariale_previsionel'] = $mttprevisionnelMassesalariale;
+            $input['part_entreprise_previsionnel'] = $mttprevisionnelMassesalariale * $part->valeur_part_entreprise;
 
             PlanFormation::create($input);
 
@@ -407,6 +416,14 @@ class PlanFormationController extends Controller
                 $input['id_part_entreprise'] = $part->id_part_entreprise;
                 $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
                 //$input['part_entreprise'] = $input['masse_salariale'] * 0.006;
+                $partEntreprise = $input['masse_salariale'] * $part->valeur_part_entreprise;
+
+                $buget = GrilleDeRepartitionFC::get_calcul_financement($partEntreprise);
+                //dd($buget);
+                $bugetseparer = explode("/",$buget);
+                //dd($bugetseparer);
+                $input['id_cle_de_repartition_financement'] = $bugetseparer[1];
+                $input['montant_financement_budget'] = round($bugetseparer[0]);
 
                 $infoentreprise->update($input);
                 $planformation->update($input);
@@ -568,8 +585,8 @@ class PlanFormationController extends Controller
                     'cout_action_formation_plan' => 'required',
                     'id_type_formation' => 'required',
                     'id_but_formation' => 'required',
-                    'date_debut_fiche_agrement' => 'required|date|after_or_equal:now',
-                    'date_fin_fiche_agrement' => 'required|date|after:date_debut_fiche_agrement',
+                    //'date_debut_fiche_agrement' => 'required|date|after_or_equal:now',
+                    //'date_fin_fiche_agrement' => 'required|date|after:date_debut_fiche_agrement',
                     'lieu_formation_fiche_agrement' => 'required',
                     //'cout_total_fiche_agrement' => 'required',
                     'objectif_pedagogique_fiche_agre' => 'required',
@@ -589,12 +606,12 @@ class PlanFormationController extends Controller
                     'cout_action_formation_plan.required' => 'Veuillez ajoutez le cout de la formation.',
                     'id_type_formation.required' => 'Veuillez selectionnez un type de formation.',
                     'id_but_formation.required' => 'Veuillez selectionnez le but de la formation.',
-                    'date_debut_fiche_agrement.required' => 'Veuillez ajoutez la date de debut',
-                    'date_debut_fiche_agrement.date' => 'Cela doit etre une date valide',
-                    'date_debut_fiche_agrement.after_or_equal' => 'Vous ne pouvez pas choisir une date inférieure à celle du jour.',
-                    'date_fin_fiche_agrement.required' => 'Veuillez ajoutez la date de fin .',
-                    'date_fin_fiche_agrement.date' => 'Cela doit etre une date valide',
-                    'date_fin_fiche_agrement.after' => 'Vous ne pouvez pas choisir une date inférieure a la date de debut',
+                    //'date_debut_fiche_agrement.required' => 'Veuillez ajoutez la date de debut',
+                    //'date_debut_fiche_agrement.date' => 'Cela doit etre une date valide',
+                    //'date_debut_fiche_agrement.after_or_equal' => 'Vous ne pouvez pas choisir une date inférieure à celle du jour.',
+                    //'date_fin_fiche_agrement.required' => 'Veuillez ajoutez la date de fin .',
+                    //'date_fin_fiche_agrement.date' => 'Cela doit etre une date valide',
+                    //'date_fin_fiche_agrement.after' => 'Vous ne pouvez pas choisir une date inférieure a la date de debut',
                     'lieu_formation_fiche_agrement.required' => 'Veuillez ajoutez le lieu de formation.',
                     //'cout_total_fiche_agrement.required' => 'Veuillez ajoutez le cout total de la fiche d\'agrement.',
                     'objectif_pedagogique_fiche_agre.required' => 'Veuillez ajoutez l\'objectif pedagogique.',
