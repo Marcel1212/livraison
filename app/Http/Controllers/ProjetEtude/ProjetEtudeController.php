@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\Audit;
+use App\Helpers\Crypt;
+use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\InfosEntreprise;
+use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\Direction;
-use App\Models\SecteurActivite;
-use App\Models\TypeEntreprise;
-use Illuminate\Http\Request;
-use App\Models\Pays;
 use App\Models\Entreprises;
-use App\Models\ProjetEtude;
+use App\Models\FormeJuridique;
+use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
-use App\Helpers\Crypt;
-use App\Helpers\InfosEntreprise;
-use App\Helpers\GenerateCode as Gencode;
-use Hash;
-use DB;
+use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
 use App\Models\User;
+use DB;
+use File;
+use Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Image;
-use File;
 
 class ProjetEtudeController extends Controller
 {
@@ -55,13 +56,15 @@ class ProjetEtudeController extends Controller
      */
     public function create()
     {
-        $pays = Pays::all();
+        $pays = Pays::where('flag_actif_pays',true)->get();
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
 
-        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
 
-        foreach ($pays as $comp) {
-            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        foreach ($formjuridiques as $comp) {
+            $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
         }
 
         $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
@@ -96,7 +99,7 @@ class ProjetEtudeController extends Controller
             'objet'=>'PROJET ETUDE'
         ]);
 
-        return view('module_projet_etude.demande.create', compact('infoentreprise','secteuractivite_projet','pay','secteuractivites'));
+        return view('module_projet_etude.demande.create', compact('formjuridique','infoentreprise','secteuractivite_projet','pay','secteuractivites'));
     }
 
     /**

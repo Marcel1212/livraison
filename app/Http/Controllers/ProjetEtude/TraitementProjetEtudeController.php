@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Menu;
+use App\Http\Controllers\Controller;
 use App\Models\Entreprises;
 use App\Models\Motif;
 use App\Models\Pays;
@@ -15,7 +16,6 @@ use App\Models\StatutOperation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Helpers\GenerateCode as Gencode;
 
 class TraitementProjetEtudeController extends Controller
 {

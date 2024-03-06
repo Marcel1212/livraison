@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\AffectationProjetEtudeController;
-use App\Http\Controllers\ProjetEtudeController;
+use App\Http\Controllers\ProjetEtude\AffectationProjetEtudeController;
+use App\Http\Controllers\ProjetEtude\ProjetEtudeController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {

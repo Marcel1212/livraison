@@ -11,9 +11,11 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper ">
             <h5 class="py-2 mb-1">
-                <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>
-                {{ $titre }}
+                <span class="text-muted fw-light">
+                    <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
+                    <a href="{{route($lien)}}"> {{$Module}}</a> /  {{$titre}}</span>
             </h5>
+
 
             @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">

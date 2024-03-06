@@ -9,13 +9,11 @@
 
     <!-- BEGIN: Content-->
 
-    <h5 class="py-2 mb-1">
         <h5 class="py-2 mb-1">
         <span class="text-muted fw-light">
             <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
            <a href="{{route($lien)}}"> {{$Module}}</a> /  {{$titre}}</span>
         </h5>
-    </h5>
 
     <div class="content-body">
         @if ($message = Session::get('success'))
@@ -128,9 +126,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label class="form-label">Type de forme juridique </label>
-                                                <input type="number" name="fax_entreprises" id="fax_entreprises"
-                                                       class="form-control form-control-sm"
-                                                       value="{{@$infoentreprise->fax_entreprises}}" disabled="disabled">
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                        <?= $formjuridique; ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
+use App\Http\Controllers\Controller;
 use App\Models\Entreprises;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 class SelectionOperateurProjetEtudeController extends Controller{
     public function index(){
         $projet_etude_valides = ProjetEtude::where('flag_fiche_agrement',true)->get();
-        return view('selectionoperateurprojetetude.index', compact('projet_etude_valides'));
+        return view('module_projet_etude.selection_operateur.index', compact('projet_etude_valides'));
     }
 
     public function edit($id_projet_etude,$idetape){
@@ -81,7 +82,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 }
 
 
-                return view('selectionoperateurprojetetude.edit', compact('idetape','operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
+                return view('module_projet_etude.selection_operateur.edit', compact('idetape','operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
             }else{
 
             }

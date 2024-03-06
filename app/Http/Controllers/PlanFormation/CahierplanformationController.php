@@ -63,17 +63,11 @@ class CahierplanformationController extends Controller
             ])->get();
 
             Audit::logSave([
-
                 'action'=>'CREER',
-
                 'code_piece'=>'',
-
                 'menu'=>'PLAN DE FORMATION (Cahier de plan de formation )',
-
                 'etat'=>'Succès',
-
                 'objet'=>'PLAN DE FORMATION'
-
             ]);
 
         return view("planformations.cahierplanformation.create",compact('departements'));

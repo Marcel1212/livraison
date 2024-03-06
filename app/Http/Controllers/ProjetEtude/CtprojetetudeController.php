@@ -1,40 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
-use Illuminate\Http\Request;
-use App\Models\Activites;
-use App\Models\CentreImpot;
-use App\Models\Localite;
-use App\Models\Pays;
-use App\Models\ProjetEtude;
-use App\Models\DemandeEnrolement;
-use App\Models\Entreprises;
-use App\Models\PlanFormation;
-use App\Models\ActionFormationPlan;
-use App\Models\FicheADemandeAgrement;
-use App\Models\BeneficiairesFormation;
-use App\Models\TypeEntreprise;
-use App\Models\ButFormation;
-use App\Models\CategorieProfessionelle;
-use App\Models\CategoriePlan;
-use App\Models\TypeFormation;
-use App\Models\ActionPlanFormationAValiderParUser;
-use App\Models\PlanFormationAValiderParUser;
-use App\Models\CtPleniere;
-use App\Models\Motif;
+use App\Helpers\ConseillerParAgence;
 use App\Helpers\Crypt;
 use App\Helpers\Menu;
-use App\Helpers\Email;
-use App\Helpers\ConseillerParAgence;
-use App\Helpers\GenerateCode as Gencode;
-use Carbon\Carbon;
-use Hash;
-use DB;
-use App\Models\User;
-use Image;
-use File;
+use App\Http\Controllers\Controller;
+use App\Models\ActionFormationPlan;
+use App\Models\ActionPlanFormationAValiderParUser;
+use App\Models\BeneficiairesFormation;
+use App\Models\ButFormation;
+use App\Models\CategoriePlan;
+use App\Models\CategorieProfessionelle;
+use App\Models\Entreprises;
+use App\Models\FicheADemandeAgrement;
+use App\Models\Motif;
+use App\Models\Pays;
+use App\Models\PlanFormation;
+use App\Models\PlanFormationAValiderParUser;
+use App\Models\ProjetEtude;
+use App\Models\TypeEntreprise;
+use App\Models\TypeFormation;
 use Auth;
+use Carbon\Carbon;
+use DB;
+use File;
+use Hash;
+use Illuminate\Http\Request;
+use Image;
 
 class CtprojetetudeController extends Controller
 {

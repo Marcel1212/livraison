@@ -288,9 +288,7 @@ $reseaux = Menu::get_info_reseaux();
                                                             <label class="form-label" for="state">Localité de
                                                                 l'entreprise <strong
                                                                     style="color:red;">*</strong></label>
-                                                            @error('id_localite')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
+
                                                             <select class="select2 form-select
                                                             @error('id_localite')
                                                                         error
@@ -299,7 +297,8 @@ $reseaux = Menu::get_info_reseaux();
                                                             id="id_localite"
                                                                     required="required"
                                                             >
-
+                                                                <option value="">-- Sélectionnez une localité --
+                                                                </option>
                                                                 @foreach(@$localites as $localite)
                                                                     <option value="{{$localite->id_localite}}"
                                                                         {{(old('id_localite')==$localite->id_localite)? 'selected':''}}
@@ -308,14 +307,15 @@ $reseaux = Menu::get_info_reseaux();
                                                                     </option>
                                                                 @endforeach
                                                             </select>
+                                                            @error('id_localite')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
 
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="state">Centre d'impôt
                                                                 <strong style="color:red;">*</strong></label>
-                                                            @error('id_centre_impot')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
+
                                                             <select class="select2 form-select
                                                                     @error('id_centre_impot')
                                                                         error
@@ -334,16 +334,16 @@ $reseaux = Menu::get_info_reseaux();
                                                                 @endforeach
 
                                                             </select>
-
+                                                            @error('id_centre_impot')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
 
                                                         </div>
 
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="id_secteur_activite">Secteur d'activité
                                                                 <strong style="color:red;">*</strong></label>
-                                                            @error('id_secteur_activite')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
+
                                                             <select class="select2 form-select
                                                                     @error('id_secteur_activite')
                                                                         error
@@ -360,6 +360,9 @@ $reseaux = Menu::get_info_reseaux();
                                                                         value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
                                                                 @endforeach
                                                             </select>
+                                                            @error('id_secteur_activite')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
 
                                                     </div>

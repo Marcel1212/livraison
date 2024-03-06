@@ -1,31 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\ConseillerParAgence;
-use App\Helpers\Email;
-use App\Helpers\Menu;
-use App\Models\ComiteGestion;
-use App\Models\ComitePleniere;
-use App\Models\ComitePleniereParticipant;
-use App\Models\PiecesProjetEtude;
-use App\Models\ProjetEtude;
-use App\Models\SecteurActivite;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Image;
-use File;
-use Auth;
-use Hash;
-use DB;
-use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Crypt;
+use App\Helpers\Email;
+use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\Menu;
+use App\Http\Controllers\Controller;
+use App\Models\ComiteGestion;
 use App\Models\ComiteGestionParticipant;
 use App\Models\Entreprises;
 use App\Models\FicheAgrement;
 use App\Models\Motif;
 use App\Models\Pays;
+use App\Models\PiecesProjetEtude;
+use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
+use App\Models\User;
+use Auth;
+use Carbon\Carbon;
+use DB;
+use File;
+use Hash;
+use Illuminate\Http\Request;
+use Image;
 
 class ComiteGestionProjetEtudeController extends Controller
 {

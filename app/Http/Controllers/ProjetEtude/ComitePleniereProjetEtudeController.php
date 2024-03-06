@@ -1,40 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
+use App\Helpers\Crypt;
 use App\Helpers\Email;
+use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Menu;
-use App\Models\PiecesProjetEtude;
-use App\Models\ProjetEtude;
-use App\Models\SecteurActivite;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Cahier;
 use App\Models\ComitePleniere;
 use App\Models\ComitePleniereParticipant;
-use Hash;
-use DB;
-use App\Models\User;
-use App\Helpers\GenerateCode as Gencode;
-use App\Helpers\Crypt;
-use App\Helpers\ConseillerParAgence;
-use App\Models\PlanFormation;
 use App\Models\Entreprises;
-use App\Models\ActionFormationPlan;
-use App\Models\FicheADemandeAgrement;
-use App\Models\BeneficiairesFormation;
-use App\Models\TypeEntreprise;
-use App\Models\ButFormation;
-use App\Models\CategorieProfessionelle;
-use App\Models\ActionPlanFormationAValiderParUser;
-use App\Models\PlanFormationAValiderParUser;
-use App\Models\CategoriePlan;
-use App\Models\TypeFormation;
 use App\Models\Motif;
 use App\Models\Pays;
+use App\Models\PiecesProjetEtude;
+use App\Models\ProjetEtude;
+use App\Models\SecteurActivite;
+use App\Models\User;
 use Carbon\Carbon;
+use DB;
+use File;
+use Hash;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Image;
-use File;
 
 class ComitePleniereProjetEtudeController extends Controller
 {

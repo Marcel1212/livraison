@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\Crypt;
-use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
+use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\Direction;
-use App\Models\Entreprises;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
 use App\Models\SecteurActivite;
 use App\Models\Service;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

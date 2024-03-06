@@ -1,36 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
+use App\Helpers\Crypt;
 use App\Helpers\GenerateCode as Gencode;
+use App\Http\Controllers\Controller;
+use App\Models\ActionFormationPlan;
+use App\Models\ActionprojetetudeAValiderParUser;
+use App\Models\BeneficiairesFormation;
 use App\Models\CahierProjetetude;
+use App\Models\Entreprises;
+use App\Models\FicheADemandeAgrement;
 use App\Models\LigneCahierProjetEtude;
+use App\Models\Motif;
+use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
-use App\Helpers\Crypt;
 use App\Models\SecteurActivite;
 use App\Models\TypeComite;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\TypeEntreprise;
-use App\Models\TypeFormation;
-use App\Models\ComitePermanenteParticipant;
-use App\Models\Entreprises;
-use App\Models\FicheADemandeAgrement;
-use App\Models\FicheAgrement;
-use App\Models\Motif;
-use App\Models\Pays;
-use App\Models\ActionprojetetudeAValiderParUser;
-use App\Models\BeneficiairesFormation;
-use App\Models\ButFormation;
-use App\Models\CategoriePlan;
-use App\Models\CategorieProfessionelle;
-use App\Helpers\ConseillerParAgence;
-use App\Helpers\EtatCahierPlanDeFormation;
-use App\Models\ActionFormationPlan;
-use App\Models\User;
-Use DB;
 
 class CahierprojetetudeController extends Controller
 {

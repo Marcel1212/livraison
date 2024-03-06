@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
-use App\Models\Entreprises;
+use App\Http\Controllers\Controller;
 use App\Models\Parcours;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;

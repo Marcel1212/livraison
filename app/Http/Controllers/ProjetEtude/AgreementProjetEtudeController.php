@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ProjetEtude;
 
+use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\DemandeAnnulationSauvegarderRequest;
 use App\Http\Requests\DemandeSubstitutionSauvegarderRequest;
 use App\Models\ActionFormationPlan;
@@ -24,14 +26,12 @@ use App\Models\SecteurActivite;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 use App\Models\User;
+use File;
+use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Image;
-use File;
-use Hash;
-use Carbon\Carbon;
-use App\Helpers\Crypt;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 class AgreementProjetEtudeController extends Controller
