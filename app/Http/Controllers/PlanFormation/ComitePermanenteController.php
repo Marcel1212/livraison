@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use App\Models\ComitePermanente;
 use App\Helpers\Audit;
@@ -34,6 +34,7 @@ use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 use App\Helpers\Menu;
 use App\Helpers\Email;
+use App\Http\Controllers\Controller;
 
 class ComitePermanenteController extends Controller
 {
@@ -56,7 +57,7 @@ class ComitePermanenteController extends Controller
             'objet'=>'PLAN DE FORMATION'
 
         ]);
-        return view('comitepermanente.index', compact('Resultat'));
+        return view('planformations.comitepermanente.index', compact('Resultat'));
     }
 
     /**
@@ -87,7 +88,7 @@ class ComitePermanenteController extends Controller
 
                                             ]);
 
-        return view('comitepermanente.create', compact('planformations'));
+        return view('planformations.comitepermanente.create', compact('planformations'));
     }
 
     /**
@@ -174,7 +175,7 @@ class ComitePermanenteController extends Controller
         ]);
 
 
-        return view('comitepermanente.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.comitepermanente.show', compact('actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -226,7 +227,7 @@ class ComitePermanenteController extends Controller
                                             ]);
 
 
-        return view('comitepermanente.edit', compact('comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
+        return view('planformations.comitepermanente.edit', compact('comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
     }
 
     /**
@@ -519,7 +520,7 @@ class ComitePermanenteController extends Controller
 
         ]);
 
-        return view('comitepermanente.editer', compact(
+        return view('planformations.comitepermanente.editer', compact(
             'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
             'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
             'nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','idcomite','id','idetape','idcomite','montantactionplanformation','montantactionplanformationacc'

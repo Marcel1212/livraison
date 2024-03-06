@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use App\Models\Entreprises;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\GenerateCode as Gencode;
 use Illuminate\Http\JsonResponse;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\PlanFormation;
 
 use App\Helpers\Audit;
 use Illuminate\Http\Request;
@@ -35,6 +35,7 @@ use App\Helpers\AnneeExercice;
 use App\Helpers\PartEntreprisesHelper;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\SecteurActivite;
+use App\Http\Controllers\Controller;
 
 class PlanFormationController extends Controller
 {
@@ -61,7 +62,7 @@ class PlanFormationController extends Controller
                 'objet'=>'PLAN DE FORMATION'
 
             ]);
-            return view('planformation.index',compact('planformations'));
+            return view('planformations.planformation.index',compact('planformations'));
         }else{
             Audit::logSave([
 
@@ -123,7 +124,7 @@ class PlanFormationController extends Controller
 
         ]);
 
-        return view('planformation.create', compact('infoentreprise','typeentreprise','pay','secteuractivites'));
+        return view('planformations.planformation.create', compact('infoentreprise','typeentreprise','pay','secteuractivites'));
     }
 
     /**
@@ -267,7 +268,7 @@ class PlanFormationController extends Controller
         ]);
 
         //dd($planformation);
-        return view('planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
     }
 
     /**
@@ -353,7 +354,7 @@ class PlanFormationController extends Controller
 
             ]);
 
-        return view('planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation'));
+        return view('planformations.planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation'));
 
     }
 
