@@ -127,11 +127,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
+                                <div class="col-md-4 col-12" style="display: none;">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
                                         <input type="date" name="date_fin_comite_pleniere" id="date_fin_comite_pleniere"
-                                            class="form-control form-control-sm" onchange="verifierDateFin()" required />
+                                            class="form-control form-control-sm" onchange="verifierDateFin()" />
                                     </div>
                                 </div>
 

@@ -93,7 +93,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
             <div class="nav-align-top nav-tabs-shadow mb-4">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 1) {
+                        <button type="button" class="nav-link <?php if ($idetape == 1 and count($ficheagrements) < 1) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
@@ -102,7 +102,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </button>
                     </li>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 2) {
+                        <button type="button" class="nav-link <?php if ($idetape == 2 and count($ficheagrements) < 1) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-categorieplan" aria-controls="navs-top-categorieplan"
@@ -112,7 +112,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                     <?php if ( $comitegestion->flag_statut_comite_gestion == false) { ?>
                     <li class="nav-item">
-                        <button type="button" class="nav-link <?php if ($idetape == 3) {
+                        <button type="button" class="nav-link <?php if ($idetape == 3 and count($ficheagrements) < 1) {
                             echo 'active';
                         } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-actionformation" aria-controls="navs-top-actionformation"
@@ -134,7 +134,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade <?php if ($idetape == 1) {
+                    <div class="tab-pane fade <?php if ($idetape == 1 and count($ficheagrements) < 1) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
                         <form method="POST" class="form"
@@ -190,7 +190,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </div>
                         </form>
                     </div>
-                    <div class="tab-pane fade <?php if ($idetape == 2) {
+                    <div class="tab-pane fade <?php if ($idetape == 2 and count($ficheagrements) < 1) {
                         echo 'show active';
                     } //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
 
@@ -275,7 +275,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
                     <?php if ( $comitegestion->flag_statut_comite_gestion == false) { ?>
-                    <div class="tab-pane fade <?php if ($idetape == 3) {
+                    <div class="tab-pane fade <?php if ($idetape == 3 and count($ficheagrements) < 1) {
                         echo 'show active';
                     } //if(count($planformations)>0 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-actionformation" role="tabpanel">
 

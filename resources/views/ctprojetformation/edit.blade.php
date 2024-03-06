@@ -148,14 +148,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
+                                {{-- <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Date de fin <strong style="color:red;">*</strong></label>
                                         <input type="date" name="date_fin_comite_pleniere"
                                             class="form-control form-control-sm"
                                             value="{{ $comitepleniere->date_fin_comite_pleniere }}" />
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">

@@ -83,11 +83,11 @@ class CtprojetformationController extends Controller
 
             $this->validate($request, [
                 'date_debut_comite_pleniere' => 'required',
-                'date_fin_comite_pleniere' => 'required',
+                //'date_fin_comite_pleniere' => 'required',
                 'commentaire_comite_pleniere' => 'required'
             ],[
                 'date_debut_comite_pleniere.required' => 'Veuillez ajouter une date de debut.',
-                'date_fin_comite_pleniere.required' => 'Veuillez ajouter une date de fin.',
+                //'date_fin_comite_pleniere.required' => 'Veuillez ajouter une date de fin.',
                 'commentaire_comite_pleniere.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
@@ -123,13 +123,14 @@ class CtprojetformationController extends Controller
 
         $comitepleniere = ComitePleniere::find($id);
 
+
         $comitepleniereparticipant = ComitePleniereParticipant::where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
 
         $cahiers = Cahier::Join('projet_formation','cahier.id_demande','projet_formation.id_projet_formation')
                             ->join('entreprises','projet_formation.id_entreprises','=','entreprises.id_entreprises')
                             ->join('users','projet_formation.id_conseiller_formation','=','users.id')
                             ->where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
-
+        //dd($cahiers);
         $conseillers = ConseillerParAgence::get_conseiller_par_departement(Auth::user()->num_agce,Auth::user()->id_departement);
 
         $motifs = Motif::all();

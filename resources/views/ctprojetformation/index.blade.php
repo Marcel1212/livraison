@@ -61,7 +61,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <th>No</th>
                                 <th>Code </th>
                                 <th>Date debut</th>
-                                <th>Date fin</th>
+                                {{-- <th>Date fin</th> --}}
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -73,7 +73,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <td>{{ ++$i }}</td>
                                     <td>{{ @$comitep->code_comite_pleniere }}</td>
                                     <td>{{ $comitep->date_debut_comite_pleniere }}</td>
-                                    <td>{{ $comitep->date_fin_comite_pleniere }}</td>
+                                    {{-- <td>{{ $comitep->date_fin_comite_pleniere }}</td> --}}
                                     <td align="center">
                                         <?php if($comitep->flag_statut_comite_pleniere == true){ ?>
                                         <span class="badge bg-success">Terminer</span>

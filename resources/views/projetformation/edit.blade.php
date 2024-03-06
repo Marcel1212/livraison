@@ -94,7 +94,7 @@
                                                             <ul class="timeline pt-3">
 
                                                                 <li
-                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
+                                                                    class="timeline-item timeline-item-success border-left-dashed">
                                                                     <span
                                                                         class="timeline-indicator-advanced timeline-indicator-success">
                                                                         <i
@@ -127,11 +127,13 @@
                                                                     </div>
                                                                 </li>
                                                             </ul>
-                                                            <?php if ($projetetude->flag_affect_departement == true ) {?>
+
+
+                                                            <?php if ($projetetude->flag_statut_instruction != null ) {?>
                                                             <ul class="timeline pt-3">
 
                                                                 <li
-                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
+                                                                    class="timeline-item timeline-item-success border-left-dashed">
                                                                     <span
                                                                         class="timeline-indicator-advanced timeline-indicator-success">
                                                                         <i
@@ -139,24 +141,27 @@
                                                                     </span>
                                                                     <div class="timeline-event">
                                                                         <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement du directeur</h6>
+                                                                            <h6 class="mb-0">Traitement de l'instruction
+                                                                            </h6>
                                                                             <span class="text-muted"><strong>
                                                                                     <?php //echo $entreprise_info->raison_social_entreprises;
                                                                                     ?>
                                                                                 </strong></span>
                                                                         </div>
-                                                                        <div class="justify-content-between flex-wrap mb-4">
+                                                                        <div class="d-flex lex-wrap mb-4">
                                                                             <div class="row ">
 
-                                                                                <span>Commentaire: <?php echo $projetetude->commentaire_directeur; ?>
-                                                                                </span> <br>
-                                                                                <span>Date de l'affectation :
-                                                                                    <span class="badge bg-label-danger">
-                                                                                        <?php echo $projetetude->date_trans_chef_service; ?> </span>
-                                                                                </span>
+                                                                                <span>Statut : <?php if ($projetetude->flag_statut_instruction == true) {
+                                                                                    echo 'RECEVABLE  ';
+                                                                                } else {
+                                                                                    echo 'NON RECEVABLE  ';
+                                                                                } ?> </span>
                                                                                 <br>
-                                                                                <span>Departement : <?php echo $departement_name; ?>
-                                                                                </span> <br>
+
+                                                                                <span>Date : <span
+                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_instructions; ?>
+                                                                                    </span> </span> <br>
+
                                                                             </div>
                                                                             <div>
                                                                             </div>
@@ -168,11 +173,103 @@
                                                                 </li>
                                                             </ul>
                                                             <?php }?>
+
+
+                                                            <?php if ($projetetude->flag_recevabilite != null ) {?>
+                                                            <ul class="timeline pt-3">
+
+                                                                <li
+                                                                    class="timeline-item timeline-item-success border-left-dashed">
+                                                                    <span
+                                                                        class="timeline-indicator-advanced timeline-indicator-success">
+                                                                        <i
+                                                                            class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                                                    </span>
+                                                                    <div class="timeline-event">
+                                                                        <div class="timeline-header border-bottom mb-4">
+                                                                            <h6 class="mb-0">Traitement de la
+                                                                                recevabilite</h6>
+                                                                            <span class="text-muted"><strong>
+                                                                                    <?php //echo $entreprise_info->raison_social_entreprises;
+                                                                                    ?>
+                                                                                </strong></span>
+                                                                        </div>
+                                                                        <div class="d-flex lex-wrap mb-4">
+                                                                            <div class="row ">
+
+                                                                                <span>Statut : <?php if ($projetetude->flag_recevabilite == true) {
+                                                                                    echo 'RECEVABLE  ';
+                                                                                } else {
+                                                                                    echo 'NON RECEVABLE  ';
+                                                                                } ?> </span>
+                                                                                <br>
+                                                                                <span>Date : <span
+                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_recevabilite; ?>
+                                                                                    </span> </span>
+                                                                            </div>
+                                                                            <div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            <?php }?>
+
+                                                            <?php if ($projetetude->flag_affect_conseiller_formation == true ) {?>
+                                                            <ul class="timeline pt-3">
+
+                                                                <li
+                                                                    class="timeline-item timeline-item-success border-left-dashed">
+                                                                    <span
+                                                                        class="timeline-indicator-advanced timeline-indicator-success">
+                                                                        <i
+                                                                            class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                                                    </span>
+                                                                    <div class="timeline-event">
+                                                                        <div class="timeline-header border-bottom mb-4">
+                                                                            <h6 class="mb-0">Traitement du chef de
+                                                                                service
+                                                                            </h6>
+                                                                            <span class="text-muted"><strong>
+                                                                                    <?php //echo $entreprise_info->raison_social_entreprises;
+                                                                                    ?>
+                                                                                </strong></span>
+                                                                        </div>
+                                                                        <div
+                                                                            class="d-flex justify-content-between flex-wrap mb-4">
+                                                                            <div class="row">
+
+                                                                                <span>Commentaire: <?php echo $projetetude->commentaire_chef_service; ?>
+                                                                                </span> <br>
+
+                                                                                <span>Date de l'affectation: <span
+                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_trans_conseiller_formation; ?></span>
+                                                                                </span> <br>
+
+                                                                                <span>Affecté a: <span
+                                                                                        class="badge bg-label-danger"><?php echo $conseiller_name; ?></span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex align-items-center">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            <?php }?>
+
+
                                                             <?php if ($projetetude->flag_affect_service == true ) {?>
                                                             <ul class="timeline pt-3">
 
                                                                 <li
-                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
+                                                                    class="timeline-item timeline-item-success border-left-dashed">
                                                                     <span
                                                                         class="timeline-indicator-advanced timeline-indicator-success">
                                                                         <i
@@ -213,7 +310,8 @@
                                                                 </li>
                                                             </ul>
                                                             <?php }?>
-                                                            <?php if ($projetetude->flag_affect_conseiller_formation == true ) {?>
+
+                                                            <?php if ($projetetude->flag_affect_departement == true ) /*START*/ {?>
                                                             <ul class="timeline pt-3">
 
                                                                 <li
@@ -225,77 +323,25 @@
                                                                     </span>
                                                                     <div class="timeline-event">
                                                                         <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement du chef de
-                                                                                service
-                                                                            </h6>
+                                                                            <h6 class="mb-0">Traitement du directeur</h6>
                                                                             <span class="text-muted"><strong>
                                                                                     <?php //echo $entreprise_info->raison_social_entreprises;
                                                                                     ?>
                                                                                 </strong></span>
                                                                         </div>
                                                                         <div
-                                                                            class="d-flex justify-content-between flex-wrap mb-4">
-                                                                            <div class="row">
-
-                                                                                <span>Commentaire: <?php echo $projetetude->commentaire_chef_service; ?>
-                                                                                </span> <br>
-
-                                                                                <span>Date de l'affectation: <span
-                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_trans_conseiller_formation; ?></span>
-                                                                                </span> <br>
-
-                                                                                <span>Affecté a: <span
-                                                                                        class="badge bg-label-danger"><?php echo $conseiller_name; ?></span>
-                                                                                </span> <br>
-
-
-                                                                            </div>
-                                                                            <div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex align-items-center">
-
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                            <?php }?>
-
-                                                            <?php if ($projetetude->flag_recevabilite != null ) {?>
-                                                            <ul class="timeline pt-3">
-
-                                                                <li
-                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
-                                                                    <span
-                                                                        class="timeline-indicator-advanced timeline-indicator-success">
-                                                                        <i
-                                                                            class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
-                                                                    </span>
-                                                                    <div class="timeline-event">
-                                                                        <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement de la
-                                                                                recevabilite</h6>
-                                                                            <span class="text-muted"><strong>
-                                                                                    <?php //echo $entreprise_info->raison_social_entreprises;
-                                                                                    ?>
-                                                                                </strong></span>
-                                                                        </div>
-                                                                        <div class="d-flex lex-wrap mb-4">
+                                                                            class="justify-content-between flex-wrap mb-4">
                                                                             <div class="row ">
 
-                                                                                <span>Statut : <?php if ($projetetude->flag_recevabilite == true) {
-                                                                                    echo 'RECEVABLE  ';
-                                                                                } else {
-                                                                                    echo 'NON RECEVABLE  ';
-                                                                                } ?> </span>
+                                                                                <span>Commentaire: <?php echo $projetetude->commentaire_directeur; ?>
+                                                                                </span> <br>
+                                                                                <span>Date de l'affectation :
+                                                                                    <span class="badge bg-label-danger">
+                                                                                        <?php echo $projetetude->date_trans_chef_service; ?> </span>
+                                                                                </span>
                                                                                 <br>
-                                                                                <br>
-                                                                                <span>Date : <span
-                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_recevabilite; ?>
-                                                                                    </span> </span> <br> <br>
-
-
-
+                                                                                <span>Departement : <?php echo $departement_name; ?>
+                                                                                </span> <br>
                                                                             </div>
                                                                             <div>
                                                                             </div>
@@ -307,52 +353,8 @@
                                                                 </li>
                                                             </ul>
                                                             <?php }?>
-                                                            <?php if ($projetetude->flag_statut_instruction != null ) {?>
-                                                            <ul class="timeline pt-3">
-
-                                                                <li
-                                                                    class="timeline-item pb-4 timeline-item-success border-left-dashed">
-                                                                    <span
-                                                                        class="timeline-indicator-advanced timeline-indicator-success">
-                                                                        <i
-                                                                            class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
-                                                                    </span>
-                                                                    <div class="timeline-event">
-                                                                        <div class="timeline-header border-bottom mb-4">
-                                                                            <h6 class="mb-0">Traitement de l'instruction
-                                                                            </h6>
-                                                                            <span class="text-muted"><strong>
-                                                                                    <?php //echo $entreprise_info->raison_social_entreprises;
-                                                                                    ?>
-                                                                                </strong></span>
-                                                                        </div>
-                                                                        <div class="d-flex lex-wrap mb-4">
-                                                                            <div class="row ">
-
-                                                                                <span>Statut : <?php if ($projetetude->flag_statut_instruction == true) {
-                                                                                    echo 'RECEVABLE  ';
-                                                                                } else {
-                                                                                    echo 'NON RECEVABLE  ';
-                                                                                } ?> </span>
-                                                                                <br> <br>
-
-                                                                                <span>Date : <span
-                                                                                        class="badge bg-label-danger"><?php echo $projetetude->date_instructions; ?>
-                                                                                    </span> </span> <br> <br>
 
 
-
-                                                                            </div>
-                                                                            <div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex align-items-center">
-
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                            <?php }?>
                                                             </li>
 
 
@@ -374,7 +376,8 @@
                                         <div class="row">
 
                                             <div class="accordion mt-3" id="accordionExample">
-                                                <?php if ($nomrole == 'ENTREPRISE' ) {?>
+                                                <?php //if ($nomrole == 'ENTREPRISE' ) {
+                                                ?>
                                                 <div class="card accordion-item active">
                                                     <h2 class="accordion-header" id="headingOne">
                                                         <button type="button" class="accordion-button"
@@ -455,7 +458,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php }?>
+                                                <?php //}
+                                                ?>
                                                 <?php //if ($nomrole == 'ENTREPRISE' OR $nomrole == 'DIRECTEUR'  ) {
                                                 ?>
                                                 <div class="card accordion-item">
