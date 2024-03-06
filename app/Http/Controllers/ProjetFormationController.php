@@ -48,18 +48,30 @@ class ProjetFormationController extends Controller
                 ->first();
             $idroles = $roles->role_id;
         $nomrole = $roles->name ;
-        //dd($nomrole);
+        $id_direction = $roles->id_direction ;
+
+        //dd($roles->id_direction);
         if ($nomrole == 'ENTREPRISE'){
             // Liste des projet de formation des entreprises
             $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
 
-        }else if ($nomrole == 'DIRECTEUR'){
+        }else if ($nomrole == 'DIRECTEUR' and $id_direction == "4"){
              // Liste des projet de formation a traiter par le directeur
+             // Recuperation de la direction ( DACD a selectionner id=4)
+             //dd('ee');
             $num_agce = Auth::user()->num_agce;
             $num_agce = intval($num_agce);
             $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce]])->get();
 
-        }else if ($nomrole == 'CHEF DE DEPARTEMENT'){
+        }else if ($nomrole == 'DIRECTEUR'){
+            // Liste des projet de formation a traiter par le directeur
+            // Recuperation de la direction ( DACD a selectionner id=4)
+            //dd('ee');
+           $num_agce = Auth::user()->num_agce;
+           $num_agce = intval($num_agce);
+           $demandeenroles = ProjetFormation::where([['flag_valide','=',null]])->get();
+
+       }else if ($nomrole == 'CHEF DE DEPARTEMENT'){
             // Liste des projet de formation a traiter par le chef de departement
             $num_agce = Auth::user()->num_agce;
             $num_agce = intval($num_agce);
@@ -177,7 +189,7 @@ class ProjetFormationController extends Controller
                     $input['doc_demande_financement'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier du document de financement n\'est pas correcte');
                 }
 
@@ -199,7 +211,7 @@ class ProjetFormationController extends Controller
                     $input['doc_lettre_engagement'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier de la lettre d\'engagement n\'est pas correcte');
                 }
             }else {
@@ -219,7 +231,7 @@ class ProjetFormationController extends Controller
                     $input['doc_liste_beneficiaires'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier du de la liste des bénéficiaires n\'est pas correcte');
                 }
 
@@ -240,7 +252,7 @@ class ProjetFormationController extends Controller
                     $input['doc_supports_pedagogiques'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier des supports pedagogiques n\'est pas correcte');
                 }
 
@@ -261,7 +273,7 @@ class ProjetFormationController extends Controller
                     $input['doc_preuve_existance'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier de l\'existence legale du promoteur n\'est pas correcte');
                 }
 
@@ -282,7 +294,7 @@ class ProjetFormationController extends Controller
                     $input['doc_autre_document'] = $fileName1;
 
                 }else{
-                    return redirect()->route('projetetude.create')
+                    return redirect()->route('projetformation.create')
                     ->with('error', 'l\extension du fichier externe n\'est pas correcte');
                 }
 
@@ -433,7 +445,14 @@ class ProjetFormationController extends Controller
         //dd($projetetude->flag_soumis);
         // Infos entrerprises
         $user = User::find(Auth::user()->id);
-        $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+        if($nomrole == "ENTREPRISE"){
+            $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+        }else{
+            $entreprise = InfosEntreprise::get_infos_entreprise($projetetude->entreprise->ncc_entreprises);
+        }
+        // dd($nomrole);
+        // $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+        // dd($projetetude->entreprise->ncc_entreprises);
         //dd($entreprise);
         if($projetetude->flag_soumis == true) {
             // Liste des agences
@@ -818,7 +837,7 @@ class ProjetFormationController extends Controller
                 // $user_id = Auth::user()->id;
                 $projetformation->id_processus = 10;
                 $projetformation->save();
-                return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au directeur avec succès.');
+                return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au FDFP avec succès.');
 
             }
 

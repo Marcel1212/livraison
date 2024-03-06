@@ -951,8 +951,8 @@ $nombre = count($conseilleragence);
                                             Retour</a>
                                     </div>
                                     <!--<div class="col-12 col-md-2" align="right"> <br>
-                                                                                                                                                                <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
-                                                                                                                                                            </div>-->
+                                                                                                                                                                    <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                                                                                                                                                </div>-->
 
                                 </div>
 

@@ -164,6 +164,7 @@ class ComitePermanentePfController extends Controller
                                                 ['cout_projet_formation','>=',$typecomiteinfos->valeur_min_type_comite],
                                                 ['cout_projet_formation','<=',$typecomiteinfos->valeur_max_type_comite]])->get();
         //dd($planformations);
+        //dd($comitegestion->flag_comite_permanente );
 
         return view('comitepermanentepf.edit', compact('motif','comitegestion','comitegestionparticipant','ficheagrements','conseiller','planformations','idetape'));
     }
