@@ -49,7 +49,7 @@
                                             <th>Valeur min</th>
                                             <th>Valeur max</th>
                                             <th>Type de prestation</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

@@ -49,7 +49,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_type_entreprise"
                                                            id="colorCheck1">
                                                 </div>
