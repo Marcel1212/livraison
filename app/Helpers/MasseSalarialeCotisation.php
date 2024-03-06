@@ -8,7 +8,7 @@ use App\Models\PartEntreprise;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class MoyenCotisation
+class MasseSalarialeCotisation
 {
     public static function get_calcul_moyen_masse_salariale($entreprise)
     {

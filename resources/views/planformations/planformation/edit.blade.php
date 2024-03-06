@@ -199,7 +199,7 @@ $idpart = Auth::user()->id_partenaire;
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Plan de formation
+                          Informations sur l'entreprise
                         </button>
                       </li>
                       <li class="nav-item">
@@ -335,6 +335,15 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
+                                        <label>Type entreprises <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" required="required">
+                                            <?php echo $typeentreprise; ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
                                         <label>Nom et prénom du responsable formation <strong style="color:red;">*</strong></label>
                                         <input type="text" name="nom_prenoms_charge_plan_formati" id="nom_prenoms_charge_plan_formati"
                                                class="form-control form-control-sm" value="{{@$planformation->nom_prenoms_charge_plan_formati}}">
@@ -365,19 +374,11 @@ $idpart = Auth::user()->id_partenaire;
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Type entreprises <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" required="required">
-                                            <?php echo $typeentreprise; ?>
-                                        </select>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
 
-                                        <label>Masse salariale <strong style="color:red;">*</strong></label>
+                                        <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
                                         <input type="number" name="masse_salariale" id="masse_salariale"
                                                class="form-control form-control-sm" value="{{@$planformation->masse_salariale}}">
                                     </div>
@@ -634,7 +635,7 @@ $idpart = Auth::user()->id_partenaire;
                             </select>
                             </div>
                             <div class="col-12 col-md-2">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation </label>
                             <input
                                 type="date"
                                 id="date_debut_fiche_agrement"
@@ -644,7 +645,7 @@ $idpart = Auth::user()->id_partenaire;
                                />
                             </div>
                             <div class="col-12 col-md-2">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation </label>
                             <input
                                 type="date"
                                 id="date_fin_fiche_agrement"
