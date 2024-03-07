@@ -60,7 +60,9 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Titre du projet </th>
+                                                    <?php if ($nomrole != 'ENTREPRISE') { ?>
                                                     <th>Entreprise</th>
+                                                    <?php } ?>
                                                     <th>Code</th>
                                                     <th>Date de creation</th>
                                                     <th>Date de soumission</th>
@@ -75,8 +77,10 @@
                                                     <tr>
                                                         <td>{{ ++$i }}</td>
                                                         <td>{{ $demandeenrole->titre_projet_etude }}</td>
+                                                        <?php if ($nomrole != 'ENTREPRISE') { ?>
 
                                                         <td>{{ $demandeenrole->entreprise->raison_social_entreprises }}</td>
+                                                        <?php } ?>
                                                         </td>
                                                         <td>{{ $demandeenrole->code_projet_formation }}</td>
                                                         <td>{{ $demandeenrole->created_at }}</td>

@@ -1044,7 +1044,7 @@
                                                             <button type="submit" type="submit" name="action"
                                                                 value="soumission_projet_formation_departement"
                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                Affecter
+                                                                Imputer
                                                             </button>
 
                                                             <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -1096,7 +1096,7 @@
                                                             <button type="submit" type="submit" name="action"
                                                                 value="soumission_projet_formation_cs"
                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                Affecter
+                                                                Imputer
                                                             </button>
 
                                                             <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -1148,7 +1148,7 @@
                                                             <button type="submit" type="submit" name="action"
                                                                 value="soumission_projet_formation_conseiller"
                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                Affecter
+                                                                Imputer
                                                             </button>
 
                                                             <a class="btn btn-sm btn-outline-secondary waves-effect"

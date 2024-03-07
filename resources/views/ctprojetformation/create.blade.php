@@ -134,6 +134,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             class="form-control form-control-sm" onchange="verifierDateFin()" />
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Intitulé de la comité <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="intitule_comite" id="intitule_comite"
+                                            class="form-control form-control-sm" required />
+                                    </div>
+                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">

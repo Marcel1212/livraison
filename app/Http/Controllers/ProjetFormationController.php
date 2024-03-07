@@ -61,7 +61,7 @@ class ProjetFormationController extends Controller
              //dd('ee');
             $num_agce = Auth::user()->num_agce;
             $num_agce = intval($num_agce);
-            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce]])->get();
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce],['flag_statut_instruction','=',null]])->get();
 
         }else if ($nomrole == 'DIRECTEUR'){
             // Liste des projet de formation a traiter par le directeur
