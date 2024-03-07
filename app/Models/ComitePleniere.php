@@ -24,21 +24,21 @@ class ComitePleniere extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'comite_pleniere';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_comite_pleniere';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -46,7 +46,7 @@ class ComitePleniere extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user_comite_pleniere', 'date_debut_comite_pleniere', 'date_fin_comite_pleniere', 'commentaire_comite_pleniere', 'code_comite_pleniere', 'code_pieces', 'flag_comite_pleniere', 'flag_statut_comite_pleniere', 'created_at', 'updated_at'];
+    protected $fillable = ['id_user_comite_pleniere', 'date_debut_comite_pleniere', 'lien_ct', 'intitule_comite', 'date_fin_comite_pleniere', 'commentaire_comite_pleniere', 'code_comite_pleniere', 'code_pieces', 'flag_comite_pleniere', 'flag_statut_comite_pleniere', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

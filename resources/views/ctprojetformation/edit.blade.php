@@ -14,6 +14,7 @@ use Carbon\Carbon;
 $anneexercice = AnneeExercice::get_annee_exercice();
 $dateday = Carbon::now()->format('d-m-Y');
 $actifsoumission = false;
+$lien_meet = 'https://' . $comitepleniere->lien_ct;
 
 if (isset($anneexercice->id_periode_exercice)) {
     $actifsoumission = true;
@@ -133,6 +134,16 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
+
+                        <?php if($comitepleniere->flag_statut_comite_pleniere == true){?>
+                        <a href="{{ $lien_meet }}">
+
+                            <button type="submit" class="btn btn-sm btn-info me-1 waves-effect waves-float waves-light">
+                                Lancer le meet
+                            </button>
+                        </a> <br>
+                        <?php } ?>
+                        <br>
                         <form method="POST" class="form"
                             action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere)) }}"
                             enctype="multipart/form-data">
@@ -148,14 +159,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
                                 </div>
 
-                                {{-- <div class="col-md-4 col-12">
+                                <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Date de fin <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_fin_comite_pleniere"
-                                            class="form-control form-control-sm"
-                                            value="{{ $comitepleniere->date_fin_comite_pleniere }}" />
+                                        <label>Intitulé de la comité <strong style="color:red;">*</strong></label>
+                                        <input type="text" name="intitule_comite" class="form-control form-control-sm"
+                                            value="{{ $comitepleniere->intitule_comite }}" />
                                     </div>
-                                </div> --}}
+                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">

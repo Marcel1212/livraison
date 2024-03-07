@@ -96,6 +96,7 @@ class CtprojetformationController extends Controller
             $input['id_user_comite_pleniere'] = Auth::user()->id;
             $input['code_comite_pleniere'] = 'CTPRF' . Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
             $input['code_pieces'] = 'PRF';
+            //$input['intitule_comite'] = 'PRF';
 
             ComitePleniere::create($input);
 
@@ -216,7 +217,14 @@ class CtprojetformationController extends Controller
 
 
                 $comitepleniere = ComitePleniere::find($id);
+                // Recuperation du code du comite pleiniere
+                $code_comite = $comitepleniere->code_comite_pleniere ;
+                // Generation du lien meet Jitsi pour la reunion
+                $lien = 'meet.jit.si/fdfp/'. $code_comite;
+                // dd($lien);
+                // dd($comitepleniere);
                 $comitepleniere->update(['flag_statut_comite_pleniere'=> true]);
+                $comitepleniere->update(['lien_ct'=> $lien]);
 
 
                 return redirect('ctprojetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Le cahier a ete validé ');
