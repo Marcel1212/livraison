@@ -255,8 +255,6 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="{{asset('/assets/js/forms-typeahead.js')}}"></script>
 <script src="{{asset('/assets/js/app-academy-dashboard.js')}}"></script>
 <script src="{{asset('/assets/js/forms-editors.js')}}"></script>
-
-
 <script>
     var win = null;
 
@@ -315,7 +313,17 @@ $imagedashboard = Menu::get_info_image_dashboard();
     $(document).ready(function () {
         $('#exampleData').DataTable();
     });
+
+    $('input.number').keyup(function(event) {
+        if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+        }
+        $(this).val(function(index, value) {
+            return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        });
+    });
 </script>
+
 </body>
 
 </html>

@@ -68,8 +68,8 @@
                                                     }else {
                                                         echo "";
                                                     }?></td>
-                                                <td>{{ $typecomite->valeur_min_type_comite }}</td>
-                                                <td>{{ $typecomite->valeur_max_type_comite }}</td>
+                                                <td>{{ number_format($typecomite->valeur_min_type_comite, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($typecomite->valeur_max_type_comite, 0, ',', ' ') }}</td>
                                                 <td><?php if($typecomite->code_type_comite=="PF"){
                                                     echo "Plan de formation";
                                                 }elseif ($typecomite->code_type_comite=="POF") {

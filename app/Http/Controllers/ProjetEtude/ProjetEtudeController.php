@@ -45,7 +45,7 @@ class ProjetEtudeController extends Controller
                 'objet'=>'PROJET ETUDE'
             ]);
 
-            return view('module_projet_etude.demande.index',compact('projet_etudes'));
+            return view('projetetudes.demande.index',compact('projet_etudes'));
         }else{
             return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
         }
@@ -99,7 +99,7 @@ class ProjetEtudeController extends Controller
             'objet'=>'PROJET ETUDE'
         ]);
 
-        return view('module_projet_etude.demande.create', compact('formjuridique','infoentreprise','secteuractivite_projet','pay','secteuractivites'));
+        return view('projetetudes.demande.create', compact('formjuridique','infoentreprise','secteuractivite_projet','pay','secteuractivites'));
     }
 
     /**
@@ -236,7 +236,7 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PROJET ETUDE'
                 ]);
 
-                return view('module_projet_etude.demande.edit', compact('id_etape',
+                return view('projetetudes.demande.edit', compact('id_etape',
                     'avant_projet_tdr',
                     'courier_demande_fin',
                     'dossier_intention',

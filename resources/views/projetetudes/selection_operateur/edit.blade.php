@@ -418,8 +418,7 @@
                                 </form>
                             @endif
 
-                            @if(@$projet_etude_valide->operateurs->count()!=5)
-
+                            @if(@$projet_etude_valide->operateurs->count()<=5)
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <div class="alert-body text-center">
                                         Info : Il vous faut sélectionner  cinq opérateurs avant de soumettre la sélection
@@ -427,23 +426,23 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
 
-                            <form action="{{route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
-                                    @method('put')
-                                    @csrf
-                                    <div class="row mb-5">
-                                        <div class="col-md-11">
-                                            <label class="form-label">Opérateurs<span style="color:red;">*</span></label>
-                                            <select class="select2 form-select-sm input-group" name="operateur">
-                                                <?=$operateur_selected?>
-                                            </select>
+                                <form action="{{route($lien.'.update',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude)])}}" method="post">
+                                        @method('put')
+                                        @csrf
+                                        <div class="row mb-5">
+                                            <div class="col-md-11">
+                                                <label class="form-label">Opérateurs<span style="color:red;">*</span></label>
+                                                <select class="select2 form-select-sm input-group" name="operateur">
+                                                    <?=$operateur_selected?>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-1 mt-4" align="right">
+                                                <button type="submit" value="Enregistrer_selection" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
+                                                    Enregistrer
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="col-md-1 mt-4" align="right">
-                                            <button type="submit" value="Enregistrer_selection" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
-                                                Enregistrer
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
                                 <hr/>
                             @endif
 

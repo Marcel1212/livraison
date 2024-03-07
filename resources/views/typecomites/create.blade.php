@@ -62,15 +62,15 @@
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur min</label>
-                                                    <input type="number" name="valeur_min_type_comite" id="valeur_min_type_comite"
-                                                           class="form-control form-control-sm" min="0"/>
+                                                    <input type="text" name="valeur_min_type_comite" id="valeur_min_type_comite"
+                                                           class="form-control form-control-sm number" min="0"/>
                                                 </div>
                                             </div>
                                              <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Valeur max</label>
                                                     <input type="text" name="valeur_max_type_comite" id="valeur_max_type_comite"
-                                                           class="form-control form-control-sm" min="0"/>
+                                                           class="form-control form-control-sm number" min="0"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 col-12">
@@ -107,15 +107,18 @@
                 </div>
             </div>
         </div>
-
     <!-- END: Content-->
 
+
 @endsection
-@else
+                @else
  <script type="text/javascript">
     window.location = "{{ url('/403') }}";//here double curly bracket
+
 </script>
 @endif
+
+
 
 
 

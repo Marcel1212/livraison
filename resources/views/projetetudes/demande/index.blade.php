@@ -45,9 +45,11 @@
                             <tr>
                                 <th>N°</th>
                                 <th>Titre du projet </th>
-                                <th>Contexte</th>
-                                <th>Cible</th>
+                                <th>Code</th>
+                                <th>Chargé d'étude</th>
+                                <th>Date de création</th>
                                 <th>Date de soumission</th>
+                                <th>Date d'agrément</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -58,9 +60,11 @@
 
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
-                                <td>{{ @$projet_etude->date_soumis }}</td>
+                                <td>{{ @$projet_etude->code_projet_etude }}</td>
+                                <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
+                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}}</td>
                                 @if(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-secondary">Soumis</span></td>
 

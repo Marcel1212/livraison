@@ -86,6 +86,13 @@ class ProjetEtude extends Model
     {
         return $this->belongsTo(Motif::class, 'id_motif_recevable', 'id_motif');
     }
+
+    public function chargedetude()
+    {
+        return $this->belongsTo(User::class, 'id_charge_etude', 'id');
+    }
+
+
       /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

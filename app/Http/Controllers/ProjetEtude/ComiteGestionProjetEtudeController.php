@@ -182,9 +182,9 @@ class ComiteGestionProjetEtudeController extends Controller
                     $sujet = "Tenue de comité de gestion";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher, $nom_prenom  ,</b>
-                                    <br><br>Vous êtes convié au comité de gestion des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_gestion." au ".$comiteencours->date_fin_comite_gestion.".
+                                    <br><br>Vous êtes conviés au comité de gestion des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_gestion." au ".$comiteencours->date_fin_comite_gestion.".
 
-                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des projets d'étude.
+                                    <br><br> Vous êtes priés de bien vouloir  prendre connaissance des projets d'étude.
                                     <br>
 
                                     <br><br><br>
@@ -280,8 +280,6 @@ class ComiteGestionProjetEtudeController extends Controller
                 foreach ($secteuractivite_projets as $comp) {
                     $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
-
-
 
                 return view('comitegestionprojetetude.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',

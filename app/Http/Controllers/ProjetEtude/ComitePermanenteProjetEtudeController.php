@@ -184,9 +184,9 @@ class ComitePermanenteProjetEtudeController extends Controller
                     $sujet = "Tenue de comité de permanent";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                     $messageMail = "<b>Cher, $nom_prenom  ,</b>
-                                    <br><br>Vous êtes convié au comité permanent des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_gestion." au ".$comiteencours->date_fin_comite_gestion.".
+                                    <br><br>Vous êtes conviés à la commission permanente des projets d'étude qui se déroulera du  ".$comiteencours->date_debut_comite_gestion." au ".$comiteencours->date_fin_comite_gestion.".
 
-                                    <br><br> Vous êtes prié de bien vouloir  prendre connaissance des projets d'étude.
+                                    <br><br> Vous êtes priés de bien vouloir  prendre connaissance des projets d'étude.
                                     <br>
 
                                     <br><br><br>

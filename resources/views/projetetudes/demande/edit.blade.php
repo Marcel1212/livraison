@@ -118,6 +118,20 @@
                                                value="{{@$infoentreprise->adresse_postal_entreprises}}" disabled="disabled">
                                     </div>
                                 </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Type de forme juridique </label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                        <?= $formjuridique; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <div class="row">
