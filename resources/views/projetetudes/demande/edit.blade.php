@@ -198,22 +198,39 @@
                             </div>
                         </div>
                         <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                            <form method="POST" class="form" action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}">
+                            <form method="POST" id="demandeProjetForm" class="form" action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}">
                                 @csrf
                                 @method('put')
                                 <div class="col-md-12 col-10">
                                     <div class="row">
-                                        <div class="mb-1 col-md-6">
+                                        <div class="mb-1 col-md-12">
                                             <label>Titre du projet <span
                                                     style="color:red;">*</span>
                                             </label>
                                             <input type="text" name="titre_projet"
                                                    required="required" id="titre_projet"
-                                                   class="form-control form-control-sm"
                                                    @if(@$projet_etude->flag_soumis==true)
                                                        disabled
                                                    @endif
-                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
+                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                   class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Financement sollicité <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="montant_demande_projet"
+                                                   required="required" id="montant_demande_projet"
+                                                   @if(@$projet_etude->flag_soumis==true)
+                                                       disabled
+                                                   @endif
+                                                   value ="{{@$projet_etude->montant_demande_projet_etude}}"
+
+                                                   class="form-control form-control-sm number">
                                         </div>
 
                                         <div class="mb-1 col-md-6">
@@ -336,44 +353,53 @@
                             </form>
                         </div>
                         <div class="tab-pane fade @if($id_etape==3) show active @endif" id="navs-top-piecesprojetetude" role="tabpanel">
-                            @if(!isset($avant_projet_tdr) || !isset($courier_demande_fin) || !isset($dossier_intention) || !isset($lettre_engagement) || !isset($offre_technique) || !isset($offre_financiere) )
+                            @if(@$projet_etude->flag_soumis == false)
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <div class="alert-body text-center">
-                                       Info : Il vous faut ajouter tous les types de pièces et la pièce jointe associée avant de soumettre le projet d'étude
+                                       Info : les types de pièces marqués (<span class="text-danger">*</span>) il vous faut ajouter ces types de pièces et la pièce jointe associée avant de soumettre le projet d'étude
                                     </div>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
-                                <form method="POST" class="form"  enctype="multipart/form-data"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
+                                <form method="POST" class="form" id="demandeProjetPieceForm"  enctype="multipart/form-data"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
                                     @method('put')
                                     @csrf
                                     <div class="row mb-5">
                                         <div class="col-md-5">
-                                            <label class="form-label">Type de pièce <span style="color:red;">*</span></label>
-                                            <select
-                                                class="select2 form-select-sm input-group"
-                                                data-allow-clear="true" name="type_pieces">
-                                                @if(!isset($avant_projet_tdr))
-                                                    <option value="avant_projet_tdr">Avant-projet TDR</option>
-                                                @endif
-                                                @if(!isset($courier_demande_fin))
-                                                    <option value="courier_demande_fin">Courrier de demande de financement</option>
-                                                @endif
-                                                @if(!isset($dossier_intention))
-                                                    <option value="dossier_intention">Dossier d’intention</option>
-                                                @endif
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="form-label">Type de pièce <span style="color:red;">*</span></label>
+                                                    <select id="type_pieces"
+                                                            class="select2 form-select-sm input-group"
+                                                            data-allow-clear="true" name="type_pieces">
+                                                        <option value="">-- Sélectionner un type de pièce --
+                                                        </option>
+                                                        @if(!isset($avant_projet_tdr))
+                                                            <option value="avant_projet_tdr">Avant-projet TDR *</option>
+                                                        @endif
+                                                        @if(!isset($courier_demande_fin))
+                                                            <option value="courier_demande_fin">Courrier de demande de financement *</option>
+                                                        @endif
 
-                                                @if(!isset($lettre_engagement))
-                                                    <option value="lettre_engagement">Lettre d’engagement</option>
-                                                @endif
+                                                        @if(!isset($offre_technique))
+                                                            <option value="offre_technique" class="text-danger">Offre technique *</option>
+                                                        @endif
+                                                        @if(!isset($offre_financiere))
+                                                            <option value="offre_financiere">Offre financière *</option>
+                                                        @endif
+                                                            <option value="autres">Autres</option>
 
-                                                @if(!isset($offre_technique))
-                                                    <option value="offre_technique">Offre technique</option>
-                                                @endif
-                                                @if(!isset($offre_financiere))
-                                                    <option value="offre_financiere">Offre financière</option>
-                                                @endif
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-12 mt-1" id="div_libelle_piece">
+                                                    <label>Intitulé de la pièce <span
+                                                            style="color:red;">*</span>
+                                                    </label>
+                                                    <input type="text" name="intitule_piece"
+                                                           required="required" id="intitule_piece"
+                                                           class="form-control form-control-sm">
+                                                </div>
+                                            </div>
 
-                                            </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Pièce jointe <span
@@ -381,7 +407,7 @@
                                             <input type="file" name="pieces"
                                                    class="form-control form-control-sm"
                                                    required="required" />
-                                            <div id="defaultFormControlHelp" class="form-text">
+                                            <div id="" class="form-text">
                                                 <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
                                                     maxi : 5Mo</em>
                                             </div>
@@ -395,6 +421,7 @@
                                 </form>
                                 <hr/>
                             @endif
+
                             <table class="table table-bordered table-striped table-hover table-sm"
                                    style="margin-top: 13px !important">
                                 <thead>
@@ -409,9 +436,12 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($pieces_projets as $key => $piece)
+                                <?php
+                                    $i=1;
+                                ?>
+                                @foreach (@$pieces_projets as $key => $piece)
                                     <tr>
-                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $i++ }}</td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
                                                 Avant-projet TDR
@@ -431,6 +461,9 @@
                                             @if($piece->code_pieces=='offre_financiere')
                                                 Offre financière
                                             @endif
+                                                @if($piece->code_pieces=='autres_piece')
+                                                    {{@$piece->intitule_piece}}
+                                                @endif
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
@@ -457,24 +490,27 @@
                                                 <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du fichier</a>
                                             @endif
+                                                @if($piece->code_pieces=='autres_piece')
+                                                    <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/autres_piece/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                       title="Afficher">Aperçu du ficher</a>
+                                                @endif
                                         </td>
                                         @if(@$projet_etude->flag_soumis == false)
 
-                                        <td class="text-center">
+                                            <td class="text-center">
                                                 <a href="{{ route($lien.'.deletefpe',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_piece_projet'=>\App\Helpers\Crypt::UrlCrypt($piece->id_pieces_projet_etude)]) }}"
                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette pièce?")) return false;'
                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
 
-                                        </td>
+                                            </td>
                                         @endif
 
                                     </tr>
                                 @endforeach
-
                                 </tbody>
                             </table>
 
-                            @if(isset($avant_projet_tdr) && isset($courier_demande_fin) && isset($dossier_intention) && isset($lettre_engagement) && isset($offre_technique) && isset($offre_financiere) )
+                            @if(isset($avant_projet_tdr) && isset($courier_demande_fin) && isset($offre_technique) && isset($offre_financiere) )
                                 <form method="POST" class="form mt-3"  action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}">
                                     @method('put')
                                     @csrf
@@ -500,8 +536,27 @@
     </div>
     <!-- END: Content-->
 @endsection
+@section('js_perso')
+    <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('assets/js/additional-methods.js')}}"></script>
+    <script src="{{asset('assets/js/projetetudes/pages-demande-projet.js')}}"></script>
+    <script type="text/javascript">
+        $("#div_libelle_piece").hide();
+        $("#intitule_piece").prop( "disabled", true );
+        $('#type_pieces').on('change', function() {
+            if(this.value=='autres'){
+                $("#div_libelle_piece").show();
+                $("#intitule_piece").prop( "disabled", false );
+            }else{
+                $("#div_libelle_piece").hide();
+                $("#intitule_piece").prop( "disabled", true );
+            }
+        });
+
+    </script>
+@endsection
 @else
  <script type="text/javascript">
-    window.location = "{{ url('/403') }}";//here double curly bracket
+     window.location = "{{ url('/403') }}";//here double curly bracket
 </script>
 @endif

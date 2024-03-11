@@ -8,7 +8,9 @@
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
-        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
+        <span class="text-muted fw-light">
+            <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
+           {{$Module}} /  {{$titre}}</span>
     </h5>
 
     @if ($message = Session::get('success'))
@@ -36,8 +38,9 @@
                         <tr>
                             <th>N°</th>
                             <th>Titre du projet </th>
-                            <th>Contexte</th>
-                            <th>Cible</th>
+                            <th>Code</th>
+                            <th>Entreprise</th>
+                            <th>Date de création</th>
                             <th>Date de soumission</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -47,10 +50,16 @@
                         @foreach ($projet_etudes as $key => $projet_etude)
                             <tr>
                                 <td>{{ $key+1 }}</td>
-                                <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
-                                <td>{{ @$projet_etude->date_soumis }}</td>
+                                <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                <td>{{ @$projet_etude->entreprise->raison_social_entreprises }}</td>
+                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
+{{--                                <td>{{ $key+1 }}</td>--}}
+{{--                                <td>{{ @$projet_etude->titre_projet_etude }}</td>--}}
+{{--                                <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>--}}
+{{--                                <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>--}}
+{{--                                <td>{{ @$projet_etude->date_soumis }}</td>--}}
 
                                 @if(@$role=="CHEF DE DEPARTEMENT")
                                     @if($projet_etude->flag_soumis_chef_depart==false)

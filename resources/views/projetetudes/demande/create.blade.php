@@ -192,7 +192,7 @@
                             </div>
                     </div>
                     <div class="tab-pane fade show active" id="navs-top-infoprojetetude" role="tabpanel">
-                        <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                        <form method="POST" id="demandeProjetForm" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
                         <div class="col-md-12 col-10">
                             <div class="row">
@@ -201,7 +201,7 @@
                                             style="color:red;">*</span>
                                     </label>
                                     <input type="text" name="titre_projet"
-                                           required="required" id="titre_projet"
+                                           id="titre_projet"
                                            class="form-control form-control-sm">
                                 </div>
                             </div>
@@ -211,12 +211,12 @@
                             <div class="col-md-12 col-10">
                                 <div class="row">
                                     <div class="mb-1 col-md-6">
-                                        <label>Montant du projet <span
+                                        <label>Financement sollicité <span
                                                 style="color:red;">*</span>
                                         </label>
-                                        <input type="text" name="montant_projet"
-                                               required="required" id="montant_projet"
-                                               class="form-control form-control-sm">
+                                        <input type="text" name="montant_demande_projet"
+                                              id="montant_demande_projet"
+                                               class="form-control form-control-sm number">
                                     </div>
 
                                     <div class="mb-1 col-md-6">
@@ -236,7 +236,7 @@
                                 <div class="mb-1">
                                     <label>Contexte ou Problèmes constatés <span
                                             style="color:red;">*</span></label>
-                                    <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
+                                    <textarea class="form-control"  rows="3" id="exampleFormControlTextarea"
                                               name="contexte_probleme" style="height: 121px;"></textarea>
                                 </div>
                             </div>
@@ -244,7 +244,7 @@
                                 <div class="mb-1">
                                     <label>Objectif Général <span
                                             style="color:red;">*</span> </label>
-                                    <textarea required="required" class="form-control" rows="3" id="exampleFormControlTextarea"
+                                    <textarea class="form-control" rows="3" id="objectif_general"
                                               name="objectif_general" style="height: 121px;"></textarea>
 
                                 </div>
@@ -253,7 +253,7 @@
                                 <div class="mb-1">
                                     <label>Objectifs spécifiques <span
                                             style="color:red;">*</span> </label>
-                                    <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
+                                    <textarea class="form-control" rows="3" id="objectif_specifique"
                                               name="objectif_specifique" style="height: 121px;"></textarea>
 
                                 </div>
@@ -263,7 +263,7 @@
                                 <div class="mb-1">
                                     <label>Résultats attendus <span
                                             style="color:red;">*</span> </label>
-                                    <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
+                                    <textarea class="form-control" rows="3" id="resultat_attendu"
                                               name="resultat_attendu" style="height: 121px;"></textarea>
 
                                 </div>
@@ -272,8 +272,8 @@
                                 <div class="mb-1">
                                     <label>Champ de l’étude <span
                                             style="color:red;">*</span></label>
-                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="champ_etude"
-                                              style="height: 121px;" required="required"></textarea>
+                                    <textarea class="form-control" rows="3" id="champ_etude" name="champ_etude"
+                                              style="height: 121px;"></textarea>
 
                                 </div>
                             </div>
@@ -281,9 +281,8 @@
                                 <div class="mb-1">
                                     <label>Cible <span style="color:red;">*</span>
                                     </label>
-                                    <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="cible" style="height: 121px;"
-                                              required="required"></textarea>
-
+                                    <textarea class="form-control" rows="3" id="cible" name="cible" style="height: 121px;"
+                                             ></textarea>
                                 </div>
                             </div>
                         </div>
@@ -306,6 +305,11 @@
             </div>
         </div>
     </div>
+@endsection
+@section('js_perso')
+    <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('assets/js/additional-methods.js')}}"></script>
+    <script src="{{asset('assets/js/projetetudes/pages-demande-projet.js')}}"></script>
 @endsection
 @else
     <script type="text/javascript">

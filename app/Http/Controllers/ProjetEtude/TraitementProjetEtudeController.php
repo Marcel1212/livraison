@@ -7,6 +7,7 @@ use App\Helpers\Email;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
 use App\Models\Entreprises;
+use App\Models\FormeJuridique;
 use App\Models\Motif;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -30,26 +31,27 @@ class TraitementProjetEtudeController extends Controller
         }else{
             $projet_etudes = ProjetEtude::all();
         }
-        return view('traitementprojetetude.index',compact('projet_etudes'));
+        return view('projetetudes.traitement.index',compact('projet_etudes'));
     }
 
     public function edit($id,$id_etape)
     {
         $id =  Crypt::UrldeCrypt($id);
         $id_etape =  Crypt::UrldeCrypt($id_etape);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
             if(isset($projet_etude)){
+                $formjuridique = "<option value='".@$projet_etude->entreprise->formeJuridique->id_forme_juridique."'> " . @$projet_etude->entreprise->formeJuridique->libelle_forme_juridique . "</option>";
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
                 $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
 
                 $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','avant_projet_tdr')->first();
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','courier_demande_fin')->first();
-                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','dossier_intention')->first();
-                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','lettre_engagement')->first();
                 $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_technique')->first();
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -98,15 +100,18 @@ class TraitementProjetEtudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
-                return view('traitementprojetetude.edit', compact(
+                return view('projetetudes.traitement.edit', compact(
                     'secteuractivite_projet',
-                'statutinst','motifs','id_etape','avant_projet_tdr','courier_demande_fin','dossier_intention','lettre_engagement','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
+                    'formjuridique',
+
+                'statutinst','motifs','id_etape','avant_projet_tdr','courier_demande_fin','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
             }
         }
     }
 
     public function update(Request $request, $id)
     {
+
         $id =  Crypt::UrldeCrypt($id);
         if(isset($id)){
             if ($request->isMethod('put')) {
@@ -132,7 +137,7 @@ class TraitementProjetEtudeController extends Controller
                             $sujet = "Recevabilité du projet d'étude sur e-FDFP";
                             $titre = "Bienvenue sur ".@$logo->mot_cle;
                             $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre projet d'étude de formation sur e-FDFP, et il a été
+                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
                                    approuvé avec succès.
 
                                     <br><br><br>
@@ -147,14 +152,6 @@ class TraitementProjetEtudeController extends Controller
                     }
                 }
                 if($request->action === 'MettreEnAttente'){
-                    $this->validate($request, [
-                        'id_motif_recevable' => 'required',
-                        'commentaires_recevabilite' => 'required'
-                    ],[
-                        'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
-                        'commentaires_recevabilite.required' => 'Veuillez ajouter un commentaire de recevabilité.',
-                    ]);
-
                     if(isset($projet_etude)){
                         $projet_etude->flag_attente_rec = true;
                         $projet_etude->id_motif_recevable = $request->id_motif_recevable;
@@ -172,10 +169,6 @@ class TraitementProjetEtudeController extends Controller
                             $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
                                     <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
                                    mis en attente nous vous prions de bien vouloir patienter.
-
-                                    <br><b>Motif de la mise en attente  : </b> ".@$projet_etude->motif->libelle_motif."
-                                    <br><b>Commentaire : </b> ".@$projet_etude->commentaires_recevabilite."" .
-                                "
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -215,18 +208,11 @@ class TraitementProjetEtudeController extends Controller
                             $sujet = "Recevabilité du projet d'étude sur e-FDFP";
                             $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                             $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre paln de formation sur e-FDFP, et
+                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
                                     <br><b>Motif de rejet  : </b> ".@$projet_etude->motif->libelle_motif."
                                     <br><b>Commentaire : </b> ".@$projet_etude->commentaires_recevabilite."
-                                    <br><br>
-                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
-                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
-                                        Cordialement,
-                                        L'équipe e-FDFP
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -254,7 +240,7 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
                         $projet_etude->cible_instruction = $request->cible_instruction;
                         $projet_etude->methodologie_instruction = $request->methodologie_instruction;
-                        $projet_etude->montant_projet_instruction = $request->montant_projet_instruction;
+                        $projet_etude->montant_projet_instruction =str_replace(' ', '', $request->montant_projet_instruction);
                         $projet_etude->id_secteur_activite = $request->id_secteur_activite;
 
                         if (isset($request->fichier_instruction)){
@@ -264,7 +250,7 @@ class TraitementProjetEtudeController extends Controller
                                 $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
                                 $projet_etude->piece_jointe_instruction = $fileName1;
                             }else{
-                                return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+                                return redirect('projetetudes.traitement/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
                             }
                         }
                         $projet_etude->update();
@@ -300,7 +286,7 @@ class TraitementProjetEtudeController extends Controller
                                 $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
                                 $projet_etude->piece_jointe_instruction = $fileName1;
                             }else{
-                                return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+                                return redirect('projetetudes.traitement/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
                             }
                         }
                         $projet_etude->statut_instruction = false;
@@ -344,11 +330,54 @@ class TraitementProjetEtudeController extends Controller
                             $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                         }else{}
 
-                        return redirect()->route('traitementprojetetude.index')->with('success', 'Rejet de l\'instruction effectue avec succès.');
+                        return redirect()->route('projetetudes.traitement.index')->with('success', 'Rejet de l\'instruction effectue avec succès.');
                     }
                 }
             }
         }
     }
+
+    public function editPieceSelect($id){
+        if(isset($id)){
+            $piece_edit= PiecesProjetEtude::where('id_pieces_projet_etude',$id)->first();
+            if(isset($piece_edit)){
+                if($piece_edit->code_pieces=='avant_projet_tdr'){
+                    $type_piece = "Avant-projet TDR";
+                }
+
+                if($piece_edit->code_pieces=='courier_demande_fin'){
+                    $type_piece = "Courrier de demande de financement";
+                }
+
+                if($piece_edit->code_pieces=='offre_technique'){
+                    $type_piece = "Offre technique";
+                }
+
+                if($piece_edit->code_pieces=='offre_financiere'){
+                    $type_piece = "Offre financière";
+                }
+
+                if($piece_edit->code_pieces=='autres_piece'){
+                    $type_piece = $piece_edit->intitule_piece;
+                }
+                return response()->json(['id_pieces_projet_etude'=>$piece_edit->id_pieces_projet_etude,'type_piece'=>$type_piece,'commentaire_piece'=>$piece_edit->commentaire_piece]);
+            }
+        }
+    }
+
+    public function addPieceCommentaire(Request $request){
+        $id = $request->id_pieces_projet_etude;
+        if(isset($id)){
+            $piece_edit= PiecesProjetEtude::where('id_pieces_projet_etude',$id)->first();
+            if(isset($piece_edit)){
+                $piece_edit->commentaire_piece = $request->commentaire_piece;
+                $piece_edit->update();
+                $id_projet_etude = $piece_edit->id_projet_etude;
+                return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id_projet_etude).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Commentaire ajouté à la pièce avec succès');
+            }
+        }
+    }
+
+
 
 }

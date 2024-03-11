@@ -2,6 +2,9 @@ $(function () {
     'use strict';
         var enrolementForm = $('#enrolementForm');
 
+    $.validator.addMethod('filesize', function (value, element, param) {
+        return this.optional(element) || (element.files[0].size <= param)
+    }, 'la taille maximale doit être de 5 MegaOctets');
     // jQuery Validation
     // --------------------------------------------------------------------
     if (enrolementForm.length) {
@@ -47,16 +50,17 @@ $(function () {
                 },
                 'piece_dfe_demande_enrolement': {
                     required: true,
+                    filesize: 5242880,
                     extension: "png|jpg|jpeg|pdf|PNG|JPG|JPEG|PDF"
                 },
                 'piece_rccm_demande_enrolement': {
                     required: true,
-                    filesize: "5120",
+                    filesize: 5242880,
                     extension: "png|jpg|jpeg|pdf|PNG|JPG|JPEG|PDF"
                 },
                 'piece_attestation_immatriculati': {
                     required: true,
-                    filesize: "5120",
+                    filesize: 5242880,
                     extension: "png|jpg|jpeg|pdf|PNG|JPG|JPEG|PDF"
                 },
                 'g-recaptcha-response': {
@@ -91,20 +95,17 @@ $(function () {
                 piece_dfe_demande_enrolement:{
                     required: "Veuillez ajouter une pièce DFE",
                     extension: "Les formats requis pour la pièce de la DFE sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF",
-                    filesize: "la taille maximale doit être de 5 MegaOctets",
                 },
 
                 piece_rccm_demande_enrolement:{
                     required:  "Veuillez ajouter une piéce RCCM",
                     extension: "Les formats requis pour la pièce de la RCCM sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF",
-                    filesize: "la taille maximale doit être de 5 MegaOctets",
                 },
 
 
                 piece_attestation_immatriculati:{
                     required: "Veuillez ajouter une pièce d\'attestation d\'immatriculation",
                     extension: "Les formats requis pour la pièce de l\'attestataion d\'immatriculation sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF",
-                    filesize: "la taille maximale doit être de 5 MegaOctets",
                 },
 
                 'g-recaptcha-response': {
