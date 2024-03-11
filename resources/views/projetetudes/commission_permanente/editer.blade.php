@@ -471,7 +471,7 @@
                                                 <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                                 </label>
                                                 <input class="form-control" type="text" id="resultat_attendu_instruction_val" name="resultat_attendu_instruction"/>
-                                                <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_instruction !!}</div>
+                                                <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendus_instruction !!}</div>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12 mt-2">
@@ -503,7 +503,7 @@
                                                 <div class="mb-1">
                                                     <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
                                                     </label>
-                                                    <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" disabled class="number form-control form-control-sm number"
+                                                    <input type="text" name="montant_projet_instruction" id="montant_projet_instruction"  class="number form-control form-control-sm number"
                                                            value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
                                                 </div>
                                             </div>
@@ -528,7 +528,7 @@
                                         <hr>
                                         <button type="submit" name="action" value="Modifier"
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Modifier
+                                            Valider
                                         </button>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>

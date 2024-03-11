@@ -140,55 +140,55 @@ $logo = Menu::get_logo();
     </div>
     <div class="col-xl-12">
         <h3>Titre du projet: {{@$agreement->titre_projet_instruction}}</h3>
-        <p class="text-danger" style="color:red; font-weight: bold">Montant Alloué au projet : {{@number_format($agreement->montant_projet)}} XOF</p>
+        <p class="text-danger" style="color:red; font-weight: bold">Montant Alloué au projet : {{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }} XOF</p>
     </div>
 
     <div class="col-xl-12">
         <h4>1. Contexte ou Problèmes constatés </h4>
         <p>
-            {{@$agreement->contexte_probleme_instruction}}
+            {!!@$agreement->contexte_probleme_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>2. Objectif général </h4>
         <p>
-            {{@$agreement->objectif_general_instruction}}
+            {!!@$agreement->objectif_general_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>3. Objectif spécific </h4>
         <p>
-            {{@$agreement->objectif_specifique_instruction}}
+            {!! @$agreement->objectif_specifique_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>4. Résultat attendu </h4>
         <p>
-            {{@$agreement->resultat_attendus_instruction}}
+            {!!@$agreement->resultat_attendus_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>5. Champ de l'étude </h4>
         <p>
-            {{@$agreement->champ_etude_instruction}}
+            {!!@$agreement->champ_etude_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>6. Cible </h4>
         <p>
-            {{@$agreement->cible_instruction}}
+            {!!@$agreement->cible_instruction!!}
         </p>
     </div>
 
     <div class="col-xl-12">
         <h4>7. Méthodologie </h4>
         <p>
-            {{@$agreement->methodologie_instruction}}
+            {!!@$agreement->methodologie_instruction!!}
         </p>
     </div>
 </body>

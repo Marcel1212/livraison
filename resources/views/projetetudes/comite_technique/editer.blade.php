@@ -449,7 +449,7 @@
                                                         </label>
                                                         <input type="text" name="titre_projet_instruction"
                                                                required="required" id="titre_projet_instruction"
-                                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
                                                                class="form-control form-control-sm">
                                                     </div>
                                                 </div>
@@ -484,14 +484,14 @@
                                         <div class="mb-1">
                                             <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
                                             <input class="form-control" type="text" id="contexte_probleme_instruction_val" name="contexte_probleme_instruction"/>
-                                            <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
+                                            <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_instruction !!}</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
                                             <input class="form-control" type="text" id="objectif_general_instruction_val" name="objectif_general_instruction"/>
-                                            <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude !!}</div>
+                                            <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_instruction !!}</div>
 
                                         </div>
                                     </div>
@@ -499,7 +499,7 @@
                                         <div class="mb-1">
                                             <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
                                             <input class="form-control" type="text" id="objectif_specifique_instruction_val" name="objectif_specifique_instruction"/>
-                                            <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud !!}</div>
+                                            <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_instruction !!}</div>
 
                                         </div>
                                     </div>
@@ -508,14 +508,14 @@
                                             <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                             </label>
                                             <input class="form-control" type="text" id="resultat_attendu_instruction_val" name="resultat_attendu_instruction"/>
-                                            <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude !!}</div>
+                                            <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendus_instruction !!}</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
                                             <input class="form-control" type="text" id="champ_etude_instruction_val" name="champ_etude_instruction"/>
-                                            <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude !!}</div>
+                                            <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_instruction !!}</div>
 
                                         </div>
                                     </div>
@@ -524,7 +524,7 @@
                                             <label for="cible_instruction">Cible <span style="color:red;">*</span>
                                             </label>
                                             <input class="form-control" type="text" id="cible_instruction_val" name="cible_instruction"/>
-                                            <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_projet_etude !!}</div>
+                                            <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_instruction !!}</div>
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-12 mt-2">

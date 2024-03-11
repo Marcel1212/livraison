@@ -326,8 +326,8 @@ class ComitePermanenteProjetEtudeController extends Controller
                 $projet_etude = ProjetEtude::find($id);
                 $idprojetetude = $projet_etude->id_projet_etude;
                 $projet_etude->flag_valider_comite_permanente_projet_etude = true;
-                $input = $request->all();
-                $projet_etude->update($input);
+                $projet_etude->montant_projet_instruction = str_replace(' ', '', $request->montant_projet_instruction);
+                $projet_etude->update();
                 return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succès : Projet d\'étude Traité ');
             }
 
@@ -342,8 +342,8 @@ class ComitePermanenteProjetEtudeController extends Controller
                     'id_user_fiche_agrement' => Auth::user()->id,
                     'flag_fiche_agrement'=> true
                 ]);
-                    $projet_etude = ProjetEtude::find($idprojetetude);
 
+                $projet_etude = ProjetEtude::find($idprojetetude);
                 $projet_etude->update([
                         'flag_fiche_agrement' => true,
                         'date_fiche_agrement' => now()

@@ -175,7 +175,7 @@ class CtprojetetudevaliderController extends Controller
                             $projet_etude->update();
                         }
 
-                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succès ');
+                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Opération validée avec succès ');
                     }
 
                     if ($data['action'] === 'Rejeter') {
@@ -222,7 +222,7 @@ class CtprojetetudevaliderController extends Controller
                             //TRAITEMENT A EFFECTUER APRES REJET
 
                         }
-                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succès ');
+                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Opération validée avec succès ');
                     }
 
                 }

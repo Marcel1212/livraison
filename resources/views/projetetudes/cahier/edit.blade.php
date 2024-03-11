@@ -311,13 +311,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <tbody>
 
                                 <?php $i=0 ?>
-                                @foreach ($cahierprojetetudes as $key => $projetetude)
+                                @foreach ($cahierprojetetudes as $key => $projet_etude)
                                     <tr>
                                         <td>{{$key+1}}</td>
                                         <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
                                         <td>{{ @$projet_etude->code_projet_etude}}</td>
-                                        <td>{{ @$projet_etude->entreprise->ncc_entreprises }} / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
-                                        <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+                                        <td>{{ @$projet_etude->ncc_entreprises }} / {{ @$projet_etude->raison_social_entreprises}}</td>
+                                        <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
                                         <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>
                                         <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
                                         <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>

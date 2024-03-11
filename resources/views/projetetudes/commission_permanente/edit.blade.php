@@ -236,11 +236,14 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Entreprise </th>
                                     <th>Code </th>
+                                    <th>Entreprise </th>
+                                    <th>Chargé d'étude </th>
                                     <th>Titre du projet </th>
-                                    <th>Date soumis</th>
-                                    <th>Cout du projet</th>
+                                    <th>Financement sollicité</th>
+                                    <th>Financement accordé</th>
+                                    <th>Date de création</th>
+                                    <th>Date de soumission</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -248,21 +251,40 @@
 
                                 <?php //dd($projetetudes);
                                 $i = 0; ?>
-                                @foreach ($projetetudes as $key => $projetetude)
+{{--                                @foreach ($ficheagrements as $key => $projet_etude)--}}
+{{--                                    <tr>--}}
+{{--                                        <td>{{ ++$i }}</td>--}}
+{{--
+{{--                                    </tr>--}}
+{{--                                @endforeach--}}
+
+
+                                @foreach ($projetetudes as $key => $projet_etude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
-                                        <td>{{ @$projetetude->entreprise->ncc_entreprises }} /
-                                            {{ @$projetetude->entreprise->raison_social_entreprises }}</td>
-                                        <td>{{ @$projetetude->code_projet_etude }}</td>
-                                        <td>{{ @$projetetude->titre_projet_etude }}</td>
-                                        <td>{{ $projetetude->date_soumis }}</td>
-                                        <td align="rigth">
-                                            {{ number_format($projetetude->montant_projet_instruction) }}</td>
+                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                        <td>{{ @$projet_etude->entreprise->ncc_entreprises }} /
+                                            {{ @$projet_etude->entreprise->raison_social_entreprises }}</td>
+                                        <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+
+                                        <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>--}}
+                                        <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+
+                                        <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>--}}
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
+
+{{--                                        <td>{{ @$projetetude->titre_projet_etude }}</td>--}}
+
+{{--                                        <td>{{ @$projetetude->titre_projet_etude }}</td>--}}
+{{--                                        <td>{{ $projetetude->date_soumis }}</td>--}}
+{{--                                        <td align="rigth">--}}
+{{--                                            {{ number_format($projetetude->montant_projet_instruction) }}</td>--}}
 
                                         <td align="center">
                                             <?php if($comitepermanente->flag_statut_comite_permanente == false && count($comitepermanenteparticipant)>=1){?>
 {{--                                            @can($lien . '-edit')--}}
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
 {{--                                            @endcan--}}
                                             <?php } ?>
@@ -313,29 +335,28 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Entreprise </th>
                                 <th>Code </th>
+                                <th>Entreprise </th>
+                                <th>Chargé d'étude </th>
                                 <th>Titre du projet </th>
-                                <th>Cout demandé</th>
-                                <th>Cout accordé </th>
-                                <th>Date soumis</th>
+                                <th>Financement sollicité</th>
+                                <th>Financement accordé</th>
+                                <th>Date de création</th>
+                                <th>Date de soumission</th>
                             </tr>
-
                             </thead>
                             <tbody>
-                                @foreach ($ficheagrements as $key => $projetetude)
+                                @foreach ($ficheagrements as $key => $projet_etude)
                                     <tr>
                                         <td>{{ ++$i }}</td>
-                                        <td>{{ @$projetetude->ncc_entreprises }} /
-                                            {{ @$projetetude->raison_social_entreprises }}</td>
-                                        <td>{{ @$projetetude->code_projet_etude }}</td>
-                                        <td>{{ @$projetetude->titre_projet_etude }}</td>
-                                        <td align="rigth">
-                                            {{ number_format($projetetude->montant_projet_instruction) }}</td>
-                                        <td align="rigth">
-                                            {{ number_format($projetetude->montant_projet) }}</td>
-                                        <td>{{ $projetetude->date_soumis }}</td>
-
+                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                        <td>{{ @$projet_etude->ncc_entreprises }} / {{ @$projet_etude->raison_social_entreprises }}</td>
+                                        <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
+                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                        <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>
+                                        <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -353,28 +353,6 @@
             $("#methodologie_val").val(methodologie.root.innerHTML);
         }
 
-        //Initialisation des variable Quill
-        var contexte_probleme = new Quill('#contexte_probleme', {
-            theme: 'snow'
-        });
-        var objectif_general = new Quill('#objectif_general', {
-            theme: 'snow'
-        });
-        var objectif_specifique = new Quill('#objectif_specifique', {
-            theme: 'snow'
-        });
-        var resultat_attendu = new Quill('#resultat_attendu', {
-            theme: 'snow'
-        });
-        var champ_etude = new Quill('#champ_etude', {
-            theme: 'snow'
-        });
-        var cible = new Quill('#cible', {
-            theme: 'snow'
-        });
-        var methodologie = new Quill('#methodologie', {
-            theme: 'snow'
-        });
     </script>
 @endsection
 @else

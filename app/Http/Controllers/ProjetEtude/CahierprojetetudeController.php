@@ -55,11 +55,11 @@ class CahierprojetetudeController extends Controller
             $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
             $cahier =  CahierProjetetude::create($input);
             if($request->action=="Enregistrer"){
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Enregistrement reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Enregistrement réussi ');
             }
 
             if($request->action=="Enregistrer_suivant"){
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Enregistrement reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Enregistrement réussi ');
             }
 
         }
@@ -271,7 +271,7 @@ class CahierprojetetudeController extends Controller
 
                 $comite->update(['flag_statut_cahier_projet_etude'=> true,'date_soumis_cahier_projet_etude'=>Carbon::now()]);
 
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise a jour reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise à jour');
 
             }
 

@@ -260,20 +260,20 @@ $idconnect = Auth::user()->id;
                                 <div class="col-md-6 col-12 mt-2">
                                     <div class="mb-1">
                                         <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                        <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
+                                        <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_instruction !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12 mt-2">
                                     <div class="mb-1">
                                         <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
-                                        <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude !!}</div>
+                                        <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_instruction !!}</div>
 
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12 mt-2">
                                     <div class="mb-1">
                                         <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                        <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud !!}</div>
+                                        <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_instruction !!}</div>
 
                                     </div>
                                 </div>
@@ -281,13 +281,13 @@ $idconnect = Auth::user()->id;
                                     <div class="mb-1">
                                         <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                         </label>
-                                        <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude !!}</div>
+                                        <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendus_instruction !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12 mt-2">
                                     <div class="mb-1">
                                         <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                        <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude !!}</div>
+                                        <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_instruction !!}</div>
 
                                     </div>
                                 </div>
@@ -295,7 +295,7 @@ $idconnect = Auth::user()->id;
                                     <div class="mb-1">
                                         <label for="cible_instruction">Cible <span style="color:red;">*</span>
                                         </label>
-                                        <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_projet_etude !!}</div>
+                                        <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_instruction !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-12 mt-2">
