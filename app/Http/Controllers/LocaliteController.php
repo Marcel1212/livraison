@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Localite;
+use App\Models\Departement;
+use Illuminate\Support\Facades\DB;
+
 
 class LocaliteController extends Controller
 {
@@ -14,6 +17,13 @@ class LocaliteController extends Controller
     public function index()
     {
         $localites = Localite::all();
+        $localite_departement = DB::table('localite')
+        ->join('departement_localite', 'localite.departement_localite_id', '=', 'departement_localite.id_departement_localite')
+        ->join('region', 'departement_localite.id_region', '=', 'region.id_region')
+        ->join('district', 'region.id_district', '=', 'district.id_district')
+        ->select('localite.*', 'departement_localite.*', 'region.*', 'district.*')
+        ->get();
+        //dd( $localite_departement);
         Audit::logSave([
 
             'action'=>'INDEX',
@@ -27,7 +37,7 @@ class LocaliteController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return view('localite.index', compact('localites'));
+        return view('localite.index', compact('localites','localite_departement'));
     }
 
     /**

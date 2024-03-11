@@ -46,16 +46,22 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libellé</th>
-                                            <th>Statut</th>
+                                            <th>Localité</th>
+                                            <th>Département</th>
+                                            <th>Region</th>
+                                            <th>District</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($localites as $key => $localite)
+                                            @foreach ($localite_departement as $key => $localite)
                                             <tr>
                                                 <td>{{ $localite->id_localite }}</td>
                                                 <td>{{ $localite->libelle_localite }}</td>
+                                                <td>{{ $localite->libelle_departement_localite }}</td>
+                                                <td>{{ $localite->libelle_region }}</td>
+                                                <td>{{ $localite->libelle_district}}</td>
                                                 <td align="center">
                                                     <?php if ($localite->flag_localite == true ){?>
                                                     <span class="badge bg-success">Actif</span>
