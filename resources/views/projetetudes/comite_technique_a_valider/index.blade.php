@@ -36,10 +36,13 @@
                            style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th>No</th>
+                                <th>N°</th>
                                 <th>Titre du projet </th>
-                                <th>Contexte </th>
-                                <th>Cible </th>
+                                <th>Code</th>
+                                <th>Chargé d'étude</th>
+                                <th>Entreprise</th>
+                                <th>Date de création</th>
+                                <th>Date de soumission</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -49,20 +52,21 @@
                         @foreach ($Resultat as $key => $res1)
                             @foreach ($res1 as $key => $projet_etude)
                                 <tr>
-                                    <td>{{ ++$i }}</td>
-                                    <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                    <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                    <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                    <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                    <td>{{ mb_strtoupper(@$projet_etude->name) }} {{  mb_strtoupper(@$projet_etude->prenom_users) }}</td>
+                                    <td>{{ @$projet_etude->ncc_entreprises }} / {{ @$projet_etude->raison_social_entreprises}}</td>
+                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                     <td align="center">
                                         <span class="badge bg-warning">En attente de traitement</span>
                                     </td>
                                     <td align="center">
-{{--                                        @can($lien.'-edit')--}}
-                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_combi_proc)]) }}"
-                                               class=" "
-                                               title="Modifier"><img
-                                                    src='/assets/img/editing.png'></a>
-{{--                                        @endcan--}}
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_combi_proc)]) }}"
+                                           class=" "
+                                           title="Modifier"><img
+                                                src='/assets/img/editing.png'></a>
                                     </td>
                                 </tr>
                             @endforeach

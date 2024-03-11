@@ -11,6 +11,7 @@ use App\Models\Cahier;
 use App\Models\ComitePleniere;
 use App\Models\ComitePleniereParticipant;
 use App\Models\Entreprises;
+use App\Models\FormeJuridique;
 use App\Models\Motif;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -33,7 +34,7 @@ class ComitePleniereProjetEtudeController extends Controller
     public function index()
     {
         $comite_plenieres = ComitePleniere::where('code_pieces','PE')->get();
-        return view('comitepleniereprojetetude.index', compact('comite_plenieres'));
+        return view('projetetudes.comite_technique.index', compact('comite_plenieres'));
     }
 
     /**
@@ -41,7 +42,7 @@ class ComitePleniereProjetEtudeController extends Controller
      */
     public function create()
     {
-        return view('comitepleniereprojetetude.create');
+        return view('projetetudes.comite_technique.create');
     }
 
     /**
@@ -89,25 +90,22 @@ class ComitePleniereProjetEtudeController extends Controller
             ->where('id_departement', Auth::user()->id_departement)
             ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->select('users.name', 'users.prenom_users', 'users.id')
-            ->where('roles.code_roles', "CHARGEETUDE")
+            ->select('users.name', 'users.prenom_users', 'users.id','roles.name as role')
             ->get();
 
         $charger_etude = "<option value=''> Selectionnez un chargé d'étude </option>";
         foreach ($charger_etudes as $comp) {
-            $charger_etude .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+            $charger_etude .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users).' ['.mb_strtoupper($comp->role).'] '." </option>";
         }
         $cahiers = Cahier::Join('projet_etude','cahier.id_demande','projet_etude.id_projet_etude')
             ->join('entreprises','projet_etude.id_entreprises','=','entreprises.id_entreprises')
             ->join('users','projet_etude.id_charge_etude','=','users.id')
             ->where([['id_comite_pleniere','=',$comitepleniere->id_comite_pleniere]])->get();
-
         $projet_etudes = ProjetEtude::where('flag_soumis_ct_pleniere',true)
             ->where('flag_valider_ct_pleniere_projet_etude',false)
             ->get();
 
-        return view('comitepleniereprojetetude.edit', compact('projet_etudes','charger_etude','idetape','comitepleniere','comitepleniereparticipant','cahiers'));
-
+        return view('projetetudes.comite_technique.edit', compact('projet_etudes','charger_etude','idetape','comitepleniere','comitepleniereparticipant','cahiers'));
     }
 
     /**
@@ -189,13 +187,13 @@ class ComitePleniereProjetEtudeController extends Controller
 
 
 
-                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Information mise à jour');
             }
 
             if ($data['action'] == 'Traiter_cahier_projet'){
                 $comitepleniere = ComitePleniere::find($id);
                 $comitepleniere->update(['flag_statut_comite_pleniere'=> true]);
-                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepleniereprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Information mise à jour');
             }
         }
 
@@ -223,6 +221,8 @@ class ComitePleniereProjetEtudeController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $idcomite = Crypt::UrldeCrypt($id2);
         $id_etape = Crypt::UrldeCrypt($id3);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
             if(isset($projet_etude)){
@@ -232,10 +232,6 @@ class ComitePleniereProjetEtudeController extends Controller
                     ->where('code_pieces','avant_projet_tdr')->first();
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','courier_demande_fin')->first();
-                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','dossier_intention')->first();
-                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','lettre_engagement')->first();
                 $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_technique')->first();
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -249,6 +245,8 @@ class ComitePleniereProjetEtudeController extends Controller
                 foreach ($secteuractivite_projets as $comp) {
                     $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
+
+
 
 
                 $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
@@ -273,8 +271,14 @@ class ComitePleniereProjetEtudeController extends Controller
                     $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
                 }
 
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
 
-                return view('comitepleniereprojetetude.editer',
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
+
+                return view('projetetudes.comite_technique.editer',
                 compact('id_etape','pay','pieces_projets','avant_projet_tdr',
                     'courier_demande_fin',
                     'dossier_intention',
@@ -284,6 +288,7 @@ class ComitePleniereProjetEtudeController extends Controller
                     'idcomite',
                     'secteuractivite_projet',
                     'motifs',
+                    'formjuridique',
                     'offre_financiere',
                     'secteuractivite'));
 
@@ -313,7 +318,7 @@ class ComitePleniereProjetEtudeController extends Controller
                 $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
                 $projet_etude->cible_instruction = $request->cible_instruction;
                 $projet_etude->methodologie_instruction = $request->methodologie_instruction;
-                $projet_etude->montant_projet_instruction = $request->montant_projet_instruction;
+                $projet_etude->montant_projet_instruction = str_replace(' ', '', $request->montant_projet_instruction);
                 if (isset($request->fichier_instruction)){
                     $filefront = $request->fichier_instruction;
                     if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){

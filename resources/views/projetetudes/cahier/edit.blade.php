@@ -209,16 +209,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <thead>
                                         <tr>
                                             <th></th>
-{{--                                            <th>Entreprise </th>--}}
-{{--                                            <th>Code </th>--}}
-{{--                                            <th>Titre du projet </th>--}}
-{{--                                            <th>Contexte </th>--}}
-{{--                                            <th>Cible </th>--}}
-{{--                                            <th>Date soumis</th>--}}
-{{--                                            <th>Action</th>--}}
-
-
-
                                             <th>Titre du projet </th>
                                             <th>Code</th>
                                             <th>Entreprise</th>
@@ -306,29 +296,32 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 id="exampleData"
                                 style="margin-top: 13px !important">
                                 <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Entreprise </th>
-                                    <th>Code </th>
-                                    <th>Titre du projet </th>
-                                    <th>Contexte </th>
-                                    <th>Cible </th>
-                                    <th>Date soumis</th>
-                                </tr>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Titre du projet </th>
+                                        <th>Code</th>
+                                        <th>Entreprise</th>
+                                        <th>Chargé d'étude</th>
+                                        <th>Financement sollicité</th>
+                                        <th>Financement à accorder</th>
+                                        <th>Date de création</th>
+                                        <th>Date de soumission</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
 
-                                <?php //dd($projetetudes);
-                                $i=0 ?>
+                                <?php $i=0 ?>
                                 @foreach ($cahierprojetetudes as $key => $projetetude)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>{{ @$projetetude->ncc_entreprises  }} / {{ @$projetetude->raison_social_entreprises  }}</td>
-                                        <td>{{ @$projetetude->code_projet_etude }}</td>
-                                        <td>{{ @$projetetude->titre_projet_etude }}</td>
-                                        <td>{{ Str::substr($projetetude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                        <td>{{ Str::substr($projetetude->cible_projet_etude, 0, 40) }}</td>
-                                        <td>{{ @$projetetude->date_soumis }}</td>
+                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                        <td>{{ @$projet_etude->entreprise->ncc_entreprises }} / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
+                                        <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+                                        <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>
+                                        <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

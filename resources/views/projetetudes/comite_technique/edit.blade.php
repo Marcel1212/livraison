@@ -154,7 +154,7 @@
                                       @method('put')
                                       <div class="row">
                                           <div class="col-12 col-md-10">
-                                              <label class="form-label" for="id_user_comite_pleniere_participant">Chargé d'étude <strong style="color:red;">*</strong></label>
+                                              <label class="form-label" for="id_user_comite_pleniere_participant">Personnes <strong style="color:red;">*</strong></label>
                                               <select
                                                   id="id_user_comite_pleniere_participant"
                                                   name="id_user_comite_pleniere_participant"
@@ -213,23 +213,23 @@
                                 <thead>
                                 <tr>
                                     <th>N°</th>
-                                    <th>Code</th>
                                     <th>Titre du projet </th>
-                                    <th>Contexte</th>
-                                    <th>Cible</th>
-                                    <th>Date soumis</th>
+                                    <th>Code</th>
+                                    <th>Chargé d'étude</th>
+                                    <th>Date de création</th>
+                                    <th>Date de soumission</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($projet_etudes as $key => $projet_etude)
                                     <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{ @$projet_etude->code_projet_etude }}</td>
-                                        <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                        <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                        <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
-                                        <td>{{ @$projet_etude->date_soumis }}</td>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                        <td>{{ mb_strtoupper(@$projet_etude->chargedetude->name) }} {{  mb_strtoupper(@$projet_etude->chargedetude->prenom_users) }}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                         <td align="center">
                                             @if($comitepleniere->flag_statut_comite_pleniere == false)
                                                 <a href="{{ route($lien.'.editer',[\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($comitepleniere->id_comite_pleniere),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
@@ -263,24 +263,25 @@
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Code </th>
+                                    <th>N°</th>
                                     <th>Titre du projet </th>
-                                    <th>Contexte </th>
-                                    <th>Cible </th>
-                                    <th>Date soumis</th>
+                                    <th>Code</th>
+                                    <th>Chargé d'étude</th>
+{{--                                    <th>Entreprise</th>--}}
+                                    <th>Date de création</th>
+                                    <th>Date de soumission</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 @foreach ($cahiers as $key => $projet_etude)
                                     <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{ @$projet_etude->code_projet_etude }}</td>
-                                        <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                        <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                        <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>
-                                        <td>{{ @$projet_etude->date_soumis }}</td>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                        <td>{{ mb_strtoupper(@$projet_etude->name) }} {{  mb_strtoupper(@$projet_etude->prenom_users) }}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

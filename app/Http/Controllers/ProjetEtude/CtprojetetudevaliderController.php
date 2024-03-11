@@ -6,6 +6,7 @@ use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
+use App\Models\FormeJuridique;
 use App\Models\Parcours;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -46,24 +47,29 @@ class CtprojetetudevaliderController extends Controller
 
             }
         }
-        return view('ctprojetetudevalider.index',compact('Resultat'));
+        return view('projetetudes.comite_technique_a_valider.index',compact('Resultat'));
     }
 
     public function edit(string $id_projet_etude,string $id_combi_proc)
     {
         $id_projet_etude = Crypt::UrldeCrypt($id_projet_etude);
         $id_combi_proc = Crypt::UrldeCrypt($id_combi_proc);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
 
         if(isset($id_projet_etude)){
             $projet_etude = ProjetEtude::find($id_projet_etude);
-//
-//            $operateurs = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)
-////                    ->where('id_secteur_activite',$projet_etude->id_secteur_activite)
-//                ->get();
+
 
             $user = User::find($projet_etude->id_user);
             $entreprise_mail = $user->email;
             $infoentreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+
+            $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+            foreach ($formjuridiques as $comp) {
+                $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+            }
+
 
             $pays = Pays::all();
             $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
@@ -114,9 +120,10 @@ class CtprojetetudevaliderController extends Controller
 
         $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
 
-        return view('ctprojetetudevalider.edit', compact(
+        return view('projetetudes.comite_technique_a_valider.edit', compact(
             'secteuractivite_projet',
             'projet_etude','id_combi_proc',
+            'formjuridique',
             'pieces_projets','pay','secteuractivite',
         'infoentreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }
@@ -168,7 +175,7 @@ class CtprojetetudevaliderController extends Controller
                             $projet_etude->update();
                         }
 
-                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
+                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succès ');
                     }
 
                     if ($data['action'] === 'Rejeter') {
@@ -215,7 +222,7 @@ class CtprojetetudevaliderController extends Controller
                             //TRAITEMENT A EFFECTUER APRES REJET
 
                         }
-                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
+                        return redirect('ctprojetetudevalider/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succès ');
                     }
 
                 }

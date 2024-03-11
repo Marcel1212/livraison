@@ -11,6 +11,7 @@ use App\Models\BeneficiairesFormation;
 use App\Models\CahierProjetetude;
 use App\Models\Entreprises;
 use App\Models\FicheADemandeAgrement;
+use App\Models\FormeJuridique;
 use App\Models\LigneCahierProjetEtude;
 use App\Models\Motif;
 use App\Models\Pays;
@@ -54,11 +55,11 @@ class CahierprojetetudeController extends Controller
             $input['code_cahier_projet_etude'] = $input['code_pieces_cahier_projet_etude']. '-' . Gencode::randStrGen(4, 5) .'-'. Carbon::now()->format('Y');
             $cahier =  CahierProjetetude::create($input);
             if($request->action=="Enregistrer"){
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Enregistrement reussi ');
             }
 
             if($request->action=="Enregistrer_suivant"){
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($cahier->id_cahier_projet_etude).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Enregistrement reussi ');
             }
 
         }
@@ -82,9 +83,12 @@ class CahierprojetetudeController extends Controller
 
     public function editer($id,$id2,$id3)
     {
+
         $id =  Crypt::UrldeCrypt($id);
         $id_cahier_projet_etude = Crypt::UrldeCrypt($id2);
         $id_etape = Crypt::UrldeCrypt($id3);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
             if(isset($projet_etude)){
@@ -94,10 +98,7 @@ class CahierprojetetudeController extends Controller
                     ->where('code_pieces','avant_projet_tdr')->first();
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','courier_demande_fin')->first();
-                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','dossier_intention')->first();
-                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','lettre_engagement')->first();
+
                 $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_technique')->first();
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -135,17 +136,22 @@ class CahierprojetetudeController extends Controller
                     $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
                 }
 
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
 
                 return view('projetetudes.cahier.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
-                        'dossier_intention',
-                        'lettre_engagement',
                         'offre_technique',
                         'projet_etude',
                         'id_cahier_projet_etude',
                         'secteuractivite_projet',
                         'motifs',
+                        'formjuridique',
                         'offre_financiere',
                         'secteuractivite'));
 
@@ -196,7 +202,7 @@ class CahierprojetetudeController extends Controller
                 $comitegestion = CahierProjetetude::find($id);
                 $comitegestion->update($input);
 
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise à jour ');
 
             }
 
@@ -224,7 +230,7 @@ class CahierprojetetudeController extends Controller
 
                     }
 
-                    return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise à jour avec succès ');
+                    return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise à jour avec succès ');
                 }else{
                     return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Erreur : Vous devez sélectionner au moins un projet d\'étude. ');
                 }
@@ -265,7 +271,7 @@ class CahierprojetetudeController extends Controller
 
                 $comite->update(['flag_statut_cahier_projet_etude'=> true,'date_soumis_cahier_projet_etude'=>Carbon::now()]);
 
-                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('cahierprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise a jour reussi ');
 
             }
 

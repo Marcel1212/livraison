@@ -145,7 +145,8 @@ class ProjetEtudeController extends Controller
             $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
             $projet_etude->champ_etude_projet_etude = $request->champ_etude;
             $projet_etude->cible_projet_etude = $request->cible;
-            $projet_etude->montant_demande_projet_etude = $request->montant_demande_projet;
+            $projet_etude->montant_demande_projet_etude = str_replace(' ', '', $request->montant_demande_projet);
+
             $projet_etude->id_secteur_activite = $request->id_secteur_activite;
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
@@ -303,7 +304,7 @@ class ProjetEtudeController extends Controller
                 $projet_etude = ProjetEtude::find($id);
                 $projet_etude->titre_projet_etude = $request->titre_projet;
                 $projet_etude->contexte_probleme_projet_etude = $request->contexte_probleme;
-                $projet_etude->montant_demande_projet_etude = $request->montant_demande_projet;
+                $projet_etude->montant_demande_projet_etude = str_replace(' ', '', $request->montant_demande_projet);
                 $projet_etude->objectif_general_projet_etude = $request->objectif_general;
                 $projet_etude->objectif_specifique_projet_etud = $request->objectif_specifique;
                 $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;

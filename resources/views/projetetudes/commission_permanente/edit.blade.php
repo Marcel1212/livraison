@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @php($Module = 'Projet d\'etude')
-    @php($titre = 'Liste des comités permanents')
-    @php($soustitre = 'Tenue de comité permanent')
+    @php($Module = 'Projet d\'étude')
+    @php($titre = 'Liste des commissions permanentes')
+    @php($soustitre = 'Tenue de la commission permanente')
     @php($lien = 'comitepermanenteprojetetude')
 
 
@@ -303,7 +303,7 @@
                                 @method('put')
                                 <button type="submit" name="action" value="Traiter_cahier_projet"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                    Valider le comite de permanente
+                                    Valider la commission permanente
                                 </button>
                             </form>
                         </div>

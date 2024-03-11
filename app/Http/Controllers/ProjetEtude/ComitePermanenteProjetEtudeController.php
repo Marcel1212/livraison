@@ -12,6 +12,7 @@ use App\Models\ComitePermanente;
 use App\Models\ComitePermanenteParticipant;
 use App\Models\Entreprises;
 use App\Models\FicheAgrement;
+use App\Models\FormeJuridique;
 use App\Models\Motif;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -34,7 +35,7 @@ class ComitePermanenteProjetEtudeController extends Controller
     public function index()
     {
         $comite_permanentes = ComitePermanente::where('code_pieces_comite_permanente','PE')->get();
-        return view('comitepermanenteprojetetude.index', compact('comite_permanentes'));
+        return view('projetetudes.commission_permanente.index', compact('comite_permanentes'));
     }
 
 
@@ -47,7 +48,7 @@ class ComitePermanenteProjetEtudeController extends Controller
             ['flag_fiche_agrement','=',false]])
             ->get();
 
-        return view('comitepermanenteprojetetude.create', compact('projetetudes'));
+        return view('projetetudes.commission_permanente.create', compact('projetetudes'));
     }
 
     /**
@@ -78,11 +79,11 @@ class ComitePermanenteProjetEtudeController extends Controller
             $insertedId = ComitePermanente::latest()->first()->id_comite_permanente;
 
             if($input['action']=="Enregistrer"){
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Enregistrement réussi ');
             }
 
             if($input['action']=="Enregistrer_suivant"){
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Enregistrement réussi ');
             }
         }
     }
@@ -117,7 +118,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                                             ['flag_fiche_agrement','=',false]])
                                             ->get();
 
-        return view('comitepermanenteprojetetude.edit', compact('comitepermanente','comitepermanenteparticipant','ficheagrements','conseiller','projetetudes','idetape'));
+        return view('projetetudes.commission_permanente.edit', compact('comitepermanente','comitepermanenteparticipant','ficheagrements','conseiller','projetetudes','idetape'));
     }
 
     /**
@@ -150,7 +151,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                 $comitepermanente->update($input);
 
 
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Information mise à jour ');
 
             }
 
@@ -196,7 +197,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                                     ";
                     $messageMailEnvoi = Email::get_envoimailTemplate($usernotifie->email, $nom_prenom, $messageMail, $sujet, $titre);
                 }
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Information mise à jour');
             }
 
             if ($data['action'] == 'Traiter_cahier_projet'){
@@ -204,7 +205,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                 $comitepermanente = ComitePermanente::find($id);
                 $comitepermanente->update(['flag_statut_comite_permanente'=> true]);
 
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Information mise à jour');
 
             }
 
@@ -218,7 +219,7 @@ class ComitePermanenteProjetEtudeController extends Controller
         $comitepermanenteParticipant = ComitePermanenteParticipant::find($idVal);
         $idcomitepermanente = $comitepermanenteParticipant->id_comite_permanente;
         ComitePermanenteParticipant::where([['id_comite_permanente_participant','=',$idVal]])->delete();
-        return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idcomitepermanente).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La personne a été supprimée du comite avec succès ');
+        return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idcomitepermanente).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : La personne a été supprimée du comite avec succès ');
     }
 
     /**
@@ -235,6 +236,8 @@ class ComitePermanenteProjetEtudeController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $idcomite = Crypt::UrldeCrypt($id2);
         $id_etape = Crypt::UrldeCrypt($id3);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
         if(isset($id)){
             $projet_etude = ProjetEtude::find($id);
             if(isset($projet_etude)){
@@ -244,10 +247,6 @@ class ComitePermanenteProjetEtudeController extends Controller
                     ->where('code_pieces','avant_projet_tdr')->first();
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','courier_demande_fin')->first();
-                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','dossier_intention')->first();
-                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','lettre_engagement')->first();
                 $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_technique')->first();
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -260,6 +259,14 @@ class ComitePermanenteProjetEtudeController extends Controller
                 foreach ($pays as $comp) {
                     $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
                 }
+
+
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
 
                 /******************** secteuractivites *********************************/
                 $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
@@ -285,12 +292,11 @@ class ComitePermanenteProjetEtudeController extends Controller
                 }
 
 
-                return view('comitepermanenteprojetetude.editer',
+                return view('projetetudes.commission_permanente.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
-                        'dossier_intention',
-                        'lettre_engagement',
                         'offre_technique',
+                        'formjuridique',
                         'projet_etude',
                         'idcomite',
                         'secteuractivite_projet',
@@ -322,7 +328,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                 $projet_etude->flag_valider_comite_permanente_projet_etude = true;
                 $input = $request->all();
                 $projet_etude->update($input);
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succes : Projet d\'étude Traité ');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($idprojetetude).'/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/editer')->with('success', 'Succès : Projet d\'étude Traité ');
             }
 
             if($data['action'] === 'Traiter_valider_projet'){
@@ -343,7 +349,7 @@ class ComitePermanenteProjetEtudeController extends Controller
                         'date_fiche_agrement' => Carbon::now()
                     ]);
                 //}
-                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succes : Le projet a été validé');
+                return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succès : Le projet a été validé');
 
 
             }

@@ -147,6 +147,19 @@
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Type de forme juridique </label>
+                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
+                                                    <?= $formjuridique; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <div class="row">
                                             <div class="col-md-4">
                                                 <label class="form-label" for="billings-country">Indicatif</label>
                                                 <select class="select2 form-select-sm input-group" data-allow-clear="true" disabled="disabled">
@@ -211,100 +224,108 @@
                             </div>
                         </div>
                         <div class="tab-pane fade @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
-                            <div class="row">
-                                <div class="col-md-6 col-10">
-                                    <div class="mb-1">
-                                        <label>Titre du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="titre_projet"
-                                               required="required" id="titre_projet"
-                                               class="form-control form-control-sm"
-                                               disabled
-                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
 
-                                               placeholder="ex : Perfectionnement ..">
+                            <div class="row">
+
+                                <div class="col-md-12 col-10">
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-12">
+                                                <label>Titre du projet <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="titre_projet"
+                                                       required="required" id="titre_projet"
+                                                       disabled
+                                                       value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                       class="form-control form-control-sm">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="mb-1 col-md-6">
-                                    <label>Secteur d'activité du projet <span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
-                                        disabled
-                                        @endif>
-                                        <?= $secteuractivite_projet; ?>
-                                    </select>
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-6">
+                                                <label>Financement sollicité <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="montant_demande_projet"
+                                                       required="required" id="montant_demande_projet"
+                                                       disabled
+                                                       value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"
+
+                                                       class="form-control form-control-sm number">
+                                            </div>
+
+                                            <div class="mb-1 col-md-6">
+                                                <label>Secteur d'activité du projet <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                    disabled
+                                                    @endif>
+                                                    <?= $secteuractivite_projet; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Contexte ou Problèmes constatés <span
+                                                        style="color:red;">*</span></label>
+                                                <input class="form-control" type="text" id="contexte_probleme_val" name="contexte_probleme"/>
+                                                <div id="contexte_probleme" class="rounded-1"  readonly="true">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Objectif Général <span
+                                                        style="color:red;">*</span> </label>
+                                                <input class="form-control" type="text" id="objectif_general_val" name="objectif_general"/>
+                                                <div id="objectif_general" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude!!}</div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Objectifs spécifiques <span
+                                                        style="color:red;">*</span> </label>
+                                                <input class="form-control" type="text" id="objectif_specifique_val" name="objectif_specifique"/>
+                                                <div id="objectif_specifique" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud!!}</div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Résultats attendus <span
+                                                        style="color:red;">*</span> </label>
+                                                <input class="form-control" type="text" id="resultat_attendu_val" name="resultat_attendu"/>
+                                                <div id="resultat_attendu" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude!!}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Champ de l’étude <span
+                                                        style="color:red;">*</span></label>
+                                                <input class="form-control" type="text" id="champ_etude_val" name="champ_etude"/>
+                                                <div id="champ_etude" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude!!}</div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <div class="mb-1">
+                                                <label>Cible <span style="color:red;">*</span>
+                                                </label>
+                                                <input class="form-control" type="text" id="cible_val" name="cible"/>
+                                                <div id="cible" class="rounded-1">{!!@$projet_etude->cible_projet_etude!!}</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Contexte ou Problèmes constatés <span
-                                                style="color:red;">*</span></label>
-                                        <textarea class="form-control" required="required"
-                                                  disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="contexte_probleme" >@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Objectif Général <span
-                                                style="color:red;">*</span> </label>
-                                        <textarea required="required" class="form-control"
-                                                  disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_general" >@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Objectifs spécifiques <span
-                                                style="color:red;">*</span> </label>
-                                        <textarea class="form-control" required="required"
-                                                  disabled
-                                                  rows="4" id="exampleFormControlTextarea"
-                                                  name="objectif_specifique" >@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Résultats attendus <span
-                                                style="color:red;">*</span> </label>
-                                        <textarea class="form-control"
-                                                  required="required" rows="4" id="exampleFormControlTextarea" disabled
-                                                  name="resultat_attendu" >@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Champ de l’étude <span
-                                                style="color:red;">*</span></label>
-                                        <textarea class="form-control"
-                                                  disabled
-                                                  rows="4" id="exampleFormControlTextarea" name="champ_etude"
-                                                  required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>
-
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Cible <span style="color:red;">*</span>
-                                        </label>
-                                        <textarea class="form-control"
-                                                  disabled
-                                                  rows="4" id="exampleFormControlTextarea" name="cible"
-                                                  required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>
-
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-12" align="right">
                                 <hr>
                                 <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
@@ -319,6 +340,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Type de pièce</th>
+                                    <th>Commentaire</th>
                                     <th>&nbsp;</th>
                                 </tr>
                                 </thead>
@@ -333,19 +355,28 @@
                                             @if($piece->code_pieces=='courier_demande_fin')
                                                 Courrier de demande de financement
                                             @endif
-                                            @if($piece->code_pieces=='dossier_intention')
-                                                Dossier d’intention
-                                            @endif
-                                            @if($piece->code_pieces=='lettre_engagement')
-                                                Lettre d’engagement
-                                            @endif
                                             @if($piece->code_pieces=='offre_technique')
                                                 Offre technique
                                             @endif
                                             @if($piece->code_pieces=='offre_financiere')
                                                 Offre financière
                                             @endif
+
+                                            @if($piece->code_pieces=='autres_piece')
+                                                {{@$piece->intitule_piece}}
+                                            @endif
                                         </td>
+                                        @if(@$projet_etude->flag_recevablite_projet_etude==true)
+                                            <td class="my-auto">
+                                                @isset($piece->commentaire_piece)
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <i class="m-0">{{@$piece->commentaire_piece}}</i>
+                                                        </div>
+                                                    </div>
+                                                @endisset
+                                            </td>
+                                        @endif
                                         <td align="center">
                                             @if($piece->code_pieces=='avant_projet_tdr')
                                                 <a href="#" onclick="NewWindow('{{ asset("pieces_projet/avant_projet_tdr/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
@@ -353,14 +384,6 @@
                                             @endif
                                             @if($piece->code_pieces=='courier_demande_fin')
                                                 <a href="#" onclick="NewWindow('{{ asset("pieces_projet/courier_demande_fin/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du fichier</a>
-                                            @endif
-                                            @if($piece->code_pieces=='dossier_intention')
-                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/dossier_intention/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
-                                                   title="Afficher">Aperçu du fichier</a>
-                                            @endif
-                                            @if($piece->code_pieces=='lettre_engagement')
-                                                <a href="#" onclick="NewWindow('{{ asset("pieces_projet/lettre_engagement/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du fichier</a>
                                             @endif
                                             @if($piece->code_pieces=='offre_technique')
@@ -371,7 +394,10 @@
                                                 <a href="#" onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du fichier</a>
                                             @endif
-
+                                                @if($piece->code_pieces=='autres_piece')
+                                                    <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/autres_piece/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                       title="Afficher">Aperçu du ficher</a>
+                                                @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -384,7 +410,6 @@
                                 <a  href="{{ route($lien.'.editer',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary">Suivant</a>
                             </div>
                         </div>
-
                         <div class="tab-pane fade @if($id_etape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
                             <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->id_charge_etude == $idconnect){?>
                             <div class="col-12" align="right">
@@ -408,99 +433,134 @@
                             <?php } ?>
 
 
-                            <form  method="POST" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}" enctype="multipart/form-data">
+                            <form  method="POST" id="formTraitement" class="form" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($id_etape)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="row mt-2">
-                                    <div class="row">
-                                        <div class="mb-1 col-md-6">
-                                            <label>Titre du projet <span
-                                                    style="color:red;">*</span>
-                                            </label>
-                                            <input type="text" name="titre_projet_instruction" required="required" id="titre_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->titre_projet_etude}}">
-                                        </div>
 
-                                        <div class="mb-1 col-md-6">
-                                            <label>Secteur d'activité du projet <span
-                                                    style="color:red;">*</span>
-                                            </label>
-                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
-                                                <?= $secteuractivite_projet; ?>
-                                            </select>
+
+                                    <div class="row">
+                                        <div class="row">
+                                            <div class="col-md-12 col-10">
+                                                <div class="row">
+                                                    <div class="mb-1 col-md-12">
+                                                        <label>Titre du projet <span
+                                                                style="color:red;">*</span>
+                                                        </label>
+                                                        <input type="text" name="titre_projet_instruction"
+                                                               required="required" id="titre_projet_instruction"
+                                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                               class="form-control form-control-sm">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-10">
+                                                <div class="row">
+                                                    <div class="mb-1 col-md-6">
+                                                        <label>Financement sollicité <span
+                                                                style="color:red;">*</span>
+                                                        </label>
+                                                        <input type="text" name="montant_demande_projet"
+                                                               required="required" id="montant_demande_projet"
+                                                               disabled
+                                                               value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"
+                                                               class="form-control form-control-sm number">
+                                                    </div>
+
+                                                    <div class="mb-1 col-md-6">
+                                                        <label>Secteur d'activité du projet <span
+                                                                style="color:red;">*</span>
+                                                        </label>
+                                                        <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" >
+                                                            <?= $secteuractivite_projet; ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" required="required" rows="4" id="contexte_probleme_instruction" name="contexte_probleme_instruction">{{@$projet_etude->contexte_probleme_instruction}}</textarea>
+                                            <input class="form-control" type="text" id="contexte_probleme_instruction_val" name="contexte_probleme_instruction"/>
+                                            <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
-                                            <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea required="required" class="form-control" rows="4" id="objectif_general_instruction" name="objectif_general_instruction" >{{@$projet_etude->objectif_general_instruction}}</textarea>
+                                            <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
+                                            <input class="form-control" type="text" id="objectif_general_instruction_val" name="objectif_general_instruction"/>
+                                            <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude !!}</div>
 
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
-                                            <textarea class="form-control" required="required" rows="4" id="objectif_specifique_instruction" name="objectif_specifique_instruction" >{{@$projet_etude->objectif_specifique_instruction}}</textarea>
+                                            <input class="form-control" type="text" id="objectif_specifique_instruction_val" name="objectif_specifique_instruction"/>
+                                            <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud !!}</div>
+
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" required="required" rows="4" id="resultat_attendu_instruction" name="resultat_attendu_instruction" >{{@$projet_etude->resultat_attendus_instruction}}</textarea>
+                                            <input class="form-control" type="text" id="resultat_attendu_instruction_val" name="resultat_attendu_instruction"/>
+                                            <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude !!}</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
-                                            <textarea class="form-control" rows="4" id="champ_etude_instruction" name="champ_etude_instruction"  required="required">{{@$projet_etude->champ_etude_instruction}}</textarea>
+                                            <input class="form-control" type="text" id="champ_etude_instruction_val" name="champ_etude_instruction"/>
+                                            <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude !!}</div>
+
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-6 col-12 mt-2">
                                         <div class="mb-1">
                                             <label for="cible_instruction">Cible <span style="color:red;">*</span>
                                             </label>
-                                            <textarea class="form-control" rows="4" id="cible_instruction" name="cible_instruction"  required="required">{{@$projet_etude->cible_instruction}}</textarea>
-
+                                            <input class="form-control" type="text" id="cible_instruction_val" name="cible_instruction"/>
+                                            <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_projet_etude !!}</div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-12 mt-2">
+                                    <div class="col-md-12 col-12 mt-2">
                                         <div class="mb-1">
-                                            <label for="methodologie_instruction">Methodologie <span style="color:red;">*</span>
-                                            </label>
-                                            <textarea class="form-control" rows="4" id="methodologie_instruction" name="methodologie_instruction"  required="required">{{@$projet_etude->methodologie_instruction}}</textarea>
+                                            <label for="methodologie_instruction">Méthodologie <span style="color:red;">*</span></label>
+                                            <input class="form-control" type="text" id="methodologie_instruction_val" name="methodologie_instruction"/>
+                                            <div id="methodologie_instruction" class="rounded-1">{!!@$projet_etude->methodologie_instruction !!}</div>
 
                                         </div>
                                     </div>
-
-                                    <div class="col-md-4 col-12 mt-2">
-                                        <div class="mb-1">
-                                            <label for="montant_projet_instruction">Montant du projet <span style="color:red;">*</span>
-                                            </label>
-                                            <input type="number" name="montant_projet_instruction" required="required" id="montant_projet_instruction" class="form-control form-control-sm" placeholder="" value="{{@$projet_etude->montant_projet_instruction}}">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12 mt-2">
+                                            <div class="mb-1">
+                                                <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="number form-control form-control-sm number"
+                                                       value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
-                                        <input type="file" name="fichier_instruction" class="form-control" placeholder="">
-                                        @if($projet_etude->piece_jointe_instruction)
-                                            <span class="badge bg-secondary mt-1"><a target="_blank"
-                                                                                onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                        <div class="col-md-6 mt-2">
+                                            <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
+                                            <input type="file" name="fichier_instruction" class="form-control" placeholder="" >
+                                            @if($projet_etude->piece_jointe_instruction)
+                                                <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                         onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                             Voir la pièce  </a> </span>
 
-                                        @endif
-                                        <div id="defaultFormControlHelp" class="form-text">
-                                            <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
-                                                maxi : 5Mo</em>
+                                            @endif
+                                            <div id="defaultFormControlHelp" class="form-text">
+                                                <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                                    maxi : 5Mo</em>
+                                            </div>
+
                                         </div>
                                     </div>
+
 
 
                                     <div class="col-12" align="right">
@@ -520,7 +580,6 @@
 
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -528,4 +587,94 @@
         </div>
     </div>
     <!-- END: Content-->
+@endsection
+@section('js_perso')
+    <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('assets/js/additional-methods.js')}}"></script>
+    <script src="{{asset('assets/js/projetetudes/pages-traitement-projet.js')}}"></script>
+    <script type="text/javascript">
+        //Initialisation des variable Quill
+        var contexte_probleme_instruction = new Quill('#contexte_probleme_instruction', {
+            theme: 'snow'
+        });
+        var objectif_general_instruction = new Quill('#objectif_general_instruction', {
+            theme: 'snow'
+        });
+        var objectif_specifique_instruction = new Quill('#objectif_specifique_instruction', {
+            theme: 'snow'
+        });
+        var resultat_attendu_instruction = new Quill('#resultat_attendu_instruction', {
+            theme: 'snow'
+        });
+        var champ_etude_instruction = new Quill('#champ_etude_instruction', {
+            theme: 'snow'
+        });
+        var cible_instruction = new Quill('#cible_instruction', {
+            theme: 'snow'
+        });
+        var methodologie_instruction = new Quill('#methodologie_instruction', {
+            theme: 'snow'
+        });
+
+        //Hide All fields
+        $("#contexte_probleme_instruction_val").hide();
+        $("#objectif_general_instruction_val").hide();
+        $("#objectif_specifique_instruction_val").hide();
+        $("#resultat_attendu_instruction_val").hide();
+        $("#champ_etude_instruction_val").hide();
+        $("#cible_instruction_val").hide();
+        $("#methodologie_instruction_val").hide();
+
+        //Submit form
+        formTraitement.onsubmit = function(){
+            $("#contexte_probleme_instruction_val").val(contexte_probleme_instruction.root.innerHTML);
+            $("#objectif_general_instruction_val").val(objectif_general_instruction.root.innerHTML);
+            $("#objectif_specifique_instruction_val").val(objectif_specifique_instruction.root.innerHTML);
+            $("#resultat_attendu_instruction_val").val(resultat_attendu_instruction.root.innerHTML);
+            $("#champ_etude_instruction_val").val(champ_etude_instruction.root.innerHTML);
+            $("#cible_instruction_val").val(cible_instruction.root.innerHTML);
+            $("#methodologie_instruction_val").val(methodologie_instruction.root.innerHTML);
+        }
+
+
+        //Initialisation des variable Quill
+        var contexte_probleme = new Quill('#contexte_probleme', {
+            theme: 'snow'
+        });
+        var objectif_general = new Quill('#objectif_general', {
+            theme: 'snow'
+        });
+        var objectif_specifique = new Quill('#objectif_specifique', {
+            theme: 'snow'
+        });
+        var resultat_attendu = new Quill('#resultat_attendu', {
+            theme: 'snow'
+        });
+        var champ_etude = new Quill('#champ_etude', {
+            theme: 'snow'
+        });
+        var cible = new Quill('#cible', {
+            theme: 'snow'
+        });
+        //Hide All fields
+        $("#contexte_probleme_val").hide();
+        $("#objectif_general_val").hide();
+        $("#objectif_specifique_val").hide();
+        $("#resultat_attendu_val").hide();
+        $("#champ_etude_val").hide();
+        $("#cible_val").hide();
+
+        //Desactivate if is submit
+        contexte_probleme.disable();
+        objectif_general.disable();
+        objectif_specifique.disable();
+        resultat_attendu.disable();
+        champ_etude.disable();
+        cible.disable();
+
+
+
+
+    </script>
+
 @endsection

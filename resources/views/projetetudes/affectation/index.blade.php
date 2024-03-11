@@ -52,14 +52,9 @@
                                 <td>{{ $key+1 }}</td>
                                 <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
                                 <td>{{ @$projet_etude->code_projet_etude}}</td>
-                                <td>{{ @$projet_etude->entreprise->raison_social_entreprises }}</td>
+                                <td>{{ @$projet_etude->entreprise->ncc_entreprises }} / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
-{{--                                <td>{{ $key+1 }}</td>--}}
-{{--                                <td>{{ @$projet_etude->titre_projet_etude }}</td>--}}
-{{--                                <td>{{ Str::substr($projet_etude->contexte_probleme_projet_etude, 0, 30) }}</td>--}}
-{{--                                <td>{{ Str::substr($projet_etude->cible_projet_etude, 0, 40) }}</td>--}}
-{{--                                <td>{{ @$projet_etude->date_soumis }}</td>--}}
 
                                 @if(@$role=="CHEF DE DEPARTEMENT")
                                     @if($projet_etude->flag_soumis_chef_depart==false)
