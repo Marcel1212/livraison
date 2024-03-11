@@ -209,12 +209,24 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Entreprise </th>
-                                            <th>Code </th>
+{{--                                            <th>Entreprise </th>--}}
+{{--                                            <th>Code </th>--}}
+{{--                                            <th>Titre du projet </th>--}}
+{{--                                            <th>Contexte </th>--}}
+{{--                                            <th>Cible </th>--}}
+{{--                                            <th>Date soumis</th>--}}
+{{--                                            <th>Action</th>--}}
+
+
+
                                             <th>Titre du projet </th>
-                                            <th>Contexte </th>
-                                            <th>Cible </th>
-                                            <th>Date soumis</th>
+                                            <th>Code</th>
+                                            <th>Entreprise</th>
+                                            <th>Chargé d'étude</th>
+                                            <th>Financement sollicité</th>
+                                            <th>Financement à accorder</th>
+                                            <th>Date de création</th>
+                                            <th>Date de soumission</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -222,30 +234,33 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                     <?php //dd($projetetudes);
                                     $i=0 ?>
-                                    @foreach ($projetetudes as $key => $projetetude)
+                                    @foreach ($projetetudes as $key => $projet_etude)
                                         <tr>
                                             <td>
                                                 <input type="checkbox"
-                                                value="<?php echo $projetetude->id_projet_etude;?>"
-                                                name="projetetude[<?php echo $projetetude->id_projet_etude;?>]"
-                                                id="projetetude<?php echo $projetetude->id_projet_etude;?>"/>
+                                                value="<?php echo $projet_etude->id_projet_etude;?>"
+                                                name="projetetude[<?php echo $projet_etude->id_projet_etude;?>]"
+                                                id="projetetude<?php echo $projet_etude->id_projet_etude;?>"/>
                                             </td>
-                                            <td>{{ @$projetetude->entreprise->ncc_entreprises  }} / {{ @$projetetude->entreprise->raison_social_entreprises  }}</td>
 
-                                            <td>{{ @$projetetude->code_projet_etude }}</td>
-                                            <td>{{ @$projetetude->titre_projet_etude }}</td>
-                                            <td>{{ Str::substr($projetetude->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                            <td>{{ Str::substr($projetetude->cible_projet_etude, 0, 40) }}</td>
-                                            <td>{{ @$projetetude->date_soumis }}</td>
+                                            <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                            <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                            <td>{{ @$projet_etude->entreprise->ncc_entreprises }} / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
+                                            <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+
+                                            <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>
+                                            <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+
+                                            <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>
+                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
 
                                             <td align="center" nowrap="nowrap">
-
                                                 <?php if($cahier->flag_statut_comite == false){?>
 {{--                                                @can($lien.'-edit')--}}
-                                                    <a href="{{ route($lien.'.editer',[\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                                    <a href="{{ route($lien.'.editer',[\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                                         class=" "
-                                                        title="Modifier"><img
-                                                            src='/assets/img/editing.png'></a>
+                                                        title="Afficher"><img
+                                                            src='/assets/img/eye-solid.png'></a>
 
 {{--                                                @endcan--}}
                                                 <?php } ?>

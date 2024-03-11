@@ -1,9 +1,9 @@
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
-    @php($Module = 'Demandes')
-    @php($titre = 'Liste des projets d\'études')
-    @php($soustitre = 'Modifier une demande de projet d\'étude ')
+    @php($Module = 'Projet d\'étude')
+    @php($titre = 'Liste des projets d\'études à affecter')
+    @php($soustitre = 'Détails du projet d\'étude ')
     @php($lien = 'affectationprojetetude')
 
     <!-- BEGIN: Content-->
@@ -12,11 +12,9 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper ">
             <h5 class="py-2 mb-1">
-{{--                <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>--}}
-{{--                {{ $titre }}--}}
                 <span class="text-muted fw-light">
                     <a href="{{route('dashboard')}}"> <i class="ti ti-home mb-2"></i>  Accueil </a> /
-                   <a href="{{route($lien)}}"> {{$Module}}</a> /  {{$titre}}
+                   <a href="{{route($lien)}}"> {{$titre}}</a> /  {{$soustitre}}
                 </span>
             </h5>
 
@@ -227,25 +225,47 @@
                         <div class="tab-pane fade  @if($id_etape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
 
                             <div class="row">
-                                <div class="col-md-6 col-10">
-                                    <div class="mb-1 ">
-                                        <label>Titre du projet <span
-                                                style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="titre_projet"
-                                               required="required" id="titre_projet"
-                                               class="form-control form-control-sm"
-                                               disabled
-                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset">
+
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-12">
+                                            <label>Titre du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="titre_projet"
+                                                   required="required" id="titre_projet"
+                                                   disabled
+                                                   value ="{{@$projet_etude->titre_projet_etude}}"
+                                                   class="form-control form-control-sm">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mb-1 col-md-6">
-                                    <label>Secteur d'activité du projet <span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" disabled>
-                                        <?= $secteuractivite_projet; ?>
-                                    </select>
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Financement sollicité <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="montant_demande_projet"
+                                                   required="required" id="montant_demande_projet"
+                                                       disabled
+                                                   value ="{{@$projet_etude->montant_demande_projet_etude}}"
+
+                                                   class="form-control form-control-sm number">
+                                        </div>
+
+                                        <div class="mb-1 col-md-6">
+                                            <label>Secteur d'activité du projet <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                disabled
+                                                @endif>
+                                                <?= $secteuractivite_projet; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 </div>
@@ -332,7 +352,7 @@
                                    style="margin-top: 13px !important">
                                 <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th>N°</th>
                                     <th>Type de pièce</th>
                                     <th>&nbsp;</th>
                                 </tr>
@@ -360,6 +380,9 @@
                                                 @if($piece->code_pieces=='offre_financiere')
                                                     Offre financière
                                                 @endif
+                                                @if($piece->code_pieces=='autres_piece')
+                                                   {{@$piece->intitule_piece}}
+                                                @endif
                                         </td>
                                         <td>
                                             @if($piece->code_pieces=='avant_projet_tdr')
@@ -386,6 +409,10 @@
                                                 <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/offre_financiere/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
                                                    title="Afficher">Aperçu du ficher</a>
                                             @endif
+                                                @if($piece->code_pieces=='autres_piece')
+                                                    <a href="#"  onclick="NewWindow('{{ asset("pieces_projet/autres_piece/". $piece->libelle_pieces)}}','',screen.width/2,screen.height,'yes','center',1);"
+                                                       title="Afficher">Aperçu du ficher</a>
+                                                @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -400,12 +427,12 @@
                         </div>
                         <div class="tab-pane fade  @if($id_etape==4) show active @endif" id="navs-top-affectationprojetetude" role="tabpanel">
                             @if(@$role=="CHEF DE DEPARTEMENT")
-                                <form action="{{route('affectationprojetetude.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)])}}" method="post">
+                                <form id="affectProjetChefDepartForm" action="{{route('affectationprojetetude.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)])}}" method="post">
                                     @csrf
                                     @method('put')
                                     <div class="row">
                                         <label class="form-label" for="id_chef_serv">Liste des chefs de service <span
-                                                style="color:red;">*</span></label>
+                                                class="text-danger">*</span></label>
                                         <select id="id_chef_serv" name="id_chef_serv" class="select2 form-select-sm input-group"
                                             @if(@$projet_etude->flag_soumis_chef_depart==true)
                                                 disabled
@@ -419,7 +446,8 @@
                                     </div>
                                     <br>
                                     <div class="row">
-                                        <label class="form-label" for="commentaires_cd">Commentaires</label>
+                                        <label class="form-label" for="commentaires_cd">Commentaires <span
+                                                class="text-danger">*</span></label>
                                         <textarea class="form-control" id="commentaires_cd" name="commentaires_cd" rows="4"
                                                   @if(@$projet_etude->flag_soumis_chef_depart==true)
                                                       disabled
@@ -449,25 +477,26 @@
                                 </form>
                             @endif
                             @if(@$role=="CHEF DE SERVICE")
-                                    <form action="{{route('affectationprojetetude.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)])}}" method="post">
+                                    <form id="affectProjetChefServForm" action="{{route('affectationprojetetude.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)])}}" method="post">
                                         @csrf
                                         @method('put')
                                         <div class="row">
                                             <label class="form-label" for="id_charge_etude">Liste des chargés d'étude <span
-                                                    style="color:red;">*</span></label>
+                                                   class="text-danger">*</span></label>
                                             <select @if(@$projet_etude->flag_soumis_chef_service==true)
                                                         disabled
                                                     @endif id="id_charge_etude" name="id_charge_etude" class="select2 form-select-sm input-group"
                                             >
                                                 <option></option>
                                                 @foreach($charger_etudes as $charger_etude)
-                                                    <option value="{{$charger_etude->id}}" @if(@$charger_etude->id==@$projet_etude->id_charge_etude) selected @endif>{{@$charger_etude->name}} {{@$charger_etude->prenom_users}}</option>
+                                                    <option value="{{$charger_etude->id}}" @if(@$charger_etude->id==@$projet_etude->id_charge_etude) selected @endif>{{mb_strtoupper(@$charger_etude->name)}} {{strtoupper(@$charger_etude->prenom_users)}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <br>
                                         <div class="row">
-                                            <label class="form-label" for="commentaires_cs">Commentaires</label>
+                                            <label class="form-label" for="commentaires_cs">Commentaires <span
+                                                    class="text-danger">*</span></label>
                                             <textarea class="form-control"
                                                       @if(@$projet_etude->flag_soumis_chef_service==true)
                                                           disabled
@@ -494,123 +523,6 @@
                                     </form>
                             @endif
 
-
-
-
-                                {{--                            <form method="POST" class="form" action="{{ route($lien.'.update',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}">--}}
-{{--                                @csrf--}}
-{{--                                @method('put')--}}
-{{--                                <div class="col-md-12 col-10" align="center">--}}
-{{--                                    <div class="mb-1">--}}
-{{--                                        <label>Titre du projet <span--}}
-{{--                                                style="color:red;">*</span>--}}
-{{--                                        </label>--}}
-{{--                                        <input type="text" name="titre_projet"--}}
-{{--                                               required="required" id="titre_projet"--}}
-{{--                                               class="form-control form-control-sm"--}}
-{{--                                               @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                   disabled--}}
-{{--                                               @endif--}}
-{{--                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"--}}
-
-{{--                                               placeholder="ex : Perfectionnement ..">--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Contexte ou Problèmes constatés <span--}}
-{{--                                                    style="color:red;">*</span></label>--}}
-{{--                                            <textarea class="form-control" required="required"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      rows="3" id="exampleFormControlTextarea"--}}
-{{--                                                      name="contexte_probleme" style="height: 121px;">@isset($projet_etude){{$projet_etude->contexte_probleme_projet_etude}}@endisset</textarea>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Objectif Général <span--}}
-{{--                                                    style="color:red;">*</span> </label>--}}
-{{--                                            <textarea required="required" class="form-control"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      rows="3" id="exampleFormControlTextarea"--}}
-{{--                                                      name="objectif_general" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_general_projet_etude}}@endisset</textarea>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Objectifs spécifiques <span--}}
-{{--                                                    style="color:red;">*</span> </label>--}}
-{{--                                            <textarea class="form-control" required="required"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      rows="3" id="exampleFormControlTextarea"--}}
-{{--                                                      name="objectif_specifique" style="height: 121px;">@isset($projet_etude){{$projet_etude->objectif_specifique_projet_etud}}@endisset</textarea>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Résultats attendus <span--}}
-{{--                                                    style="color:red;">*</span> </label>--}}
-{{--                                            <textarea class="form-control"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      required="required" rows="3" id="exampleFormControlTextarea"--}}
-{{--                                                      name="resultat_attendu" style="height: 121px;">@isset($projet_etude){{$projet_etude->resultat_attendu_projet_etude}}@endisset</textarea>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Champ de l’étude <span--}}
-{{--                                                    style="color:red;">*</span></label>--}}
-{{--                                            <textarea class="form-control"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      rows="3" id="exampleFormControlTextarea" name="champ_etude"--}}
-{{--                                                      style="height: 121px;" required="required">@isset($projet_etude){{$projet_etude->champ_etude_projet_etude}}@endisset</textarea>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="col-md-4 col-12">--}}
-{{--                                        <div class="mb-1">--}}
-{{--                                            <label>Cible <span style="color:red;">*</span>--}}
-{{--                                            </label>--}}
-{{--                                            <textarea class="form-control"--}}
-{{--                                                      @if(@$projet_etude->flag_soumis==true)--}}
-{{--                                                          disabled--}}
-{{--                                                      @endif--}}
-{{--                                                      rows="3" id="exampleFormControlTextarea" name="cible" style="height: 121px;"--}}
-{{--                                                      required="required">@isset($projet_etude){{$projet_etude->cible_projet_etude}}@endisset</textarea>--}}
-
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-12" align="right">--}}
-{{--                                    <hr>--}}
-{{--                                    @if(@$projet_etude->flag_soumis==false)--}}
-{{--                                        <button type="submit" name="action" value="Modifier"--}}
-{{--                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">--}}
-{{--                                            Modifier--}}
-{{--                                        </button>--}}
-{{--                                    @endif--}}
-
-{{--                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>--}}
-
-{{--                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">--}}
-{{--                                        Retour</a>--}}
-{{--                                </div>--}}
-{{--                            </form>--}}
                         </div>
 
                     </div>
@@ -620,4 +532,10 @@
         </div>
     </div>
     <!-- END: Content-->
+@endsection
+
+@section('js_perso')
+    <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('assets/js/additional-methods.js')}}"></script>
+    <script src="{{asset('assets/js/projetetudes/pages-affectation-projet.js')}}"></script>
 @endsection

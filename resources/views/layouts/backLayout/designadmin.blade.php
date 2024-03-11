@@ -40,10 +40,16 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
         rel="stylesheet"/>
+
+    <link
+        href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+        rel="stylesheet"/>
+
     <!-- Icons -->
     <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/fontawesome.css')}}"/>
     <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/tabler-icons.css')}}"/>
     <link rel="stylesheet" href="{{asset('/assets/vendor/fonts/flag-icons.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/css/form-validation.css')}}"/>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{asset('/assets/vendor/css/rtl/core.css')}}"/>
@@ -67,12 +73,28 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/quill/editor.css')}}"/>
 
     <!-- Page CSS -->
+<style>
+    .ql-snow .ql-editor{
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+    }
 
+    .light-style .ql-snow.ql-toolbar, .light-style .ql-snow .ql-toolbar{
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .ql-editor{
+        height: 250px !important;
+        overflow: scroll;
+    }
+</style>
     <!-- Helpers -->
     <script src="{{asset('/assets/vendor/js/helpers.js')}}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('/assets/js/config.js')}}"></script>
+
 </head>
 
 <body onload="startTime()">
@@ -254,7 +276,13 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="{{asset('/assets/js/forms-tagify.js')}}"></script>
 <script src="{{asset('/assets/js/forms-typeahead.js')}}"></script>
 <script src="{{asset('/assets/js/app-academy-dashboard.js')}}"></script>
-<script src="{{asset('/assets/js/forms-editors.js')}}"></script>
+{{--<script src="{{asset('/assets/js/forms-editors.js')}}"></script>--}}
+{{--<script src="{{asset('/assets/vendor/libs/quill/quill.js')}}"></script>--}}
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+
+
+
 <script>
     var win = null;
 
@@ -323,7 +351,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
         });
     });
 </script>
-
+@yield('js_perso')
 </body>
 
 </html>

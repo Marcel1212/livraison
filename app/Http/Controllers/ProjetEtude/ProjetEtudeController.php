@@ -114,6 +114,7 @@ class ProjetEtudeController extends Controller
                 'contexte_probleme' => 'required',
                 'objectif_general' => 'required',
                 'objectif_specifique' => 'required',
+                'montant_demande_projet' => 'required',
                 'resultat_attendu' => 'required',
                 'champ_etude' => 'required',
                 'cible' => 'required',
@@ -121,11 +122,12 @@ class ProjetEtudeController extends Controller
 
             ],[
                 'titre_projet.required' => 'Veuillez ajouter un titre de projet',
-                'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
-                'objectif_general.required' => 'Veuillez ajouter un objectif general',
-                'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+                'montant_demande_projet.required' => 'Veuillez ajouter le le financement sollicité',
+                'contexte_probleme.required' => 'Veuillez ajouter un contexte ou problème constaté',
+                'objectif_general.required' => 'Veuillez ajouter un objectif général',
+                'objectif_specifique.required' => 'Veuillez ajouter des objectifs spécifiques',
                 'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
-                'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+                'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                 'cible.required' => 'Veuillez ajouter une cible',
                 'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
 
@@ -143,6 +145,7 @@ class ProjetEtudeController extends Controller
             $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
             $projet_etude->champ_etude_projet_etude = $request->champ_etude;
             $projet_etude->cible_projet_etude = $request->cible;
+            $projet_etude->montant_demande_projet_etude = $request->montant_demande_projet;
             $projet_etude->id_secteur_activite = $request->id_secteur_activite;
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
@@ -168,11 +171,11 @@ class ProjetEtudeController extends Controller
                     'etat'=>'Succès',
                     'objet'=>'PROJET ETUDE'
                 ]);
-                return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Enregistrement réussi ');
             }
 
             if ($request->action == 'Enregistrer_suivant'){
-                return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+                return redirect('projetetude/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement réussi');
             }
         }
     }
@@ -182,6 +185,7 @@ class ProjetEtudeController extends Controller
      */
     public function edit($id,$id_etape)
     {
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
         $id =  Crypt::UrldeCrypt($id);
         $id_etape =  Crypt::UrldeCrypt($id_etape);
         if(isset($id)){
@@ -191,12 +195,9 @@ class ProjetEtudeController extends Controller
 
                 $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','avant_projet_tdr')->first();
+
                 $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','courier_demande_fin')->first();
-                $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','dossier_intention')->first();
-                $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                    ->where('code_pieces','lettre_engagement')->first();
                 $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_technique')->first();
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
@@ -228,6 +229,13 @@ class ProjetEtudeController extends Controller
                     $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
+
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
                 Audit::logSave([
                     'action'=>'VISITE',
                     'code_piece'=>$projet_etude->id_projet_etude,
@@ -237,10 +245,9 @@ class ProjetEtudeController extends Controller
                 ]);
 
                 return view('projetetudes.demande.edit', compact('id_etape',
+                    'formjuridique',
                     'avant_projet_tdr',
                     'courier_demande_fin',
-                    'dossier_intention',
-                    'lettre_engagement',
                     'offre_technique',
                     'offre_financiere',
                     'secteuractivite',
@@ -274,16 +281,18 @@ class ProjetEtudeController extends Controller
                     'objectif_general' => 'required',
                     'objectif_specifique' => 'required',
                     'resultat_attendu' => 'required',
+                    'montant_demande_projet' => 'required',
                     'champ_etude' => 'required',
                     'cible' => 'required',
                     'id_secteur_activite' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
-                    'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
-                    'objectif_general.required' => 'Veuillez ajouter un objectif general',
-                    'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+                    'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
+                    'contexte_probleme.required' => 'Veuillez ajouter un contexte ou problème constaté',
+                    'objectif_general.required' => 'Veuillez ajouter un objectif général',
+                    'objectif_specifique.required' => 'Veuillez ajouter des objectifs spécifiques',
                     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
-                    'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+                    'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
                 ]);
@@ -294,6 +303,7 @@ class ProjetEtudeController extends Controller
                 $projet_etude = ProjetEtude::find($id);
                 $projet_etude->titre_projet_etude = $request->titre_projet;
                 $projet_etude->contexte_probleme_projet_etude = $request->contexte_probleme;
+                $projet_etude->montant_demande_projet_etude = $request->montant_demande_projet;
                 $projet_etude->objectif_general_projet_etude = $request->objectif_general;
                 $projet_etude->objectif_specifique_projet_etud = $request->objectif_specifique;
                 $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
@@ -311,12 +321,13 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PROJET ETUDE'
                 ]);
 
-                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Information mise à jour ');
             }
             if ($request->action == 'Modifier_suivant'){
 
                 $this->validate($request, [
                     'titre_projet' => 'required',
+                    'montant_demande_projet' => 'required',
                     'contexte_probleme' => 'required',
                     'objectif_general' => 'required',
                     'objectif_specifique' => 'required',
@@ -326,11 +337,12 @@ class ProjetEtudeController extends Controller
                     'id_secteur_activite' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
-                    'contexte_probleme.required' => 'Veuillez ajouter un context ou problemes constaté',
-                    'objectif_general.required' => 'Veuillez ajouter un objectif general',
-                    'objectif_specifique.required' => 'Veuillez ajouter un objectif specifiques',
+                    'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
+                    'contexte_probleme.required' => 'Veuillez ajouter un contexte ou problème constaté',
+                    'objectif_general.required' => 'Veuillez ajouter un objectif général',
+                    'objectif_specifique.required' => 'Veuillez ajouter des objectifs spécifiques',
                     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
-                    'champ_etude.required' => 'Veuillez ajouter un champ d&quot;etude',
+                    'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
                 ]);
@@ -357,7 +369,7 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PROJET ETUDE'
                 ]);
 
-                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Information mise à jour');
             }
 
             if($request->action=='Enregistrer_fichier'){
@@ -380,6 +392,7 @@ class ProjetEtudeController extends Controller
                         $filename = 'avant_projet_tdr'. '_' . rand(111,99999) . '_' . 'avant_projet_tdr' . '_' . time() . '.' . $filefront->extension();
                         $filefront->move(public_path('pieces_projet/avant_projet_tdr/'), $filename);
                         $piece_etude->libelle_pieces = $filename;
+                        $piece_etude->intitule_piece = $filename;
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='avant_projet_tdr' ;
                         $piece_etude->save();
@@ -394,7 +407,7 @@ class ProjetEtudeController extends Controller
                             'objet'=>'PIECE PROJET ETUDE'
                         ]);
 
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement du fichier réussi ');
 
                     }
                 }
@@ -410,6 +423,7 @@ class ProjetEtudeController extends Controller
                         $filename = 'courier_demande_fin'. '_' . rand(111,99999) . '_' . 'courier_demande_fin' . '_' . time() . '.' . $filefront->extension();
                         $filefront->move(public_path('pieces_projet/courier_demande_fin/'), $filename);
                         $piece_etude->libelle_pieces = $filename;
+                        $piece_etude->intitule_piece = $filename;
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='courier_demande_fin' ;
                         $piece_etude->save();
@@ -425,67 +439,7 @@ class ProjetEtudeController extends Controller
                             'objet'=>'PIECE PROJET ETUDE'
                         ]);
 
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
-
-                    }
-                }
-
-                if($request->type_pieces=='dossier_intention'){
-                    $dossier_intention = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                        ->where('code_pieces','dossier_intention')->first();
-                    if(isset($dossier_intention)) {
-                        return redirect()->back()->with('error', 'Impossible d\'enregistrer le même type de fichier 2 fois');
-                    }
-                    if(isset($request->pieces)){
-                        $filefront = $request->pieces;
-                        $filename = 'dossier_intention'. '_' . rand(111,99999) . '_' . 'dossier_intention' . '_' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces_projet/dossier_intention/'), $filename);
-                        $piece_etude->libelle_pieces = $filename;
-                        $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
-                        $piece_etude->code_pieces ='dossier_intention' ;
-                        $piece_etude->save();
-
-                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
-
-                        Audit::logSave([
-                            'action'=>'CREATION',
-                            'code_piece'=>$insertedId,
-                            'menu'=>'CREATION PIECE PROJET ETUDE',
-                            'etat'=>'Succès',
-                            'objet'=>'PIECE PROJET ETUDE'
-                        ]);
-
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
-
-                    }
-                }
-
-                if($request->type_pieces=='lettre_engagement'){
-                    $lettre_engagement = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
-                        ->where('code_pieces','lettre_engagement')->first();
-                    if(isset($lettre_engagement)) {
-                        return redirect()->back()->with('error', 'Impossible d\'enregistrer le même type de fichier 2 fois');
-                    }
-                    if(isset($request->pieces)){
-                        $filefront = $request->pieces;
-                        $filename = 'lettre_engagement'. '_' . rand(111,99999) . '_' . 'lettre_engagement' . '_' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces_projet/lettre_engagement/'), $filename);
-                        $piece_etude->libelle_pieces = $filename;
-                        $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
-                        $piece_etude->code_pieces ='lettre_engagement' ;
-                        $piece_etude->save();
-
-                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
-
-                        Audit::logSave([
-                            'action'=>'CREATION',
-                            'code_piece'=>$insertedId,
-                            'menu'=>'CREATION PIECE PROJET ETUDE',
-                            'etat'=>'Succès',
-                            'objet'=>'PIECE PROJET ETUDE'
-                        ]);
-
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement du fichier réussi ');
 
                     }
                 }
@@ -501,6 +455,7 @@ class ProjetEtudeController extends Controller
                         $filename = 'offre_technique'. '_' . rand(111,99999) . '_' . 'offre_technique' . '_' . time() . '.' . $filefront->extension();
                         $filefront->move(public_path('pieces_projet/offre_technique/'), $filename);
                         $piece_etude->libelle_pieces = $filename;
+                        $piece_etude->intitule_piece = $filename;
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='offre_technique' ;
                         $piece_etude->save();
@@ -515,7 +470,7 @@ class ProjetEtudeController extends Controller
                             'objet'=>'PIECE PROJET ETUDE'
                         ]);
 
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement du fichier réussi ');
 
                     }
                 }
@@ -531,6 +486,8 @@ class ProjetEtudeController extends Controller
                         $filename = 'offre_financiere'. '_' . rand(111,99999) . '_' . 'offre_financiere' . '_' . time() . '.' . $filefront->extension();
                         $filefront->move(public_path('pieces_projet/offre_financiere/'), $filename);
                         $piece_etude->libelle_pieces = $filename;
+                        $piece_etude->intitule_piece = $filename;
+;
                         $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
                         $piece_etude->code_pieces ='offre_financiere' ;
                         $piece_etude->save();
@@ -545,7 +502,33 @@ class ProjetEtudeController extends Controller
                             'objet'=>'PIECE PROJET ETUDE'
                         ]);
 
-                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Enregistrement du fichier reussi ');
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement du fichier réussi ');
+
+                    }
+                }
+
+                if($request->type_pieces=='autres'){
+                    if(isset($request->pieces)){
+                        $filefront = $request->pieces;
+                        $filename = 'autres_piece'. '_' . rand(111,99999) . '_' . 'autres_piece' . '_' . time() . '.' . $filefront->extension();
+                        $filefront->move(public_path('pieces_projet/autres_piece/'), $filename);
+                        $piece_etude->libelle_pieces = $filename;
+                        $piece_etude->intitule_piece = $request->intitule_piece;
+                        $piece_etude->id_projet_etude = $projet_etude->id_projet_etude;
+                        $piece_etude->code_pieces ='autres_piece' ;
+                        $piece_etude->save();
+
+                        $insertedId = PiecesProjetEtude::latest()->first()->id_pieces_projet_etude;
+
+                        Audit::logSave([
+                            'action'=>'CREATION',
+                            'code_piece'=>$insertedId,
+                            'menu'=>'CREATION PIECE PROJET ETUDE',
+                            'etat'=>'Succès',
+                            'objet'=>'PIECE PROJET ETUDE'
+                        ]);
+
+                        return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Enregistrement du fichier réussi ');
 
                     }
                 }
@@ -573,7 +556,7 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PROJET ETUDE'
                 ]);
 
-                return redirect('projetetude')->with('success', 'Succes : Projet soumis avec succès ');
+                return redirect('projetetude')->with('success', 'Succès : Projet soumis avec succès ');
             }
         }
     }
@@ -598,7 +581,7 @@ class ProjetEtudeController extends Controller
                     'objet'=>'PIECE PROJET ETUDE'
                 ]);
 
-                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Suppression de la pièce réussie ');
+                return redirect('projetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Suppression de la pièce réussie ');
             }else{
 
             }

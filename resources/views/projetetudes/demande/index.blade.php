@@ -59,64 +59,19 @@
                             <tr>
 
                                 <td>{{ $key+1 }}</td>
-                                <td>{{ @$projet_etude->titre_projet_etude }}</td>
-                                <td>{{ @$projet_etude->code_projet_etude }}</td>
+                                <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                <td>{{ @$projet_etude->code_projet_etude}}</td>
                                 <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}}</td>
                                 @if(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-secondary">Soumis</span></td>
-
                                 @elseif(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==true )
                                     <td><span class="badge bg-success">Agrée</span></td>
                                 @elseif(@$projet_etude->flag_soumis==false && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-primary">Non Soumis</span></td>
                                 @endif
-
-
-                                {{--                                <td>{{ @$planformation->entreprise->raison_social_entreprises }}</td>--}}
-{{--                                <td>{{  @$planformation->userconseilplanformation->name }} {{  @$planformation->userconseilplanformation->prenom_users }}</td>--}}
-{{--                                <td>{{  @$planformation->agence->lib_agce }}</td>--}}
-{{--                                <td>{{ $planformation->date_soumis_plan_formation }}</td>--}}
-{{--                                <td align="center">--}}
-{{--                                        <?php if ($planformation->flag_soumis_plan_formation == true and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == true--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false){ ?>--}}
-{{--                                    <span class="badge bg-success">Valider</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false){ ?>--}}
-{{--                                    <span class="badge bg-warning">En cours de traitement</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false) { ?>--}}
-{{--                                    <span class="badge bg-secondary">Soumis</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == false and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == false and $planformation->flag_valide_plan_formation == false--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false) { ?>--}}
-{{--                                    <span class="badge bg-primary">Non Soumis</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == true) { ?>--}}
-{{--                                    <span class="badge bg-danger">Non recevable</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == true and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_valide_plan_formation == false--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false) { ?>--}}
-
-{{--                                    <span class="badge bg-danger">Annulé</span>--}}
-{{--                                    <?php } elseif ($planformation->flag_soumis_plan_formation == true and $planformation->flag_annulation_plan == false and--}}
-{{--                                        $planformation->flag_recevablite_plan_formation == true and $planformation->flag_annulation_plan == true--}}
-{{--                                        and $planformation->flag_rejeter_plan_formation == false) { ?>--}}
-
-{{--                                    <span class="badge bg-danger">Annulé</span>--}}
-{{--                                    <?php }--}}
-
-
-{{--                                    else { ?>--}}
-{{--                                    <span class="badge bg-danger"> </span>--}}
-{{--                                    <?php } ?>--}}
-{{--                                </td>--}}
                                 <td align="center">
 {{--                                    @can($lien.'-edit')--}}
                                         <a href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(2)]) }}"

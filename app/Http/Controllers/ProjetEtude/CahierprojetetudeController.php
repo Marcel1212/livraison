@@ -29,12 +29,12 @@ class CahierprojetetudeController extends Controller
 
         $cahiers = CahierProjetetude::all();
 
-        return view("cahierprojetetude.index", compact("cahiers"));
+        return view("projetetudes.cahier.index", compact("cahiers"));
     }
 
     public function create(){
 
-        return view("cahierprojetetude.create");
+        return view("projetetudes.cahier.create");
 
     }
 
@@ -77,7 +77,7 @@ class CahierprojetetudeController extends Controller
 
         $projetetudes = ProjetEtude::where([['flag_valider_par_processus','=',true],['flag_projet_etude_valider_cahier','=',false]])->get();
 
-        return view('cahierprojetetude.edit', compact('cahier','id','idetape','projetetudes','cahierprojetetudes'));
+        return view('projetetudes.cahier.edit', compact('cahier','id','idetape','projetetudes','cahierprojetetudes'));
     }
 
     public function editer($id,$id2,$id3)
@@ -136,7 +136,7 @@ class CahierprojetetudeController extends Controller
                 }
 
 
-                return view('cahierprojetetude.editer',
+                return view('projetetudes.cahier.editer',
                     compact('id_etape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
                         'dossier_intention',
@@ -169,7 +169,7 @@ class CahierprojetetudeController extends Controller
             $projetetude = projetetude::where([['id_projet_etude','=',$actionplan->id_projet_etude]])->first();
         }
 
-        return view('cahierprojetetude.show', compact('actionplan','ficheagrement', 'beneficiaires','projetetude'));
+        return view('projetetudes.cahier.show', compact('actionplan','ficheagrement', 'beneficiaires','projetetude'));
     }
 
     public function update(Request $request, $id, $id1)

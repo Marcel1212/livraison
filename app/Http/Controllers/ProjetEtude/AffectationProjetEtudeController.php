@@ -7,6 +7,7 @@ use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\Direction;
+use App\Models\FormeJuridique;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
@@ -70,19 +71,29 @@ class AffectationProjetEtudeController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $user = Auth::user();
         $role = Menu::get_menu_profil($user->id);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
         if($role == "CHEF DE DEPARTEMENT") {
             if (isset($id)) {
+
                 $projet_etude = ProjetEtude::find($id);
+
                 $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
                     ->orderBy('libelle_secteur_activite')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                $secteuractivite_projet = "<option value='".@$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
                 foreach ($secteuractivite_projets as $comp) {
                     $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
+
+
                 if (isset($projet_etude)) {
+                    $formjuridique = "<option value='".@$projet_etude->entreprise->formeJuridique->id_forme_juridique."'> " . @$projet_etude->entreprise->formeJuridique->libelle_forme_juridique . "</option>";
+                    foreach ($formjuridiques as $comp) {
+                        $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                    }
                     $chef_services = DB::table('users')
                         ->where('id_departement', $projet_etude->id_departement)
                         ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
@@ -98,8 +109,7 @@ class AffectationProjetEtudeController extends Controller
                         $pay .= "<option value='" . $comp->id_pays . "'>" . $comp->indicatif . " </option>";
                     }
                     return view('projetetudes.affectation.edit', compact('chef_services',
-                        'secteuractivite_projet',
-
+                        'secteuractivite_projet','formjuridique',
                         'pieces_projets', 'id_etape', 'pay', 'role', 'projet_etude'));
                 }
             }
@@ -108,6 +118,10 @@ class AffectationProjetEtudeController extends Controller
             if (isset($id)) {
                 $projet_etude = ProjetEtude::find($id);
                 if (isset($projet_etude)) {
+                    $formjuridique = "<option value='".@$projet_etude->entreprise->formeJuridique->id_forme_juridique."'> " . @$projet_etude->entreprise->formeJuridique->libelle_forme_juridique . "</option>";
+                    foreach ($formjuridiques as $comp) {
+                        $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                    }
 
                     $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
                         ->orderBy('libelle_secteur_activite')
@@ -136,6 +150,7 @@ class AffectationProjetEtudeController extends Controller
                         compact('charger_etudes',
                             'pieces_projets',
                             'id_etape',
+                            'formjuridique',
                             'pay',
                             'role',
                             'secteuractivite_projet',
@@ -154,7 +169,7 @@ class AffectationProjetEtudeController extends Controller
                     'id_chef_serv' => 'required',
                     'commentaires_cd' => 'required',
                 ],[
-                    'id_chef_serv.required' => 'Veuillez ajouter un chef de service.',
+                    'id_chef_serv.required' => 'Veuillez sélectionner un chef de service.',
                     'commentaires_cd.required' => 'Veuillez ajouter un commentaire.',
                 ]);
                 $projet_etude = ProjetEtude::find($id);
