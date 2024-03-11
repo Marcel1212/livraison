@@ -375,17 +375,6 @@
         var methodologie = new Quill('#methodologie', {
             theme: 'snow'
         });
-
-        //Desactivate if is submit
-        @if($projet_etude->flag_soumis == true)
-        contexte_probleme.disable();
-        objectif_general.disable();
-        objectif_specifique.disable();
-        resultat_attendu.disable();
-        champ_etude.disable();
-        cible.disable();
-        methodologie.disable();
-        @endif
     </script>
 @endsection
 @else

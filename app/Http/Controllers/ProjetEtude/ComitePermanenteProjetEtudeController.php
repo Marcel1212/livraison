@@ -346,7 +346,7 @@ class ComitePermanenteProjetEtudeController extends Controller
 
                 $projet_etude->update([
                         'flag_fiche_agrement' => true,
-                        'date_fiche_agrement' => Carbon::now()
+                        'date_fiche_agrement' => now()
                     ]);
                 //}
                 return redirect('comitepermanenteprojetetude/'.Crypt::UrlCrypt($id2).'/'.Crypt::UrlCrypt($id3).'/edit')->with('success', 'Succès : Le projet a été validé');
