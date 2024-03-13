@@ -304,8 +304,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Chargé d'étude</th>
                                         <th>Financement sollicité</th>
                                         <th>Financement à accorder</th>
-                                        <th>Date de création</th>
-                                        <th>Date de soumission</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -320,8 +318,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
                                         <td>{{ number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ') }}</td>
                                         <td>{{ number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
-                                        <td>{{ date('d/m/Y h:i:s',strtotime($projet_etude->created_at ))}}</td>
-                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 class SelectionOperateurProjetEtudeController extends Controller{
     public function index(){
         $projet_etude_valides = ProjetEtude::where('flag_fiche_agrement',true)->get();
-        return view('module_projet_etude.selection_operateur.index', compact('projet_etude_valides'));
+        return view('projetetudes.selection_operateur.index', compact('projet_etude_valides'));
     }
 
     public function edit($id_projet_etude,$idetape){
@@ -82,7 +82,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 }
 
 
-                return view('module_projet_etude.selection_operateur.edit', compact('idetape','operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
+                return view('projetetudes.selection_operateur.edit', compact('idetape','operateur_valider','operateur_selected','pay','secteuractivite_projet','pieces_projets','entreprise','entreprise_mail','projet_etude_valide'));
             }else{
 
             }

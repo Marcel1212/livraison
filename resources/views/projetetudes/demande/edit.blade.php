@@ -392,7 +392,7 @@
                                         </div>
                                         <div class="col-md-1 mt-4" align="right">
                                             <button type="submit" value="Enregistrer_fichier" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
-                                                Enregistrer
+                                                Ajouter
                                             </button>
                                         </div>
                                     </div>
