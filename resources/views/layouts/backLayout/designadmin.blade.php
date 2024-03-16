@@ -83,7 +83,9 @@ $imagedashboard = Menu::get_info_image_dashboard();
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
     }
-
+    .ql-container{
+        height: auto;
+    }
     .ql-editor{
         height: 250px !important;
         overflow: scroll;
