@@ -49,7 +49,7 @@ class PlanFormationController extends Controller
         //$infoentrprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
         $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
         if(!empty($infoentrprise)){
-            $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+            $planformations = PlanFormation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->orderByDesc('id_plan_de_formation')->get();
             Audit::logSave([
 
                 'action'=>'INDEX',
@@ -633,6 +633,8 @@ class PlanFormationController extends Controller
 
                 //dd($input);
 
+                $nombreactionplan = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+
                 $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation']]])->first();
 
                 $input['id_entreprise_structure_formation_action'] = $input['id_entreprise_structure_formation_plan_formation'];
@@ -642,6 +644,9 @@ class PlanFormationController extends Controller
                 $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
                 $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
                 $input['id_plan_de_formation'] = $id;
+                $input['pirorite_action_formation'] = count($nombreactionplan)+1;
+
+                $input['cout_action_formation_plan'] = str_replace(' ', '', $input['cout_action_formation_plan']);
 
                 if (isset($data['file_beneficiare'])){
 
