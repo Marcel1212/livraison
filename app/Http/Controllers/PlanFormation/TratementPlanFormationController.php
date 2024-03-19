@@ -260,7 +260,7 @@ class TratementPlanFormationController extends Controller
 
         if ($request->isMethod('put')) {
             $data = $request->all();
-            dd($data);
+            //dd($data);
 
             if($data['action'] === 'CommentairePlanFormation'){
 
