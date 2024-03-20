@@ -1056,6 +1056,9 @@ $idpart = Auth::user()->id_partenaire;
               >
 				<div class="modal-dialog modal-dialog-scrollable">
                   <div class="modal-content">
+                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data" id="actionformationForm">
+                        @csrf
+                        @method('put')
                     <div class="modal-header">
                       <h5 class="modal-title" id="SoummissionplanformationLuApprouve">Soumission du plan d eformation</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1063,10 +1066,9 @@ $idpart = Auth::user()->id_partenaire;
                     <div class="modal-body">
                       <p>
                                                     <?php
-                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, utilisateur(trice) de l'application web <strong>e-FDFP</strong>,
-                                                    déclare avoir pris connaissance et compris les conditions d'utilisation de ladite application.  J'ai lu attentivement l'ensemble des termes et des conditions énoncés dans le document intitulé <a href='#' target='_blank'>Conditions d'Utilisation</a>,  accessible sur le site web de l'application.
+                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenus dans ce documen.
 
-                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, je confirme avoir compris et accepté pleinement les conditions stipulées dans le document mentionné. Je m'engage à respecter ces conditions pendant l'utilisation de l'application.";
+                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                                     ?>
                                                     <?php echo wordwrap($message,144,"<br>\n"); ?>
 
@@ -1083,6 +1085,7 @@ $idpart = Auth::user()->id_partenaire;
 					  <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action" value="Enregistrer_soumettre_plan_formation" id="Enregistrer_soumettre_plan_formation" disabled>Valider le plan de formation</button>
 
                     </div>
+                    </form>
                   </div>
                 </div>
 				</div>
