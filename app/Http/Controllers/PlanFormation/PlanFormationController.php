@@ -574,7 +574,7 @@ class PlanFormationController extends Controller
             }
 
             if ($data['action'] == 'Enregistrer_action_formation'){
-               // dd($data);
+                dd($data);
                 $this->validate($request, [
                     'intitule_action_formation_plan' => 'required',
                     'id_entreprise_structure_formation_plan_formation' => 'required',

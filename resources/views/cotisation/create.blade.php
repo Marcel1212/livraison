@@ -68,9 +68,9 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Mois</label>
+                                                    <label>Mois (exemple : 1960-01)</label>
                                                     <input type="month" name="mois_cotisation" id="mois_cotisation"
-                                                    class="form-control form-control-sm">
+                                                    class="form-control form-control-sm" pattern="[0-9]{4}-[0-9]{2}">
                                                 </div>
                                             </div>
 
