@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property float $id_comite
  * @property float $id_user_comite
- * @property float $id_type_comite
  * @property float $id_departement
+ * @property float $id_categorie_comite
  * @property string $date_debut_comite
  * @property string $date_fin_comite
  * @property string $commentaire_comite
@@ -19,11 +19,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $objet_comite
+ * @property CategorieComite $categorieComite
  * @property Departement $departement
- * @property TypeComite $typeComite
  * @property User $user
- * @property ProcessusComiteLieComite[] $processusComiteLieComites
  * @property CahierComite[] $cahierComites
+ * @property ProcessusComiteLieComite[] $processusComiteLieComites
  * @property ComiteParticipant[] $comiteParticipants
  */
 class Comite extends Model
@@ -52,7 +52,15 @@ class Comite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user_comite', 'id_type_comite', 'id_departement', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite'];
+    protected $fillable = ['id_user_comite', 'id_departement', 'id_categorie_comite', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function categorieComite()
+    {
+        return $this->belongsTo('App\Models\CategorieComite', 'id_categorie_comite', 'id_categorie_comite');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -60,14 +68,6 @@ class Comite extends Model
     public function departement()
     {
         return $this->belongsTo('App\Models\Departement', 'id_departement', 'id_departement');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function typeComite()
-    {
-        return $this->belongsTo('App\Models\TypeComite', 'id_type_comite', 'id_type_comite');
     }
 
     /**
@@ -81,17 +81,17 @@ class Comite extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function processusComiteLieComites()
+    public function cahierComites()
     {
-        return $this->hasMany('App\Models\ProcessusComiteLieComite', 'id_comite', 'id_comite');
+        return $this->hasMany('App\Models\CahierComite', 'id_comite', 'id_comite');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function cahierComites()
+    public function processusComiteLieComites()
     {
-        return $this->hasMany('App\Models\CahierComite', 'id_comite', 'id_comite');
+        return $this->hasMany('App\Models\ProcessusComiteLieComite', 'id_comite', 'id_comite');
     }
 
     /**

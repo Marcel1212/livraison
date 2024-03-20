@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_comite
  * @property float $id_user_comite
  * @property float $id_type_comite
+ * @property float $id_departement
  * @property string $date_debut_comite
  * @property string $date_fin_comite
  * @property string $commentaire_comite
@@ -18,9 +19,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property string $objet_comite
- * @property ProcessusComiteLieComite[] $processusComiteLieComites
+ * @property Departement $departement
  * @property TypeComite $typeComite
  * @property User $user
+ * @property ProcessusComiteLieComite[] $processusComiteLieComites
  * @property CahierComite[] $cahierComites
  * @property ComiteParticipant[] $comiteParticipants
  */
@@ -50,14 +52,14 @@ class Comite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user_comite', 'id_type_comite', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite'];
+    protected $fillable = ['id_user_comite', 'id_type_comite', 'id_departement', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function processusComiteLieComites()
+    public function departement()
     {
-        return $this->hasMany('App\Models\ProcessusComiteLieComite', 'id_comite', 'id_comite');
+        return $this->belongsTo('App\Models\Departement', 'id_departement', 'id_departement');
     }
 
     /**
@@ -74,6 +76,14 @@ class Comite extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'id_user_comite');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function processusComiteLieComites()
+    {
+        return $this->hasMany('App\Models\ProcessusComiteLieComite', 'id_comite', 'id_comite');
     }
 
     /**
