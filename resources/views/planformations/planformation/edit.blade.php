@@ -1056,7 +1056,7 @@ $idpart = Auth::user()->id_partenaire;
               >
 				<div class="modal-dialog modal-dialog-scrollable">
                   <div class="modal-content">
-                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data" id="actionformationForm">
+                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
                         @csrf
                         @method('put')
                     <div class="modal-header">
