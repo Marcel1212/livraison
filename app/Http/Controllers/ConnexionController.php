@@ -82,7 +82,7 @@ class ConnexionController extends Controller
                     'etat'=>'Succès',
 
                 ]);
-                return redirect('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
+                return redirect()->intended('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
             } else {
                 Audit::logSave([
 
