@@ -820,7 +820,7 @@
                         </div>
                         <div class="col-md-12 mb-5">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
-                            <input class="form-control objectif_pedagogique_fiche_agre_val @error('objectif_pedagogique_fiche_agre') error @enderror" type="text" id="objectif_pedagogique_fiche_agre_val" name="objectif_pedagogique_fiche_agre"/>
+                            <input class="form-control objectif_pedagogique_fiche_agre_val @error('objectif_pedagogique_fiche_agre') error @enderror" type="text" id="" name="objectif_pedagogique_fiche_agre"/>
                             <div id="" class="rounded-1 objectif_pedagogique_fiche_agre">{!! $infosactionplanformation->objectif_pedagogique_fiche_agre !!}</div>
                            @error('objectif_pedagogique_fiche_agre')
                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -1299,14 +1299,14 @@
 
                 // });
 
-                // actionformationForm.onsubmit = function(){
+                 actionformationForm.onsubmit = function(){
                 //     //alert(objectif_pedagogique_fiche_agre.root.innerHTML);
                 //     alert(objectif_pedagogique_fiche_agre.root.innerHTML);
-                //     $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
-                //  }
+                    $(".objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
+                 }
 
                  commentaireplanformationForm.onsubmit = function(){
-                    alert(commentaire_plan_formation.root.innerHTML);
+                    //alert(commentaire_plan_formation.root.innerHTML);
                     $("#commentaire_plan_formation_val").val(commentaire_plan_formation.root.innerHTML);
                  }
 
