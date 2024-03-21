@@ -357,7 +357,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <tr>
                                         <th>No</th>
                                         <th>Nom</th>
-                                        <th>Prenom</th>
+                                        <th>Prénoms</th>
+                                        <th>Profil</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -367,8 +368,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <?php $i += 1; ?>
                                         <tr>
                                             <td>{{ $i }}</td>
-                                            <td>{{ $comiteparticipant->user->name }}</td>
-                                            <td>{{ $comiteparticipant->user->prenom_users }}</td>
+                                            <td>{{ $comiteparticipant->name }}</td>
+                                            <td>{{ $comiteparticipant->prenom_users }}</td>
+                                            <td>{{ $comiteparticipant->profile }}</td>
                                             <td>
                                                 <?php if ($comite->flag_statut_comite != true){ ?>
                                                 <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($comiteparticipant->id_comite_participant)) }}"

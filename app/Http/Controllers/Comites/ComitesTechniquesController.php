@@ -199,7 +199,13 @@ class ComitesTechniquesController extends Controller
 
         //dd($cahiers);
 
-        $comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
+        $comiteparticipants = ComiteParticipant::Select('comite_participant.id_comite as id_comite', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile','comite_participant.id_comite_participant as id_comite_participant')
+                                                ->join('users','comite_participant.id_user_comite_participant','users.id')
+                                                ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+                                                ->join('roles', 'model_has_roles.role_id', 'roles.id')
+                                                ->where([['id_comite','=',$id]])
+                                                ->get();
+         //ComiteParticipant::where([['id_comite','=',$id]])->get();
 
         $personneressources = User::with('agence:num_agce,lib_agce')
                             ->select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
