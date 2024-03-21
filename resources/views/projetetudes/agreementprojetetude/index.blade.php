@@ -46,27 +46,28 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Entreprise </th>
-                                <th>Code </th>
                                 <th>Titre du projet </th>
+                                <th>Code </th>
+                                <th>Chargé d'étude </th>
                                 <th>Date soumis</th>
+                                <th>Date D'agrément</th>
                                 <th>Statut </th>
                                 <th>Action </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($agreements as $key => $projetetude)
+                            @foreach ($agreements as $key => $projet_etude)
                                 <tr>
-                                    <td>{{ $key+1 }}</td>
-                                    <td>{{ @$projetetude->ncc_entreprises }} /
-                                        {{ @$projetetude->raison_social_entreprises }}</td>
-                                    <td>{{ @$projetetude->code_projet_etude }}</td>
-                                    <td>{{ @$projetetude->titre_projet_etude }}</td>
-                                    <td>{{ @$projetetude->date_soumis }}</td>
-                                    <td> <span class="badge bg-success xs">Agrée</span></td>
 
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                    <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                    <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
+                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement))}}</td>
+                                    <td> <span class="badge bg-success xs">Agrée</span></td>
                                     <td align="center">
-                                        <a onclick="NewWindow('{{ route($lien . '.show', \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"
+                                        <a onclick="NewWindow('{{ route($lien . '.show', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"
                                             target="_blank" class=" "title="Afficher"><img
                                                 src='/assets/img/eye-solid.png'></a>
                                     </td>

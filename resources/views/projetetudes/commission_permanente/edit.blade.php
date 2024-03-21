@@ -284,7 +284,7 @@
                                         <td align="center">
                                             <?php if($comitepermanente->flag_statut_comite_permanente == false && count($comitepermanenteparticipant)>=1){?>
 {{--                                            @can($lien . '-edit')--}}
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitepermanente->id_comite_permanente), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
 {{--                                            @endcan--}}
                                             <?php } ?>

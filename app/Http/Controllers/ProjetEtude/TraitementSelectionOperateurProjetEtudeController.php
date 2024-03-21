@@ -6,6 +6,7 @@ use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
+use App\Models\FormeJuridique;
 use App\Models\Parcours;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -33,6 +34,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                 $resultat[$key] = DB::table('vue_processus_liste as v')
                     ->join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
                     ->join('projet_etude','p.id_demande','projet_etude.id_projet_etude')
+                    ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
                     ->join('users','projet_etude.id_charge_etude','users.id')
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
@@ -43,22 +45,23 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
             }
         }
-        return view('traitementselectionoperateurprojetetude.index', compact('resultat'));
+        return view('projetetudes.traitement_selection_operateur.index', compact('resultat'));
     }
 
     public function edit(string $id_projet_etude,string $id_combi_proc)
     {
         $id_projet_etude = Crypt::UrldeCrypt($id_projet_etude);
         $id_combi_proc = Crypt::UrldeCrypt($id_combi_proc);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
 
         if(isset($id_projet_etude)){
-            $projet_etude_valide = ProjetEtude::find($id_projet_etude);
+            $projet_etude = ProjetEtude::find($id_projet_etude);
 
-            $user = User::find($projet_etude_valide->id_user);
+            $user = User::find($projet_etude->id_user);
             $entreprise_mail = $user->email;
             $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
 
-            $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude_valide->id_projet_etude)->get();
+            $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
 
             $pays = Pays::all();
             $pay = "<option value='".$entreprise->pay->id_pays."'> " . $entreprise->pay->indicatif . "</option>";
@@ -70,7 +73,13 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                 ->orderBy('libelle_secteur_activite')
                 ->get();
 
-            $secteuractivite_projet = "<option value='".$projet_etude_valide->secteurActivite->id_secteur_activite."'> " . $projet_etude_valide->secteurActivite->libelle_secteur_activite . "</option>";
+            $formjuridique = "<option value='".$entreprise->formeJuridique->id_forme_juridique."'> " . $entreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+            foreach ($formjuridiques as $comp) {
+                $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+            }
+
+            $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
             foreach ($secteuractivite_projets as $comp) {
                 $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
             }
@@ -78,8 +87,8 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
         $ResultProssesList = DB::table('vue_processus_validation_affichage as v')
             ->select('v.name', 'v.priorite_combi_proc', 'v.is_valide', 'v.date_valide','v.comment_parcours', 'v.id_processus')
-            ->where('v.id_processus', '=', $projet_etude_valide->id_processus_selection)
-            ->where('v.id_demande', '=', $projet_etude_valide->id_projet_etude)
+            ->where('v.id_processus', '=', $projet_etude->id_processus_selection)
+            ->where('v.id_demande', '=', $projet_etude->id_projet_etude)
             ->orderBy('v.priorite_combi_proc', 'ASC')
             ->get();
 
@@ -88,7 +97,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
         $Idroles = Menu::get_id_profil($idUser);
 
         $parcoursexist=Parcours::where([
-            ['id_processus','=',$projet_etude_valide->id_processus_selection],
+            ['id_processus','=',$projet_etude->id_processus_selection],
             ['id_user','=',$idUser],
             ['id_piece','=',$id_projet_etude],
             ['id_roles','=',$Idroles],
@@ -96,7 +105,9 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
             ['id_combi_proc','=',$id_combi_proc]
         ])->get();
 
-        return view('traitementselectionoperateurprojetetude.edit', compact('secteuractivite_projet','pay','pieces_projets','projet_etude_valide','id_combi_proc','entreprise','entreprise_mail','ResultProssesList','parcoursexist'));
+        return view('projetetudes.traitement_selection_operateur.edit', compact(
+            'formjuridique',
+            'secteuractivite_projet','pay','pieces_projets','projet_etude','id_combi_proc','entreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }
 
     public function update(Request $request, $id_projet_etude)
@@ -104,9 +115,9 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
         $id_projet_etude =  Crypt::UrldeCrypt($id_projet_etude);
 
         if(isset($id_projet_etude)){
-            $projet_etude_valide = ProjetEtude::find($id_projet_etude);
+            $projet_etude = ProjetEtude::find($id_projet_etude);
 
-            if(isset($projet_etude_valide)) {
+            if(isset($projet_etude)) {
                 if ($request->isMethod('put')) {
                     $data = $request->all();
                     if ($data['action'] === 'Valider') {
@@ -143,9 +154,9 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                             ->first();
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-                            $projet_etude_valide->flag_selection_operateur_valider_par_processus = true;
-                            $projet_etude_valide->flag_validation_selection_operateur = false;
-                            $projet_etude_valide->update();
+                            $projet_etude->flag_selection_operateur_valider_par_processus = true;
+                            $projet_etude->flag_validation_selection_operateur = false;
+                            $projet_etude->update();
 
 
 //                            $infoentreprise = Entreprises::find($projet_etude_valide->id_entreprises);

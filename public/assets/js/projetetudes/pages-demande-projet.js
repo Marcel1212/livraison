@@ -62,7 +62,7 @@ $(function () {
                 champ_etude: "Veuillez ajouter un champ d'étude",
                 cible: "Veuillez ajouter une cible",
             },
-
+            onfocusout: function(element){ return false; },
             errorPlacement: function (error, element) {
                 if (element.parent('.input-group').length) {
                     error.insertAfter(element.parent());      // radio/checkbox?

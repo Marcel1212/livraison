@@ -64,7 +64,11 @@
                                 <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
                                 <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis ))}}</td>
-                                <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}}</td>
+                                <td>
+                                    @isset($projet_etude->date_fiche_agrement)
+                                        {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}}
+                                   @endisset
+                                </td>
                                 @if(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==false)
                                     <td><span class="badge bg-secondary">Soumis</span></td>
                                 @elseif(@$projet_etude->flag_soumis==true && @$projet_etude->flag_fiche_agrement==true )

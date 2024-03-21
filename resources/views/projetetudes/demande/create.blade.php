@@ -236,8 +236,9 @@
                                 <div class="mb-1">
                                     <label>Contexte ou Problèmes constatés <span
                                             style="color:red;">*</span></label>
-                                    <input class="form-control" type="text" id="contexte_probleme_val" name="contexte_probleme"/>
                                     <div id="contexte_probleme" class="rounded-1">{{@$projet_etude->contexte_probleme_projet_etude}}</div>
+                                    <input class="form-control" type="text" id="contexte_probleme_val" name="contexte_probleme"/>
+
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -311,27 +312,12 @@
     <script src="{{asset('assets/js/projetetudes/pages-demande-projet.js')}}"></script>
     <script type="text/javascript">
         //Initialisation des variable Quill
-        var contexte_probleme = new Quill('#contexte_probleme', {
-            theme: 'snow'
-        });
-        var objectif_general = new Quill('#objectif_general', {
-            theme: 'snow'
-        });
-        var objectif_specifique = new Quill('#objectif_specifique', {
-            theme: 'snow'
-        });
-        var resultat_attendu = new Quill('#resultat_attendu', {
-            theme: 'snow'
-        });
-        var champ_etude = new Quill('#champ_etude', {
-            theme: 'snow'
-        });
-        var cible = new Quill('#cible', {
-            theme: 'snow'
-        });
-        var methodologie = new Quill('#methodologie', {
-            theme: 'snow'
-        });
+        var contexte_probleme = new Quill('#contexte_probleme',{theme: 'snow'});
+        var objectif_general = new Quill('#objectif_general',{theme: 'snow'});
+        var objectif_specifique = new Quill('#objectif_specifique',{theme: 'snow'});
+        var resultat_attendu = new Quill('#resultat_attendu',{theme: 'snow'});
+        var champ_etude = new Quill('#champ_etude',{theme: 'snow'});
+        var cible = new Quill('#cible',{theme: 'snow'});
 
         //Hide All fields
         $("#contexte_probleme_val").hide();
@@ -340,7 +326,6 @@
         $("#resultat_attendu_val").hide();
         $("#champ_etude_val").hide();
         $("#cible_val").hide();
-        $("#methodologie_val").hide();
 
         //Submit form
         demandeProjetForm.onsubmit = function(){
@@ -350,9 +335,7 @@
             $("#resultat_attendu_val").val(resultat_attendu.root.innerHTML);
             $("#champ_etude_val").val(champ_etude.root.innerHTML);
             $("#cible_val").val(cible.root.innerHTML);
-            $("#methodologie_val").val(methodologie.root.innerHTML);
         }
-
     </script>
 @endsection
 @else

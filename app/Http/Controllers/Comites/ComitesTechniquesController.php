@@ -514,11 +514,11 @@ class ComitesTechniquesController extends Controller
                     ->where([['cahier_comite.id_comite','=',$id]])
                     ->get();
 
-                    $affichedemande = [];
-
-                    foreach ($listedemandesss as $listedemandess) {
-                       $affichedemande = '<strong>Code</strong>:'.$listedemandess->code.';  <strong>raison sociale</strong>:'.$listedemandess->raison_sociale.'; <strong>cout accordée</strong>:'.number_format($listedemandess->montant_total, 0, ',', ' ').'.';
-                    }
+//                    $affichedemande = [];
+//
+//                    foreach ($listedemandesss as $listedemandess) {
+//                       $affichedemande = '<strong>Code</strong>:'.$listedemandess->code.';  <strong>raison sociale</strong>:'.$listedemandess->raison_sociale.'; <strong>cout accordée</strong>:'.number_format($listedemandess->montant_total, 0, ',', ' ').'.';
+//                    }
 
                     foreach($listepersonnes as $personne){
 
@@ -535,9 +535,9 @@ class ComitesTechniquesController extends Controller
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes conviés au ".$comitep->categorieComite->libelle_categorie_comite." des ".$processuscomite->processusComite->libelle_processus_comite." qui se déroulera  ".$comitep->date_debut_comite." au ".$comitep->date_fin_comite.".
 
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants : <br/>".
-
-                                            $affichedemande
+                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants via le lien ci-dessous : <br/>".
+                                            route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])
+//                                            $affichedemande
 
                                             ."<br><br><br>
                                             -----
