@@ -1292,21 +1292,18 @@
                 $(".objectif_pedagogique_fiche_agre_val").hide();
 
                 $("#commentaire_plan_formation_val").hide();
-                // var actionformationForm = $(".actionformationForm");
 
-                // let actionformationForm = document.querySelectorAll('.actionformationForm');
-                // Array.from(actionformationForm).map(function(actionformation) {
+                var commentaireplanformationForm = $("#commentaireplanformationForm");
 
-                // });
-
-                 actionformationForm.onsubmit = function(){
-                //     //alert(objectif_pedagogique_fiche_agre.root.innerHTML);
-                //     alert(objectif_pedagogique_fiche_agre.root.innerHTML);
-                    $(".objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
-                 }
+                var form = document.querySelectorAll('.actionformationForm');
+                for (let i = 0; i < form.length; i++) {
+                    const data_element = form[i];
+                    data_element.onsubmit =function(){
+                        $(".objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre[i].root.innerHTML)
+                    }
+                }
 
                  commentaireplanformationForm.onsubmit = function(){
-                    //alert(commentaire_plan_formation.root.innerHTML);
                     $("#commentaire_plan_formation_val").val(commentaire_plan_formation.root.innerHTML);
                  }
 

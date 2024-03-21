@@ -401,7 +401,6 @@ class TratementPlanFormationController extends Controller
             }
 
             if($data['action'] === 'Traiter_action_formation'){
-
                 $actionplan = ActionFormationPlan::find($id);
 
                 $idplan = $actionplan->id_plan_de_formation;
