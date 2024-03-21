@@ -149,6 +149,12 @@ class TratementPlanFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
+        $payss = Pays::all();
+        $paysc = "<option value=''> ---Selectionnez un pays--- </option>";
+        foreach ($payss as $comp) {
+            $paysc .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
         $butformations = ButFormation::all();
         $butformation = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($butformations as $comp) {
@@ -203,7 +209,7 @@ class TratementPlanFormationController extends Controller
 
         $nombreactionvalider = count($actionvalider);
 
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->orderBy('id_action_formation_plan','asc')->get();
 
         $montantactionplanformation = 0;
 
@@ -222,6 +228,8 @@ class TratementPlanFormationController extends Controller
                 ->orderBy('libelle_secteur_activite')
                 ->get();
 
+                $typeformationss = TypeFormation::where('flag_actif_formation','=',true)->orderBy('type_formation')->get();
+
                 Audit::logSave([
 
                     'action'=>'MODIFIER',
@@ -236,7 +244,10 @@ class TratementPlanFormationController extends Controller
 
                 ]);
 
-        return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','secteuractivites','butformations'));
+        return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations',
+                            'categorieprofessionelle','categorieplans','motif','infosactionplanformations',
+                            'nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation',
+                            'montantactionplanformationacc','secteuractivites','butformations','typeformationss','paysc'));
 
     }
 
@@ -249,6 +260,34 @@ class TratementPlanFormationController extends Controller
 
         if ($request->isMethod('put')) {
             $data = $request->all();
+            //dd($data);
+
+            if($data['action'] === 'CommentairePlanFormation'){
+
+                $input1 = $request->all();
+///dd($input1);
+                $input['commentaire_plan_formation'] = $input1['commentaire_plan_formation'];
+                $input['date_commentaire_plan_formation'] = Carbon::now();
+
+                $planformation = PlanFormation::find($id);
+                $planformation->update($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: Commentaire effectué avec succès.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+                return redirect('traitementplanformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Commentaire effectué avec succès. ');
+
+            }
 
             if($data['action'] === 'Recevable'){
                 $this->validate($request, [
@@ -284,7 +323,10 @@ class TratementPlanFormationController extends Controller
 
                 ]);
 
-                return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
+                return redirect('traitementplanformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
+
+
+                //return redirect()->route('traitementplanformation.index')->with('success', 'Recevabilité effectué avec succès.');
             }
 
             if($data['action'] === 'NonRecevable'){
@@ -335,7 +377,9 @@ class TratementPlanFormationController extends Controller
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-                    $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                    $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->email_professionnel_charge_plan_formation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                    //$messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
 
                 Audit::logSave([
@@ -373,10 +417,12 @@ class TratementPlanFormationController extends Controller
                 ]);
 
                 $input = $request->all();
-
+//dd($input['cout_action_formation_plan']);
                 //$planformationupadteinfos = PlanFormation::find($idplan);
 
                 //$planformationupadteinfos->update($input);
+
+                $input['cout_accorde_action_formation'] = str_replace(' ', '', $input['cout_accorde_action_formation']);
 
                 if($input['cout_accorde_action_formation']==0){
 
@@ -397,7 +443,9 @@ class TratementPlanFormationController extends Controller
 
                     $input['nombre_jour_action_formation'] = $nombredejour;
 
-                    $infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+                    //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                    $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
 
                     $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
 
@@ -465,7 +513,9 @@ class TratementPlanFormationController extends Controller
 
                     $input['nombre_jour_action_formation'] = $nombredejour;
 
-                    $infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+                    //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                    $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
 
                     $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
 

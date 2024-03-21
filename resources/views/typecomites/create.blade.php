@@ -53,9 +53,9 @@
                                                     <label>Libelle</label>
                                                     <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
                                                             <option value="">----Selectionnez le comiten----</option>
-                                                            <option value="Comitepleniere">Comité pléniere</option>
-                                                            <option value="Comitedegestion">Comité de gestion</option>
-                                                            <option value="Comitepermant">Commission permanente</option>
+                                                            <option value="Comité pléniere">Comité pléniere</option>
+                                                            <option value="Comité de gestion">Comité de gestion</option>
+                                                            <option value="Commission permanente">Commission permanente</option>
                                                     </select>
                                                 </div>
                                             </div>

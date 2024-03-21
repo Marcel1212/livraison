@@ -11,6 +11,16 @@ $logo = Menu::get_logo();
     <link media="all" href="/assets/css/style_etat.css" type="text/css" rel="stylesheet"/>
     <style type="text/css" media="print">
         @page { size: landscape; }
+        @media print {
+            .visuel_bouton {
+                display: none;
+            }
+
+            @page {
+                margin-top: 0.3in !important;
+                margin-bottom: 0.3in !important;
+            }
+        }
     </style>
 </head>
 

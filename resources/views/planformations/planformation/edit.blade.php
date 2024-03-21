@@ -167,16 +167,7 @@ $idpart = Auth::user()->id_partenaire;
             </div>
         @endif
 
-        @if($errors->any())
-                                  @foreach ($errors->all() as $error)
-                                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <div class="alert-body">
-                                            {{ $error }}
-                                        </div>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                      </div>
-                                  @endforeach
-                              @endif
+
 
              @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -391,6 +382,7 @@ $idpart = Auth::user()->id_partenaire;
                                                 value="{{number_format(@$planformation->part_entreprise, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
                                 </div>
+
                                 <!--<div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Seuil de cotisation </label>
@@ -435,22 +427,32 @@ $idpart = Auth::user()->id_partenaire;
                                         <select
                                             id="id_categorie_professionelle"
                                             name="id_categorie_professionelle"
-                                            class="select2 form-select-sm input-group"
+                                            class="select2 form-select-sm @error('id_categorie_professionelle')
+                                            error
+                                            @enderror input-group"
                                             aria-label="Default select example" required="required">
                                             <?= $categorieprofessionelle; ?>
                                         </select>
+                                        @error('id_categorie_professionelle')
+                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
                                     </div>
                                     <div class="col-12 col-md-3">
                                         <label class="form-label" for="genre_plan">Genre <strong style="color:red;">*</strong></label>
                                         <select
                                             id="genre_plan"
                                             name="genre_plan"
-                                            class="select2 form-select-sm input-group"
+                                            class="select2 form-select-sm @error('genre_plan')
+                                            error
+                                            @enderror input-group"
                                             aria-label="Default select example" required="required">
                                            <option value="">Selectionnez le genre</option>
                                            <option value="HOMMES">HOMMES</option>
                                            <option value="FEMMES">FEMMES</option>
                                         </select>
+                                        @error('genre_plan')
+                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
                                     </div>
                                     <div class="col-12 col-md-3">
                                         <label class="form-label" for="nombre_plan">Nombre <strong style="color:red;">*</strong></label>
@@ -459,8 +461,13 @@ $idpart = Auth::user()->id_partenaire;
                                             id="nombre_plan"
                                             name="nombre_plan"
                                             min="1"
-                                            class="form-control form-control-sm"
-                                            required="required" />
+                                            class="form-control form-control-sm @error('nombre_plan')
+                                            error
+                                            @enderror"
+                                            required="required" value="{{ old('nombre_plan') }}"/>
+                                            @error('nombre_plan')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                            @enderror
                                     </div>
 
                                         <div class="col-12 col-md-2" align="right"> <br>
@@ -523,11 +530,41 @@ $idpart = Auth::user()->id_partenaire;
                         </div>
                       </div>
                       <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-actionformation" role="tabpanel">
+
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <div class="alert-body" style="text-align:center">
+                                <strong>Les enregistrements des actions sont faits par ordre de priorité.</strong>
+                            </div>
+                            <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
+                        </div>
+
                       <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
-                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
+                      <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data" id="actionformationForm">
                                 @csrf
                                 @method('put')
                             <div>
+                                <div class="col-md-12" align="right">
+
+
+                                    <?php if ($actifsoumission == true){ ?>
+                                        <?php if (count($actionplanformations)>=1){ ?>
+                                            <!--<button type="button" id="SoummissionplanformationLuApprouve"
+											class="btn btn-icon btn-succes waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#SoummissionplanformationLuApprouve" href="#myModal1" data-url="http://example.com">
+                                            Soumettre le plan de formation
+                                        </button>-->
+
+                                    <button
+                                    type="button"
+                                    class="btn btn-outline-success"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#SoummissionplanformationLuApprouve1">
+                                    Soumettre le plan de formation
+                                  </button>
+                                        <?php } ?>
+                                    <?php } ?>
+
+
+                                </div>
                             <div class="row">
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="nombre_stagiaire_action_formati"><strong style="color:green;">Budget crédit</strong></label>
@@ -551,9 +588,14 @@ $idpart = Auth::user()->id_partenaire;
                                 type="text"
                                 id="intitule_action_formation_plan"
                                 name="intitule_action_formation_plan"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('intitule_action_formation_plan')
+                                error
+                                @enderror"
                                 value="{{ old('intitule_action_formation_plan') }}"
                                  />
+                                 @error('intitule_action_formation_plan')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
 
 
@@ -563,9 +605,14 @@ $idpart = Auth::user()->id_partenaire;
                                 type="number"
                                 id="nombre_groupe_action_formation_"
                                 name="nombre_groupe_action_formation_"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('nombre_groupe_action_formation_')
+                                error
+                                @enderror"
                                 value="{{ old('nombre_groupe_action_formation_') }}"
                                  />
+                                 @error('nombre_groupe_action_formation_')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes <strong style="color:red;">*</strong></label>
@@ -573,47 +620,71 @@ $idpart = Auth::user()->id_partenaire;
                                 type="number"
                                 id="nombre_heure_action_formation_p"
                                 name="nombre_heure_action_formation_p"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('nombre_heure_action_formation_p')
+                                error
+                                @enderror"
                                 value="{{ old('nombre_heure_action_formation_p') }}"
                                  />
+                                 @error('nombre_heure_action_formation_p')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cout_action_formation_plan">Coût de la formation <strong style="color:red;">*</strong></label>
                             <input
-                                type="number"
+                                type="text"
                                 id="cout_action_formation_plan"
                                 name="cout_action_formation_plan"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm number @error('cout_action_formation_plan')
+                                error
+                                @enderror"
                                 value="{{ old('cout_action_formation_plan') }}"
                                  />
+                                 @error('cout_action_formation_plan')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
                             <select
                                 id="id_type_formation"
                                 name="id_type_formation"
-                                class="select2 form-select-sm input-group"
+                                class="select2 form-select-sm input-group @error('id_type_formation')
+                                error
+                                @enderror"
                                 aria-label="Default select example"
                                 onchange="changeFunction();">
                                 <?= $typeformation; ?>
                             </select>
+                            @error('id_type_formation')
+                            <div class=""><label class="error">{{ $message }}</label></div>
+                            @enderror
                             </div>
                             <div class="col-12 col-md-4">
                                 <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
-                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group">
+                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
+                                error
+                                @enderror">
                                     <option value='0'></option>
                                 </select>
+                                @error('id_caracteristique_type_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
                             </div>
                             <div class="col-12 col-md-4">
                                 <div class="row">
                                     <div class="col-12 col-md-10">
                                         <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
 
-                                        <select class="select2 form-select-sm input-group" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                        <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
+                                        error
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
                                             <option value='0'></option>
                                             <?php //echo $structureformation; ?>
                                         </select>
-
+                                        @error('id_entreprise_structure_formation_plan_formation')
+                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
                                     </div>
                                     <div class="col-12 col-md-2">
                                         <br>
@@ -629,10 +700,15 @@ $idpart = Auth::user()->id_partenaire;
                             <select
                                 id="id_but_formation"
                                 name="id_but_formation"
-                                class="select2 form-select-sm input-group"
+                                class="select2 form-select input-group @error('id_but_formation')
+                                error
+                                @enderror"
                                 aria-label="Default select example" >
                                 <?= $butformation; ?>
                             </select>
+                            @error('id_but_formation')
+                            <div class=""><label class="error">{{ $message }}</label></div>
+                            @enderror
                             </div>
                             <div class="col-12 col-md-2">
                             <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation </label>
@@ -660,9 +736,14 @@ $idpart = Auth::user()->id_partenaire;
                                 type="text"
                                 id="lieu_formation_fiche_agrement"
                                 name="lieu_formation_fiche_agrement"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('lieu_formation_fiche_agrement')
+                                error
+                                @enderror"
                                 value="{{ old('lieu_formation_fiche_agrement') }}"
                                  />
+                                 @error('lieu_formation_fiche_agrement')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <!--<div class="col-12 col-md-4">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
@@ -675,7 +756,9 @@ $idpart = Auth::user()->id_partenaire;
                             </div>-->
                             <div class="col-md-4 col-12">
                                 <label>Secteur d'activité <strong style="color:red;">*</strong></label>
-                                <select class="select2 form-select"
+                                <select class="select2 form-select @error('id_secteur_activite')
+                                error
+                                @enderror"
                                                 data-allow-clear="true" name="id_secteur_activite"
                                                 id="id_secteur_activite">
                                     <option value="">-- Sélectionnez un secteur d'activité--- </option>
@@ -683,6 +766,9 @@ $idpart = Auth::user()->id_partenaire;
                                         <option value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
                                     @endforeach
                                 </select>
+                                @error('id_secteur_activite')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
                             </div>
 
                             <div class="col-12 col-md-4">
@@ -691,10 +777,15 @@ $idpart = Auth::user()->id_partenaire;
                                 type="number"
                                 id="cadre_fiche_demande_agrement"
                                 name="cadre_fiche_demande_agrement"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('cadre_fiche_demande_agrement')
+                                error
+                                @enderror"
                                 min="0"
                                 value="{{ old('cadre_fiche_demande_agrement') }}"
                                  />
+                                 @error('cadre_fiche_demande_agrement')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise <strong style="color:red;">*</strong></label>
@@ -702,10 +793,15 @@ $idpart = Auth::user()->id_partenaire;
                                 type="number"
                                 id="agent_maitrise_fiche_demande_ag"
                                 name="agent_maitrise_fiche_demande_ag"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('agent_maitrise_fiche_demande_ag')
+                                error
+                                @enderror"
                                 min="0"
                                 value="{{ old('agent_maitrise_fiche_demande_ag') }}"
                                  />
+                                 @error('agent_maitrise_fiche_demande_ag')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers <strong style="color:red;">*</strong></label>
@@ -713,10 +809,15 @@ $idpart = Auth::user()->id_partenaire;
                                 type="number"
                                 id="employe_fiche_demande_agrement"
                                 name="employe_fiche_demande_agrement"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('employe_fiche_demande_agrement')
+                                error
+                                @enderror"
                                 min="0"
                                 value="{{ old('employe_fiche_demande_agrement') }}"
                                  />
+                                 @error('employe_fiche_demande_agrement')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
                             </div>
 
                             <div class="col-12 col-md-4">
@@ -725,26 +826,49 @@ $idpart = Auth::user()->id_partenaire;
                                 type="file"
                                 id="file_beneficiare"
                                 name="file_beneficiare"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('file_beneficiare')
+                                error
+                                @enderror"
                                 />
+                                @error('file_beneficiare')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
+                                <div id="defaultFormControlHelp" class="form-text ">
+                                    <em> Fichiers autorisés : Excel <br></em>
+                                </div>
                             </div>
                             <div class="col-12 col-md-4">
-                            <label class="form-label" for="facture_proforma_action_formati">Joindre la facture proforma (PDF) <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="facture_proforma_action_formati">Joindre la facture proforma <strong style="color:red;">*</strong></label>
                             <input
                                 type="file"
                                 id="facture_proforma_action_formati"
                                 name="facture_proforma_action_formati"
-                                class="form-control form-control-sm"
+                                class="form-control form-control-sm @error('facture_proforma_action_formati')
+                                error
+                                @enderror"
                                  />
+                                 @error('facture_proforma_action_formati')
+                                 <div class=""><label class="error">{{ $message }}</label></div>
+                                 @enderror
+                                 <div id="defaultFormControlHelp" class="form-text ">
+                                    <em> Fichiers autorisés : PDF <br>Taille
+                                        maxi : 5Mo</em>
+                                </div>
                             </div>
-                            <div class="col-12 col-md-12">
+                            <div class="row">
+                            <div class="col-md-12 mb-5">
                                 <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
-                                <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6">{{ old('objectif_pedagogique_fiche_agre') }}</textarea>
+                                <input class="form-control @error('objectif_pedagogique_fiche_agre') error @enderror" type="text" id="objectif_pedagogique_fiche_agre_val" name="objectif_pedagogique_fiche_agre"/>
+                                <div id="objectif_pedagogique_fiche_agre" class="rounded-1">{{ old('objectif_pedagogique_fiche_agre') }}</div>
+                               @error('objectif_pedagogique_fiche_agre')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
                             </div>
+                        </div>
                                 </div>
 <hr>
 
-                            <div class="col-12" align="right">
+                            <div class="col-md-12" align="right">
 
 
 
@@ -756,12 +880,6 @@ $idpart = Auth::user()->id_partenaire;
 
                                     <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer l’action de formation</button>
 
-                                <?php } ?>
-
-                                <?php if ($actifsoumission == true){ ?>
-                                    <?php if (count($actionplanformations)>=1){ ?>
-                                        <button onclick='javascript:if (!confirm("Voulez-vous soumettre le plan de formation à un conseiller ? . Cette action est irréversible.")) return false;'  type="submit" name="action" value="Enregistrer_soumettre_plan_formation" class="btn btn-sm btn-success me-sm-3 me-1">Soumettre le plan de formation</button>
-                                    <?php } ?>
                                 <?php } ?>
 
 
@@ -782,6 +900,7 @@ $idpart = Auth::user()->id_partenaire;
                                 <th>Nombre de stagiaires</th>
                                 <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
+                                <th>Priorité</th>
                                 <th>Cout de l'action</th>
                                 <th>Action</th>
                             </tr>
@@ -797,6 +916,7 @@ $idpart = Auth::user()->id_partenaire;
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
+                                                <td>{{ $actionplanformation->pirorite_action_formation }}</td>
                                                 <td align="rigth">{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
 
                                                 <td align="center">
@@ -927,8 +1047,62 @@ $idpart = Auth::user()->id_partenaire;
                 </div>
 
 
+                <div
+                class="modal fade"
+                id="SoummissionplanformationLuApprouve1"
+                tabindex="-1"
+                aria-labelledby="SoummissionplanformationLuApprouve"
+                aria-hidden="true"
+              >
+				<div class="modal-dialog modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="SoummissionplanformationLuApprouve">Soumission du plan d eformation</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>
+                                                    <?php
+                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenus dans ce documen.
 
-        <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                    ?>
+                                                    <?php echo wordwrap($message,144,"<br>\n"); ?>
+
+
+                      </p>
+
+                    </div>
+                    <div class="modal-footer">
+
+
+
+					                                                    <input type="checkbox" class="form-check-input" name="is_valide" id="colorCheck1" onclick="myFunctionMAJ()">
+													<label>Lu et approuvé </label>
+					  <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action" value="Enregistrer_soumettre_plan_formation" id="Enregistrer_soumettre_plan_formation" disabled>Valider le plan de formation</button>
+
+                    </div>
+                    </form>
+                  </div>
+                </div>
+				</div>
+
+
+
+
+
+                @endsection
+
+                @section('js_perso')
+                <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+                <script src="{{asset('assets/js/additional-methods.js')}}"></script>
+
+            <script src="{{asset('assets/js/planformation/pages-soumission-plan-formation.js')}}"></script>
+
+        {{-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
         <script type="text/javascript">
 
             /*------------------------------------------
@@ -983,6 +1157,52 @@ $idpart = Auth::user()->id_partenaire;
                    });
 
             });
+
+        </script>
+
+        <script>
+
+
+                var objectif_pedagogique_fiche_agre = new Quill('#objectif_pedagogique_fiche_agre', {
+                    theme: 'snow'
+                });
+
+                $("#objectif_pedagogique_fiche_agre_val").hide();
+
+                actionformationForm.onsubmit = function(){
+                    //alert(objectif_pedagogique_fiche_agre.root.innerHTML);
+                    $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
+                 }
+
+            //Select2 type de formation
+            $("#id_type_formation").select2().val({{old('id_type_formation')}});
+
+            //Select2 caracteristique type de formation
+            $("#id_caracteristique_type_formation").select2().val({{old('id_caracteristique_type_formation')}});
+
+            //Select2 structure entreprise
+            $("#id_entreprise_structure_formation_plan_formation").select2().val({{old('id_entreprise_structure_formation_plan_formation')}});
+
+            //Select2 But de formation
+            $("#id_but_formation").select2().val({{old('id_but_formation')}});
+
+            //Select2 secteur d'activité
+            $("#id_secteur_activite").select2().val({{old('id_secteur_activite')}});
+
+            var idactivesmoussion = $('#colorCheck1').prop('checked', false);
+
+
+                function myFunctionMAJ() {
+                    // Get the checkbox
+                    var checkBox = document.getElementById("colorCheck1");
+
+                    // If the checkbox is checked, display the output text
+                    if (checkBox.checked == true){
+                        $("#Enregistrer_soumettre_plan_formation").prop( "disabled", false );
+                    } else {
+                        $("#Enregistrer_soumettre_plan_formation").prop( "disabled", true );
+                    }
+                }
 
         </script>
 
