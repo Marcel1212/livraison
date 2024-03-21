@@ -411,7 +411,7 @@
                                                             <input type="text" name="titre_projet_instruction"
                                                                    required="required" id="titre_projet_instruction"
                                                                    disabled
-                                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                                   value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
                                                                    class="form-control form-control-sm">
                                                         </div>
                                                     </div>
@@ -528,7 +528,7 @@
                                         <hr>
                                         <button type="submit" name="action" value="Modifier"
                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Valider
+                                            Enregistrer
                                         </button>
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>

@@ -147,8 +147,8 @@ class TraitementProjetEtudeController extends Controller
                                     ";
                             $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                         }else{}
-                        return redirect()->route('traitementprojetetude.index')->with('success', 'Recevabilité effectuée avec succès.');
 
+                        return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Information mise à jour');
                     }
                 }
                 if($request->action === 'MettreEnAttente'){

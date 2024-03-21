@@ -57,46 +57,48 @@
                                         <table class="table table-bordered table-striped table-hover table-sm "
                                                id="exampleData" style="margin-top: 13px !important">
                                             <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Titre du projet </th>
-                                                <th>Contexte</th>
-                                                <th>Cible</th>
-                                                <th>Statut de la sélection</th>
-                                                <th>Date de la soumission de la sélection</th>
-                                                <th>Action</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>N°</th>
+                                                    <th>Titre du projet </th>
+                                                    <th>Code</th>
+                                                    <th>Chargé d'étude</th>
+                                                    <th>Date d'agrément</th>
+                                                    <th>Date de soumission de la sélection</th>
+                                                    <th>Statut de la sélection</th>
+                                                    <th>Action</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach ($projet_etude_valides as  $key=>$projet_etude_valide)
-
+                                            @foreach ($projet_etude_valides as  $key=>$projet_etude)
                                                 <tr>
-                                                    <td>{{ $key+1}}</td>
-                                                    <td>{{ $projet_etude_valide->titre_projet_etude }}</td>
-                                                    <td>{{ Str::substr($projet_etude_valide->contexte_probleme_projet_etude, 0, 30) }}</td>
-                                                    <td>{{ Str::substr($projet_etude_valide->cible_projet_etude, 0, 40) }}</td>
-
+                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                                <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                                <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
+                                                    <td>@isset($projet_etude->date_fiche_agrement) {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}} @endisset</td>
+                                                    <td>@isset($projet_etude->date_soumis_selection_operateur) {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_selection_operateur ))}} @endisset</td>
                                                     <td>
-                                                        @if(isset($projet_etude_valide->flag_soumis_selection_operateur))
-                                                            @if($projet_etude_valide->flag_soumis_selection_operateur==true && $projet_etude_valide->flag_selection_operateur_valider_par_processus==false)
-                                                                <span class="badge bg-warning">Soumis pour approbation</span>
-                                                            @elseif($projet_etude_valide->flag_soumis_selection_operateur==true &&
-                                                                $projet_etude_valide->flag_selection_operateur_valider_par_processus==true)
-                                                                <span class="badge bg-primary">En attente sélection operateur retenu</span>
-                                                            @else
-                                                                <span class="badge bg-secondary">Non Soumis</span>
-                                                            @endif
+                                                    @if(isset($projet_etude_valide->flag_soumis_selection_operateur))
+                                                        @if($projet_etude_valide->flag_soumis_selection_operateur==true && $projet_etude_valide->flag_selection_operateur_valider_par_processus==false)
+                                                            <span class="badge bg-warning">Soumis pour approbation</span>
+                                                        @elseif($projet_etude_valide->flag_soumis_selection_operateur==true &&
+                                                            $projet_etude_valide->flag_selection_operateur_valider_par_processus==true)
+                                                            <span class="badge bg-primary">En attente sélection operateur retenu</span>
                                                         @else
-                                                            <span class="badge bg-primary">En attente de traitement</span>
+                                                            <span class="badge bg-secondary">Non Soumis</span>
                                                         @endif
-                                                    </td>
-                                                    <td>{{ $projet_etude_valide->date_soumis_selection_operateur }}</td>
-
-                                                    <td align="center">
-                                                        <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($projet_etude_valide->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
-                                                           class=" " title="Modifier"><img
-                                                                src='/assets/img/editing.png'></a>
-                                                    </td>
+                                                    @else
+                                                        <span class="badge bg-primary">En attente de traitement</span>
+                                                    @endif
+                                                </td>
+                                                <td align="center">
+                                                    {{--                                    @can($lien.'-edit')--}}
+                                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                                       class=" "
+                                                       title="Modifier"><img
+                                                            src='/assets/img/editing.png'></a>
+                                                    {{--                                    @endcan--}}
+                                                </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>

@@ -267,7 +267,6 @@
                                     <th>Titre du projet </th>
                                     <th>Code</th>
                                     <th>Chargé d'étude</th>
-{{--                                    <th>Entreprise</th>--}}
                                     <th>Date de création</th>
                                     <th>Date de soumission</th>
                                 </tr>
