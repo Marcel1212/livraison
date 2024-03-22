@@ -76,11 +76,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $planformation->cout_total_demande_plan_formation }}</td>
                                 <td>{{ $planformation->cout_total_accorder_plan_formation }}</td>
                                 <td>
-                                    @isset($planformation->flag_annulation_plan)
-                                        <span class="badge bg-danger">Annulé</span>
-                                    @else
+{{--                                    @isset($planformation->flag_annulation_plan)--}}
+{{--                                        <span class="badge bg-danger">Annulé</span>--}}
+{{--                                    @else--}}
                                         <span class="badge bg-success xs">Agrée</span>
-                                    @endisset
+{{--                                    @endisset--}}
                                 </td>
                                 <td align="center">
                                     <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank" class=" "title="Afficher"><img src='/assets/img/eye-solid.png'></a>
@@ -92,13 +92,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             src='/assets/img/editing.png'></a>
 {{--                                    @endcan--}}
 {{--                                    @can($lien.'-cancel')--}}
-                                        @if($anneexercice->date_fin_periode_exercice>now())
-                                            @if($planformation->flag_annulation_plan==false)
-                                                <a href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)])}}"
-                                                   class="btn btn-danger btn-xs"
-                                                   title="Annuler">Annuler l'agrément</a>
-                                           @endif
-                                       @endif
+{{--                                        @if($anneexercice->date_fin_periode_exercice>now())--}}
+{{--                                            @if($planformation->flag_annulation_plan==false)--}}
+{{--                                                <a href="{{ route($lien.'.edit',['id_plan_de_formation'=>\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)])}}"--}}
+{{--                                                   class="btn btn-danger btn-xs"--}}
+{{--                                                   title="Annuler">Annuler l'agrément</a>--}}
+{{--                                           @endif--}}
+{{--                                       @endif--}}
 {{--                                    @endcan--}}
                                 </td>
                             </tr>
@@ -110,7 +110,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
             </div>
         </div>
     </div>
-
 @endsection
 
 
