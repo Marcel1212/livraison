@@ -110,33 +110,10 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           data-bs-target="#navs-top-categorieplan"
                           aria-controls="navs-top-categorieplan"
                           aria-selected="false">
-                          Liste des plans/projets
-                        </button>
-                      </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link <?php if($idetape==3){ echo "active";}  ?>"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-actionformation"
-                          aria-controls="navs-top-actionformation"
-                          aria-selected="false">
                           Liste des participants
                         </button>
                       </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link <?php if($idetape==4){ echo "active";}else{ echo "disabled";}  ?>"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-cahieraprescomite"
-                          aria-controls="navs-top-cahieraprescomite"
-                          aria-selected="false">
-                          Valider le comite
-                        </button>
-                      </li>
+
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade <?php if($idetape==1){ echo "show active";} //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-planformation" role="tabpanel">
@@ -183,19 +160,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td align="center" nowrap="nowrap">
                                             @can($lien.'-edit')
                                             @if ($demande->code_processus =='PF')
-                                                <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                     class=" "
                                                     title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
                                             @endif
                                             @if ($demande->code_processus =='PE')
-                                                <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                     class=" "
                                                     title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
                                             @endif
                                             @if ($demande->code_processus =='PRF')
-                                                <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                     class=" "
                                                     title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
@@ -215,7 +192,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <?php //if (count($comitegestionparticipant)>=1){ ?>
 
 
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 
 
                                 <?php //} ?>
@@ -225,7 +202,45 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             </div>
                         </div>
                         <div class="tab-pane fade <?php if($idetape==2){ echo "show active";} //if(count($comitegestionparticipant)<1){ echo "show active";} //dd($activetab); echo $activetab; ?>" id="navs-top-categorieplan" role="tabpanel">
+                            <table class="table table-bordered table-striped table-hover table-sm" id="" style="margin-top: 13px !important">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nom</th>
+                                        <th>Prénoms</th>
+                                        <th>Profil</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 0; ?>
+                                    @foreach ($comiteparticipants as $key => $comiteparticipant)
+                                        <?php $i += 1; ?>
+                                        <tr>
+                                            <td>{{ $i }}</td>
+                                            <td>{{ $comiteparticipant->name }}</td>
+                                            <td>{{ $comiteparticipant->prenom_users }}</td>
+                                            <td>{{ $comiteparticipant->profile }}</td>
+                                        </tr>
+                                    @endforeach
 
+                                </tbody>
+                            </table>
+
+                            <div class="col-12" align="right">
+
+                                <hr>
+
+                                <?php //if (count($comitegestionparticipant)>=1){ ?>
+
+
+                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+
+
+                                <?php //} ?>
+
+                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                    Retour</a>
+                            </div>
                         </div>
                         <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} ?>" id="navs-top-actionformation" role="tabpanel">
 
