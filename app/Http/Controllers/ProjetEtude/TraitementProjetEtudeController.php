@@ -127,6 +127,7 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->commentaires_recevabilite = $request->commentaires_recevabilite;
                         $projet_etude->date_recevabilite_projet_etude = now();
                         $projet_etude->flag_recevablite_projet_etude = true;
+                        $projet_etude->num_agce = Auth::user()->num_agce;
                         $projet_etude->update();
 
                         $entreprise  = Entreprises::find($projet_etude->id_entreprises);
@@ -157,6 +158,7 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->id_motif_recevable = $request->id_motif_recevable;
                         $projet_etude->date_mis_en_attente = now();
                         $projet_etude->commentaires_recevabilite = $request->commentaires_recevabilite;
+                        $projet_etude->num_agce = Auth::user()->num_agce;
                         $projet_etude->update();
 
                         $entreprise  = Entreprises::find($projet_etude->id_entreprises);
@@ -198,6 +200,7 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->flag_recevablite_projet_etude = true;
                         $projet_etude->date_rejet = now();
                         $projet_etude->flag_rejet = true;
+                        $projet_etude->num_agce = Auth::user()->num_agce;
                         $projet_etude->update();
 
                         $entreprise  = Entreprises::find($projet_etude->id_entreprises);
