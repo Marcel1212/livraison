@@ -6,7 +6,11 @@
     @php($soustitre = 'Projet de formation ')
     @php($lien = 'projetformation')
 
-    <?php if ($projetetude->flag_soumis == true) {
+    <?php if ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == null) {
+        $disable = 'disabled';
+    } elseif ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == true and $projetetude->flag_statut_instruction == null) {
+        $disable = '';
+    } elseif ($projetetude->flag_statut_instruction == true) {
         $disable = 'disabled';
     } else {
         $disable = '';
