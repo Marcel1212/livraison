@@ -142,6 +142,10 @@ $imagedashboard = Menu::get_info_image_dashboard();
                             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                                 {{ Auth::user()->name . ' ' . Auth::user()->prenom_users }}<br>
+                                @if ( Auth::user()->direction)
+                             {{ Auth::user()->direction->libelle_direction }}
+                                @endif
+
                                 <em>( {{ $naroles }} ) </em>
                             </a>
                         </li>
@@ -177,21 +181,56 @@ $imagedashboard = Menu::get_info_image_dashboard();
                                     </div>
                                 </a>
                             </li>
+
                             <li>
                                 <div class="dropdown-divider"></div>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('profil') }}">
-                                    <i class="ti ti-user-check me-2 ti-sm"></i>
-                                    <span class="align-middle">Mon profil</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ url('deconnexion') }}">
-                                    <i class="ti ti-logout me-2 ti-sm"></i>
-                                    <span class="align-middle">Déconnexion</span>
-                                </a>
-                            </li>
+
+                                @if ( Auth::user()->direction)
+
+                                <span class="dropdown-item">
+
+                                <i class="ti ti-arrow-right me-2 ti-sm"></i>
+                                Direction:  <span class="form-text">{{  Auth::user()->direction->libelle_direction}} </span>
+
+                            </span>
+                                @endif
+
+                                    </li>
+                                    <li>
+                                        @if ( Auth::user()->departement)
+
+                                        <span class="dropdown-item">
+
+                                        <i class="ti ti-flag me-2 ti-sm"></i>
+                                        Département:  <span class="form-text">{{ Auth::user()->departement->libelle_departement }}</span>
+
+                                    </span>
+                                        @endif
+
+                                    </li>
+                                    <li>
+                                        @if ( Auth::user()->service)
+
+                                        <span class="dropdown-item">
+
+                                        <i class="ti ti-briefcase me-2 ti-sm"></i>
+                                        Service:  <span class="form-text">{{ Auth::user()->service->libelle_service  }}</span>
+
+                                        </span>
+                                        @endif
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('profil') }}">
+                                            <i class="ti ti-user-check me-2 ti-sm"></i>
+                                            <span class="align-middle">Mon profil</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url('deconnexion') }}">
+                                            <i class="ti ti-logout me-2 ti-sm"></i>
+                                            <span class="align-middle">Déconnexion</span>
+                                        </a>
+                                    </li>
                         </ul>
                     </li>
                     <!--/ User -->
