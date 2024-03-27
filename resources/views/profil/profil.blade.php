@@ -73,11 +73,27 @@
                                     <span>{{strtoupper($naroles) }}</span>
                                 </li>
                                 <li class="mb-75">
+                                    @if ( Auth::user()->direction)
+                                    <span class="fw-bolder me-25">Direction:</span>
+                                    <span >{{  Auth::user()->direction->libelle_direction}}</span>
+                                    @endif
+                                </li>
+                                <li class="mb-75">
+                                    @if ( Auth::user()->departement)
+                                        <span class="fw-bolder me-25">Département:</span>
+                                        <span >{{ Auth::user()->departement->libelle_departement }}</span>
+                                        @endif
+                                </li>
+                                <li class="mb-75">
+                                    @if ( Auth::user()->service)
+                                    <span class="fw-bolder me-25">Service:</span>
+                                    <span >{{ Auth::user()->service->libelle_service  }}</span>
+                                    @endif
+                                </li>
+                                <li class="mb-75">
                                     <span class="fw-bolder me-25">Contact:</span>
                                     <span>{{Auth::user()->cel_users}} / {{Auth::user()->tel_users}}</span>
                                 </li>
-
-
                             </ul>
                             <div class="d-flex justify-content-center pt-2">
                                 <a href="{{ route('modifier.mot.passe') }}"
