@@ -416,7 +416,7 @@ class TratementPlanFormationController extends Controller
                 ]);
 
                 $input = $request->all();
-//dd($input['cout_action_formation_plan']);
+                //dd($input['cout_action_formation_plan']);
                 //$planformationupadteinfos = PlanFormation::find($idplan);
 
                 //$planformationupadteinfos->update($input);

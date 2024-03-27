@@ -258,7 +258,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Date soumis au FDFP</th>
                                         <th>Date fin instruction</th>
                                         <th>Cout accordé</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -269,7 +268,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <tr>
                                         <td>
                                             <input type="checkbox"
-                                            value="<?php echo $demande->id_demande;?>"
+                                            value="<?php echo $demande->id_demande;?>/<?php echo $demande->code_processus;?>"
                                             name="demande[<?php echo $demande->id_demande;?>]"
                                             id="demande<?php echo $demande->id_demande;?>"/>
                                         </td>
@@ -290,7 +289,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ $demande->date_demande }}</td>
                                         <td>{{ $demande->date_soumis }}</td>
                                         <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
-                                        <td align="center" nowrap="nowrap"></td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -321,7 +319,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     @csrf
                                     @method('put')
                                     <div class="row">
-                                        <div class="col-12 col-md-10">
+                                        <div class="col-12 col-md-8">
                                             <label class="form-label" for="id_user_comite_participant">Personnes ressources <strong
                                                     style="color:red;">*</strong></label>
                                             <select id="id_user_comite_participant"
@@ -334,7 +332,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
 
 
-                                        <div class="col-12 col-md-2" align="right"> <br>
+                                        <div class="col-12 col-md-4" align="right"> <br>
                                             <button type="submit" name="action" value="Enregistrer_persone_ressource_pour_comite"
                                                 class="btn btn-sm btn-primary me-sm-3 me-1"
                                                 onclick='javascript:if (!confirm("Voulez-vous ajouter ces personnes a cet CT ?")) return false;'>Ajouter</button>
@@ -405,6 +403,26 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                         <div class="tab-pane fade<?php if($idetape==4){ echo "show active";} //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
+                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
+                            <form method="POST" class="form"
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                            enctype="multipart/form-data">
+                            @csrf
+                            @method('put')
+                                <div class="row">
+                                    <div class="col-12 col-md-10">
+                                    </div>
+                                    <div class="col-12 col-md-2" align="right"> <br>
+                                        <button type="submit" name="action" value="valider_comite_technique"
+                                            class="btn btn-sm btn-success me-sm-3 me-1"
+                                            onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider le comité</button>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+                            <?php } ?>
                             <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
                             style="margin-top: 13px !important">
@@ -445,7 +463,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ $demande->date_demande }}</td>
                                         <td>{{ $demande->date_soumis }}</td>
                                         <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
-                                        <td align="center" nowrap="nowrap"></td>
+                                        <td align="center" nowrap="nowrap">
+                                            @if($comite->flag_statut_comite == true)
+                                                <span class="badge bg-success">Traité</span>
+                                            @else
+                                                <span class="badge bg-warning">En cours</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
