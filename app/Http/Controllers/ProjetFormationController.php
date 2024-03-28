@@ -24,6 +24,7 @@ use App\Helpers\Crypt;
 use App\Models\Departement;
 use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
+use App\Models\ProjetFormationInstruction;
 use App\Helpers\GenerateCode as Gencode;
 use Spatie\Permission\Models\Role;
 use Hash;
@@ -624,7 +625,7 @@ class ProjetFormationController extends Controller
 
                 //dd($data);
 
-                    // Docuemnt
+                    // Document
                     if (isset($data['doc_autre_document_instruction'])){
                         //dd($data);
                         $filefront = $data['doc_autre_document_instruction'];
@@ -656,7 +657,39 @@ class ProjetFormationController extends Controller
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
                     $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
                     $projetformation->save();
-                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation traité avec succes, vous pouvez passer a l\'instruction');
+
+
+                    // Enregistrement des modifications de l'instruction par le conseiller
+                    $input = $request->all();
+                    //dd(intval($projetformation->id_projet_formation));
+                    $input['id_projet_formation'] = intval($projetformation->id_projet_formation);
+                    $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
+                    $input['operateur'] = ucfirst($input['operateur']);
+                    $input['promoteur'] = ucfirst($input['promoteur']);
+                    $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
+                    $input['zone_projet'] = ucfirst($input['zone_projey']);
+                    $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
+                    $input['fonction'] = ucfirst($input['fonction']);
+                    $input['telephone'] = ucfirst($input['telephone']);
+                    $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
+                    $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
+                    $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
+                    $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
+                    $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
+                    $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
+                    $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
+                    $input['autre_acteur'] = ucfirst($input['autre_acteur']);
+                    $input['roles_autres'] = ucfirst($input['roles_autres']);
+                    $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
+                    $input['problemes'] = ucfirst($input['problemes_odf']);
+                    $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
+                    $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
+                    $input['competences'] = ucfirst($input['competences_odf']);
+                    $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
+                    $input['source_verification'] = ucfirst($input['sources_verification_odf']);
+
+                    ProjetFormationInstruction::create($input);
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation instruit avec succes');
                     }else{
                         $etat_rec = false ;
                           //dd($etat_rec);
@@ -666,6 +699,36 @@ class ProjetFormationController extends Controller
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
                     $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
                     $projetformation->save();
+
+                    // Enregistrement des modifications de l'instruction par le conseiller
+                    $input['id_projet_formation_instruction'] = intval($projetformation->id_projet_formation);
+                    $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
+                    $input['operateur'] = ucfirst($input['operateur']);
+                    $input['promoteur'] = ucfirst($input['promoteur']);
+                    $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
+                    $input['zone_projet'] = ucfirst($input['zone_projey']);
+                    $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
+                    $input['fonction'] = ucfirst($input['fonction']);
+                    $input['telephone'] = ucfirst($input['telephone']);
+                    $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
+                    $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
+                    $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
+                    $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
+                    $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
+                    $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
+                    $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
+                    $input['autre_acteur'] = ucfirst($input['autre_acteur']);
+                    $input['roles_autres'] = ucfirst($input['roles_autres']);
+                    $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
+                    $input['problemes'] = ucfirst($input['problemes_odf']);
+                    $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
+                    $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
+                    $input['competences'] = ucfirst($input['competences_odf']);
+                    $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
+                    $input['source_verification'] = ucfirst($input['sources_verification_odf']);
+
+                    ProjetFormationInstruction::create($input);
+
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('error', 'Projet formation rejeté avec succes');
                     }
 

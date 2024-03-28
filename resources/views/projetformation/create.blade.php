@@ -534,10 +534,10 @@
                                                                     <label>Cout de la formation <span
                                                                             style="color:red;">*</span>
                                                                     </label>
-                                                                    <input type="number" name="cout_projet_formation"
+                                                                    <input type="text" name="cout_projet_formation"
                                                                         required="required" id="cout_projet_formation"
                                                                         class="form-control form-control-sm"
-                                                                        placeholder="ex : 2000000">
+                                                                        {{-- oninput="formatNumber()" --}} placeholder="ex : 2000000">
                                                                 </div>
 
                                                             </div>
@@ -818,5 +818,18 @@
                 });
             }
         });
+
+        function formatNumber() {
+            let inputValue = document.getElementById('cout_projet_formation').value;
+
+            // Supprimer les séparateurs existants (virgules) pour éviter les erreurs
+            inputValue = inputValue.replace(/,/g, '');
+
+            // Ajouter les séparateurs de milliers en utilisant une expression régulière
+            let formattedValue = inputValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+            // Mettre à jour la valeur du champ input avec le nombre formaté
+            document.getElementById('cout_projet_formation').value = formattedValue;
+        }
     </script>
 @endsection
