@@ -3,8 +3,8 @@
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Parametrage')
-    @php($titre='Liste des clés de répartitions de financement')
-    @php($soustitre='Modifier une cle de répartition de financement')
+    @php($titre='Liste des clés de répartition de financement')
+    @php($soustitre='Modifier une clé de répartition de financement')
     @php($lien='clederepartitionfinancement')
     <!-- BEGIN: Content-->
     <div class="app-content content ">

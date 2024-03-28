@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des motifs')
     @php($soustitre='Ajouter motif')
     @php($lien='motifs')
@@ -61,7 +61,7 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle </label>
+                                                    <label>Libellé </label>
                                                     <input type="text" name="libelle_motif" id="libelle_motif"
                                                            class="form-control form-control-sm"
                                                            required>
@@ -77,7 +77,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_motif"
                                                            id="colorCheck1">
                                                 </div>

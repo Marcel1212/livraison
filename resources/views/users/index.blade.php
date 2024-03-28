@@ -47,7 +47,7 @@
                                             <th>Email</th>
                                             <th>Profil</th>
                                             <th>Antenne</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th>Action</th>
                                         </tr>
                                         </thead>

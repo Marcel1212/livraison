@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\Departement;
 use App\Models\Service;
@@ -14,6 +15,19 @@ class ServiceController extends Controller
     public function index()
     {
         $Resultat = Service::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES SERVICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>' ADMINISTRATION'
+
+        ]);
         return view('service.index', compact('Resultat'));
     }
 
@@ -22,11 +36,24 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        $departements = Departement::all();
+        $departements = Departement::where([['flag_departement','=',true]])->get();
         $departement = "<option value=''> Selectionnez un departement </option>";
         foreach ($departements as $comp) {
             $departement .= "<option value='" . $comp->id_departement  . "'>" . $comp->libelle_departement ." </option>";
-        } 
+        }
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES SERVICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('service.create', compact('departement'));
     }
 
@@ -38,17 +65,30 @@ class ServiceController extends Controller
         if ($request->isMethod('post')) {
             $request->validate([
                 'libelle_service' => 'required'
-                
+
             ]);
 
             $input = $request->all();
 
-            $input['libelle_service'] = mb_strtoupper($input['libelle_service']); 
+            $input['libelle_service'] = mb_strtoupper($input['libelle_service']);
 
-            Service::create($input);
+            $serv = Service::create($input);
 
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$serv->id_service,
+
+                'menu'=>'LISTE DES SERVICES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('service.index')->with('success', 'Service ajouté avec succès.');
-        }        
+        }
     }
 
     /**
@@ -66,17 +106,30 @@ class ServiceController extends Controller
      */
     public function edit(Service $service)
     {
-        $departements = Departement::all();
+        $departements = Departement::where([['flag_departement','=',true]])->get();
         $departement = "<option value='".@$service->departement->id_departement."'> ".@$service->departement->libelle_departement." </option>";
         foreach ($departements as $comp) {
             $departement .= "<option value='" . $comp->id_departement  . "'>" . $comp->libelle_departement ." </option>";
-        } 
+        }
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$service->id_service,
+
+            'menu'=>'LISTE DES SERVICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('service.edit', compact('service','departement'));
     }
 
     /**
      * Update the specified resource in storage.
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Service $service
      * @return \Illuminate\Http\Response
@@ -86,16 +139,33 @@ class ServiceController extends Controller
     {
         $request->validate([
             'libelle_service' => 'required'
-            
+
         ]);
 
         $input = $request->all();
 
-        $input['libelle_service'] = mb_strtoupper($input['libelle_service']); 
+        if(!isset($input['flag_service'])){
+            $input['flag_service'] = false;
+        }
 
-        $service->update($input);      
+        $input['libelle_service'] = mb_strtoupper($input['libelle_service']);
 
-        return redirect()->route('service.index')->with('success', 'Service mise a jour avec succès.');        
+        $service->update($input);
+
+        Audit::logSave([
+
+            'action'=>'MISE A JOUR',
+
+            'code_piece'=>$service->id_service,
+
+            'menu'=>'LISTE DES SERVICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATIVE'
+
+        ]);
+        return redirect()->route('service.index')->with('success', 'Service mise a jour avec succès.');
     }
 
     /**

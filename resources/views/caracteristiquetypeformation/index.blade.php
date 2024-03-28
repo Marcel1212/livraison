@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des caractéristiques de type de formation')
     @php($lien='caracteristiquetypeformation')
 
@@ -46,9 +46,9 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Type de formation</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Montant</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

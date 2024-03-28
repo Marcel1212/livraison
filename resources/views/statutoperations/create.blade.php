@@ -3,9 +3,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des status operations')
-    @php($soustitre='Ajouter statut operation')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des status opérations')
+    @php($soustitre='Ajouter statut opération')
     @php($lien='statutoperations')
 
 
@@ -52,7 +52,7 @@
 
                                             <div class="col-md-6 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle </label>
+                                                    <label>Libellé </label>
                                                     <input type="text" name="libelle_statut_operation" id="libelle_statut_operation"
                                                            class="form-control form-control-sm"
                                                            required>
@@ -68,7 +68,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_statut_operation"
                                                            id="colorCheck1">
                                                 </div>

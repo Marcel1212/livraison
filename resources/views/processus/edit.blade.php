@@ -5,8 +5,8 @@
 @section('content')
 
     @php($Module='Configuration')
-    @php($titre='Liste des processus')
-    @php($soustitre='Enregistrer un processus')
+    @php($titre='Liste des circuits de validation')
+    @php($soustitre='Enregistrer un circuit de validation')
     @php($lien='processus')
 
 
@@ -73,7 +73,7 @@
                                                 <tr>
                                                     <th>Action</th>
                                                     <th>Priorité</th>
-                                                    <th>Roles</th>
+                                                    <th>Rôles</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>

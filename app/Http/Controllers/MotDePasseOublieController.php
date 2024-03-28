@@ -28,10 +28,10 @@ class MotDePasseOublieController extends Controller
     {
         $this->validate($request, [
             'email_mot_de_passe_oublie' => 'required',
-            //'g-recaptcha-response' => ['required', new ReCaptcha]
+            'g-recaptcha-response' => ['required', new ReCaptcha]
         ], [
             'email_mot_de_passe_oublie.required' => 'Veuillez saisir votre adresse email.',
-           // 'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
+            'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
         ]);
         $now = Carbon::now();
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
@@ -57,7 +57,6 @@ class MotDePasseOublieController extends Controller
                                     <br><br>Veuillez utiliser le code ci-dessous pour la réinitialisation de votre mot de passe
                                     <br><br><br>
                                     <h1>$mot_de_passe->code_mot_de_passe_oublie</h1>
-                                    <br><br>Ce code exipre dans 5 minutes
 
                                     <br><br><br>
                                     -----
@@ -65,7 +64,9 @@ class MotDePasseOublieController extends Controller
                                     Dans le cas où vous n'avez tentez de réinitialiser votre mot de passe veuillez ignorer ce mail
                                     -----
                                     ";
-                    $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $user->name, $messageMail, $sujet, $titre);
+        //                                    <br><br>Ce code exipre dans 5 minutes
+
+        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $user->name, $messageMail, $sujet, $titre);
             return redirect('motdepasseoublie/'.Crypt::UrlCrypt($request->email_mot_de_passe_oublie).'/otp');
     }
     public function otp($email){
@@ -92,9 +93,9 @@ class MotDePasseOublieController extends Controller
                 $user = User::where('email',$mot_de_passe_oublie->email_mot_de_passe_oublie)->first();
                 if(isset($user)){
                     $logo = Menu::get_logo();
-                    $emailcli = $user->email;
 
                     if (isset($user->email)) {
+                        $emailcli = $user->email;
 
                         $histo = HistoriqueMotDePasse::create([
                             'id_utilisateur'=> $user->id,
@@ -126,6 +127,7 @@ class MotDePasseOublieController extends Controller
                                     -----
                                     ";
                         }else{
+                            $user_login = $user->login_users;
                             $name = $user->name .' '. $user->prenom_users;
                             $sujet = "Réinitialisation du mot de passe du compte FDFP";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -135,7 +137,7 @@ class MotDePasseOublieController extends Controller
                                     <br><br>Voici un récapitulatif de vos informations de compte :
                                     <br><b>Nom d'utilisateur : </b> $name
                                     <br><b>Adresse e-mail : </b> $emailcli
-                                    <br><b>Identifiant : </b> $emailcli
+                                    <br><b>Identifiant : </b> $user_login
                                     <br><b>Mot de passe : </b> $passwordCli
                                     <br><br>Pour finaliser la réinitialisation de  votre compte, veuillez cliquer sur le lien ci-dessous :
                                             http://fdfp.ldfgroupe.com/
@@ -155,7 +157,7 @@ class MotDePasseOublieController extends Controller
 
 
                     }
-                    return redirect()->route('connexion')->with('success', 'Mot de passe réinitialiser avec succès veuillez consulter votre boite mail pour vos nouveaux accès. ');
+                    return redirect()->route('connexion')->with('success', 'Mot de passe réinitialisé avec succès veuillez consulter votre boîte mail pour vos nouveaux accès. ');
 
                 }
             }else{

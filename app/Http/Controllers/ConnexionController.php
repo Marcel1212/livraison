@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\Audit;
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Envoisms;
@@ -33,14 +33,13 @@ class ConnexionController extends Controller
             $this->validate($request, [
                 'username' => 'required',
                 'password' => 'required',
-                //'g-recaptcha-response' => ['required', new ReCaptcha]
-                //'captcha' => 'required|captcha'
+
+                'g-recaptcha-response' => ['required', new ReCaptcha]
+
             ], [
                 'username.required' => 'Veuillez saisir votreidentifiant.',
                 'password.required' => 'Veuillez saisir le mot de passe.',
-                //  'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
-                //'captcha.required' => 'Veuillez saisir le captcha.',
-                //'captcha.captcha' => 'Caractère saisi incorrect.',
+                'g-recaptcha-response.required' => 'Veuillez saisir le captcha.',
             ]);
 
             $data = $request->input();
@@ -50,11 +49,50 @@ class ConnexionController extends Controller
                 $flag = $dbinfo->flag_mdp;
                 if ($flag == true) {
                     Session::put('userSession', $data['username']);
+
+                    Audit::logSave([
+
+                        'action'=>'CONNEXION',
+
+                        'menu'=>'CONNEXION',
+
+                        'etat'=>'Succès',
+
+                    ]);
+
                 } else {
+                    Audit::logSave([
+
+                        'action'=>'CONNEXION',
+
+                        'menu'=>'CONNEXION',
+
+                        'etat'=>'Succès',
+
+                    ]);
                     return redirect('/modifiermotdepasse')->with('success', 'Info:  Veuillez modifier votre mot de passe à la première connexion');
+
                 }
-                return redirect('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
+                Audit::logSave([
+
+                    'action'=>'CONNEXION',
+
+                    'menu'=>'CONNEXION',
+
+                    'etat'=>'Succès',
+
+                ]);
+                return redirect()->intended('/dashboard')->with('success', 'Bonjour ' . Auth::user()->name . ' ' . Auth::user()->prenom_users . ',  Bienvenue sur le portail de '. @$logo->mot_cle);
             } else {
+                Audit::logSave([
+
+                    'action'=>'CONNEXION',
+
+                    'menu'=>'CONNEXION',
+
+                    'etat'=>'Echec',
+
+                ]);
                 return redirect('/connexion')->with('error', 'Identifiant ou mot de passe  incorrect');
             }
         }

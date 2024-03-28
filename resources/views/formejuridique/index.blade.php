@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des formes juridiques')
     @php($lien='formejuridique')
 
@@ -46,9 +46,9 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Type</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

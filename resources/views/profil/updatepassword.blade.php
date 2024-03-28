@@ -378,7 +378,7 @@
                                                     <div class="col-md-9 col-12">
                                                         <label class="form-label">Liste des activités de liée à l'entreprise </label>
 
-                                                        <select class="select2 form-select"
+                                                        <select class="select21 form-select"
                                                                 data-allow-clear="true" name="id_activites"
                                                                 required="required">
                                                             <?= $activite; ?>

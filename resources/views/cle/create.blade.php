@@ -2,9 +2,9 @@
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des clés de répartitions de financement')
-    @php($soustitre='Ajouter une cle de répartition de financement')
+    @php($soustitre='Ajouter une clé de répartition de financement')
     @php($lien='clederepartitionfinancement')
     <!-- BEGIN: Content-->
     <div class="app-content content ">

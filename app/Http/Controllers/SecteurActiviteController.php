@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\Audit;
 use App\Models\Activites;
 use Illuminate\Http\Request;
 use App\Models\SecteurActivite;
@@ -20,7 +20,19 @@ class SecteurActiviteController extends Controller
     public function index()
     {
         $secteuractivites = SecteurActivite::get();
+        Audit::logSave([
 
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES SECTEURS D\'ACTIVITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('secteuractivite.index',compact('secteuractivites'));
     }
 
@@ -29,6 +41,19 @@ class SecteurActiviteController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES SECTEURS D\'ACTIVITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('secteuractivite.create');
     }
 
@@ -45,7 +70,20 @@ class SecteurActiviteController extends Controller
                 'libelle_secteur_activite.required' => 'Veuillez ajouter un libelle.'
             ]);
 
-            SecteurActivite::create($request->all());
+            $secteuractivite = SecteurActivite::create($request->all());
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$secteuractivite->id_secteur_activite,
+
+                'menu'=>'LISTE DES SECTEURS D\'ACTIVITES',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
 
             return redirect()->route('secteuractivite.index')->with('success', 'Succes : Enregistrement réussi.');
         }
@@ -66,6 +104,19 @@ class SecteurActiviteController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $secteuractivite = SecteurActivite::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES SECTEURS D\'ACTIVITES',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('secteuractivite.edit', compact('secteuractivite'));
     }
 
@@ -90,6 +141,19 @@ class SecteurActiviteController extends Controller
 
             $secteuractivite->update($input);
 
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES SECTEURS D\'ACTIVITES',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('secteuractivite.index')->with('success', 'Succes : mis à jour avec succès.');
         }
     }

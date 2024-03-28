@@ -10,7 +10,7 @@ class AuditController extends Controller
     //
     public function index()
     {
-        $logs = Log::paginate(10);
+        $logs = Log::latest()->paginate();
         return view('audit.index',compact('logs'));
     }
 }

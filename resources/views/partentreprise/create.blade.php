@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des parts entreprises')
     @php($soustitre='Ajouter une part entreprise')
     @php($lien='partentreprise')
@@ -53,14 +53,14 @@
                                                 <div class="mb-1">
                                                     <label>Valeur </label>
                                                     <input type="number" name="valeur_part_entreprise" id="valeur_part_entreprise"
-                                                           class="form-control form-control-sm" step="0.0001"
+                                                           class="form-control form-control-sm" step="0.0001" min="0"
                                                            required>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_part_entreprise"
                                                            id="colorCheck1">
                                                 </div>

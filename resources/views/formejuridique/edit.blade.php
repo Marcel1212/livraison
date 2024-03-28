@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des formes juridiques')
     @php($soustitre='Modifier une forme juridique')
     @php($lien='formejuridique')
@@ -71,7 +71,7 @@
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_forme_juridique" {{  ($formejuridique->flag_actif_forme_juridique == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>

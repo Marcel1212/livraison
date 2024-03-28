@@ -4,7 +4,7 @@
     @section('content')
 
         @php($Module='Paramétrage')
-        @php($titre='Liste des departements')
+        @php($titre='Liste des départements')
         @php($lien='departement')
 
 
@@ -45,8 +45,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Direction</th>
-                                <th>Libelle</th>
-                                <th>Statut</th>
+                                <th>Libellé</th>
+                                <th>Actif</th>
                                 <th>Action</th>
                             </tr>
                             </thead>

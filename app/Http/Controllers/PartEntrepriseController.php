@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\Audit;
 use App\Models\PartEntreprise;
 use Illuminate\Http\Request;
 
@@ -13,7 +13,19 @@ class PartEntrepriseController extends Controller
     public function index()
     {
         $parts = PartEntreprise::all();
+        Audit::logSave([
 
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PARTS ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view("partentreprise.index", compact("parts"));
     }
 
@@ -22,6 +34,19 @@ class PartEntrepriseController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PARTS ENTREPRISES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view("partentreprise.create");
     }
 
@@ -47,8 +72,26 @@ class PartEntrepriseController extends Controller
                 ]);
             }
 
-            PartEntreprise::create($request->all());
+            $input = $request->all();
 
+            if(!isset($input['flag_actif_part_entreprise'])){
+                $input['flag_actif_part_entreprise'] = true;
+            }
+
+            $partentreprise = PartEntreprise::create($input);
+            Audit::logSave([
+
+                'action'=>'ENREGISTRER',
+
+                'code_piece'=>$partentreprise->id_part_entreprise,
+
+                'menu'=>'LISTE DES PARTS ENTREPRISES',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('partentreprise.index')->with('success', 'Succes : Enregistrement réussi.');
         }
     }
@@ -68,6 +111,19 @@ class PartEntrepriseController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $part = PartEntreprise::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES PARTS ENTREPRISES',
+
+            'etat'=>'Succes',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view("partentreprise.edit", compact("part"));
     }
 
@@ -92,15 +148,28 @@ class PartEntrepriseController extends Controller
 
             $partvals = PartEntreprise::get();
 
-            foreach ($partvals as $part) {
+            foreach ($partvals as $parte) {
 
-                PartEntreprise::where([['id_part_entreprise','=',$part->id_part_entreprise]])->update([
+                PartEntreprise::where([['id_part_entreprise','=',$parte->id_part_entreprise]])->update([
                     'flag_actif_part_entreprise' => false
                 ]);
             }
 
             $part->update($input);
 
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES PARTS ENTREPRISES',
+
+                'etat'=>'Succes',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('partentreprise.index')->with('success', 'Succes : mis à jour avec succès.');
         }
     }

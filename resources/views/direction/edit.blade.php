@@ -50,7 +50,7 @@
 
                                             <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle direction </label>
+                                                    <label>Libellé direction </label>
                                                     <input type="text" name="libelle_direction" id="libelle_direction"
                                                            value="{{$direction->libelle_direction }}"
                                                            class="form-control form-control-sm" placeholder="Code">
@@ -60,8 +60,8 @@
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_agce"
+                                                    <label>Actif </label><br>
+                                                    <input type="checkbox" class="form-check-input" name="flag_direction"
                                                            id="colorCheck1" {{  ($direction->flag_direction == true ? ' checked' : '') }}>
                                                 </div>
                                             </div>
@@ -78,6 +78,27 @@
                                             </div>
                                         </div>
                                     </form>
+
+                                    <table class="table table-bordered table-striped table-hover table-sm"
+                                    id="exampleData" >
+                                 <thead>
+                                 <tr>
+                                     <th>No</th>
+                                     <th>Departement</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                 <?php $i = 0; ?>
+                                 @foreach ($departementss as $departement)
+                                     <tr>
+                                     <td>{{ ++$i }}</td>
+                                     <td>{{ @$departement->libelle_departement }}</td>
+
+                                     </tr>
+                                 @endforeach
+
+                                 </tbody>
+                             </table>
                                 </div>
                             </div>
                         </div>

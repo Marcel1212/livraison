@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des secteurs activités')
     @php($soustitre='Modifier un secteur activité')
     @php($lien='secteuractivite')
@@ -54,7 +54,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input"
                                                            name="flag_actif_secteur_activite"
                                                            {{  ($secteuractivite->flag_actif_secteur_activite == true ? ' checked' : '') }}

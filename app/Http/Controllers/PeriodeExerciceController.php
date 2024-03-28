@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Helpers\Audit;
 use Illuminate\Http\Request;
 use App\Models\PeriodeExercice;
 use Carbon\Carbon;
@@ -19,8 +19,21 @@ class PeriodeExerciceController extends Controller
      */
     public function index()
     {
-        $periodeexercices = PeriodeExercice::all(); 
-        return view('periodeexercice.index', compact('periodeexercices'));        
+        $periodeexercices = PeriodeExercice::all();
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PERIODES D\'EXERCICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+        return view('periodeexercice.index', compact('periodeexercices'));
     }
 
     /**
@@ -28,6 +41,19 @@ class PeriodeExerciceController extends Controller
      */
     public function create()
     {
+        Audit::logSave([
+
+            'action'=>'CREER',
+
+            'code_piece'=>'',
+
+            'menu'=>'LISTE DES PERIODES D\'EXERCICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
         return view('periodeexercice.create');
     }
 
@@ -57,10 +83,38 @@ class PeriodeExerciceController extends Controller
                 //$date2 = Carbon::createFromFormat('m/d/Y', $dateanneefin)->format('Y');
                 $input = $request->all();
                 if($date1 != $dateencours){
-                    return redirect()->route('periodeexercice.create')->with('error', 'L\'année de la date de debut de la periode d\'est differente de l\'année en cours !'); 
+
+                    Audit::logSave([
+
+                        'action'=>'ENREGISTRER',
+
+                        'code_piece'=>'',
+
+                        'menu'=>'LISTE DES PERIODES D\'EXERCICES(L\'année de la date de debut de la periode est différente de l\'année en cours)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'ADMINISTRATION'
+
+                    ]);
+                    return redirect()->route('periodeexercice.create')->with('error', 'L\'année de la date de debut de la periode est différente de l\'année en cours !');
                 }
                 if($date2 != $dateencours){
-                    return redirect()->route('periodeexercice.create')->with('error', 'L\'année de la date de fin de la periode d\'est differente de l\'année en cours !');                    
+
+                    Audit::logSave([
+
+                        'action'=>'ENREGISTRER',
+
+                        'code_piece'=>'',
+
+                        'menu'=>'LISTE DES PERIODES D\'EXERCICES(L\'année de la date de fin de la periode d\'est differente de l\'année en cours)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'ADMINISTRATION'
+
+                    ]);
+                    return redirect()->route('periodeexercice.create')->with('error', 'L\'année de la date de fin de la periode d\'est differente de l\'année en cours !');
                 }
                 if($date1 == $dateencours and $date2 == $dateencours){
                     $input['annee'] = $date2;
@@ -69,13 +123,27 @@ class PeriodeExerciceController extends Controller
                 $verfi = PeriodeExercice::where([['annee','=',$input['annee']]])->get();
 
                 if(count($verfi)>=1){
+
+                    Audit::logSave([
+
+                        'action'=>'ENREGISTRER',
+
+                        'code_piece'=>'',
+
+                        'menu'=>'LISTE DES PERIODES D\'EXERCICES(Veuillez effectuer une prolongation)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'ADMINISTRATION'
+
+                    ]);
                     return redirect()->route('periodeexercice.create')->with('error', 'Vous avez une  période d\'excercice en cours; Veuillez effectuer une prolongation. ');
                 }
-                
+
                 $input['id_user'] = Auth::user()->id;
                 $input['flag_actif_periode_exercice'] = true;
 
-                PeriodeExercice::create($input);
+                $PeriodeExercice = PeriodeExercice::create($input);
 
                 $insertedId = PeriodeExercice::latest()->first()->id_periode_exercice;
 
@@ -84,9 +152,22 @@ class PeriodeExerciceController extends Controller
                 foreach($resultatnonflags as $resultatnonflag){
                     PeriodeExercice::where('id_periode_exercice',$resultatnonflag->id_periode_exercice)->update([
                         'flag_actif_periode_exercice' => false
-                    ]);                    
+                    ]);
                 }
 
+                Audit::logSave([
+
+                    'action'=>'ENREGISTRER',
+
+                    'code_piece'=>$PeriodeExercice->id_periode_exercice,
+
+                    'menu'=>'LISTE DES PERIODES D\'EXERCICES',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'ADMINISTRATION'
+
+                ]);
                 return redirect()->route('periodeexercice.index')->with('success', 'Periode exercice ajouté avec succès.');
         }
     }
@@ -106,6 +187,20 @@ class PeriodeExerciceController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
         $periodeexercice = PeriodeExercice::find($id);
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'LISTE DES PERIODES D\'EXERCICES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'ADMINISTRATION'
+
+        ]);
+
         return view('periodeexercice.edit', compact('periodeexercice'));
     }
 
@@ -126,10 +221,23 @@ class PeriodeExerciceController extends Controller
                 'motif_prolongation_periode_exercice.required' => 'Veuillez ajouter le motif de prolongation.',
             ]);
 
-            
+
             $periodeexercice = PeriodeExercice::find($id);
             $periodeexercice->update($request->all());
 
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'LISTE DES PERIODES D\'EXERCICES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'ADMINISTRATION'
+
+            ]);
             return redirect()->route('periodeexercice.index')
                 ->with('success', 'Période exercice mis à jour avec succès.');
         }

@@ -2,7 +2,7 @@
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des centres d\'impots')
     @php($soustitre='Ajouter un centre d\'impot')
     @php($lien='centreimpot')
@@ -59,7 +59,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_centre_impot"
                                                            id="flag_centre_impot">
                                                 </div>

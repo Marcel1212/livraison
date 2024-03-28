@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types entreprises')
     @php($lien='typeentreprise')
 
     <!-- BEGIN: Content-->
@@ -46,8 +46,8 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
-                                            <th>Statut</th>
+                                            <th>Libellé</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

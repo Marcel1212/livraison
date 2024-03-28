@@ -3,9 +3,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types de comites')
-    @php($soustitre='Modifier  un type de comite')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types de comités')
+    @php($soustitre='Modifier  un type de comité')
     @php($lien='typecomites')
 
 
@@ -44,20 +44,28 @@
 
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle</label>
+                                                    <label>Libellé</label>
                                                     <select class="select2 form-select" name="libelle_type_comite" id="libelle_type_comite" required>
-                                                            <option value="<?php if($typecomite->libelle_type_comite=="Comitepleniere"){
-                                                                echo "Comite pléniere";
-                                                            }elseif ($typecomite->code_type_comite=="Comitedegestion") {
-                                                                echo "Comite de gestion";
-                                                            }elseif ($typecomite->code_type_comite=="Comitepermant") {
+                                                            <option value="<?php if($typecomite->libelle_type_comite=="Comité plénière"){
+                                                                echo "Comité plénière";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comité de gestion") {
+                                                                echo "Comité de gestion";
+                                                            }elseif ($typecomite->libelle_type_comite=="Commission permanente") {
                                                                 echo "Commission permanente";
                                                             }else {
                                                                 echo "";
-                                                            }?>">----Selectionnez le comiten----</option>
-                                                            <option value="Comitepleniere">Comite pléniere</option>
-                                                            <option value="Comitedegestion">Comite de gestion</option>
-                                                            <option value="Comitepermant">Commission permanente</option>
+                                                            }?>"><?php if($typecomite->libelle_type_comite=="Comité plénière"){
+                                                                echo "Comite pléniere";
+                                                            }elseif ($typecomite->libelle_type_comite=="Comité de gestion") {
+                                                                echo "Comite de gestion";
+                                                            }elseif ($typecomite->libelle_type_comite=="Commission permanente") {
+                                                                echo "Commission permanente";
+                                                            }else {
+                                                                echo "----Selectionnez le comiten----";
+                                                            }?></option>
+                                                            <option value="Comité plénière">Comité plénière</option>
+                                                            <option value="Comité de gestion">Comité de gestion</option>
+                                                            <option value="Commission permanente">Commission permanente</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -83,15 +91,15 @@
                                                     <select class="select2 form-select" name="code_type_comite" id="code_type_comite">
                                                             <option value="<?php if($typecomite->code_type_comite=="PF"){
                                                                                 echo "PF";
-                                                                            }elseif ($typecomite->code_type_comite=="POF") {
-                                                                                echo "POF";
+                                                                            }elseif ($typecomite->code_type_comite=="PRF") {
+                                                                                echo "PRF";
                                                                             }elseif ($typecomite->code_type_comite=="PE") {
                                                                                 echo "PE";
                                                                             }else {
                                                                                 echo "";
                                                                             }?>"><?php if($typecomite->code_type_comite=="PF"){
                                                                                 echo "Plan de formation";
-                                                                            }elseif ($typecomite->code_type_comite=="POF") {
+                                                                            }elseif ($typecomite->code_type_comite=="PRF") {
                                                                                 echo "Projet de formation";
                                                                             }elseif ($typecomite->code_type_comite=="PE") {
                                                                                 echo "Projet etude";
@@ -99,15 +107,15 @@
                                                                                 echo "----Selectionnez un type de prestation---";
                                                                             }?></option>
                                                             <option value="PF">Plan de formation</option>
-                                                            <option value="POF">Projet de formation</option>
-                                                            <option value="PE">Projet etude</option>
+                                                            <option value="PRF">Projet de formation</option>
+                                                            <option value="PE">Projet étude</option>
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_type_comite" {{  ($typecomite->flag_actif_type_comite == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>

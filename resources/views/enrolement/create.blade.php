@@ -44,6 +44,7 @@ $reseaux = Menu::get_info_reseaux();
     <link rel="stylesheet" href="{{asset('assets/vendor/fonts/fontawesome.css')}}"/>
     <link rel="stylesheet" href="{{asset('assets/vendor/fonts/tabler-icons.css')}}"/>
     <link rel="stylesheet" href="{{asset('assets/vendor/fonts/flag-icons.css')}}"/>
+    <link rel="stylesheet" href="{{asset('assets/css/form-validation.css')}}"/>
 
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css"/>
@@ -73,39 +74,6 @@ $reseaux = Menu::get_info_reseaux();
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{{asset('assets/js/config.js')}}"></script>
 
-    <script type="text/javascript">
-
-        function changeFuncFormeJuridique() {
-            //location.reload();
-            // location.href = location.href;
-            //document.getElementById("departement").innerHTML = "";
-            //document.getElementById("service").innerHTML = "";
-            var selectBox = document.getElementById("id_forme_juridique");
-            //var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-            const myArray = selectedValue.split("/");
-            let code_forme_juridique = myArray[0];
-            let id_forme_juridiques = myArray[1];
-
-            if (code_forme_juridique === 'PR') {
-                document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
-                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
-                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
-                document.getElementById("piece_attestation_immatriculati_div").style.display = 'block';
-            } else if (code_forme_juridique === 'PU') {
-                document.getElementById("rccm_demande_enrolement_div").style.display = 'none';
-                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'none';
-                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'none';
-                document.getElementById("piece_attestation_immatriculati_div").style.display = 'none';
-            } else {
-                document.getElementById("rccm_demande_enrolement_div").style.display = 'block';
-                document.getElementById("numero_cnps_demande_enrolement_div").style.display = 'block';
-                document.getElementById("piece_rccm_demande_enrolement_div").style.display = 'block';
-                document.getElementById("piece_attestation_immatriculati_div").style.display = 'block';
-            }
-        }
-
-    </script>
 
     <!--<script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script>-->
     <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -189,28 +157,6 @@ $reseaux = Menu::get_info_reseaux();
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
-
-                    @if ($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <div class="alert-body">
-                                {{ $message }}
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-
-                    @if($errors->any())
-                        @foreach ($errors->all() as $error)
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <div class="alert-body">
-                                    {{ $error }}
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                            </div>
-                        @endforeach
-                    @endif
-                    <!-- Sticky Actions -->
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -227,58 +173,93 @@ $reseaux = Menu::get_info_reseaux();
                                         <div class="col-lg-10 mx-auto">
                                             <!-- 1. Delivery Address -->
                                             <h5 class="my-4">1. Renseigner les informations </h5>
-                                            <form method="POST" class="form"
+                                            <form method="POST"
                                                   action="{{ route('enrolements.store') }}"
-                                                  enctype="multipart/form-data" id="EnrolementUSForm">
+                                                  enctype="multipart/form-data" id="enrolementForm">
                                                 @csrf
                                                 <div class="row g-6">
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="fullname">Forme juridique
                                                                 <strong style="color:red;">*</strong></label>
-                                                            <select class="form-select"
+                                                            <select class="form-select
+                                                                    @error('id_forme_juridique')
+                                                                        error
+                                                                   @enderror"
                                                                     data-allow-clear="true" name="id_forme_juridique"
                                                                     id="id_forme_juridique"
-                                                                    onchange="changeFuncFormeJuridique();"
-                                                                    required="required">
-                                                                <?= $formejuridique; ?>
+                                                                    onchange="changeFuncFormeJuridique(this.options[this.selectedIndex].value);"
+                                                                    required="required"
+                                                            >
+                                                                @foreach(@$formejuridiques as $formejuridique)
+                                                                    <option value="{{$formejuridique->code_forme_juridique}}/{{$formejuridique->id_forme_juridique}}"
+                                                                        {{(old('id_forme_juridique')==$formejuridique->code_forme_juridique.'/'.$formejuridique->id_forme_juridique)? 'selected':''}}
+                                                                    >
+                                                                        {{mb_strtoupper($formejuridique->libelle_forme_juridique)}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
+                                                            @error('id_forme_juridique')
+                                                                <div class="mb-1"><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
                                                         <div class="col-md-8">
-                                                            <label class="form-label" for="fullname">Raison sociale
+                                                            <label class="form-label" for="raison_sociale_demande_enroleme">Raison sociale
                                                                 <strong style="color:red;">*</strong></label>
                                                             <input type="text" id="raison_sociale_demande_enroleme"
                                                                    name="raison_sociale_demande_enroleme"
-                                                                   class="form-control form-control-sm"
+                                                                   class="form-control form-control-sm
+                                                                   @error('raison_sociale_demande_enroleme')
+                                                                        error
+                                                                   @enderror"
                                                                    placeholder="Raison sociale"
                                                                    required="required"
                                                                    value="{{ old('raison_sociale_demande_enroleme') }}"/>
+                                                                    @error('raison_sociale_demande_enroleme')
+                                                                        <div class="mb-1"><label class="error">{{ $message }}</label></div>
+                                                                    @enderror
                                                         </div>
+
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="email">Email <strong
                                                                     style="color:red;">*</strong></label>
-                                                            <div class="input-group input-group-merge">
                                                                 <input
-                                                                    class="form-control form-control-sm"
+                                                                    class="form-control form-control-sm
+                                                                     @error('email_demande_enrolement')
+                                                                        error
+                                                                    @enderror"
                                                                     type="email"
                                                                     id="email"
                                                                     name="email_demande_enrolement"
                                                                     placeholder="Email"
                                                                     aria-label=""
-                                                                    aria-describedby="email3" required="required"
+                                                                    aria-describedby="email3"
+                                                                    required="required"
                                                                     value="{{ old('email_demande_enrolement') }}"/>
-                                                                <span class="input-group-text" id="email"></span>
-                                                            </div>
+                                                                @error('email_demande_enrolement')
+                                                                    <div class="mb-1"><label class="error">{{ $message }}</label></div>
+                                                                @enderror
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <!--<label class="form-label" for="phone-number-mask">Téléphone du représentant</label>-->
-
                                                             <label class="form-label"
                                                                    for="billings-country">Indicatif</label>
-                                                            <select class="form-select" readonly=""
+                                                            @error('indicatif_demande_enrolement')
+                                                            <div class="mt-1"><label class="error">{{ $message }}</label></div>
+                                                            @enderror
+                                                            <select class="form-select
+                                                            @error('indicatif_demande_enrolement')
+                                                                        selecterror
+                                                                   @enderror"
+                                                                    required="required"
+                                                                    readonly=""
                                                                     name="indicatif_demande_enrolement">
-                                                                <?php echo "+" . $pay; ?>
-
+                                                                @foreach(@$pays as $pay)
+                                                                    <option value="{{$pay->id_pays}}"
+                                                                        {{(old('indicatif_demande_enrolement')==$pay->id_pays)? 'selected':''}}
+                                                                    >
+                                                                        + {{mb_strtoupper($pay->indicatif)}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                         <div class="col-md-4">
@@ -286,59 +267,102 @@ $reseaux = Menu::get_info_reseaux();
                                                                     style="color:red;">*</strong></label>
                                                             <input type="number" maxlength="10" min="0"
                                                                    name="tel_demande_enrolement"
-                                                                   class="form-control form-control-sm"
+                                                                   class="form-control form-control-sm
+                                                                   @error('tel_demande_enrolement')
+                                                                        error
+                                                                   @enderror
+                                                                   "
                                                                    placeholder="Téléphone"
                                                                    required="required"
                                                                    value="{{ old('tel_demande_enrolement') }}"/>
+                                                            @error('tel_demande_enrolement')
+                                                                <div class="mb-1"><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
 
 
                                                     </div>
 
                                                     <div class="row">
-
-
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="state">Localité de
                                                                 l'entreprise <strong
                                                                     style="color:red;">*</strong></label>
-                                                            <select class="select2 form-select"
+
+                                                            <select class="select2 form-select
+                                                            @error('id_localite')
+                                                                        error
+                                                                   @enderror"
                                                                     data-allow-clear="true" name="id_localite"
-                                                                    required="required">
+                                                            id="id_localite"
+                                                                    required="required"
+                                                            >
                                                                 <option value="">-- Sélectionnez une localité --
                                                                 </option>
-                                                                <?= $localite; ?>
+                                                                @foreach(@$localites as $localite)
+                                                                    <option value="{{$localite->id_localite}}"
+                                                                        {{(old('id_localite')==$localite->id_localite)? 'selected':''}}
+                                                                    >
+                                                                        {{mb_strtoupper($localite->libelle_localite)}}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
-
+                                                            @error('id_localite')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
 
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="state">Centre d'impôt
                                                                 <strong style="color:red;">*</strong></label>
-                                                            <select class="select2 form-select"
+
+                                                            <select class="select2 form-select
+                                                                    @error('id_centre_impot')
+                                                                        error
+                                                                   @enderror"
                                                                     data-allow-clear="true" name="id_centre_impot"
-                                                                    required="required">
+                                                                    required="required"
+                                                            >
                                                                 <option value="">-- Sélectionnez un centre d'impôt --
                                                                 </option>
-                                                                <?= $centreimpot; ?>
+                                                                @foreach(@$centreimpots as $centreimpot)
+                                                                    <option value="{{$centreimpot->id_centre_impot}}"
+                                                                        {{(old('id_centre_impot')==$centreimpot->id_centre_impot)? 'selected':''}}
+                                                                    >
+                                                                        {{mb_strtoupper($centreimpot->libelle_centre_impot)}}
+                                                                    </option>
+                                                                @endforeach
+
                                                             </select>
+                                                            @error('id_centre_impot')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
 
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                            <label class="form-label" for="fullname">Secteur d'activité
+                                                            <label class="form-label" for="id_secteur_activite">Secteur d'activité
                                                                 <strong style="color:red;">*</strong></label>
-                                                            <select class="select2 form-select"
+
+                                                            <select class="select2 form-select
+                                                                    @error('id_secteur_activite')
+                                                                        error
+                                                                   @enderror
+                                                                   "
+                                                                    required="required"
                                                                     data-allow-clear="true" name="id_secteur_activite"
                                                                     id="id_secteur_activite">
                                                                 <option value="">-- Sélectionnez un secteur d'activité
                                                                     --
                                                                 </option>
-                                                                @foreach ($secteuractivites as $activite)
+                                                                @foreach (@$secteuractivites as $activite)
                                                                     <option
                                                                         value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
                                                                 @endforeach
                                                             </select>
+                                                            @error('id_secteur_activite')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
 
                                                     </div>
@@ -353,13 +377,19 @@ $reseaux = Menu::get_info_reseaux();
                                                                 <input
                                                                     type="text"
                                                                     id="collapsible-payment-name"
-                                                                    class="form-control form-control-sm" maxlength="9"
+                                                                    class="form-control form-control-sm @error('ncc_demande_enrolement')
+                                                                        error
+                                                                   @enderror" maxlength="9"
                                                                     minlength="6"
                                                                     placeholder="Numéro de compte  contribuable (NCC)"
                                                                     name="ncc_demande_enrolement"
                                                                     required="required"
                                                                     value="{{ old('ncc_demande_enrolement') }}"/>
+                                                                @error('ncc_demande_enrolement')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
                                                             </div>
+
                                                         </div>
                                                         <div class="col-4 col-md-4" id="rccm_demande_enrolement_div">
                                                             <div class="mb-3">
@@ -369,12 +399,17 @@ $reseaux = Menu::get_info_reseaux();
                                                                         style="color:red;" id="rccm_demande_enrolement_label">*</strong></label>
                                                                 <input
                                                                     type="text"
-                                                                    class="form-control form-control-sm"
+                                                                    class="form-control form-control-sm @error('rccm_demande_enrolement')
+                                                                        error
+                                                                   @enderror"
                                                                     placeholder="Numéro du registre de  commerce (RCCM)"
                                                                     name="rccm_demande_enrolement"
                                                                     id="rccm_demande_enrolement"
                                                                     required="required"
                                                                     value="{{ old('rccm_demande_enrolement') }}"/>
+                                                                @error('rccm_demande_enrolement')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                         <div class="col-4 col-md-4" id="numero_cnps_demande_enrolement_div">
@@ -385,12 +420,18 @@ $reseaux = Menu::get_info_reseaux();
 
                                                                 <input
                                                                     type="text"
-                                                                    class="form-control form-control-sm"
+                                                                    class="form-control form-control-sm
+                                                                    @error('numero_cnps_demande_enrolement')
+                                                                        error
+                                                                   @enderror"
                                                                     placeholder="Numéro CNPS "
                                                                     name="numero_cnps_demande_enrolement"
                                                                     id="numero_cnps_demande_enrolement"
                                                                     required="required"
                                                                     value="{{ old('numero_cnps_demande_enrolement') }}"/>
+                                                                @error('numero_cnps_demande_enrolement')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
 
 
                                                             </div>
@@ -412,22 +453,35 @@ $reseaux = Menu::get_info_reseaux();
                                                         <label class="form-label">Pièce de la DFE <strong
                                                                 style="color:red;">*</strong></label>
                                                         <input type="file" name="piece_dfe_demande_enrolement"
-                                                               class="form-control form-control-sm" placeholder=""
+                                                               class="form-control form-control-sm  @error('piece_dfe_demande_enrolement')
+                                                               error
+                                                                @enderror" placeholder=""
                                                                required="required"
                                                                value="{{ old('piece_dfe_demande_enrolement') }}"/>
+                                                        @error('piece_dfe_demande_enrolement')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                        @enderror
                                                         <div id="defaultFormControlHelp" class="form-text ">
                                                             <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                                 maxi : 5Mo</em>
                                                         </div>
+
                                                     </div>
                                                     <div class="col-md-4" id="piece_rccm_demande_enrolement_div">
                                                         <label class="form-label"> Pièce du RCCM <strong
                                                                 style="color:red;"  id="piece_rccm_demande_enrolement_label">*</strong></label>
                                                         <input type="file" name="piece_rccm_demande_enrolement"
                                                                id="piece_rccm_demande_enrolement"
-                                                               class="form-control form-control-sm" placeholder=""
+                                                               class="form-control form-control-sm
+                                                               @error('piece_rccm_demande_enrolement')
+                                                               error
+                                                                @enderror
+                                                                " placeholder=""
                                                                required="required"
                                                                value="{{ old('piece_rccm_demande_enrolement') }}"/>
+                                                        @error('piece_rccm_demande_enrolement')
+                                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                                        @enderror
                                                         <div id="defaultFormControlHelp" class="form-text">
                                                             <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                                 maxi : 5Mo</em>
@@ -438,9 +492,16 @@ $reseaux = Menu::get_info_reseaux();
                                                             <strong style="color:red;" id="piece_attestation_immatriculati_label">*</strong></label>
                                                         <input type="file" name="piece_attestation_immatriculati"
                                                                id="piece_attestation_immatriculati"
-                                                               class="form-control form-control-sm" placeholder=""
+                                                               class="form-control form-control-sm
+                                                               @error('piece_attestation_immatriculati')
+                                                               error
+                                                                @enderror
+                                                    " placeholder=""
                                                                required="required"
                                                                value="{{ old('piece_attestation_immatriculati') }}"/>
+                                                        @error('piece_attestation_immatriculati')
+                                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                                        @enderror
                                                         <div id="defaultFormControlHelp" class="form-text">
                                                             <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                                 maxi : 5Mo</em>
@@ -460,24 +521,19 @@ $reseaux = Menu::get_info_reseaux();
                                                         <div class="form-group">
                                                             <div class="g-recaptcha"
                                                                  data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
-                                                            @if ($errors->has('g-recaptcha-response'))
-                                                                <span
-                                                                    class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
-                                                            @endif
+                                                            @error('g-recaptcha-response')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <br/>
                                                 <hr>
-                                                <!-- 3. Apply Promo code -->
                                                 <div class="row">
-
                                                     <div class="col-sm-12 col-4 text-end mt-0">
-                                                        <button class="btn btn-primary">Enregistrer</button>
+                                                        <button class="btn btn-primary" type="submit" name="submit">Enregistrer</button>
                                                     </div>
                                                 </div>
-
-
                                             </form>
                                         </div>
                                     </div>
@@ -607,47 +663,93 @@ $reseaux = Menu::get_info_reseaux();
 <script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/select3/select3.js')}}"></script>
 <script src="{{asset('assets/vendor/libs/dropzone/dropzone.js')}}"></script>
+<script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
+<script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
 <!-- Main JS -->
 <script src="{{asset('assets/js/main.js')}}"></script>
 <script src="{{asset('assets/js/forms-file-upload.js')}}"></script>
-
 <!-- Page JS -->
 <script src="{{asset('assets/js/form-layouts.js')}}"></script>
+<script src="{{asset('assets/js/pages-enrolements.js')}}"></script>
+
+<script>
+    var selectBox = $("#id_forme_juridique");
+    let selectedValue = selectBox.val();
+    changeFuncFormeJuridique(selectedValue);
+
+    //Afficher les champs requis ou non en fontion du type de forme juridique
+    function changeFuncFormeJuridique(code_forme_juridique_array) {
+            const myArray = code_forme_juridique_array.split("/");
+            let code_forme_juridique = myArray[0];
+            if (code_forme_juridique === 'PR') {
+                displayPufield();
+            } else if (code_forme_juridique === 'PU') {
+                hiddenPufield();
+            } else {
+                displayPufield();
+            }
+        }
+    function hiddenPufield(){
+            $("#rccm_demande_enrolement").prop( "disabled", true );
+            $("#piece_attestation_immatriculati").prop( "disabled", true );
+            $("#numero_cnps_demande_enrolement").prop( "disabled", true );
+            $("#piece_rccm_demande_enrolement").prop( "disabled", true );
+
+            $("#rccm_demande_enrolement_div").hide();
+            $("#numero_cnps_demande_enrolement_div").hide();
+            $("#piece_rccm_demande_enrolement_div").hide();
+            $("#piece_attestation_immatriculati_div").hide();
+        }
+    function displayPufield(){
+            $("#rccm_demande_enrolement").prop( "disabled", false );
+            $("#piece_attestation_immatriculati").prop( "disabled", false );
+            $("#numero_cnps_demande_enrolement").prop( "disabled", false );
+            $("#piece_rccm_demande_enrolement").prop( "disabled", false );
+
+            $("#rccm_demande_enrolement_div").show();
+            $("#numero_cnps_demande_enrolement_div").show();
+            $("#piece_rccm_demande_enrolement_div").show();
+            $("#piece_attestation_immatriculati_div").show();
+        }
+
+
+    //Select2 localité entreprise
+    $("#id_localite").select2().val({{old('id_localite')}});
+
+    //Select2 centre impot
+    $("#id_centre_impot").select2().val({{old('id_centre_impot')}});
+
+    //Select2 secteur d'activité
+    $("#id_secteur_activite").select2().val({{old('id_secteur_activite')}});
+
+</script>
 
 <script>
     $(function () {
 
         $('#id_secteur_activite').on('change', function (e) {
             var id = e.target.value;
-            // alert(id); //exit;
             telUpdate1(id);
-            //alert('ttt'); //exit;
         });
 
         function telUpdate1(id) {
-            //alert('testanc'); //exit;
             $.get('/secteuractivilitelistes/' + id, function (data) {
-                // alert(data); //exit;
                 $('#id_activites').empty();
                 $.each(data, function (index, tels) {
                     $('#id_activites').append($('<option>', {
                         value: tels.id_activites,
                         text: tels.libelle_activites,
                     }));
-
                 });
-
             });
         }
-
     });
 
 </script>
 
-<script type="text/javascript">
+<script>
     $('#reload').click(function () {
-        //alert('tesr');
         $.ajax({
             type: 'GET',
             url: 'reload-captcha',

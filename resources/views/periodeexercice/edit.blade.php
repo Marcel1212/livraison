@@ -4,9 +4,9 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des periodes d\'excercices')
-    @php($soustitre='Modifier une periode d\'excercice')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des périodes d\'excercices')
+    @php($soustitre='Modifier une période d\'excercice')
     @php($lien='periodeexercice')
 
 
@@ -63,7 +63,7 @@
                                         <div class="row">
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Date de debut </label>
+                                                    <label>Date de début </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$periodeexercice->date_debut_periode_exercice}}"
                                                            disabled="disabled">

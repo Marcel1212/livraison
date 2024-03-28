@@ -155,7 +155,7 @@
                                         </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label" for="state">Departement</label>
+                                    <label class="form-label" for="state">Département</label>
                                     <select class="select2 form-select" id='departement' name='id_departement'
                                             class="form-control">
                                         <option
@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Statut </label>
+                                        <label>Actif </label>
                                         <select name="flag_actif_users"
                                                 class="form-control form-control-sm ">
                                             <option value=true

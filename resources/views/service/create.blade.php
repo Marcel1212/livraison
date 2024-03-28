@@ -47,7 +47,7 @@
                                             <div class="row">
                                                 <div class="col-md-5 col-12">
                                                     <div class="mb-1">
-                                                        <label>Departement </label>
+                                                        <label>Département </label>
                                                         <select class="form-select" data-allow-clear="true" name="id_departement">
                                                             <?= $departement; ?>
                                                         </select>
@@ -55,7 +55,7 @@
                                                 </div>
                                                 <div class="col-md-5 col-12">
                                                     <div class="mb-1">
-                                                        <label>Libelle service </label>
+                                                        <label>Libellé service </label>
                                                         <input type="text" name="libelle_service" id="libelle_service"
                                                             class="form-control form-control-sm" placeholder="code" >
                                                     </div>
@@ -63,7 +63,7 @@
 
                                                 <div class="col-md-2 col-12">
                                                     <div class="mb-1">
-                                                        <label>Statut </label><br>
+                                                        <label>Actif </label><br>
                                                         <input type="checkbox" class="form-check-input" name="flag_service"
                                                             id="flag_service"  >
                                                     </div>

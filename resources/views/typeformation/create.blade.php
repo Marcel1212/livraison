@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des types de  formation')
     @php($soustitre='Ajouter un type de formation')
     @php($lien='typeformation')
@@ -50,7 +50,7 @@
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_formation"
                                                            id="colorCheck1">
                                                 </div>

@@ -4,8 +4,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des processus')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des circuits de validation')
     @php($lien='processus')
 
     <!-- BEGIN: Content-->

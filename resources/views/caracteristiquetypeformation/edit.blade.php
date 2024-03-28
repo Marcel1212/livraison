@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des caractéristiques de type de formation')
     @php($soustitre='Modifier une caractéristique de type de formation')
     @php($lien='caracteristiquetypeformation')
@@ -70,7 +70,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle </label>
+                                                    <label>Libellé </label>
                                                     <input type="text" name="libelle_ctf" id="libelle_ctf"
                                                            class="form-control form-control-sm"
                                                            value="{{$caracteristique->libelle_ctf}}">
@@ -107,11 +107,11 @@
                                                             }
                                                          ?>
                                                          </option>
-                                                        <option value="CGF">Cout par groupe de formation</option>
-                                                        <option value="CSF">Cout par stagiaire de formation</option>
-                                                        <option value="CFD">Cout formation diplômante</option>
-                                                        <option value="CCEF">Cout par cabinet étranger de formation</option>
-                                                        <option value="CSEF">Cout par stagiaire étranger de formation</option>
+                                                        <option value="CGF">Coût par groupe de formation</option>
+                                                        <option value="CSF">Coût par stagiaire de formation</option>
+                                                        <option value="CFD">Coût formation diplômante</option>
+                                                        <option value="CCEF">Coût par cabinet étranger de formation</option>
+                                                        <option value="CSEF">Coût par stagiaire étranger de formation</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -125,7 +125,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_ctf" {{  ($caracteristique->flag_ctf == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>

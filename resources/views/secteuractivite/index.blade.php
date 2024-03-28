@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des secteurs activités')
     @php($lien='secteuractivite')
 
@@ -47,7 +47,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Secteurs activités</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
@@ -77,11 +77,11 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <!--end: Datatable-->
-                                    </div>
-            </div>
-        </div>
-    </div>
+                            <!--end: Datatable-->
+                        </div>
+                   </div>
+              </div>
+         </div>
     <!-- END: Content-->
 @endsection
 @else

@@ -3,8 +3,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types de comites')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types de comités')
     @php($lien='typecomites')
 
     <!-- BEGIN: Content-->
@@ -45,11 +45,11 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Libelle</th>
+                                            <th>Libellé</th>
                                             <th>Valeur min</th>
-                                            <th>Valeur min</th>
+                                            <th>Valeur max</th>
                                             <th>Type de prestation</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>
@@ -59,20 +59,12 @@
                                         <?php $i += 1;?>
                                             <tr>
                                                 <td>{{ $i }}</td>
-                                                <td><?php if($typecomite->libelle_type_comite=="Comitepleniere"){
-                                                        echo "Comite pléniere";
-                                                    }elseif ($typecomite->libelle_type_comite=="Comitedegestion") {
-                                                        echo "Comite de gestion";
-                                                    }elseif ($typecomite->libelle_type_comite=="Comitepermant") {
-                                                        echo "Comite permant";
-                                                    }else {
-                                                        echo "";
-                                                    }?></td>
-                                                <td>{{ $typecomite->valeur_min_type_comite }}</td>
-                                                <td>{{ $typecomite->valeur_max_type_comite }}</td>
+                                                <td>{{ $typecomite->libelle_type_comite }}</td>
+                                                <td>{{ number_format($typecomite->valeur_min_type_comite, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($typecomite->valeur_max_type_comite, 0, ',', ' ') }}</td>
                                                 <td><?php if($typecomite->code_type_comite=="PF"){
                                                     echo "Plan de formation";
-                                                }elseif ($typecomite->code_type_comite=="POF") {
+                                                }elseif ($typecomite->code_type_comite=="PRF") {
                                                     echo "Projet de formation";
                                                 }elseif ($typecomite->code_type_comite=="PE") {
                                                     echo "Projet etude";

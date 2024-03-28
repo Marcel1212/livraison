@@ -34,10 +34,11 @@ class PermissionController extends Controller
      */
     public function create(Request $request)
     {
-        $SousMenu = DB::table('sousmenu')->where('is_valide', '=', true)->orderBy('libelle',)->get();
+        $SousMenu = Sousmenus::where('is_valide', '=', true)->orderBy('libelle',)->get();
+        //DB::table('sousmenu')->where('is_valide', '=', true)->orderBy('libelle',)->get();
         $SousMenuList = "<option value='' > -- Sélectionner --</option>";
         foreach ($SousMenu as $comp) {
-            $SousMenuList .= "<option value='" . $comp->id_sousmenu . "'   >" . strtoupper($comp->libelle) . " </option>";
+            $SousMenuList .= "<option value='" . $comp->id_sousmenu . "'   >" . strtoupper($comp->libelle)." [ ".$comp->menu->menu." ] ". " </option>";
         }
         return view('permissions.create', compact('SousMenuList'));
     }

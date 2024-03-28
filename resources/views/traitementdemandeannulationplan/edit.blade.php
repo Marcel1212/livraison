@@ -350,7 +350,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-12 mt-3">
-                                                            <label class="form-label">Pièce justificatif
+                                                            <label class="form-label">Pièce justificative
                                                                 de la demande d'annulation</label>
                                                             <br>
                                                             @isset($demande_annulation->piece_demande_annulation_plan)

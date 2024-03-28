@@ -3,8 +3,8 @@
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
-    @php($titre='Liste des agences')
-    @php($soustitre='Ajouter une agence')
+    @php($titre='Liste des antennes')
+    @php($soustitre='Ajouter une antenne')
     @php($lien='agence')
     <!-- BEGIN: Content-->
 
@@ -83,6 +83,22 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Longitude. </label>
+                                                    <input type="text" name="longitude_agce" id="longitude_agce"
+                                                           class="form-control form-control-sm" placeholder="Longitude.">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Latitude. </label>
+                                                    <input type="text" name="latitude_agce" id="latitude_agce"
+                                                           class="form-control form-control-sm" placeholder="Latitude.">
+                                                </div>
+                                            </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Siège </label><br>
@@ -94,7 +110,7 @@
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_agce"
                                                            id="flag_agce"  >
                                                 </div>

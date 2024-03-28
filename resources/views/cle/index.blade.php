@@ -52,7 +52,7 @@
                                             <th>Marge superieur</th>
                                             <th>Montant FC</th>
                                             <th>coefficient</th>
-                                            <th>Statut</th>
+                                            <th>Actif</th>
                                             <th >Action</th>
                                         </tr>
                                         </thead>

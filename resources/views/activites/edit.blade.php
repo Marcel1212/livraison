@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des activités')
     @php($soustitre='Modifier une activité')
     @php($lien='activites')
@@ -64,7 +64,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_activites" {{  ($activite->flag_activites == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>

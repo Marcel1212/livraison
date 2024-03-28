@@ -3,8 +3,8 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
-    @php($titre='Liste des Types entreprises')
+    @php($Module='Paramétrage')
+    @php($titre='Liste des types entreprises')
     @php($soustitre='Ajouter un type entreprise')
     @php($lien='typeentreprise')
 
@@ -49,7 +49,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_type_entreprise"
                                                            id="colorCheck1">
                                                 </div>

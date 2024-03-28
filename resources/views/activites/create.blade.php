@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des activités')
     @php($soustitre='Ajouter une activité')
     @php($lien='activites')
@@ -55,7 +55,7 @@
 
                                             <div class="col-md-5 col-12">
                                                 <div class="mb-1">
-                                                    <label>Libelle activite </label>
+                                                    <label>Libellé activité </label>
                                                     <input type="text" name="libelle_activites" id="libelle_activites"
                                                            class="form-control form-control-sm"
                                                            required>
@@ -63,7 +63,7 @@
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_activites"
                                                            id="colorCheck1">
                                                 </div>

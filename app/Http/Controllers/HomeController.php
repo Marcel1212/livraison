@@ -168,7 +168,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 
@@ -212,7 +212,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 
@@ -299,7 +299,7 @@ class HomeController extends Controller
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
 
-                    if($verifmdp != true){
+                    if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
 
@@ -416,7 +416,7 @@ class HomeController extends Controller
 //dd($infoentreprise);
         //if(isset($infoentreprise)){
 
-            $activites = Activites::where([['id_secteur_activite','=',@$infoentreprise->id_secteur_activite_entreprise],['flag_activites','=',true]])->get();
+            $activites = Activites::where([['flag_activites','=',true]])->get();
             $activite = "<option value=''> -- Sélectionnez une activité -- </option>";
             foreach ($activites as $comp) {
                 $activite .= "<option value='" . @$comp->id_activites  . "'>" . @$comp->libelle_activites ." </option>";

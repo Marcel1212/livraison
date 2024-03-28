@@ -40,9 +40,9 @@
                         <thead>
                         <tr>
                             <th>No</th>
-                            <th>Intitluer de l'action de formation </th>
-                            <th>Structure ou etablissement de formation </th>
-                            <th>Date soumis</th>
+                            <th>Intitulé de l'action de formation </th>
+                            <th>Structure ou établissement de formation </th>
+                            <th>Date de soumission</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>

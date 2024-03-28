@@ -3,7 +3,7 @@
 
 @section('content')
 
-    @php($Module='Parametrage')
+    @php($Module='Paramétrage')
     @php($titre='Liste des types de  formation')
     @php($soustitre='Modifier un type de formation')
     @php($lien='typeformation')
@@ -42,7 +42,7 @@
                                         <div class="row">
                                             <div class="col-md-10 col-12">
                                                 <div class="mb-1">
-                                                    <label>But de formation </label>
+                                                    <label>Type de formation </label>
                                                     <input type="text" name="type_formation" id="type_formation"
                                                            class="form-control form-control-sm" value="{{$typeformation->type_formation}}"
                                                            required>
@@ -51,7 +51,7 @@
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
-                                                    <label>Statut </label><br>
+                                                    <label>Actif </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_actif_formation" {{  ($typeformation->flag_actif_formation == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>
