@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\AgreementPfController;
+use App\Http\Controllers\CommissionEvaluationOffreController;
+use App\Http\Controllers\CritereEvaluationOffreTechController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;
 use App\Http\Controllers\MotDePasseOublieController;
+use App\Http\Controllers\OffreTechniqueController;
 use App\Http\Controllers\ProjetEtude\AgreementProjetEtudeController;
 use App\Http\Controllers\ProjetEtude\CahierprojetetudeController;
 use App\Http\Controllers\ProjetEtude\ComiteGestionProjetEtudeController;
@@ -13,6 +16,8 @@ use App\Http\Controllers\ProjetEtude\CtprojetetudevaliderController;
 use App\Http\Controllers\ProjetEtude\SelectionOperateurProjetEtudeController;
 use App\Http\Controllers\ProjetEtude\TraitementProjetEtudeController;
 use App\Http\Controllers\ProjetEtude\TraitementSelectionOperateurProjetEtudeController;
+use App\Http\Controllers\SousCritereEvaluationOffreTechController;
+use App\Http\Controllers\TraitementCommissionEvaluationOffreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/reload-captcha', [App\Http\Controllers\ConnexionController::class, 'reloadCaptcha'])->name('reloadCaptcha');
@@ -524,6 +529,62 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
+
+    /*************************** Offre Technique ***************************/
+    Route::group(['middleware' => ['can:critereevaluationoffretech-index']], function () {
+        Route::resources([
+            'critereevaluationoffretech' => CritereEvaluationOffreTechController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:souscritereevaluationoffretech-index']], function () {
+        Route::resources([
+            'souscritereevaluationoffretech' => SousCritereEvaluationOffreTechController::class,
+        ]);
+    });
+
+    Route::get('souscritereevaluationoffretech/{id}/critere/json', [SousCritereEvaluationOffreTechController::class, 'jsonSousCritereCritere'])->name('souscritereevaluationoffretech.critere.json');
+
+    Route::get('commissionevaluationoffres', [CommissionEvaluationOffreController::class, 'index'])->name('commissionevaluationoffres');
+    Route::get('commissionevaluationoffres/create', [CommissionEvaluationOffreController::class, 'create'])->name('commissionevaluationoffres.create');
+    Route::post('commissionevaluationoffres/store', [CommissionEvaluationOffreController::class, 'store'])->name('commissionevaluationoffres.store');
+    Route::get('commissionevaluationoffres/{id}/{id1}/edit', [CommissionEvaluationOffreController::class, 'edit'])->name('commissionevaluationoffres.edit');
+    Route::put('commissionevaluationoffres/{id}/{id1}/update', [CommissionEvaluationOffreController::class, 'update'])->name('commissionevaluationoffres.update');
+    Route::get('commissionevaluationoffres/{id}/{id1}/delete', [CommissionEvaluationOffreController::class, 'deleteSousCritere'])->name('commissionevaluationoffres.delete');
+    Route::get('commissionevaluationoffres/{id}/delete/personne', [CommissionEvaluationOffreController::class, 'deletePersonne'])->name('commissionevaluationoffres.delete.personne');
+
+
+
+//    Route::group(['middleware' => ['can:traitementcomitetechniques-index']], function () {
+
+    Route::get('traitementcommissionevaluationoffres', [TraitementCommissionEvaluationOffreController::class, 'index'])->name('traitementcommissionevaluationoffres');
+    Route::get('traitementcommissionevaluationoffres/{id}/{id1}/edit', [TraitementCommissionEvaluationOffreController::class, 'edit'])->name('traitementcommissionevaluationoffres.edit');
+    Route::post('traitementcommissionevaluationoffres/{id}/note', [TraitementCommissionEvaluationOffreController::class, 'notation'])->name('traitementcommissionevaluationoffres.notation');
+//        Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/editer', [TraitementCommissionEvaluationOffreController::class, 'editer'])->name('traitementcomitetechniques.editer');
+//        Route::put('traitementcomitetechniques/{id}/{id2}/{id3}/cahierupdate', [TraitementComitesTechniquesController::class, 'cahierupdate'])->name('traitementcomitetechniques.cahierupdate');
+//        Route::put('traitementcomitetechniques/{id}/{id1}/update', [TraitementComitesTechniquesController::class, 'update'])->name('traitementcomitetechniques.update');
+//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/planformation', [TraitementComitesTechniquesController::class, 'editplanformation'])->name('traitementcomitetechniques.edit.planformation');
+//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/projetetude', [TraitementComitesTechniquesController::class, 'edit'])->name('traitementcomitetechniques.edit.projetetude');
+//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/projetformation', [TraitementComitesTechniquesController::class, 'edit'])->name('traitementcomitetechniques.edit.projetformation');
+//        Route::get('traitementcomitetechniques/{id}/delete', [TraitementComitesTechniquesController::class, 'delete'])->name('traitementcomitetechniques.delete');
+
+//    });
+
+
+//    Route::get('offretechniques', [OffreTechniqueController::class, 'index'])->name('offretechniques');
+//
+//
+//
+//
+//    Route::get('offretechniques', [OffreTechniqueController::class, 'index'])->name('offretechniques');
+//    Route::get('offretechniques/create', [OffreTechniqueController::class, 'create'])->name('offretechniques.create');
+//    Route::post('offretechniques/store', [OffreTechniqueController::class, 'store'])->name('offretechniques.store');
+//    Route::get('comites/{id}/show', [ComitesController::class, 'show'])->name('comites.show');
+//    Route::get('comites/{id}/{id2}/{id3}/cahier', [ComitesController::class, 'cahier'])->name('comites.cahier');
+//    Route::get('comites/{id}/{id2}/{id3}/editer', [ComitesController::class, 'editer'])->name('comites.editer');
+//    Route::post('comites/{id}/{id2}/{id3}/cahierupdate', [ComitesController::class, 'cahierupdate'])->name('comites.cahierupdate');
+//    Route::put('comites/{id}/{id1}/update', [ComitesController::class, 'update'])->name('comites.update');
+//    Route::get('comites/{id}/{id1}/edit', [ComitesController::class, 'edit'])->name('comites.edit');
 
 
 });

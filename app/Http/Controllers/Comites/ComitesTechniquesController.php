@@ -533,7 +533,6 @@ class ComitesTechniquesController extends Controller
                         'etat'=>'Echec',
 
                         'objet'=>'COMITES TECHNIQUES'
-
                         ]);
 
                     return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins une personne pour le CT '.@$processuscomite->processusComite->libelle_processus_comite.'.');

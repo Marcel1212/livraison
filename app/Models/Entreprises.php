@@ -51,7 +51,7 @@ class Entreprises extends Model
      *
      * @var string
      */
-    protected $primaryKey = 'id_entreprises';
+        protected $primaryKey = 'id_entreprises';
 
     /**
      * The "type" of the auto-incrementing ID.
