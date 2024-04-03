@@ -127,9 +127,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
                                         <th>Code </th>
-                                        <th>Date soumis au FDFP</th>
+                                        <th>Date soumise au FDFP</th>
                                         <th>Date fin instruction</th>
-                                        <th>Cout accordé</th>
+                                        <th>Coût accordé</th>
                                         <th>Statut</th>
                                     </tr>
                                 </thead>

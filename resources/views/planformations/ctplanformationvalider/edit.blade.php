@@ -10,6 +10,7 @@
     $Iddepartement = Auth::user()->id_departement;
     use App\Helpers\ConseillerParAgence;
     use App\Helpers\NombreActionValiderParLeConseiller;
+    use App\Helpers\ListeTraitementCritereParUser;
     $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce,$Iddepartement);
     $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
     $nombre = count($conseilleragence);
@@ -70,9 +71,14 @@
                 <div class="row">
                     <div align="right">
                         <button type="button"
-                                class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                class="btn rounded-pill btn-outline-primary btn-sm waves-effect waves-light"
                                 data-bs-toggle="modal" data-bs-target="#modalToggle">
                             Voir le parcours de validation
+                        </button>
+                        <button type="button"
+                                class="btn rounded-pill btn-outline-success btn-sm waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#modalToggleCommentaireplan">
+                            Voir le commentaire du plan de formation
                         </button>
                     </div>
                 <div class="col-xl-12">
@@ -88,7 +94,7 @@
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Plan de formation
+                          Informations sur l'entreprise
                         </button>
                       </li>
                       <li class="nav-item">
@@ -109,10 +115,10 @@
                           class="nav-link"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-histortiqueactionformation"
-                          aria-controls="navs-top-histortiqueactionformation"
+                          data-bs-target="#navs-top-actionformation"
+                          aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Historiques des actions des plans de formation
+                          Actions du plan de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -121,10 +127,10 @@
                           class="nav-link"
                           role="tab"
                           data-bs-toggle="tab"
-                          data-bs-target="#navs-top-actionformation"
-                          aria-controls="navs-top-actionformation"
+                          data-bs-target="#navs-top-histortiqueactionformation"
+                          aria-controls="navs-top-histortiqueactionformation"
                           aria-selected="false">
-                          Actions du plan de formation
+                          Historiques des actions des plans de formation
                         </button>
                       </li>
                       <li class="nav-item">
@@ -360,7 +366,7 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Categorie </th>
+                                <th>Catégorie </th>
                                 <th>Genre</th>
                                 <th>Nombre</th>
                             </tr>
@@ -396,9 +402,9 @@
                                 <th>No</th>
                                 <th>Intituler de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -460,9 +466,10 @@
                                 <th>No</th>
                                 <th>Intituler de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
+                                <th>Commentaire</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -477,7 +484,16 @@
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
+                                                <td align="center" nowrap>
 
+                                                    <button type="button"
+                                                        class="btn rounded-pill btn-outline-primary btn-sm waves-effect waves-light"
+                                                        data-bs-toggle="modal" data-bs-target="#modalToggleConseil<?php echo $actionplanformation->id_action_formation_plan; ?>">
+                                                            Voir commentaire CT
+                                                    </button>
+
+
+                                                </td>
                                                 <td align="center" nowrap="nowrap">
                                                     @can($lien.'-edit')
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
@@ -943,6 +959,168 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-4 col-12">
+                        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggleCommentaireplan"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Commentaire </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Commentaire du plan de formation</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+
+                                                    <li class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0"></h6>
+                                                                <span class="text-muted"><strong>{{ $planformationuser->name .' '. $planformationuser->prenom_users}}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation : <?php echo $planformationuser->commentaire_plan_formation; ?></span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>Validé le  {{ $planformationuser->date_commentaire_plan_formation }}</span>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    @foreach($infosactionplanformations as $infosactionplanformation)
+                    <div class="col-md-4 col-12">
+                        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggleConseil<?php echo $infosactionplanformation->id_action_formation_plan; ?>"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                             <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Commentaires </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Recommandations</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+                                                <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); ?>
+                                                @foreach ($ResultatTraitement as $res)
+                                                    <li class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }} ({{ $res->profil }})</h6>
+                                                                <span class="text-muted"><strong>Critère : {{ $res->libelle_critere_evaluation }}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    @if($res->flag_traitement_par_critere_commentaire==true)
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation : {{ $res->commentaire_critere }}</span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>Traité le  {{ $res->created_at }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endif
+                                                                    @if($res->flag_traitement_par_critere_commentaire===false)
+                                                                        <div class="row">
+                                                                            <div>
+                                                                                <span>Observation : {{ $res->commentaire_critere }}</span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span class="badge bg-label-danger">Traité le {{ $res->created_at }}</span>
+                                                                            </div> <br/><br/><br/>
+                                                                            @if ($res->flag_traite_par_user_conserne != true)
+                                                                            <div>
+                                                                                <form id="editUserFormMessage" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
+                                                                                    @csrf
+                                                                                    @method('put')
+                                                                                    <input type="hidden" name="id_traitement_par_critere_commentaire" value="{{ $res->id_traitement_par_critere_commentaire }}"/>
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4 col-12">
+                                                                                            <label class="form-label" for="">Statut </label>
+                                                                                            <select class="select2 form-select" data-allow-clear="true" name="flag_traitement_par_critere_commentaire_traiter" id="flag_traitement_par_critere_commentaire_traiter">
+                                                                                                <option value="">-----------</option>
+                                                                                                <option value="true">Prise en compte</option>
+                                                                                                <option value="false">Pas prise en compte</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="col-md-6 col-12">
+                                                                                            <label class="form-label" for="">Reponse </label>
+                                                                                            <textarea class="form-control form-control-sm"  name="commentaire_reponse" id="commentaire_reponse" rows="6"></textarea>
+                                                                                        </div>
+                                                                                        <div class="col-md-2 col-12">
+                                                                                            <br/>
+                                                                                            <button onclick='javascript:if (!confirm("Voulez-vous traité cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider_reponse" class="btn btn-warning btn-sm me-sm-3 me-1">Traité</button>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                            @else
+                                                                            <div>
+                                                                                <span>
+                                                                                    Statut : @if ($res->flag_traitement_par_critere_commentaire_traiter == true)
+                                                                                            Prise en compte
+                                                                                        @else
+                                                                                            Pas prise en compte
+                                                                                        @endif
+                                                                                </span>
+                                                                            </div>
+                                                                            <div>
+                                                                                <span>Reponse : {{ $res->commentaire_reponse }}</span>
+                                                                            </div>
+                                                                            @endif
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
 
         @endsection
 

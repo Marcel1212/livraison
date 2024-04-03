@@ -149,6 +149,7 @@ class CtplanformationvaliderController extends Controller
         $id =  Crypt::UrldeCrypt($id);
 //dd($id);
         $planformation = PlanFormation::find($id);
+        $planformationuser = PlanFormation::Join('users','plan_formation.user_conseiller','users.id')->where([['id_plan_de_formation','=',$id]])->first();
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
         $historiquesplanformations = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
@@ -244,7 +245,9 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
+        //dd()
+
+        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','planformationuser'));
 
     }
 
@@ -254,6 +257,7 @@ class CtplanformationvaliderController extends Controller
         $id2 =  Crypt::UrldeCrypt($id2);
 //dd($id);
         $planformation = PlanFormation::find($id);
+        $planformationuser = PlanFormation::Join('users','plan_formation.user_conseiller','users.id')->where([['id_plan_de_formation','=',$id]])->first();
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
         $historiquesplanformations = FicheAgrement::Join('plan_formation','fiche_agrement.id_demande','plan_formation.id_plan_de_formation')
@@ -367,7 +371,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations','montantactionplanformation','montantactionplanformationacc'));
+        return view('planformations.ctplanformationvalider.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations','nombreaction','nombreactionvalider','nombreactionvaliderparconseiller','id2','ResultProssesList','parcoursexist','historiquesplanformations','montantactionplanformation','montantactionplanformationacc','planformationuser'));
 
     }
 

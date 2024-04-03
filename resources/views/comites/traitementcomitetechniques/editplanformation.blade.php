@@ -314,7 +314,7 @@
 
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
-                                    <label>Type entreprises </label>
+                                    <label>Type entreprise </label>
                                     <select class="select2 form-select-sm input-group" name="id_type_entreprise" id="id_type_entreprise" disabled="disabled">
                                         <?php echo $typeentreprise; ?>
                                     </select>
@@ -372,7 +372,7 @@
                             <div class="col-md-2 col-12">
                                 <div class="mb-1">
 
-                                    <label>Part entreprise determiné</label>
+                                    <label>Part entreprise déterminé</label>
                                     <input type="text" name="part_entreprise_previsionnel" id="part_entreprise_previsionnel"
                                            class="form-control form-control-sm" value="{{number_format(@$planformation->part_entreprise_previsionnel, 0, ',', ' ')}}" disabled="disabled">
                                 </div>
@@ -479,11 +479,11 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intitluer de l'action de formation </th>
-                                <th>Structure ou etablissemnt de formation</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Intituler de l'action de formation </th>
+                                <th>Structure ou établissement de formation</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Statut traitement</th>
                                 <th>Commentaire</th>
                                 <th>Action</th>
@@ -609,7 +609,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                                 <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6" disabled="disabled"><?php echo @$infosactionplanformation->objectif_pedagogique_fiche_agre; ?></textarea>
 
                             </div>
@@ -630,7 +630,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="structure_etablissement_action_">Structure ou etablissemnt de formation</label>
+                            <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -646,7 +646,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                            <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -670,7 +670,7 @@
                                   disabled="disabled" />
                               </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" >Cout de la formation</label>
+                            <label class="form-label" >Coût de la formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -686,7 +686,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                                <label class="form-label">Caracteristique type de formation</label>
+                                <label class="form-label">Caractéristique type de formation</label>
                                 <input
                                   type="text"
                                   class="form-control form-control-sm"
@@ -702,7 +702,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                            <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -710,7 +710,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                            <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -727,7 +727,7 @@
                             </div>
 
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                            <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -735,7 +735,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                            <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de maitrise</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -743,7 +743,7 @@
                                 disabled="disabled"/>
                             </div>
                             <div class="col-12 col-md-3">
-                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                            <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés / ouvriers</label>
                             <input
                                 type="number"
                                 class="form-control form-control-sm"
@@ -751,7 +751,7 @@
                                 disabled="disabled" />
                             </div>
                             <div class="col-12 col-md-3">
-                                <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
+                                <label class="form-label" for="cout_total_fiche_agrement">Coût de financement</label>
                                 <input
                                   type="text"
                                   class="form-control form-control-sm"
@@ -795,7 +795,7 @@
 
                             @if(count($resultatTCPCU)<1)
 
-                                <h2>Critéres evaluations</h2>
+                                <h2>Critères évaluations</h2>
 
                                 <div class="card card-custom" style="width: 100%">
                                     <div class="card-body">
@@ -804,7 +804,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>N°</th>
-                                                    <th>Critére</th>
+                                                    <th>Critère</th>
                                                     <th>status</th>
                                                     <th>commentaire</th>
                                                 </tr>
@@ -845,7 +845,7 @@
                             <hr/>
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
-                                    <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                    <label>Montant accordée <strong style="color:red;">*</strong>: </label>
                                     <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
                             </div>
                             <div class="col-md-4 col-12">
@@ -923,7 +923,7 @@
                                 name="intitule_action_formation_plan" />
                             </div>
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique</label>
                                 <textarea class="form-control form-control-sm"  name="objectif_pedagogique_fiche_agre" id="objectif_pedagogique_fiche_agre" rows="6"><?php echo @$infosactionplanformation->objectif_pedagogique_fiche_agre; ?></textarea>
 
                             </div>
@@ -1024,7 +1024,7 @@
                                 <div class="col-12 col-md-4">
                                     <div class="row">
                                         <div class="col-12 col-md-10">
-                                            <label class="form-label" for="structure_etablissement_action_">Etablissement de formation <strong style="color:red;">*</strong></label>
+                                            <label class="form-label" for="structure_etablissement_action_">Établissement de formation <strong style="color:red;">*</strong></label>
 
                                             <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
                                             error
@@ -1128,7 +1128,7 @@
                                         </div>
 
                                     <div class="col-12 col-md-4">
-                                        <label class="form-label" >Cout de la formation</label>
+                                        <label class="form-label" >Coût de la formation</label>
                                         <input
                                             type="text"
                                             class="form-control form-control-sm"
@@ -1146,7 +1146,7 @@
                                         </div>
 
                             <div class="col-12 col-md-4">
-                                <label class="form-label" for="cout_total_fiche_agrement">Cout de financement</label>
+                                <label class="form-label" for="cout_total_fiche_agrement">Coût de financement</label>
                                 <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -1184,7 +1184,7 @@
 
                             <div class="col-md-4 col-12">
                                 <div class="mb-1">
-                                    <label>Montant accorder <strong style="color:red;">*</strong>: </label>
+                                    <label>Montant accordée <strong style="color:red;">*</strong>: </label>
                                     <input type="text" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm number" value="@if ($infosactionplanformation->cout_action_formation_plan<$infosactionplanformation->montant_attribuable_fdfp){{ number_format($infosactionplanformation->cout_action_formation_plan, 0, ',', ' ')}}@elseif($infosactionplanformation->cout_action_formation_plan>$infosactionplanformation->montant_attribuable_fdfp){{ number_format($infosactionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}@else{{ number_format($infosactionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}@endif">
                                 </div>
                             </div>
@@ -1243,7 +1243,7 @@
                                     aria-label="Close"></button>
                         </div>
                         <div class="card">
-                            <h5 class="card-header">Mes appreciations</h5>
+                            <h5 class="card-header">Mes appréciations</h5>
                             <div class="card-body pb-2">
                                 <ul class="timeline pt-3">
                                     <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>
