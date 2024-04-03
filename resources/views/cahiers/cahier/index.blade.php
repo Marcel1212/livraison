@@ -5,14 +5,14 @@ use App\Helpers\AnneeExercice;
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
-@if(auth()->user()->can('traitementcomitetechniques-index'))
+@if(auth()->user()->can('cahierplansprojets-index'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Comite')
-    @php($titre='Liste des comites techniques')
-    @php($lien='traitementcomitetechniques')
+    @php($Module='Cahiers')
+    @php($titre='Liste des cahiers des plans/projets')
+    @php($lien='cahierplansprojets')
     @php($lienacceuil='dashboard')
 
     <!-- BEGIN: Content-->
@@ -50,7 +50,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         @can($lien.'-create')
                             <a href="{{ route($lien.'.create') }}"
                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
+                                <i class="menu-icon tf-icons ti ti-plus"></i> Nouvel cahier des plans/projets </a>
                         @endcan
                     </small>
                 </div>
@@ -63,28 +63,26 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
-                            <th>Libellé </th>
                             <th>Processus </th>
-                            <th>Date de début</th>
-                            <th>Date de fin</th>
-                            <th>Objet</th>
+                            <th>Commentaire </th>
+                            <th>Date creation</th>
+                            <th>Date soumis</th>
                             <th>Statut</th>
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php $i=0; ?>
-                        @foreach ($comites as $key => $comitep)
+                        @foreach ($cahiers as $key => $cahier)
                             <tr>
                                 <td>{{ ++$i }}</td>
-                                <td>{{ @$comitep->code_comite }}</td>
-                                <td>{{ @$comitep->libelle_categorie_comite }}</td>
-                                <td>{{ @$comitep->libelle_processus_comite }}</td>
-                                <td>{{ $comitep->date_debut_comite }}</td>
-                                <td>{{ $comitep->date_fin_comite }}</td>
-                                <td>{{ $comitep->commentaire_comite }}</td>
+                                <td>{{ @$cahier->code_cahier_plans_projets }}</td>
+                                <td>{{ @$cahier->processusComite->libelle_processus_comite }}</td>
+                                <td>{{ @$cahier->commentaire_cahier_plans_projets }}</td>
+                                <td>{{ $cahier->date_creer_cahier_plans_projets }}</td>
+                                <td>{{ $cahier->date_soumis_cahier_plans_projets }}</td>
                                 <td align="center">
-                                    <?php if($comitep->flag_statut_comite == true){ ?>
+                                    <?php if($cahier->flag_statut_cahier_plans_projets == true){ ?>
                                         <span class="badge bg-success">Terminer</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>
@@ -92,7 +90,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </td>
                                 <td align="center">
                                     @can($lien.'-edit')
-                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comitep->id_comite),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                            class=" "
                                            title="Modifier"><img
                                                 src='/assets/img/editing.png'></a>
@@ -115,5 +113,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
         window.location = "{{ url('/403') }}";//here double curly bracket
     </script>
 @endif
+
 
 

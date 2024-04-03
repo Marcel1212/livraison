@@ -176,7 +176,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Date de debut <strong style="color:red;">*</strong></label>
+                                            <label>Date de début <strong style="color:red;">*</strong></label>
                                             <input type="date" name="date_debut_comite"
                                                 class="form-control form-control-sm" value="{{ $comite->date_debut_comite }}"/>
                                         </div>
@@ -255,9 +255,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
                                         <th>Code </th>
-                                        <th>Date soumis au FDFP</th>
+                                        <th>Date soumise au FDFP</th>
                                         <th>Date fin instruction</th>
-                                        <th>Cout accordé</th>
+                                        <th>Coût accordé</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -433,9 +433,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
                                         <th>Code </th>
-                                        <th>Date soumis au FDFP</th>
+                                        <th>Date soumise au FDFP</th>
                                         <th>Date fin instruction</th>
-                                        <th>Cout accordé</th>
+                                        <th>Coût accordé</th>
                                         <th>Statut</th>
                                     </tr>
                                 </thead>

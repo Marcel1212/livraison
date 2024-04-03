@@ -1,33 +1,69 @@
 <?php
 
 use App\Helpers\AnneeExercice;
+use App\Models\PlanFormation;
 
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
-@if(auth()->user()->can('comitetechniques-create'))
+
+@if(auth()->user()->can('cahierplansprojets-create'))
+
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Comites')
-    @php($titre='Liste des comites techniques')
-    @php($soustitre='Ajout de comite technique')
-    @php($lien='comitetechniques')
+    @php($Module='Cahiers')
+    @php($titre='Liste des cahiers des plans/projets')
+    @php($soustitre='Creer un cahier')
+    @php($lien='cahierplansprojets')
     @php($lienacceuil='dashboard')
 
-    <!-- BEGIN: Content-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <script type="text/javascript">
 
+       // document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+        function changeFunction() {
+            //alert('code');exit;
+
+            var selectBox = document.getElementById("id_processus_comite");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            //alert(selectedValue);
+
+            if(selectedValue != '1'){
+                hiddenPufield();
+                //alert(selectedValue);
+            }else{
+                displayPufield();
+            }
+
+
+        };
+
+        function hiddenPufield(){
+                $("#id_departement").prop( "disabled", true );
+
+                $("#id_departement_div").hide();
+            }
+            function displayPufield(){
+                $("#id_departement").prop( "disabled", false );
+
+                $("#id_departement_div").show();
+            }
     </script>
+
+    <!-- BEGIN: Content-->
+
+
 
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <a class="active" href="/{{ $lienacceuil }}"> <i class="ti ti-home"></i>  Accueil </a> / {{$Module}} / <a href="/{{ $lien }}"> {{$titre}}</a> / </span> {{$soustitre}}
     </h5>
-
-
-
 
     <div class="content-body">
         @if ($message = Session::get('success'))
@@ -38,14 +74,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        @if ($message = Session::get('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="alert-body">
-                {{ $message }}
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
         @if(!isset($anneexercice->id_periode_exercice))
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <div class="alert-body" style="text-align:center">
@@ -79,21 +107,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-planformation"
                           aria-controls="navs-top-planformation"
                           aria-selected="true">
-                          Comité
+                          Cahier des plans/projets
                         </button>
                       </li>
-                      <li class="nav-item">
-                        <button
-                          type="button"
-                          class="nav-link disabled"
-                          role="tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#navs-top-categoriesprofessionel"
-                          aria-controls="navs-top-categoriesprofessionel"
-                          aria-selected="false">
-                          Liste des plans/projets
-                        </button>
-                      </li>
+
                       <li class="nav-item">
                         <button
                           type="button"
@@ -103,7 +120,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-actionformation"
                           aria-controls="navs-top-actionformation"
                           aria-selected="false">
-                          Liste des participants
+                          Liste des plans/projets
                         </button>
                       </li>
 
@@ -116,7 +133,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-Soumettre"
                           aria-controls="navs-top-Soumettre"
                           aria-selected="false">
-                          Valider le comite
+                          Cahier à soumettre
                         </button>
                       </li>
                     </ul>
@@ -126,76 +143,49 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
                             <div class="row">
-                                <div class="col-md-3 col-12">
-                                    <label>Type de comité <strong style="color:red;">*</strong></label>
-                                    <select class="select2 form-select @error('id_categorie_comite')
-                                    error
-                                    @enderror"
-                                                    data-allow-clear="true" name="id_categorie_comite"
-                                                    id="id_categorie_comite"  required>
-                                        <?php echo $typecomitesListe; ?>
-                                    </select>
-                                    @error('id_categorie_comite')
-                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-3 col-12">
+
+                                <div class="col-md-4 col-12">
                                     <label>Liste des processus <strong style="color:red;">*</strong></label>
                                     <select class="select2 form-select @error('id_processus_comite')
                                     error
                                     @enderror"
                                                     data-allow-clear="true" name="id_processus_comite"
-                                                    id="id_processus_comite" >
+                                                    id="id_processus_comite" required onchange="changeFunction()">
                                          <?php echo $processuscomitesListe ?>
                                     </select>
                                     @error('id_processus_comite')
                                     <div class=""><label class="error">{{ $message }}</label></div>
                                     @enderror
                                 </div>
-                                <div class="col-md-3 col-12">
-                                    <div class="mb-1">
-                                        <label>Date de début <strong style="color:red;">*</strong></label>
-                                        <input type="date" name="date_debut_comite"
-                                               class="form-control form-control-sm" required/>
-                                    </div>
+
+                                <div class="col-md-4 col-12" id="id_departement_div">
+                                    <label>Liste des departements <strong style="color:red;">*</strong></label>
+                                    <select class="select2 form-select @error('id_departement')
+                                    error
+                                    @enderror"
+                                                    data-allow-clear="true" name="id_departement"
+                                                    id="id_departement" >
+                                         <?php echo $departementsListe ?>
+                                    </select>
+                                    @error('id_departement')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
                                 </div>
 
-                                <div class="col-md-3 col-12">
-                                    <div class="mb-1">
-                                        <label>Date de fin </label>
-                                        <input type="date" name="date_fin_comite"
-                                               class="form-control form-control-sm" />
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label" for="state">Direction </label> <strong style="color: red">*</strong>
-                                    <select class="select2 form-select" id="direction" name="id_direction"/>
-                                        <option value='0'>Directions</option>
-                                        @foreach($directions as $direction)
-                                        <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label" for="state">Département</label>
-                                    <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
-                                        <option value='0'>Département</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 col-12">
+
+                                <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
-                                        <textarea class="form-control form-control-sm"  name="commentaire_comite" id="commentaire_comite" rows="6"></textarea>
+                                        <textarea class="form-control form-control-sm"  name="commentaire_cahier_plans_projets" id="commentaire_cahier_plans_projets" rows="6" required></textarea>
 
                                     </div>
                                 </div>
-
 
                                 <div class="col-12" align="right">
                                     <hr>
                                     <button type="submit"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                        Enregistrer
+                                            Enregistrer
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                         Retour</a>
@@ -207,7 +197,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                       <div class="tab-pane fade" id="navs-top-actionformation" role="tabpanel">
 
 
-                      </div>
+
+                    </div>
                       <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
 
                       </div>
@@ -225,4 +216,3 @@ $anneexercice = AnneeExercice::get_annee_exercice();
             window.location = "{{ url('/403') }}";//here double curly bracket
         </script>
     @endif
-

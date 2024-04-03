@@ -32,7 +32,7 @@ $demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en
                           <i class="ti ti-device-laptop ti-xl"></i>
                         </span>
                         <div class="content-right">
-                            <p class="mb-0">Plan de formation reçu</p>
+                            <p class="mb-0">Plan de formation reçus</p>
                             <h4 class="text-primary mb-0">{{count($planformations)}}</h4>
                         </div>
                     </div>
@@ -41,7 +41,7 @@ $demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en
                           <i class="ti ti-bulb ti-xl"></i>
                         </span>
                         <div class="content-right">
-                            <p class="mb-0">Plan de formation en traitement</p>
+                            <p class="mb-0">Plan de formation en traitements</p>
                             <h4 class="text-info mb-0">{{count($planformationstraitement)}}</h4>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ $demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Plan de formation reçu</h5>
+                        <h5 class="m-0 me-2">Plan de formation reçus</h5>
                     </div>
 
                 </div>
