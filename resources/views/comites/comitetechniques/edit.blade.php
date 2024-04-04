@@ -160,7 +160,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </div>
 
                                     <div class="col-md-3 col-12">
-                                        <label>Liste des processus <strong style="color:red;">*</strong></label>
+                                        <label>Liste des processus choisis</label>
                                         <select class="select2 form-select @error('id_processus_comite')
                                         error
                                         @enderror"
@@ -250,7 +250,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th><label>Selectionnez tous</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
                                         <th>Type processus </th>
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
@@ -496,6 +496,25 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
     </div>
 
+
+        @endsection
+
+        @section('js_perso')
+
+        <script  type="text/javascript">
+            $('#allcb').change(function(){
+                if($(this).prop('checked')){
+                    $('tbody tr td input[type="checkbox"]').each(function(){
+                        $(this).prop('checked', true);
+                    });
+                }else{
+                    $('tbody tr td input[type="checkbox"]').each(function(){
+                        $(this).prop('checked', false);
+                    });
+                }
+            });
+
+        </script>
 
         @endsection
 

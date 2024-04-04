@@ -5,43 +5,19 @@ use App\Helpers\AnneeExercice;
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
-@if(auth()->user()->can('comites-create'))
+@if(auth()->user()->can('comitetechniques-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Comites')
-    @php($titre='Liste des comites')
-    @php($soustitre='Ajout de comite')
-    @php($lien='comites')
+    @php($titre='Liste des comites techniques')
+    @php($soustitre='Ajout de comite technique')
+    @php($lien='comitetechniques')
     @php($lienacceuil='dashboard')
 
     <!-- BEGIN: Content-->
     <script type="text/javascript">
-
-       /* function changeFuncSelect() {
-            var selectBox = document.getElementById("id_type_comite");
-            var id_processus_comite = document.getElementById("id_processus_comite");
-            //var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-            //alert(selectedValue);
-            const myArray = selectedValue.split("/");
-            //alert(myArray);
-            let id_type_comite = myArray[0];
-            //alert(id_type_comite);
-            let libelle_type_comite = myArray[1];
-           // alert(libelle_type_comite);
-
-            if(libelle_type_comite =="Commission permanente"){
-                id_processus_comite.setAttribute('multiple', '')
-            }else{
-                id_processus_comite.removeAttribute('multiple');
-            }
-
-
-        };*/
-
-
 
     </script>
 
@@ -115,7 +91,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-categoriesprofessionel"
                           aria-controls="navs-top-categoriesprofessionel"
                           aria-selected="false">
-                          Liste des cahiers
+                          Liste des plans/projets
                         </button>
                       </li>
                       <li class="nav-item">
@@ -168,8 +144,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <select class="select2 form-select @error('id_processus_comite')
                                     error
                                     @enderror"
-                                                    data-allow-clear="true" name="id_processus_comite[]"
-                                                    id="id_processus_comite" multiple>
+                                                    data-allow-clear="true" name="id_processus_comite"
+                                                    id="id_processus_comite" >
                                          <?php echo $processuscomitesListe ?>
                                     </select>
                                     @error('id_processus_comite')
@@ -191,8 +167,22 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                class="form-control form-control-sm" />
                                     </div>
                                 </div>
-
-                                <div class="col-md-12 col-12">
+                                <div class="col-md-3">
+                                    <label class="form-label" for="state">Direction </label> <strong style="color: red">*</strong>
+                                    <select class="select2 form-select" id="direction" name="id_direction"/>
+                                        <option value='0'>Directions</option>
+                                        @foreach($directions as $direction)
+                                        <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label" for="state">Département</label>
+                                    <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
+                                        <option value='0'>Département</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
                                         <textarea class="form-control form-control-sm"  name="commentaire_comite" id="commentaire_comite" rows="6"></textarea>

@@ -178,6 +178,20 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         @enderror
                                     </div>
 
+                                    <div class="col-md-3 col-12" id="id_categorie_comite_div">
+                                        <label>Liste des comités <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select @error('id_categorie_comite')
+                                        error
+                                        @enderror"
+                                                        data-allow-clear="true" name="id_categorie_comite"
+                                                        id="id_categorie_comite" >
+                                             <?php echo $categoriecomitesListe ?>
+                                        </select>
+                                        @error('id_categorie_comite')
+                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
+                                    </div>
+
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Commentaire <strong style="color:red;">*</strong></label>
@@ -393,15 +407,18 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
             //          displayPufield();
             //      }
 
-                 function hiddenPufield(){
+                function hiddenPufield(){
                      $("#id_departement").prop( "disabled", true );
-
                      $("#id_departement_div").hide();
+                     $("#id_categorie_comite").prop( "disabled", false );
+                     $("#id_categorie_comite_div").show();
                  }
+
                  function displayPufield(){
                      $("#id_departement").prop( "disabled", false );
-
                      $("#id_departement_div").show();
+                     $("#id_categorie_comite").prop( "disabled", true );
+                     $("#id_categorie_comite_div").hide();
                  }
 
                 changeFunction($("#id_processus_comite").val());
@@ -442,13 +459,16 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
              function hiddenPufield(){
                      $("#id_departement").prop( "disabled", true );
-
                      $("#id_departement_div").hide();
+                     $("#id_categorie_comite").prop( "disabled", false );
+                     $("#id_categorie_comite_div").show();
                  }
+
                  function displayPufield(){
                      $("#id_departement").prop( "disabled", false );
-
                      $("#id_departement_div").show();
+                     $("#id_categorie_comite").prop( "disabled", true );
+                     $("#id_categorie_comite_div").hide();
                  }
          </script>
 

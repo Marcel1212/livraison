@@ -117,7 +117,9 @@ class TraitementComitesTechniquesController extends Controller
         ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
         ->join('comite','cahier_comite.id_comite','comite.id_comite')
         ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
-        ->where([['cahier_comite.id_comite','=',$id],['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
+        ->where([['cahier_comite.id_comite','=',$id],
+                ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
+                ['cahier_comite.code_demande','=',$processuscomite->processusComite->code_processus_comite]])
         ->get();
 
         //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();

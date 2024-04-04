@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $libelle_categorie_comite
  * @property boolean $flag_actif_categorie_comite
  * @property string $code_categorie_comite
+ * @property string $type_code_categorie_comite
  * @property string $created_at
  * @property string $updated_at
  * @property Comite[] $comites
@@ -17,21 +18,21 @@ class CategorieComite extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'categorie_comite';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_categorie_comite';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -39,7 +40,7 @@ class CategorieComite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['libelle_categorie_comite', 'flag_actif_categorie_comite', 'code_categorie_comite', 'created_at', 'updated_at'];
+    protected $fillable = ['libelle_categorie_comite', 'flag_actif_categorie_comite', 'code_categorie_comite', 'created_at', 'updated_at','type_code_categorie_comite'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

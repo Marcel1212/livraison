@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Helpers\EtatCahierPlanDeFormation;
+use App\Models\CategorieComite;
 
 class CahierPlansProjetsController extends Controller
 {
@@ -65,6 +66,12 @@ class CahierPlansProjetsController extends Controller
         foreach ($processuscomites as $comp) {
             $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
         }
+
+        $categoriecomites = CategorieComite::where([['flag_actif_categorie_comite','=',true],['code_categorie_comite','=','CP']])->orderBy('libelle_categorie_comite')->get();
+        $categoriecomitesListe = "<option value=''> Selectionnez le type de comité </option>";
+        foreach ($categoriecomites as $comp) {
+            $categoriecomitesListe .= "<option value='" . $comp->id_categorie_comite. "'>" . mb_strtoupper($comp->libelle_categorie_comite) . " </option>";
+        }
             Audit::logSave([
                 'action'=>'CREER',
                 'code_piece'=>'',
@@ -73,7 +80,7 @@ class CahierPlansProjetsController extends Controller
                 'objet'=>'CAHIERS'
             ]);
 
-        return view("cahiers.cahier.create",compact('departementsListe','processuscomitesListe'));
+        return view("cahiers.cahier.create",compact('departementsListe','processuscomitesListe','categoriecomitesListe'));
     }
 
     /**
@@ -98,13 +105,18 @@ class CahierPlansProjetsController extends Controller
             if (isset($input['id_departement'])) {
                 $departement = Departement::find($input['id_departement']);
                 $input['code_cahier_plans_projets'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
+                $input['id_categorie_comite'] = 3;
+                $catcomite = CategorieComite::find(3);
             }else{
                 $input['code_cahier_plans_projets'] = $processus->code_processus_comite.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
+                $input['id_categorie_comite'] = $input['id_categorie_comite'];
+                $catcomite = CategorieComite::find($input['id_categorie_comite']);
             }
 
             $input['id_users_cahier_plans_projets'] = Auth::user()->id;
             $input['date_creer_cahier_plans_projets'] = Carbon::now();
             $input['code_pieces_cahier_plans_projets'] = $processus->code_processus_comite;
+            $input['code_commission_permante_comite_gestion'] = $catcomite->type_code_categorie_comite;
 
             $cahier = CahierPlansProjets::create($input);
 
@@ -161,6 +173,12 @@ class CahierPlansProjetsController extends Controller
             $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
         }
 
+        $categoriecomites = CategorieComite::where([['flag_actif_categorie_comite','=',true],['code_categorie_comite','=','CP']])->orderBy('libelle_categorie_comite')->get();
+        $categoriecomitesListe = "<option value='".@$cahier->categorieComite->id_categorie_comite."'> ".@$cahier->categorieComite->libelle_categorie_comite." </option>";
+        foreach ($categoriecomites as $comp) {
+            $categoriecomitesListe .= "<option value='" . $comp->id_categorie_comite. "'>" . mb_strtoupper($comp->libelle_categorie_comite) . " </option>";
+        }
+
         if(isset($cahier->id_departement)){
             $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
@@ -175,6 +193,15 @@ class CahierPlansProjetsController extends Controller
                  ])
                  ->get();
         }else{
+
+            if ($cahier->code_commission_permante_comite_gestion == 'COP') {
+                $valeur1 = 0;
+                $valeur2 = 65000000;
+            }else{
+                $valeur1 = 65000001;
+                $valeur2 = 3000000000000000000;
+            }
+
             $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
                 ->from('ligne_cahier_plans_projets')
@@ -185,6 +212,7 @@ class CahierPlansProjetsController extends Controller
                  ['caracteristique_marge_departement.flag_cmd','=',true],
                  ['vue_plans_projets_dispobinle_pour_cahier.code_processus','=',$cahier->processusComite->code_processus_comite],
                  ])
+                 ->whereBetween('montant_total', [$valeur1, $valeur2])
                  ->get();
         }
 
@@ -205,7 +233,7 @@ class CahierPlansProjetsController extends Controller
 
         ]);
 
-        return view("cahiers.cahier.edit",compact('departementsListe','processuscomitesListe','id','idetape','cahier','demandes','cahierplansprojets'));
+        return view("cahiers.cahier.edit",compact('departementsListe','processuscomitesListe','id','idetape','cahier','demandes','cahierplansprojets','categoriecomitesListe'));
     }
 
     /**
@@ -237,13 +265,18 @@ class CahierPlansProjetsController extends Controller
                 if (isset($input['id_departement'])) {
                     $departement = Departement::find($input['id_departement']);
                     $input['code_cahier_plans_projets'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
+                    $input['id_categorie_comite'] = 3;
+                    $catcomite = CategorieComite::find(3);
                 }else{
                     $input['code_cahier_plans_projets'] = $processus->code_processus_comite.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
+                    $input['id_categorie_comite'] = $input['id_categorie_comite'];
+                    $catcomite = CategorieComite::find($input['id_categorie_comite']);
                 }
 
                 $input['id_users_cahier_plans_projets'] = Auth::user()->id;
                 $input['date_creer_cahier_plans_projets'] = Carbon::now();
                 $input['code_pieces_cahier_plans_projets'] = $processus->code_processus_comite;
+                $input['code_commission_permante_comite_gestion'] = $catcomite->type_code_categorie_comite;
 
                 $cahier = CahierPlansProjets::find($id);
                 $cahier->update($input);
