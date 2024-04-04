@@ -5,14 +5,14 @@ use App\Helpers\AnneeExercice;
 $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
-@if(auth()->user()->can('comites-index'))
+@if(auth()->user()->can('traitementcomite-index'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Comite')
-    @php($titre='Liste des comites')
-    @php($lien='comites')
+    @php($titre='Liste des comites techniques')
+    @php($lien='traitementcomite')
     @php($lienacceuil='dashboard')
 
     <!-- BEGIN: Content-->
@@ -63,9 +63,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
-                            <th>Libelle </th>
-                            <th>Date debut</th>
-                            <th>Date fin</th>
+                            <th>Libellé </th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
                             <th>Objet</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -77,7 +77,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ @$comitep->code_comite }}</td>
-                                <td>{{ @$comitep->categorieComite->libelle_categorie_comite }}</td>
+                                <td>{{ @$comitep->libelle_categorie_comite }}</td>
                                 <td>{{ $comitep->date_debut_comite }}</td>
                                 <td>{{ $comitep->date_fin_comite }}</td>
                                 <td>{{ $comitep->commentaire_comite }}</td>

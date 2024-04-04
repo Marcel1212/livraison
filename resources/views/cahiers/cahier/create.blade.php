@@ -18,49 +18,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
     @php($soustitre='Creer un cahier')
     @php($lien='cahierplansprojets')
     @php($lienacceuil='dashboard')
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <script type="text/javascript">
-
-       // document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-        function changeFunction() {
-            //alert('code');exit;
-
-            var selectBox = document.getElementById("id_processus_comite");
-            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-
-            //alert(selectedValue);
-
-            if(selectedValue != '1'){
-                hiddenPufield();
-                //alert(selectedValue);
-            }else{
-                displayPufield();
-            }
-
-
-        };
-
-        function hiddenPufield(){
-                $("#id_departement").prop( "disabled", true );
-
-                $("#id_departement_div").hide();
-            }
-            function displayPufield(){
-                $("#id_departement").prop( "disabled", false );
-
-                $("#id_departement_div").show();
-            }
-    </script>
 
     <!-- BEGIN: Content-->
-
-
-
-
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <a class="active" href="/{{ $lienacceuil }}"> <i class="ti ti-home"></i>  Accueil </a> / {{$Module}} / <a href="/{{ $lien }}"> {{$titre}}</a> / </span> {{$soustitre}}
     </h5>
@@ -150,7 +111,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     error
                                     @enderror"
                                                     data-allow-clear="true" name="id_processus_comite"
-                                                    id="id_processus_comite" required onchange="changeFunction()">
+                                                    id="id_processus_comite" required >
                                          <?php echo $processuscomitesListe ?>
                                     </select>
                                     @error('id_processus_comite')
@@ -172,6 +133,19 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     @enderror
                                 </div>
 
+                                <div class="col-md-4 col-12" id="id_categorie_comite_div">
+                                    <label>Liste des comités <strong style="color:red;">*</strong></label>
+                                    <select class="select2 form-select @error('id_categorie_comite')
+                                    error
+                                    @enderror"
+                                                    data-allow-clear="true" name="id_categorie_comite"
+                                                    id="id_categorie_comite" >
+                                         <?php echo $categoriecomitesListe ?>
+                                    </select>
+                                    @error('id_categorie_comite')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
+                                </div>
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
@@ -209,6 +183,42 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
         <!-- END: Content-->
 
+        @endsection
+
+        @section('js_perso')
+
+        <script type="text/javascript">
+
+            // document.getElementById("Activeajoutercabinetformation").disabled = true;
+
+            function changeFunction(idproc) {
+                      if(idproc != '1'){
+                          hiddenPufield();
+                          //alert(selectedValue);
+                      }else{
+                          displayPufield();
+                      }
+                  }
+
+
+             $("#id_processus_comite").change(function(){
+                         changeFunction(this.value)
+                     });
+
+             function hiddenPufield(){
+                     $("#id_departement").prop( "disabled", true );
+                     $("#id_departement_div").hide();
+                     $("#id_categorie_comite").prop( "disabled", false );
+                     $("#id_categorie_comite_div").show();
+                 }
+
+                 function displayPufield(){
+                     $("#id_departement").prop( "disabled", false );
+                     $("#id_departement_div").show();
+                     $("#id_categorie_comite").prop( "disabled", true );
+                     $("#id_categorie_comite_div").hide();
+                 }
+         </script>
         @endsection
 
         @else
