@@ -131,6 +131,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Date fin instruction</th>
                                         <th>Coût accordé</th>
                                         <th>Statut</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -157,27 +158,27 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ $demande->date_demande }}</td>
                                         <td>{{ $demande->date_soumis }}</td>
                                         <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
+                                        <td>
+                                            @if(@$demande->flag_valide_ct ==true)
+                                                <span class="badge bg-success">Traité</span>
+                                            @else
+                                                <span class="badge bg-warning">En attente de traiement</span>
+                                            @endif
+                                        </td>
                                         <td align="center" nowrap="nowrap">
                                             @can($lien.'-edit')
-                                            @if ($demande->code_processus =='PF')
+                                            @if($demande->code_processus =='PF')
                                                 <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" "
-                                                    title="Modifier"><img
-                                                        src='/assets/img/editing.png'></a>
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endif
-                                            @if ($demande->code_processus =='PE')
+                                            @if($demande->code_processus =='PE')
                                                 <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" "
-                                                    title="Modifier"><img
-                                                        src='/assets/img/editing.png'></a>
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endif
-                                            @if ($demande->code_processus =='PRF')
+                                            @if($demande->code_processus =='PRF')
                                                 <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" "
-                                                    title="Modifier"><img
-                                                        src='/assets/img/editing.png'></a>
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endif
-
                                         @endcan
                                         </td>
                                     </tr>
@@ -190,7 +191,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <hr>
 
                                 <?php //if (count($comitegestionparticipant)>=1){ ?>
-
 
                                     <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
 

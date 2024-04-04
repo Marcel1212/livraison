@@ -135,18 +135,18 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Offre Technique
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button
-                            type="button"
-                            class="nav-link @if(isset($cahier) && $notation_commission_evaluation_offre_tech==count($commissioneparticipants)) @if($idetape==5 ) active @endif @else disabled @endif"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-top-offrefinanciere"
-                            aria-controls="navs-top-offrefinanciere"
-                            aria-selected="false">
-                            Offre Financière
-                        </button>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <button--}}
+{{--                            type="button"--}}
+{{--                            class="nav-link @if(isset($cahier) && $notation_commission_evaluation_offre_tech==count($commissioneparticipants)) @if($idetape==5 ) active @endif @else disabled @endif"--}}
+{{--                            role="tab"--}}
+{{--                            data-bs-toggle="tab"--}}
+{{--                            data-bs-target="#navs-top-offrefinanciere"--}}
+{{--                            aria-controls="navs-top-offrefinanciere"--}}
+{{--                            aria-selected="false">--}}
+{{--                            Offre Financière--}}
+{{--                        </button>--}}
+{{--                    </li>--}}
                     <li class="nav-item">
                         <button
                             type="button"
@@ -466,7 +466,17 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
                     <div class="tab-pane fade @if($idetape==4 && isset($cahier) && count($commissioneparticipants)>0) show active @else disabled @endif" id="navs-top-offretechnique" role="tabpanel">
-                        <form method="POST" class="form"
+
+                        <div align="right">
+                            <a href="#"
+                               class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                               onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
+                                Afficher la grille de notation
+                            </a>
+
+                        </div>
+                        @if(!isset($beginvalidebyoneuser))
+                            <form method="POST" class="form"
                               action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}">
                             @csrf
                             @method('put')
@@ -518,7 +528,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                             </div>
                         </form>
-
+                        @endif
                         <table class="table table-bordered table-striped table-hover table-sm"
                                id="exampleData"
                                style="margin-top: 13px !important">
@@ -528,7 +538,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <th>Critère</th>
                                 <th>Sous-critère</th>
                                 <th>Note</th>
-                                <th>Action</th>
+                                @if(!isset($beginvalidebyoneuser))
+                                    <th>Action</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -547,153 +559,22 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>
                                             {{@$offretechcommissioneval_tab->note_offre_tech_commission_evaluation_offre}}
                                         </td>
+                                        @if(!isset($beginvalidebyoneuser))
+
                                         <td>
                                             <a href="{{ route($lien . '.delete', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt($offretechcommissioneval_tab->id_sous_critere_evaluation_offre_tech)])}}"
                                                class=""
                                                onclick='javascript:if (!confirm("Voulez-vous supprimer ce sous-critère de cette commission ?")) return false;'
                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                         </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endisset
                             </tbody>
                         </table>
 
-                        <h6 class="mt-5 mb-2">Visualisation de la grille de Notation</h6>
-                        @isset($cahier)
-                            @isset($cahier->projet_etude)
-                                <h6>Projet d'étude : {{@$cahier->projet_etude->titre_projet_instruction}} </h6>
-                            @endisset
-                        @endisset
-                        <table class="table table-bordered table-striped table-hover table-sm"
-                               id="exampleData"
-                               style="margin-top: 13px !important">
-                            <tbody>
-                            <tr>
-                                <td colspan="2">OPERATEURS</td>
-                                @isset($cahier)
-                                    @isset($cahier->projet_etude)
-                                        @isset($cahier->projet_etude->operateurs)
-                                            @foreach($cahier->projet_etude->operateurs as $key=>$operateur)
-                                                <td colspan="{{@$commissioneparticipants->count()}}">
-                                                    Opérateur {{$key+1}}
-                                                    : {{$operateur->raison_social_entreprises}}</td>
-                                            @endforeach
-                                        @endisset
-                                    @endisset
-                                @endisset
-                            </tr>
 
-                            <tr>
-                                <td colspan="2">CONSEILLERS</td>
-                                @isset($cahier)
-                                    @isset($cahier->projet_etude)
-                                        @isset($cahier->projet_etude->operateurs)
-                                            @foreach($cahier->projet_etude->operateurs as $key=>$operateur)
-                                                @isset($commissioneparticipants)
-                                                    @foreach($commissioneparticipants as $key=>$commissioneparticipant)
-                                                        <td>{{mb_substr(@$commissioneparticipant->name,0, 1)}}{{mb_substr(@$commissioneparticipant->prenom_users,0, 1)}}</td>
-                                                    @endforeach
-                                                @endisset
-                                            @endforeach
-                                        @endisset
-                                    @endisset
-                                @endisset
-                            </tr>
-
-
-                            @isset($offretechcommissionevals)
-                                @foreach($offretechcommissionevals as $libelle=>$offretechcommissioneval_f)
-                                    <tr>
-                                        <td rowspan="{{$offretechcommissioneval_f->count()+1}}">{{@$libelle}}
-                                            ( {{@$offretechcommissioneval_f->sum('note_offre_tech_commission_evaluation_offre') }}
-                                            pts)
-                                        </td>
-                                    </tr>
-                                    @isset($offretechcommissioneval_f)
-                                        @foreach($offretechcommissioneval_f as $offretechcommissioneval)
-                                            <tr>
-                                                <td>
-                                                    {{@$offretechcommissioneval->souscritereevaluationoffretech->libelle_sous_critere_evaluation_offre_tech}}
-                                                    ({{@$offretechcommissioneval->note_offre_tech_commission_evaluation_offre}}
-                                                    pts)
-                                                </td>
-                                                @isset($cahier)
-                                                    @isset($cahier->projet_etude)
-                                                        @isset($cahier->projet_etude->operateurs)
-                                                            @foreach($cahier->projet_etude->operateurs as $key=>$operateur)
-                                                                @isset($commissioneparticipants)
-                                                                    @foreach($commissioneparticipants as $key=>$commissioneparticipant)
-                                                                        <td></td>
-                                                                    @endforeach
-                                                                @endisset
-                                                            @endforeach
-                                                        @endisset
-                                                    @endisset
-                                                @endisset
-                                            </tr>
-                                        @endforeach
-                                    @endisset
-                                @endforeach
-                            @endisset
-                            {{--                                <tr>--}}
-                            {{--                                    <td rowspan="5">Expérience du personnel clé Proposé (30 points)</td>--}}
-                            {{--                                </tr>--}}
-                            {{--                                @isset($offretechcommissionevals)--}}
-                            {{--                                    @foreach($offretechcommissionevals as $offretechcommissioneval)--}}
-                            {{--                                        <tr>--}}
-                            {{--                                            <td>{{@$offretechcommissioneval->souscritereevaluationoffretech->libelle_sous_critere_evaluation_offre_tech}} ({{@$offretechcommissioneval->note_offre_tech_commission_evaluation_offre}} pts)</td>--}}
-                            {{--                                        </tr>--}}
-                            {{--                                    @endforeach--}}
-                            {{--                                @endisset--}}
-
-                            {{--                                <tr>--}}
-                            {{--                                    <td>Réalisation de missions Similaires : (dates et références) (10 pts)</td>--}}
-                            {{--                                </tr>--}}
-
-                            {{--                                <tr>--}}
-                            {{--                                    <td>Total 1</td>--}}
-                            {{--                                </tr>--}}
-
-                            {{--                                <tr>--}}
-                            {{--                                    <td>Moyenne</td>--}}
-                            {{--                                </tr>--}}
-
-
-
-
-
-                            {{--                                    <?php $i=0 ?>--}}
-                            {{--                                                                    @foreach ($demandes as $key => $demande)--}}
-                            {{--                                                                        <tr>--}}
-                            {{--                                                                            <td>--}}
-                            {{--                                                                                <input type="checkbox"--}}
-                            {{--                                                                                       value="<?php echo $demande->id_demande;?>"--}}
-                            {{--                                                                                       name="demande[<?php echo $demande->id_demande;?>]"--}}
-                            {{--                                                                                       id="demande<?php echo $demande->id_demande;?>"/>--}}
-                            {{--                                                                            </td>--}}
-                            {{--                                                                            <td>--}}
-                            {{--                                                                                @if ($demande->code_processus =='PF')--}}
-                            {{--                                                                                    PLAN DE FORMATION--}}
-                            {{--                                                                                @endif--}}
-                            {{--                                                                                @if ($demande->code_processus =='PE')--}}
-                            {{--                                                                                    PROJET ETUDE--}}
-                            {{--                                                                                @endif--}}
-                            {{--                                                                                @if ($demande->code_processus =='PRF')--}}
-                            {{--                                                                                    PROJET DE FORMATION--}}
-                            {{--                                                                                @endif--}}
-                            {{--                                                                            </td>--}}
-                            {{--                                                                            <td>{{ @$demande->raison_sociale  }}</td>--}}
-                            {{--                                                                            <td>{{ @$demande->nom_conseiller }}</td>--}}
-                            {{--                                                                            <td>{{ @$demande->code }}</td>--}}
-                            {{--                                                                            <td>{{ $demande->date_demande }}</td>--}}
-                            {{--                                                                            <td>{{ $demande->date_soumis }}</td>--}}
-                            {{--                                                                            <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>--}}
-                            {{--                                                                            <td align="center" nowrap="nowrap"></td>--}}
-                            {{--                                                                        </tr>--}}
-                            {{--                                                                    @endforeach--}}
-                            </tbody>
-                        </table>
                         <div class="col-12" align="right">
                             <hr>
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"

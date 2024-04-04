@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Comites;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cahier;
 use App\Models\Comite;
+use App\Models\FormeJuridique;
+use App\Models\PiecesProjetEtude;
+use App\Models\ProjetEtude;
 use Illuminate\Http\Request;
 use Image;
 use File;
@@ -36,6 +40,7 @@ use App\Models\TraitementParCritereCommentaire;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 
+@ini_set('max_execution_time',0);
 class TraitementComitesTechniquesController extends Controller
 {
     /**
@@ -269,6 +274,89 @@ class TraitementComitesTechniquesController extends Controller
         ));
 
     }
+
+
+    public function editprojetetude($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id;
+
+
+//        $comite = Comite::find($id);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
+        if(isset($id1)){
+            $projet_etude = ProjetEtude::find($id1);
+            if(isset($projet_etude)){
+                $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
+
+                $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','avant_projet_tdr')->first();
+                $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','courier_demande_fin')->first();
+                $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_technique')->first();
+                $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_financiere')->first();
+
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+                $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
+
+                $pays = Pays::all();
+                $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+                foreach ($pays as $comp) {
+                    $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+                }
+
+                /******************** secteuractivites *********************************/
+                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivites as $comp) {
+                    $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+                $motif = Motif::where('code_motif','=','PRE')->get();;
+                $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+                foreach ($motif as $comp) {
+                    $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
+                }
+
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
+
+                return view('comites.traitementcomitetechniques.editprojetetude',
+                    compact('idetape','pay','pieces_projets','avant_projet_tdr',
+                        'courier_demande_fin',
+                        'offre_technique',
+                        'projet_etude',
+                        'idcomite',
+                        'secteuractivite_projet',
+                        'motifs',
+                        'formjuridique',
+                        'offre_financiere',
+                        'secteuractivite'));
+
+            }
+        }
+    }
+
+
+
 
     /**
      * Update the specified resource in storage.
@@ -599,6 +687,52 @@ class TraitementComitesTechniquesController extends Controller
 
         }
     }
+
+
+    public function cahierupdateprojetetude(Request $request, $id, $id1, $id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id1;
+
+        if ($request->isMethod('put')) {
+            $projet_etude = ProjetEtude::find($id);
+
+            if($request->action === 'Modifier'){
+
+                $projet_etude->titre_projet_instruction = $request->titre_projet_instruction;
+                $projet_etude->contexte_probleme_instruction = $request->contexte_probleme_instruction;
+                $projet_etude->objectif_general_instruction = $request->objectif_general_instruction;
+                $projet_etude->objectif_specifique_instruction = $request->objectif_specifique_instruction;
+                $projet_etude->resultat_attendus_instruction = $request->resultat_attendu_instruction;
+                $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
+                $projet_etude->cible_instruction = $request->cible_instruction;
+                $projet_etude->methodologie_instruction = $request->methodologie_instruction;
+                $projet_etude->montant_projet_instruction = str_replace(' ', '', $request->montant_projet_instruction);
+                if (isset($request->fichier_instruction)){
+                    $filefront = $request->fichier_instruction;
+                    if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                        $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+                        $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+                        $projet_etude->piece_jointe_instruction = $fileName1;
+                    }else{
+                        return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit/projetetude')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+                    }
+                }
+                $projet_etude->update();
+                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit/projetetude')->with('success', 'Succès : Projet d\'étude modifié avec succès ');
+            }
+
+            if($request->action === 'Traiter_valider_projet'){
+                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                $projet_etude->update();
+                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+            }
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.

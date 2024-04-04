@@ -552,15 +552,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('commissionevaluationoffres/{id}/{id1}/update', [CommissionEvaluationOffreController::class, 'update'])->name('commissionevaluationoffres.update');
     Route::get('commissionevaluationoffres/{id}/{id1}/delete', [CommissionEvaluationOffreController::class, 'deleteSousCritere'])->name('commissionevaluationoffres.delete');
     Route::get('commissionevaluationoffres/{id}/delete/personne', [CommissionEvaluationOffreController::class, 'deletePersonne'])->name('commissionevaluationoffres.delete.personne');
+    Route::get('commissionevaluationoffres/{id}/show/offretech', [CommissionEvaluationOffreController::class, 'showOffreTech'])->name('commissionevaluationoffres.offretech.show');
 
 
 
 //    Route::group(['middleware' => ['can:traitementcomitetechniques-index']], function () {
 
-    Route::get('traitementcommissionevaluationoffres', [TraitementCommissionEvaluationOffreController::class, 'index'])->name('traitementcommissionevaluationoffres');
-    Route::get('traitementcommissionevaluationoffres/{id}/{id1}/edit', [TraitementCommissionEvaluationOffreController::class, 'edit'])->name('traitementcommissionevaluationoffres.edit');
+        Route::get('traitementcommissionevaluationoffres', [TraitementCommissionEvaluationOffreController::class, 'index'])->name('traitementcommissionevaluationoffres');
+        Route::get('traitementcommissionevaluationoffres/{id}/{id1}/edit', [TraitementCommissionEvaluationOffreController::class, 'edit'])->name('traitementcommissionevaluationoffres.edit');
     Route::post('traitementcommissionevaluationoffres/{id}/note', [TraitementCommissionEvaluationOffreController::class, 'notation'])->name('traitementcommissionevaluationoffres.notation');
-//        Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/editer', [TraitementCommissionEvaluationOffreController::class, 'editer'])->name('traitementcomitetechniques.editer');
+//      Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/editer', [TraitementCommissionEvaluationOffreController::class, 'editer'])->name('traitementcomitetechniques.editer');
 //        Route::put('traitementcomitetechniques/{id}/{id2}/{id3}/cahierupdate', [TraitementComitesTechniquesController::class, 'cahierupdate'])->name('traitementcomitetechniques.cahierupdate');
 //        Route::put('traitementcomitetechniques/{id}/{id1}/update', [TraitementComitesTechniquesController::class, 'update'])->name('traitementcomitetechniques.update');
 //        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/planformation', [TraitementComitesTechniquesController::class, 'editplanformation'])->name('traitementcomitetechniques.edit.planformation');

@@ -473,9 +473,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             $values = $cahier->projet_etude->operateurs->count()*$offretechcommissionevalsouscriteres;
                         ?>
                         @if($values==$note_commissions)
-                            <form action="{{route('traitementcommissionevaluationoffres.notation'
+                            <form method="post" action="{{route('traitementcommissionevaluationoffres.notation'
                                             ,['id'=>\App\Helpers\Crypt::UrlCrypt($cahier->id_commission_evaluation_offre)])}}">
-                                  <div align="right">
+                                @csrf
+                                <div align="right">
                                     <button type="submit" name="action" value="Valider"
                                             class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                         Valider

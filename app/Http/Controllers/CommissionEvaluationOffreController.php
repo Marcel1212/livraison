@@ -117,8 +117,9 @@ class CommissionEvaluationOffreController extends Controller
 
         $offretechcommissioneval_tabs = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->get();
 
+        $beginvalidebyoneuser = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)
+            ->where('flag_statut_valider_commission_evaluation_offre_participant',true)->first();
 
-//
 //        $personneressources = User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
 //            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
 //            ->join('roles', 'model_has_roles.role_id', 'roles.id')
@@ -135,7 +136,6 @@ class CommissionEvaluationOffreController extends Controller
 //                ->where('projet_etude_has_entreprises.id_projet_etude',$id_projet_etude);
 //        })->where('flag_operateur',true)
 //            ->where('flag_actif_entreprises',true)
-//
 //            ->where('id_secteur_activite_entreprise',$projet_etude->id_secteur_activite)
 //            ->get();
 
@@ -200,12 +200,12 @@ class CommissionEvaluationOffreController extends Controller
             'cahier',
             'commissioneparticipants',
             'listedemandes',
+            'beginvalidebyoneuser',
             'personneressource',
             'notation_commission_evaluation_offre_tech',
             'offretechcommissioneval_tabs',
             'commissionevaluationoffre','idetape'));
     }
-
 
     public function update(Request $request, $id, $id1)
     {
@@ -448,7 +448,6 @@ class CommissionEvaluationOffreController extends Controller
         }
     }
 
-
     public function deletePersonne($id)
     {
         $id =  Crypt::UrldeCrypt($id);
@@ -477,4 +476,29 @@ class CommissionEvaluationOffreController extends Controller
         }
     }
 
+
+    public function showOffreTech($id){
+        $id =  Crypt::UrldeCrypt($id);
+
+        $cahier = CahierCommissionEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->first();
+        $offretechcommissionevals = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)
+            ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
+            ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
+            ->get()
+            ->groupby('libelle_critere_evaluation_offre_tech');
+        $commissioneparticipants = CommissionParticipantEvaluationOffre::select('commission_evaluation_offre_participant.id_commission_evaluation_offre_participant as id_commission_participant', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile')
+            ->join('users','commission_evaluation_offre_participant.id_user_commission_evaluation_offre_participant','users.id')
+            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+            ->where([['id_commission_evaluation_offre','=',$id]])
+            ->get();
+
+        return view('evaluationoffre.commission.showoffretech',compact(
+            'id',
+            'offretechcommissionevals',
+            'cahier',
+            'commissioneparticipants',
+            )
+        );
+    }
 }

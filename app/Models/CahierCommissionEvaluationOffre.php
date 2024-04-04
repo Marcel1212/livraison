@@ -52,4 +52,9 @@ class CahierCommissionEvaluationOffre extends Model
     {
         return $this->belongsTo(ProjetEtude::class, 'id_projet_etude', 'id_projet_etude');
     }
+
+    public function commission_evaluation()
+    {
+        return $this->belongsTo(CommissionEvaluationOffre::class, 'id_commission_evaluation_offre', 'id_commission_evaluation_offre');
+    }
 }
