@@ -228,14 +228,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(2)]) }}" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                            <?php //if(count($cahiers)>0){ ?>
+                            <?php if(count($demandes)>0){ ?>
                                 <div class="col-12" align="right">
                                     <button type="submit" name="action" value="creer_cahier_plans_projets"
                                     class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                     Ajouter au cahier
                                     </button>
                                 </div>
-                            <?php //} ?>
+                            <?php } ?>
 
                             <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
@@ -428,7 +428,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             <th>Date creation </th>
                                             <th>Date soumis a la commission</th>
                                             <th>Commentaire</th>
-                                            <th>Action</th>
+                                            <th>Statut</th>
                                         </tr>
                                     </thead>
                                     <tbody>

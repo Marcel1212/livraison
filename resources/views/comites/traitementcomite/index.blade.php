@@ -48,9 +48,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                     <h5 class="mb-0">{{$titre}}</h5>
                     <small class="text-muted float-end">
                         @can($lien.'-create')
-                            <a href="{{ route($lien.'.create') }}"
-                               class="btn btn-sm btn-primary waves-effect waves-light">
-                                <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter </a>
+
                         @endcan
                     </small>
                 </div>
