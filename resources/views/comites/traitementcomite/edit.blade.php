@@ -129,6 +129,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Date soumis a la commission</th>
                                         <th>Commentaire</th>
                                         <th>Statut</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -153,6 +154,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$demande->date_creer_cahier_plans_projets }}</td>
                                         <td>{{ @$demande->date_soumis_cahier_plans_projets }}</td>
                                         <td>{{ $demande->commentaire_cahier_plans_projets }}</td>
+                                        <td>
+                                            @if(@$demande->flag_traitement_effectuer_commission ==true)
+                                                <span class="badge bg-success">Traité</span>
+                                            @else
+                                                <span class="badge bg-warning">En attente de traiement</span>
+                                            @endif
+                                        </td>
                                         <td align="center" nowrap="nowrap">
                                             @can($lien.'-edit')
                                             @if ($demande->code_pieces_cahier_plans_projets =='PF')

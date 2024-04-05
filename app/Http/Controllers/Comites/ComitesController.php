@@ -620,7 +620,7 @@ class ComitesController extends Controller
 
                             $plan->update([
                                 'flag_fiche_agrement' => true,
-                                'date_fiche_agrement' => true
+                                'date_fiche_agrement' => Carbon::now()
                             ]);
 
                         }
@@ -689,6 +689,15 @@ class ComitesController extends Controller
                             $projetformation->update();
 
                         }
+
+                        $majcahierplanprojet = CahierPlansProjets::find($infoscahier->id_cahier_plans_projets);
+
+                        $majcahierplanprojet->update([
+                            'flag_traitement_valide_flag_cahier_plans_projets' => true,
+                            'date_traitement_valide_flag_cahier_plans_projets' => Carbon::now()
+                        ]);
+
+
                     }
 
                 }

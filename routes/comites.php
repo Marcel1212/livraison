@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('traitementcomite/{id}/{id1}/update', [TraitementComitesController::class, 'update'])->name('traitementcomite.update');
         Route::get('traitementcomite/{id}/{id1}/edit', [TraitementComitesController::class, 'edit'])->name('traitementcomite.edit');
         Route::get('traitementcomite/{id}/{id1}/{id2}/edit/planformation', [TraitementComitesController::class, 'editplanformation'])->name('traitementcomite.edit.planformation');
+        Route::get('traitementcomite/{id}/{id1}/{id2}/{id3}/editer/planformation', [TraitementComitesController::class, 'editerplanformation'])->name('traitementcomite.editer.planformation');
+        Route::put('traitementcomite/{id}/{id1}/{id2}/{id3}/updater/planformation', [TraitementComitesController::class, 'updater'])->name('traitementcomite.updater.planformation');
         Route::get('traitementcomite/{id}/{id1}/{id2}/edit/projetetude', [TraitementComitesController::class, 'edit'])->name('traitementcomite.edit.projetetude');
         Route::get('traitementcomite/{id}/{id1}/{id2}/edit/projetformation', [TraitementComitesController::class, 'edit'])->name('traitementcomite.edit.projetformation');
         Route::get('traitementcomite/{id}/delete', [TraitementComitesController::class, 'delete'])->name('traitementcomite.delete');
