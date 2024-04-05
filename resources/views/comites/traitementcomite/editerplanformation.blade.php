@@ -782,96 +782,9 @@
                             </div>
 
 
-                            @if (@$planformation->user_conseiller != Auth::user()->id)
-                            <?php
-                                $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan);
-
-                                //echo $resultatT;
-                            ?>
-                            <hr/>
-
-                            @if(count($resultatTCPCU)<1)
-
-                                <h2>Critères évaluations</h2>
-
-                                <div class="card card-custom" style="width: 100%">
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-hover table-checkable"
-                                            style="margin-top: 13px !important">
-                                            <thead>
-                                                <tr>
-                                                    <th>N°</th>
-                                                    <th>Critère</th>
-                                                    <th>status</th>
-                                                    <th>commentaire</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                $i=0;
-                                                    foreach ($criteres as $key => $res):
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        {{ ++$i }}
-                                                        <input type="hidden" class="form-control" name="id_critere_evaluation/{{ $res->id_critere_evaluation }}" value="{{$res->id_critere_evaluation}}"/>
-                                                    </td>
-                                                    <td>{{ $res->libelle_critere_evaluation }}</td>
-                                                    <td align="center">
-                                                        <select class="select2 form-select" data-allow-clear="true" name="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}" id="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}">
-                                                            <option value="">-----------</option>
-                                                            <option value="true">D'accord</option>
-                                                            <option value="false">Pas d'accord</option>
-                                                        </select>
-                                                    </td>
-                                                    <td align="center">
-                                                        <textarea class="form-control form-control-sm"  name="commentaire_critere/{{ $res->id_critere_evaluation }}" id="commentaire_critere/{{ $res->id_critere_evaluation }}" rows="6"></textarea>
-                                                    </td>
-
-                                                </tr>
-                                            <?php endforeach; ?>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            @endif
-
-
-                            @else
-                            <hr/>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-1">
-                                    <label>Montant accordée <strong style="color:red;">*</strong>: </label>
-                                    <input type="number" name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$infosactionplanformation->cout_accorde_action_formation}}">                            </div>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <label class="form-label" for="billings-country">Motif de validation <strong style="color:red;">(obligatoire si action a corrigé)</strong></label>
-
-                                <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif" id="id_motif">
-                                    <?= $motif; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-4 col-12">
-                                <div class="mb-1">
-                                    <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                    <textarea class="form-control form-control-sm"  name="commentaire" id="commentaire" rows="6"></textarea>
-                                </div>
-                            </div>
-
-                            @endif
-
-
 
                             <div class="col-12 text-center">
 
-                                @if (@$planformation->user_conseiller != Auth::user()->id)
-                                    @if(count($resultatTCPCU)<1)
-                                        <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider_critere" class="btn btn-success me-sm-3 me-1">Valider</button>
-                                    @endif
-                                @else
-                                    <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider" class="btn btn-success me-sm-3 me-1">Valider</button>
-                                @endif
                             <button
                                 type="reset"
                                 class="btn btn-label-secondary"
