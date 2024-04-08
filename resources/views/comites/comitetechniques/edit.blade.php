@@ -250,7 +250,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th><label>Selectionnez tous</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
+                                        <th><label>Cocher tout</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
                                         <th>Type processus </th>
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
