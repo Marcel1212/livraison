@@ -423,7 +423,7 @@ class CommissionEvaluationOffreController extends Controller
             ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
             ->get()
             ->groupby('libelle_critere_evaluation_offre_tech');
-        $commissioneparticipants = CommissionParticipantEvaluationOffre::select('commission_evaluation_offre_participant.id_commission_evaluation_offre_participant as id_commission_participant', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile')
+        $commissioneparticipants = CommissionParticipantEvaluationOffre::select('commission_evaluation_offre_participant.id_commission_evaluation_offre_participant as id_commission_participant','users.id as id_user_commission_evaluation_offre_participant', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile')
             ->join('users','commission_evaluation_offre_participant.id_user_commission_evaluation_offre_participant','users.id')
             ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
             ->join('roles', 'model_has_roles.role_id', 'roles.id')

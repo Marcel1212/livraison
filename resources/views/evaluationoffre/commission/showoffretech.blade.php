@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\Menu;
 $logo = Menu::get_logo();
+@ini_set('max_execution_time',0)
 ?>
 
     <!DOCTYPE html>
@@ -64,7 +65,7 @@ $logo = Menu::get_logo();
     </table>
     @isset($cahier)
         <h3>NOTATION DES OFFRES TECHNIQUES</h3>
-        <p><strong>CODE : {{@$cahier->commission_evaluation  ->code_commission_evaluation_offre}} </strong> | <strong> NOMBRE DE MEMBRE  : {{@$commissioneparticipants->count()}} </strong> </p>
+        <p><strong>CODE : {{@$cahier->commission_evaluation->code_commission_evaluation_offre}} </strong> | <strong> NOMBRE DE MEMBRE  : {{@$commissioneparticipants->count()}} </strong> </p>
     @endisset
     <table border="1" width="100%" cellspacing="0" cellpadding="0" class="encadre" style="margin-top: 13px !important">
         <tbody>
@@ -123,7 +124,7 @@ $logo = Menu::get_logo();
                                         @isset($commissioneparticipants)
                                             @foreach($commissioneparticipants as $key=>$commissioneparticipant)
                                                 <td>
-                                                    {{@$offretechcommissioneval->noteEvaluationOffre($operateur->id_entreprises)->note_notation_commission_evaluation_offre_tech}}
+                                                    {{@$offretechcommissioneval->noteEvaluationOffre($operateur->id_entreprises,$commissioneparticipant->id_user_commission_evaluation_offre_participant)->note_notation_commission_evaluation_offre_tech}}
                                                 </td>
                                             @endforeach
                                         @endisset
