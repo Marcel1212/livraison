@@ -49,12 +49,9 @@ $idpart = Auth::user()->id_partenaire;
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <script type="text/javascript">
-
        // document.getElementById("Activeajoutercabinetformation").disabled = true;
-
         function changeFunction() {
             //alert('code');exit;
-
             var selectBox = document.getElementById("id_type_formation");
             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
@@ -135,19 +132,12 @@ $idpart = Auth::user()->id_partenaire;
 
 
 
-        };
-
-
-
+        }
     </script>
-    <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
     </h5>
-
-
-
 
     <div class="content-body">
     @if(!isset($anneexercice->id_periode_exercice))

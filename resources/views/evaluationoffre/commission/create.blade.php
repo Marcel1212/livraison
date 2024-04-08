@@ -85,7 +85,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <li class="nav-item">
                             <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link disabled"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-projet"
@@ -186,9 +186,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     @enderror
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="row">--}}
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de début <strong style="color:red;">*</strong></label>
                                                     <input type="date" name="date_debut_commission_evaluation_offre"
@@ -196,14 +196,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de fin </label>
                                                     <input type="date" name="date_fin_commission_evaluation_offre"
                                                            class="form-control form-control-sm" />
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Pourcentage offre technique <strong style="color:red;">*</strong></label>
                                                     <input type="number" id="pourcentage_offre_tech_commission_evaluation_offre" name="pourcentage_offre_tech_commission_evaluation_offre" min="0"
@@ -211,19 +211,40 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Pourcentage offre financière </label>
-                                                    <input type="number" readonly id="pourcentage_offre_fin_commission_evaluation_offre" name="pourcentage_offre_fin_commission_evaluation_offre"  min="0" disabled
+                                                    <input type="number" readonly id="pourcentage_offre_fin_commission_evaluation_offre" name="pourcentage_offre_fin_commission_evaluation_offre"  min="0"
                                                            class="form-control form-control-sm" />
                                                 </div>
                                             </div>
-                                        </div>
-
+                                <div class="col-md-3 col-12">
+                                    <div class="mb-1">
+                                        <label>Note éliminatoire offre technique (/100)</label>
+                                        <input type="number" id="note_eliminatoire_offre_tech_commission_evaluation_offre" name="note_eliminatoire_offre_tech_commission_evaluation_offre"  min="0"
+                                               class="form-control form-control-sm" />
                                     </div>
+                                </div>
+                                <div class="col-md-3 col-12">
+                                    <div class="mb-1">
+                                        <label>Marge inférieur offre financière (%) </label>
+                                        <input type="number" id="marge_inf_offre_fin_commission_evaluation_offre" name="marge_inf_offre_fin_commission_evaluation_offre"  min="0"
+                                               class="form-control form-control-sm" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-12">
+                                    <div class="mb-1">
+                                        <label>Marge supérieur offre financière (%) </label>
+                                        <input type="number" id="marge_sup_offre_fin_commission_evaluation_offre" name="marge_sup_offre_fin_commission_evaluation_offre"  min="0"
+                                               class="form-control form-control-sm" />
+                                    </div>
+                                </div>
+{{--                                        </div>--}}
+
+{{--                                    </div>--}}
 
 
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Commentaire <strong style="color:red;">*</strong></label>
                                             <textarea class="form-control form-control-sm"  name="commentaire_commission_evaluation_offre" id="commentaire_commission_evaluation_offre" rows="6"></textarea>

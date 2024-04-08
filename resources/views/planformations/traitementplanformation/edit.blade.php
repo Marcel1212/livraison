@@ -17,98 +17,6 @@
     @php($soustitre='Instruction')
     @php($lien='traitementplanformation')
 
-    <script type="text/javascript">
-
-        // document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-         function changeFunction() {
-             //alert('code');exit;
-
-             var selectBox = document.getElementById("id_type_formation");
-             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-
-            // alert(selectedValue);
-
-             $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
-                      //alert(data); //exit;
-                     $('#id_caracteristique_type_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_caracteristique_type_formation').append($('<option>', {
-                             value: tels.id_caracteristique_type_formation,
-                             text: tels.libelle_ctf,
-                         }));
-                     });
-                 });
-
-             if(selectedValue == 3){
-
-                 //function telUpdate() {
-                 //alert('testanc'); //exit;
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-                 $.get('/entrepriseinterneplan', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-
-
-                     });
-                 });
-                 // }
-
-             }
-
-             if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-                 $.get('/entreprisecabinetformation', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-                     });
-                 });
-
-             }
-
-
-             if(selectedValue == 4){
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = false;
-
-                 $.get('/entreprisecabinetetrangerformation', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-                     });
-                 });
-
-                 //$('#Activeajoutercabinetformation').removeAttr('disabled');
-                // $('#cabinetetranger').modal('show');
-
-             }
-
-
-
-
-         };
-
-
-
-     </script>
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
@@ -746,7 +654,8 @@
     </div>
 
     <!-- Edit User Modal -->
-          @foreach($infosactionplanformations as $infosactionplanformation)
+          @foreach($infosactionplanformations as $key=>$infosactionplanformation)
+              <?php $key = $key+1 ?>
             <div class="modal fade" id="traiterActionFomationPlan<?php echo $infosactionplanformation->id_action_formation_plan ?>" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                   <div class="modal-content p-3 p-md-5">
@@ -901,15 +810,14 @@
 
 
                           <div class="col-12 col-md-4">
-                            <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="id_type_formation_{{$key}}">Type de formation <strong style="color:red;">*</strong></label>
                             <select
-                                id="id_type_formation"
+                                id="id_type_formation_{{$key}}"
                                 name="id_type_formation"
                                 class="select2 form-select-sm input-group @error('id_type_formation')
                                 error
                                 @enderror"
-                                aria-label="Default select example"
-                                onchange="changeFunction();">
+                                aria-label="Default select example">
 									<option value="{{@$infosactionplanformation->id_type_formation }}">{{@$infosactionplanformation->type_formation }} </option>
                                   @foreach ($typeformationss as $typeformation)
                                     <option value="{{ $typeformation->id_type_formation }}">{{ mb_strtoupper($typeformation->type_formation) }}</option>
@@ -922,7 +830,7 @@
 
                             <div class="col-12 col-md-4">
                                 <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
-                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
+                                <select id="id_caracteristique_type_formation_{{$key}}" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
                                 error
                                 @enderror">
                                     <option value='{{@$infosactionplanformation->caracteristiqueTypeFormation->id_caracteristique_type_formation}}'>{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}</option>
@@ -939,7 +847,7 @@
 
                                         <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
                                         error
-                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation_{{$key}}">
                                             <option value='{{@$infosactionplanformation->id_entreprise_structure_formation_action}}'>{{@$infosactionplanformation->structure_etablissement_action_}}</option>
                                             <?php //echo $structureformation; ?>
                                         </select>
@@ -1214,10 +1122,69 @@
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
-            {{-- <script src="{{asset('assets/js/planformation/pages-soumission-plan-formation.js')}}"></script> --}}
+                <script type="text/javascript">
+                    {{--var all_count_actions = {{$infosactionplanformations->count()}};--}}
+                    {{--for(var i=1; i < all_count_actions+1 ; i++){--}}
+                        var selectBox = $("#id_type_formation_"+i);
+                        selectBox.on("change", function() {
+                            let selectedValue = $(this).val();
+                            alert('select'+i+' '+selectedValue);
+                             $.get('{{url('/')}}/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
+                                //alert(data); //exit;
+                                $('#id_caracteristique_type_formation_'+i).empty();
+                                $.each(data, function (index, tels) {
+                                    $('#id_caracteristique_type_formation_'+i).append($('<option>', {
+                                        value: tels.id_caracteristique_type_formation,
+                                        text: tels.libelle_ctf,
+                                    }));
+                                });
+                            });
 
-        {{-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
-        <script type="text/javascript">
+                            if(selectedValue == 3){
+                                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                                $.get('{{url('/')}}/entrepriseinterneplan', function (data) {
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+
+                            if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
+                                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                                $.get('{{url('/')}}/entreprisecabinetformation', function (data) {
+                                    //alert(data); //exit;
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+
+                            if(selectedValue == 4){
+                                document.getElementById("Activeajoutercabinetformation").disabled = false;
+                                $.get('{{url('/')}}/entreprisecabinetetrangerformation', function (data) {
+                                    //alert(data); //exit;
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+                        });
+                    // }
+                </script>
+
+                <script type="text/javascript">
 
             /*------------------------------------------
             --------------------------------------------

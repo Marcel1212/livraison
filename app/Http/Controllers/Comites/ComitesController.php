@@ -183,14 +183,16 @@ class ComitesController extends Controller
             ->from('cahier_comite')
             ->whereColumn('cahier_comite.id_demande','=','cahier_plans_projets.id_cahier_plans_projets')
             ->where('cahier_comite.id_comite',$id);
-             });
-            // dd($querydemande);
-        foreach ($processuscomite as  $cd) {
-            $querydemande->where([
+             })
+            ->where([
                 ['cahier_plans_projets.code_commission_permante_comite_gestion','=', $comite->categorieComite->type_code_categorie_comite],
                 ['cahier_plans_projets.flag_traitement_cahier_plans_projets','=',false]
-            ])->orWhere('cahier_plans_projets.code_pieces_cahier_plans_projets',$cd->code_pieces);
-        }
+            ])
+            ->where(function ($query) use ($processuscomite,$comite) {
+                foreach ($processuscomite as  $cd) {
+                    $query->orWhere('cahier_plans_projets.code_pieces_cahier_plans_projets',$cd->code_pieces);
+                }
+            })->get();
 
         $demandes = $querydemande->get();
 
@@ -542,7 +544,7 @@ class ComitesController extends Controller
                         $nom = $personne->user->name;
                         $prenom = $personne->user->prenom_users;
                         if(isset($comitep->date_fin_comite)){
-                            $datefin = 'au '. $comitep->date_fin_comite;
+                            $datefin = 'jusqu\'au '. $comitep->date_fin_comite;
                         }else{
                             $datefin = ' ';
                         }
@@ -553,18 +555,13 @@ class ComitesController extends Controller
                             $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes conviés au ".$comitep->categorieComite->libelle_categorie_comite."  qui se déroulera  du ".$comitep->date_debut_comite." ".$datefin. ".
-
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants via le lien ci-dessous : <br/>".
-                                            route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])
-//                                            $affichedemande
-
+                                            <br><br>Vous êtes conviés au ".$comitep->categorieComite->libelle_categorie_comite."  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
+                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
                                             ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                             -----
                                             ";
-
 
                             $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
                         }
@@ -752,4 +749,5 @@ class ComitesController extends Controller
     {
         //
     }
+
 }

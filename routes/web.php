@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgreementController;
 use App\Http\Controllers\AgreementPfController;
+use App\Http\Controllers\Comites\ComitesController;
 use App\Http\Controllers\CommissionEvaluationOffreController;
 use App\Http\Controllers\CritereEvaluationOffreTechController;
 use App\Http\Controllers\DemandeAnnulationActionPlanController;

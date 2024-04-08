@@ -111,22 +111,11 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des projets
                         </button>
                     </li>
+
                     <li class="nav-item">
                         <button
                             type="button"
-                            class="nav-link  @if(isset($cahier)) @if($idetape==3) active @endif @else disabled @endif"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-top-participant"
-                            aria-controls="navs-top-participant"
-                            aria-selected="false">
-                            Liste des participants
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                            type="button"
-                            class="nav-link @if(isset($cahier) && count($commissioneparticipants)>0) @if($idetape==4 ) active @endif @else disabled @endif"
+                            class="nav-link @if(isset($cahier)) @if($idetape==3) active @endif @else disabled @endif"
                             role="tab"
                             data-bs-toggle="tab"
                             data-bs-target="#navs-top-offretechnique"
@@ -135,6 +124,19 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Offre Technique
                         </button>
                     </li>
+                    <li class="nav-item">
+                        <button
+                            type="button"
+                            class="nav-link  @if(isset($cahier) && $offretechcommissioneval_sums==100) @if($idetape==4) active @endif @else disabled @endif"
+                            role="tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#navs-top-participant"
+                            aria-controls="navs-top-participant"
+                            aria-selected="false">
+                            Liste des participants
+                        </button>
+                    </li>
+
 {{--                    <li class="nav-item">--}}
 {{--                        <button--}}
 {{--                            type="button"--}}
@@ -145,6 +147,18 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 {{--                            aria-controls="navs-top-offrefinanciere"--}}
 {{--                            aria-selected="false">--}}
 {{--                            Offre Financière--}}
+{{--                        </button>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <button--}}
+{{--                            type="button"--}}
+{{--                            class="nav-link @if(isset($cahier) && count($commissioneparticipants)>0) @if($idetape==4 ) active @endif @else disabled @endif"--}}
+{{--                            role="tab"--}}
+{{--                            data-bs-toggle="tab"--}}
+{{--                            data-bs-target="#navs-top-offretechnique"--}}
+{{--                            aria-controls="navs-top-offretechnique"--}}
+{{--                            aria-selected="false">--}}
+{{--                            Classement--}}
 {{--                        </button>--}}
 {{--                    </li>--}}
                     <li class="nav-item">
@@ -209,9 +223,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     @enderror
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6 col-12">
+{{--                                    <div class="col-md-6">--}}
+{{--                                        <div class="row">--}}
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de début <strong style="color:red;">*</strong></label>
                                                     <input type="date" name="date_debut_commission_evaluation_offre"
@@ -221,7 +235,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Date de fin </label>
                                                     <input type="date" name="date_fin_commission_evaluation_offre"
@@ -230,7 +244,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     />
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Pourcentage offre technique <strong
                                                             style="color:red;">*</strong></label>
@@ -244,7 +258,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-3 col-12">
                                                 <div class="mb-1">
                                                     <label>Pourcentage offre financière </label>
                                                     <input type="number"
@@ -256,12 +270,36 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     />
                                                 </div>
                                             </div>
-                                        </div>
 
+                                    <div class="col-md-3 col-12">
+                                        <div class="mb-1">
+                                            <label>Note éliminatoire offre technique (/100)</label>
+                                            <input type="number" id="note_eliminatoire_offre_tech_commission_evaluation_offre" name="note_eliminatoire_offre_tech_commission_evaluation_offre"  min="0"
+                                                   class="form-control form-control-sm"  value="{{$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="mb-1">
+                                            <label>Marge inférieur offre financière (%) </label>
+                                            <input type="number" id="marge_inf_offre_fin_commission_evaluation_offre" name="marge_inf_offre_fin_commission_evaluation_offre"  min="0"
+                                                   class="form-control form-control-sm" value="{{$commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-12">
+                                        <div class="mb-1">
+                                            <label>Marge supérieur offre financière (%) </label>
+                                            <input type="number" id="marge_sup_offre_fin_commission_evaluation_offre" name="marge_sup_offre_fin_commission_evaluation_offre"  min="0"
+                                                   class="form-control form-control-sm"  value="{{$commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre }}" />
+                                        </div>
                                     </div>
 
 
-                                    <div class="col-md-6 col-12">
+{{--                                        </div>--}}
+
+{{--                                    </div>--}}
+
+
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Commentaire <strong style="color:red;">*</strong></label>
                                             <textarea class="form-control form-control-sm"
@@ -329,9 +367,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <tr>
                                         @if (!isset($cahier))
                                             <td>
-                                                <input type="checkbox"
+                                                <input type="radio"
                                                        value="<?php echo $projet_etude->id_projet_etude;?>"
-                                                       name="demande[<?php echo $projet_etude->id_projet_etude;?>]"
+                                                       name="demande"
                                                        id="demande<?php echo $projet_etude->id_projet_etude;?>"/>
                                             </td>
                                         @else
@@ -359,6 +397,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 </tbody>
                             </table>
                         </form>
+                        @if(isset($cahier))
                         <div class="col-12" align="right">
                             <hr>
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
@@ -368,8 +407,135 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                 Retour</a>
                         </div>
+                        @endif
                     </div>
-                    <div class="tab-pane fade @if($idetape==3 && isset($cahier)) show active @else disabled @endif"
+                    <div class="tab-pane fade @if($idetape==3 && isset($cahier)) show active @else disabled @endif" id="navs-top-offretechnique" role="tabpanel">
+
+                        <div align="right">
+                            <a href="#"
+                               class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                               onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
+                                Afficher la grille de notation
+                            </a>
+                            @if($beginvalidebyoneuser->count()!=0 && $beginvalidebyoneuser->count()==$commissioneparticipants->count())
+                                <button type="submit" name="action" value="valider_offre_technique"
+                                        class="btn rounded-pill btn-outline-success waves-effect waves-light me-sm-3 me-1"
+                                        onclick='javascript:if (!confirm("Voulez-vous mettre fin à la notation ?")) return false;'>Clôturer l'offre technique</button>
+                            @endif
+                        </div>
+                        @if($beginvalidebyoneuser->count()==0 && $offretechcommissioneval_sums!=100)
+                            <form method="POST" class="form"
+                                  action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}">
+                                @csrf
+                                @method('put')
+                                <div class="row">
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label" for="id_user_comite_participant">Critère d'évaluation
+                                            offre technique <strong
+                                                style="color:red;">*</strong></label>
+                                        <select id="id_critere_evaluation_offre_tech"
+                                                class="select2 form-select-sm input-group" data-allow-clear="true"
+                                                name="id_critere_evaluation_offre_tech"
+                                                required="required">
+                                            <option value="">-----------------------</option>
+                                            @isset($critereevaluationoffretechs)
+                                                @foreach($critereevaluationoffretechs as $critereevaluationoffretech)
+                                                    <option
+                                                        value="{{@$critereevaluationoffretech->id_critere_evaluation_offre_tech}}">{{@$critereevaluationoffretech->libelle_critere_evaluation_offre_tech}}</option>
+                                                @endforeach
+                                            @endisset
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="id_sous_critere_evaluation_offre_tech">Sous-critère
+                                            d'évaluation offre technique <strong
+                                                style="color:red;">*</strong></label>
+                                        <select id="id_sous_critere_evaluation_offre_tech"
+                                                name="id_sous_critere_evaluation_offre_tech"
+                                                class="select2 form-select-sm input-group"
+                                                aria-label="Default select example"
+                                        >
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-3">
+                                        <label class="form-label" for="note_offre_tech_commission_evaluation_offre">Note
+                                            Sous-critère d'évaluation offre technique <strong
+                                                style="color:red;">*</strong></label>
+                                        <input type="number" style="line-height:1.5rem" class="form-control form-control-sm"
+                                               name="note_offre_tech_commission_evaluation_offre"
+                                               aria-label="Default select example"/>
+                                    </div>
+
+                                    <div class="col-12 col-md-2" align="right"><br>
+                                        <button type="submit" name="action" value="Enregistrer_Offre_Tech"
+                                                class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        @endif
+                        <table class="table table-bordered table-striped table-hover table-sm"
+                               id="exampleData"
+                               style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Critère</th>
+                                <th>Sous-critère</th>
+                                <th>Note</th>
+                                @if($beginvalidebyoneuser->count()==0)
+                                    <th>Action</th>
+                                @endif
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @isset($offretechcommissioneval_tabs)
+                                @foreach($offretechcommissioneval_tabs as $key=>$offretechcommissioneval_tab)
+                                    <tr>
+                                        <td>
+                                            {{$key+1}}
+                                        </td>
+                                        <td>
+                                            {{@$offretechcommissioneval_tab->critereevaluationoffretech->libelle_critere_evaluation_offre_tech}}
+                                        </td>
+                                        <td>
+                                            {{@$offretechcommissioneval_tab->souscritereevaluationoffretech->libelle_sous_critere_evaluation_offre_tech}}
+                                        </td>
+                                        <td>
+                                            {{@$offretechcommissioneval_tab->note_offre_tech_commission_evaluation_offre}}
+                                        </td>
+                                        @if($beginvalidebyoneuser->count()==0)
+
+                                            <td>
+                                                <a href="{{ route($lien . '.delete', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt($offretechcommissioneval_tab->id_sous_critere_evaluation_offre_tech)])}}"
+                                                   class=""
+                                                   onclick='javascript:if (!confirm("Voulez-vous supprimer ce sous-critère de cette commission ?")) return false;'
+                                                   title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                            </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            @endisset
+                            </tbody>
+                        </table>
+
+                        @if($offretechcommissioneval_sums==100)
+                            <div class="col-12" align="right">
+                                <hr>
+                                <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                   class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+                                <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                   class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                    Retour</a>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div class="tab-pane fade @if($idetape==4 && isset($cahier)  && $offretechcommissioneval_sums==100) show active @else disabled @endif"
                          id="navs-top-participant" role="tabpanel">
                             <?php if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier)){ ?>
                         <form method="POST" class="form"
@@ -461,126 +627,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
-                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                Retour</a>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade @if($idetape==4 && isset($cahier) && count($commissioneparticipants)>0) show active @else disabled @endif" id="navs-top-offretechnique" role="tabpanel">
-
-                        <div align="right">
-                            <a href="#"
-                               class="btn rounded-pill btn-outline-primary waves-effect waves-light"
-                               onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
-                                Afficher la grille de notation
-                            </a>
-
-                        </div>
-                        @if(!isset($beginvalidebyoneuser))
-                            <form method="POST" class="form"
-                              action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}">
-                            @csrf
-                            @method('put')
-                            <div class="row">
-                                <div class="col-12 col-md-4">
-                                    <label class="form-label" for="id_user_comite_participant">Critère d'évaluation
-                                        offre technique <strong
-                                            style="color:red;">*</strong></label>
-                                    <select id="id_critere_evaluation_offre_tech"
-                                            class="select2 form-select-sm input-group" data-allow-clear="true"
-                                            name="id_critere_evaluation_offre_tech"
-                                            required="required">
-                                        <option value="">-----------------------</option>
-                                        @isset($critereevaluationoffretechs)
-                                            @foreach($critereevaluationoffretechs as $critereevaluationoffretech)
-                                                <option
-                                                    value="{{@$critereevaluationoffretech->id_critere_evaluation_offre_tech}}">{{@$critereevaluationoffretech->libelle_critere_evaluation_offre_tech}}</option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                </div>
-
-                                <div class="col-12 col-md-3">
-                                    <label class="form-label" for="id_sous_critere_evaluation_offre_tech">Sous-critère
-                                        d'évaluation offre technique <strong
-                                            style="color:red;">*</strong></label>
-                                    <select id="id_sous_critere_evaluation_offre_tech"
-                                            name="id_sous_critere_evaluation_offre_tech"
-                                            class="select2 form-select-sm input-group"
-                                            aria-label="Default select example"
-                                    >
-                                    </select>
-                                </div>
-
-                                <div class="col-12 col-md-3">
-                                    <label class="form-label" for="note_offre_tech_commission_evaluation_offre">Note
-                                        Sous-critère d'évaluation offre technique <strong
-                                            style="color:red;">*</strong></label>
-                                    <input type="number" style="line-height:1.5rem" class="form-control form-control-sm"
-                                           name="note_offre_tech_commission_evaluation_offre"
-                                           aria-label="Default select example"/>
-                                </div>
-
-                                <div class="col-12 col-md-2" align="right"><br>
-                                    <button type="submit" name="action" value="Enregistrer_Offre_Tech"
-                                            class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter
-                                    </button>
-                                </div>
-
-                            </div>
-                        </form>
-                        @endif
-                        <table class="table table-bordered table-striped table-hover table-sm"
-                               id="exampleData"
-                               style="margin-top: 13px !important">
-                            <thead>
-                            <tr>
-                                <th>N°</th>
-                                <th>Critère</th>
-                                <th>Sous-critère</th>
-                                <th>Note</th>
-                                @if(!isset($beginvalidebyoneuser))
-                                    <th>Action</th>
-                                @endif
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @isset($offretechcommissioneval_tabs)
-                                @foreach($offretechcommissioneval_tabs as $key=>$offretechcommissioneval_tab)
-                                    <tr>
-                                        <td>
-                                            {{$key+1}}
-                                        </td>
-                                        <td>
-                                            {{@$offretechcommissioneval_tab->critereevaluationoffretech->libelle_critere_evaluation_offre_tech}}
-                                        </td>
-                                        <td>
-                                            {{@$offretechcommissioneval_tab->souscritereevaluationoffretech->libelle_sous_critere_evaluation_offre_tech}}
-                                        </td>
-                                        <td>
-                                            {{@$offretechcommissioneval_tab->note_offre_tech_commission_evaluation_offre}}
-                                        </td>
-                                        @if(!isset($beginvalidebyoneuser))
-
-                                        <td>
-                                            <a href="{{ route($lien . '.delete', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt($offretechcommissioneval_tab->id_sous_critere_evaluation_offre_tech)])}}"
-                                               class=""
-                                               onclick='javascript:if (!confirm("Voulez-vous supprimer ce sous-critère de cette commission ?")) return false;'
-                                               title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                        </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            @endisset
-                            </tbody>
-                        </table>
-
-
-                        <div class="col-12" align="right">
-                            <hr>
-                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
-                               class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
-                               class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
                             <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                 Retour</a>
                         </div>

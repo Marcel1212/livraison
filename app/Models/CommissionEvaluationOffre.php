@@ -44,6 +44,10 @@ class CommissionEvaluationOffre extends Model
         'date_fin_commission_evaluation_offre',
         'commentaire_commission_evaluation_offre',
         'id_user_commission_evaluation_offre',
+        'id_commission_evaluation_offre',
+        'note_eliminatoire_offre_tech_commission_evaluation_offre',
+        'marge_inf_offre_fin_commission_evaluation_offre',
+        'marge_sup_offre_fin_commission_evaluation_offre',
         'numero_commission_evaluation_offre',
         'nombre_evaluateur_commission_evaluation_offre',
         'region_commission_evaluation_offre',
@@ -54,5 +58,4 @@ class CommissionEvaluationOffre extends Model
         'flag_commission_evaluation_offre',
         'flag_statut_commission_evaluation_offre',
         'created_at', 'updated_at'];
-
 }

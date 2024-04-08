@@ -58,7 +58,10 @@ class CommissionEvaluationOffreController extends Controller
                 'commentaire_commission_evaluation_offre' => 'required',
                 'numero_commission_evaluation_offre' => 'required',
                 'nombre_evaluateur_commission_evaluation_offre' => 'required',
-                'pourcentage_offre_tech_commission_evaluation_offre' => 'required'
+                'pourcentage_offre_tech_commission_evaluation_offre' => 'required',
+                'note_eliminatoire_offre_tech_commission_evaluation_offre' => 'required|max:100',
+                'marge_inf_offre_fin_commission_evaluation_offre' => 'required|max:100',
+                'marge_sup_offre_fin_commission_evaluation_offre' => 'required|max:100'
             ],[
                 'date_debut_commission_evaluation_offre.required' => 'Veuillez ajouter une date de debut.',
                 'date_debut_commission_evaluation_offre.after_or_equal' => 'La date ne doit pas être inférieure à celle du jour.',
@@ -66,6 +69,9 @@ class CommissionEvaluationOffreController extends Controller
                 'numero_commission_evaluation_offre.required' => 'Veuillez ajouter un numéro de commission.',
                 'nombre_evaluateur_commission_evaluation_offre.required' => 'Veuillez ajouter un nombre d\'évaluateur',
                 'pourcentage_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter un pourcentage pour une offre technique',
+                'note_eliminatoire_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter une note éliminatoire pour une offre technique',
+                'marge_inf_offre_fin_commission_evaluation_offre.required' => 'Veuillez ajouter une marge inférieur pour l\'offre financière',
+                'marge_sup_offre_fin_commission_evaluation_offre.required' => 'Veuillez ajouter une marge supérieur pour l\'offre financière',
             ]);
 
             $input = $request->all();
@@ -73,8 +79,7 @@ class CommissionEvaluationOffreController extends Controller
             $input['id_user_commission_evaluation_offre'] = Auth::user()->id;
             $input['code_commission_evaluation_offre'] = 'CODE'.'-'. Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
             $commission_evaluation_offre = CommissionEvaluationOffre::create($input);
-
-            $insertedId = $commission_evaluation_offre->id_commission_evaluation_offre;
+            $insertedId = CommissionEvaluationOffre::latest()->first()->id_commission_evaluation_offre;
 
             Audit::logSave([
                 'action'=>'CREATION',
@@ -116,9 +121,10 @@ class CommissionEvaluationOffreController extends Controller
             ->groupby('libelle_critere_evaluation_offre_tech');
 
         $offretechcommissioneval_tabs = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->get();
+        $offretechcommissioneval_sums = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->sum('note_offre_tech_commission_evaluation_offre');
 
         $beginvalidebyoneuser = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)
-            ->where('flag_statut_valider_commission_evaluation_offre_participant',true)->first();
+            ->where('flag_statut_valider_commission_evaluation_offre_participant',true)->get();
 
 //        $personneressources = User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
 //            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
@@ -202,6 +208,7 @@ class CommissionEvaluationOffreController extends Controller
             'listedemandes',
             'beginvalidebyoneuser',
             'personneressource',
+            'offretechcommissioneval_sums',
             'notation_commission_evaluation_offre_tech',
             'offretechcommissioneval_tabs',
             'commissionevaluationoffre','idetape'));
@@ -251,7 +258,6 @@ class CommissionEvaluationOffreController extends Controller
 
             }
             if ($data['action'] == 'Enregistrer_Offre_Tech'){
-
                 $this->validate($request, [
                     'id_sous_critere_evaluation_offre_tech' => 'required',
                     'id_critere_evaluation_offre_tech' => 'required',
@@ -265,9 +271,14 @@ class CommissionEvaluationOffreController extends Controller
                 $input = $request->all();
 
                 $input['id_commission_evaluation_offre'] = $id;
-                $offretechcommissioneval = OffreTechCommissionEvaluationOffre::create($input);
 
-                $insertedId = $offretechcommissioneval->id_offre_tech_commission_evaluation_offre;
+                $somme_exist = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->get();
+                if($somme_exist->sum('note_offre_tech_commission_evaluation_offre')+$input['note_offre_tech_commission_evaluation_offre']>100){
+                    return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('error', 'Echec : la somme des sous-critères ne peut être supérieur à 100');
+                }
+
+                $offretechcommissioneval = OffreTechCommissionEvaluationOffre::create($input);
+                $insertedId = OffreTechCommissionEvaluationOffre::latest()->first()->id_offre_tech_commission_evaluation_offre;
 
                 Audit::logSave([
                     'action'=>'CREATION',
@@ -293,13 +304,6 @@ class CommissionEvaluationOffreController extends Controller
                     $verifnombre = count($input['id_user_commission_evaluation_offre_participant']);
 
                     if($verifnombre < 1){
-//                        Audit::logSave([
-//                            'action'=>'MISE A JOUR',
-//                            'code_piece'=>$id,
-//                            'menu'=>'COMITES (Cahier du '.@$comitep->categorieComite->libelle_categorie_comite.' : Vous devez sélectionner au moins une personne le CT '.@$processuscomite->processusComite->libelle_processus_comite.'.)',
-//                            'etat'=>'Echec',
-//                            'objet'=>'COMITES TECHNIQUES'
-//                        ]);
                         return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins une personne pour la commisison ');
                     }
 
@@ -313,29 +317,9 @@ class CommissionEvaluationOffreController extends Controller
                         ]);
                     }
 
-//                    Audit::logSave([
-//                        'action'=>'MISE A JOUR',
-//                        'code_piece'=>$id,
-//                        'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' )',
-//                        'etat'=>'Succès',
-//                        'objet'=>'COMITES TECHNIQUES'
-//                    ]);
-
                     return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Participant ajouté avec succès');
 
                 }else{
-//                    Audit::logSave([
-//
-//                        'action'=>'MISE A JOUR',
-//
-//                        'code_piece'=>$id,
-//
-//                        'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' : Vous devez sélectionner au moins une personne pour le CT '.@$processuscomite->processusComite->libelle_processus_comite.'.)',
-//
-//                        'etat'=>'Echec',
-//
-//                        'objet'=>'COMITES TECHNIQUES'
-//                    ]);
 
                     return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins une personne pour la commission');
                 }
@@ -343,13 +327,7 @@ class CommissionEvaluationOffreController extends Controller
             if ($data['action'] == 'Invitation_personne_ressouce'){
                 $listepersonnes = CommissionParticipantEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->get();
                 if(count($listepersonnes)<1){
-//                    Audit::logSave([
-//                        'action'=>'MISE A JOUR',
-//                        'code_piece'=>$id,
-//                        'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' : Vous ne pouvez pas envoyer les invitations car il n\' y a pas de personne ressousce pour  CT '.@$processuscomite->processusComite->libelle_processus_comite.'.)',
-//                        'etat'=>'Echec',
-//                        'objet'=>'COMITES TECHNIQUES'
-//                    ]);
+
                     return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous ne pouvez pas envoyer les invitations car il n\' y a pas de personne ressource à la commission.');
                 }else{
                     foreach($listepersonnes as $personne){
@@ -366,14 +344,16 @@ class CommissionEvaluationOffreController extends Controller
                                             <br><br>Vous êtes conviés à la commission d'évaluation qui se déroulera  à partir du ".$commissionevaluationoffre->date_debut_commission_evaluation_offre;
 
                             if(isset($commissionevaluationoffre->date_fin_commission_evaluation_offre)){
-                                $messageMail.=" au".$commissionevaluationoffre->date_fin_commission_evaluation_offre." <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants via le lien ci-dessous : <br/>".
-                                route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])
-                                ."<br><br><br>
+                                $messageMail.=" au".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
+                            }
+
+                            $messageMail.=".<br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcommissionevaluationoffres.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a> <br/>".
+
+                                "<br><br><br>
                                 -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                 -----
                                             ";
-                            }
                             $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
                         }
 
@@ -383,68 +363,25 @@ class CommissionEvaluationOffreController extends Controller
             }
             if ($data['action'] == 'creer_cahier_offre_projets'){
                 $input = $request->all();
-                if(isset($input['demande'])){
-                    $verifnombre = count($input['demande']);
-                    if($verifnombre < 1 && $verifnombre > 2 ){
-//                        Audit::logSave([
-//                            'action'=>'MISE A JOUR',
-//                            'code_piece'=>$id,
-//                            'menu'=>'COMITES (Cahier du '.@$comitep->typeComite->libelle_type_comite.' : Vous devez sélectionner au moins un plan/projet pour le comite.)',
-//                            'etat'=>'Echec',
-//                            'objet'=>'COMITES'
-//                        ]);
-                        return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('error', 'Echec : Vous devez sélectionner projet d\'étude pour la commission d\'évaluation');
-                    }
-                    $tab = $input['demande'];
-                    foreach ($tab as $key => $value) {
-                        CahierCommissionEvaluationOffre::create([
-                            'id_commission_evaluation_offre'=> $id,
-                            'id_projet_etude'=> $value,
-                            'flag_cahier'=>true
-                        ]);
+                $this->validate($request, [
+                    'demande' => 'required'
+                ],[
+                    'demande.required' => 'Veuillez selectionner un projet d\'étude.'
+                ]);
 
-                        $projet_etude = ProjetEtude::find($value);
-                        $projet_etude->flag_passer_commission_evaluation_offre = true;
-                        $projet_etude->update();
-                    }
+                CahierCommissionEvaluationOffre::create([
+                    'id_commission_evaluation_offre'=> $id,
+                    'id_projet_etude'=> $input['demande'],
+                    'flag_cahier'=>true
+                ]);
 
-//                    Audit::logSave([
-//                        'action'=>'MISE A JOUR',
-//                        'code_piece'=>$id,
-//                        'menu'=>'COMITES (Cahier de '.@$comitep->typeComite->libelle_type_comite.' )',
-//                        'etat'=>'Succès',
-//                        'objet'=>'COMITES'
-//
-//                    ]);
-                    return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Projet d\'étude ajouté à la commission avec succès');
+                $projet_etude = ProjetEtude::find($input['demande']);
+                $projet_etude->flag_passer_commission_evaluation_offre = true;
+                $projet_etude->update();
 
-                }
-//else{
-//
-//                    Audit::logSave([
-//
-//                        'action'=>'MISE A JOUR',
-//
-//                        'code_piece'=>$id,
-//
-//                        'menu'=>'COMITES (Cahier de '.@$comitep->typeComite->libelle_type_comite.' : Vous devez sélectionner au moins un plan/projet pour le comite.)',
-//
-//                        'etat'=>'Echec',
-//
-//                        'objet'=>'COMITES'
-//
-//                    ]);
-//
-//                    return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins un plan/projet pour le comite ');
-//
-//
-//
-//                }
-//
-//
+                return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Projet d\'étude ajouté à la commission avec succès');
+
             }
-//
-
         }
     }
 
@@ -472,7 +409,7 @@ class CommissionEvaluationOffreController extends Controller
             ->where('id_sous_critere_evaluation_offre_tech',$id1)->first();
         if(isset($offretechcomeval)){
             $offretechcomeval->delete();
-            return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Sous-critère retiré de la commission avec succès');
+            return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Sous-critère retiré de la commission avec succès');
         }
     }
 
