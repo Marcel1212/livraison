@@ -248,7 +248,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Date creation </th>
                                         <th>Date soumis a la commission</th>
                                         <th>Commentaire</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -278,7 +277,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$demande->date_creer_cahier_plans_projets }}</td>
                                         <td>{{ @$demande->date_soumis_cahier_plans_projets }}</td>
                                         <td>{{ $demande->commentaire_cahier_plans_projets }}</td>
-                                        <td align="center" nowrap="nowrap"></td>
                                     </tr>
                                 @endforeach
                                 </tbody>

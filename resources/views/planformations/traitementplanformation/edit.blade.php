@@ -384,11 +384,11 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -554,12 +554,12 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
                                 <th>Priorité</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
