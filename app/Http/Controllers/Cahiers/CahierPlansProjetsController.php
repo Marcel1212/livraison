@@ -217,7 +217,11 @@ class CahierPlansProjetsController extends Controller
         }
 
 
-        $cahierplansprojets = DB::table('vue_plans_projets_dispobinle_pour_cahier_traiter')->get();
+        $cahierplansprojets = DB::table('vue_plans_projets_dispobinle_pour_cahier_traiter as vppdpct')
+                                ->join('ligne_cahier_plans_projets','vppdpct.id_demande','ligne_cahier_plans_projets.id_demande')
+                                ->join('cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets')
+                                ->where('cahier_plans_projets.id_cahier_plans_projets',$id)
+                                ->get();
 
         Audit::logSave([
 

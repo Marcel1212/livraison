@@ -347,7 +347,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 </thead>
                                 <tbody>
 
-                                <?php //dd($planformations);
+                                <?php //dd($cahierplansprojets);
                                 $i=0 ?>
                                 @foreach ($cahierplansprojets as $key => $demande)
                                     <tr>
