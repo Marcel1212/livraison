@@ -192,7 +192,7 @@ class ComitesController extends Controller
                 foreach ($processuscomite as  $cd) {
                     $query->orWhere('cahier_plans_projets.code_pieces_cahier_plans_projets',$cd->code_pieces);
                 }
-            })->get();
+            });
 
         $demandes = $querydemande->get();
 
