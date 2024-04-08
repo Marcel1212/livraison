@@ -533,7 +533,7 @@ $idpart = Auth::user()->id_partenaire;
 
                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                             <div class="alert-body" style="text-align:center">
-                                <strong>Les enregistrements des actions sont faits par ordre de priorité.</strong>
+                                <strong>Les enregistrements sont fait par ordre de saisie.</strong>
                             </div>
                             <!--<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
                         </div>
@@ -1060,13 +1060,13 @@ $idpart = Auth::user()->id_partenaire;
                         @csrf
                         @method('put')
                     <div class="modal-header">
-                      <h5 class="modal-title" id="SoummissionplanformationLuApprouve">Soumission du plan d eformation</h5>
+                      <h5 class="modal-title" id="SoummissionplanformationLuApprouve">Soumission du plan de formation</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       <p>
                                                     <?php
-                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenus dans ce documen.
+                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenue dans ce document.
 
                                                     En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                                     ?>

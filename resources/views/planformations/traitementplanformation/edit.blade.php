@@ -380,7 +380,7 @@
                                 <div class="col-md-2 col-12">
                                     <div class="mb-1">
 
-                                        <label>Part entreprise determiné</label>
+                                        <label>Part entreprise determinée</label>
                                         <input type="text" name="part_entreprise_previsionnel" id="part_entreprise_previsionnel"
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->part_entreprise_previsionnel, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
@@ -478,9 +478,6 @@
                                 <th>No</th>
                                 <th>Intituler de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Nombre de bénéficiaires de l’action de formation</th>
-                                <th>Nombre de groupes</th>
-                                <th>Nombre d'heures par groupe</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de financement</th>
                                 <th>Cout de l'action accordée</th>
@@ -495,9 +492,6 @@
                                 <td>{{ $i }}</td>
                                 <td>{{ $historiquesplanformation->intitule_action_formation_plan }}</td>
                                 <td>{{ $historiquesplanformation->structure_etablissement_action_ }}</td>
-                                <td>{{ $historiquesplanformation->nombre_stagiaire_action_formati }}</td>
-                                <td>{{ $historiquesplanformation->nombre_groupe_action_formation_ }}</td>
-                                <td>{{ $historiquesplanformation->nombre_heure_action_formation_p }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($historiquesplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
@@ -517,39 +511,52 @@
                       </div>
 
                       <div class="tab-pane fade <?php if($planformation->flag_recevablite_plan_formation==true){ echo "show active";} ?>" id="navs-top-actionformation" role="tabpanel">
+                        <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
+                        <div class="row">
+                            @if (isset($planformation->commentaire_plan_formation))
+                        <div class="col-3">
+                            <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
+                                @csrf
+                                @method('put')
+                                <button onclick='javascript:if (!confirm("Le plan de formation sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_ct_plan_formation"
+                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                Soumettre pour le comite
+                                </button>
+                            </form>
+                            </div>
+                            @endif
+                        <div class="col-9" align="right">
 
-                        <div class="col-12" align="right">
 
-                            <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
                                 @if (!isset($planformation->commentaire_plan_formation))
-                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
-                                        Ajouter un commentaire
-                                    </button>
+                                    <div class="col-6">
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#inlineForm">
+                                            Ajouter un commentaire
+                                        </button>
+                                    </div>
                                 @else
                                     <div class="row">
                                         <div class="col-6">
                                         </div>
                                         <div class="col-3">
-                                        <button type="button" class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                        </div>
+                                        <div class="col-3">
+                                        <button type="button" class="btn rounded-pill btn-outline-primary waves-effect waves-light btn-sm"
                                         data-bs-toggle="modal" data-bs-target="#modalToggle">
                                             Voir le commentaire
                                         </button>
                                         </div>
-                                        <div class="col-3">
-                                        <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
-                                            @csrf
-                                            @method('put')
-                                            <button onclick='javascript:if (!confirm("Le plan de formation sera soumis au comite technique en ligne ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_ct_plan_formation"
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                            Soumettre pour le comite
-                                            </button>
-                                        </form>
-                                        </div>
+
                                     </div>
                                 @endif
-                            <?php } ?>
-                        </div>
 
+                        </div>
+                        </div>
+                        <?php } ?>
                         <div class="col-md-4 col-12">
                             <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                 aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -641,13 +648,11 @@
                                 <th>No</th>
                                 <th>Intituler de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Nombre de bénéficiaires de l’action de formation</th>
-                                <th>Nombre de groupes</th>
-                                <th>Nombre d'heures par groupe</th>
                                 <th>Priorité</th>
                                 <th>Cout de l'action</th>
                                 <th>Cout de financement</th>
                                 <th>Cout de l'action accordée</th>
+                                <th>Statut</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -659,14 +664,17 @@
                                                 <td>{{ $i }}</td>
                                                 <td>{{ $actionplanformation->intitule_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->structure_etablissement_action_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
-                                                <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ $actionplanformation->pirorite_action_formation }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
-
+                                                <td>
+                                                    @if(@$actionplanformation->flag_action_formation_plan_traite_instruction ==true)
+                                                        <span class="badge bg-success">Traité</span>
+                                                    @else
+                                                        <span class="badge bg-warning">En attente de traitement</span>
+                                                    @endif
+                                                </td>
                                                 <td align="center" nowrap="nowrap">
                                                     @can($lien.'-edit')
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
@@ -697,7 +705,7 @@
                                 @method('put')
                                 <div class="row">
                                             <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">*</strong></label>
+                                                    <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
 
                                                         <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
