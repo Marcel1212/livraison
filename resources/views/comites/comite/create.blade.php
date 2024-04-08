@@ -205,7 +205,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <hr>
                                     <button type="submit"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                        Suivant
+                                        Enregistrer
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                         Retour</a>
