@@ -584,23 +584,25 @@ class ComitesTechniquesController extends Controller
                         $nom = $personne->user->name;
                         $prenom = $personne->user->prenom_users;
 
+                        if(isset($comitep->date_fin_comite)){
+                            $datefin = 'jusqu\'au '. $comitep->date_fin_comite;
+                        }else{
+                            $datefin = ' ';
+                        }
+
                         if (isset($email)) {
                             $nom_prenom = $nom .' '. $prenom;
                             $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes conviés au ".$comitep->categorieComite->libelle_categorie_comite." des ".$processuscomite->processusComite->libelle_processus_comite." qui se déroulera  ".$comitep->date_debut_comite." au ".$comitep->date_fin_comite.".
-
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants via le lien ci-dessous : <br/>".
-                                            route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])
-//                                            $affichedemande
-
-                                            ."<br><br><br>
+                                            <br><br>Vous êtes conviés au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
+                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
+                                ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                             -----
                                             ";
-
 
                             $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
                         }

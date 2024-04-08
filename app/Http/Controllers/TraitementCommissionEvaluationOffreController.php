@@ -48,7 +48,10 @@ class TraitementCommissionEvaluationOffreController extends Controller
 
         if(isset($id)){
             $cahier = CahierCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->first();
-            $commissioneparticipant = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)->first();
+            $commissioneparticipant = CommissionParticipantEvaluationOffre::
+                  where('id_commission_evaluation_offre',$id)
+                ->where('id_user_commission_evaluation_offre_participant',Auth::user()->id)
+                ->first();
             $offretechcommissionevals = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)
                 ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
                 ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
@@ -135,7 +138,8 @@ class TraitementCommissionEvaluationOffreController extends Controller
 
     public function notation($id,Request $request){
         $id =  Crypt::UrldeCrypt($id);
-        $commissioneparticipant = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)->first();
+        $commissioneparticipant = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)
+            ->where('id_user_commission_evaluation_offre_participant',Auth::user()->id)->first();
 
         if($request->action =="Valider"){
             if(isset($commissioneparticipant)){
@@ -175,6 +179,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                     $note_exist = NotationCommissionEvaluationOffreTech::where('id_commission_evaluation_offre',$id)
                         ->where('id_sous_critere_evaluation_offre_tech',intval($key_sous_critere))
                         ->where('id_operateur',intval($key))
+                        ->where('id_user_notation_commission_evaluation_offre',Auth::user()->id)
                         ->first();
 
                     if(isset($note_exist)){
