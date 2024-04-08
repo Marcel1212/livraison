@@ -33,8 +33,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 @section('content')
 
     @php($Module='Comites')
-    @php($titre='Liste des comite techniques')
-    @php($soustitre='Tenue de comite technique')
+    @php($titre='Liste des comités techniques')
+    @php($soustitre='Tenue de comité technique')
     @php($lien='comitetechniques')
     @php($lienacceuil='dashboard')
 
