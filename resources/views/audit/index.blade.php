@@ -41,73 +41,33 @@
                                         <thead>
                                         <tr>
                                             <th>N°</th>
-                                            <th>Message</th>
+                                            <th>Date d'action</th>
+                                            <th>Nom d'hôte</th>
+                                            <th>Adresse IP</th>
+                                            <th>Etat</th>
+                                            <th>Utilisateur</th>
+                                            <th>Privilège</th>
+                                            <th>Module</th>
+                                            <th>Action</th>
+                                            <th>Pièce</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($logs as $key => $log)
                                                 <tr>
-                                                    <td>{{ $key+1}}</td>
-                                                    <td>
-                                                        {{$log->created_at}}
-                                                        @isset($log->nom_hote_log)
-                                                            Etat : {{$log->etat_log}};
-                                                        @endisset
-                                                        @isset($log->nom_hote_log)
-                                                            Machine :  {{long2ip($log->ip_addr_log)}};
-                                                        @endisset
-                                                        @isset($log->nom_hote_log)
-                                                            Nom d'hôte : {{$log->nom_hote_log}};
-                                                        @endisset
-                                                        @isset($log->nom_hote_log)
-                                                            Identifiant : {{$log->identifiant_log}};
-                                                        @endisset
-                                                        @isset($log->nom_hote_log)
-                                                            Utilisateur : {{$log->utilisateur_log}};
-                                                        @endisset
-                                                        @isset($log->nom_hote_log)
-                                                            Privilege : {{$log->role_log}};
-                                                        @endisset
-                                                        @isset($log->module_log)
-                                                            Module : {{$log->module_log}};
-                                                        @endisset
-                                                        @isset($log->action_log)
-                                                            Action : {{$log->action_log}};
-                                                        @endisset
-                                                        @isset($log->code_piece_log)
-                                                            Pièce : {{$log->code_piece_log}};
-                                                        @endisset
-                                                    </td>
+                                                    <td>{{ $key+1 }}</td>
+                                                    <td>{{ $log->created_at }}</td>
+                                                    <td>{{ $log->nom_hote_log }}</td>
+                                                    <td>{{ long2ip($log->ip_addr_log) }}</td>
+                                                    <td>{{ $log->etat_log }}</td>
+                                                    <td>{{ $log->identifiant_log }} / {{ $log->utilisateur_log }}</td>
+                                                    <td>{{ $log->role_log }}</td>
+                                                    <td>{{ $log->menu_log }}</td>
+                                                    <td>{{ $log->action_log }}</td>
+                                                    <td>{{ $log->code_piece_log }}</td>
                                                 </tr>
+
                                             @endforeach
-{{--                                                <td>{{ $res->lib_agce }}</td>--}}
-{{--                                                <td>{{ $res->adresse_agce }}</td>--}}
-{{--                                                <td>{{ $res->localisation_agce }}</td>--}}
-{{--                                                <td>{{ $res->coordonne_gps_agce }}</td>--}}
-{{--                                                <td>{{ $res->tel_agce}}</td>--}}
-{{--                                                <td align="center">--}}
-{{--                                                    <?php if($res->flag_siege_agce == 1){ ?>--}}
-{{--                                                    <span class="badge bg-success">OUI</span>--}}
-{{--                                                    <?php  }else{?>--}}
-{{--                                                    <span class="badge bg-danger">NON</span>--}}
-{{--                                                    <?php } ?>--}}
-{{--                                                </td>--}}
-{{--                                                <td align="center">--}}
-{{--                                                    <?php if($res->flag_agce == 1){ ?>--}}
-{{--                                                    <span class="badge bg-success">Actif</span>--}}
-{{--                                                    <?php  }else{?>--}}
-{{--                                                        <span class="badge bg-danger">Inactif</span>--}}
-{{--                                                    <?php } ?>--}}
-{{--                                                </td>--}}
-{{--                                                <td align="center">--}}
-{{--                                                    @can($lien.'-edit')--}}
-{{--                                                        <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($res->num_agce)) }}"--}}
-{{--                                                           class="text-warning "--}}
-{{--                                                           title="Modifier"><img src='/assets/img/editing.png'></a>--}}
-{{--                                                @endcan--}}
-{{--                                                </td>--}}
-{{--                                            </tr>--}}
-{{--                                        @endforeach--}}
                                         </tbody>
                                     </table>
                                     <!--end: Datatable-->

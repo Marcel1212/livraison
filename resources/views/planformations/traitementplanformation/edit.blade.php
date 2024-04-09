@@ -541,7 +541,7 @@
                                             @method('put')
                                             <button onclick='javascript:if (!confirm("Le plan de formation sera soumis au comite technique en ligne ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_ct_plan_formation"
                                                             class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                            Soumettre pour le comite en ligne
+                                                            Soumettre pour le comite
                                             </button>
                                         </form>
                                         </div>

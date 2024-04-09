@@ -518,6 +518,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['get'], '/demandencours', [App\Http\Controllers\DemandeController::class, 'demandencours'])->name('demandencours');
     Route::match(['get'], '/demanderejetes', [App\Http\Controllers\DemandeController::class, 'demanderejetes'])->name('demanderejetes');
 
+    Route::group(['middleware' => ['can:critereevaluation-index']], function () {
+        Route::resources([
+            'critereevaluation' => App\Http\Controllers\CritereEvaluationController::class,
+        ]);
+    });
+
 
 
 });

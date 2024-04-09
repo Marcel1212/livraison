@@ -23,6 +23,9 @@ use App\Models\ProcessusComite;
 use App\Models\ProcessusComiteLieComite;
 use App\Models\User;
 use App\Helpers\Menu;
+use App\Models\PlanFormation;
+use App\Models\ProjetEtude;
+use App\Models\ProjetFormation;
 
 class ComitesTechniquesController extends Controller
 {
@@ -207,14 +210,26 @@ class ComitesTechniquesController extends Controller
                                                 ->get();
          //ComiteParticipant::where([['id_comite','=',$id]])->get();
 
-        $personneressources = User::with('agence:num_agce,lib_agce')
+        $personneressources = 	User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
+                                ->whereNotExists(function ($query) use ($id){
+                                    $query->select('*')
+                                        ->from('comite_participant')
+                                        ->whereColumn('comite_participant.id_user_comite_participant','=','users.id')
+                                        ->where('comite_participant.id_comite','=',$id);
+                                })->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+                                ->join('roles', 'model_has_roles.role_id', 'roles.id')
+                                ->where([['flag_demission_users', '=', false],
+                                    ['flag_admin_users', '=', false],
+                                    ['roles.id', '!=', 15],
+                                ])->get();
+            /*User::with('agence:num_agce,lib_agce')
                             ->select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
                             ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
                             ->join('roles', 'model_has_roles.role_id', 'roles.id')
                             ->where([['flag_demission_users', '=', false],
                                     ['flag_admin_users', '=', false],
                                     ['roles.id', '!=', 15]])
-                            ->get();
+                            ->get();*/
 
                             //dd($personneressources);
         $personneressource = "<option value=''> Selectionnez le but de la formation </option>";
@@ -237,7 +252,7 @@ class ComitesTechniquesController extends Controller
             $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
         }
 
-        $listedemandesss = DB::table('vue_plans_projets_formation')
+        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
                             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
                             ->where([['cahier_comite.id_comite','=',$id]])
                             ->get();
@@ -357,11 +372,47 @@ class ComitesTechniquesController extends Controller
                     foreach ($tab as $key => $value) {
 
                         //dd($value); exit;
+                        $recuperationvaleur = explode('/',$value);
+                        //dd($recuperationvaleur); exit;
+                        $iddemande = $recuperationvaleur[0];
+                        $codeprocessus = $recuperationvaleur[1];
+
+                        //dd($iddemande); exit;
+                        //dd($codeprocessus); exit;
                         CahierComite::create([
                             'id_comite'=> $id,
-                            'id_demande'=> $value,
-                            'flag_cahier'=>true
+                            'id_demande'=> $iddemande,
+                            'flag_cahier'=>true,
+                            'code_demande'=>$codeprocessus
                         ]);
+
+                        if($codeprocessus =='PF'){
+
+                            $plan = PlanFormation::find($iddemande);
+                            $plan->update([
+                                'flag_passer_comite_technique' => true
+                            ]);
+
+                        }
+
+                        if($codeprocessus =='PE'){
+
+                            $projet_etude = ProjetEtude::find($iddemande);
+                            $projet_etude->flag_passer_comite_technique = true;
+                            $projet_etude->update();
+
+                        }
+
+                        if($codeprocessus =='PRF'){
+
+                            // Recuperation du Projet de formation
+                            $projetformation = ProjetFormation::find($iddemande);
+                            $projetformation->flag_passer_comite_technique = true;
+                            $projetformation->update();
+
+                        }
+
+
                     }
 
                     Audit::logSave([
@@ -515,7 +566,7 @@ class ComitesTechniquesController extends Controller
 
                 }else{
 
-                    $listedemandesss = DB::table('vue_plans_projets_formation')
+                    $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
                     ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
                     ->where([['cahier_comite.id_comite','=',$id]])
                     ->get();
@@ -576,6 +627,62 @@ class ComitesTechniquesController extends Controller
                 }
 
                 //return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+            }
+
+            if ($data['action'] == 'valider_comite_technique'){
+
+                $listedemandesss = DB::table('vue_plans_projets_formation_traiter')
+                ->join('cahier_comite','vue_plans_projets_formation_traiter.id_demande','cahier_comite.id_demande')
+                ->where([['cahier_comite.id_comite','=',$id]])
+                ->get();
+
+                foreach ($listedemandesss as $demande) {
+
+                    if($demande->code_processus =='PF'){
+
+                        $plan = PlanFormation::find($demande->id_demande);
+                        $plan->update([
+                            'id_processus' => 1,
+                            'flag_valide_action_des_plan_formation' => true,
+                            'flag_plan_formation_valider_par_comite_pleniere' => true
+                        ]);
+
+                    }
+
+                    if($demande->code_processus =='PE'){
+
+                        $projet_etude = ProjetEtude::find($demande->id_demande);
+                        $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                        $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                        $projet_etude->id_processus = 8;
+                        $projet_etude->update();
+
+                    }
+
+                    if($demande->code_processus =='PRF'){
+
+                        // Recuperation du Projet de formation
+                        $projetformation = ProjetFormation::find($demande->id_demande);
+                        //dd($data);
+                        // Modification du projet de formation -- flag et ajout du code
+                        $projetformation->flag_comite_pleiniere = true;
+                        $projetformation->code_comite_pleiniere = $comitep->code_comite ;
+                        $projetformation->id_processus = 6 ;
+                        $projetformation->id_comite_pleiniere = $id ;
+                        $projetformation->update();
+
+                    }
+
+                }
+
+                $majcomite = $comitep->update([
+                    'flag_statut_comite' => true,
+                    'date_fin_comite' => Carbon::now()
+                ]);
+
+
+                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 

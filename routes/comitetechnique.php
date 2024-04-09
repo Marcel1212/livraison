@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('traitementcomitetechniques/{id}/show', [TraitementComitesTechniquesController::class, 'show'])->name('traitementcomitetechniques.show');
         Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/cahier', [TraitementComitesTechniquesController::class, 'cahier'])->name('traitementcomitetechniques.cahier');
         Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/editer', [TraitementComitesTechniquesController::class, 'editer'])->name('traitementcomitetechniques.editer');
-        Route::post('traitementcomitetechniques/{id}/{id2}/{id3}/cahierupdate', [TraitementComitesTechniquesController::class, 'cahierupdate'])->name('traitementcomitetechniques.cahierupdate');
+        Route::put('traitementcomitetechniques/{id}/{id2}/{id3}/cahierupdate', [TraitementComitesTechniquesController::class, 'cahierupdate'])->name('traitementcomitetechniques.cahierupdate');
         Route::put('traitementcomitetechniques/{id}/{id1}/update', [TraitementComitesTechniquesController::class, 'update'])->name('traitementcomitetechniques.update');
         Route::get('traitementcomitetechniques/{id}/{id1}/edit', [TraitementComitesTechniquesController::class, 'edit'])->name('traitementcomitetechniques.edit');
         Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/planformation', [TraitementComitesTechniquesController::class, 'editplanformation'])->name('traitementcomitetechniques.edit.planformation');
