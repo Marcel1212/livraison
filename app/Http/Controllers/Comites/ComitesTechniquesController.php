@@ -254,7 +254,8 @@ class ComitesTechniquesController extends Controller
 
         $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
                             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-                            ->where([['cahier_comite.id_comite','=',$id]])
+                            ->where([['cahier_comite.id_comite','=',$id],
+                                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
                             ->get();
 
         Audit::logSave([
