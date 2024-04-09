@@ -11,8 +11,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Comites')
-    @php($titre='Liste des comites')
-    @php($soustitre='Ajout de comite')
+    @php($titre='Liste des comités')
+    @php($soustitre='Ajout de comité')
     @php($lien='comites')
     @php($lienacceuil='dashboard')
 
@@ -140,7 +140,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-Soumettre"
                           aria-controls="navs-top-Soumettre"
                           aria-selected="false">
-                          Valider le comite
+                          Valider le comité
                         </button>
                       </li>
                     </ul>
