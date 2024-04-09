@@ -77,7 +77,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ @$comitep->code_comite }}</td>
-                                <td>{{ @$comitep->typeComite->libelle_type_comite }}</td>
+                                <td>{{ @$comitep->categorieComite->libelle_categorie_comite }}</td>
                                 <td>{{ $comitep->date_debut_comite }}</td>
                                 <td>{{ $comitep->date_fin_comite }}</td>
                                 <td>{{ $comitep->commentaire_comite }}</td>

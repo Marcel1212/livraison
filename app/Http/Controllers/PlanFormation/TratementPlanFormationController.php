@@ -290,11 +290,11 @@ class TratementPlanFormationController extends Controller
             }
 
             if($data['action'] === 'Recevable'){
-                $this->validate($request, [
+                /*$this->validate($request, [
                     'id_motif_recevable' => 'required'
                 ],[
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
-                ]);
+                ]);*/
 
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
@@ -493,6 +493,9 @@ class TratementPlanFormationController extends Controller
 
                     //dd($input['cout_accorde_action_formation'],$input['montant_attribuable_fdfp']);
 
+                    $input['flag_action_formation_plan_traite_instruction'] = true;
+                    $input['date_action_formation_plan_traite_instruction'] = Carbon::now();
+
                     $actionplanupdate->update($input);
 
                     $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
@@ -560,6 +563,9 @@ class TratementPlanFormationController extends Controller
                     }else{
                         $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
                     }
+
+                    $input['flag_action_formation_plan_traite_instruction'] = true;
+                    $input['date_action_formation_plan_traite_instruction'] = Carbon::now();
 
                     $actionplanupdate->update($input);
 

@@ -33,8 +33,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 @section('content')
 
     @php($Module='Comites')
-    @php($titre='Liste des comite techniques')
-    @php($soustitre='Tenue de comite technique')
+    @php($titre='Liste des comités techniques')
+    @php($soustitre='Tenue de comité technique')
     @php($lien='comitetechniques')
     @php($lienacceuil='dashboard')
 
@@ -160,7 +160,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </div>
 
                                     <div class="col-md-3 col-12">
-                                        <label>Liste des processus <strong style="color:red;">*</strong></label>
+                                        <label>Liste des processus choisis</label>
                                         <select class="select2 form-select @error('id_processus_comite')
                                         error
                                         @enderror"
@@ -176,7 +176,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Date de debut <strong style="color:red;">*</strong></label>
+                                            <label>Date de début <strong style="color:red;">*</strong></label>
                                             <input type="date" name="date_debut_comite"
                                                 class="form-control form-control-sm" value="{{ $comite->date_debut_comite }}"/>
                                         </div>
@@ -250,14 +250,14 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th><label>Cocher tout</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
                                         <th>Type processus </th>
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
                                         <th>Code </th>
-                                        <th>Date soumis au FDFP</th>
+                                        <th>Date soumise au FDFP</th>
                                         <th>Date fin instruction</th>
-                                        <th>Cout accordé</th>
+                                        <th>Coût accordé</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -433,9 +433,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
                                         <th>Code </th>
-                                        <th>Date soumis au FDFP</th>
+                                        <th>Date soumise au FDFP</th>
                                         <th>Date fin instruction</th>
-                                        <th>Cout accordé</th>
+                                        <th>Coût accordé</th>
                                         <th>Statut</th>
                                     </tr>
                                 </thead>
@@ -496,6 +496,25 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
     </div>
 
+
+        @endsection
+
+        @section('js_perso')
+
+        <script  type="text/javascript">
+            $('#allcb').change(function(){
+                if($(this).prop('checked')){
+                    $('tbody tr td input[type="checkbox"]').each(function(){
+                        $(this).prop('checked', true);
+                    });
+                }else{
+                    $('tbody tr td input[type="checkbox"]').each(function(){
+                        $(this).prop('checked', false);
+                    });
+                }
+            });
+
+        </script>
 
         @endsection
 

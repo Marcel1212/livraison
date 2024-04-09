@@ -63,10 +63,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <tr>
                             <th>No</th>
                             <th>Code </th>
-                            <th>Libelle </th>
+                            <th>Libellé </th>
                             <th>Processus </th>
-                            <th>Date debut</th>
-                            <th>Date fin</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
                             <th>Objet</th>
                             <th>Statut</th>
                             <th>Action</th>

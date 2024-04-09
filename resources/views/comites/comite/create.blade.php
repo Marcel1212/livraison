@@ -19,7 +19,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
     <!-- BEGIN: Content-->
     <script type="text/javascript">
 
-        function changeFuncSelect() {
+       /* function changeFuncSelect() {
             var selectBox = document.getElementById("id_type_comite");
             var id_processus_comite = document.getElementById("id_processus_comite");
             //var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -39,7 +39,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
             }
 
 
-        };
+        };*/
 
 
 
@@ -115,7 +115,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                           data-bs-target="#navs-top-categoriesprofessionel"
                           aria-controls="navs-top-categoriesprofessionel"
                           aria-selected="false">
-                          Liste des plans/projets
+                          Liste des cahiers
                         </button>
                       </li>
                       <li class="nav-item">
@@ -152,14 +152,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <div class="row">
                                 <div class="col-md-3 col-12">
                                     <label>Type de comité <strong style="color:red;">*</strong></label>
-                                    <select class="select2 form-select @error('id_type_comite')
+                                    <select class="select2 form-select @error('id_categorie_comite')
                                     error
                                     @enderror"
-                                                    data-allow-clear="true" name="id_type_comite"
-                                                    id="id_type_comite" onchange="changeFuncSelect();"  required>
+                                                    data-allow-clear="true" name="id_categorie_comite"
+                                                    id="id_categorie_comite"  required>
                                         <?php echo $typecomitesListe; ?>
                                     </select>
-                                    @error('id_type_comite')
+                                    @error('id_categorie_comite')
                                     <div class=""><label class="error">{{ $message }}</label></div>
                                     @enderror
                                 </div>
@@ -205,7 +205,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <hr>
                                     <button type="submit"
                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                        Suivant
+                                        Enregistrer
                                     </button>
                                     <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                         Retour</a>

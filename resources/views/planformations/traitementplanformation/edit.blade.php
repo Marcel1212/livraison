@@ -17,98 +17,6 @@
     @php($soustitre='Instruction')
     @php($lien='traitementplanformation')
 
-    <script type="text/javascript">
-
-        // document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-         function changeFunction() {
-             //alert('code');exit;
-
-             var selectBox = document.getElementById("id_type_formation");
-             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-
-            // alert(selectedValue);
-
-             $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
-                      //alert(data); //exit;
-                     $('#id_caracteristique_type_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_caracteristique_type_formation').append($('<option>', {
-                             value: tels.id_caracteristique_type_formation,
-                             text: tels.libelle_ctf,
-                         }));
-                     });
-                 });
-
-             if(selectedValue == 3){
-
-                 //function telUpdate() {
-                 //alert('testanc'); //exit;
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-                 $.get('/entrepriseinterneplan', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-
-
-                     });
-                 });
-                 // }
-
-             }
-
-             if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-                 $.get('/entreprisecabinetformation', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-                     });
-                 });
-
-             }
-
-
-             if(selectedValue == 4){
-
-                 document.getElementById("Activeajoutercabinetformation").disabled = false;
-
-                 $.get('/entreprisecabinetetrangerformation', function (data) {
-                      //alert(data); //exit;
-                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                     $.each(data, function (index, tels) {
-                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                             value: tels.id_entreprises,
-                             text: tels.raison_social_entreprises,
-                         }));
-                     });
-                 });
-
-                 //$('#Activeajoutercabinetformation').removeAttr('disabled');
-                // $('#cabinetetranger').modal('show');
-
-             }
-
-
-
-
-         };
-
-
-
-     </script>
     <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
@@ -380,7 +288,7 @@
                                 <div class="col-md-2 col-12">
                                     <div class="mb-1">
 
-                                        <label>Part entreprise determiné</label>
+                                        <label>Part entreprise determinée</label>
                                         <input type="text" name="part_entreprise_previsionnel" id="part_entreprise_previsionnel"
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->part_entreprise_previsionnel, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
@@ -476,14 +384,11 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Nombre de bénéficiaires de l’action de formation</th>
-                                <th>Nombre de groupes</th>
-                                <th>Nombre d'heures par groupe</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -495,9 +400,6 @@
                                 <td>{{ $i }}</td>
                                 <td>{{ $historiquesplanformation->intitule_action_formation_plan }}</td>
                                 <td>{{ $historiquesplanformation->structure_etablissement_action_ }}</td>
-                                <td>{{ $historiquesplanformation->nombre_stagiaire_action_formati }}</td>
-                                <td>{{ $historiquesplanformation->nombre_groupe_action_formation_ }}</td>
-                                <td>{{ $historiquesplanformation->nombre_heure_action_formation_p }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($historiquesplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                 <td>{{ number_format($historiquesplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
@@ -517,39 +419,52 @@
                       </div>
 
                       <div class="tab-pane fade <?php if($planformation->flag_recevablite_plan_formation==true){ echo "show active";} ?>" id="navs-top-actionformation" role="tabpanel">
+                        <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
+                        <div class="row">
+                            @if (isset($planformation->commentaire_plan_formation))
+                        <div class="col-3">
+                            <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
+                                @csrf
+                                @method('put')
+                                <button onclick='javascript:if (!confirm("Le plan de formation sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_ct_plan_formation"
+                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                Soumettre pour le comite
+                                </button>
+                            </form>
+                            </div>
+                            @endif
+                        <div class="col-9" align="right">
 
-                        <div class="col-12" align="right">
 
-                            <?php if($nombreaction == $nombreactionvalider and $planformation->flag_soumis_ct_plan_formation != true){?>
                                 @if (!isset($planformation->commentaire_plan_formation))
-                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#inlineForm">
-                                        Ajouter un commentaire
-                                    </button>
+                                    <div class="col-6">
+                                    </div>
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#inlineForm">
+                                            Ajouter un commentaire
+                                        </button>
+                                    </div>
                                 @else
                                     <div class="row">
                                         <div class="col-6">
                                         </div>
                                         <div class="col-3">
-                                        <button type="button" class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                        </div>
+                                        <div class="col-3">
+                                        <button type="button" class="btn rounded-pill btn-outline-primary waves-effect waves-light btn-sm"
                                         data-bs-toggle="modal" data-bs-target="#modalToggle">
                                             Voir le commentaire
                                         </button>
                                         </div>
-                                        <div class="col-3">
-                                        <form method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}">
-                                            @csrf
-                                            @method('put')
-                                            <button onclick='javascript:if (!confirm("Le plan de formation sera soumis au comite technique en ligne ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_ct_plan_formation"
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                            Soumettre pour le comite
-                                            </button>
-                                        </form>
-                                        </div>
+
                                     </div>
                                 @endif
-                            <?php } ?>
-                        </div>
 
+                        </div>
+                        </div>
+                        <?php } ?>
                         <div class="col-md-4 col-12">
                             <div class="modal animate__animated animate__fadeInDownBig fade" id="modalToggle"
                                 aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;" aria-hidden="true">
@@ -639,15 +554,13 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
-                                <th>Nombre de bénéficiaires de l’action de formation</th>
-                                <th>Nombre de groupes</th>
-                                <th>Nombre d'heures par groupe</th>
                                 <th>Priorité</th>
-                                <th>Cout de l'action</th>
-                                <th>Cout de financement</th>
-                                <th>Cout de l'action accordée</th>
+                                <th>Coût de l'action</th>
+                                <th>Coût de financement</th>
+                                <th>Coût de l'action accordée</th>
+                                <th>Statut</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -659,14 +572,17 @@
                                                 <td>{{ $i }}</td>
                                                 <td>{{ $actionplanformation->intitule_action_formation_plan }}</td>
                                                 <td>{{ $actionplanformation->structure_etablissement_action_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
-                                                <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
-                                                <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
                                                 <td>{{ $actionplanformation->pirorite_action_formation }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
-
+                                                <td>
+                                                    @if(@$actionplanformation->flag_action_formation_plan_traite_instruction ==true)
+                                                        <span class="badge bg-success">Traité</span>
+                                                    @else
+                                                        <span class="badge bg-warning">En attente de traitement</span>
+                                                    @endif
+                                                </td>
                                                 <td align="center" nowrap="nowrap">
                                                     @can($lien.'-edit')
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
@@ -697,7 +613,7 @@
                                 @method('put')
                                 <div class="row">
                                             <div class="col-md-6 col-12">
-                                                    <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">*</strong></label>
+                                                    <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
 
                                                         <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                                                             <?= $motif; ?>
@@ -746,7 +662,8 @@
     </div>
 
     <!-- Edit User Modal -->
-          @foreach($infosactionplanformations as $infosactionplanformation)
+          @foreach($infosactionplanformations as $key=>$infosactionplanformation)
+              <?php $key = $key+1 ?>
             <div class="modal fade" id="traiterActionFomationPlan<?php echo $infosactionplanformation->id_action_formation_plan ?>" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                   <div class="modal-content p-3 p-md-5">
@@ -901,15 +818,14 @@
 
 
                           <div class="col-12 col-md-4">
-                            <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                            <label class="form-label" for="id_type_formation_{{$key}}">Type de formation <strong style="color:red;">*</strong></label>
                             <select
-                                id="id_type_formation"
+                                id="id_type_formation_{{$key}}"
                                 name="id_type_formation"
                                 class="select2 form-select-sm input-group @error('id_type_formation')
                                 error
                                 @enderror"
-                                aria-label="Default select example"
-                                onchange="changeFunction();">
+                                aria-label="Default select example">
 									<option value="{{@$infosactionplanformation->id_type_formation }}">{{@$infosactionplanformation->type_formation }} </option>
                                   @foreach ($typeformationss as $typeformation)
                                     <option value="{{ $typeformation->id_type_formation }}">{{ mb_strtoupper($typeformation->type_formation) }}</option>
@@ -922,7 +838,7 @@
 
                             <div class="col-12 col-md-4">
                                 <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
-                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
+                                <select id="id_caracteristique_type_formation_{{$key}}" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
                                 error
                                 @enderror">
                                     <option value='{{@$infosactionplanformation->caracteristiqueTypeFormation->id_caracteristique_type_formation}}'>{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}</option>
@@ -939,7 +855,7 @@
 
                                         <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
                                         error
-                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation_{{$key}}">
                                             <option value='{{@$infosactionplanformation->id_entreprise_structure_formation_action}}'>{{@$infosactionplanformation->structure_etablissement_action_}}</option>
                                             <?php //echo $structureformation; ?>
                                         </select>
@@ -1214,10 +1130,69 @@
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
-            {{-- <script src="{{asset('assets/js/planformation/pages-soumission-plan-formation.js')}}"></script> --}}
+                <script type="text/javascript">
+                    {{--var all_count_actions = {{$infosactionplanformations->count()}};--}}
+                    {{--for(var i=1; i < all_count_actions+1 ; i++){--}}
+                        var selectBox = $("#id_type_formation_"+i);
+                        selectBox.on("change", function() {
+                            let selectedValue = $(this).val();
+                            alert('select'+i+' '+selectedValue);
+                             $.get('{{url('/')}}/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
+                                //alert(data); //exit;
+                                $('#id_caracteristique_type_formation_'+i).empty();
+                                $.each(data, function (index, tels) {
+                                    $('#id_caracteristique_type_formation_'+i).append($('<option>', {
+                                        value: tels.id_caracteristique_type_formation,
+                                        text: tels.libelle_ctf,
+                                    }));
+                                });
+                            });
 
-        {{-- <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
-        <script type="text/javascript">
+                            if(selectedValue == 3){
+                                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                                $.get('{{url('/')}}/entrepriseinterneplan', function (data) {
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+
+                            if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
+                                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                                $.get('{{url('/')}}/entreprisecabinetformation', function (data) {
+                                    //alert(data); //exit;
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+
+                            if(selectedValue == 4){
+                                document.getElementById("Activeajoutercabinetformation").disabled = false;
+                                $.get('{{url('/')}}/entreprisecabinetetrangerformation', function (data) {
+                                    //alert(data); //exit;
+                                    $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
+                                    $.each(data, function (index, tels) {
+                                        $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
+                                            value: tels.id_entreprises,
+                                            text: tels.raison_social_entreprises,
+                                        }));
+                                    });
+                                });
+                            }
+                        });
+                    // }
+                </script>
+
+                <script type="text/javascript">
 
             /*------------------------------------------
             --------------------------------------------
