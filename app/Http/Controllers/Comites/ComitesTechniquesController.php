@@ -124,7 +124,7 @@ class ComitesTechniquesController extends Controller
 
             $comite = Comite::create($input);
 
-            $infosprocessus = ProcessusComite::find($input['id_categorie_comite']);
+            $infosprocessus = ProcessusComite::find($input['id_processus_comite']);
 
             $processus = ProcessusComiteLieComite::create([
                 'id_comite' => $comite->id_comite,
@@ -176,7 +176,7 @@ class ComitesTechniquesController extends Controller
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
-       // dd($processuscomite->processusComite->code_processus_comite);
+        //dd($processuscomite->processusComite());
 
         $demandes = DB::table('vue_plans_projets_formation')->whereNotExists(function ($query) use ($id){
             $query->select('*')
