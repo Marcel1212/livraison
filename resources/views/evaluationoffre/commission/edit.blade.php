@@ -537,7 +537,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
                     <div class="tab-pane fade @if($idetape==4 && isset($cahier)  && $offretechcommissioneval_sums==100) show active @else disabled @endif"
                          id="navs-top-participant" role="tabpanel">
-                            <?php if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier)){ ?>
+                            @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
                         <form method="POST" class="form"
                               action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(3)]) }}"
                               enctype="multipart/form-data">
@@ -587,7 +587,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </form>
 
                         <hr>
-                        <?php } ?>
+                        @endif
                         <table class="table table-bordered table-striped table-hover table-sm" id=""
                                style="margin-top: 13px !important">
                             <thead>
@@ -596,7 +596,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <th>Nom</th>
                                 <th>Prénoms</th>
                                 <th>Profil</th>
-                                <th>Action</th>
+                                @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
+                                    <th>Action</th>
+                                @endif
                             </tr>
                             </thead>
                             <tbody>
@@ -606,21 +608,21 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <td>{{ $commissioneparticipant->name }}</td>
                                     <td>{{ $commissioneparticipant->prenom_users }}</td>
                                     <td>{{ $commissioneparticipant->profile }}</td>
+                                    @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
                                     <td>
-                                            <?php if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true){ ?>
                                         <a href="{{ route($lien . '.delete.personne', \App\Helpers\Crypt::UrlCrypt($commissioneparticipant->id_commission_participant)) }}"
                                            class=""
                                            onclick='javascript:if (!confirm("Voulez-vous supprimer cette personne de cette commission ?")) return false;'
                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                        <?php } ?>
                                     </td>
+                                    @endif
+
                                 </tr>
                             @endforeach
 
                             </tbody>
                         </table>
                         <div class="col-12" align="right">
-
                             <hr>
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
@@ -633,19 +635,19 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
                     <div class="tab-pane fade @if($idetape==5 && isset($cahier) && count($commissioneparticipants)>0) show active @else disabled @endif" id="navs-top-classementoffretech" role="tabpanel">
                         <div>
-                            @if($beginvalidebyoneuser->count()!=0 && $beginvalidebyoneuser->count()==$commissioneparticipants->count())
+                            @if($commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false && $beginvalidebyoneuser->count()!=0 && $beginvalidebyoneuser->count()==$commissioneparticipants->count())
                                 <form method="POST" class="form d-inline-block"
                                       action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
                                       >
                                     @method('put')
                                     @csrf
                                     <button type="submit" align="left" name="action" value="valider_offre_technique"
-                                        class="btn btn-success btn-sm waves-effect waves-light me-sm-3 me-1"
+                                        class="btn btn-success btn-sm waves-effect waves-light me-sm-3 me-1 mb-2"
                                         onclick='javascript:if (!confirm("Voulez-vous mettre fin à la notation ?")) return false;'>Clôturer l'offre technique</button>
                                 </form>
                             @endif
                             <a href="#"
-                               class="btn float-end btn-sm rounded-pill btn-outline-primary waves-effect waves-light"
+                               class="btn float-end btn-sm rounded-pill btn-outline-primary waves-effect waves-light mb-2"
                                onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
                                 Afficher la grille de notation
                             </a>
@@ -660,6 +662,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tr>
                             </thead>
                             <tbody>
+                            {{dd($classement_offre_techs)}}
                                 @foreach ($classement_offre_techs as $key => $classement_offre_tech)
                                     <tr @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
                                            style="" class="bg-light"
@@ -687,66 +690,114 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
 
-
-
                     <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">
-                                               @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier))
-                                                <form method="POST" class="form"
-                                                      action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"
-                                                      enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('put')
-                                                    <div class="row">
-                                                        <div class="col-12 col-md-10">
-                                                        </div>
-                                                        <div class="col-12 col-md-2" align="right"> <br>
-                                                            <button type="submit" name="action" value="valider_comite_technique"
-                                                                    class="btn btn-sm btn-success me-sm-3 me-1"
-                                                                    onclick='javascript:if (!confirm("Voulez-vous valider la commission ?")) return false;'>Valider le comité</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                                @endif
-                                                <table class="table table-bordered table-striped table-hover table-sm"
-                                                id="exampleData"
-                                                style="margin-top: 13px !important">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>N°</th>
-                                                            <th>Code</th>
-                                                            <th>Entreprise</th>
-                                                            <th>Chargé d'étude</th>
-                                                            <th>Titre du projet</th>
-                                                            <th>Date soumis au FDFP</th>
-                                                            <th>Date fin instruction</th>
-                                                            <th>Cout accordé</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach ($listedemandes as $key => $demande)
-                                                        <tr>
-                                                            <td>{{ $key+1 }}</td>
-                                                            <td>{{ @$demande->code_projet_etude}}</td>
-                                                            <td>{{ @$demande->entreprise->ncc_entreprises }}
-                                                                / {{ @$demande->entreprise->raison_social_entreprises}}</td>
-                                                            <td>{{ @$demande->chargedetude->name  }}
-                                                                / {{ @$demande->chargedetude->prenom_users  }}</td>
-                                                            <td>{{ Str::title(Str::limit($demande->titre_projet_etude, 40,'...')) }}</td>
-                                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$demande->created_at ))}}</td>
-                                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$demande->date_instruction ))}}</td>
-                                                            <td align="rigth">{{ number_format($demande->montant_projet_instruction, 0, ',', ' ') }}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
+                        @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier))
+                            <form method="POST" class="form"
+                                  action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"
+                                  enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
+                                <div class="row">
+                                    <div class="col-12 col-md-10">
+                                    </div>
+                                    <div class="col-12 col-md-2" align="right"> <br>
+                                        <button type="submit" name="action" value="valider_comite_technique"
+                                                class="btn btn-sm btn-success me-sm-3 me-1"
+                                                onclick='javascript:if (!confirm("Voulez-vous valider la commission ?")) return false;'>Valider le comité</button>
+                                    </div>
+                                </div>
+                            </form>
+                        @endif
+                        <table class="table table-bordered table-striped table-hover table-sm"
+                               id="exampleData"
+                               style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Entreprise</th>
+                                <th>Montant</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($listedemandes as $key => $demande)
+                                <tr>
+                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ @$demande->code_projet_etude}}</td>
+                                    <td>
+                                        <input type="number" class="form-control" name=""/>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
 
-                                                <div class="col-12" align="right">
-                                                    <hr>
-                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                                        Retour</a>
-                                                </div>
-                                            </div>
+                        <div class="col-12" align="right">
+                            <hr>
+                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                Retour</a>
+                        </div>
+                    </div>
+
+
+{{--                    <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">--}}
+{{--                                               @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier))--}}
+{{--                                                <form method="POST" class="form"--}}
+{{--                                                      action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"--}}
+{{--                                                      enctype="multipart/form-data">--}}
+{{--                                                    @csrf--}}
+{{--                                                    @method('put')--}}
+{{--                                                    <div class="row">--}}
+{{--                                                        <div class="col-12 col-md-10">--}}
+{{--                                                        </div>--}}
+{{--                                                        <div class="col-12 col-md-2" align="right"> <br>--}}
+{{--                                                            <button type="submit" name="action" value="valider_comite_technique"--}}
+{{--                                                                    class="btn btn-sm btn-success me-sm-3 me-1"--}}
+{{--                                                                    onclick='javascript:if (!confirm("Voulez-vous valider la commission ?")) return false;'>Valider le comité</button>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                </form>--}}
+{{--                                                @endif--}}
+{{--                                                <table class="table table-bordered table-striped table-hover table-sm"--}}
+{{--                                                id="exampleData"--}}
+{{--                                                style="margin-top: 13px !important">--}}
+{{--                                                    <thead>--}}
+{{--                                                        <tr>--}}
+{{--                                                            <th>N°</th>--}}
+{{--                                                            <th>Code</th>--}}
+{{--                                                            <th>Entreprise</th>--}}
+{{--                                                            <th>Chargé d'étude</th>--}}
+{{--                                                            <th>Titre du projet</th>--}}
+{{--                                                            <th>Date soumis au FDFP</th>--}}
+{{--                                                            <th>Date fin instruction</th>--}}
+{{--                                                            <th>Cout accordé</th>--}}
+{{--                                                        </tr>--}}
+{{--                                                    </thead>--}}
+{{--                                                    <tbody>--}}
+{{--                                                    @foreach ($listedemandes as $key => $demande)--}}
+{{--                                                        <tr>--}}
+{{--                                                            <td>{{ $key+1 }}</td>--}}
+{{--                                                            <td>{{ @$demande->code_projet_etude}}</td>--}}
+{{--                                                            <td>{{ @$demande->entreprise->ncc_entreprises }}--}}
+{{--                                                                / {{ @$demande->entreprise->raison_social_entreprises}}</td>--}}
+{{--                                                            <td>{{ @$demande->chargedetude->name  }}--}}
+{{--                                                                / {{ @$demande->chargedetude->prenom_users  }}</td>--}}
+{{--                                                            <td>{{ Str::title(Str::limit($demande->titre_projet_etude, 40,'...')) }}</td>--}}
+{{--                                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$demande->created_at ))}}</td>--}}
+{{--                                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$demande->date_instruction ))}}</td>--}}
+{{--                                                            <td align="rigth">{{ number_format($demande->montant_projet_instruction, 0, ',', ' ') }}</td>--}}
+{{--                                                        </tr>--}}
+{{--                                                    @endforeach--}}
+{{--                                                    </tbody>--}}
+{{--                                                </table>--}}
+
+{{--                                                <div class="col-12" align="right">--}}
+{{--                                                    <hr>--}}
+{{--                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>--}}
+{{--                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">--}}
+{{--                                                        Retour</a>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
                 </div>
             </div>
         </div>

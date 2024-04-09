@@ -56,6 +56,8 @@ class CommissionEvaluationOffre extends Model
         'pourcentage_offre_fin_commission_evaluation_offre',
         'code_commission_evaluation_offre',
         'flag_commission_evaluation_offre',
+        'flag_valider_offre_tech_commission_evaluation_tech',
+        'date_valider_offre_tech_commission_evaluation_tech',
         'flag_statut_commission_evaluation_offre',
         'created_at', 'updated_at'];
 }
