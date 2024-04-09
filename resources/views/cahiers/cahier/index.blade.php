@@ -65,7 +65,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             <th>Code </th>
                             <th>Processus </th>
                             <th>Commentaire </th>
-                            <th>Date creation</th>
+                            <th>Date création</th>
                             <th>Date soumis</th>
                             <th>Statut</th>
                             <th>Action</th>
@@ -83,7 +83,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $cahier->date_soumis_cahier_plans_projets }}</td>
                                 <td align="center">
                                     <?php if($cahier->flag_statut_cahier_plans_projets == true){ ?>
-                                        <span class="badge bg-success">Terminer</span>
+                                        <span class="badge bg-success">Terminé</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>
                                     <?php } ?>
