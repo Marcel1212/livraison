@@ -136,19 +136,31 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             Liste des participants
                         </button>
                     </li>
+                                        <li class="nav-item">
+                                            <button
+                                                type="button"
+                                                class="nav-link @if(isset($cahier) && count($commissioneparticipants)>0) @if($idetape==5 ) active @endif @else disabled @endif"
+                                                role="tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#navs-top-classementoffretech"
+                                                aria-controls="navs-top-classementoffretech"
+                                                aria-selected="false">
+                                                Classement Offre technique
+                                            </button>
+                                        </li>
 
-{{--                    <li class="nav-item">--}}
-{{--                        <button--}}
-{{--                            type="button"--}}
-{{--                            class="nav-link @if(isset($cahier) && $notation_commission_evaluation_offre_tech==count($commissioneparticipants)) @if($idetape==5 ) active @endif @else disabled @endif"--}}
-{{--                            role="tab"--}}
-{{--                            data-bs-toggle="tab"--}}
-{{--                            data-bs-target="#navs-top-offrefinanciere"--}}
-{{--                            aria-controls="navs-top-offrefinanciere"--}}
-{{--                            aria-selected="false">--}}
-{{--                            Offre Financière--}}
-{{--                        </button>--}}
-{{--                    </li>--}}
+                    <li class="nav-item">
+                        <button
+                            type="button"
+                            class="nav-link @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true) @if($idetape==6 ) active @endif @else disabled @endif"
+                            role="tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#navs-top-offrefinanciere"
+                            aria-controls="navs-top-offrefinanciere"
+                            aria-selected="false">
+                            Offre Financière
+                        </button>
+                    </li>
 {{--                    <li class="nav-item">--}}
 {{--                        <button--}}
 {{--                            type="button"--}}
@@ -161,18 +173,20 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 {{--                            Classement--}}
 {{--                        </button>--}}
 {{--                    </li>--}}
-                    <li class="nav-item">
-                        <button
-                            type="button"
-                            class="nav-link @if(isset($cahier)) @if($idetape==6) active @endif @else disabled @endif  ?>"
-                            role="tab"
-                            data-bs-toggle="tab"
-                            data-bs-target="#navs-top-cahieraprescomite"
-                            aria-controls="navs-top-cahieraprescomite"
-                            aria-selected="false">
-                            Valider le comite
-                        </button>
-                    </li>
+
+
+{{--                    <li class="nav-item">--}}
+{{--                        <button--}}
+{{--                            type="button"--}}
+{{--                            class="nav-link @if(isset($cahier)) @if($idetape==6) active @endif @else disabled @endif  ?>"--}}
+{{--                            role="tab"--}}
+{{--                            data-bs-toggle="tab"--}}
+{{--                            data-bs-target="#navs-top-cahieraprescomite"--}}
+{{--                            aria-controls="navs-top-cahieraprescomite"--}}
+{{--                            aria-selected="false">--}}
+{{--                            Valider le comite--}}
+{{--                        </button>--}}
+{{--                    </li>--}}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade @if($idetape==1)show active @endif" id="navs-top-commission"
@@ -410,19 +424,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         @endif
                     </div>
                     <div class="tab-pane fade @if($idetape==3 && isset($cahier)) show active @else disabled @endif" id="navs-top-offretechnique" role="tabpanel">
-
-                        <div align="right">
-                            <a href="#"
-                               class="btn rounded-pill btn-outline-primary waves-effect waves-light"
-                               onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
-                                Afficher la grille de notation
-                            </a>
-                            @if($beginvalidebyoneuser->count()!=0 && $beginvalidebyoneuser->count()==$commissioneparticipants->count())
-                                <button type="submit" name="action" value="valider_offre_technique"
-                                        class="btn rounded-pill btn-outline-success waves-effect waves-light me-sm-3 me-1"
-                                        onclick='javascript:if (!confirm("Voulez-vous mettre fin à la notation ?")) return false;'>Clôturer l'offre technique</button>
-                            @endif
-                        </div>
                         @if($beginvalidebyoneuser->count()==0 && $offretechcommissioneval_sums!=100)
                             <form method="POST" class="form"
                                   action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}">
@@ -534,7 +535,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </div>
                         @endif
                     </div>
-
                     <div class="tab-pane fade @if($idetape==4 && isset($cahier)  && $offretechcommissioneval_sums==100) show active @else disabled @endif"
                          id="navs-top-participant" role="tabpanel">
                             <?php if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier)){ ?>
@@ -631,20 +631,65 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 Retour</a>
                         </div>
                     </div>
-                    <div class="tab-pane fade @if($idetape==5 && isset($cahier) && count($commissioneparticipants)>0) show active @else disabled @endif" id="navs-top-offrefinanciere" role="tabpanel">
-
+                    <div class="tab-pane fade @if($idetape==5 && isset($cahier) && count($commissioneparticipants)>0) show active @else disabled @endif" id="navs-top-classementoffretech" role="tabpanel">
+                        <div>
+                            @if($beginvalidebyoneuser->count()!=0 && $beginvalidebyoneuser->count()==$commissioneparticipants->count())
+                                <form method="POST" class="form d-inline-block"
+                                      action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
+                                      >
+                                    @method('put')
+                                    @csrf
+                                    <button type="submit" align="left" name="action" value="valider_offre_technique"
+                                        class="btn btn-success btn-sm waves-effect waves-light me-sm-3 me-1"
+                                        onclick='javascript:if (!confirm("Voulez-vous mettre fin à la notation ?")) return false;'>Clôturer l'offre technique</button>
+                                </form>
+                            @endif
+                            <a href="#"
+                               class="btn float-end btn-sm rounded-pill btn-outline-primary waves-effect waves-light"
+                               onclick="NewWindow('{{route("commissionevaluationoffres.offretech.show",[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre)])}}','',screen.width/2,screen.height,'yes','center',1);">
+                                Afficher la grille de notation
+                            </a>
+                        </div>
+                        <table class="table table-bordered table-sm" id=""
+                               style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>Rang</th>
+                                <th>Entreprise</th>
+                                <th>Moyenne Générale</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($classement_offre_techs as $key => $classement_offre_tech)
+                                    <tr @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
+                                           style="" class="bg-light"
+                                    @endif>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $classement_offre_tech->entreprise }}</td>
+                                        <td>{{ round($classement_offre_tech->note,2) }} / 100</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="mt-2">
+                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-light" style="height: 5px; width: 5px"></div> Eliminé </span>
+                        </div>
                         <div class="col-12" align="right">
                             <hr>
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
-                               class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                            @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true)
+                                <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                                   class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                            @endif
                             <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                 Retour</a>
                         </div>
                     </div>
 
-                                            <div class="tab-pane fade @if($idetape==6) show active @endif" id="navs-top-cahieraprescomite" role="tabpanel">
+
+
+                    <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">
                                                @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier))
                                                 <form method="POST" class="form"
                                                       action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"

@@ -99,10 +99,8 @@ class CommissionEvaluationOffreController extends Controller
 
     public function edit($id,$id1)
     {
-
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
-
         $commissionevaluationoffre = CommissionEvaluationOffre::find($id);
         $critereevaluationoffretechs = CritereEvaluationOffreTech::where('flag_critere_evaluation_offre_tech',true)->get();
 
@@ -113,6 +111,25 @@ class CommissionEvaluationOffreController extends Controller
             ->get()
             ->groupby('notation_commission_evaluation_offre_tech.id_user_notation_commission_evaluation_offre')
             ->count();
+
+//        protected $fillable = ['id_offre_tech_commission_evaluation_offre', 'id_commission_evaluation_offre',
+//        'id_sous_critere_evaluation_offre_tech',
+//        'id_user_notation_commission_evaluation_offre',
+//        'flag_notation_commission_evaluation_offre_tech',
+//        'flag_valider_notation_commission_evaluation_offre_tech',
+//        'note_notation_commission_evaluation_offre_tech',
+//        '',
+//        'id_operateur',
+//        'created_at', 'updated_at'];
+
+//         = NotationCommissionEvaluationOffreTech::
+//            select('notation_commission_evaluation_offre_tech.id_operateur')
+//
+//                    ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
+//                    ->groupby('notation_commission_evaluation_offre_tech.id_operateur')
+//                    ->sum('note_notation_commission_evaluation_offre_tech');
+//
+
 
         $offretechcommissionevals = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)
             ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
@@ -183,6 +200,19 @@ class CommissionEvaluationOffreController extends Controller
             ->where([['id_commission_evaluation_offre','=',$id]])
             ->get();
 
+        if(isset($commissioneparticipants)){
+            $classement_offre_techs = DB::table('notation_commission_evaluation_offre_tech')
+                ->Join('entreprises','entreprises.id_entreprises',
+                    'notation_commission_evaluation_offre_tech.id_operateur')
+                ->selectRaw('entreprises.raison_social_entreprises as entreprise, sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note')
+                ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
+                ->groupBy('entreprise')
+                ->orderBy('note', 'desc')
+                ->get();
+        }else{
+            $classement_offre_techs = [];
+        }
+
         $listedemandes = ProjetEtude::whereExists(function ($query) use ($id){
             $query->select('*')
                 ->from('cahier_commission_evaluation_offre')
@@ -207,6 +237,7 @@ class CommissionEvaluationOffreController extends Controller
             'commissioneparticipants',
             'listedemandes',
             'beginvalidebyoneuser',
+            'classement_offre_techs',
             'personneressource',
             'offretechcommissioneval_sums',
             'notation_commission_evaluation_offre_tech',
@@ -381,6 +412,13 @@ class CommissionEvaluationOffreController extends Controller
 
                 return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succès : Projet d\'étude ajouté à la commission avec succès');
 
+            }
+            if($data['action'] == 'valider_offre_technique'){
+                    $commissionevaluationoffre->update([
+                        'flag_valider_offre_tech_commission_evaluation_tech'=> true,
+                        'date_valider_offre_tech_commission_evaluation_tech' => Carbon::now()
+                    ]);
+                return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succès : Offre technique cloturée avec succès');
             }
         }
     }

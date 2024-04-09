@@ -35,7 +35,9 @@ class ProjetEtudeController extends Controller
 
         if(isset($infoentreprise)){
             //Récupérer les projets d'études soumis par une entreprise
-            $projet_etudes = ProjetEtude::where([['id_entreprises','=',$infoentreprise->id_entreprises]])->get();
+            $projet_etudes = ProjetEtude::where([['id_entreprises','=',$infoentreprise->id_entreprises]])
+                ->orderBy('created_at', 'desc')
+                ->get();
 
             Audit::logSave([
                 'action'=>'VISITE',
