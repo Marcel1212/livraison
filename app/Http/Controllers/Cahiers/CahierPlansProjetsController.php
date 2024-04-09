@@ -363,6 +363,7 @@ class CahierPlansProjetsController extends Controller
                         if($codeprocessus == 'PE'){
 
                             $projet_etude = ProjetEtude::find($iddemande);
+                            $projet_etude->flag_projet_etude_valider_cahier = true;
                             $projet_etude->flag_passer_cahier_cp_cg = true;
                             $projet_etude->date_passe_cahier_cp_cg = Carbon::now();
                             $projet_etude->update();
