@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Comites;
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
 use App\Helpers\Audit;
+use App\Models\FormeJuridique;
+use App\Models\PiecesProjetEtude;
 use App\Models\ProcessusComite;
 use App\Models\TypeComite;
 use App\Helpers\Menu;
@@ -392,6 +394,86 @@ class TraitementComitesController extends Controller
 
     }
 
+
+    public function editprojetetude($id,$id1,$id2){
+         $idcomite=  Crypt::UrldeCrypt($id);
+        $id = Crypt::UrldeCrypt($id1);
+        $idetape = Crypt::UrldeCrypt($id2);
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+
+        if(isset($id)){
+            $projet_etude = ProjetEtude::find($id);
+            if(isset($projet_etude)){
+                $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
+
+                $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','avant_projet_tdr')->first();
+                $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','courier_demande_fin')->first();
+                $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_technique')->first();
+                $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_financiere')->first();
+
+                $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
+
+                $pays = Pays::all();
+                $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+                foreach ($pays as $comp) {
+                    $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+                }
+
+
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
+
+                /******************** secteuractivites *********************************/
+                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivites as $comp) {
+                    $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+                $motif = Motif::where('code_motif','=','PRE')->get();;
+                $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+                foreach ($motif as $comp) {
+                    $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
+                }
+
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+
+                return view('comites.traitementcomite.editerprojetetude', compact(
+                    'courier_demande_fin',
+                    'offre_technique',
+                    'formjuridique',
+                    'projet_etude','pieces_projets','avant_projet_tdr',
+                    'idcomite',
+                    'secteuractivite_projet',
+                    'motifs',
+                    'idetape',
+                    'pay',
+                    'offre_financiere',
+                    'secteuractivite'
+                ));
+
+            }
+
+        }
+
+    }
 
     /**
      * Remove the specified resource from storage.
