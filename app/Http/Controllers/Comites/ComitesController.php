@@ -148,7 +148,7 @@ class ComitesController extends Controller
 
             ]);
 
-            return redirect('comites/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
+            return redirect('comites/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Enregistrement reussi ');
 
         }
     }
@@ -323,7 +323,7 @@ class ComitesController extends Controller
 
                 ]);
 
-                return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise a jour reussi ');
 
             }
 
@@ -397,7 +397,7 @@ class ComitesController extends Controller
 
                         ]);
 
-                        return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                        return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise a jour reussi ');
 
                 }else{
 
@@ -487,7 +487,7 @@ class ComitesController extends Controller
 
                         ]);
 
-                    return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                    return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise a jour reussi ');
 
                 }else{
 
@@ -582,7 +582,7 @@ class ComitesController extends Controller
 
                         ]);
 
-                    return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                    return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise à jour ');
 
                 }
 
@@ -705,7 +705,7 @@ class ComitesController extends Controller
                 ]);
 
 
-                return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comites/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succès : Information mise à jour');
 
             }
 
@@ -736,10 +736,7 @@ class ComitesController extends Controller
             'objet'=>'COMITES '
 
         ]);
-
-        return redirect('comites/'.Crypt::UrlCrypt($comite).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
-
-
+        return redirect('comites/'.Crypt::UrlCrypt($comite).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succès : Information mise à jour');
     }
 
     /**

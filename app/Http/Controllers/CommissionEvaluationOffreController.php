@@ -209,6 +209,7 @@ class CommissionEvaluationOffreController extends Controller
                 ->groupBy('entreprise')
                 ->orderBy('note', 'desc')
                 ->get();
+
         }else{
             $classement_offre_techs = [];
         }
