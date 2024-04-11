@@ -29,7 +29,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
 @section('content')
 
-    @php($Module='Comites')
+    @php($Module='Comités')
     @php($titre='Liste des commissions d\'évaluation')
     @php($soustitre='Tenue de la commission d\'évaluation')
     @php($lien='commissionevaluationoffres')
@@ -430,7 +430,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 @csrf
                                 @method('put')
                                 <div class="row">
-                                    <div class="col-12 col-md-4">
+                                    <div class="col-12 col-md-12">
                                         <label class="form-label" for="id_user_comite_participant">Critère d'évaluation
                                             offre technique <strong
                                                 style="color:red;">*</strong></label>
@@ -448,7 +448,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         </select>
                                     </div>
 
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-5">
                                         <label class="form-label" for="id_sous_critere_evaluation_offre_tech">Sous-critère
                                             d'évaluation offre technique <strong
                                                 style="color:red;">*</strong></label>
@@ -460,10 +460,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         </select>
                                     </div>
 
-                                    <div class="col-12 col-md-3">
+                                    <div class="col-12 col-md-5">
                                         <label class="form-label" for="note_offre_tech_commission_evaluation_offre">Note
-                                            Sous-critère d'évaluation offre technique <strong
-                                                style="color:red;">*</strong></label>
+                                            <strong style="color:red;">*</strong></label>
                                         <input type="number" style="line-height:1.5rem" class="form-control form-control-sm"
                                                name="note_offre_tech_commission_evaluation_offre"
                                                aria-label="Default select example"/>
@@ -474,6 +473,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter
                                         </button>
                                     </div>
+
+
 
                                 </div>
                             </form>
