@@ -224,13 +224,11 @@ class CommissionEvaluationOffreController extends Controller
                     'date_debut_commission_evaluation_offre' => 'required|date',
                     'commentaire_commission_evaluation_offre' => 'required',
                     'numero_commission_evaluation_offre' => 'required',
-                    'nombre_evaluateur_commission_evaluation_offre' => 'required',
                     'pourcentage_offre_tech_commission_evaluation_offre' => 'required'
                 ],[
                     'date_debut_commission_evaluation_offre.required' => 'Veuillez ajouter une date de debut.',
                     'commentaire_commission_evaluation_offre.required' => 'Veuillez ajouter un commentaire.',
                     'numero_commission_evaluation_offre.required' => 'Veuillez ajouter un numéro de commission.',
-                    'nombre_evaluateur_commission_evaluation_offre.required' => 'Veuillez ajouter un nombre d\'évaluateur',
                     'pourcentage_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter un pourcentage pour une offre technique',
                 ]);
 
