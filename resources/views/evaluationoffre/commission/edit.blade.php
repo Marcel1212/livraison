@@ -520,7 +520,17 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         @endif
                                     </tr>
                                 @endforeach
+
                             @endisset
+
+                                    <tr>
+                                        <td colspan="3">
+                                            <span class="fw-bold">Total</span>
+                                        </td>
+                                        <td colspan="2">
+                                            <span class="fw-bold"> {{$offretechcommissioneval_tabs->sum('note_offre_tech_commission_evaluation_offre')}}/ 100</span>
+                                        </td>
+                                    </tr>
                             </tbody>
                         </table>
 
