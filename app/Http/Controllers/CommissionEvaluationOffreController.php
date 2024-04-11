@@ -58,7 +58,6 @@ class CommissionEvaluationOffreController extends Controller
             $this->validate($request, [
                 'date_debut_commission_evaluation_offre' => 'required|date|after_or_equal:now',
                 'numero_commission_evaluation_offre' => 'required',
-                'nombre_evaluateur_commission_evaluation_offre' => 'required',
                 'pourcentage_offre_tech_commission_evaluation_offre' => 'required',
                 'note_eliminatoire_offre_tech_commission_evaluation_offre' => 'required|max:100',
                 'marge_inf_offre_fin_commission_evaluation_offre' => 'required|max:100',
@@ -67,7 +66,6 @@ class CommissionEvaluationOffreController extends Controller
                 'date_debut_commission_evaluation_offre.required' => 'Veuillez ajouter une date de debut.',
                 'date_debut_commission_evaluation_offre.after_or_equal' => 'La date ne doit pas être inférieure à celle du jour.',
                 'numero_commission_evaluation_offre.required' => 'Veuillez ajouter un numéro de commission.',
-                'nombre_evaluateur_commission_evaluation_offre.required' => 'Veuillez ajouter un nombre d\'évaluateur',
                 'pourcentage_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter un pourcentage pour une offre technique',
                 'note_eliminatoire_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter une note éliminatoire pour une offre technique',
                 'marge_inf_offre_fin_commission_evaluation_offre.required' => 'Veuillez ajouter une marge inférieur pour l\'offre financière',
