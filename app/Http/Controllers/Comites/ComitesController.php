@@ -555,8 +555,8 @@ class ComitesController extends Controller
                             $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes conviés au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
+                                            <br><br>Vous êtes convié au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
+                                            <br><br> Vous êtes prié de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
                                             ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
