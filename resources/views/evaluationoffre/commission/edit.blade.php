@@ -614,12 +614,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </thead>
                             <tbody>
                             @foreach ($commissioneparticipants as $key => $commissioneparticipant)
-                                <tr>
+                                <tr>{
                                     <td>{{ $key+1 }}</td>
                                     <td>{{ $commissioneparticipant->name }}</td>
                                     <td>{{ $commissioneparticipant->prenom_users }}</td>
                                     <td>{{ $commissioneparticipant->profile }}</td>
-                                    @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
+                                    @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier))
                                     <td>
                                         <a href="{{ route($lien . '.delete.personne', \App\Helpers\Crypt::UrlCrypt($commissioneparticipant->id_commission_participant)) }}"
                                            class=""
