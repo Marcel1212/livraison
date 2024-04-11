@@ -294,14 +294,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Marge inférieure offre financière (%) </label>
+                                            <label>Marge inférieure offre financière (%) <strong style="color:red;">*</strong></label>
                                             <input type="number" id="marge_inf_offre_fin_commission_evaluation_offre" name="marge_inf_offre_fin_commission_evaluation_offre"  min="0"
                                                    class="form-control form-control-sm" value="{{$commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre }}" />
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Marge supérieure offre financière (%) </label>
+                                            <label>Marge supérieure offre financière (%) <strong style="color:red;">*</strong></label>
                                             <input type="number" id="marge_sup_offre_fin_commission_evaluation_offre" name="marge_sup_offre_fin_commission_evaluation_offre"  min="0"
                                                    class="form-control form-control-sm"  value="{{$commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre }}" />
                                         </div>
