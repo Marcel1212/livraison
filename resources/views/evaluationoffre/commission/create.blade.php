@@ -227,14 +227,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 </div>
                                 <div class="col-md-3 col-12">
                                     <div class="mb-1">
-                                        <label>Marge inférieur offre financière (%) </label>
+                                        <label>Marge inférieure offre financière (%) </label>
                                         <input type="number" id="marge_inf_offre_fin_commission_evaluation_offre" name="marge_inf_offre_fin_commission_evaluation_offre"  min="0"
                                                class="form-control form-control-sm" />
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-12">
                                     <div class="mb-1">
-                                        <label>Marge supérieur offre financière (%) </label>
+                                        <label>Marge supérieure offre financière (%) </label>
                                         <input type="number" id="marge_sup_offre_fin_commission_evaluation_offre" name="marge_sup_offre_fin_commission_evaluation_offre"  min="0"
                                                class="form-control form-control-sm" />
                                     </div>
