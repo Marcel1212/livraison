@@ -742,7 +742,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <tr>
                                             <td>{{ $key+1 }}</td>
                                             <td>{{ $classement_offre_tech->entreprise }}</td>
-                                            <td><input type="number" class="form-control" min="0" name="note_offre_fins[{{ $classement_offre_tech->entreprise}}][]"/></td>
+                                            <td><input type="text" class="form-control number" min="0" name="note_offre_fins[{{ $classement_offre_tech->entreprise}}][]"/></td>
                                         </tr>
                                     @endif
                                 @endforeach
