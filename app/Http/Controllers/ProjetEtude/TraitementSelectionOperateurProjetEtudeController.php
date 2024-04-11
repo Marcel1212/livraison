@@ -27,6 +27,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
         $resultat_etape = DB::table('vue_processus')
             ->where('id_roles', '=', $id_roles)
             ->get();
+
         $resultat = null;
         if (isset($resultat_etape)) {
             $resultat = [];
@@ -40,6 +41,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                         ['v.mini', '=', $r->priorite_combi_proc],
                         ['v.id_processus', '=', $r->id_processus],
                         ['v.code', '=', 'SOPE'],
+                        ['p.id_combi_proc', '=', $r->id_combi_proc],
                         ['p.id_roles', '=', $id_roles]
                     ])->get();
 
