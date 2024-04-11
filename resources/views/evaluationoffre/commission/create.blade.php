@@ -156,7 +156,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <div class="col-md-3 col-12">
                                     <label>Nombre d'évaluateur <strong style="color:red;">*</strong></label>
                                     <input type="number" name="nombre_evaluateur_commission_evaluation_offre"
-                                           class="form-control form-control-sm" required min="0" disabled/>
+                                           class="form-control form-control-sm" required min="0" value="0" disabled/>
                                     @error('nombre_evaluateur_commission_evaluation_offre')
                                     <div class=""><label class="error">{{ $message }}</label></div>
                                     @enderror
