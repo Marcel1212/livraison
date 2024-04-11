@@ -213,14 +213,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                             <div class="col-md-3 col-12">
                                                 <div class="mb-1">
-                                                    <label>Pourcentage offre financière </label>
+                                                    <label>Pourcentage offre financière <strong style="color:red;">*</strong></label>
                                                     <input type="number" readonly id="pourcentage_offre_fin_commission_evaluation_offre" name="pourcentage_offre_fin_commission_evaluation_offre"  min="0"
                                                            class="form-control form-control-sm" />
                                                 </div>
                                             </div>
                                 <div class="col-md-3 col-12">
                                     <div class="mb-1">
-                                        <label>Note éliminatoire offre technique (/100)</label>
+                                        <label>Note éliminatoire offre technique (/100) <strong style="color:red;">*</strong></label>
                                         <input type="number" id="note_eliminatoire_offre_tech_commission_evaluation_offre" name="note_eliminatoire_offre_tech_commission_evaluation_offre"  min="0"
                                                class="form-control form-control-sm" />
                                     </div>
