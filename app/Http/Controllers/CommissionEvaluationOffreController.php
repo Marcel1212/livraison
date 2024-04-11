@@ -323,7 +323,6 @@ class CommissionEvaluationOffreController extends Controller
             if ($data['action'] == 'Invitation_personne_ressouce'){
                 $listepersonnes = CommissionParticipantEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->get();
                 if(count($listepersonnes)<1){
-
                     return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous ne pouvez pas envoyer les invitations car il n\' y a pas de personne ressource à la commission.');
                 }else{
                     foreach($listepersonnes as $personne){
@@ -354,7 +353,7 @@ class CommissionEvaluationOffreController extends Controller
                         }
 
                     }
-                    return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Invitation envoyée avec succès');
+                    return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Invitation envoyée avec succès');
                 }
             }
             if ($data['action'] == 'creer_cahier_offre_projets'){
