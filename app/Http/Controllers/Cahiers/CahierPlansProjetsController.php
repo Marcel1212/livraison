@@ -221,6 +221,7 @@ class CahierPlansProjetsController extends Controller
                                 ->join('ligne_cahier_plans_projets','vppdpct.id_demande','ligne_cahier_plans_projets.id_demande')
                                 ->join('cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets')
                                 ->where('cahier_plans_projets.id_cahier_plans_projets',$id)
+                                ->where('vppdpct.code_processus','=',$cahier->processusComite->code_processus_comite)
                                 ->get();
 
         Audit::logSave([
