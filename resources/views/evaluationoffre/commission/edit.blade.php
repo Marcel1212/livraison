@@ -670,6 +670,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <th>Rang</th>
                                 <th>Entreprise</th>
                                 <th>Moyenne Générale</th>
+                                <th>Statut</th>
                             </tr>
                             </thead>
                             <tbody>
