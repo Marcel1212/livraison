@@ -607,7 +607,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <th>Nom</th>
                                 <th>Prénoms</th>
                                 <th>Profil</th>
-                                @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
+                                @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier))
                                     <th>Action</th>
                                 @endif
                             </tr>
