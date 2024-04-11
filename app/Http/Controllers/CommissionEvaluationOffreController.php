@@ -312,6 +312,10 @@ class CommissionEvaluationOffreController extends Controller
                             'flag_commission_evaluation_offre_participant'=>true
                         ]);
                     }
+                    $listepersonnes = CommissionParticipantEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->get();
+                    $commissionevaluationoffre->update([
+                        'nombre_evaluateur_commission_evaluation_offre'=>@$listepersonnes->count()
+                    ]);
 
                     return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Participant ajouté avec succès');
 
