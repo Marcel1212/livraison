@@ -679,6 +679,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <td>{{ $classement_offre_tech->entreprise }}</td>
                                         <td>{{ round($classement_offre_tech->note,2) }} / 100</td>
                                         <td>
+
                                             @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
                                                 <span class="badge bg-danger">Eliminé</span>
                                             @else
