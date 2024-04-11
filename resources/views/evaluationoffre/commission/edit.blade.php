@@ -674,19 +674,22 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </thead>
                             <tbody>
                                 @foreach ($classement_offre_techs as $key => $classement_offre_tech)
-                                    <tr @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
-                                           style="" class="bg-danger text-white"
-                                    @endif>
+                                    <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $classement_offre_tech->entreprise }}</td>
                                         <td>{{ round($classement_offre_tech->note,2) }} / 100</td>
+                                        <td>
+                                            @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
+                                                <span class="badge bg-danger">Eliminé</span>
+                                            @else
+                                                <span class="badge bg-success">Retenu</span>
+                                                <span></span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="mt-2">
-                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-danger text-white" style="height: 5px; width: 5px"></div> Eliminé </span>
-                        </div>
                         <div class="col-12" align="right">
                             <hr>
                             <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
