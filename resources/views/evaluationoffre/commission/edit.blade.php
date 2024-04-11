@@ -685,7 +685,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tbody>
                         </table>
                         <div class="mt-2">
-                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-danger text-white" style="height: 5px; width: 5px"></div> Eliminé </span>
+                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-danger text-white" style="height: 10px; width: 10px"></div> Eliminé </span>
                         </div>
                         <div class="col-12" align="right">
                             <hr>
