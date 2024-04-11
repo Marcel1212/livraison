@@ -548,7 +548,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
                     <div class="tab-pane fade @if($idetape==4 && isset($cahier)  && $offretechcommissioneval_sums==100) show active @else disabled @endif"
                          id="navs-top-participant" role="tabpanel">
-                            @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier)){ ?>
+                            @if ($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==false and isset($cahier))
                         <form method="POST" class="form"
                               action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(3)]) }}"
                               enctype="multipart/form-data">
