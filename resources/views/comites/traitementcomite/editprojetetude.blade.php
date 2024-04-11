@@ -24,8 +24,8 @@
 @section('content')
 
     @php($Module=' Comités')
-    @php($titre='Liste des comites')
-    @php($soustitre='Tenue de comite')
+    @php($titre='Liste des comités')
+    @php($soustitre='Tenue de comité')
     @php($lien='traitementcomite')
     @php($lienacceuil='dashboard')
 
