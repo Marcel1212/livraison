@@ -401,28 +401,29 @@ class CommissionEvaluationOffreController extends Controller
 //            }
 
             if($request->action =="Enregistrer_offre_Fin"){
-                foreach($request->note_operations as $key=>$note_operation){
-                    $entreprise = Entreprises::find($key);
-                    foreach ($note_operation as $key_sous_critere=>$note_sous_critere) {
+                foreach($request->note_offre_fins as $key=>$note_offre_fin){
+//                    foreach ($note_offre_fin as $key_sous_critere=>$note_sous_critere) {
+                        $entreprise = Entreprises::where('raison_social_entreprises',$key)->first();
+
                         $notation_montant = new NotationCommissionEvaluationOffreFin();
                         $notation_montant->id_commission_evaluation_offre =$id;
                         $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
-//                        $notation_montant->montant_notation_commission_evaluation_offre_fin = ;
-                        $notation_montant->id_operateur =$key;
+                        $notation_montant->montant_notation_commission_evaluation_offre_fin = intval($note_offre_fin[0]);
+                        $notation_montant->id_operateur = $entreprise->id_entreprises;
 
                         //Vérification sur le montant entrée
                         $notation_montant_exist = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
-                            ->where('id_operateur',intval($key))
+                            ->where('id_operateur',$entreprise->id_entreprises)
                             ->where('id_user_notation_commission_evaluation_offre',Auth::user()->id)
                             ->first();
 
                         if(isset($note_exist)){
-                            $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = intval($note_sous_critere[0]);
+                            $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = intval($note_offre_fin[0]);
                             $notation_montant_exist->update();
                         }else{
                             $notation_montant->save();
                         }
-                    }
+//                    }
                 }
                 return redirect('traitementcommissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Enregistrement effectué avec succès ');
             }
