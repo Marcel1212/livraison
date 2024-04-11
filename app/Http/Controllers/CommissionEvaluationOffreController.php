@@ -11,6 +11,8 @@ use App\Models\ComiteParticipant;
 use App\Models\CommissionEvaluationOffre;
 use App\Models\CommissionParticipantEvaluationOffre;
 use App\Models\CritereEvaluationOffreTech;
+use App\Models\Entreprises;
+use App\Models\NotationCommissionEvaluationOffreFin;
 use App\Models\NotationCommissionEvaluationOffreTech;
 use App\Models\OffreTechCommissionEvaluationOffre;
 use App\Models\ProjetEtude;
@@ -112,25 +114,6 @@ class CommissionEvaluationOffreController extends Controller
             ->groupby('notation_commission_evaluation_offre_tech.id_user_notation_commission_evaluation_offre')
             ->count();
 
-//        protected $fillable = ['id_offre_tech_commission_evaluation_offre', 'id_commission_evaluation_offre',
-//        'id_sous_critere_evaluation_offre_tech',
-//        'id_user_notation_commission_evaluation_offre',
-//        'flag_notation_commission_evaluation_offre_tech',
-//        'flag_valider_notation_commission_evaluation_offre_tech',
-//        'note_notation_commission_evaluation_offre_tech',
-//        '',
-//        'id_operateur',
-//        'created_at', 'updated_at'];
-
-//         = NotationCommissionEvaluationOffreTech::
-//            select('notation_commission_evaluation_offre_tech.id_operateur')
-//
-//                    ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
-//                    ->groupby('notation_commission_evaluation_offre_tech.id_operateur')
-//                    ->sum('note_notation_commission_evaluation_offre_tech');
-//
-
-
         $offretechcommissionevals = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)
             ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
             ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
@@ -142,25 +125,6 @@ class CommissionEvaluationOffreController extends Controller
 
         $beginvalidebyoneuser = CommissionParticipantEvaluationOffre::where('id_commission_evaluation_offre',$id)
             ->where('flag_statut_valider_commission_evaluation_offre_participant',true)->get();
-
-//        $personneressources = User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
-//            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
-//            ->join('roles', 'model_has_roles.role_id', 'roles.id')
-//            ->where([['flag_demission_users', '=', false],
-//                ['flag_admin_users', '=', false],
-//                ['roles.code_roles', '=', 'CHARGEETUDE']
-//            ])
-//            ->get();
-
-//        $operateur_selecteds = Entreprises::whereNotExists(function ($query) use ($id_projet_etude){
-//            $query->select('*')
-//                ->from('projet_etude_has_entreprises')
-//                ->whereColumn('projet_etude_has_entreprises.id_entreprises','=','entreprises.id_entreprises')
-//                ->where('projet_etude_has_entreprises.id_projet_etude',$id_projet_etude);
-//        })->where('flag_operateur',true)
-//            ->where('flag_actif_entreprises',true)
-//            ->where('id_secteur_activite_entreprise',$projet_etude->id_secteur_activite)
-//            ->get();
 
         $personneressources = User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
         ->whereNotExists(function ($query) use ($id){
@@ -204,7 +168,10 @@ class CommissionEvaluationOffreController extends Controller
             $classement_offre_techs = DB::table('notation_commission_evaluation_offre_tech')
                 ->Join('entreprises','entreprises.id_entreprises',
                     'notation_commission_evaluation_offre_tech.id_operateur')
-                ->selectRaw('entreprises.raison_social_entreprises as entreprise, sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note')
+                ->selectRaw('entreprises.raison_social_entreprises as entreprise,
+                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note,
+                entreprises.id_entreprises as id_entreprise
+                ')
                 ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
                 ->groupBy('entreprise')
                 ->orderBy('note', 'desc')
@@ -424,6 +391,50 @@ class CommissionEvaluationOffreController extends Controller
         }
     }
 
+
+    public function updateNotationOffreFin(Request $request, $id, $id1){
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+        $commissionevaluationoffre = CommissionEvaluationOffre::find($id);
+        if ($request->isMethod('put')) {
+            $data = $request->all();
+//            if($request->action =="valider_offre_fin"){
+//                if(isset($commissioneparticipant)){
+//                    $commissioneparticipant->flag_statut_valider_commission_evaluation_offre_participant = true;
+//                    $commissioneparticipant->update();
+//                    return redirect('traitementcommissionevaluationoffres')->with('success', 'Succès : Validation effectuée avec succès ');
+//                }
+//            }
+
+            if($request->action =="Enregistrer_offre_Fin"){
+                foreach($request->note_operations as $key=>$note_operation){
+                    $entreprise = Entreprises::find($key);
+                    foreach ($note_operation as $key_sous_critere=>$note_sous_critere) {
+                        $notation_montant = new NotationCommissionEvaluationOffreFin();
+                        $notation_montant->id_commission_evaluation_offre =$id;
+                        $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
+//                        $notation_montant->montant_notation_commission_evaluation_offre_fin = ;
+                        $notation_montant->id_operateur =$key;
+
+                        //Vérification sur le montant entrée
+                        $notation_montant_exist = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
+                            ->where('id_operateur',intval($key))
+                            ->where('id_user_notation_commission_evaluation_offre',Auth::user()->id)
+                            ->first();
+
+                        if(isset($note_exist)){
+                            $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = intval($note_sous_critere[0]);
+                            $notation_montant_exist->update();
+                        }else{
+                            $notation_montant->save();
+                        }
+                    }
+                }
+                return redirect('traitementcommissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Enregistrement effectué avec succès ');
+            }
+
+        }
+    }
     public function deletePersonne($id)
     {
         $id =  Crypt::UrldeCrypt($id);
@@ -451,7 +462,6 @@ class CommissionEvaluationOffreController extends Controller
             return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Sous-critère retiré de la commission avec succès');
         }
     }
-
 
     public function showOffreTech($id){
         $id =  Crypt::UrldeCrypt($id);

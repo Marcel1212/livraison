@@ -294,14 +294,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Marge inférieur offre financière (%) </label>
+                                            <label>Marge inférieure offre financière (%) </label>
                                             <input type="number" id="marge_inf_offre_fin_commission_evaluation_offre" name="marge_inf_offre_fin_commission_evaluation_offre"  min="0"
                                                    class="form-control form-control-sm" value="{{$commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre }}" />
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Marge supérieur offre financière (%) </label>
+                                            <label>Marge supérieure offre financière (%) </label>
                                             <input type="number" id="marge_sup_offre_fin_commission_evaluation_offre" name="marge_sup_offre_fin_commission_evaluation_offre"  min="0"
                                                    class="form-control form-control-sm"  value="{{$commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre }}" />
                                         </div>
@@ -662,7 +662,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tr>
                             </thead>
                             <tbody>
-                            {{dd($classement_offre_techs)}}
                                 @foreach ($classement_offre_techs as $key => $classement_offre_tech)
                                     <tr @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
                                            style="" class="bg-light"
@@ -719,15 +718,21 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($listedemandes as $key => $demande)
-                                <tr>
-                                    <td>{{ $key+1 }}</td>
-                                    <td>{{ @$demande->code_projet_etude}}</td>
-                                    <td>
-                                        <input type="number" class="form-control" name=""/>
-                                    </td>
-                                </tr>
+                            @foreach ($classement_offre_techs as $key => $classement_offre_tech)
+                                @if(round($classement_offre_tech->note,2)>$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
+                                    <tr>
+                                        <td>{{ $key+1 }}</td>
+                                        <td>{{ $classement_offre_tech->entreprise }}</td>
+                                        <td><input type="number" class="form-control" min="0" name=""/></td>
+                                    </tr>
+                                @endif
                             @endforeach
+{{--                            @foreach ($listedemandes as $key => $demande)--}}
+{{--                                <tr>--}}
+{{--                                    <td>{{ $key+1 }}</td>--}}
+{{--                                    <td>{{ @$demande->code_projet_etude}}</td>--}}
+{{--                                </tr>--}}
+{{--                            @endforeach--}}
                             </tbody>
                         </table>
 
