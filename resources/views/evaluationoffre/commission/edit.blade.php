@@ -706,23 +706,23 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
 
                     <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">
-                        {{--                        @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre != true and isset($cahier))--}}
-                        {{--                            <form method="POST" class="form"--}}
-                        {{--                                  action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"--}}
-                        {{--                                  enctype="multipart/form-data">--}}
-                        {{--                                @csrf--}}
-                        {{--                                @method('put')--}}
-                        {{--                                <div class="row">--}}
-                        {{--                                    <div class="col-12 col-md-10">--}}
-                        {{--                                    </div>--}}
-                        {{--                                    <div class="col-12 col-md-2" align="right"> <br>--}}
-                        {{--                                        <button type="submit" name="action" value="valider_comite_technique"--}}
-                        {{--                                                class="btn btn-sm btn-success me-sm-3 me-1"--}}
-                        {{--                                                onclick='javascript:if (!confirm("Voulez-vous valider la commission ?")) return false;'>Valider le comité</button>--}}
-                        {{--                                    </div>--}}
-                        {{--                                </div>--}}
-                        {{--                            </form>--}}
-                        {{--                        @endif--}}
+                                                @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre == true)
+                                                    <form method="POST" class="form"
+                                                          action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"
+                                                          enctype="multipart/form-data">
+                                                        @csrf
+                                                        @method('put')
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-10">
+                                                            </div>
+                                                            <div class="col-12 col-md-2" align="right"> <br>
+                                                                <button type="submit" name="action" value="valider_offre_fin"
+                                                                        class="btn btn-sm btn-success me-sm-3 me-1"
+                                                                        onclick='javascript:if (!confirm("Voulez-vous valider la commission ?")) return false;'>Valider la commission</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                @endif
                         <form method="POST" action="{{route($lien.'.updateNotationOffreFin',[\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)])}}">
                             @csrf
                             @method('put')
