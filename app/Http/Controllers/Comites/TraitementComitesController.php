@@ -105,9 +105,7 @@ class TraitementComitesController extends Controller
     public function edit($id,$id1)
     {
         $id =  Crypt::UrldeCrypt($id);
-        // dd($id);
          $idetape =  Crypt::UrldeCrypt($id1);
-
          $comite = Comite::find($id);
 
          $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
@@ -186,7 +184,6 @@ class TraitementComitesController extends Controller
                         'id_cahier_plans_projets' => $idcahier,
                         'code_pieces_ligne_cahier_plans_projets' => 'PF'
                     ])->get();
-                //dd(count($listeplansformation));
 
                 $listeplansformationtraiter = LigneCahierPlansProjets::join('plan_formation','ligne_cahier_plans_projets.id_demande','plan_formation.id_plan_de_formation')
                     ->where([
@@ -208,6 +205,7 @@ class TraitementComitesController extends Controller
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/planformation')->with('success', 'Succes : Mise a jour reussi ');
             }
             if($data['action'] === 'Traiter_valider_projet'){
+                dd($id);
 
                 $projet_etude = ProjetEtude::find($id1);
                 $cahier = CahierPlansProjets::find($idcahier);
@@ -253,6 +251,7 @@ class TraitementComitesController extends Controller
                         'date_traitement_effectuer_commission' => Carbon::now()
                     ]);
                 }
+
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetetude')->with('success', 'Succes : Mise a jour reussi ');
             }
 
@@ -434,7 +433,6 @@ class TraitementComitesController extends Controller
         $comite = Comite::find($id);
 
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
-
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
         $listedemandesss = DB::table('cahier_plans_projets')
