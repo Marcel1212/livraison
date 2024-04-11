@@ -57,7 +57,6 @@ class CommissionEvaluationOffreController extends Controller
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'date_debut_commission_evaluation_offre' => 'required|date|after_or_equal:now',
-                'commentaire_commission_evaluation_offre' => 'required',
                 'numero_commission_evaluation_offre' => 'required',
                 'nombre_evaluateur_commission_evaluation_offre' => 'required',
                 'pourcentage_offre_tech_commission_evaluation_offre' => 'required',
@@ -67,7 +66,6 @@ class CommissionEvaluationOffreController extends Controller
             ],[
                 'date_debut_commission_evaluation_offre.required' => 'Veuillez ajouter une date de debut.',
                 'date_debut_commission_evaluation_offre.after_or_equal' => 'La date ne doit pas être inférieure à celle du jour.',
-                'commentaire_commission_evaluation_offre.required' => 'Veuillez ajouter un commentaire.',
                 'numero_commission_evaluation_offre.required' => 'Veuillez ajouter un numéro de commission.',
                 'nombre_evaluateur_commission_evaluation_offre.required' => 'Veuillez ajouter un nombre d\'évaluateur',
                 'pourcentage_offre_tech_commission_evaluation_offre.required' => 'Veuillez ajouter un pourcentage pour une offre technique',
@@ -169,8 +167,7 @@ class CommissionEvaluationOffreController extends Controller
                 ->Join('entreprises','entreprises.id_entreprises',
                     'notation_commission_evaluation_offre_tech.id_operateur')
                 ->selectRaw('entreprises.raison_social_entreprises as entreprise,
-                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note,
-                entreprises.id_entreprises as id_entreprise
+                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note
                 ')
                 ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
                 ->groupBy('entreprise')
