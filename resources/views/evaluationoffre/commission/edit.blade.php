@@ -675,7 +675,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <tbody>
                                 @foreach ($classement_offre_techs as $key => $classement_offre_tech)
                                     <tr @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
-                                           style="" class="bg-light"
+                                           style="" class="bg-danger text-white"
                                     @endif>
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $classement_offre_tech->entreprise }}</td>
@@ -685,7 +685,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tbody>
                         </table>
                         <div class="mt-2">
-                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-light" style="height: 5px; width: 5px"></div> Eliminé </span>
+                            <span class="fw-bold">Légende: </span> <span><div class="d-inline-block bg-danger text-white" style="height: 5px; width: 5px"></div> Eliminé </span>
                         </div>
                         <div class="col-12" align="right">
                             <hr>

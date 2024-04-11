@@ -386,7 +386,6 @@ class CommissionEvaluationOffreController extends Controller
         }
     }
 
-
     public function updateNotationOffreFin(Request $request, $id, $id1){
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
@@ -408,7 +407,7 @@ class CommissionEvaluationOffreController extends Controller
                         $notation_montant = new NotationCommissionEvaluationOffreFin();
                         $notation_montant->id_commission_evaluation_offre =$id;
                         $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
-//                        $notation_montant->montant_notation_commission_evaluation_offre_fin = ;
+                        $notation_montant->montant_notation_commission_evaluation_offre_fin = ;
                         $notation_montant->id_operateur =$key;
 
                         //Vérification sur le montant entrée
