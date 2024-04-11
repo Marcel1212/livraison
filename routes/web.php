@@ -551,6 +551,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('commissionevaluationoffres/store', [CommissionEvaluationOffreController::class, 'store'])->name('commissionevaluationoffres.store');
     Route::get('commissionevaluationoffres/{id}/{id1}/edit', [CommissionEvaluationOffreController::class, 'edit'])->name('commissionevaluationoffres.edit');
     Route::put('commissionevaluationoffres/{id}/{id1}/update', [CommissionEvaluationOffreController::class, 'update'])->name('commissionevaluationoffres.update');
+    Route::put('commissionevaluationoffres/{id}/{id1}/updateNotationOffreFin', [CommissionEvaluationOffreController::class, 'updateNotationOffreFin'])->name('commissionevaluationoffres.updateNotationOffreFin');
+
     Route::get('commissionevaluationoffres/{id}/{id1}/delete', [CommissionEvaluationOffreController::class, 'deleteSousCritere'])->name('commissionevaluationoffres.delete');
     Route::get('commissionevaluationoffres/{id}/delete/personne', [CommissionEvaluationOffreController::class, 'deletePersonne'])->name('commissionevaluationoffres.delete.personne');
     Route::get('commissionevaluationoffres/{id}/show/offretech', [CommissionEvaluationOffreController::class, 'showOffreTech'])->name('commissionevaluationoffres.offretech.show');
