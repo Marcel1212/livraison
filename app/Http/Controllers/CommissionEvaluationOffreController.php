@@ -145,8 +145,7 @@ class CommissionEvaluationOffreController extends Controller
         $projet_etudes = ProjetEtude::whereNotExists(function ($query) use ($id){
             $query->select('*')
                 ->from('cahier_commission_evaluation_offre')
-                ->whereColumn('cahier_commission_evaluation_offre.id_projet_etude','=','projet_etude.id_projet_etude')
-                ->where('cahier_commission_evaluation_offre.id_commission_evaluation_offre',$id);
+                ->whereColumn('cahier_commission_evaluation_offre.id_projet_etude','=','projet_etude.id_projet_etude');
         })->where('flag_fiche_agrement',true)
             ->where('flag_selection_operateur_valider_par_processus',true)
             ->get();
