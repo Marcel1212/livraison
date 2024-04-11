@@ -205,8 +205,6 @@ class TraitementComitesController extends Controller
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/planformation')->with('success', 'Succes : Mise a jour reussi ');
             }
             if($data['action'] === 'Traiter_valider_projet'){
-                dd($id);
-
                 $projet_etude = ProjetEtude::find($id1);
                 $cahier = CahierPlansProjets::find($idcahier);
 
