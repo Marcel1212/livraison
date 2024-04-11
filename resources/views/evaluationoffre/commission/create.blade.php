@@ -154,7 +154,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             @csrf
                             <div class="row">
                                 <div class="col-md-3 col-12">
-                                    <label>Nombre d'évaluateur <strong style="color:red;">*</strong></label>
+                                    <label>Nombre d'évaluateur</label>
                                     <input type="number" name="nombre_evaluateur_commission_evaluation_offre"
                                            class="form-control form-control-sm" required min="0" value="0" disabled/>
                                     @error('nombre_evaluateur_commission_evaluation_offre')
@@ -246,7 +246,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                     <div class="col-md-3 col-12">
                                         <div class="mb-1">
-                                            <label>Commentaire <strong style="color:red;">*</strong></label>
+                                            <label>Commentaire</label>
                                             <textarea class="form-control form-control-sm"  name="commentaire_commission_evaluation_offre" id="commentaire_commission_evaluation_offre" rows="6"></textarea>
 
                                         </div>
