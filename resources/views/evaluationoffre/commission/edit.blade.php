@@ -675,11 +675,11 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </thead>
                             <tbody>
                             <?php
-                                    $key = 0;
+                                    $number_qualif = 0;
                             ?>
-                            @foreach ($classement_offre_techs as  $classement_offre_tech)
+                            @foreach ($classement_offre_techs as  $key=>$classement_offre_tech)
                                 <tr>
-                                    <td>{{ ++$key}}</td>
+                                    <td>{{ $key+1}}</td>
                                     <td>{{ $classement_offre_tech->entreprise }}</td>
                                     <td>{{ round($classement_offre_tech->note,2) }} / 100</td>
                                     <td>
@@ -687,6 +687,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         @if(round($classement_offre_tech->note,2)<$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
                                             <span class="badge bg-danger">Eliminée</span>
                                         @else
+                                            <?php
+                                                $number_qualif = $number_qualif+1;
+                                            ?>
                                             <span class="badge bg-success">Retenue</span>
                                             <span></span>
                                         @endif
@@ -709,7 +712,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
 
                     <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">
-                        @if($notation_commission_evaluation_offre_fin==$key && ($notation_commission_evaluation_offre_fin!=0))
+                        @if(@$notation_commission_evaluation_offre_fin==$number_qualif && (@$notation_commission_evaluation_offre_fin!=0))
                                                     <form method="POST" class="form"
                                                           action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"
                                                           enctype="multipart/form-data">
