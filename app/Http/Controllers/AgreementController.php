@@ -358,9 +358,9 @@ class AgreementController extends Controller
                 ->where('id_plan_de_formation',$id_plan)
                 ->first();
 //
-//            if(isset($actionplanformation)){
+            if(isset($actionplanformation)){
 //                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
-//                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
+                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
 //                $demande_substitution->id_plan_de_formation = $id_plan;
 //                $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
 //                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
@@ -374,9 +374,9 @@ class AgreementController extends Controller
 //                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
                 $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
 //                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
-//                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
-//                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
-//                $demande_substitution->id_processus = 5;
+                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
+                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
+                $demande_substitution->id_processus = 5;
 //
 //                if (isset($request->file_beneficiare)){
 //                    $file = $request->file_beneficiare;
@@ -409,7 +409,7 @@ class AgreementController extends Controller
 //                    $demande_substitution->id_user = $plan_formation->user_conseiller;
 //                }
 //
-//                $demande_substitution->save();
+                $demande_substitution->save();
 //
 //                $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
 //
