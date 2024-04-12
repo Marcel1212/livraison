@@ -554,6 +554,7 @@ class AgreementController extends Controller
                 ->where('id_plan_de_formation',$id_plan)
                 ->first();
 
+
             if(isset($demande_substitution)) {
                 $this->validate($request, [
                     'id_motif_demande_plan_substi' => 'required',
@@ -584,6 +585,7 @@ class AgreementController extends Controller
                             ]);
                     }
                 }
+
                 DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
                     ->where('id_plan_de_formation',$id_plan)
                     ->update([
@@ -597,11 +599,10 @@ class AgreementController extends Controller
                         ->update([
                             'flag_soumis_demande_substitution_action_plan' => true,
                             'date_soumis_demande_substitution_action_plan' => now()]);
+
                     return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation soumis avec succès ');
                 }
-
                 return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation modifié ');
-
             }
         }
     }
