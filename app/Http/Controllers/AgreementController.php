@@ -345,9 +345,9 @@ class AgreementController extends Controller
         $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
         $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
         $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
-//            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-//                ->where('id_plan_de_formation',$id_plan)
-//                ->first();
+            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+                ->where('id_plan_de_formation',$id_plan)
+                ->first();
 //
 //            if(isset($actionplanformation)){
 //                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
@@ -726,7 +726,6 @@ class AgreementController extends Controller
 //        }
 
         return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution ajouté avec succès');
-
     }
 
     public function substitutionsUpdate(Request $request,string $id_plan,$id_action)
