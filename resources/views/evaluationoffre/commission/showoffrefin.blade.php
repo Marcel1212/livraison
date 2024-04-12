@@ -97,7 +97,7 @@ $logo = Menu::get_logo();
                                         {{@$montant}}
                                     @endif
                                 @elseif($montant_inf >= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                    && $montant_sup <=intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin))
+                                    || $montant_sup <=intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin))
                                     <?php
                                         $montant = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
                                         ?>
