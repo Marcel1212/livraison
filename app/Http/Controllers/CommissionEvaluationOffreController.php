@@ -405,7 +405,7 @@ class CommissionEvaluationOffreController extends Controller
                         $notation_montant = new NotationCommissionEvaluationOffreFin();
                         $notation_montant->id_commission_evaluation_offre =$id;
                         $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
-                        $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
+                    $notation_montant->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
                         $notation_montant->id_operateur = $entreprise->id_entreprises;
                         $notation_montant->flag_valider_commission_evaluation_offre_fin = true;
                         $notation_montant->date_valider_commission_evaluation_offre_fin = now();
