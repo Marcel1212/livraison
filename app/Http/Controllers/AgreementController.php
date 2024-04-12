@@ -556,66 +556,66 @@ class AgreementController extends Controller
         $data = $request->all();
 
         $input = $request->all();
-        $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation_substi']]])->first();
-        $input['id_entreprise_structure_formation_action_substi'] = $input['id_entreprise_structure_formation_plan_formation_substi'];
-        $input['nombre_stagiaire_action_formati_substi'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
-        $input['intitule_action_formation_plan_substi'] = mb_strtoupper($input['intitule_action_formation_plan_substi']);
-        $input['structure_etablissement_action_substi'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
-        $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
-        $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
-        $input['id_plan_de_formation'] = $id_plan;
-        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
+//        $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation_substi']]])->first();
+//        $input['id_entreprise_structure_formation_action_substi'] = $input['id_entreprise_structure_formation_plan_formation_substi'];
+//        $input['nombre_stagiaire_action_formati_substi'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+//        $input['intitule_action_formation_plan_substi'] = mb_strtoupper($input['intitule_action_formation_plan_substi']);
+//        $input['structure_etablissement_action_substi'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
+//        $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
+//        $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
+//        $input['id_plan_de_formation'] = $id_plan;
+//        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
 
-        if (isset($data['file_beneficiare_substi'])){
-            $file = $data['file_beneficiare_substi'];
-            $collections = (new FastExcel)->import($file);
-            if (count($collections)>$input['nombre_stagiaire_action_formati_substi']){
-                return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
-            }
-
-            if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
-                return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
-            }
-        }
-
-        if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
-            return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le coût de la formation que vous souhaitez substituer ']);
-        }
-
-        $nombredejour = $input['nombre_heure_action_formation_p_substi']/8;
-
-        $input['nombre_jour_action_formation_substi'] = $nombredejour;
-
-        $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation_substi']);
-
-        if($infoscaracteristique->code_ctf == "CGF"){
-            $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_substi'];
-        }
-        if($infoscaracteristique->code_ctf == "CSF"){
-            $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati_substi'];
-        }
-        if($infoscaracteristique->code_ctf == "CFD"){
-            $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
-        }
-        if($infoscaracteristique->code_ctf == "CCEF"){
-            $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_substi'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
-        }
-        if($infoscaracteristique->code_ctf == "CSEF"){
-            $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
-        }
-
-        $input['montant_attribuable_fdfp_substi'] = $montantcoutactionattribuable;
-
-        if (isset($data['facture_proforma_action_formati_substi'])){
-            $filefront = $data['facture_proforma_action_formati_substi'];
-            if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-                $fileName1 = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
-                $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $fileName1);
-                $input['facture_proforma_action_formati_substi'] = $fileName1;
-            }
-        }
+//        if (isset($data['file_beneficiare_substi'])){
+//            $file = $data['file_beneficiare_substi'];
+//            $collections = (new FastExcel)->import($file);
+//            if (count($collections)>$input['nombre_stagiaire_action_formati_substi']){
+//                return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+//            }
+//
+//            if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
+//                return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+//            }
+//        }
+//
+//        if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
+//            return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le coût de la formation que vous souhaitez substituer ']);
+//        }
+//
+//        $nombredejour = $input['nombre_heure_action_formation_p_substi']/8;
+//
+//        $input['nombre_jour_action_formation_substi'] = $nombredejour;
+//
+//        $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation_substi']);
+//
+//        if($infoscaracteristique->code_ctf == "CGF"){
+//            $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_substi'];
+//        }
+//        if($infoscaracteristique->code_ctf == "CSF"){
+//            $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati_substi'];
+//        }
+//        if($infoscaracteristique->code_ctf == "CFD"){
+//            $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
+//        }
+//        if($infoscaracteristique->code_ctf == "CCEF"){
+//            $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_substi'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+//        }
+//        if($infoscaracteristique->code_ctf == "CSEF"){
+//            $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
+//        }
+//
+//        $input['montant_attribuable_fdfp_substi'] = $montantcoutactionattribuable;
+//
+//        if (isset($data['facture_proforma_action_formati_substi'])){
+//            $filefront = $data['facture_proforma_action_formati_substi'];
+//            if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+//                || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+//                || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+//                $fileName1 = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
+//                $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $fileName1);
+//                $input['facture_proforma_action_formati_substi'] = $fileName1;
+//            }
+//        }
 
         if (isset($data['piece_demande_plan_substi'])){
             $filefront = $data['piece_demande_plan_substi'];
@@ -628,102 +628,102 @@ class AgreementController extends Controller
             }
         }
 
-        $input['id_action_formation_plan_a_substi'] = $id_action;
+//        $input['id_action_formation_plan_a_substi'] = $id_action;
         $input['id_processus'] = 5;
-
-        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
-        if(isset($plan_formation)){
-            $input['id_user'] = $plan_formation->user_conseiller;
-        }
+//
+//        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
+//        if(isset($plan_formation)){
+//            $input['id_user'] = $plan_formation->user_conseiller;
+//        }
 
         DemandeSubstitutionActionPlanFormation::create($input);
 
-        $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
-        $input['id_action_formation_plan_substi'] = $demande_substitution->id_action_formation_plan_substi;
-        $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan_substi'];
-
-        FicheADemandeAgrement::create($input);
-
-        $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
-
-        if (isset($data['file_beneficiare_substi'])){
-
-            $file = $data['file_beneficiare_substi'];
-
-            $collections = (new FastExcel)->import($file);
-
-            foreach($collections as $collection){
-
-                if(isset($collection['NOM ET PRENON'])){
-                    $nom_prenom = $collection['NOM ET PRENON'];
-                }else{
-                    $nom_prenom = null;
-                }
-                if(isset($collection['GENRE'])){
-                    $genre = $collection['GENRE'];
-                }else{
-                    $genre = null;
-                }
-                if(isset($collection['DATE'])){
-                    $date = $collection['DATE'];
-                }else{
-                    $date = null;
-                }
-                if(isset($collection['NATIONALITE'])){
-                    $nationalite = $collection['NATIONALITE'];
-                }else{
-                    $nationalite = null;
-                }
-                if(isset($collection['FONCTION'])){
-                    $fonction = $collection['FONCTION'];
-                }else{
-                    $fonction = null;
-                }
-                if(isset($collection['CATEGORIE'])){
-                    $categorie = $collection['CATEGORIE'];
-                }else{
-                    $categorie = null;
-                }
-                if(isset($collection['ANNEE EMBAUCHE'])){
-                    $anneeembauche = $collection['ANNEE EMBAUCHE'];
-                }else{
-                    $anneeembauche = null;
-                }
-                if(isset($collection['MATRICULE CNPS'])){
-                    $matricule_cnps = $collection['MATRICULE CNPS'];
-                }else{
-                    $matricule_cnps = null;
-                }
-                BeneficiairesFormation::create([
-                    'id_fiche_agrement' => $insertedIdFicheAgrement,
-                    'nom_prenoms' => $nom_prenom,
-                    'genre' =>$genre,
-                    'annee_naissance' => $date,
-                    'nationalite' => $nationalite,
-                    'fonction' => $fonction,
-                    'categorie' => $categorie,
-                    'annee_embauche' => $anneeembauche,
-                    'matricule_cnps' => $matricule_cnps
-                ]);
-            }
-            $nbrebeneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$insertedIdFicheAgrement]])->get();
-            $nbrebene = count($nbrebeneficiaires);
-            $fiche = FicheADemandeAgrement::find($insertedIdFicheAgrement);
-            $fiche->update([
-                'total_beneficiaire_fiche_demand' =>$nbrebene
-            ]);
-        }
-
-        if (isset($data['file_beneficiare_substi'])){
-            $filefront = $data['file_beneficiare_substi'];
-            if($filefront->extension() == "xlsx"  || $filefront->extension() == "XLSX"){
-                $fileName1 = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
-                $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $fileName1);
-                FicheADemandeAgrement::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
-                    'file_beneficiare_fiche_agrement' => $fileName1
-                ]);
-            }
-        }
+//        $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
+//        $input['id_action_formation_plan_substi'] = $demande_substitution->id_action_formation_plan_substi;
+//        $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan_substi'];
+//
+//        FicheADemandeAgrement::create($input);
+//
+//        $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
+//
+//        if (isset($data['file_beneficiare_substi'])){
+//
+//            $file = $data['file_beneficiare_substi'];
+//
+//            $collections = (new FastExcel)->import($file);
+//
+//            foreach($collections as $collection){
+//
+//                if(isset($collection['NOM ET PRENON'])){
+//                    $nom_prenom = $collection['NOM ET PRENON'];
+//                }else{
+//                    $nom_prenom = null;
+//                }
+//                if(isset($collection['GENRE'])){
+//                    $genre = $collection['GENRE'];
+//                }else{
+//                    $genre = null;
+//                }
+//                if(isset($collection['DATE'])){
+//                    $date = $collection['DATE'];
+//                }else{
+//                    $date = null;
+//                }
+//                if(isset($collection['NATIONALITE'])){
+//                    $nationalite = $collection['NATIONALITE'];
+//                }else{
+//                    $nationalite = null;
+//                }
+//                if(isset($collection['FONCTION'])){
+//                    $fonction = $collection['FONCTION'];
+//                }else{
+//                    $fonction = null;
+//                }
+//                if(isset($collection['CATEGORIE'])){
+//                    $categorie = $collection['CATEGORIE'];
+//                }else{
+//                    $categorie = null;
+//                }
+//                if(isset($collection['ANNEE EMBAUCHE'])){
+//                    $anneeembauche = $collection['ANNEE EMBAUCHE'];
+//                }else{
+//                    $anneeembauche = null;
+//                }
+//                if(isset($collection['MATRICULE CNPS'])){
+//                    $matricule_cnps = $collection['MATRICULE CNPS'];
+//                }else{
+//                    $matricule_cnps = null;
+//                }
+//                BeneficiairesFormation::create([
+//                    'id_fiche_agrement' => $insertedIdFicheAgrement,
+//                    'nom_prenoms' => $nom_prenom,
+//                    'genre' =>$genre,
+//                    'annee_naissance' => $date,
+//                    'nationalite' => $nationalite,
+//                    'fonction' => $fonction,
+//                    'categorie' => $categorie,
+//                    'annee_embauche' => $anneeembauche,
+//                    'matricule_cnps' => $matricule_cnps
+//                ]);
+//            }
+//            $nbrebeneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$insertedIdFicheAgrement]])->get();
+//            $nbrebene = count($nbrebeneficiaires);
+//            $fiche = FicheADemandeAgrement::find($insertedIdFicheAgrement);
+//            $fiche->update([
+//                'total_beneficiaire_fiche_demand' =>$nbrebene
+//            ]);
+//        }
+//
+//        if (isset($data['file_beneficiare_substi'])){
+//            $filefront = $data['file_beneficiare_substi'];
+//            if($filefront->extension() == "xlsx"  || $filefront->extension() == "XLSX"){
+//                $fileName1 = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
+//                $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $fileName1);
+//                FicheADemandeAgrement::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
+//                    'file_beneficiare_fiche_agrement' => $fileName1
+//                ]);
+//            }
+//        }
 
         return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution ajouté avec succès');
 
@@ -797,73 +797,73 @@ class AgreementController extends Controller
                 $data = $request->all();
 
                 $input = $request->all();
-                $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation_substi']]])->first();
-                $input['id_entreprise_structure_formation_action_substi'] = $input['id_entreprise_structure_formation_plan_formation_substi'];
-                $input['nombre_stagiaire_action_formati_substi'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
-                $input['intitule_action_formation_plan_substi'] = mb_strtoupper($input['intitule_action_formation_plan_substi']);
-                $input['structure_etablissement_action_substi'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
-                $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
-                $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
+//                $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation_substi']]])->first();
+//                $input['id_entreprise_structure_formation_action_substi'] = $input['id_entreprise_structure_formation_plan_formation_substi'];
+//                $input['nombre_stagiaire_action_formati_substi'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+//                $input['intitule_action_formation_plan_substi'] = mb_strtoupper($input['intitule_action_formation_plan_substi']);
+//                $input['structure_etablissement_action_substi'] = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
+//                $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
+//                $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
 //                $input['id_plan_de_formation'] = $id_plan;
 //                $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
 
-                if (isset($data['file_beneficiare_substi'])){
-                    $file = $data['file_beneficiare_substi'];
-                    $collections = (new FastExcel)->import($file);
-                    if (count($collections)>$input['nombre_stagiaire_action_formati_substi']){
-                        return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
-                    }
-
-                    if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
-                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
-                    }
-                }else{
-                    //compter le nombre de personne précedemment enregistré
-                }
-
-                if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
-                    return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le cout de la formation que vous souhaitez substituer ']);
-                }
-
-                $nombredejour = $input['nombre_heure_action_formation_p_substi']/8;
-
-                $input['nombre_jour_action_formation_substi'] = $nombredejour;
-
-                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation_substi']);
-
-                if($infoscaracteristique->code_ctf == "CGF"){
-                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_substi'];
-                }
-                if($infoscaracteristique->code_ctf == "CSF"){
-                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati_substi'];
-                }
-                if($infoscaracteristique->code_ctf == "CFD"){
-                    $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
-                }
-                if($infoscaracteristique->code_ctf == "CCEF"){
-                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_substi'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
-                }
-                if($infoscaracteristique->code_ctf == "CSEF"){
-                    $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
-                }
-
-                $input['montant_attribuable_fdfp_substi'] = $montantcoutactionattribuable;
-
-                if (isset($data['facture_proforma_action_formati_substi'])){
-                    $filefront = $data['facture_proforma_action_formati_substi'];
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-                        $fileName1 = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $fileName1);
-                        $input['facture_proforma_action_formati_substi'] = $fileName1;
-                        DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-                            ->where('id_plan_de_formation',$id_plan)
-                            ->update([
-                                'facture_proforma_action_formati_substi' => $input['facture_proforma_action_formati_substi'],
-                            ]);
-                    }
-                }
+//                if (isset($data['file_beneficiare_substi'])){
+//                    $file = $data['file_beneficiare_substi'];
+//                    $collections = (new FastExcel)->import($file);
+//                    if (count($collections)>$input['nombre_stagiaire_action_formati_substi']){
+//                        return redirect()->back()->withErrors(['error' => 'Erreur :Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+//                    }
+//
+//                    if (count($collections)<$input['nombre_stagiaire_action_formati_substi']){
+//                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+//                    }
+//                }else{
+//                    //compter le nombre de personne précedemment enregistré
+//                }
+//
+//                if($input['cout_action_formation_plan_substi']>$actionplanformation->cout_action_formation_plan){
+//                    return redirect()->back()->withErrors(['error' => 'Erreur :  Le coût de cette formation est plus élevé que le cout de la formation que vous souhaitez substituer ']);
+//                }
+//
+//                $nombredejour = $input['nombre_heure_action_formation_p_substi']/8;
+//
+//                $input['nombre_jour_action_formation_substi'] = $nombredejour;
+//
+//                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation_substi']);
+//
+//                if($infoscaracteristique->code_ctf == "CGF"){
+//                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_substi'];
+//                }
+//                if($infoscaracteristique->code_ctf == "CSF"){
+//                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati_substi'];
+//                }
+//                if($infoscaracteristique->code_ctf == "CFD"){
+//                    $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
+//                }
+//                if($infoscaracteristique->code_ctf == "CCEF"){
+//                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_substi'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+//                }
+//                if($infoscaracteristique->code_ctf == "CSEF"){
+//                    $montantcoutactionattribuable = $input['cout_action_formation_plan_substi'];
+//                }
+//
+//                $input['montant_attribuable_fdfp_substi'] = $montantcoutactionattribuable;
+//
+//                if (isset($data['facture_proforma_action_formati_substi'])){
+//                    $filefront = $data['facture_proforma_action_formati_substi'];
+//                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+//                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+//                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+//                        $fileName1 = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
+//                        $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $fileName1);
+//                        $input['facture_proforma_action_formati_substi'] = $fileName1;
+//                        DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+//                            ->where('id_plan_de_formation',$id_plan)
+//                            ->update([
+//                                'facture_proforma_action_formati_substi' => $input['facture_proforma_action_formati_substi'],
+//                            ]);
+//                    }
+//                }
 
                 if (isset($data['piece_demande_plan_substi'])){
                     $filefront = $data['piece_demande_plan_substi'];
@@ -883,118 +883,118 @@ class AgreementController extends Controller
                 DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
                     ->where('id_plan_de_formation',$id_plan)
                     ->update([
-                        'intitule_action_formation_plan_substi' => $input['intitule_action_formation_plan_substi'],
-                        'nombre_groupe_action_formation_substi' => $input['nombre_groupe_action_formation_substi'],
-                        'nombre_heure_action_formation_p_substi' => $input['nombre_heure_action_formation_p_substi'],
-                        'cout_action_formation_plan_substi' => $input['cout_action_formation_plan_substi'],
-                        'id_caracteristique_type_formation_substi' => $input['id_caracteristique_type_formation_substi'],
-                        'nombre_jour_action_formation_substi' => $input['nombre_jour_action_formation_substi'],
-                        'nombre_stagiaire_action_formati_substi' => $input['nombre_stagiaire_action_formati_substi'],
-                        'id_entreprise_structure_formation_action_substi' => $input['id_entreprise_structure_formation_action_substi'],
-                        'montant_attribuable_fdfp_substi' => $input['montant_attribuable_fdfp_substi'],
-                        'structure_etablissement_action_substi' => $input['structure_etablissement_action_substi'],
+//                        'intitule_action_formation_plan_substi' => $input['intitule_action_formation_plan_substi'],
+//                        'nombre_groupe_action_formation_substi' => $input['nombre_groupe_action_formation_substi'],
+//                        'nombre_heure_action_formation_p_substi' => $input['nombre_heure_action_formation_p_substi'],
+//                        'cout_action_formation_plan_substi' => $input['cout_action_formation_plan_substi'],
+//                        'id_caracteristique_type_formation_substi' => $input['id_caracteristique_type_formation_substi'],
+//                        'nombre_jour_action_formation_substi' => $input['nombre_jour_action_formation_substi'],
+//                        'nombre_stagiaire_action_formati_substi' => $input['nombre_stagiaire_action_formati_substi'],
+//                        'id_entreprise_structure_formation_action_substi' => $input['id_entreprise_structure_formation_action_substi'],
+//                        'montant_attribuable_fdfp_substi' => $input['montant_attribuable_fdfp_substi'],
+//                        'structure_etablissement_action_substi' => $input['structure_etablissement_action_substi'],
                         'commentaire_demande_plan_substi' => $input['commentaire_demande_plan_substi'],
                         'id_motif_demande_plan_substi' => $input['id_motif_demande_plan_substi'],
-                        'id_secteur_activite_substi' => $input['id_secteur_activite_substi'],
+//                        'id_secteur_activite_substi' => $input['id_secteur_activite_substi'],
                     ]);
 
 
-                $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
-                $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan_substi'];
-
-                FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)
-                    ->update([
-                        'id_type_formation' => $input['id_type_formation'],
-                        'id_but_formation' => $input['id_but_formation'],
-                        'date_debut_fiche_agrement' => $input['date_debut_fiche_agrement'],
-                        'date_fin_fiche_agrement' => $input['date_fin_fiche_agrement'],
-                        'lieu_formation_fiche_agrement' => $input['lieu_formation_fiche_agrement'],
-                        'cout_total_fiche_agrement' => $input['cout_total_fiche_agrement'],
-                        'objectif_pedagogique_fiche_agre' => $input['objectif_pedagogique_fiche_agre'],
-                        'cadre_fiche_demande_agrement' => $input['cadre_fiche_demande_agrement'],
-                        'agent_maitrise_fiche_demande_ag' => $input['agent_maitrise_fiche_demande_ag'],
-                        'employe_fiche_demande_agrement' => $input['employe_fiche_demande_agrement'],
-                    ]);
-
-                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
-
-                if (isset($data['file_beneficiare_substi'])){
-
-                    $file = $data['file_beneficiare_substi'];
-
-                    $collections = (new FastExcel)->import($file);
-
-                    foreach($collections as $collection){
-
-                        if(isset($collection['NOM ET PRENON'])){
-                            $nom_prenom = $collection['NOM ET PRENON'];
-                        }else{
-                            $nom_prenom = null;
-                        }
-                        if(isset($collection['GENRE'])){
-                            $genre = $collection['GENRE'];
-                        }else{
-                            $genre = null;
-                        }
-                        if(isset($collection['DATE'])){
-                            $date = $collection['DATE'];
-                        }else{
-                            $date = null;
-                        }
-                        if(isset($collection['NATIONALITE'])){
-                            $nationalite = $collection['NATIONALITE'];
-                        }else{
-                            $nationalite = null;
-                        }
-                        if(isset($collection['FONCTION'])){
-                            $fonction = $collection['FONCTION'];
-                        }else{
-                            $fonction = null;
-                        }
-                        if(isset($collection['CATEGORIE'])){
-                            $categorie = $collection['CATEGORIE'];
-                        }else{
-                            $categorie = null;
-                        }
-                        if(isset($collection['ANNEE EMBAUCHE'])){
-                            $anneeembauche = $collection['ANNEE EMBAUCHE'];
-                        }else{
-                            $anneeembauche = null;
-                        }
-                        if(isset($collection['MATRICULE CNPS'])){
-                            $matricule_cnps = $collection['MATRICULE CNPS'];
-                        }else{
-                            $matricule_cnps = null;
-                        }
-                        BeneficiairesFormation::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
-                            'nom_prenoms' => $nom_prenom,
-                            'genre' =>$genre,
-                            'annee_naissance' => $date,
-                            'nationalite' => $nationalite,
-                            'fonction' => $fonction,
-                            'categorie' => $categorie,
-                            'annee_embauche' => $anneeembauche,
-                            'matricule_cnps' => $matricule_cnps
-                        ]);
-                    }
-                    $nbrebeneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$insertedIdFicheAgrement]])->get();
-                    $nbrebene = count($nbrebeneficiaires);
-                    $fiche = FicheADemandeAgrement::find($insertedIdFicheAgrement);
-                    $fiche->update([
-                        'total_beneficiaire_fiche_demand' =>$nbrebene
-                    ]);
-                }
-
-                if (isset($data['file_beneficiare_substi'])){
-                    $filefront = $data['file_beneficiare_substi'];
-                    if($filefront->extension() == "xlsx"  || $filefront->extension() == "XLSX"){
-                        $fileName1 = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $fileName1);
-                        FicheADemandeAgrement::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
-                            'file_beneficiare_fiche_agrement' => $fileName1
-                        ]);
-                    }
-                }
+//                $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
+//                $input['cout_total_fiche_agrement'] = $input['cout_action_formation_plan_substi'];
+//
+//                FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)
+//                    ->update([
+//                        'id_type_formation' => $input['id_type_formation'],
+//                        'id_but_formation' => $input['id_but_formation'],
+//                        'date_debut_fiche_agrement' => $input['date_debut_fiche_agrement'],
+//                        'date_fin_fiche_agrement' => $input['date_fin_fiche_agrement'],
+//                        'lieu_formation_fiche_agrement' => $input['lieu_formation_fiche_agrement'],
+//                        'cout_total_fiche_agrement' => $input['cout_total_fiche_agrement'],
+//                        'objectif_pedagogique_fiche_agre' => $input['objectif_pedagogique_fiche_agre'],
+//                        'cadre_fiche_demande_agrement' => $input['cadre_fiche_demande_agrement'],
+//                        'agent_maitrise_fiche_demande_ag' => $input['agent_maitrise_fiche_demande_ag'],
+//                        'employe_fiche_demande_agrement' => $input['employe_fiche_demande_agrement'],
+//                    ]);
+//
+//                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
+//
+//                if (isset($data['file_beneficiare_substi'])){
+//
+//                    $file = $data['file_beneficiare_substi'];
+//
+//                    $collections = (new FastExcel)->import($file);
+//
+//                    foreach($collections as $collection){
+//
+//                        if(isset($collection['NOM ET PRENON'])){
+//                            $nom_prenom = $collection['NOM ET PRENON'];
+//                        }else{
+//                            $nom_prenom = null;
+//                        }
+//                        if(isset($collection['GENRE'])){
+//                            $genre = $collection['GENRE'];
+//                        }else{
+//                            $genre = null;
+//                        }
+//                        if(isset($collection['DATE'])){
+//                            $date = $collection['DATE'];
+//                        }else{
+//                            $date = null;
+//                        }
+//                        if(isset($collection['NATIONALITE'])){
+//                            $nationalite = $collection['NATIONALITE'];
+//                        }else{
+//                            $nationalite = null;
+//                        }
+//                        if(isset($collection['FONCTION'])){
+//                            $fonction = $collection['FONCTION'];
+//                        }else{
+//                            $fonction = null;
+//                        }
+//                        if(isset($collection['CATEGORIE'])){
+//                            $categorie = $collection['CATEGORIE'];
+//                        }else{
+//                            $categorie = null;
+//                        }
+//                        if(isset($collection['ANNEE EMBAUCHE'])){
+//                            $anneeembauche = $collection['ANNEE EMBAUCHE'];
+//                        }else{
+//                            $anneeembauche = null;
+//                        }
+//                        if(isset($collection['MATRICULE CNPS'])){
+//                            $matricule_cnps = $collection['MATRICULE CNPS'];
+//                        }else{
+//                            $matricule_cnps = null;
+//                        }
+//                        BeneficiairesFormation::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
+//                            'nom_prenoms' => $nom_prenom,
+//                            'genre' =>$genre,
+//                            'annee_naissance' => $date,
+//                            'nationalite' => $nationalite,
+//                            'fonction' => $fonction,
+//                            'categorie' => $categorie,
+//                            'annee_embauche' => $anneeembauche,
+//                            'matricule_cnps' => $matricule_cnps
+//                        ]);
+//                    }
+//                    $nbrebeneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$insertedIdFicheAgrement]])->get();
+//                    $nbrebene = count($nbrebeneficiaires);
+//                    $fiche = FicheADemandeAgrement::find($insertedIdFicheAgrement);
+//                    $fiche->update([
+//                        'total_beneficiaire_fiche_demand' =>$nbrebene
+//                    ]);
+//                }
+//
+//                if (isset($data['file_beneficiare_substi'])){
+//                    $filefront = $data['file_beneficiare_substi'];
+//                    if($filefront->extension() == "xlsx"  || $filefront->extension() == "XLSX"){
+//                        $fileName1 = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
+//                        $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $fileName1);
+//                        FicheADemandeAgrement::where('id_fiche_agrement',$insertedIdFicheAgrement)->update([
+//                            'file_beneficiare_fiche_agrement' => $fileName1
+//                        ]);
+//                    }
+//                }
 
 
                 if($request->action=="Enregistrer_soumettre_demande_substitution"){
