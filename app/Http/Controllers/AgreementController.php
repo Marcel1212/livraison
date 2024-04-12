@@ -741,7 +741,6 @@ class AgreementController extends Controller
     {
         unset($request['_token']);
         unset($request['_method']);
-
         $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
         $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
         if(isset($id_action)){
@@ -1005,6 +1004,7 @@ class AgreementController extends Controller
 //                }
 
                 if($request->action=="Enregistrer_soumettre_demande_substitution"){
+                    dd($id_action);
                     DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
                         ->where('id_plan_de_formation',$id_plan)
                         ->update([
