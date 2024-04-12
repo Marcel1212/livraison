@@ -505,8 +505,8 @@ class AgreementController extends Controller
 //                    $fiche->file_beneficiare_fiche_agrement = $filename_other;
 //                    $fiche->update();
 //                }
-//                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
-//            }
+                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
+            }
 //        }
 
         $this->validate($request, [
