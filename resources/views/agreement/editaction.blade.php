@@ -191,19 +191,19 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         type="button"
                         class="nav-link @if($id_etape==2)  active @endif"
                         role="tab"
-                        @if($demande_annulation_action)
-                            @if($demande_annulation_action->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)
-                                disabled
-                            @endif
-                        @endif
+{{--                        @if($demande_annulation_action)--}}
+{{--                            @if($demande_annulation_action->flag_soumis_demande_annulation_plan==true || $demande_annulation_action->flag_validation_demande_annulation_plan==true)--}}
+{{--                                disabled--}}
+{{--                            @endif--}}
+{{--                        @endif--}}
                         @if($anneexercice->date_fin_periode_exercice<now())
                             disabled
                         @endif
-                        @if($demande_annulation_plan)
-                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_plan->flag_validation_demande_annulation_plan==true)
-                                disabled
-                           @endif
-                        @endif
+{{--                        @if($demande_annulation_plan)--}}
+{{--                            @if($demande_annulation_plan->flag_soumis_demande_annulation_plan==true || $demande_annulation_plan->flag_validation_demande_annulation_plan==true)--}}
+{{--                                disabled--}}
+{{--                           @endif--}}
+{{--                        @endif--}}
 
                             data-bs-toggle="tab"
                         data-bs-target="#navs-top-substitution"
