@@ -236,7 +236,7 @@ class AgreementController extends Controller
     {
         $caracteristiques = CaracteristiqueTypeFormation::All();
 
-        $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
+//        $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
         $butformations = ButFormation::all();
         $fiche_a_demande_agrement = new FicheADemandeAgrement();
         $beneficiaire_formation = new BeneficiairesFormation();
@@ -250,15 +250,15 @@ class AgreementController extends Controller
         $id_etape = Crypt::UrldeCrypt($id_etape);
         $id_action = Crypt::UrldeCrypt($id_action);
 
-        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
+//        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
 
         $demande_substitution = DemandeSubstitutionActionPlanFormation::
         where('id_action_formation_plan_a_substi',$id_action)
             ->first();
-        if(isset($demande_substitution)){
-            $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
-            $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
-        }
+//        if(isset($demande_substitution)){
+//            $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
+//            $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
+//        }
         $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
             ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
             ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
@@ -266,7 +266,7 @@ class AgreementController extends Controller
             ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
             ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
             ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
-        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
+//        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
         return view('agreement.editaction', compact('fiche_a_demande_agrement',
             'demande_annulation_plan','beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
     }
@@ -327,10 +327,10 @@ class AgreementController extends Controller
 //                ->where('id_plan_de_formation',$id_plan)
                 ->first();
 
-            if(isset($demande_substitution)){
-                $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
-                $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
-            }
+//            if(isset($demande_substitution)){
+//                $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
+//                $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
+//            }
 
 
 
@@ -363,7 +363,7 @@ class AgreementController extends Controller
 //                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
 //                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
 //                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
-//                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
+                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
 //                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
 //                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
 //                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
@@ -564,7 +564,7 @@ class AgreementController extends Controller
 //        $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
 //        $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
 //        $input['id_plan_de_formation'] = $id_plan;
-//        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
+        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
 
 //        if (isset($data['file_beneficiare_substi'])){
 //            $file = $data['file_beneficiare_substi'];
@@ -628,7 +628,7 @@ class AgreementController extends Controller
             }
         }
 
-//        $input['id_action_formation_plan_a_substi'] = $id_action;
+        $input['id_action_formation_plan_a_substi'] = $id_action;
         $input['id_processus'] = 5;
 //
 //        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
@@ -804,7 +804,7 @@ class AgreementController extends Controller
 //                $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
 //                $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
 //                $input['id_plan_de_formation'] = $id_plan;
-//                $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
+                $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
 
 //                if (isset($data['file_beneficiare_substi'])){
 //                    $file = $data['file_beneficiare_substi'];
@@ -994,7 +994,6 @@ class AgreementController extends Controller
 //                        ]);
 //                    }
 //                }
-
 
                 if($request->action=="Enregistrer_soumettre_demande_substitution"){
                     DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
