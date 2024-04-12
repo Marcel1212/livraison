@@ -404,7 +404,7 @@ class CommissionEvaluationOffreController extends Controller
                 $commissionevaluationoffre->date_fin_commission_evaluation_offre = now();
                 $commissionevaluationoffre->update();
 
-                $cahier = CahierCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->frst();
+                $cahier = CahierCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->first();
                 $projet_etude = ProjetEtude::where('id_projet_etude',@$cahier->id_projet_etude)->first();
                 $projet_etude->flag_valider_commission_evaluation_offre = true;
                 $projet_etude->update();
