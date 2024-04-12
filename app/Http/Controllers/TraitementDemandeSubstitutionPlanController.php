@@ -144,9 +144,12 @@ class TraitementDemandeSubstitutionPlanController extends Controller
 
         return view('traitementdemandesubstitutionplan.edit', compact('motif_substitutions',
             'caracteristiques',
-            'fiche_a_demande_agrement_acien',
-            'secteuractivites','ResultProssesList','action_formation','fiche_a_demande_agrement','butformations','typeformations','categorieprofessionelles','structureformations','motifs','demande_substitution','id2','ResultProssesList','parcoursexist'));
-
+//            'fiche_a_demande_agrement_acien',
+            'secteuractivites','ResultProssesList','action_formation',
+//            'fiche_a_demande_agrement',
+            'butformations','typeformations','categorieprofessionelles',
+            'structureformations','motifs','demande_substitution',
+            'id2','ResultProssesList','parcoursexist'));
     }
 
 
