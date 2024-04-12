@@ -674,9 +674,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($classement_offre_techs as $key => $classement_offre_tech)
+                            <?php
+                                    $key = 0;
+                            ?>
+                            @foreach ($classement_offre_techs as  => $classement_offre_tech)
                                 <tr>
-                                    <td>{{ $key+1 }}</td>
+                                    <td>{{ ++$key}}</td>
                                     <td>{{ $classement_offre_tech->entreprise }}</td>
                                     <td>{{ round($classement_offre_tech->note,2) }} / 100</td>
                                     <td>
@@ -706,7 +709,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                     </div>
 
                     <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true && $idetape==6) show active @endif" id="navs-top-offrefinanciere" role="tabpanel">
-                                                @if($commissionevaluationoffre->flag_statut_commission_evaluation_offre == true)
+                        @if($notation_commission_evaluation_offre_fin==$key && ($notation_commission_evaluation_offre_fin!=0))
                                                     <form method="POST" class="form"
                                                           action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($commissionevaluationoffre->id_commission_evaluation_offre),\App\Helpers\Crypt::UrlCrypt(6)]) }}"
                                                           enctype="multipart/form-data">

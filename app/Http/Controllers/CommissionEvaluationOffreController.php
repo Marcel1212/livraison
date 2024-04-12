@@ -102,6 +102,11 @@ class CommissionEvaluationOffreController extends Controller
         $commissionevaluationoffre = CommissionEvaluationOffre::find($id);
         $critereevaluationoffretechs = CritereEvaluationOffreTech::where('flag_critere_evaluation_offre_tech',true)->get();
 
+        //Offre Fin
+        $notation_commission_evaluation_offre_fin = NotationCommissionEvaluationOffreFin::
+            where('id_commission_evaluation_offre',$id)
+            ->count();
+
         $notation_commission_evaluation_offre_tech = NotationCommissionEvaluationOffreTech::
         Join('commission_evaluation_offre_participant','commission_evaluation_offre_participant.id_user_commission_evaluation_offre_participant',
         'notation_commission_evaluation_offre_tech.id_user_notation_commission_evaluation_offre')
@@ -196,6 +201,7 @@ class CommissionEvaluationOffreController extends Controller
             'offretechcommissionevals',
             'projet_etudes',
             'cahier',
+            'notation_commission_evaluation_offre_fin',
             'commissioneparticipants',
             'listedemandes',
             'beginvalidebyoneuser',
@@ -405,10 +411,8 @@ class CommissionEvaluationOffreController extends Controller
                         $notation_montant = new NotationCommissionEvaluationOffreFin();
                         $notation_montant->id_commission_evaluation_offre =$id;
                         $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
-                    $notation_montant->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
+                        $notation_montant->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
                         $notation_montant->id_operateur = $entreprise->id_entreprises;
-                        $notation_montant->flag_valider_commission_evaluation_offre_fin = true;
-                        $notation_montant->date_valider_commission_evaluation_offre_fin = now();
 
                         //Vérification sur le montant entrée
                         $notation_montant_exist = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
