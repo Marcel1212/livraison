@@ -420,7 +420,7 @@ class CommissionEvaluationOffreController extends Controller
                             ->where('id_user_notation_commission_evaluation_offre',Auth::user()->id)
                             ->first();
 
-                        if(isset($note_exist)){
+                        if(isset($notation_montant_exist)){
                             $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
                             $notation_montant_exist->update();
                         }else{
