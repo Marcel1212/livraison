@@ -273,7 +273,11 @@ class AgreementController extends Controller
 //        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
         return view('agreement.editaction', compact('fiche_a_demande_agrement',
 //            'demande_annulation_plan',
-            'beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
+            'beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation'
+//            ,
+//            'motif_annulations',
+//            'demande_annulation_action'
+        ));
     }
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
