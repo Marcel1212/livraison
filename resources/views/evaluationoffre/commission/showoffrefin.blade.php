@@ -88,31 +88,31 @@ $logo = Menu::get_logo();
                                 ?>
                                 @if(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)<$montant_inf)
                                     <?php
-                                        $montant = (intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
+                                        $note = (intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                                 /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20
                                     ?>
-                                    @if($montant<0)
+                                    @if($note<0)
                                         0
                                     @else
-                                        {{@$montant}}
+                                        {{round(@$note,2)}}
                                     @endif
                                 @elseif($montant_inf >= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                     || $montant_sup <=intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin))
                                     <?php
-                                        $montant = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
+                                        $note = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
                                         ?>
-                                        {{@$montant}}
+                                    {{round(@$note,2)}}
                                     @elseif(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)>$montant_sup)
                                         <?php
-                                        $montant = ((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
+                                        $note = ((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                                     /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20)-
                                             (((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                                         -@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20*2)
                                         ?>
-                                    @if($montant<0)
+                                    @if($note<0)
                                         0
                                     @else
-                                        {{@$montant}}
+                                        {{round(@$note,2)}}
                                     @endif
                                 @endif
                             </td>
