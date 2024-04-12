@@ -137,20 +137,24 @@ class AgreementController extends Controller
                     ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
             })->get();
 
-        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
+//        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
 
-        $demande_annulation_exist =false;
+//        $demande_annulation_exist =false;
 
-        foreach ($actionplanformations as $actionplanformation) {
-            $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $actionplanformation->id_action_formation_plan)
-                ->whereNull('flag_demande_annulation_plan_valider_par_processus')->first();
-            if(isset($demande_annulation_action)){
-                $demande_annulation_exist = true;
-            }
-        }
-        return view('agreement.edit', compact('agreement','demande_annulation_exist','id_etape','plan_de_formation','pays','motifs','type_entreprises','demande_annulation_plan','infoentreprise','actionplanformations','categorieplans'));
+//        foreach ($actionplanformations as $actionplanformation) {
+//            $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $actionplanformation->id_action_formation_plan)
+//                ->whereNull('flag_demande_annulation_plan_valider_par_processus')->first();
+//            if(isset($demande_annulation_action)){
+//                $demande_annulation_exist = true;
+//            }
+//        }
+        return view('agreement.edit', compact('agreement',
+//            'demande_annulation_exist',
+            'id_etape','plan_de_formation','pays','motifs','type_entreprises',
+//            'demande_annulation_plan',
+            'infoentreprise','actionplanformations','categorieplans'));
 
     }
 
@@ -163,74 +167,74 @@ class AgreementController extends Controller
     }
 
 
-    public function cancel(DemandeAnnulationSauvegarderRequest $request,string $id_plan_de_formation,string $id_etape)
-    {
-        $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
-        $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
-        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
-        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation',$id_plan_de_formation)->first();
-        if(isset($request->piece_demande_annulation_plan)){
-            $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
-            $extension_file = $piece_demande_annulation_plan->extension();
-            $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
-            $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
-        }else{
-            $file_name =  $demande_annulation_plan->piece_demande_annulation_plan;
-        }
-        DemandeAnnulationPlan::updateOrCreate(
-            ['id_plan_formation'=>$id_plan_de_formation],
-            [
-                'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
-                'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
-                'id_processus'=>4,
-                'flag_soumis_demande_annulation_plan'=>false,
-                'flag_validation_demande_annulation_plan'=>false,
-                'id_user'=>$plan_formation->user_conseiller,
-                'piece_demande_annulation_plan'=>$file_name,
-            ]
-        );
-
-        if($request->action=="Enregistrer_soumettre_demande_annulation"){
-            $demande_annulation_plan->flag_soumis_demande_annulation_plan = true;
-            $demande_annulation_plan->date_soumis_demande_annulation_plan = now();
-            $demande_annulation_plan->update();
-        }
-
-
-        return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_etape).'/edit')->with('success', 'Succès : Demande d\'annulation de plan de formation effectuée');
-    }
-
-    public function cancelUpdate(DemandeAnnulationSauvegarderRequest $request,string $id_demande,$id_plan)
-    {
-        if(isset($id_demande)){
-            $id_demande =  \App\Helpers\Crypt::UrldeCrypt($id_demande);
-            $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
-            $demande_annulation_plan = DemandeAnnulationPlan::where('id_demande_annulation_plan',$id_demande)->first();
-            if(isset($demande_annulation_plan)){
-                $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
-                $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
-                $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
-                $demande_annulation_plan->id_processus = 5;
-                $demande_annulation_plan->id_plan_formation = $id_plan;
-                if(isset($plan_formation)){
-                    $demande_annulation_plan->id_user = $plan_formation->user_conseiller;
-                }
-
-                if(isset($request->piece_demande_annulation_plan)){
-                    $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
-                    $extension_file = $piece_demande_annulation_plan->extension();
-                    $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
-                    $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
-                    $demande_annulation_plan->piece_demande_annulation_plan = $file_name;
-                }
-
-
-                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/cancel')->with('success', 'Succès : Demande d\'annulation de plan de formation soumis');
-            }
-
-        }
-//        substitution
-    }
+//    public function cancel(DemandeAnnulationSauvegarderRequest $request,string $id_plan_de_formation,string $id_etape)
+//    {
+//        $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
+//        $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
+//        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
+//        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation',$id_plan_de_formation)->first();
+//        if(isset($request->piece_demande_annulation_plan)){
+//            $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
+//            $extension_file = $piece_demande_annulation_plan->extension();
+//            $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
+//            $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
+//        }else{
+//            $file_name =  $demande_annulation_plan->piece_demande_annulation_plan;
+//        }
+//        DemandeAnnulationPlan::updateOrCreate(
+//            ['id_plan_formation'=>$id_plan_de_formation],
+//            [
+//                'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
+//                'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
+//                'id_processus'=>4,
+//                'flag_soumis_demande_annulation_plan'=>false,
+//                'flag_validation_demande_annulation_plan'=>false,
+//                'id_user'=>$plan_formation->user_conseiller,
+//                'piece_demande_annulation_plan'=>$file_name,
+//            ]
+//        );
+//
+//        if($request->action=="Enregistrer_soumettre_demande_annulation"){
+//            $demande_annulation_plan->flag_soumis_demande_annulation_plan = true;
+//            $demande_annulation_plan->date_soumis_demande_annulation_plan = now();
+//            $demande_annulation_plan->update();
+//        }
+//
+//
+//        return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_etape).'/edit')->with('success', 'Succès : Demande d\'annulation de plan de formation effectuée');
+//    }
+//
+//    public function cancelUpdate(DemandeAnnulationSauvegarderRequest $request,string $id_demande,$id_plan)
+//    {
+//        if(isset($id_demande)){
+//            $id_demande =  \App\Helpers\Crypt::UrldeCrypt($id_demande);
+//            $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
+//            $demande_annulation_plan = DemandeAnnulationPlan::where('id_demande_annulation_plan',$id_demande)->first();
+//            if(isset($demande_annulation_plan)){
+//                $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
+//                $demande_annulation_plan->id_motif_demande_annulation_plan = $request->id_motif_demande_annulation_plan;
+//                $demande_annulation_plan->commentaire_demande_annulation_plan = $request->commentaire_demande_annulation_plan;
+//                $demande_annulation_plan->id_processus = 5;
+//                $demande_annulation_plan->id_plan_formation = $id_plan;
+//                if(isset($plan_formation)){
+//                    $demande_annulation_plan->id_user = $plan_formation->user_conseiller;
+//                }
+//
+//                if(isset($request->piece_demande_annulation_plan)){
+//                    $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
+//                    $extension_file = $piece_demande_annulation_plan->extension();
+//                    $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
+//                    $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
+//                    $demande_annulation_plan->piece_demande_annulation_plan = $file_name;
+//                }
+//
+//
+//                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/cancel')->with('success', 'Succès : Demande d\'annulation de plan de formation soumis');
+//            }
+//
+//        }
+////        substitution
+//    }
 
     public function editaction(string $id_plan_de_formation, string $id_action,string $id_etape)
     {
@@ -268,7 +272,8 @@ class AgreementController extends Controller
             ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
 //        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
         return view('agreement.editaction', compact('fiche_a_demande_agrement',
-            'demande_annulation_plan','beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
+//            'demande_annulation_plan',
+            'beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation','motif_annulations','demande_annulation_action'));
     }
 
     public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
