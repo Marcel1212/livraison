@@ -677,7 +677,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <?php
                                     $key = 0;
                             ?>
-                            @foreach ($classement_offre_techs as  => $classement_offre_tech)
+                            @foreach ($classement_offre_techs as  $classement_offre_tech)
                                 <tr>
                                     <td>{{ ++$key}}</td>
                                     <td>{{ $classement_offre_tech->entreprise }}</td>
