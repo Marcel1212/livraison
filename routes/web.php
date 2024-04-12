@@ -556,7 +556,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('commissionevaluationoffres/{id}/{id1}/delete', [CommissionEvaluationOffreController::class, 'deleteSousCritere'])->name('commissionevaluationoffres.delete');
     Route::get('commissionevaluationoffres/{id}/delete/personne', [CommissionEvaluationOffreController::class, 'deletePersonne'])->name('commissionevaluationoffres.delete.personne');
     Route::get('commissionevaluationoffres/{id}/show/offretech', [CommissionEvaluationOffreController::class, 'showOffreTech'])->name('commissionevaluationoffres.offretech.show');
-
+    Route::get('commissionevaluationoffres/{id}/show/offrefin', [CommissionEvaluationOffreController::class, 'showOffreFin'])->name('commissionevaluationoffres.offrefin.show');
 
 
 //    Route::group(['middleware' => ['can:traitementcomitetechniques-index']], function () {

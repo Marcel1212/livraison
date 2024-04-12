@@ -83,7 +83,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ @$commission_evaluation_offre->date_fin_commission_evaluation_offre }}</td>
                                 <td>{{ @$commission_evaluation_offre->commentaire_commission_evaluation_offre }}</td>
                                 <td align="center">
-                                    <?php if($commission_evaluation_offre->flag_statut_commission_evaluation_offre == true){ ?>
+                                    <?php if($commission_evaluation_offre->flag_valider_commission_evaluation_offre == true){ ?>
                                         <span class="badge bg-success">Terminer</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>

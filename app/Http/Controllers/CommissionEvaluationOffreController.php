@@ -401,7 +401,14 @@ class CommissionEvaluationOffreController extends Controller
             if($request->action =="valider_offre_fin"){
                 $commissionevaluationoffre->flag_valider_commission_evaluation_offre = true;
                 $commissionevaluationoffre->date_valider_commission_evaluation_offre = now();
+                $commissionevaluationoffre->date_fin_commission_evaluation_offre = now();
                 $commissionevaluationoffre->update();
+
+                $cahier = CahierCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->frst();
+                $projet_etude = ProjetEtude::where('id_projet_etude',@$cahier->id_projet_etude)->first();
+                $projet_etude->flag_valider_commission_evaluation_offre = true;
+                $projet_etude->update();
+
                 return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(6).'/edit')->with('success', 'Succes : Enregistrement effectué avec succès ');
             }
 
@@ -484,4 +491,45 @@ class CommissionEvaluationOffreController extends Controller
             )
         );
     }
+
+
+    public function showOffreFin($id){
+        $id =  Crypt::UrldeCrypt($id);
+        $commissionevaluationoffre = CommissionEvaluationOffre::find($id);
+        $commissioneparticipants = CommissionParticipantEvaluationOffre::select('commission_evaluation_offre_participant.id_commission_evaluation_offre_participant as id_commission_participant','users.id as id_user_commission_evaluation_offre_participant', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile')
+            ->join('users','commission_evaluation_offre_participant.id_user_commission_evaluation_offre_participant','users.id')
+            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+            ->where([['id_commission_evaluation_offre','=',$id]])
+            ->get();
+
+        $classement_offre_techs = DB::table('notation_commission_evaluation_offre_tech')
+            ->Join('entreprises','entreprises.id_entreprises',
+                'notation_commission_evaluation_offre_tech.id_operateur')
+            ->selectRaw('entreprises.raison_social_entreprises as entreprise,
+                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note')
+            ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
+            ->groupBy('entreprise')
+            ->orderBy('note', 'desc')
+            ->get();
+
+//        dd($classement_offre_techs);
+
+//
+//        $cahier = CahierCommissionEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->first();
+//
+//        $offretechcommissionevals = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
+//            ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
+//            ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
+//            ->get()
+//            ->groupby('libelle_critere_evaluation_offre_tech');
+
+        return view('evaluationoffre.commission.showoffrefin',compact(
+                'id','classement_offre_techs',
+                'commissionevaluationoffre'
+
+            )
+        );
+    }
+
 }

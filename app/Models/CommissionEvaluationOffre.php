@@ -60,4 +60,19 @@ class CommissionEvaluationOffre extends Model
         'date_valider_offre_tech_commission_evaluation_tech',
         'flag_statut_commission_evaluation_offre',
         'created_at', 'updated_at'];
+
+
+    public function montantfinanciere($libelle){
+        $entreprise = Entreprises::where('raison_social_entreprises',$libelle)->first();
+        return $this->belongsTo(NotationCommissionEvaluationOffreFin::class,'id_commission_evaluation_offre','id_commission_evaluation_offre')
+            ->where('notation_commission_evaluation_offre_fin.id_operateur',$entreprise->id_entreprises)
+            ->first();
+    }
+
+    public function cahiercommission()
+    {
+        return $this->belongsTo(CahierCommissionEvaluationOffre::class, 'id_commission_evaluation_offre','id_commission_evaluation_offre');
+    }
+
+
 }
