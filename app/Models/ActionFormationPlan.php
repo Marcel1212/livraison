@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $cout_accorde_action_formation
  * @property float $montant_attribuable_fdfp
  * @property float $nombre_jour_action_formation
+ * @property float $utilisation_direct_action_formation
+ * @property float $finan_complemantaire_action_formation
  * @property float $pirorite_action_formation
  * @property string $commentaire_action_formation
  * @property string $commentaire_comite_technique
@@ -66,7 +68,7 @@ class ActionFormationPlan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente','id_secteur_activite','id_caracteristique_type_formation','nombre_jour_action_formation','montant_attribuable_fdfp','pirorite_action_formation','flag_action_formation_traiter_comite_technique','commentaire_comite_technique','flag_action_formation_plan_traite_instruction','date_action_formation_plan_traite_instruction'];
+    protected $fillable = ['id_plan_de_formation', 'motif_non_financement_action_formation', 'intitule_action_formation_plan', 'structure_etablissement_action_', 'nombre_stagiaire_action_formati', 'nombre_groupe_action_formation_', 'nombre_heure_action_formation_p', 'cout_action_formation_plan', 'flag_valide_action_formation_pl', 'created_at', 'updated_at', 'numero_action_formation_plan', 'facture_proforma_action_formati', 'cout_accorde_action_formation', 'commentaire_action_formation','id_entreprise_structure_formation_action','flag_valide_action_formation_pl_comite_gestion','flag_valide_action_formation_pl_comite_permanente','id_secteur_activite','id_caracteristique_type_formation','nombre_jour_action_formation','montant_attribuable_fdfp','pirorite_action_formation','flag_action_formation_traiter_comite_technique','commentaire_comite_technique','flag_action_formation_plan_traite_instruction','date_action_formation_plan_traite_instruction','utilisation_direct_action_formation','finan_complemantaire_action_formation'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
