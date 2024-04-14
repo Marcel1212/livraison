@@ -560,6 +560,8 @@
                                 <th>Coût de l'action</th>
                                 <th>Coût de financement</th>
                                 <th>Coût de l'action accordée</th>
+                                <th>Utilisation direct</th>
+                                <th>Finan complémentaire</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
@@ -576,6 +578,8 @@
                                                 <td>{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}</td>
                                                 <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($actionplanformation->utilisation_direct_action_formation, 0, ',', ' ') }}</td>
+                                                <td>{{ number_format($actionplanformation->finan_complemantaire_action_formation, 0, ',', ' ') }}</td>
                                                 <td>
                                                     @if(@$actionplanformation->flag_action_formation_plan_traite_instruction ==true)
                                                         <span class="badge bg-success">Traité</span>

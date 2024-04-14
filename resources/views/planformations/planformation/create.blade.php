@@ -305,6 +305,13 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4 col-12">
+                                            <div class="mb-1">
+                                                <label>Nombre de salariés déclarés à la CNPS <strong style="color:red;">*</strong></label>
+                                                <input type="number" class="form-control form-control-sm"  disabled="disabled">
+                                            </div>
+                                        </div>
+
                                         <div class="col-12" align="right">
                                             <hr>
                                             <button type="submit" name="action" value="Enregister"
