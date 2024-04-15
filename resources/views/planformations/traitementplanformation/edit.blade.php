@@ -561,7 +561,7 @@
                                 <th>Coût de financement</th>
                                 <th>Coût de l'action accordée</th>
                                 <th>Utilisation direct</th>
-                                <th>Finan complémentaire</th>
+                                <th>Finan. complémentaire</th>
                                 <th>Statut</th>
                                 <th>Action</th>
                             </tr>
