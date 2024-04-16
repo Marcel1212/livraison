@@ -362,6 +362,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                         <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
                                         <input type="text" name="masse_salariale" id="masse_salariale"
+                                               onkeyup="FuncCalculPartENtre({{@$planformation->valeur_part_entreprise}});"
                                                class="form-control form-control-sm number" value="{{number_format(@$planformation->masse_salariale, 0, ',', ' ')}}">
                                     </div>
                                 </div>
