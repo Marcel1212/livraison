@@ -674,7 +674,7 @@ class PlanFormationController extends Controller
                             'objet'=>'PLAN DE FORMATION'
 
                         ]);
-                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error','Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ');
                     }
 
                     if (count($collections)<$input['nombre_stagiaire_action_formati']){
@@ -693,7 +693,7 @@ class PlanFormationController extends Controller
 
                         ]);
                         //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
-                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error', 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
                     }
                 }
 
@@ -725,7 +725,7 @@ class PlanFormationController extends Controller
 
                     ]);
 
-                    return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->withErrors(['error' => 'Erreur : Le coût de cette formation est plus élevé que le budget restant. ']);
+                    return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error','Erreur : Le coût de cette formation est plus élevé que le budget restant. ');
 
                 }
 
