@@ -288,7 +288,7 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                                             <div class="mb-1">
 
                                                 <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
-                                                <input type="text" name="masse_salariale " id="masse_salariale" onkeyup="FuncCalculPartENtre(<?php echo $part->valeur_part_entreprise; ?>);"
+                                                <input type="text" name="masse_salariale" id="masse_salariale" onkeyup="FuncCalculPartENtre(<?php echo $part->valeur_part_entreprise; ?>);"
                                                     class="form-control form-control-sm number" required="required">
                                             </div>
                                         </div>
