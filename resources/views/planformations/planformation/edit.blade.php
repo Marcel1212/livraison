@@ -157,6 +157,17 @@ $idpart = Auth::user()->id_partenaire;
             </div>
         @endif
 
+        @if($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert-body">
+                        {{ $error }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endforeach
+        @endif
+
 
 
              @if ($message = Session::get('error'))
@@ -1089,13 +1100,7 @@ $idpart = Auth::user()->id_partenaire;
                 @endsection
 
                 @section('js_perso')
-                    <script type="text/javascript">
-                        function FuncCalculPartENtre(valeurpart) {
-                            var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
-                            var partEntreprise = ValueMS*valeurpart;
-                            document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
-                        }
-                    </script>
+
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
@@ -1202,10 +1207,12 @@ $idpart = Auth::user()->id_partenaire;
                         $("#Enregistrer_soumettre_plan_formation").prop( "disabled", true );
                     }
                 }
-
-        </script>
-
-
+                    function FuncCalculPartENtre(valeurpart) {
+                        var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
+                        var partEntreprise = ValueMS*valeurpart;
+                        document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+                    }
+                </script>
        @endsection
     @else
        <script type="text/javascript">
