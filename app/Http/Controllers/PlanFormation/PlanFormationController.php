@@ -667,14 +667,14 @@ class PlanFormationController extends Controller
 
                             'code_piece'=>$id,
 
-                            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi.)',
+                            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi par catégorie.)',
 
                             'etat'=>'Echec',
 
                             'objet'=>'PLAN DE FORMATION'
 
                         ]);
-                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error','Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ');
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error', 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur à la somme du nombre saisi par catégorie (Nombre de cadres, Nombres d\'agent de maitrise, Nombre d\'employés/ouvriers)');
                     }
 
                     if (count($collections)<$input['nombre_stagiaire_action_formati']){
@@ -692,8 +692,7 @@ class PlanFormationController extends Controller
                             'objet'=>'PLAN DE FORMATION'
 
                         ]);
-                        //return redirect('planformation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Succes : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
-                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error', 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ');
+                        return redirect()->route('planformation.edit', [Crypt::UrlCrypt($id),Crypt::UrlCrypt($idetape)])->with('error', 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur à la somme du nombre saisi par catégorie (Nombre de cadres, Nombres d\'agent de maitrise, Nombre d\'employés/ouvriers)');
                     }
                 }
 
