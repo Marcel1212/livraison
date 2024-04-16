@@ -167,13 +167,7 @@ $idpart = Auth::user()->id_partenaire;
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-        <script type="text/javascript">
-            function FuncCalculPartENtre(valeurpart) {
-                var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
-                var partEntreprise = ValueMS*valeurpart;
-                document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
-            }
-        </script>
+
         <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -1094,6 +1088,13 @@ $idpart = Auth::user()->id_partenaire;
                 @endsection
 
                 @section('js_perso')
+                    <script type="text/javascript">
+                        function FuncCalculPartENtre(valeurpart) {
+                            var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
+                            var partEntreprise = ValueMS*valeurpart;
+                            document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+                        }
+                    </script>
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
