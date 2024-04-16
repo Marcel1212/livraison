@@ -3,10 +3,8 @@
 @section('content')
 
     @php($Module='Plan de formation')
-    @php($titre='Liste des demandes de substitution d\'action  de plan de formation')
+    @php($titre='Liste des demandes de substitution')
     @php($lien='traitementdemandesubstitutionplan')
-
-    <!-- BEGIN: Content-->
 
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / </span> {{$titre}}
@@ -48,8 +46,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($resultat as $key => $res1)
-                            @foreach ($res1 as  $action_formation)
+                        @foreach ($resultat as  $res1)
+                            @foreach ($res1 as  $key =>$action_formation)
                                 <tr>
                                     <td>{{$key+1 }}</td>
                                     <td>{{ $action_formation->intitule_action_formation_plan  }}</td>
@@ -60,7 +58,7 @@
                                     </td>
                                     <td align="center">
                                             <a href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($action_formation->id_action_formation_plan_substi),
-'id2'=>\App\Helpers\Crypt::UrlCrypt($action_formation->id_combi_proc)]) }}"
+'id2'=>\App\Helpers\Crypt::UrlCrypt($action_formation->id_combi_proc),'etape'=>\App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                                class=" "
                                                title="Modifier"><img
                                                     src='/assets/img/editing.png'></a>

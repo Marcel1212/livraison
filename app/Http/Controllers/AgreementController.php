@@ -115,6 +115,7 @@ class AgreementController extends Controller
 
         $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
         $id_etape = Crypt::UrldeCrypt($id_etape);
+        $motif_substitutions = Motif::where('code_motif','SAF')->get();
 
         $agreement = DB::table('fiche_agrement')
             ->select(['plan_formation.*', 'fiche_agrement.*', 'fiche_agrement.created_at as date_valide_agrreement'])
@@ -137,23 +138,12 @@ class AgreementController extends Controller
                     ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
             })->get();
 
-//        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
 
-//        $demande_annulation_exist =false;
-
-//        foreach ($actionplanformations as $actionplanformation) {
-//            $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $actionplanformation->id_action_formation_plan)
-//                ->whereNull('flag_demande_annulation_plan_valider_par_processus')->first();
-//            if(isset($demande_annulation_action)){
-//                $demande_annulation_exist = true;
-//            }
-//        }
         return view('agreement.edit', compact('agreement',
-//            'demande_annulation_exist',
             'id_etape','plan_de_formation','pays','motifs','type_entreprises',
-//            'demande_annulation_plan',
+            'motif_substitutions',
             'infoentreprise','actionplanformations','categorieplans'));
 
     }
@@ -236,375 +226,384 @@ class AgreementController extends Controller
 ////        substitution
 //    }
 
-    public function editaction(string $id_plan_de_formation, string $id_action,string $id_etape)
-    {
-        $caracteristiques = CaracteristiqueTypeFormation::All();
-
-//        $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
-        $butformations = ButFormation::all();
-        $fiche_a_demande_agrement = new FicheADemandeAgrement();
-        $beneficiaire_formation = new BeneficiairesFormation();
-        $motif_substitutions = Motif::where('code_motif','SAF')->get();
-        $typeformations = TypeFormation::all();
-        $categorieprofessionelles = CategorieProfessionelle::all();
-        $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
-        $secteuractivites = SecteurActivite::all();
-        $pays = Pays::all();
-        $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
-        $id_etape = Crypt::UrldeCrypt($id_etape);
-        $id_action = Crypt::UrldeCrypt($id_action);
-
-//        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
-
-        $demande_substitution = DemandeSubstitutionActionPlanFormation::
-        where('id_action_formation_plan_a_substi',$id_action)
-            ->first();
-//        if(isset($demande_substitution)){
-//            $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
-//            $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
+//    public function editaction(string $id_plan_de_formation, string $id_action,string $id_etape)
+//    {
+//        $caracteristiques = CaracteristiqueTypeFormation::All();
+//
+////        $motif_annulations = Motif::where('code_motif','AAF')->where('flag_actif_motif',true)->get();
+//        $butformations = ButFormation::all();
+//        $fiche_a_demande_agrement = new FicheADemandeAgrement();
+//        $beneficiaire_formation = new BeneficiairesFormation();
+//        $motif_substitutions = Motif::where('code_motif','SAF')->get();
+//        $typeformations = TypeFormation::all();
+//        $categorieprofessionelles = CategorieProfessionelle::all();
+//        $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
+//        $secteuractivites = SecteurActivite::all();
+//        $pays = Pays::all();
+//        $id_plan_de_formation = Crypt::UrldeCrypt($id_plan_de_formation);
+//        $id_etape = Crypt::UrldeCrypt($id_etape);
+//        $id_action = Crypt::UrldeCrypt($id_action);
+//
+////        $demande_annulation_plan = DemandeAnnulationPlan::where('id_plan_formation', $id_plan_de_formation)->first();
+//
+//        $demande_substitution = DemandeSubstitutionActionPlanFormation::
+//        where('id_action_formation_plan_a_substi',$id_action)
+//            ->first();
+////        if(isset($demande_substitution)){
+////            $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
+////            $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
+////        }
+//        $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
+//            ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+//            ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+//            ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+//            ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+//            ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+//            ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
+////        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
+//        return view('agreement.editaction', compact('fiche_a_demande_agrement',
+////            'demande_annulation_plan',
+//            'beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation'
+////            ,
+////            'motif_annulations',
+////            'demande_annulation_action'
+//        ));
+//    }
+//
+//    public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
+//    {
+//        $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
+//        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
+//        $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
+//        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
+//        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan',$id_action)->first();
+//
+//        if(isset($request->piece_demande_annulation_plan)){
+//            $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
+//            $extension_file = $piece_demande_annulation_plan->extension();
+//            $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
+//            $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
+//
+//        }else{
+//            $file_name =  $demande_annulation_action->piece_demande_annulation_plan;
 //        }
-        $infosactionplanformation = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*')
-            ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
-            ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
-            ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-            ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
-            ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-            ->where([['action_formation_plan.id_action_formation_plan','=',$id_action]])->first();
-//        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan', $id_action)->first();
-        return view('agreement.editaction', compact('fiche_a_demande_agrement',
-//            'demande_annulation_plan',
-            'beneficiaire_formation','caracteristiques','demande_substitution','motif_substitutions','pays','secteuractivites','fiche_a_demande_agrement','typeformations','beneficiaire_formation','categorieprofessionelles','structureformations','butformations','id_etape','infosactionplanformation'
-//            ,
-//            'motif_annulations',
-//            'demande_annulation_action'
-        ));
-    }
-
-    public function editactionCancel(DemandeAnnulationSauvegarderRequest $request, string $id_plan_de_formation, string $id_action,string $id_etape)
-    {
-        $id_plan_de_formation =  \App\Helpers\Crypt::UrldeCrypt($id_plan_de_formation);
-        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
-        $id_etape =  \App\Helpers\Crypt::UrldeCrypt($id_etape);
-        $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan_de_formation)->first();
-        $demande_annulation_action = DemandeAnnulationPlan::where('id_action_plan',$id_action)->first();
-
-        if(isset($request->piece_demande_annulation_plan)){
-            $piece_demande_annulation_plan = $request->piece_demande_annulation_plan;
-            $extension_file = $piece_demande_annulation_plan->extension();
-            $file_name = 'piece_justificatif_demande_annulation_'. '_' . rand(111,99999) . '_' . 'piece_justificatif_demande_annulation_' . '_' . time() . '.' . $extension_file;
-            $piece_demande_annulation_plan->move(public_path('pieces/piece_justificatif_demande_annulation/'), $file_name);
-
-        }else{
-            $file_name =  $demande_annulation_action->piece_demande_annulation_plan;
-        }
-        DemandeAnnulationPlan::updateOrCreate(
-            ['id_action_plan'=>$id_action],
-            [
-                'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
-                'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
-                'id_processus'=>4,
-                'id_user'=>$plan_formation->user_conseiller,
-                'piece_demande_annulation_plan'=>$file_name,
-            ]
-        );
-
-        if($request->action=="Enregistrer_soumettre_demande_annulation"){
-            $demande_annulation_action->flag_soumis_demande_annulation_plan = true;
-            $demande_annulation_action->date_soumis_demande_annulation_plan = now();
-            $demande_annulation_action->update();
-        }
-        return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation effectuée');
-    }
-
-    public function substitution(string $id_plan, string $id_action)
+//        DemandeAnnulationPlan::updateOrCreate(
+//            ['id_action_plan'=>$id_action],
+//            [
+//                'id_motif_demande_annulation_plan'=>$request->id_motif_demande_annulation_plan,
+//                'commentaire_demande_annulation_plan'=>$request->commentaire_demande_annulation_plan,
+//                'id_processus'=>4,
+//                'id_user'=>$plan_formation->user_conseiller,
+//                'piece_demande_annulation_plan'=>$file_name,
+//            ]
+//        );
+//
+//        if($request->action=="Enregistrer_soumettre_demande_annulation"){
+//            $demande_annulation_action->flag_soumis_demande_annulation_plan = true;
+//            $demande_annulation_action->date_soumis_demande_annulation_plan = now();
+//            $demande_annulation_action->update();
+//        }
+//        return redirect('agreement/'.Crypt::UrlCrypt($id_plan_de_formation).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt($id_etape).'/editaction')->with('success', 'Succès : Demande d\'annulation effectuée');
+//    }
+//
+    public function substitution(Request $request, string $id_plan, string $id_action)
     {
         $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
         $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
         $planformation = PlanFormation::find($id_plan);
-        $butformations = ButFormation::all();
-        $fiche_a_demande_agrement = new FicheADemandeAgrement();
-        $beneficiaire_formation = new BeneficiairesFormation();
-        $motifs = Motif::where('code_motif','SAF')->get();
-        $typeformations = TypeFormation::all();
-        $categorieprofessionelles = CategorieProfessionelle::all();
-        $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
-        $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$id_plan)->get();
-        if(isset($id_action)){
-            $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
-            $demande_substitution = DemandeSubstitutionActionPlanFormation::
-            where('id_action_formation_plan_a_substi',$id_action)
-//                ->where('id_plan_de_formation',$id_plan)
-                ->first();
-
-//            if(isset($demande_substitution)){
-//                $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan_substi',$demande_substitution->id_action_formation_plan_substi)->first();
-//                $beneficiaire_formation = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->first();
-//            }
-
-
-
-            if(isset($actionplanformation)){
-                return view('agreement.substitution',compact('beneficiaire_formation','demande_substitution','fiche_a_demande_agrement','motifs','actionplanformation','actionplanformations','structureformations','categorieprofessionelles','typeformations','butformations'));
-            }
-        }
-    }
-
-    public function substitutionsStore(Request $request,string $id_plan, string $id_action)
-    {
-        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
-        $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
         $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
-            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-                ->where('id_plan_de_formation',$id_plan)
-                ->first();
-//
-            if(isset($actionplanformation)){
-//                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
-                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
-                $demande_substitution->id_plan_de_formation = $id_plan;
-//                $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
-//                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
-//                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
-//                $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
-//
-//                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
-//
-//                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
-//                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
-//                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
-                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
-//                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
-                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
-                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
-                $demande_substitution->id_processus = 5;
-//
-//                if (isset($request->file_beneficiare)){
-//                    $file = $request->file_beneficiare;
-//                    $collections = (new FastExcel)->import($file);
-//                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
-//                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
-//                    }
-//                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
-//                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
-//                    }
-//                }
-//
-//                if(isset($request->piece_demande_plan_substi)){
-//                    $filefront = $request->piece_demande_plan_substi;
-//                    $filename_one = 'piece_demande_plan_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_plan_substi' . '_' . time() . '.' . $filefront->extension();
-//                    $filefront->move(public_path('pieces/piece_demande_substi/'), $filename_one);
-//                    $demande_substitution->piece_demande_plan_substi = $filename_one;
-//                }
-//
-//                if(isset($request->facture_proforma_action_plan_substi)){
-//                    $filefront = $request->facture_proforma_action_plan_substi;
-//                    $filename = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
-//                    $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $filename);
-//                    $demande_substitution->facture_proforma_action_plan_substi = $filename;
-//                }
-//
-//                $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
-//
-//                if(isset($plan_formation)){
-//                    $demande_substitution->id_user = $plan_formation->user_conseiller;
-//                }
-//
-                $demande_substitution->save();
-//
-//                $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
-//
-//                $fiche_a_demande_agrement = new FicheADemandeAgrement();
-//                $fiche_a_demande_agrement->lieu_formation_fiche_agrement = mb_strtoupper($request->lieu_formation_fiche_agrement);
-//                $fiche_a_demande_agrement->objectif_pedagogique_fiche_agre = mb_strtoupper($request->objectif_pedagogique_fiche_agre);
-//                $fiche_a_demande_agrement->id_action_formation_plan_substi = $demande_substitution->id_action_formation_plan_substi;
-//                $fiche_a_demande_agrement->date_debut_fiche_agrement =$request->date_debut_fiche_agrement;
-//                $fiche_a_demande_agrement->date_fin_fiche_agrement = $request->date_fin_fiche_agrement;
-//                $fiche_a_demande_agrement->id_type_formation = $request->id_type_formation;
-//                $fiche_a_demande_agrement->id_but_formation = $request->id_but_formation;
-//                $fiche_a_demande_agrement->cadre_fiche_demande_agrement = $request->cadre_fiche_demande_agrement;
-//                $fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag = $request->agent_maitrise_fiche_demande_ag;
-//                $fiche_a_demande_agrement->employe_fiche_demande_agrement = $request->employe_fiche_demande_agrement;
-//
-//                $fiche_a_demande_agrement->save();
-//                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
-//
-//                if (isset($request->file_beneficiare)){
-//                    $file = $request->file_beneficiare;
-//                    $collections = (new FastExcel)->import($file);
-//                    foreach($collections as $collection){
-//
-//                        if(isset($collection['NOM ET PRENON'])){
-//                            $nom_prenom = $collection['NOM ET PRENON'];
-//                        }else{
-//                            $nom_prenom = null;
-//                        }
-//                        if(isset($collection['GENRE'])){
-//                            $genre = $collection['GENRE'];
-//                        }else{
-//                            $genre = null;
-//                        }
-//                        if(isset($collection['DATE'])){
-//                            $date = $collection['DATE'];
-//                        }else{
-//                            $date = null;
-//                        }
-//                        if(isset($collection['NATIONALITE'])){
-//                            $nationalite = $collection['NATIONALITE'];
-//                        }else{
-//                            $nationalite = null;
-//                        }
-//                        if(isset($collection['FONCTION'])){
-//                            $fonction = $collection['FONCTION'];
-//                        }else{
-//                            $fonction = null;
-//                        }
-//                        if(isset($collection['CATEGORIE'])){
-//                            $categorie = $collection['CATEGORIE'];
-//                        }else{
-//                            $categorie = null;
-//                        }
-//                        if(isset($collection['ANNEE EMBAUCHE'])){
-//                            $anneeembauche = $collection['ANNEE EMBAUCHE'];
-//                        }else{
-//                            $anneeembauche = null;
-//                        }
-//                        if(isset($collection['MATRICULE CNPS'])){
-//                            $matricule_cnps = $collection['MATRICULE CNPS'];
-//                        }else{
-//                            $matricule_cnps = null;
-//                        }
-//
-//                        $beneficiaire_formation = new BeneficiairesFormation();
-//                        $beneficiaire_formation->id_fiche_agrement = $insertedIdFicheAgrement;
-//                        $beneficiaire_formation->nom_prenoms = $nom_prenom;
-//                        $beneficiaire_formation->genre = $genre;
-//                        $beneficiaire_formation->annee_naissance = $date;
-//                        $beneficiaire_formation->nationalite = $nationalite;
-//                        $beneficiaire_formation->fonction = $fonction;
-//                        $beneficiaire_formation->categorie = $categorie;
-//                        $beneficiaire_formation->annee_embauche = $anneeembauche;
-//                        $beneficiaire_formation->matricule_cnps = $matricule_cnps;
-//                        $beneficiaire_formation->save();
-//                    }
-//
-//                    $nbrebeneficiaires = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->get();
-//                    $nbrebene = count($nbrebeneficiaires);
-//
-//                    $fiche = FicheADemandeAgrement::find($fiche_a_demande_agrement->id_fiche_agrement);
-//                    $fiche->total_beneficiaire_fiche_demand = $nbrebene;
-//                    $fiche->update();
-//                }
-//
-//                if (isset($request->file_beneficiare)){
-//
-//                    $filefront = $request->file_beneficiare;
-//                    $filename_other = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
-//                    $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $filename_other);
-//
-//                    $fiche = FicheADemandeAgrement::find($fiche_a_demande_agrement->id_fiche_agrement);
-//                    $fiche->file_beneficiare_fiche_agrement = $filename_other;
-//                    $fiche->update();
-//                }
-                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
-            }
-//        }
-
         $this->validate($request, [
             'id_motif_demande_plan_substi' => 'required',
             'piece_demande_plan_substi' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120',
             'commentaire_demande_plan_substi' => 'required',
         ],[
             'piece_demande_plan_substi.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-            'id_motif_demande_plan_substi.unique' => 'Veuillez ajoutez le motif de la demande',
-            'commentaire_demande_plan_substi.unique' => 'Veuillez ajoutez le commentaire de la demande',
+            'piece_demande_plan_substi.required'=> 'Veuillez ajouter la pièce de la demande',
+            'id_motif_demande_plan_substi.required' => 'Veuillez ajouter le motif de la demande',
+            'commentaire_demande_plan_substi.required' => 'Veuillez ajouter le commentaire de la demande',
         ]);
 
-        $data = $request->all();
+        $demande_substitution = new DemandeSubstitutionActionPlanFormation();
+        $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
+        $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
+        $demande_substitution->id_plan_de_formation_substi = $id_plan;
+        $demande_substitution->id_action_formation_plan_substi = $id_action;
+        $demande_substitution->intitule_action_formation_plan_substi = $actionplanformation->intitule_action_formation_plan;
+        $demande_substitution->structure_etablissement_action_substi = $actionplanformation->structure_etablissement_action_;
+        $demande_substitution->id_action_formation_plan_substi = $id_action;
 
-        $input = $request->all();
-        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
-        $input['id_plan_de_formation'] = $id_plan;
-
-        if (isset($data['piece_demande_plan_substi'])){
-            $filefront = $data['piece_demande_plan_substi'];
-            if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-                $fileName1 = 'piece_demande_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_substi' . '_' . time() . '.' . $filefront->extension();
-                $filefront->move(public_path('pieces/piece_demande_substi/'), $fileName1);
-                $input['piece_demande_plan_substi'] = $fileName1;
-            }
+        $fiche_a_demande_agreme = FicheADemandeAgrement::where('id_action_formation_plan')->first();
+        $demande_substitution->objectif_pedagogique_action_substi = $fiche_a_demande_agreme->objectif_pedagogique_fich_agre;
+        $demande_substitution->lieu_formation_fiche_agrement_substi = $fiche_a_demande_agreme->lieu_formation_fiche_agrement;
+        $demande_substitution->date_soumis_demande_substitution_action_plan = now();
+        $demande_substitution->id_user = $planformation->user_conseiller;
+        if(isset($request->piece_demande_plan_substi)){
+            $filefront = $request->piece_demande_plan_substi;
+            $filename_one = 'piece_demande_plan_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_plan_substi' . '_' . time() . '.' . $filefront->extension();
+            $filefront->move(public_path('pieces/piece_demande_substi/'), $filename_one);
+            $demande_substitution->piece_demande_plan_substi = $filename_one;
         }
-        $input['id_action_formation_plan_a_substi'] = $id_action;
-        $input['id_processus'] = 5;
-        DemandeSubstitutionActionPlanFormation::create($input);
-        return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution ajouté avec succès');
+        $demande_substitution->id_processus = 5;
+        $demande_substitution->save();
+        return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Demande de substitution effectuée avec succès');
     }
-
-    public function substitutionsUpdate(Request $request, $id_plan,$id_action)
-    {
-        unset($request['_token']);
-        unset($request['_method']);
-        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
-        $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
-        if(isset($id_action)){
-            $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
-            $demande_substitution = DemandeSubstitutionActionPlanFormation::
-            where('id_action_formation_plan_a_substi',$id_action)
-                ->where('id_plan_de_formation',$id_plan)
-                ->first();
-
-
-            if(isset($demande_substitution)) {
-                $this->validate($request, [
-                    'id_motif_demande_plan_substi' => 'required',
-                    'commentaire_demande_plan_substi' => 'required',
-                ],[
-                    'piece_demande_plan_substi.mimes' => 'Les formats requises pour la proformat est: PDF,PNG,JPG,JPEG.',
-                    'piece_demande_plan_substi.max'=> 'la taille maximale doit etre 5 MegaOctets.',
-                    'id_motif_demande_plan_substi.unique' => 'Veuillez ajoutez le motif de la demande',
-                    'commentaire_demande_plan_substi.unique' => 'Veuillez ajoutez le commentaire de la demande',
-                ]);
-
-                $data = $request->all();
-                $input = $request->all();
-                $input['id_plan_de_formation'] = $id_plan;
-                $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
-                if (isset($data['piece_demande_plan_substi'])){
-                    $filefront = $data['piece_demande_plan_substi'];
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-                        $fileName1 = 'piece_demande_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_substi' . '_' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces/piece_demande_substi/'), $fileName1);
-                        $input['piece_demande_plan_substi'] = $fileName1;
-                        DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-                            ->where('id_plan_de_formation',$id_plan)
-                            ->update([
-                                'piece_demande_plan_substi' => $input['piece_demande_plan_substi'],
-                            ]);
-                    }
-                }
-
-                DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-                    ->where('id_plan_de_formation',$id_plan)
-                    ->update([
-                        'commentaire_demande_plan_substi' => $input['commentaire_demande_plan_substi'],
-                        'id_motif_demande_plan_substi' => $input['id_motif_demande_plan_substi'],
-                    ]);
-
-                if($request->action=="Enregistrer_soumettre_demande_substitution"){
-                    DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
-                        ->where('id_plan_de_formation',$id_plan)
-                        ->update([
-                            'flag_soumis_demande_substitution_action_plan' => true,
-                            'date_soumis_demande_substitution_action_plan' => now()]);
-
-                    return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation soumis avec succès ');
-                }
-                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation modifié ');
-            }
-        }
-    }
+//
+//    public function substitutionsStore(Request $request,string $id_plan, string $id_action)
+//    {
+//        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
+//        $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
+//        $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
+//            $demande_substitution_one = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+//                ->where('id_plan_de_formation',$id_plan)
+//                ->first();
+////
+//            if(isset($actionplanformation)){
+////                $rccentreprisehabilitation = Entreprises::where('id_entreprises',$request->structure_etablissement_plan_substi)->first();
+//                $demande_substitution = new DemandeSubstitutionActionPlanFormation();
+//                $demande_substitution->id_plan_de_formation = $id_plan;
+////                $demande_substitution->intitule_action_formation_plan_substi = $request->intitule_action_formation_plan_substi;
+////                $demande_substitution->nombre_stagiaire_action_formati_plan_substi = $request->nombre_stagiaire_action_formati_plan_substi;
+////                $demande_substitution->nombre_heure_action_formation_plan_substi = $request->nombre_heure_action_formation_plan_substi;
+////                $demande_substitution->structure_etablissement_plan_substi = mb_strtoupper($rccentreprisehabilitation->raison_social_entreprises);
+////
+////                $demande_substitution->id_entreprise_structure_formation_plan_substi = $request->structure_etablissement_plan_substi;
+////
+////                $demande_substitution->id_secteur_activite = $request->id_secteur_activite;
+////                $demande_substitution->nombre_groupe_action_formation_plan_substi = $request->nombre_groupe_action_formation_plan_substi;
+////                $demande_substitution->cout_action_formation_plan_substi = $actionplanformation->cout_action_formation_plan;
+//                $demande_substitution->id_action_formation_plan_a_substi = $actionplanformation->id_action_formation_plan;
+////                $nombre_stagiaire_action_formati_substitu = $request->agent_maitrise_fiche_demande_ag + $request->employe_fiche_demande_agrement + $request->cadre_fiche_demande_agrement;
+//                $demande_substitution->id_motif_demande_plan_substi = $request->id_motif_demande_plan_substi;
+//                $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
+//                $demande_substitution->id_processus = 5;
+////
+////                if (isset($request->file_beneficiare)){
+////                    $file = $request->file_beneficiare;
+////                    $collections = (new FastExcel)->import($file);
+////                    if (count($collections)>$nombre_stagiaire_action_formati_substitu){
+////                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est supérieur au nombre saisi ']);
+////                    }
+////                    if (count($collections)<$nombre_stagiaire_action_formati_substitu){
+////                        return redirect()->back()->withErrors(['error' => 'Erreur : Le nombre de bénéficiaires de l\'action de formation est inférieur au nombre saisi ']);
+////                    }
+////                }
+////
+////                if(isset($request->piece_demande_plan_substi)){
+////                    $filefront = $request->piece_demande_plan_substi;
+////                    $filename_one = 'piece_demande_plan_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_plan_substi' . '_' . time() . '.' . $filefront->extension();
+////                    $filefront->move(public_path('pieces/piece_demande_substi/'), $filename_one);
+////                    $demande_substitution->piece_demande_plan_substi = $filename_one;
+////                }
+////
+////                if(isset($request->facture_proforma_action_plan_substi)){
+////                    $filefront = $request->facture_proforma_action_plan_substi;
+////                    $filename = 'facture_proforma_action_formati'. '_' . rand(111,99999) . '_' . 'facture_proforma_action_formati' . '_' . time() . '.' . $filefront->extension();
+////                    $filefront->move(public_path('pieces/facture_proforma_action_formation/'), $filename);
+////                    $demande_substitution->facture_proforma_action_plan_substi = $filename;
+////                }
+////
+////                $plan_formation = PlanFormation::where('id_plan_de_formation',$id_plan)->first();
+////
+////                if(isset($plan_formation)){
+////                    $demande_substitution->id_user = $plan_formation->user_conseiller;
+////                }
+////
+//                $demande_substitution->save();
+////
+////                $demande_substitution = DemandeSubstitutionActionPlanFormation::latest()->first();
+////
+////                $fiche_a_demande_agrement = new FicheADemandeAgrement();
+////                $fiche_a_demande_agrement->lieu_formation_fiche_agrement = mb_strtoupper($request->lieu_formation_fiche_agrement);
+////                $fiche_a_demande_agrement->objectif_pedagogique_fiche_agre = mb_strtoupper($request->objectif_pedagogique_fiche_agre);
+////                $fiche_a_demande_agrement->id_action_formation_plan_substi = $demande_substitution->id_action_formation_plan_substi;
+////                $fiche_a_demande_agrement->date_debut_fiche_agrement =$request->date_debut_fiche_agrement;
+////                $fiche_a_demande_agrement->date_fin_fiche_agrement = $request->date_fin_fiche_agrement;
+////                $fiche_a_demande_agrement->id_type_formation = $request->id_type_formation;
+////                $fiche_a_demande_agrement->id_but_formation = $request->id_but_formation;
+////                $fiche_a_demande_agrement->cadre_fiche_demande_agrement = $request->cadre_fiche_demande_agrement;
+////                $fiche_a_demande_agrement->agent_maitrise_fiche_demande_ag = $request->agent_maitrise_fiche_demande_ag;
+////                $fiche_a_demande_agrement->employe_fiche_demande_agrement = $request->employe_fiche_demande_agrement;
+////
+////                $fiche_a_demande_agrement->save();
+////                $insertedIdFicheAgrement = FicheADemandeAgrement::latest()->first()->id_fiche_agrement;
+////
+////                if (isset($request->file_beneficiare)){
+////                    $file = $request->file_beneficiare;
+////                    $collections = (new FastExcel)->import($file);
+////                    foreach($collections as $collection){
+////
+////                        if(isset($collection['NOM ET PRENON'])){
+////                            $nom_prenom = $collection['NOM ET PRENON'];
+////                        }else{
+////                            $nom_prenom = null;
+////                        }
+////                        if(isset($collection['GENRE'])){
+////                            $genre = $collection['GENRE'];
+////                        }else{
+////                            $genre = null;
+////                        }
+////                        if(isset($collection['DATE'])){
+////                            $date = $collection['DATE'];
+////                        }else{
+////                            $date = null;
+////                        }
+////                        if(isset($collection['NATIONALITE'])){
+////                            $nationalite = $collection['NATIONALITE'];
+////                        }else{
+////                            $nationalite = null;
+////                        }
+////                        if(isset($collection['FONCTION'])){
+////                            $fonction = $collection['FONCTION'];
+////                        }else{
+////                            $fonction = null;
+////                        }
+////                        if(isset($collection['CATEGORIE'])){
+////                            $categorie = $collection['CATEGORIE'];
+////                        }else{
+////                            $categorie = null;
+////                        }
+////                        if(isset($collection['ANNEE EMBAUCHE'])){
+////                            $anneeembauche = $collection['ANNEE EMBAUCHE'];
+////                        }else{
+////                            $anneeembauche = null;
+////                        }
+////                        if(isset($collection['MATRICULE CNPS'])){
+////                            $matricule_cnps = $collection['MATRICULE CNPS'];
+////                        }else{
+////                            $matricule_cnps = null;
+////                        }
+////
+////                        $beneficiaire_formation = new BeneficiairesFormation();
+////                        $beneficiaire_formation->id_fiche_agrement = $insertedIdFicheAgrement;
+////                        $beneficiaire_formation->nom_prenoms = $nom_prenom;
+////                        $beneficiaire_formation->genre = $genre;
+////                        $beneficiaire_formation->annee_naissance = $date;
+////                        $beneficiaire_formation->nationalite = $nationalite;
+////                        $beneficiaire_formation->fonction = $fonction;
+////                        $beneficiaire_formation->categorie = $categorie;
+////                        $beneficiaire_formation->annee_embauche = $anneeembauche;
+////                        $beneficiaire_formation->matricule_cnps = $matricule_cnps;
+////                        $beneficiaire_formation->save();
+////                    }
+////
+////                    $nbrebeneficiaires = BeneficiairesFormation::where('id_fiche_agrement',$fiche_a_demande_agrement->id_fiche_agrement)->get();
+////                    $nbrebene = count($nbrebeneficiaires);
+////
+////                    $fiche = FicheADemandeAgrement::find($fiche_a_demande_agrement->id_fiche_agrement);
+////                    $fiche->total_beneficiaire_fiche_demand = $nbrebene;
+////                    $fiche->update();
+////                }
+////
+////                if (isset($request->file_beneficiare)){
+////
+////                    $filefront = $request->file_beneficiare;
+////                    $filename_other = 'file_beneficiare'. '_' . rand(111,99999) . '_' . 'file_beneficiare' . '_' . time() . '.' . $filefront->extension();
+////                    $filefront->move(public_path('pieces/fichier_beneficiaire_lie_aux_action_plan_formation/'), $filename_other);
+////
+////                    $fiche = FicheADemandeAgrement::find($fiche_a_demande_agrement->id_fiche_agrement);
+////                    $fiche->file_beneficiare_fiche_agrement = $filename_other;
+////                    $fiche->update();
+////                }
+//                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation effectué ');
+//            }
+////        }
+//
+//        $this->validate($request, [
+//            'id_motif_demande_plan_substi' => 'required',
+//            'piece_demande_plan_substi' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120',
+//            'commentaire_demande_plan_substi' => 'required',
+//        ],[
+//            'piece_demande_plan_substi.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+//            'id_motif_demande_plan_substi.unique' => 'Veuillez ajoutez le motif de la demande',
+//            'commentaire_demande_plan_substi.unique' => 'Veuillez ajoutez le commentaire de la demande',
+//        ]);
+//
+//        $data = $request->all();
+//
+//        $input = $request->all();
+//        $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
+//        $input['id_plan_de_formation'] = $id_plan;
+//
+//        if (isset($data['piece_demande_plan_substi'])){
+//            $filefront = $data['piece_demande_plan_substi'];
+//            if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+//                || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+//                || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+//                $fileName1 = 'piece_demande_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_substi' . '_' . time() . '.' . $filefront->extension();
+//                $filefront->move(public_path('pieces/piece_demande_substi/'), $fileName1);
+//                $input['piece_demande_plan_substi'] = $fileName1;
+//            }
+//        }
+//        $input['id_action_formation_plan_a_substi'] = $id_action;
+//        $input['id_processus'] = 5;
+//        DemandeSubstitutionActionPlanFormation::create($input);
+//        return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution ajouté avec succès');
+//    }
+//
+//    public function substitutionsUpdate(Request $request, $id_plan,$id_action)
+//    {
+//        unset($request['_token']);
+//        unset($request['_method']);
+//        $id_action =  \App\Helpers\Crypt::UrldeCrypt($id_action);
+//        $id_plan =  \App\Helpers\Crypt::UrldeCrypt($id_plan);
+//        if(isset($id_action)){
+//            $actionplanformation = ActionFormationPlan::where('id_action_formation_plan',$id_action)->first();
+//            $demande_substitution = DemandeSubstitutionActionPlanFormation::
+//            where('id_action_formation_plan_a_substi',$id_action)
+//                ->where('id_plan_de_formation',$id_plan)
+//                ->first();
+//
+//
+//            if(isset($demande_substitution)) {
+//                $this->validate($request, [
+//                    'id_motif_demande_plan_substi' => 'required',
+//                    'commentaire_demande_plan_substi' => 'required',
+//                ],[
+//                    'piece_demande_plan_substi.mimes' => 'Les formats requises pour la proformat est: PDF,PNG,JPG,JPEG.',
+//                    'piece_demande_plan_substi.max'=> 'la taille maximale doit etre 5 MegaOctets.',
+//                    'id_motif_demande_plan_substi.unique' => 'Veuillez ajoutez le motif de la demande',
+//                    'commentaire_demande_plan_substi.unique' => 'Veuillez ajoutez le commentaire de la demande',
+//                ]);
+//
+//                $data = $request->all();
+//                $input = $request->all();
+//                $input['id_plan_de_formation'] = $id_plan;
+//                $input['id_action_formation_plan_a_substi'] = $actionplanformation->id_action_formation_plan;
+//                if (isset($data['piece_demande_plan_substi'])){
+//                    $filefront = $data['piece_demande_plan_substi'];
+//                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+//                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+//                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+//                        $fileName1 = 'piece_demande_substi'. '_' . rand(111,99999) . '_' . 'piece_demande_substi' . '_' . time() . '.' . $filefront->extension();
+//                        $filefront->move(public_path('pieces/piece_demande_substi/'), $fileName1);
+//                        $input['piece_demande_plan_substi'] = $fileName1;
+//                        DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+//                            ->where('id_plan_de_formation',$id_plan)
+//                            ->update([
+//                                'piece_demande_plan_substi' => $input['piece_demande_plan_substi'],
+//                            ]);
+//                    }
+//                }
+//
+//                DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+//                    ->where('id_plan_de_formation',$id_plan)
+//                    ->update([
+//                        'commentaire_demande_plan_substi' => $input['commentaire_demande_plan_substi'],
+//                        'id_motif_demande_plan_substi' => $input['id_motif_demande_plan_substi'],
+//                    ]);
+//
+//                if($request->action=="Enregistrer_soumettre_demande_substitution"){
+//                    DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_a_substi',$id_action)
+//                        ->where('id_plan_de_formation',$id_plan)
+//                        ->update([
+//                            'flag_soumis_demande_substitution_action_plan' => true,
+//                            'date_soumis_demande_substitution_action_plan' => now()]);
+//
+//                    return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation soumis avec succès ');
+//                }
+//                return redirect('agreement/'.Crypt::UrlCrypt($id_plan).'/'.Crypt::UrlCrypt($id_action).'/'.Crypt::UrlCrypt(2).'/editaction')->with('success', 'Succes : Demande de substitution d\'action de plan de formation modifié ');
+//            }
+//        }
+//    }
 
 }

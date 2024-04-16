@@ -117,7 +117,7 @@ class ActionFormationPlan extends Model
 
     public function demandeSubstitution()
     {
-        return $this->belongsTo(DemandeSubstitutionActionPlanFormation::class,'id_action_formation_plan','id_action_formation_plan_a_substi');
+        return $this->belongsTo(DemandeSubstitutionActionPlanFormation::class,'id_action_formation_plan','id_action_formation_plan_substi');
     }
 
     /**

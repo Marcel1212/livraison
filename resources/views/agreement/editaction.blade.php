@@ -973,7 +973,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                            action="{{ route($lien.'.substitution', ['id_plan'=>\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_plan_de_formation),'id_action'=>\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan)]) }}"
                                            enctype="multipart/form-data">
                                         @csrf
-                                        @method('put')
                                         <div class="row">
 {{--                                            <h6>Nouvelle action de formation</h6>--}}
 {{--                                            <div class="col-12 col-md-12">--}}
