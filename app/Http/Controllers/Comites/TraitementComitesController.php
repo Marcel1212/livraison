@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Comites;
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
 use App\Helpers\Audit;
+use App\Models\FormeJuridique;
+use App\Models\PiecesProjetEtude;
 use App\Models\ProcessusComite;
 use App\Models\TypeComite;
 use App\Helpers\Menu;
@@ -103,9 +105,7 @@ class TraitementComitesController extends Controller
     public function edit($id,$id1)
     {
         $id =  Crypt::UrldeCrypt($id);
-        // dd($id);
          $idetape =  Crypt::UrldeCrypt($id1);
-
          $comite = Comite::find($id);
 
          $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
@@ -167,15 +167,11 @@ class TraitementComitesController extends Controller
         $idcahier =  Crypt::UrldeCrypt($id3);
         $idcomite =  $id;
 
-
         if($request->isMethod('put')){
 
             $data = $request->all();
 
             if($data['action'] === 'Valider_les_actions_des_plans_de_formations'){
-
-
-
                 $planformation = PlanFormation::find($id1);
 
                 $planformation->update([
@@ -184,18 +180,17 @@ class TraitementComitesController extends Controller
                 ]);
 
                 $listeplansformation = LigneCahierPlansProjets::join('plan_formation','ligne_cahier_plans_projets.id_demande','plan_formation.id_plan_de_formation')
-                                ->where([
-                                'id_cahier_plans_projets' => $idcahier,
-                                'code_pieces_ligne_cahier_plans_projets' => 'PF'
-                                ])->get();
-                //dd(count($listeplansformation));
+                    ->where([
+                        'id_cahier_plans_projets' => $idcahier,
+                        'code_pieces_ligne_cahier_plans_projets' => 'PF'
+                    ])->get();
 
                 $listeplansformationtraiter = LigneCahierPlansProjets::join('plan_formation','ligne_cahier_plans_projets.id_demande','plan_formation.id_plan_de_formation')
-                                ->where([
-                                'id_cahier_plans_projets' => $idcahier,
-                                'code_pieces_ligne_cahier_plans_projets' => 'PF',
-                                'flag_traiter_commission_permanente' => true
-                                ])->get();
+                    ->where([
+                        'id_cahier_plans_projets' => $idcahier,
+                        'code_pieces_ligne_cahier_plans_projets' => 'PF',
+                        'flag_traiter_commission_permanente' => true
+                    ])->get();
 
                 //dd(count($listeplansformationtraiter));
 
@@ -207,9 +202,55 @@ class TraitementComitesController extends Controller
                     ]);
                 }
 
-
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/planformation')->with('success', 'Succes : Mise a jour reussi ');
+            }
+            if($data['action'] === 'Traiter_valider_projet'){
+                $projet_etude = ProjetEtude::find($id1);
+                $cahier = CahierPlansProjets::find($idcahier);
 
+                if($cahier->code_commission_permante_comite_gestion=='COP'){
+                    $projet_etude->update([
+                        'flag_valider_comite_permanente_projet_etude' => true,
+                        'date_valider_comite_permanente_projet_etude' => Carbon::now()
+                    ]);
+
+                    $listeplansprojetetudetraiter = LigneCahierPlansProjets::join('projet_etude','ligne_cahier_plans_projets.id_demande','projet_etude.id_projet_etude')
+                        ->where([
+                            'id_cahier_plans_projets' => $idcahier,
+                            'code_pieces_ligne_cahier_plans_projets' => 'PE',
+                            'flag_valider_comite_permanente_projet_etude' => true
+                        ])->get();
+                }
+
+                if($cahier->code_commission_permante_comite_gestion=='COG'){
+                    $projet_etude->update([
+                        'flag_valider_comite_gestion_projet_etude' => true,
+                        'date_valider_comite_gestion_projet_etude' => Carbon::now()
+                    ]);
+
+                    $listeplansprojetetudetraiter = LigneCahierPlansProjets::join('projet_etude','ligne_cahier_plans_projets.id_demande','projet_etude.id_projet_etude')
+                        ->where([
+                            'id_cahier_plans_projets' => $idcahier,
+                            'code_pieces_ligne_cahier_plans_projets' => 'PE',
+                            'flag_valider_comite_gestion_projet_etude' => true
+                        ])->get();
+                }
+
+                $listeprojetetude = LigneCahierPlansProjets::join('projet_etude','ligne_cahier_plans_projets.id_demande','projet_etude.id_projet_etude')
+                    ->where([
+                        'id_cahier_plans_projets' => $idcahier,
+                        'code_pieces_ligne_cahier_plans_projets' => 'PE'
+                    ])->get();
+
+                if(count($listeprojetetude) == count($listeplansprojetetudetraiter)){
+                    $majcahier = CahierPlansProjets::find($idcahier);
+                    $majcahier->update([
+                        'flag_traitement_effectuer_commission' => true,
+                        'date_traitement_effectuer_commission' => Carbon::now()
+                    ]);
+                }
+
+                return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetetude')->with('success', 'Succes : Mise a jour reussi ');
             }
 
         }
@@ -226,11 +267,9 @@ class TraitementComitesController extends Controller
 
         $comite = Comite::find($id);
 
-        //dd($idcomite);
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
-
 
         $listedemandesss = DB::table('cahier_plans_projets')->select('entreprises.raison_social_entreprises','users.name','users.prenom_users','plan_formation.code_plan_formation',
                 'plan_formation.date_soumis_plan_formation','plan_formation.date_soumis_ct_plan_formation','date_soumis_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets',
@@ -257,20 +296,12 @@ class TraitementComitesController extends Controller
         ->where([['id_comite','=',$id]])
         ->get();
 
-
-
         Audit::logSave([
-
             'action'=>'MODIFIER',
-
             'code_piece'=>$id,
-
             'menu'=>'COMITES',
-
             'etat'=>'Succès',
-
             'objet'=>'TENUE DE COMITES '
-
         ]);
 
         return view('comites.traitementcomite.editplanformation', compact(
@@ -290,7 +321,6 @@ class TraitementComitesController extends Controller
 
         $comite = Comite::find($id);
 
-        //dd($idcomite);
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
@@ -393,11 +423,143 @@ class TraitementComitesController extends Controller
     }
 
 
+    public function editprojetetude($id,$id1,$id2){
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id;
+        $comite = Comite::find($id);
+
+        $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
+        $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
+
+        $listedemandesss = DB::table('cahier_plans_projets')
+            ->select('entreprises.raison_social_entreprises','users.name','users.prenom_users','projet_etude.code_projet_etude',
+               'projet_etude.flag_valider_comite_permanente_projet_etude','projet_etude.flag_valider_comite_gestion_projet_etude',
+                'projet_etude.date_soumis','projet_etude.date_instruction','date_soumis_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets',
+            'projet_etude.montant_projet_instruction','projet_etude.id_projet_etude as id_demande')
+            ->join('cahier_comite','cahier_plans_projets.id_cahier_plans_projets','cahier_comite.id_demande')
+            ->join('comite','cahier_comite.id_comite','comite.id_comite')
+            ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+            ->join('ligne_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets')
+            ->join('projet_etude','ligne_cahier_plans_projets.id_demande','id_projet_etude')
+            ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
+            ->join('users','projet_etude.id_charge_etude','users.id')
+            ->where([['cahier_comite.id_comite','=',$id],
+                ['cahier_comite.id_demande','=',$id1],
+                ['cahier_plans_projets.flag_traitement_cahier_plans_projets','=',true],
+                ['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
+            ->get();
+
+
+        $comiteparticipants = ComiteParticipant::Select('comite_participant.id_comite as id_comite', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile','comite_participant.id_comite_participant as id_comite_participant')
+            ->join('users','comite_participant.id_user_comite_participant','users.id')
+            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+            ->where([['id_comite','=',$id]])
+            ->get();
+
+        Audit::logSave([
+            'action'=>'MODIFIER',
+            'code_piece'=>$id,
+            'menu'=>'COMITES',
+            'etat'=>'Succès',
+            'objet'=>'TENUE DE COMITES '
+        ]);
+
+        return view('comites.traitementcomite.editprojetetude', compact(
+            'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss'
+        ));
+
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function editerprojetetude($id,$id1,$id2,$id3)
     {
+        $idcomite=  Crypt::UrldeCrypt($id);
+        $id = Crypt::UrldeCrypt($id1);
+        $idetape = Crypt::UrldeCrypt($id2);
+        $idcahier =  Crypt::UrldeCrypt($id3);
+        $comite = Comite::find($idcomite);
 
+        $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
+        $cahiersplanprojet = CahierPlansProjets::find($idcahier);
+
+        if(isset($id)){
+            $projet_etude = ProjetEtude::find($id);
+            if(isset($projet_etude)){
+                $pieces_projets= PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)->get();
+
+                $avant_projet_tdr = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','avant_projet_tdr')->first();
+                $courier_demande_fin = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','courier_demande_fin')->first();
+                $offre_technique = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_technique')->first();
+                $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
+                    ->where('code_pieces','offre_financiere')->first();
+
+                $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
+
+                $pays = Pays::all();
+                $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+                foreach ($pays as $comp) {
+                    $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+                }
+
+
+                $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
+
+                foreach ($formjuridiques as $comp) {
+                    $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
+                }
+
+
+                /******************** secteuractivites *********************************/
+                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+                $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
+                foreach ($secteuractivites as $comp) {
+                    $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+                $motif = Motif::where('code_motif','=','PRE')->get();;
+                $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
+                foreach ($motif as $comp) {
+                    $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
+                }
+
+                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                    ->orderBy('libelle_secteur_activite')
+                    ->get();
+
+                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+                foreach ($secteuractivite_projets as $comp) {
+                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                }
+
+
+                return view('comites.traitementcomite.editerprojetetude', compact(
+                    'courier_demande_fin',
+                    'offre_technique',
+                    'formjuridique',
+                    'projet_etude','pieces_projets','avant_projet_tdr',
+                    'idcomite',
+                    'secteuractivite_projet',
+                    'motifs',
+                    'idetape',
+                    'cahiersplanprojet',
+                    'pay',
+                    'comite',
+                    'cahiersplanprojet',
+                    'offre_financiere',
+                    'secteuractivite'
+                ));
+
+            }
+
+        }
     }
 }

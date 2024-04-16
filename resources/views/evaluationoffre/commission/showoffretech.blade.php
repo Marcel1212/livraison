@@ -85,7 +85,7 @@ $logo = Menu::get_logo();
     </tr>
 
     <tr>
-        <td colspan="2" style="font-size: 14px">CONSEILLERS</td>
+        <td colspan="2" style="font-size: 14px">Personnes ressources</td>
         @isset($cahier)
             @isset($cahier->projet_etude)
                 @isset($cahier->projet_etude->operateurs)

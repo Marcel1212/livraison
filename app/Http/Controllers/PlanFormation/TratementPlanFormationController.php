@@ -407,6 +407,25 @@ class TratementPlanFormationController extends Controller
 
                 //dd($idplan);
 
+                $infosplanformation = PlanFormation::find($idplan);
+
+                $part_entreprise = $infosplanformation->part_entreprise;
+                $montant_financement_budget = $infosplanformation->montant_financement_budget;
+                $utilisationfinancecompletaire = $montant_financement_budget-$part_entreprise;
+
+                //----------------recuperation de la somme du montant du champ utilisation direct
+
+                $utilisationdirectslignes = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+                $montantutilisationdirects = 0;
+
+                foreach ($utilisationdirectslignes as $actionplanformation){
+                    $montantutilisationdirects += $actionplanformation->utilisation_direct_action_formation;
+                }
+
+                $montantutilisationdirect = $montantutilisationdirects;
+
+
                 $this->validate($request, [
                     'cout_accorde_action_formation' => 'required',
                     'commentaire_action_formation' => 'required',
@@ -493,6 +512,42 @@ class TratementPlanFormationController extends Controller
 
                     //dd($input['cout_accorde_action_formation'],$input['montant_attribuable_fdfp']);
 
+                                    //--------mise des conditions
+
+                if($montantutilisationdirect == $part_entreprise){
+                    $input['utilisation_direct_action_formation'] = 0;
+                    $input['finan_complemantaire_action_formation'] = $input['cout_accorde_action_formation'];
+                }
+
+                if ($montantutilisationdirect < $part_entreprise) {
+
+                    $montantutilisationdirectrestcalcul =  $part_entreprise - $montantutilisationdirect;
+
+                    if ($montantutilisationdirectrestcalcul < $input['cout_accorde_action_formation']) {
+
+                        $montantutilisationdirectrest = $input['cout_accorde_action_formation'] - $montantutilisationdirectrestcalcul;
+
+                        $input['utilisation_direct_action_formation'] = $montantutilisationdirectrestcalcul;
+                        $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                    }
+
+                    if ($montantutilisationdirectrestcalcul == $input['cout_accorde_action_formation']) {
+
+                        $montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                        $input['utilisation_direct_action_formation'] = $montantutilisationdirectrest;
+                        $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                    }
+
+                    if ($montantutilisationdirectrestcalcul > $input['cout_accorde_action_formation']) {
+
+                        //$montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                        $input['utilisation_direct_action_formation'] = $input['cout_accorde_action_formation'];
+                        $input['finan_complemantaire_action_formation'] = 0;
+                    }
+                }
+
                     $input['flag_action_formation_plan_traite_instruction'] = true;
                     $input['date_action_formation_plan_traite_instruction'] = Carbon::now();
 
@@ -563,6 +618,42 @@ class TratementPlanFormationController extends Controller
                     }else{
                         $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
                     }
+
+                                    //--------mise des conditions
+
+                if($montantutilisationdirect == $part_entreprise){
+                    $input['utilisation_direct_action_formation'] = 0;
+                    $input['finan_complemantaire_action_formation'] = $input['cout_accorde_action_formation'];
+                }
+
+                if ($montantutilisationdirect < $part_entreprise) {
+
+                    $montantutilisationdirectrestcalcul =  $part_entreprise - $montantutilisationdirect;
+
+                    if ($montantutilisationdirectrestcalcul < $input['cout_accorde_action_formation']) {
+
+                        $montantutilisationdirectrest = $input['cout_accorde_action_formation'] - $montantutilisationdirectrestcalcul;
+
+                        $input['utilisation_direct_action_formation'] = $montantutilisationdirectrestcalcul;
+                        $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                    }
+
+                    if ($montantutilisationdirectrestcalcul == $input['cout_accorde_action_formation']) {
+
+                        $montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                        $input['utilisation_direct_action_formation'] = $montantutilisationdirectrest;
+                        $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                    }
+
+                    if ($montantutilisationdirectrestcalcul > $input['cout_accorde_action_formation']) {
+
+                        //$montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                        $input['utilisation_direct_action_formation'] = $input['cout_accorde_action_formation'];
+                        $input['finan_complemantaire_action_formation'] = 0;
+                    }
+                }
 
                     $input['flag_action_formation_plan_traite_instruction'] = true;
                     $input['date_action_formation_plan_traite_instruction'] = Carbon::now();

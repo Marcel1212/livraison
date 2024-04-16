@@ -10,8 +10,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 @section('content')
 
-    @php($Module='Comite')
-    @php($titre='Liste des comites')
+    @php($Module='Comité')
+    @php($titre='Liste des comités')
     @php($lien='comites')
     @php($lienacceuil='dashboard')
 

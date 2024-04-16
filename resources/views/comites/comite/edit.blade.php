@@ -32,9 +32,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
 @section('content')
 
-    @php($Module='Comites')
-    @php($titre='Liste des comites')
-    @php($soustitre='Tenue de comite')
+    @php($Module='Comités')
+    @php($titre='Liste des comités')
+    @php($soustitre='Tenue de comité')
     @php($lien='comites')
     @php($lienacceuil='dashboard')
 
@@ -134,7 +134,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           data-bs-target="#navs-top-cahieraprescomite"
                           aria-controls="navs-top-cahieraprescomite"
                           aria-selected="false">
-                          Valider le comite
+                          Valider le comité
                         </button>
                       </li>
                     </ul>
@@ -242,7 +242,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th><label>Selectionnez tous</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
+                                        <th><label>Cocher tout</label><br/><input type="checkbox" id="allcb" name="allcb"/></th>
                                         <th>Type processus </th>
                                         <th>Code du cahier </th>
                                         <th>Date creation </th>

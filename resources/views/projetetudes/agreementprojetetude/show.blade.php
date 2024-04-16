@@ -176,7 +176,6 @@ $logo = Menu::get_logo();
                     @else
                         <span>EN APPEL D'OFFRE</span>
                     @endisset
-                    <span>EN APPEL D'OFFRE</span>
                 </td>
             </tr>
             <tr>

@@ -224,6 +224,7 @@ class CahierPlansProjetsController extends Controller
                                 ->join('ligne_cahier_plans_projets','vppdpct.id_demande','ligne_cahier_plans_projets.id_demande')
                                 ->join('cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets')
                                 ->where('cahier_plans_projets.id_cahier_plans_projets',$id)
+                                ->where('vppdpct.code_processus','=',$cahier->processusComite->code_processus_comite)
                                 ->get();
 
         //dd($cahierplansprojets);
@@ -381,6 +382,7 @@ class CahierPlansProjetsController extends Controller
 
                         if($codeprocessus == 'PE'){
                             $projet_etude = ProjetEtude::find($iddemande);
+                            $projet_etude->flag_projet_etude_valider_cahier = true;
                             $projet_etude->flag_passer_cahier_cp_cg = true;
                             $projet_etude->date_passe_cahier_cp_cg = Carbon::now();
                             $projet_etude->update();

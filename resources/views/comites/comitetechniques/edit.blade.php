@@ -134,7 +134,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                           data-bs-target="#navs-top-cahieraprescomite"
                           aria-controls="navs-top-cahieraprescomite"
                           aria-selected="false">
-                          Valider le comite
+                          Valider le comité
                         </button>
                       </li>
                     </ul>

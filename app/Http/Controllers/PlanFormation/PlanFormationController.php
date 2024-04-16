@@ -186,11 +186,12 @@ class PlanFormationController extends Controller
             $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
             $part = PartEntreprisesHelper::get_part_entreprise();
             $input['id_part_entreprise'] = $part->id_part_entreprise;
-            $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
+
+            $input['part_entreprise'] = str_replace(' ', '', $input['masse_salariale']) * $part->valeur_part_entreprise;
             $entreprise = Entreprises::find($infoentrprise->id_entreprises);
             $entreprise->update($input);
 
-            $partEntreprise = $input['masse_salariale'] * $part->valeur_part_entreprise;
+            $partEntreprise = str_replace(' ', '', $input['masse_salariale']) * $part->valeur_part_entreprise;
 
             $buget = GrilleDeRepartitionFC::get_calcul_financement($partEntreprise);
             //dd($buget);
@@ -200,7 +201,7 @@ class PlanFormationController extends Controller
             $input['montant_financement_budget'] = round($bugetseparer[0]);
             $input['masse_salariale_previsionel'] = $mttprevisionnelMassesalariale;
             $input['part_entreprise_previsionnel'] = $mttprevisionnelMassesalariale * $part->valeur_part_entreprise;
-
+            $input['masse_salariale'] =  str_replace(' ', '', $input['masse_salariale']);
             PlanFormation::create($input);
 
             $insertedId = PlanFormation::latest()->first()->id_plan_de_formation;
@@ -405,6 +406,7 @@ class PlanFormationController extends Controller
                 $planformation = PlanFormation::find($id);
                 $infoentreprise = Entreprises::find($planformation->id_entreprises);
 
+                $input['masse_salariale'] =  str_replace(' ', '', $input['masse_salariale']);
 
                 //$input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
                 //$input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
@@ -414,9 +416,9 @@ class PlanFormationController extends Controller
                 $input['fonction_charge_plan_formation'] = mb_strtoupper($input['fonction_charge_plan_formation']);
                 $part = PartEntreprisesHelper::get_part_entreprise();
                 $input['id_part_entreprise'] = $part->id_part_entreprise;
-                $input['part_entreprise'] = $input['masse_salariale'] * $part->valeur_part_entreprise;
+                $input['part_entreprise'] = str_replace(' ', '', $input['masse_salariale']) * $part->valeur_part_entreprise;
                 //$input['part_entreprise'] = $input['masse_salariale'] * 0.006;
-                $partEntreprise = $input['masse_salariale'] * $part->valeur_part_entreprise;
+                $partEntreprise = str_replace(' ', '', $input['masse_salariale']) * $part->valeur_part_entreprise;
 
                 $buget = GrilleDeRepartitionFC::get_calcul_financement($partEntreprise);
                 //dd($buget);

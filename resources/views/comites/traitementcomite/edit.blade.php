@@ -171,9 +171,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             @endif
                                             @if ($demande->code_pieces_cahier_plans_projets =='PE')
                                                 <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_cahier_plans_projets),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" "
-                                                    title="Modifier"><img
-                                                        src='/assets/img/editing.png'></a>
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endif
                                             @if ($demande->code_pieces_cahier_plans_projets =='PRF')
                                                 <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_cahier_plans_projets),\App\Helpers\Crypt::UrlCrypt(1)]) }}"

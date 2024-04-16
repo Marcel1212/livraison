@@ -157,6 +157,17 @@ $idpart = Auth::user()->id_partenaire;
             </div>
         @endif
 
+        @if($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div class="alert-body">
+                        {{ $error }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endforeach
+        @endif
+
 
 
              @if ($message = Session::get('error'))
@@ -167,6 +178,7 @@ $idpart = Auth::user()->id_partenaire;
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+
         <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -360,15 +372,16 @@ $idpart = Auth::user()->id_partenaire;
                                     <div class="mb-1">
 
                                         <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
-                                        <input type="number" name="masse_salariale" id="masse_salariale"
-                                               class="form-control form-control-sm" value="{{@$planformation->masse_salariale}}">
+                                        <input type="text" name="masse_salariale" id="masse_salariale"
+                                               onkeyup="FuncCalculPartENtre({{@$planformation->partEntreprise->valeur_part_entreprise }});"
+                                               class="form-control form-control-sm number" value="{{number_format(@$planformation->masse_salariale, 0, ',', ' ')}}">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
-                                        <input type="text"
-                                               class="form-control form-control-sm"
+                                        <input type="text" name="part_entreprise"
+                                               class="form-control form-control-sm" id="part_entreprise"
                                                 value="{{number_format(@$planformation->part_entreprise, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
                                 </div>
@@ -461,7 +474,7 @@ $idpart = Auth::user()->id_partenaire;
                                     </div>
 
                                         <div class="col-12 col-md-2" align="right"> <br>
-                                            <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                            <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter</button>
                                         </div>
 
                                 </div>
@@ -868,7 +881,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <?php $budget = $planformation->montant_financement_budget - $montantactionplanformation; if($budget > 0){?>
 
-                                    <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer l’action de formation</button>
+                                    <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter l’action de formation</button>
 
                                 <?php } ?>
 
@@ -1087,6 +1100,7 @@ $idpart = Auth::user()->id_partenaire;
                 @endsection
 
                 @section('js_perso')
+
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
@@ -1193,10 +1207,12 @@ $idpart = Auth::user()->id_partenaire;
                         $("#Enregistrer_soumettre_plan_formation").prop( "disabled", true );
                     }
                 }
-
-        </script>
-
-
+                    function FuncCalculPartENtre(valeurpart) {
+                        var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
+                        var partEntreprise = ValueMS*valeurpart;
+                        document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+                    }
+                </script>
        @endsection
     @else
        <script type="text/javascript">

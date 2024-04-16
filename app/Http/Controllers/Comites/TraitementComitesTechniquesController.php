@@ -123,7 +123,7 @@ class TraitementComitesTechniquesController extends Controller
         ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
         ->where([['cahier_comite.id_comite','=',$id],
                 ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
-                ['cahier_comite.code_demande','=',$processuscomite->processusComite->code_processus_comite]])
+                ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
         ->get();
 
         //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();

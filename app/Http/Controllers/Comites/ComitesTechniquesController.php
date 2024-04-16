@@ -124,7 +124,7 @@ class ComitesTechniquesController extends Controller
 
             $comite = Comite::create($input);
 
-            $infosprocessus = ProcessusComite::find($input['id_categorie_comite']);
+            $infosprocessus = ProcessusComite::find($input['id_processus_comite']);
 
             $processus = ProcessusComiteLieComite::create([
                 'id_comite' => $comite->id_comite,
@@ -176,7 +176,7 @@ class ComitesTechniquesController extends Controller
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
-       // dd($processuscomite->processusComite->code_processus_comite);
+        //dd($processuscomite->processusComite());
 
         $demandes = DB::table('vue_plans_projets_formation')->whereNotExists(function ($query) use ($id){
             $query->select('*')
@@ -254,7 +254,8 @@ class ComitesTechniquesController extends Controller
 
         $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
                             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-                            ->where([['cahier_comite.id_comite','=',$id]])
+                            ->where([['cahier_comite.id_comite','=',$id],
+                                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
                             ->get();
 
         Audit::logSave([
@@ -333,7 +334,7 @@ class ComitesTechniquesController extends Controller
 
                 ]);
 
-                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
             }
 
@@ -429,7 +430,7 @@ class ComitesTechniquesController extends Controller
 
                         ]);
 
-                        return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                        return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
                 }else{
 
@@ -518,7 +519,7 @@ class ComitesTechniquesController extends Controller
 
                         ]);
 
-                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
                 }else{
 
@@ -626,7 +627,8 @@ class ComitesTechniquesController extends Controller
                         ]);
 
 
-                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
+
 
                 }
 
@@ -686,7 +688,7 @@ class ComitesTechniquesController extends Controller
                 ]);
 
 
-                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
             }
 

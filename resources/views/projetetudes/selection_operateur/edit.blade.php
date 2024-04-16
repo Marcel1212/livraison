@@ -407,7 +407,7 @@
                                 </form>
                             @endif
 
-                            @if((@$projet_etude->operateurs->count()>=1 && @$projet_etude->operateurs->count()<=5) && @$projet_etude->flag_soumis_selection_operateur == false)
+                            @if((@$projet_etude->operateurs->count()<=5) && @$projet_etude->flag_soumis_selection_operateur == false)
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <div class="alert-body text-center">
                                         Info : Il vous faut sélectionner au moins  un opérateur et au maximum 5 operateurs avant de soumettre la sélection

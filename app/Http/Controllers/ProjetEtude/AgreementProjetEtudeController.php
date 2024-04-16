@@ -50,7 +50,8 @@ class AgreementProjetEtudeController extends Controller
             ->join('entreprises','projet_etude.id_entreprises','entreprises.id_entreprises')
             ->join('users','projet_etude.id_charge_etude','users.id')
             ->where('fiche_agrement.code_fiche_agrement','PE')
-            ->where('projet_etude.flag_fiche_agrement',true);
+            ->where('projet_etude.flag_fiche_agrement',true)
+            ->orderBy('created_at', 'desc');
 
         if ($role== 'ENTREPRISE'){
             $agreements = $agreements->where('projet_etude.id_entreprises',Auth::user()->id_partenaire);

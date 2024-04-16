@@ -77,18 +77,11 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                     @else
 
                     <script type="text/javascript">
-
                         function FuncCalculPartENtre(valeurpart) {
-
-                            var ValueMS = document.getElementById("masse_salariale").value;
-
+                            var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
                             var partEntreprise = ValueMS*valeurpart;
-
-                            document.getElementById('part_entreprise').setAttribute('value', partEntreprise);
-
-
-                        };
-
+                            document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+                        }
                     </script>
 
 
@@ -291,8 +284,8 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                                             <div class="mb-1">
 
                                                 <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
-                                                <input type="number" name="masse_salariale" id="masse_salariale" onkeyup="FuncCalculPartENtre(<?php echo $part->valeur_part_entreprise; ?>);"
-                                                    class="form-control form-control-sm" required="required">
+                                                <input type="text" name="masse_salariale" id="masse_salariale" onkeyup="FuncCalculPartENtre(<?php echo $part->valeur_part_entreprise; ?>);"
+                                                    class="form-control form-control-sm number" required="required">
                                             </div>
                                         </div>
 
@@ -300,8 +293,15 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                                             <div class="mb-1">
                                                 <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
                                                 <input type="text" name="part_entreprise" id="part_entreprise"
-                                                       class="form-control form-control-sm"
+                                                       class="form-control form-control-sm number"
                                                          disabled="disabled">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4 col-12">
+                                            <div class="mb-1">
+                                                <label>Nombre de salariés déclarés à la CNPS <strong style="color:red;">*</strong></label>
+                                                <input type="number" class="form-control form-control-sm"  disabled="disabled">
                                             </div>
                                         </div>
 

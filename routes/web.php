@@ -303,6 +303,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('agreement/{id_plan_de_formation}/{id_action}/{id_etape}/editactioncancel', [AgreementController::class, 'editactionCancel'])->name('agreement.editactioncancel');
 
 
+    //Substitution
+    Route::get('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitution'])->name('agreement.substitution');
+
+
+
+
 //    /{id_plan_de_formation}/{id_etape}/cancel
 
     //Demande Annulation Agrément
@@ -310,16 +316,19 @@ Route::group(['middleware' => ['auth']], function () {
 
 //    Route::put('agreement/{id_demande}/{id_plan}/cancel/update', [App\Http\Controllers\AgreementController::class, 'cancelUpdate'])->name('agreement.cancel.update');
 
-    Route::get('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitution'])->name('agreement.substitution');
-    Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsStore'])->name('agreement.substitution');
-    Route::put('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
+    Route::post('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitution'])->name('agreement.substitution');
+//    Route::('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitutionsUpdate'])->name('agreement.substitution');
     //    Route::get('comitepermanente/{id}/{id1}/edit', [App\Http\Controllers\ComitePermanenteController::class, 'edit'])->name('comitepermanente.edit');
 
     //traitement
-
     Route::get('traitementdemandesubstitutionplan', [App\Http\Controllers\TraitementDemandeSubstitutionPlanController::class, 'index'])->name('traitementdemandesubstitutionplan.index');
-    Route::get('traitementdemandesubstitutionplan/{id}/{id2}/edit', [App\Http\Controllers\TraitementDemandeSubstitutionPlanController::class, 'edit'])->name('traitementdemandesubstitutionplan.edit');
+    Route::get('traitementdemandesubstitutionplan/{id}/{id2}/{etape}/edit', [App\Http\Controllers\TraitementDemandeSubstitutionPlanController::class, 'edit'])->name('traitementdemandesubstitutionplan.edit');
     Route::put('traitementdemandesubstitutionplan/{id}/update', [App\Http\Controllers\TraitementDemandeSubstitutionPlanController::class, 'update'])->name('traitementdemandesubstitutionplan.update');
+
+    Route::get('traitementsubstitution', [App\Http\Controllers\TraitementSubstitutionController::class, 'index'])->name('traitementsubstitution.index');
+    Route::get('traitementsubstitution/{id}/{etape}/edit', [App\Http\Controllers\TraitementSubstitutionController::class, 'edit'])->name('traitementsubstitution.edit');
+    Route::put('traitementsubstitution/{id}/update', [App\Http\Controllers\TraitementSubstitutionController::class, 'update'])->name('traitementsubstitution.update');
+
 
 
     Route::get('traitementdemandeannulationplan', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'index'])->name('traitementdemandeannulationplan.index');
@@ -551,10 +560,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('commissionevaluationoffres/store', [CommissionEvaluationOffreController::class, 'store'])->name('commissionevaluationoffres.store');
     Route::get('commissionevaluationoffres/{id}/{id1}/edit', [CommissionEvaluationOffreController::class, 'edit'])->name('commissionevaluationoffres.edit');
     Route::put('commissionevaluationoffres/{id}/{id1}/update', [CommissionEvaluationOffreController::class, 'update'])->name('commissionevaluationoffres.update');
+    Route::put('commissionevaluationoffres/{id}/{id1}/updateNotationOffreFin', [CommissionEvaluationOffreController::class, 'updateNotationOffreFin'])->name('commissionevaluationoffres.updateNotationOffreFin');
+
     Route::get('commissionevaluationoffres/{id}/{id1}/delete', [CommissionEvaluationOffreController::class, 'deleteSousCritere'])->name('commissionevaluationoffres.delete');
     Route::get('commissionevaluationoffres/{id}/delete/personne', [CommissionEvaluationOffreController::class, 'deletePersonne'])->name('commissionevaluationoffres.delete.personne');
     Route::get('commissionevaluationoffres/{id}/show/offretech', [CommissionEvaluationOffreController::class, 'showOffreTech'])->name('commissionevaluationoffres.offretech.show');
-
+    Route::get('commissionevaluationoffres/{id}/show/offrefin', [CommissionEvaluationOffreController::class, 'showOffreFin'])->name('commissionevaluationoffres.offrefin.show');
 
 
 //    Route::group(['middleware' => ['can:traitementcomitetechniques-index']], function () {
