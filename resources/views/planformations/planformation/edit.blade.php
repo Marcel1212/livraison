@@ -167,6 +167,13 @@ $idpart = Auth::user()->id_partenaire;
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
+        <script type="text/javascript">
+            function FuncCalculPartENtre(valeurpart) {
+                var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
+                var partEntreprise = ValueMS*valeurpart;
+                document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
+            }
+        </script>
         <div class="col-xl-12">
                   <h6 class="text-muted"></h6>
                   <div class="nav-align-top nav-tabs-shadow mb-4">
@@ -361,7 +368,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                         <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
                                         <input type="number" name="masse_salariale" id="masse_salariale"
-                                               class="form-control form-control-sm" value="{{@$planformation->masse_salariale}}">
+                                               class="form-control form-control-sm" value="{{number_format(@$planformation->masse_salariale, 0, ',', ' ')}}">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-12">

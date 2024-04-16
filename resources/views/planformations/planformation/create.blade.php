@@ -79,13 +79,9 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                     <script type="text/javascript">
                         function FuncCalculPartENtre(valeurpart) {
                             var ValueMS = document.getElementById("masse_salariale").value.replaceAll(' ','');
-
                             var partEntreprise = ValueMS*valeurpart;
-                            // $(this).val(function(index, value) {
-                            //     return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-                            // });
                             document.getElementById('part_entreprise').setAttribute('value', partEntreprise.toString().replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, " "));
-                        };
+                        }
                     </script>
 
 

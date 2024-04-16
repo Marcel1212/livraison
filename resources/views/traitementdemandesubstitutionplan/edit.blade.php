@@ -288,6 +288,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                     <label>Masse salariale brute annuelle prévisionnelle </label>
                                     <input type="text" name="masse_salariale" id="masse_salariale"
+                                           onkeyup="FuncCalculPartENtre(<?php echo $planformation->valeur_part_entreprise; ?>);"
                                            class="form-control form-control-sm" value="{{number_format(@$planformation->masse_salariale, 0, ',', ' ')}}" disabled="disabled">
                                 </div>
                             </div>
