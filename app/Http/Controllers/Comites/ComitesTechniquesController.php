@@ -579,6 +579,8 @@ class ComitesTechniquesController extends Controller
 
                     foreach($listepersonnes as $personne){
 
+
+                       // dd("".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)]));
                         $logo = Menu::get_logo();
 
                         $email = $personne->user->email;
@@ -624,7 +626,9 @@ class ComitesTechniquesController extends Controller
 
                         ]);
 
+
                     return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
+
 
                 }
 
@@ -662,7 +666,7 @@ class ComitesTechniquesController extends Controller
 
                     }
 
-                    if($demande->code_processus =='PRF'){
+                    if($demande->code_demande =='PRF'){
 
                         // Recuperation du Projet de formation
                         $projetformation = ProjetFormation::find($demande->id_demande);
@@ -670,7 +674,7 @@ class ComitesTechniquesController extends Controller
                         // Modification du projet de formation -- flag et ajout du code
                         $projetformation->flag_comite_pleiniere = true;
                         $projetformation->code_comite_pleiniere = $comitep->code_comite ;
-                        $projetformation->id_processus = 6 ;
+                        $projetformation->id_processus = 10 ; // Processus 10
                         $projetformation->id_comite_pleiniere = $id ;
                         $projetformation->update();
 

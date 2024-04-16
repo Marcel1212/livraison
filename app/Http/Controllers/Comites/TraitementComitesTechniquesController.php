@@ -8,6 +8,8 @@ use App\Models\Comite;
 use App\Models\FormeJuridique;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
+use App\Models\ProjetFormation;
+use App\Models\TraitementParCriterePrf;
 use Illuminate\Http\Request;
 use Image;
 use File;
@@ -21,11 +23,13 @@ use App\Helpers\Email;
 use App\Helpers\Audit;
 use App\Helpers\Menu;
 use App\Models\ActionFormationPlan;
+use App\Models\PiecesProjetFormation;
 use App\Models\ButFormation;
 use App\Models\CahierComite;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
+use App\Models\TraitementParCritereCommentairePrf;
 use App\Models\ComiteParticipant;
 use App\Models\CritereEvaluation;
 use App\Models\Entreprises;
@@ -277,6 +281,158 @@ class TraitementComitesTechniquesController extends Controller
 
     }
 
+    public function editprojetformation($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id;
+        $comite = Comite::find($id);
+        $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
+        $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
+
+        //dd($processuscomite);
+        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+        ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+        ->join('comite','cahier_comite.id_comite','comite.id_comite')
+        ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+        ->where([['cahier_comite.id_comite','=',$id],['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
+        ->get();
+
+        //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
+
+        $comiteparticipants = ComiteParticipant::Select('comite_participant.id_comite as id_comite', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile','comite_participant.id_comite_participant as id_comite_participant')
+        ->join('users','comite_participant.id_user_comite_participant','users.id')
+        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+        ->where([['id_comite','=',$id]])
+        ->get();
+
+        //$planformation = PlanFormation::find($id1);
+        $planformation = ProjetFormation::find($id1);
+        //dd($planformation);
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','1']])->get();
+        $piecesetude1 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','2']])->get();
+        $piecesetude2 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','3']])->get();
+        $piecesetude3 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','4']])->get();
+        $piecesetude4 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','5']])->get();
+        $piecesetude5 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','6']])->get();
+        $piecesetude6 = $piecesetude['0']['libelle_pieces'];
+        $piecesetude_ins = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','7']])->get();
+        if($piecesetude_ins->count()> 0){
+            $piecesetude7 = $piecesetude_ins['0']['libelle_pieces'];
+        }else {
+            $piecesetude7 = null ;
+        }
+        $infoentreprise = Entreprises::find($planformation->id_entreprises);
+        // if($planformation->user_conseiller == Auth::user()->id){
+        //     dd('true');
+        // }else{
+        //     dd('rrr');
+        // }
+        //dd($infoentreprise);
+
+        // $typeentreprises = TypeEntreprise::all();
+        // $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
+        // foreach ($typeentreprises as $comp) {
+        //     $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
+        // }
+
+
+        // $pays = Pays::all();
+        // $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
+        // foreach ($pays as $comp) {
+        //     $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        // }
+
+        // $butformations = ButFormation::all();
+        // $butformation = "<option value=''> Selectionnez le but de la formation </option>";
+        // foreach ($butformations as $comp) {
+        //     $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
+        // }
+
+        // $typeformations = TypeFormation::all();
+        // $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
+        // foreach ($typeformations as $comp) {
+        //     $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
+        // }
+
+        // $categorieprofessionelles = CategorieProfessionelle::all();
+        // $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
+        // foreach ($categorieprofessionelles as $comp) {
+        //     $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
+        // }
+
+        // $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id1]])->get();
+
+        // $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id1]])->get();
+
+        // $motifs = Motif::where([['code_motif','=','CTPAF']])->get();
+        // $motif = "<option value=''> Selectionnez un motif </option>";
+        // foreach ($motifs as $comp) {
+        //     $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        // }
+
+        // $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        //                                 ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+        //                                 ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+        //                                 ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+        //                                 ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+        //                                 ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+        //                                 ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
+        //                                 ->where([['action_formation_plan.id_plan_de_formation','=',$id1]])->get();
+
+        $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','PRF']])
+                                    ->get();
+
+        //dd($criteres);
+
+     /******************** secteuractivites *********************************/
+        // $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+        //                 ->orderBy('libelle_secteur_activite')
+        //                 ->get();
+
+
+        // $typeformationss = TypeFormation::where('flag_actif_formation','=',true)->orderBy('type_formation')->get();
+
+        // $butformations = ButFormation::all();
+        // $butformation = "<option value=''> Selectionnez le but de la formation </option>";
+        // foreach ($butformations as $comp) {
+        //     $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
+        // }
+
+        Audit::logSave([
+
+            'action'=>'OBSERVER LE PROJET DE FORMATION',
+
+            'code_piece'=>$id,
+
+            'menu'=>'COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'TENUE DE COMITES TECHNIQUES'
+
+        ]);
+
+        return view('comites.traitementcomitetechniques.editprojetformation', compact(
+            'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss',
+            'planformation','infoentreprise', 'piecesetude1', 'piecesetude2', 'piecesetude3', 'piecesetude4','piecesetude5','piecesetude6','piecesetude7',
+            'idcomite','criteres'
+        ));
+
+    }
+
+
 
     public function editprojetetude($id,$id1,$id2)
     {
@@ -377,11 +533,84 @@ class TraitementComitesTechniquesController extends Controller
         $idcomite =  Crypt::UrldeCrypt($id2);
         $etape =  Crypt::UrldeCrypt($id3);
 
+
         if ($request->isMethod('put')) {
 
             $data = $request->all();
 
-           // dd($data);
+           //dd($data);
+
+           // Projet formation
+
+           if($data['action'] === 'Traiter_action_formation_valider_critere_prf'){
+
+            //$actionplan = ActionFormationPlan::find($idactionformation);
+            // Id projet formation
+            $idprojetformation = $idactionformation;
+            // Recuperation du projet de formation
+            $projetformation = ProjetFormation::find($idprojetformation);
+
+            $idplan = $projetformation->id_projet_formation;
+
+            //dd($data);
+
+            $lignescriterevalides = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','PRF']])
+                                    ->get();
+            //dd($lignescriterevalides);
+
+            foreach ($lignescriterevalides as $uneligne) {
+
+                $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
+                $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
+                $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
+
+                $traitementcritere = TraitementParCriterePrf::create([
+                    'id_user_traitement_par_critere' => Auth::user()->id,
+                    //'id_demande' => $idactionformation,
+                    'id_projet_formation' => $idactionformation,
+                    'id_critere_evaluation' => $id_critere_evaluation,
+                    //'code_traitement' => 'PRF',
+                    'flag_critere_evaluation' => true,
+                ]);
+
+                $traitementcommentaire = TraitementParCritereCommentairePrf::create([
+                    'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+                    'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+                    'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
+                   // 'code_traitement' => 'PRF',
+                    'commentaire_critere' => $commentaire_critere,
+                ]);
+
+            }
+            // Mise a jour du projet de formation
+            // $projetformation->flag_comite_pleiniere = true ;
+            // $projetformation->save()  ;
+            // Mise en commentaire, cette mise a jour sera effectué sur la validation du cahoer.
+
+
+            Audit::logSave([
+
+                'action'=>'MODIFIER / AJOUT DE COMMENTAIRE SUR UN COMITE TECHNIQUE PRF',
+
+                'code_piece'=>$idactionformation,
+
+                'menu'=>'COMITES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'TENUE DE COMITES TECHNIQUES(traitement par les critéres )'
+
+            ]);
+
+            return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($etape).'/edit/projetformation')->with('success', 'Succes : Enregistrement reussi ');
+
+        }
+
+           // Plan formation
 
             if($data['action'] === 'Traiter_action_formation_valider_critere'){
 

@@ -105,7 +105,7 @@ $couleur = Menu::get_info_couleur();
                                     <b>Succès: </b> {{ $message }}
                                 </div>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
+                                    aria-label="Close"></button>
                             </div>
                         @endif
                         @if ($message = Session::get('error'))
@@ -169,14 +169,14 @@ $couleur = Menu::get_info_couleur();
                         <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
                     </div>-->
 
-                        <div class="form-group mb-4">
+                        {{-- <div class="form-group mb-4">
                             <div class="form-group">
                                 <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
                                 @if ($errors->has('g-recaptcha-response'))
                                     <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
 
                         <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
                     </form>
