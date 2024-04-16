@@ -870,7 +870,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <?php $budget = $planformation->montant_financement_budget - $montantactionplanformation; if($budget > 0){?>
 
-                                    <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer l’action de formation</button>
+                                    <button onclick='javascript:if (!confirm("Voulez-vous Ajouter cette action de plan de formation  ?")) return false;'  type="submit" name="action" value="Enregistrer_action_formation" class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter l’action de formation</button>
 
                                 <?php } ?>
 
