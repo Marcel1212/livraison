@@ -362,7 +362,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                         <label>Masse salariale brute annuelle prévisionnelle <strong style="color:red;">*</strong></label>
                                         <input type="text" name="masse_salariale" id="masse_salariale"
-                                               onkeyup="FuncCalculPartENtre({{@$planformation->valeur_part_entreprise}});"
+                                               onkeyup="FuncCalculPartENtre({{@$planformation->partEntreprise->valeur_part_entreprise }});"
                                                class="form-control form-control-sm number" value="{{number_format(@$planformation->masse_salariale, 0, ',', ' ')}}">
                                     </div>
                                 </div>
@@ -370,7 +370,7 @@ $idpart = Auth::user()->id_partenaire;
                                     <div class="mb-1">
                                         <label>Part entreprise ({{ @$planformation->partEntreprise->valeur_part_entreprise }})</label>
                                         <input type="text" name="part_entreprise"
-                                               class="form-control form-control-sm number" id="part_entreprise"
+                                               class="form-control form-control-sm" id="part_entreprise"
                                                 value="{{number_format(@$planformation->part_entreprise, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
                                 </div>
