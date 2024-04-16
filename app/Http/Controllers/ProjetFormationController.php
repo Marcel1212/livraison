@@ -420,7 +420,6 @@ class ProjetFormationController extends Controller
 
         //dd($projetetude['titre_projet_etude']);
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','1']])->get();
-        //dd($piecesetude);
         $piecesetude1 = $piecesetude['0']['libelle_pieces'];
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','2']])->get();
         $piecesetude2 = $piecesetude['0']['libelle_pieces'];
@@ -433,7 +432,6 @@ class ProjetFormationController extends Controller
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','6']])->get();
         $piecesetude6 = $piecesetude['0']['libelle_pieces'];
         $piecesetude_ins = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','7']])->get();
-        //dd($piecesetude_ins->count());
         if($piecesetude_ins->count()> 0){
             $piecesetude7 = $piecesetude_ins['0']['libelle_pieces'];
         }else {

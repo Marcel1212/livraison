@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property float $id_traitement_par_critere_commentaire
+ * @property float $id_traitement_par_critere_commentaire_prf
  * @property float $id_user_traitement_par_critere_commentaire
  * @property float $id_traitement_par_critere
  * @property boolean $flag_traitement_par_critere_commentaire
@@ -18,21 +18,21 @@ use Illuminate\Database\Eloquent\Model;
  * @property TraitementParCritere $traitementParCritere
  * @property User $user
  */
-class TraitementParCritereCommentaire extends Model
+class TraitementParCritereCommentairePrf extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'traitement_par_critere_commentaire';
+    protected $table = 'traitement_par_critere_commentaire_prf';
 
     /**
      * The primary key for the model.
      *
      * @var string
      */
-    protected $primaryKey = 'id_traitement_par_critere_commentaire';
+    protected $primaryKey = 'id_traitement_par_critere_commentaire_prf';
 
     /**
      * The "type" of the auto-incrementing ID.

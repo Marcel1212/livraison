@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property float $id_traitement_par_critere
  * @property float $id_user_traitement_par_critere
- * @property float $id_action_formation_plan
+ * @property float $id_projet_formation
  * @property float $id_critere_evaluation
  * @property float $id_demande
  * @property boolean $flag_critere_evaluation
@@ -18,14 +18,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property CritereEvaluation $critereEvaluation
  * @property User $user
  */
-class TraitementParCritere extends Model
+class TraitementParCriterePrf extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'traitement_par_critere';
+    protected $table = 'traitement_par_critere_prf';
 
     /**
      * The primary key for the model.
@@ -44,7 +44,7 @@ class TraitementParCritere extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user_traitement_par_critere', 'id_action_formation_plan', 'id_critere_evaluation', 'id_demande', 'flag_critere_evaluation','code_traitement', 'created_at', 'updated_at'];
+    protected $fillable = ['id_user_traitement_par_critere', 'id_projet_formation', 'id_critere_evaluation', 'id_demande', 'flag_critere_evaluation','code_traitement', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -57,9 +57,9 @@ class TraitementParCritere extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function actionFormationPlan()
+    public function ProjetFormation()
     {
-        return $this->belongsTo('App\Models\ActionFormationPlan', 'id_action_formation_plan', 'id_action_formation_plan');
+        return $this->belongsTo('App\Models\ProjetFormation', 'id_action_formation_plan', 'id_action_formation_plan');
     }
 
     /**

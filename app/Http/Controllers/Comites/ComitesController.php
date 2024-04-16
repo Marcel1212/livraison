@@ -168,6 +168,7 @@ class ComitesController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
+        //dd($id);
 
         $comite = Comite::find($id);
 
@@ -597,11 +598,15 @@ class ComitesController extends Controller
                 ->where([['cahier_comite.id_comite','=',$id],['cahier_plans_projets.flag_traitement_cahier_plans_projets','=',true]])
                 ->get();
 
+
+
                 foreach ($listedemandesss as $demande) {
 
                     $infoscahiers = CahierPlansProjets::Join('ligne_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets')->where([['cahier_plans_projets.id_cahier_plans_projets','=',$demande->id_cahier_plans_projets]])->get();
-
+                    //dd($infoscahiers);
                     foreach ($infoscahiers as $infoscahier) {
+                        //dd($infoscahier->code_pieces_ligne_cahier_plans_projets);
+
 
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PF'){
 
@@ -655,33 +660,37 @@ class ComitesController extends Controller
                         }
 
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PRF'){
+                            //dd($listedemandesss);
+                            //dd($infoscahier->code_commission_permante_comite_gestion);
 
                             // Recuperation du Projet de formation
                             $projetformation = ProjetFormation::find($infoscahier->id_demande);
+                            //dd($projetformation);
 
 
-                            if($infoscahier->code_commission_permante_comite_gestion == 'COP'){
-                                FicheAgrement::create([
-                                    'id_demande' => $projetformation->id_projet_formation,
-                                    'id_comite_permanente' => $id,
-                                    'id_user_fiche_agrement' => Auth::user()->id,
-                                    'flag_fiche_agrement'=> true,
-                                    'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
-                                ]);
-                            }
+                            // if($infoscahier->code_commission_permante_comite_gestion == 'COP'){
+                            //     FicheAgrement::create([
+                            //         'id_demande' => $projetformation->id_projet_formation,
+                            //         'id_comite_permanente' => $id,
+                            //         'id_user_fiche_agrement' => Auth::user()->id,
+                            //         'flag_fiche_agrement'=> true,
+                            //         'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
+                            //     ]);
+                            // }
 
-                            if($infoscahier->code_commission_permante_comite_gestion == 'COG'){
-                                FicheAgrement::create([
-                                    'id_demande' => $projetformation->id_projet_formation,
-                                    'id_comite_gestion' => $id,
-                                    'id_user_fiche_agrement' => Auth::user()->id,
-                                    'flag_fiche_agrement'=> true,
-                                    'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
-                                ]);
-                            }
+                            // if($infoscahier->code_commission_permante_comite_gestion == 'COG'){
+                            //     FicheAgrement::create([
+                            //         'id_demande' => $projetformation->id_projet_formation,
+                            //         'id_comite_gestion' => $id,
+                            //         'id_user_fiche_agrement' => Auth::user()->id,
+                            //         'flag_fiche_agrement'=> true,
+                            //         'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
+                            //     ]);
+                            // }
 
                             // Modification du projet de formation -- flag et ajout du code
                             $projetformation->flag_comite_pleiniere = true;
+                            $projetformation->flag_fiche_agrement = true;
                             $projetformation->code_comite_pleiniere = $comitep->code_comite ;
                             $projetformation->update();
 

@@ -158,6 +158,7 @@ class CahierPlansProjetsController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $cahier = CahierPlansProjets::find($id);
+        //dd($cahier->code_pieces_cahier_plans_projets);
 
         $departements = Direction::join('departement','direction.id_direction','departement.id_direction')->where([
             ['direction.id_direction','=','4'],['departement.flag_departement','=',true]
@@ -194,6 +195,8 @@ class CahierPlansProjetsController extends Controller
                  ->get();
         }else{
 
+
+            //dd($cahier);
             if ($cahier->code_commission_permante_comite_gestion == 'COP') {
                 $valeur1 = 0;
                 $valeur2 = 65000000;
@@ -222,6 +225,21 @@ class CahierPlansProjetsController extends Controller
                                 ->join('cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets')
                                 ->where('cahier_plans_projets.id_cahier_plans_projets',$id)
                                 ->get();
+
+        //dd($cahierplansprojets);
+        //Projet formation
+        if($cahier->code_pieces_cahier_plans_projets == 'PRF'){
+            $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier as vppdpct')
+            ->where('vppdpct.code_processus','PRF')
+            ->get();
+
+            //  $cahierplansprojets = DB::table('ligne_cahier_plans_projets as vppdpct')
+            //  ->join('projet_formation','vppdpct.id_demande','projet_formation.id_projet_formation')
+            //  ->where('vppdpct.id_cahier_plans_projets',$id)
+            //  ->get();
+            // dd($cahierplansprojets);
+        }
+
 
         Audit::logSave([
 
@@ -308,7 +326,7 @@ class CahierPlansProjetsController extends Controller
                 $cahier = CahierPlansProjets::find($id);
 
                 $input = $request->all();
-                //dd($input);exit;
+                //dd($input); //exit;
 
                 if(isset($input['demande'])){
 
@@ -338,11 +356,12 @@ class CahierPlansProjetsController extends Controller
 
                     foreach ($tab as $key => $value) {
 
-                        //dd($value); exit;
+                        //dd($codeprocessus); exit;
                         $recuperationvaleur = explode('/',$value);
                         //dd($recuperationvaleur); exit;
                         $iddemande = $recuperationvaleur[0];
                         $codeprocessus = $recuperationvaleur[1];
+                        //dd($iddemande); //exit;
 
                         LigneCahierPlansProjets::create([
                             'id_cahier_plans_projets'=> $id,
@@ -361,7 +380,6 @@ class CahierPlansProjetsController extends Controller
                         }
 
                         if($codeprocessus == 'PE'){
-
                             $projet_etude = ProjetEtude::find($iddemande);
                             $projet_etude->flag_passer_cahier_cp_cg = true;
                             $projet_etude->date_passe_cahier_cp_cg = Carbon::now();
@@ -369,7 +387,6 @@ class CahierPlansProjetsController extends Controller
                         }
 
                         if($codeprocessus == 'PRF'){
-
                             $projetformation = ProjetFormation::find($iddemande);
                             $projetformation->flag_passer_cahier_cp_cg = true;
                             $projetformation->date_passe_cahier_cp_cg = Carbon::now();

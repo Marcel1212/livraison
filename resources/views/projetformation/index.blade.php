@@ -43,12 +43,18 @@
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h5 class="mb-0">{{ $titre }}</h5>
                                     <?php if ($nomrole == 'ENTREPRISE') { ?>
-                                    <span align="right">
+                                    {{-- <span align="right">
                                         <a href="{{ route($lien . '.create') }}"
                                             class="btn btn-sm btn-primary waves-effect waves-light">
                                             <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter un projet de formation</a>
 
-                                    </span>
+                                    </span> --}}
+                                    <button type="button" class="btn btn-sm btn-primary waves-effect waves-light"
+                                        data-bs-toggle="modal" data-bs-target="#MessageFirst" id="Btn2"> Ajouter un
+                                        projet de formation
+
+                                    </button>
+
                                     <?php } ?>
                                 </div>
                                 <div class="card-body">
@@ -122,6 +128,80 @@
             </div>
 
 
+        </div>
+        <div class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" id="MessageFirst">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Selectionnez un type de projet de formation
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md mb-md-0 mb-2">
+                                        <div class="form-check custom-option custom-option-icon">
+                                            <label class="form-check-label custom-option-content" for="customRadioIcon1">
+                                                <span class="custom-option-body">
+                                                    <i class="ti ti-briefcase"></i>
+                                                    <span class="custom-option-title">Perfectionnment </span>
+                                                    {{-- <small>Le perfectionnement est un engagement envers l'amélioration
+                                                        personnelle et professionnelle, qui implique de consacrer du temps
+                                                        et des efforts à acquérir de nouvelles compétences et à approfondir
+                                                        ses connaissances existantes. </small> --}}
+                                                </span>
+                                                <input name="customOptionRadioIcon" class="form-check-input" type="radio"
+                                                    value="" id="customRadioIcon1" checked="">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md mb-md-0 mb-2">
+                                        <div class="form-check custom-option custom-option-icon">
+                                            <label class="form-check-label custom-option-content" for="customRadioIcon2">
+                                                <span class="custom-option-body">
+                                                    <i class="ti ti-briefcase"></i>
+                                                    <span class="custom-option-title">Inititaion </span>
+                                                    {{-- <small> L'initiation pour les débutants est
+                                                        un projet conçu pour introduire les participants aux concepts
+                                                        fondamentaux d'une activité. </small> --}}
+                                                </span>
+                                                <input name="customOptionRadioIcon" class="form-check-input" type="radio"
+                                                    value="" id="customRadioIcon2">
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-check custom-option custom-option-icon checked">
+                                            <label class="form-check-label custom-option-content" for="customRadioIcon3">
+                                                <span class="custom-option-body">
+                                                    <i class="ti ti-briefcase"></i>
+                                                    <span class="custom-option-title"> Developpement </span>
+                                                    {{-- <small>Le développement est un processus essentiel dans un domaine afin
+                                                        d'y apporter de l'amelioration.</small> --}}
+                                                </span>
+                                                <input name="customOptionRadioIcon" class="form-check-input"
+                                                    type="radio" value="" id="customRadioIcon3">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-primary waves-effect" data-bs-dismiss="modal">
+                            Valider
+                        </button>
+                        <button type="button" class="btn btn-label-secondary waves-effect" data-bs-dismiss="modal">
+                            Fermer
+                        </button>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- END: Content-->

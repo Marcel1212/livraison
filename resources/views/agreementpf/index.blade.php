@@ -58,9 +58,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <th>No</th>
                                 <th>Code projet formation </th>
                                 <th>Titre projet formation </th>
-                                <th>Entreprise</th>
-                                <th>Conseiller en charge</th>
-                                <th>Cout formation</th>
+                                {{-- <th>Entreprise</th>
+                                <th>Conseiller en charge</th> --}}
+                                <th>Cout formation demandé</th>
+                                <th>Cout formation validé</th>
                                 {{-- <th>Statut</th> --}}
                                 <th>Action</th>
                             </tr>
@@ -71,9 +72,10 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ @$planformation->code_projet_formation }}</td>
                                     <td>{{ @$planformation->titre_projet_etude }}</td>
-                                    <td>{{ $planformation->raison_social_entreprises }}</td>
-                                    <td>{{ $planformation->name }} {{ $planformation->prenom_users }}</td>
+                                    {{-- <td>{{ $planformation->raison_social_entreprises }}</td>
+                                    <td>{{ $planformation->name }} {{ $planformation->prenom_users }}</td> --}}
                                     <td>{{ $planformation->cout_projet_formation }}</td>
+                                    <td>{{ $planformation->cout_projet_instruction }}</td>
                                     {{-- <td>
                                         @isset($planformation->flag_annulation_plan)
                                             <span class="badge bg-danger">Annulé</span>
