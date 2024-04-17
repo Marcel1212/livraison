@@ -133,10 +133,7 @@ class AgreementController extends Controller
         $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
             ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
             ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
-            ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
-                $query->where('id_plan_de_formation', $id_plan_de_formation)
-                    ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
-            })->get();
+           ->get();
 
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
