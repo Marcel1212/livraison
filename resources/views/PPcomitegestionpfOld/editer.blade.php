@@ -237,7 +237,7 @@ $nombre = count($conseilleragence);
                             </div>
 
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de
+                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de
                                     formation</label>
                                 <input type="text" class="form-control form-control-sm"
                                     value="{{ @$infosactionplanformation->intitule_action_formation_plan }}"
@@ -408,10 +408,10 @@ $nombre = count($conseilleragence);
                                 <?php //}else{
                                 ?>
                                 <!--<div class="alert alert-info alert-dismissible fade show" role="alert">
-                                                <div class="alert-body" style="text-align:center">
-                                                    Action déja traité
-                                                </div>
-                                            </div>-->
+                                                    <div class="alert-body" style="text-align:center">
+                                                        Action déja traité
+                                                    </div>
+                                                </div>-->
                                 <?php //}
                                 ?>
                                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
@@ -427,25 +427,25 @@ $nombre = count($conseilleragence);
     @endforeach
 
     <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <div id='modal-content'>
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <div id='modal-content'>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <script>
-                            $('#btnChange').click(function(eve) {
-                                var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
-                                alert(url);
-                                $("#modal-content").load(url, function() {
-                                    $("#myModal").modal("show");
-                                });
-                            })
-                        </script>-->
+                            <script>
+                                $('#btnChange').click(function(eve) {
+                                    var url = "/DeviceLocation/ChangeLocation?deviceID=" + $(this).data("id");
+                                    alert(url);
+                                    $("#modal-content").load(url, function() {
+                                        $("#myModal").modal("show");
+                                    });
+                                })
+                            </script>-->
 
 @endsection

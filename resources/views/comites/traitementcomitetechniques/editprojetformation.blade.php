@@ -311,7 +311,7 @@ $nombre = count($conseilleragence);
                             <thead>
                                 <tr>
                                     {{-- <th>No</th> --}}
-                                    <th>Intituler du projet de formation </th>
+                                    <th>Intituleé du projet de formation </th>
                                     {{-- <th>Structure ou établissement de formation</th> --}}
                                     <th>Coût de formation entreprise</th>
                                     <th>Coût de de formation a l'instruction</th>
@@ -340,7 +340,7 @@ $nombre = count($conseilleragence);
                                     <td align="center">
                                         <?php
                                         $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
-
+                                        
                                         ?>
 
                                         @if (count($resultatTCPCU) > 0)
@@ -433,7 +433,7 @@ $nombre = count($conseilleragence);
 
 
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de
+                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de
                                     formation</label>
                                 <input type="text" class="form-control form-control-sm"
                                     value="{{ @$infosactionplanformation->intitule_action_formation_plan }}"
@@ -588,9 +588,9 @@ $nombre = count($conseilleragence);
                             @if (@$planformation->user_conseiller != Auth::user()->id)
                                 <?php
                                 $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id, $infosactionplanformation->id_action_formation_plan);
-
+                                
                                 //echo $resultatT;
-
+                                
                                 ?>
                                 <hr />
 
@@ -1273,7 +1273,7 @@ $nombre = count($conseilleragence);
 
                 <?php
                 $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
-
+                
                 ?>
 
                 @if (count($resultatTCPCU) < 1)
@@ -1366,7 +1366,7 @@ $nombre = count($conseilleragence);
                         <h5 class="card-header">Mes appréciations</h5>
                         <div class="card-body pb-2">
                             <ul class="timeline pt-3">
-                                <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id,$planformation->id_projet_formation); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>
+                                <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>
                                 @foreach ($ResultatTraitement as $res)
                                     <li
                                         class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">

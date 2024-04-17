@@ -400,7 +400,7 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
                                 <th>Coût de l'action</th>
                                 <th>Coût de financement</th>
@@ -464,7 +464,7 @@
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
                                 <th>Coût de l'action</th>
                                 <th>Coût de financement</th>
@@ -641,7 +641,7 @@
                         </div>
 
                         <div class="col-12 col-md-12">
-                          <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
+                          <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
                           <input
                             type="text"
                             class="form-control form-control-sm"
