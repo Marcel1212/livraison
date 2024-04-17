@@ -1065,30 +1065,7 @@
                                                                             </div> <br/><br/><br/>
                                                                             @if ($res->flag_traite_par_user_conserne != true)
                                                                             <div>
-                                                                                <form id="editUserFormMessage" class="row g-3" method="POST" action="{{ route($lien.'.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
-                                                                                    @csrf
-                                                                                    @method('put')
-                                                                                    <input type="hidden" name="id_traitement_par_critere_commentaire" value="{{ $res->id_traitement_par_critere_commentaire }}"/>
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-4 col-12">
-                                                                                            <label class="form-label" for="">Statut </label>
-                                                                                            <select class="select2 form-select" data-allow-clear="true" name="flag_traitement_par_critere_commentaire_traiter" id="flag_traitement_par_critere_commentaire_traiter">
-                                                                                                <option value="">-----------</option>
-                                                                                                <option value="true">Prise en compte</option>
-                                                                                                <option value="false">Pas prise en compte</option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <div class="col-md-6 col-12">
-                                                                                            <label class="form-label" for="">Reponse </label>
-                                                                                            <textarea class="form-control form-control-sm"  name="commentaire_reponse" id="commentaire_reponse" rows="6"></textarea>
-                                                                                        </div>
-                                                                                        <div class="col-md-2 col-12">
-                                                                                            <br/>
-                                                                                            <button onclick='javascript:if (!confirm("Voulez-vous traité cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation_valider_reponse" class="btn btn-warning btn-sm me-sm-3 me-1">Traité</button>
 
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </form>
                                                                             </div>
                                                                             @else
                                                                             <div>
