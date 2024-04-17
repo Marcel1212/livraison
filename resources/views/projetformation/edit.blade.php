@@ -1075,7 +1075,7 @@
                                                     <h5 class="card-title" align="center"> Traitement du chef de
                                                         departement</h5>
                                                     <div class="row">
-                                                        <label class="form-label">Liste des service <span
+                                                        <label class="form-label">Liste des services <span
                                                                 style="color:red;">*</span></label>
                                                         <select id="id_service" name="id_service"
                                                             class="select2 select2-size-sm form-select"
