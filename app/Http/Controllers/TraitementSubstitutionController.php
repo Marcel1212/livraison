@@ -43,7 +43,7 @@ class TraitementSubstitutionController extends Controller
         $id_action = $id;
         $etape = Crypt::UrldeCrypt($etape);
         $actionplanformation = ActionFormationPlan::
-        select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')->
+        select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.id_but_formation','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')->
         join('demande_substi_action_formation','action_formation_plan.id_action_formation_plan','demande_substi_action_formation.id_action_formation_plan_substi')
             ->join('users','demande_substi_action_formation.id_user','users.id')
             ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
@@ -61,11 +61,6 @@ class TraitementSubstitutionController extends Controller
         $caracteristiques = CaracteristiqueTypeFormation::All();
 
         $butformations = ButFormation::where([['flag_actif_but_formation','=',true]])->get();
-        $butformation = "<option value=''> Selectionnez le but de la formation </option>";
-        foreach ($butformations as $comp) {
-            $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
-        }
-
 
 
         $secteuractivites = SecteurActivite::all();
@@ -107,10 +102,6 @@ class TraitementSubstitutionController extends Controller
         }
 
         $typeformations = TypeFormation::where([['flag_actif_formation','=',true]])->get();
-        $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
-        foreach ($typeformations as $comp) {
-            $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
-        }
 
         return view('agreement.editsubstitution', compact('motif_substitutions',
             'caracteristiques',
@@ -121,12 +112,15 @@ class TraitementSubstitutionController extends Controller
             'etape',
             'categorieplans',
             'typeentreprise',
-            'butformation','typeformation','categorieprofessionelles',
+            'butformations','typeformations','categorieprofessionelles',
             'structureformations','motifs','demande_substitution','paysc'
             ));
     }
 
     public function update(Request $request,$id){
+
+        dd($request);
+
         $id = Crypt::UrldeCrypt($id);
         $id_action = $id;
         $action = ActionFormationPlan::find($id);
