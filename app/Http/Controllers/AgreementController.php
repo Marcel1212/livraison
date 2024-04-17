@@ -133,10 +133,8 @@ class AgreementController extends Controller
         $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
             ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
             ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
-            ->where(function ($query) use ($id_plan_de_formation,$plan_de_formation) {
-                $query->where('id_plan_de_formation', $id_plan_de_formation)
-                    ->orWhere('id_plan_de_formation', $plan_de_formation->id_plan_formation_supplementaire);
-            })->get();
+            ->where('id_plan_de_formation', $id_plan_de_formation)
+                                ->get();
 
         $infoentreprise = Entreprises::find($plan_de_formation->id_entreprises);
         $categorieplans = CategoriePlan::where('id_plan_de_formation', $id_plan_de_formation)->get();
@@ -328,14 +326,8 @@ class AgreementController extends Controller
         $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
         $demande_substitution->id_plan_de_formation_substi = $id_plan;
         $demande_substitution->id_action_formation_plan_substi = $id_action;
-        $demande_substitution->intitule_action_formation_plan_substi = $actionplanformation->intitule_action_formation_plan;
-        $demande_substitution->structure_etablissement_action_substi = $actionplanformation->structure_etablissement_action_;
-        $demande_substitution->id_action_formation_plan_substi = $id_action;
-
-        $fiche_a_demande_agreme = FicheADemandeAgrement::where('id_action_formation_plan')->first();
-        $demande_substitution->objectif_pedagogique_action_substi = $fiche_a_demande_agreme->objectif_pedagogique_fich_agre;
-        $demande_substitution->lieu_formation_fiche_agrement_substi = $fiche_a_demande_agreme->lieu_formation_fiche_agrement;
         $demande_substitution->date_soumis_demande_substitution_action_plan = now();
+
         $demande_substitution->id_user = $planformation->user_conseiller;
         if(isset($request->piece_demande_plan_substi)){
             $filefront = $request->piece_demande_plan_substi;
