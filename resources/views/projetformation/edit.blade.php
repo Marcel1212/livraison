@@ -828,7 +828,7 @@
                                                                         required="required" id="cout_projet_formation"
                                                                         class="form-control form-control-sm"
                                                                         placeholder="ex : 2000000" <?php echo $disable; ?>
-                                                                        value={{ $projetetude->cout_projet_formation }}>
+                                                                        value={{ number_format(@$projetetude->cout_projet_formation, 0, ',', ' ') }}>
                                                                 </div>
 
                                                             </div>
