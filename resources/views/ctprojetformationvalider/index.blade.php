@@ -2,7 +2,7 @@
 
 @section('content')
     @php($Module = 'Projet de formation')
-    @php($titre = 'Comite technique à valider')
+    @php($titre = 'Comité technique à valider')
     @php($lien = 'ctprojetformationvalider')
 
     <!-- BEGIN: Content-->
@@ -40,7 +40,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Entreprise </th>
-                                <th>Conseiller </th>
+                                {{-- <th>Conseiller </th> --}}
                                 <th>Code </th>
                                 <th>Titre projet </th>
                                 <th>Coût de formation </th>
