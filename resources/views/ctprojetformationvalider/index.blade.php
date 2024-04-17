@@ -43,8 +43,8 @@
                                 <th>Conseiller </th>
                                 <th>Code </th>
                                 <th>Titre projet </th>
-                                <th>Cout de formation </th>
-                                <th>Date soumis</th>
+                                <th>Coût de formation </th>
+                                <th>Date de la soumission</th>
                                 {{-- <th>Statut</th> --}}
                                 <th>Action</th>
                             </tr>
@@ -60,7 +60,7 @@
                                         <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
                                         <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ @$planformation->titre_projet_etude }}</td>
-                                        <td>{{ @$planformation->cout_projet_formation }}</td>
+                                        <td>{{ number_format($planformation->cout_projet_formation) }}</td>
                                         <td>{{ $planformation->date_soumis }}</td>
                                         {{-- <td align="center">
                                             <?php if ($planformation->flag_soumis_plan_formation == true and
