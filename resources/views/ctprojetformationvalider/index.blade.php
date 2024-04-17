@@ -2,7 +2,7 @@
 
 @section('content')
     @php($Module = 'Projet de formation')
-    @php($titre = 'Comite technique à valider')
+    @php($titre = 'Comité technique à valider')
     @php($lien = 'ctprojetformationvalider')
 
     <!-- BEGIN: Content-->
