@@ -485,7 +485,7 @@ $nombre = count($conseilleragence);
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Intituler de l'action de formation </th>
+                                    <th>Intitulé de l'action de formation </th>
                                     <th>Structure ou établissement de formation</th>
                                     <th>Coût de l'action</th>
                                     <th>Coût de financement</th>
@@ -519,7 +519,7 @@ $nombre = count($conseilleragence);
                                             @else
                                                 <?php
                                                 $value = ListeTraitementCritereParUser::get_traitement_crietere_par_user(Auth::user()->id, $actionplanformation->id_action_formation_plan);
-                                                
+
                                                 echo $value;
                                                 ?>
                                             @endif
@@ -607,7 +607,7 @@ $nombre = count($conseilleragence);
 
 
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de
+                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de
                                     formation</label>
                                 <input type="text" class="form-control form-control-sm"
                                     value="{{ @$infosactionplanformation->intitule_action_formation_plan }}"
@@ -762,9 +762,9 @@ $nombre = count($conseilleragence);
                             @if (@$planformation->user_conseiller != Auth::user()->id)
                                 <?php
                                 $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id, $infosactionplanformation->id_action_formation_plan);
-                                
+
                                 //echo $resultatT;
-                                
+
                                 ?>
                                 <hr />
 
@@ -900,7 +900,7 @@ $nombre = count($conseilleragence);
 
 
                             <div class="col-12 col-md-12">
-                                <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de
+                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de
                                     formation</label>
                                 <input type="text" class="form-control form-control-sm"
                                     value="{{ @$infosactionplanformation->intitule_action_formation_plan }}"

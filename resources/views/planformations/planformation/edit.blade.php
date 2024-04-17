@@ -898,7 +898,7 @@ $idpart = Auth::user()->id_partenaire;
                             <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Intituler de l'action de formation </th>
+                                <th>Intitulé de l'action de formation </th>
                                 <th>Structure ou établissement de formation</th>
                                 <th>Nombre de stagiaires</th>
                                 <th>Nombre de groupes</th>

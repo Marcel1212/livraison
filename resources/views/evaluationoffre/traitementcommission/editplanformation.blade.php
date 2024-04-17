@@ -601,7 +601,7 @@
 
 
                             <div class="col-12 col-md-12">
-                            <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
+                            <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
@@ -915,7 +915,7 @@
 
 
                             <div class="col-12 col-md-12">
-                            <label class="form-label" for="intitule_action_formation_plan">Intituler de l'action de formation</label>
+                            <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
                             <input
                                 type="text"
                                 class="form-control form-control-sm"
