@@ -57,7 +57,7 @@
                                         <td>{{ ++$i }}</td>
                                         <td>{{ @$planformation->ncc_entreprises }} /
                                             {{ @$planformation->raison_social_entreprises }}</td>
-                                        <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td>
+                                        {{-- <td>{{ @$planformation->name }} {{ @$planformation->prenom_users }}</td> --}}
                                         <td>{{ @$planformation->code_projet_formation }}</td>
                                         <td>{{ @$planformation->titre_projet_etude }}</td>
                                         <td>{{ number_format($planformation->cout_projet_formation) }}</td>
