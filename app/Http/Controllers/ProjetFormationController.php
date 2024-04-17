@@ -725,6 +725,7 @@ class ProjetFormationController extends Controller
                     $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
                     $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
                     $input['competences'] = ucfirst($input['competences_odf']);
+                    $input['cout_projet_instruction'] = $cout_projet_formation;
                     $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
                     $input['source_verification'] = ucfirst($input['sources_verification_odf']);
 
