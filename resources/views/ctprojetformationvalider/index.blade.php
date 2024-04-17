@@ -40,7 +40,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Entreprise </th>
-                                <th>Conseiller </th>
+                                {{-- <th>Conseiller </th> --}}
                                 <th>Code </th>
                                 <th>Titre projet </th>
                                 <th>Coût de formation </th>
