@@ -536,7 +536,7 @@
                                                                     </label>
                                                                     <input type="text" name="cout_projet_formation"
                                                                         required="required" id="cout_projet_formation"
-                                                                        class="form-control form-control-sm"
+                                                                        class="form-control form-control-sm number"
                                                                         {{-- oninput="formatNumber()" --}} placeholder="ex : 2000000">
                                                                 </div>
 
