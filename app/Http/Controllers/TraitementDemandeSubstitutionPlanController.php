@@ -48,7 +48,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     ->join('action_formation_plan','action_formation_plan.id_action_formation_plan','demande_substi_action_formation.id_action_formation_plan_substi')
 //                    ->join('entreprises','plan_formation.id_entreprises','entreprises.id_entreprises')
                     ->join('users','demande_substi_action_formation.id_user','users.id')
-                    ->where('users.id', Auth::user()->id)
+//                    ->where('users.id', Auth::user()->id)
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
                         ['v.id_processus', '=', $r->id_processus],
