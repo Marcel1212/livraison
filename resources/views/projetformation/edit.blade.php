@@ -1294,15 +1294,15 @@
                                                                                             placeholder="" />
                                                                                         <?php } ?> <br>
 
-                                                                                        <label>Cout du projet <span
+                                                                                        <label>Coût du projet <span
                                                                                                 style="color:red;">*</span>
                                                                                         </label>
                                                                                         <input
                                                                                             name="cout_projet_instruction"
                                                                                             required="required"
-                                                                                            type="number"
+                                                                                            type="text"
                                                                                             id="cout_projet_instruction"
-                                                                                            class="form-control form-control-sm"
+                                                                                            class="form-control form-control-sm number"
                                                                                             <?php echo $disable_ins; ?>
                                                                                             value="{{ $projetetude->cout_projet_instruction }}"
                                                                                             placeholder="200000">

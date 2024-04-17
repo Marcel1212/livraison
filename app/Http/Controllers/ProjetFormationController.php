@@ -654,7 +654,8 @@ class ProjetFormationController extends Controller
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"]; //
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
-                    $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
+                    $cout_projet_formation = str_replace(' ', '', $data["cout_projet_instruction"]) ;
+                    $projetformation->cout_projet_instruction = $cout_projet_formation;
                     $projetformation->save();
 
 
@@ -696,7 +697,8 @@ class ProjetFormationController extends Controller
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
-                    $projetformation->cout_projet_instruction = $data["cout_projet_instruction"];
+                    $cout_projet_formation = str_replace(' ', '', $data["cout_projet_instruction"]) ;
+                    $projetformation->cout_projet_instruction = $cout_projet_formation ;
                     $projetformation->save();
 
                     // Enregistrement des modifications de l'instruction par le conseiller
