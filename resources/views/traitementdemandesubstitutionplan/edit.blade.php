@@ -618,9 +618,215 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                     {{--                        @endisset--}}
                 </div>
                 <div class="tab-pane fade @if($etape==4) show active @endif" id="navs-top-traitersub" role="tabpanel">
-                    <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_substitution->id_action_formation_plan_substi)) }}" enctype="multipart/form-data">
+                   @if(@$ResultCptVal->priorite_max != @$ResultCptVal->priorite_combi_proc)
+                        <form  method="POST" id="planForm" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_substitution->id_action_formation_plan_substi)) }}">
                         @csrf
                         @method('put')
+                        <div class="row">
+                            <div class="col-12 col-md-9">
+                                <label class="form-label" for="masse_salariale">Entreprise</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->raison_social_entreprises}}"
+                                    disabled="disabled" />
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="masse_salariale">Masse salariale</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->masse_salariale}}"
+                                    disabled="disabled" />
+                            </div>
+
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    name="intitule_action_formation_plan"
+                                    value="{{@$actionplanformation->intitule_action_formation_plan}}" />
+                            </div>
+                            <div class="col-12 col-md-12">
+                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                <div id="objectif_pedagogique_fiche_agre" class="rounded-1">{!!@$actionplanformation->objectif_pedagogique_fiche_agre!!}</div>
+                                <input class="form-control" type="hidden" id="objectif_pedagogique_fiche_agre" name="objectif_pedagogique_fiche_agre_val"/>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
+                                <select
+                                    id="id_but_formation"
+                                    name="id_but_formation"
+                                    class="select2 form-select input-group @error('id_but_formation')
+                                error
+                                @enderror"
+                                    aria-label="Default select example" >
+                                    @foreach ($butformations as $butformation)
+                                        <option @if($actionplanformation->id_but_formation==$butformation->id_but_formation) selected @endif value="{{ $butformation->id_but_formation }}">{{ mb_strtoupper($butformation->but_formation) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_but_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                                <select
+                                    id="id_type_formation_{{$key}}"
+                                    name="id_type_formation"
+                                    class="select2 form-select-sm input-group @error('id_type_formation')
+                                error
+                                @enderror"
+                                    aria-label="Default select example">
+                                    @foreach ($typeformations as $typeformation)
+                                        <option @if($actionplanformation->id_type_formation==$typeformation->id_type_formation) selected @endif value="{{ $typeformation->id_type_formation }}">{{ mb_strtoupper($typeformation->type_formation) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_type_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
+                                <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
+                                error
+                                @enderror">
+                                    <option value='{{@$actionplanformation->caracteristiqueTypeFormation->id_caracteristique_type_formation}}'>{{@$actionplanformation->caracteristiqueTypeFormation->libelle_ctf}}</option>
+                                </select>
+                                @error('id_caracteristique_type_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="row">
+                                    <div class="col-12 col-md-10">
+                                        <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
+                                        <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
+                                        error
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation_{{$key}}">
+                                            <option value='{{@$actionplanformation->id_entreprise_structure_formation_action}}'>{{@$actionplanformation->structure_etablissement_action_}}</option>
+                                        </select>
+                                        @error('id_entreprise_structure_formation_plan_formation')
+                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <br>
+                                        <button type="button" id="Activeajoutercabinetformation"
+                                                class="btn btn-icon btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
+                                            <span class="ti ti-plus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->lieu_formation_fiche_agrement}}"
+                                />
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->nombre_stagiaire_action_formati}}"
+                                    disabled="disabled" />
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->nombre_groupe_action_formation_}}"
+                                    disabled="disabled" />
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->nombre_heure_action_formation_p}}"
+                                    disabled="disabled" />
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->date_debut_fiche_agrement}}"
+                                    disabled="disabled"/>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                                <input
+                                    type="text"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->date_fin_fiche_agrement}}"
+                                    disabled="disabled"/>
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->cadre_fiche_demande_agrement}}"
+                                    disabled="disabled"/>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->agent_maitrise_fiche_demande_ag}}"
+                                    disabled="disabled"/>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                                <input
+                                    type="number"
+                                    class="form-control form-control-sm"
+                                    value="{{@$actionplanformation->employe_fiche_demande_agrement}}"
+                                    disabled="disabled" />
+                            </div>
+
+
+                            <div class="col-md-3 col-12">
+                                <div class="mb-1">
+                                    <label>Montant accordé <strong style="color:red;">*</strong>: </label>
+                                    <input type="text" disabled
+                                           value="{{number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}"
+                                           name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$actionplanformation->cout_accorde_action_formation}}">                            </div>
+                            </div>
+
+
+                            <div class="col-12 col-md-3 mb-4 ">
+                                <div class="mb-1 ">
+                                    <label>Facture proforma </label> <br>
+                                    <span class="badge bg-secondary"><a target="_blank"
+                                                                        onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $actionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                                </div>
+                            </div>
+{{--                            <hr>--}}
+{{--                            <div class="col-12" align="right">--}}
+
+{{--                                <button--}}
+{{--                                    onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de cette action de formation à un conseiller ? . Cette action est irreversible")) return false;'--}}
+{{--                                    type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"--}}
+{{--                                    class="btn btn-sm btn-success me-sm-3 me-1">Valider le traitement--}}
+{{--                                </button>--}}
+{{--                                <a href="/{{$lien}}" class="btn btn-sm btn-outline-secondary me-sm-3 me-1">Retour</a>--}}
+{{--                            </div>--}}
+
+                        </div>
+
                         <div class="row">
                             <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id2) }}"/>
                             <div class="col-md-12 col-12">
@@ -656,7 +862,251 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                             </div>
                         </div>
                     </form>
+                    @else
+                        <form  method="POST" id="planForm" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demande_substitution->id_action_formation_plan_substi)) }}">
+                            @csrf
+                            @method('put')
+                            <div class="row">
+                                <div class="col-12 col-md-9">
+                                    <label class="form-label" for="masse_salariale">Entreprise</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->raison_social_entreprises}}"
+                                        disabled="disabled" />
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="masse_salariale">Masse salariale</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->masse_salariale}}"
+                                        disabled="disabled" />
+                                </div>
 
+                                <div class="col-12 col-md-12">
+                                    <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de formation</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        name="intitule_action_formation_plan" disabled
+                                        value="{{@$demande_substitution->intitule_action_formation_plan_substi}}" />
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pedagogique</label>
+                                    <div id="objectif_pedagogique_fiche_agre" class="rounded-1">{!!@$demande_substitution->objectif_pedagogique_fiche_agre_substi!!}</div>
+                                    <input class="form-control" type="hidden" id="objectif_pedagogique_fiche_agre" name="objectif_pedagogique_fiche_agre_val"/>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
+                                    <select disabled
+                                        id="id_but_formation"
+                                        name="id_but_formation"
+                                        class="select2 form-select input-group @error('id_but_formation')
+                                error
+                                @enderror"
+                                        aria-label="Default select example" >
+                                        @foreach ($butformations as $butformation)
+                                            <option @if($demande_substitution->id_but_formation_substi==$butformation->id_but_formation) selected @endif value="{{ $butformation->id_but_formation }}">{{ mb_strtoupper($butformation->but_formation) }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_but_formation')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
+                                    <select disabled
+                                        id="id_type_formation_{{$key}}"
+                                        name="id_type_formation"
+                                        class="select2 form-select-sm input-group @error('id_type_formation')
+                                error
+                                @enderror"
+                                        aria-label="Default select example">
+                                        @foreach ($typeformations as $typeformation)
+                                            <option @if($demande_substitution->id_type_formation_substi==$typeformation->id_type_formation) selected @endif value="{{ $typeformation->id_type_formation }}">{{ mb_strtoupper($typeformation->type_formation) }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_type_formation')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
+                                    <select disabled id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
+                                error
+                                @enderror">
+                                        <option value='{{@$demande_substitution->id_caracteristique_type_formation_substi}}'>{{@$actionplanformation->caracteristiqueTypeFormation->libelle_ctf}}</option>
+                                    </select>
+                                    @error('id_caracteristique_type_formation')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-10">
+                                            <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
+                                            <select disabled class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
+                                        error
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation_{{$key}}">
+                                                <option value='{{@$actionplanformation->id_entreprise_structure_formation_action}}'>{{@$actionplanformation->structure_etablissement_action_}}</option>
+                                            </select>
+                                            @error('id_entreprise_structure_formation_plan_formation')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-12 col-md-2">
+                                            <br>
+                                            <button type="button" id="Activeajoutercabinetformation"
+                                                    class="btn btn-icon btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#Ajoutercabinetformation" href="#myModal1" data-url="http://example.com">
+                                                <span class="ti ti-plus"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->lieu_formation_fiche_agrement}}"
+                                    />
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de stagiaires</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->nombre_stagiaire_action_formati}}"
+                                        disabled="disabled" />
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupe</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->nombre_groupe_action_formation_}}"
+                                        disabled="disabled" />
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par groupes</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->nombre_heure_action_formation_p}}"
+                                        disabled="disabled" />
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->date_debut_fiche_agrement}}"
+                                        disabled="disabled"/>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="date_fin_fiche_agrement">Date fin de realisation</label>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->date_fin_fiche_agrement}}"
+                                        disabled="disabled"/>
+                                </div>
+
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadre</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->cadre_fiche_demande_agrement}}"
+                                        disabled="disabled"/>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agent de maitrise</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->agent_maitrise_fiche_demande_ag}}"
+                                        disabled="disabled"/>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employe / ouvriers</label>
+                                    <input
+                                        type="number"
+                                        class="form-control form-control-sm"
+                                        value="{{@$actionplanformation->employe_fiche_demande_agrement}}"
+                                        disabled="disabled" />
+                                </div>
+
+
+                                <div class="col-md-3 col-12">
+                                    <div class="mb-1">
+                                        <label>Montant accordé <strong style="color:red;">*</strong>: </label>
+                                        <input type="text" disabled
+                                               value="{{number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}"
+                                               name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$actionplanformation->cout_accorde_action_formation}}">                            </div>
+                                </div>
+
+
+                                <div class="col-12 col-md-3 mb-4 ">
+                                    <div class="mb-1 ">
+                                        <label>Facture proforma </label> <br>
+                                        <span class="badge bg-secondary"><a target="_blank"
+                                                                            onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $actionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                                    </div>
+                                </div>
+                                {{--                            <hr>--}}
+                                {{--                            <div class="col-12" align="right">--}}
+
+                                {{--                                <button--}}
+                                {{--                                    onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de cette action de formation à un conseiller ? . Cette action est irreversible")) return false;'--}}
+                                {{--                                    type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"--}}
+                                {{--                                    class="btn btn-sm btn-success me-sm-3 me-1">Valider le traitement--}}
+                                {{--                                </button>--}}
+                                {{--                                <a href="/{{$lien}}" class="btn btn-sm btn-outline-secondary me-sm-3 me-1">Retour</a>--}}
+                                {{--                            </div>--}}
+
+                            </div>
+
+                            <div class="row">
+                                <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id2) }}"/>
+                                <div class="col-md-12 col-12">
+                                    <div class="mb-1">
+                                        <label>Commentaire <strong style="color:red;">(obligatoire si rejeté)*</strong>: </label>
+                                        @if($parcoursexist->count()<1)
+                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6"></textarea>
+                                        @else
+                                            <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-12" align="right">
+                                    <hr>
+                                        <?php if(count($parcoursexist)<1){?>
+                                    <button type="submit" name="action" value="Valider"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                        Valider
+                                    </button>
+                                    <button type="submit" name="action" value="Rejeter"
+                                            class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                        Rejeter
+                                    </button>
+                                    <?php } else{ ?>
+                                    <div class="col-12" align="right">
+                                        <a class="btn btn-sm btn-secondary waves-effect me-2" href="{{route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demande_substitution->id_action_formation_plan_substi),'id2'=>\App\Helpers\Crypt::UrlCrypt($id2),
+\App\Helpers\Crypt::UrlCrypt(3)]) }}">
+                                            Précédent</a>
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                            Retour</a>
+                                    </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -721,5 +1171,78 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 </div>
             </div>
     </div>
+@endsection
+@section('js_perso')
+    <script type="text/javascript">
+        //Initialisation des variable Quill
+        var objectif_pedagogique_fiche_agre = new Quill('#objectif_pedagogique_fiche_agre',{theme: 'snow'});
+
+        //Hide All fields
+        $("#objectif_pedagogique_fiche_agre_val").hide();
+
+        var planForm = $("#planForm");
+        function changeFunction() {
+            var selectBox = document.getElementById("id_type_formation");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
+                //alert(data); //exit;
+                $('#id_caracteristique_type_formation').empty();
+                $.each(data, function (index, tels) {
+                    $('#id_caracteristique_type_formation').append($('<option>', {
+                        value: tels.id_caracteristique_type_formation,
+                        text: tels.libelle_ctf,
+                    }));
+                });
+            });
+
+            if(selectedValue == 3){
+                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                $.get('/entrepriseinterneplan', function (data) {
+                    //alert(data); //exit;
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                    });
+                });
+            }
+
+            if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
+                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                $.get('/entreprisecabinetformation', function (data) {
+                    //alert(data); //exit;
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                    });
+                });
+            }
+
+
+            if(selectedValue == 4){
+                document.getElementById("Activeajoutercabinetformation").disabled = false;
+                $.get('/entreprisecabinetetrangerformation', function (data) {
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
+                    $.each(data, function (index, tels) {
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                    });
+                });
+            }
+        }
+
+        planForm.onsubmit = function(){
+            $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
+        }
+    </script>
+
 @endsection
 

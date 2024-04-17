@@ -601,8 +601,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                     {{--                        @endisset--}}
                 </div>
                 <div class="tab-pane fade @if($etape==4) show active @endif" id="navs-top-traitersub" role="tabpanel">
-
-                    <form  method="POST" id="planForm" class="form" action="{{route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation))}}" enctype="multipart/form-data">
+                    <form  method="POST" id="planForm" class="form" action="{{route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan))}}" enctype="multipart/form-data">
                         @csrf
                         @method('put')
                         <div class="row">
@@ -636,43 +635,59 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <div id="objectif_pedagogique_fiche_agre" class="rounded-1">{!!@$actionplanformation->objectif_pedagogique_fiche_agre!!}</div>
                                     <input class="form-control" type="hidden" id="objectif_pedagogique_fiche_agre" name="objectif_pedagogique_fiche_agre_val"/>
                                 </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
+                                <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
+                                <select
+                                    id="id_but_formation"
+                                    name="id_but_formation"
+                                    class="select2 form-select input-group @error('id_but_formation')
+                                error
+                                @enderror"
+                                    aria-label="Default select example" >
+                                    @foreach ($butformations as $butformation)
+                                        <option @if($actionplanformation->id_but_formation==$butformation->id_but_formation) selected @endif value="{{ $butformation->id_but_formation }}">{{ mb_strtoupper($butformation->but_formation) }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_but_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
+                            </div>
+                            <div class="col-12 col-md-3">
                                 <label class="form-label" for="id_type_formation">Type de formation <strong style="color:red;">*</strong></label>
                                 <select
-                                    id="id_type_formation"
+                                    id="id_type_formation_{{$key}}"
                                     name="id_type_formation"
                                     class="select2 form-select-sm input-group @error('id_type_formation')
                                 error
                                 @enderror"
-                                    aria-label="Default select example"
-                                    onchange="changeFunction();">
-                                        <?= $typeformation; ?>
+                                    aria-label="Default select example">
+                                    @foreach ($typeformations as $typeformation)
+                                        <option @if($actionplanformation->id_type_formation==$typeformation->id_type_formation) selected @endif value="{{ $typeformation->id_type_formation }}">{{ mb_strtoupper($typeformation->type_formation) }}</option>
+                                    @endforeach
                                 </select>
                                 @error('id_type_formation')
                                 <div class=""><label class="error">{{ $message }}</label></div>
                                 @enderror
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <label class="form-label" for="id_caracteristique_type_formation">Caractéristique type de formation <strong style="color:red;">*</strong></label>
                                 <select id="id_caracteristique_type_formation" name="id_caracteristique_type_formation" class="select2 form-select-sm input-group @error('id_caracteristique_type_formation')
                                 error
                                 @enderror">
-                                    <option value='0'></option>
+                                    <option value='{{@$actionplanformation->caracteristiqueTypeFormation->id_caracteristique_type_formation}}'>{{@$actionplanformation->caracteristiqueTypeFormation->libelle_ctf}}</option>
                                 </select>
                                 @error('id_caracteristique_type_formation')
                                 <div class=""><label class="error">{{ $message }}</label></div>
                                 @enderror
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-3">
                                 <div class="row">
                                     <div class="col-12 col-md-10">
                                         <label class="form-label" for="structure_etablissement_action_">Structure ou établissement de formation <strong style="color:red;">*</strong></label>
-
                                         <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
                                         error
-                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
-                                            <option value='0'></option>
-                                                <?php //echo $structureformation; ?>
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation_{{$key}}">
+                                            <option value='{{@$actionplanformation->id_entreprise_structure_formation_action}}'>{{@$actionplanformation->structure_etablissement_action_}}</option>
                                         </select>
                                         @error('id_entreprise_structure_formation_plan_formation')
                                         <div class=""><label class="error">{{ $message }}</label></div>
@@ -722,15 +737,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         disabled="disabled" />
                                 </div>
                                 <div class="col-12 col-md-3">
-                                    <label class="form-label" >Cout de la formation</label>
-                                    <input
-                                        type="text"
-                                        class="form-control form-control-sm"
-                                        value="{{@$actionplanformation->cout_action_formation_plan}}"
-                                        disabled="disabled" />
-                                </div>
-
-                                <div class="col-12 col-md-3">
                                     <label class="form-label" for="date_debut_fiche_agrement">Date debut de realisation</label>
                                     <input
                                         type="text"
@@ -745,15 +751,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         class="form-control form-control-sm"
                                         value="{{@$actionplanformation->date_fin_fiche_agrement}}"
                                         disabled="disabled"/>
-                                </div>
-
-                                <div class="col-12 col-md-3">
-                                    <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement</label>
-                                    <input
-                                        type="number"
-                                        class="form-control form-control-sm"
-                                        value="{{@$actionplanformation->cout_total_fiche_agrement}}"
-                                        disabled="disabled" />
                                 </div>
 
                                 <div class="col-12 col-md-3">
@@ -785,8 +782,11 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div class="col-md-3 col-12">
                                     <div class="mb-1">
                                         <label>Montant accordé <strong style="color:red;">*</strong>: </label>
-                                        <input type="number" disabled name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$actionplanformation->cout_accorde_action_formation}}">                            </div>
+                                        <input type="text" disabled
+                                               value="{{number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}"
+                                               name="cout_accorde_action_formation" id="cout_accorde_action_formation" class="form-control form-control-sm" value="{{@$actionplanformation->cout_accorde_action_formation}}">                            </div>
                                 </div>
+
 
                             <div class="col-12 col-md-3 mb-4 ">
                                 <div class="mb-1 ">
@@ -918,8 +918,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
         //Hide All fields
         $("#objectif_pedagogique_fiche_agre_val").hide();
-    </script>
-    <script type="text/javascript">
 
         var planForm = $("#planForm");
         function changeFunction() {
@@ -981,12 +979,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
         }
 
         planForm.onsubmit = function(){
-            $("#contexte_probleme_val").val(contexte_probleme.root.innerHTML);
-            $("#objectif_general_val").val(objectif_general.root.innerHTML);
-            $("#objectif_specifique_val").val(objectif_specifique.root.innerHTML);
-            $("#resultat_attendu_val").val(resultat_attendu.root.innerHTML);
-            $("#champ_etude_val").val(champ_etude.root.innerHTML);
-            $("#cible_val").val(cible.root.innerHTML);
+            $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
         }
     </script>
 

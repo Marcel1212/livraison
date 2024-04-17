@@ -328,14 +328,8 @@ class AgreementController extends Controller
         $demande_substitution->commentaire_demande_plan_substi = $request->commentaire_demande_plan_substi;
         $demande_substitution->id_plan_de_formation_substi = $id_plan;
         $demande_substitution->id_action_formation_plan_substi = $id_action;
-        $demande_substitution->intitule_action_formation_plan_substi = $actionplanformation->intitule_action_formation_plan;
-        $demande_substitution->structure_etablissement_action_substi = $actionplanformation->structure_etablissement_action_;
-        $demande_substitution->id_action_formation_plan_substi = $id_action;
-
-        $fiche_a_demande_agreme = FicheADemandeAgrement::where('id_action_formation_plan')->first();
-        $demande_substitution->objectif_pedagogique_action_substi = $fiche_a_demande_agreme->objectif_pedagogique_fich_agre;
-        $demande_substitution->lieu_formation_fiche_agrement_substi = $fiche_a_demande_agreme->lieu_formation_fiche_agrement;
         $demande_substitution->date_soumis_demande_substitution_action_plan = now();
+
         $demande_substitution->id_user = $planformation->user_conseiller;
         if(isset($request->piece_demande_plan_substi)){
             $filefront = $request->piece_demande_plan_substi;
