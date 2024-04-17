@@ -821,7 +821,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
-                                                                    <label>Cout de la formation <span
+                                                                    <label>Coût de la formation <span
                                                                             style="color:red;">*</span>
                                                                     </label>
                                                                     <input type="text" name="cout_projet_formation"
