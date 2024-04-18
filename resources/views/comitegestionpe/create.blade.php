@@ -140,7 +140,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <th>Entreprise </th>
                                     {{-- <th>Conseiller </th> --}}
                                     <th>Code </th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                     <th>Cout formation</th>
                                     <th>Action</th>
                                 </tr>

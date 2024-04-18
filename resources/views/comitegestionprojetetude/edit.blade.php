@@ -80,11 +80,13 @@
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link <?php if ($idetape == 4) {
-                        echo ' active';
-                    } if(count($ficheagrements)<1){ echo 'disabled'; }?>" role="tab" data-bs-toggle="tab"
+                            echo ' active';
+                        }
+                        if (count($ficheagrements) < 1) {
+                            echo 'disabled';
+                        } ?>" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
-                            aria-selected="false"
-                        >
+                            aria-selected="false">
                             Agrément
                         </button>
                     </li>
@@ -158,8 +160,8 @@
                             @method('put')
                             <div class="row">
                                 <div class="col-12 col-md-10">
-                                    <label class="form-label" for="id_user_comite_gestion_participant">Participants <strong
-                                            style="color:red;">*</strong></label>
+                                    <label class="form-label" for="id_user_comite_gestion_participant">Participants
+                                        <strong style="color:red;">*</strong></label>
                                     <select id="id_user_comite_gestion_participant"
                                         name="id_user_comite_gestion_participant"
                                         class="select2 form-select-sm input-group" aria-label="Default select example"
@@ -220,14 +222,14 @@
 
                             <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                 class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-                                <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                    class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                            <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
-                                    <?php } ?>
+                            <?php } ?>
 
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
-                                        Retour</a>
+                            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
+                                Retour</a>
                         </div>
                     </div>
 
@@ -243,7 +245,7 @@
                                     <th>Entreprise </th>
                                     <th>Code </th>
                                     <th>Titre du projet </th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                     <th>Cout du projet</th>
                                     <th>Action</th>
                                 </tr>
@@ -252,7 +254,7 @@
 
                                 <?php //dd($projetetudes);
                                 $i = 0; ?>
-{{--                                {{dd($projetetudes)}}--}}
+                                {{--                                {{dd($projetetudes)}} --}}
 
                                 @foreach ($projetetudes as $key => $projetetude)
                                     <tr>
@@ -267,10 +269,10 @@
                                             {{ number_format($projetetude->montant_projet_instruction) }}</td>
                                         <td align="center">
                                             <?php if($comitegestion->flag_statut_comite_gestion == false && count($comitegestionparticipant)>=1){?>
-{{--                                            @can($lien . '-edit')--}}
-                                                <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-{{--                                            @endcan--}}
+                                            {{--                                            @can($lien . '-edit') --}}
+                                            <a href="{{ route($lien . '.editer', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_etude), \App\Helpers\Crypt::UrlCrypt($comitegestion->id_comite_gestion), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                                class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            {{--                                            @endcan --}}
                                             <?php } ?>
                                         </td>
                                     </tr>
@@ -298,7 +300,10 @@
                     </div>
                     <div class="tab-pane fade<?php if ($idetape == 4) {
                         echo 'show active';
-                    } if(count($ficheagrements)<1 and count($comitegestionparticipant)<1){ echo 'disabled'; }?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                    }
+                    if (count($ficheagrements) < 1 and count($comitegestionparticipant) < 1) {
+                        echo 'disabled';
+                    } ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
                         <?php  if(count($ficheagrements)>=1 and $comitegestion->flag_statut_comite_gestion == false){?>
                         <div class="col-12" align="right">
@@ -317,16 +322,16 @@
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
                             <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Entreprise </th>
-                                <th>Code </th>
-                                <th>Titre du projet </th>
-                                <th>Cout demandé</th>
-                                <th>Cout accordé </th>
-                                <th>Date soumis</th>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Entreprise </th>
+                                    <th>Code </th>
+                                    <th>Titre du projet </th>
+                                    <th>Cout demandé</th>
+                                    <th>Cout accordé </th>
+                                    <th>Date de soumission</th>
 
-                            </tr>
+                                </tr>
 
                             </thead>
                             <tbody>
