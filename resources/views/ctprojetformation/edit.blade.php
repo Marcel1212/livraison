@@ -272,7 +272,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Code </th>
                                     <th>Cout entreprise </th>
                                     <th>Proposition financiere du conseiller </th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                     {{-- <th>Statut</th> --}}
                                     <th>Action</th>
                                 </tr>
@@ -340,7 +340,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Code </th>
                                     <th>Cout entreprise </th>
                                     <th>Proposition financiere du conseiller </th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                 </tr>
                             </thead>
                             <tbody>

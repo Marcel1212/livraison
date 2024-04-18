@@ -49,7 +49,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <th>Titre du projet </th>
                                 <th>Code </th>
                                 <th>Chargé d'étude </th>
-                                <th>Date soumis</th>
+                                <th>Date de soumission</th>
                                 <th>Date D'agrément</th>
                                 <th>Statut </th>
                                 <th>Action </th>
@@ -59,12 +59,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             @foreach ($agreements as $key => $projet_etude)
                                 <tr>
 
-                                    <td>{{ $key+1 }}</td>
-                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
-                                    <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40, '...')) }}</td>
+                                    <td>{{ @$projet_etude->code_projet_etude }}</td>
                                     <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
-                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
-                                    <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement))}}</td>
+                                    <td>{{ date('d/m/Y h:i:s', strtotime(@$projet_etude->created_at)) }}</td>
+                                    <td>{{ date('d/m/Y h:i:s', strtotime(@$projet_etude->date_fiche_agrement)) }}</td>
                                     <td> <span class="badge bg-success xs">Agrée</span></td>
                                     <td align="center">
                                         <a onclick="NewWindow('{{ route($lien . '.show', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"

@@ -169,7 +169,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <th>Entreprise </th>
                                     {{-- <th>Conseiller </th> --}}
                                     <th>Code comite pleiniere </th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                     <th>Cout formation</th>
                                     {{-- <th>Cout accordé</th> --}}
                                     {{-- <th>Action</th> --}}

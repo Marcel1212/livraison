@@ -294,7 +294,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Code </th>
                                     <th>Titre projet </th>
                                     <th>Cout formation</th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                     <?php if($comitegestion->flag_statut_comite_permanente == false){?>
                                     <th>Action</th>
                                     <?php } ?>
@@ -383,7 +383,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <th>Titre du projet </th>
                                     <th>Code </th>
                                     <th>Cout formation</th>
-                                    <th>Date soumis</th>
+                                    <th>Date de soumission</th>
                                 </tr>
                             </thead>
                             <tbody>
