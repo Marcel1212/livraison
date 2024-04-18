@@ -311,7 +311,8 @@ class ProjetFormationController extends Controller
             $input['id_user'] = $user_id;
             $input['code_projet_formation'] = 'PRF-'.Gencode::randStrGen(4, 5);
             // Modification du montant
-            $input['cout_projet_formation'] = $data['cout_projet_formation'];
+            $cout_projet_formation = str_replace(' ', '', $data["cout_projet_instruction"]) ;
+            $input['cout_projet_formation'] = $cout_projet_formation;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);

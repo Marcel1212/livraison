@@ -516,6 +516,7 @@ class ComitesController extends Controller
 
                 $listepersonnes = ComiteParticipant::where([['id_comite','=',$id]])->get();
                 //dd($listepersonnes);
+                dd("".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)]));
                 if(count($listepersonnes)<1){
                     Audit::logSave([
 
