@@ -47,7 +47,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <h5 class="mb-0">{{ $titre }}</h5>
                         <small class="text-muted float-end">
                             @can($lien . '-create')
-                                <a href="{{ route($lien . '.create') }}" class="btn btn-sm btn-primary waves-effect waves-light">
+                                <a href="{{ route($lien . '.create') }}"
+                                    class="btn btn-sm btn-primary waves-effect waves-light">
                                     <i class="menu-icon tf-icons ti ti-plus"></i> Nouveau cahier de plan de formation </a>
                             @endcan
                         </small>
@@ -60,8 +61,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <tr>
                                     <th>No</th>
                                     <th>Code </th>
-                                    <th>Date creation</th>
-                                    <th>Date soumis</th>
+                                    <th>Date de creation</th>
+                                    <th>Date de soumission</th>
                                     <th>Statut</th>
                                     <th>Action</th>
                                 </tr>
