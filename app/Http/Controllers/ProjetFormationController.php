@@ -18,6 +18,7 @@ use App\Models\Entreprises;
 use App\Models\Pieces;
 use App\Models\ProjetEtude;
 use App\Models\PiecesProjetEtude;
+use App\Models\TypeProjetFormation;
 use Carbon\Carbon;
 use App\Helpers\Menu;
 use App\Helpers\Crypt;
@@ -50,11 +51,13 @@ class ProjetFormationController extends Controller
             $idroles = $roles->role_id;
         $nomrole = $roles->name ;
         $id_direction = $roles->id_direction ;
-
+        $typeprojetformation = TypeProjetFormation::all();
+        //dd($typeprojetformation);
         //dd($roles->id_direction);
         if ($nomrole == 'ENTREPRISE'){
             // Liste des projet de formation des entreprises
             $demandeenroles = ProjetFormation::where('id_user','=',$user_id)->get();
+
 
         }else if ($nomrole == 'DIRECTEUR' and $id_direction == "4"){
              // Liste des projet de formation a traiter par le directeur
@@ -90,7 +93,7 @@ class ProjetFormationController extends Controller
 
         }
 
-        return view('projetformation.index', compact('demandeenroles','nomrole'));
+        return view('projetformation.index', compact('demandeenroles','nomrole','typeprojetformation'));
     }
 
     /**
@@ -101,6 +104,8 @@ class ProjetFormationController extends Controller
         $user = User::find(Auth::user()->id);
         $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
         //dd($user->email);
+
+        $typeprojetformation = TypeProjetFormation::all();
 
         $activites = Activites::all();
         $activite = "<option value=''> Selectionnez une activité </option>";
@@ -126,7 +131,7 @@ class ProjetFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        return view('projetformation.create', compact('activite','centreimpot','localite','pay','entreprise','user'));
+        return view('projetformation.create', compact('activite','centreimpot','localite','pay','entreprise','user','typeprojetformation'));
     }
 
     /**
@@ -312,8 +317,10 @@ class ProjetFormationController extends Controller
             $input['code_projet_formation'] = 'PRF-'.Gencode::randStrGen(4, 5);
             // Modification du montant
             $cout_projet_formation = str_replace(' ', '', $data["cout_projet_formation"]) ;
+            //dd($cout_projet_formation);
             $input['cout_projet_formation'] = $cout_projet_formation;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
+            $input['id_type_projet_formation'] = $input['typeprojetformation'];
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);
             $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
@@ -418,6 +425,7 @@ class ProjetFormationController extends Controller
         //dd($id);
         $projetetude = ProjetFormation::find($id);
         $entreprise_info = Entreprises::find($projetetude->id_entreprises);
+        $typeprojetformation = TypeProjetFormation::all();
         //dd($entreprise->raison_social_entreprises);
 
         //dd($projetetude['titre_projet_etude']);
@@ -457,6 +465,10 @@ class ProjetFormationController extends Controller
         //dd($entreprise);
         if($projetetude->flag_soumis == true) {
             // Liste des agences
+            //dd($projetetude->id_type_projet_formation);
+            $typeproj = TypeProjetFormation::find($projetetude->id_type_projet_formation);
+            //dd($typeproj);
+
             $listeuser = User::all();
             $listeuserfinal = "<option value=''> Selectionnez un agent </option>";
             foreach ($listeuser as $comp) {
@@ -601,7 +613,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('conseiller_name','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
+        return view('projetformation.edit', compact('conseiller_name','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
     }
 
 
@@ -698,7 +710,7 @@ class ProjetFormationController extends Controller
                     $projetformation->date_instructions = $date_soumission;
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"];
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
-                    $cout_projet_formation = str_replace(' ', '', $data["cout_projet_instruction"]) ;
+                    $cout_projet_formation = intval(str_replace(' ', '', $data["cout_projet_instruction"]))  ;
                     $projetformation->cout_projet_instruction = $cout_projet_formation ;
                     $projetformation->save();
 
@@ -912,6 +924,18 @@ class ProjetFormationController extends Controller
                 // ID du plan
                 // Modification du fichier du document de financement
                 //dd($data);
+                //dd($data["cout_projet_formation"]);
+
+                //$cout_projet_formation = str_replace(' ', '', $data["cout_projet_formation"]) ;
+
+                $position = strpos($data["cout_projet_formation"], ' ');
+                if($position ==! false){
+                    $cout_projet_formation = str_replace(' ', '', $data["cout_projet_formation"]) ;
+                }else {
+                    $cout_projet_formation = str_replace(',', '', $data["cout_projet_formation"]) ;
+                }
+
+                //dd($cout_projet_formation);
                 if (isset($data['doc_demande_financement'])){
 
                     $filefront = $data['doc_demande_financement'];
@@ -1062,10 +1086,12 @@ class ProjetFormationController extends Controller
                 $projetformation->beneficiaires_cible = $data['beneficiaire_cible'];
                 $projetformation->zone_projet = $data['zone_projey'];
                 $projetformation->nom_prenoms = $data['nom_prenoms'];
+                //$input['cout_projet_formation'] = $cout_projet_formation;
                 $projetformation->fonction = $data['fonction'];
                 $projetformation->telephone = $data['telephone'];
+                $input['id_type_projet_formation'] = $data['typeprojetformation'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
-                $projetformation->cout_projet_formation = $data['cout_projet_formation'];
+                $projetformation->cout_projet_formation = $cout_projet_formation;
                 // $projetformation->acteurs = $data['acteurs_projet'];
                 // $projetformation->role_p = $data['role_projet'];
                 // $projetformation->responsabilite = $data['responsabilite_projet'];
