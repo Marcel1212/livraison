@@ -380,7 +380,7 @@
                         <div class="tab-pane fade @if($idetape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
                             @if($cahiersplanprojet->code_commission_permante_comite_gestion=='COP')
                                 @if($projet_etude->flag_valider_comite_permanente_projet_etude == false)
-                                    <form  method="POST" class="form" action="{{ route($lien.'.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                    <form  method="POST" class="form" action="{{ route($lien.'.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(1),\App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets)]) }}">
                                             @csrf
                                             @method('put')
                                             <div align="right">
@@ -394,7 +394,7 @@
                             @endif
                                 @if($cahiersplanprojet->code_commission_permante_comite_gestion=='COG')
                                     @if($projet_etude->flag_valider_comite_gestion_projet_etude == false)
-                                        <form  method="POST" class="form" action="{{ route($lien.'.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                        <form  method="POST" class="form" action="{{ route($lien.'.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(1),\App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets)]) }}">
                                             @csrf
                                             @method('put')
                                             <div align="right">

@@ -169,14 +169,14 @@ $couleur = Menu::get_info_couleur();
                         <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
                     </div>-->
 
-                        {{-- <div class="form-group mb-4">
+                         <div class="form-group mb-4">
                             <div class="form-group">
                                 <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
                                 @if ($errors->has('g-recaptcha-response'))
                                     <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
                                 @endif
                             </div>
-                        </div> --}}
+                        </div>
 
                         <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
                     </form>
