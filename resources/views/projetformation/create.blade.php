@@ -69,6 +69,31 @@
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="row">
+                                            @foreach ($typeprojetformation as $proj)
+                                                <div class="col-md mb-md-0 mb-2">
+                                                    <div class="form-check custom-option custom-option-icon">
+                                                        <label class="form-check-label custom-option-content"
+                                                            for="customRadioIcon1">
+                                                            <span class="custom-option-body">
+                                                                <i class="ti ti-briefcase"></i>
+                                                                <span class="custom-option-title"> {{ $proj->libelle }}
+                                                                    <?php ?> </span>
+                                                                {{-- <small>Le perfectionnement est un engagement envers l'amélioration
+                                                                personnelle et professionnelle, qui implique de consacrer du temps
+                                                                et des efforts à acquérir de nouvelles compétences et à approfondir
+                                                                ses connaissances existantes. </small> --}}
+                                                            </span>
+                                                            <input name="typeprojetformation" class="form-check-input" required="required"
+                                                                type="radio" value={{ $proj->id_type_projet_formation }}
+                                                                id="customRadioIcon1.<?php echo $proj->id_type_projet_formatio; ?>"checked="">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+
+                                        </div>
+                                        <div class="row">
 
                                             <div class="accordion mt-3" id="accordionExample">
                                                 <div class="card accordion-item active">

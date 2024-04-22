@@ -171,6 +171,7 @@ class ComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comite = Comite::find($id);
+        //dd($comite);
 
         $directionselection = Direction::where('id_direction',$comite->departement->id_direction)->first();
 

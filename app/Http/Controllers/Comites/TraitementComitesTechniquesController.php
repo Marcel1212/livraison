@@ -11,6 +11,7 @@ use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
 use App\Models\TraitementParCriterePrf;
 use Illuminate\Http\Request;
+use App\Models\TypeProjetFormation;
 use Image;
 use File;
 use Auth;
@@ -310,6 +311,7 @@ class TraitementComitesTechniquesController extends Controller
 
         //$planformation = PlanFormation::find($id1);
         $planformation = ProjetFormation::find($id1);
+        $typeproj = TypeProjetFormation::find($planformation->id_type_projet_formation);
         //dd($planformation);
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id1],['code_pieces','=','1']])->get();
         $piecesetude1 = $piecesetude['0']['libelle_pieces'];
@@ -426,7 +428,7 @@ class TraitementComitesTechniquesController extends Controller
 
         return view('comites.traitementcomitetechniques.editprojetformation', compact(
             'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss',
-            'planformation','infoentreprise', 'piecesetude1', 'piecesetude2', 'piecesetude3', 'piecesetude4','piecesetude5','piecesetude6','piecesetude7',
+            'planformation','infoentreprise', 'piecesetude1', 'piecesetude2','typeproj', 'piecesetude3', 'piecesetude4','piecesetude5','piecesetude6','piecesetude7',
             'idcomite','criteres'
         ));
 
