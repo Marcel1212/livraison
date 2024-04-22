@@ -426,6 +426,7 @@ class ProjetFormationController extends Controller
         $projetetude = ProjetFormation::find($id);
         $entreprise_info = Entreprises::find($projetetude->id_entreprises);
         $typeprojetformation = TypeProjetFormation::all();
+        $typeproj = '';
         //dd($entreprise->raison_social_entreprises);
 
         //dd($projetetude['titre_projet_etude']);
