@@ -1,68 +1,73 @@
+<?php
+$idconnect = Auth::user()->id;
+if ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == null) {
+    $disable = 'disabled';
+} elseif ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == true and $projetetude->flag_statut_instruction == null) {
+    $disable = '';
+} elseif ($projetetude->flag_statut_instruction == true) {
+    $disable = 'disabled';
+} else {
+    $disable = '';
+} ?>
+
+<?php if ($projetetude->flag_statut_instruction != null) {
+    $disable_ins = 'disabled';
+} else {
+    $disable_ins = '';
+}
+?>
+
 @extends('layouts.backLayout.designadmin')
 
+
 @section('content')
-    @php($Module = 'Projet de formations')
-    @php($titre = 'Liste des projets de formations')
-    @php($soustitre = 'Projet de formation ')
-    @php($lien = 'projetformation')
 
-    <?php if ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == null) {
-        $disable = 'disabled';
-    } elseif ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == true and $projetetude->flag_statut_instruction == null) {
-        $disable = '';
-    } elseif ($projetetude->flag_statut_instruction == true) {
-        $disable = 'disabled';
-    } else {
-        $disable = '';
-    } ?>
+    @php($Module = ' Comités')
+    @php($titre = 'Liste des comites')
+    @php($soustitre = 'Tenue de comite')
+    @php($lien = 'traitementcomite')
+    @php($lienacceuil = 'dashboard')
 
-    <?php if ($projetetude->flag_statut_instruction != null) {
-        $disable_ins = 'disabled';
-    } else {
-        $disable_ins = '';
-    } ?>
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">
-
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper ">
             <h5 class="py-2 mb-1">
                 <span class="text-muted fw-light"> <i class="ti ti-home"></i> Accueil / {{ $Module }} / </span>
-                {{ $titre }}
+                {{ $titre }} / {{ $soustitre }}
             </h5>
-
-
-            @if ($message = Session::get('error'))
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert-body">
+                            {{ $error }}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endforeach
+            @endif
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert-body">
+                        {{ $message }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            @if ($message = Session::get('danger'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <div class="alert-body">
-                        <i class="fas fa-allergies mb-2"></i>
                         {{ $message }}
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
-            <div class="content-body">
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <div class="alert-body">
-                            <i class="fab fa-angellist mb-2"></i>
-                            {{ $message }}
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-                @if ($message = Session::get('warning'))
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <div class="alert-body">
-                            <i class="fas fa-allergies mb-2"></i>
-                            {{ $message }}
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+
+            <div>
+
                 <section id="multiple-column-form">
                     <div class="row">
                         <div class="col-12">
@@ -373,52 +378,10 @@
                                     </div>
                                     <?php }?>
                                     <form method="POST" class="form"
-                                        action="{{ route($lien . '.update', \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_formation)) }}"
+                                        action="{{ route($lien . '.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
-                                        <br>
-                                        <div class="row">
-                                            <?php if ($projetetude->flag_soumis ==! true ){ ?>
-                                            @foreach ($typeprojetformation as $proj)
-                                                <div class="col-md mb-md-0 mb-2">
-                                                    <div class="form-check custom-option custom-option-icon">
-                                                        <label class="form-check-label custom-option-content"
-                                                            for="customRadioIcon1">
-                                                            <span class="custom-option-body">
-                                                                <i class="ti ti-briefcase"></i>
-                                                                <span class="custom-option-title"> {{ $proj->libelle }}
-                                                                    <?php ?> </span>
-                                                                {{-- <small>Le perfectionnement est un engagement envers l'amélioration
-                                                                personnelle et professionnelle, qui implique de consacrer du temps
-                                                                et des efforts à acquérir de nouvelles compétences et à approfondir
-                                                                ses connaissances existantes. </small> --}}
-                                                            </span>
-                                                            <input name="typeprojetformation" class="form-check-input"
-                                                                type="radio" value={{ $proj->id_type_projet_formation }}
-                                                                id="customRadioIcon1.<?php echo $proj->id_type_projet_formatio; ?>"checked="">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                            <?php }else {?>
-                                            <div class="col-md mb-md-0 mb-2">
-                                                <div class="form-check custom-option custom-option-icon">
-                                                    <label class="form-check-label custom-option-content"
-                                                        for="customRadioIcon1">
-                                                        <span class="custom-option-body">
-                                                            <i class="ti ti-briefcase"></i>
-                                                            <span class="custom-option-title"> {{ $typeproj->libelle }}
-                                                                <?php ?> </span>
-                                                            <small> {{ $typeproj->description }} </small>
-                                                        </span>
-
-                                                    </label>
-                                                </div>
-                                            </div><?php }?>
-
-
-                                        </div>
                                         <div class="row">
 
                                             <div class="accordion mt-3" id="accordionExample">
@@ -1346,7 +1309,7 @@
                                                                                             id="cout_projet_instruction"
                                                                                             class="form-control form-control-sm number"
                                                                                             <?php echo $disable_ins; ?>
-                                                                                            value="{{ number_format($projetetude->cout_projet_instruction) }}"
+                                                                                            value="{{ $projetetude->cout_projet_instruction }}"
                                                                                             placeholder="200000">
 
                                                                                     </div>
@@ -1428,6 +1391,43 @@
                                                 <div class="col-12" align="left">
                                                     <br>
                                                     <div class="col-12" align="right">
+                                                        @if ($cahiersplanprojet->code_commission_permante_comite_gestion == 'COP')
+                                                            @if ($projetetude->flag_traiter_commission_permanente == false)
+                                                                <form method="POST" class="form"
+                                                                    action="{{ route($lien . '.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets), \App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                                                    @csrf
+                                                                    @method('put')
+                                                                    <div align="right">
+                                                                        <button type="submit" name="action"
+                                                                            value="Traiter_valider_projet_formation"
+                                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                            Valider le projet de formation pour cette
+                                                                            commission
+                                                                            permanente
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+                                                        @if ($cahiersplanprojet->code_commission_permante_comite_gestion == 'COG')
+                                                            @if ($projetetude->flag_traiter_commission_permanente == false)
+                                                                <form method="POST" class="form"
+                                                                    action="{{ route($lien . '.updater', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($cahiersplanprojet->id_cahier_plans_projets), \App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                                                    @csrf
+                                                                    @method('put')
+                                                                    <div align="right">
+                                                                        <button type="submit" name="action"
+                                                                            value="Traiter_valider_projet_formation"
+                                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                            Valider le projet de formation pour ce comité
+                                                                            de
+                                                                            gestion
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            @endif
+                                                        @endif
+
                                                         <?php if($projetetude->flag_soumis != true) {
                                                     ?>
                                                         <button type="submit" type="submit" name="action"
@@ -1453,7 +1453,84 @@
                         </div>
                     </div>
                 </section>
+
             </div>
+
         </div>
-    </div> <!-- END: Content-->
+    </div>
+    <!-- END: Content-->
+@endsection
+@section('js_perso')
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/js/additional-methods.js') }}"></script>
+    <script src="{{ asset('assets/js/projetetudes/pages-traitement-projet.js') }}"></script>
+    <script type="text/javascript">
+        //Initialisation des variable Quill
+        var contexte_probleme_instruction = new Quill('#contexte_probleme_instruction', {
+            theme: 'snow'
+        });
+        var objectif_general_instruction = new Quill('#objectif_general_instruction', {
+            theme: 'snow'
+        });
+        var objectif_specifique_instruction = new Quill('#objectif_specifique_instruction', {
+            theme: 'snow'
+        });
+        var resultat_attendu_instruction = new Quill('#resultat_attendu_instruction', {
+            theme: 'snow'
+        });
+        var champ_etude_instruction = new Quill('#champ_etude_instruction', {
+            theme: 'snow'
+        });
+        var cible_instruction = new Quill('#cible_instruction', {
+            theme: 'snow'
+        });
+        var methodologie_instruction = new Quill('#methodologie_instruction', {
+            theme: 'snow'
+        });
+
+        //Hide All fields
+        $("#contexte_probleme_instruction_val").hide();
+        $("#objectif_general_instruction_val").hide();
+        $("#objectif_specifique_instruction_val").hide();
+        $("#resultat_attendu_instruction_val").hide();
+        $("#champ_etude_instruction_val").hide();
+        $("#cible_instruction_val").hide();
+        $("#methodologie_instruction_val").hide();
+
+        //Initialisation des variable Quill
+        var contexte_probleme = new Quill('#contexte_probleme', {
+            theme: 'snow'
+        });
+        var objectif_general = new Quill('#objectif_general', {
+            theme: 'snow'
+        });
+        var objectif_specifique = new Quill('#objectif_specifique', {
+            theme: 'snow'
+        });
+        var resultat_attendu = new Quill('#resultat_attendu', {
+            theme: 'snow'
+        });
+        var champ_etude = new Quill('#champ_etude', {
+            theme: 'snow'
+        });
+        var cible = new Quill('#cible', {
+            theme: 'snow'
+        });
+
+        contexte_probleme.disable();
+        objectif_general.disable();
+        objectif_specifique.disable();
+        resultat_attendu.disable();
+        champ_etude.disable();
+        cible.disable();
+
+
+        contexte_probleme_instruction.disable();
+        objectif_general_instruction.disable();
+        objectif_specifique_instruction.disable();
+        resultat_attendu_instruction.disable();
+        champ_etude_instruction.disable();
+        cible_instruction.disable();
+        methodologie_instruction.disable();
+    </script>
 @endsection

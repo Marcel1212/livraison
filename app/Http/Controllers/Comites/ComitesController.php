@@ -692,7 +692,7 @@ class ComitesController extends Controller
 
                             // Modification du projet de formation -- flag et ajout du code
                             $projetformation->flag_comite_pleiniere = true;
-                            $projetformation->flag_fiche_agrement = true;
+                           // $projetformation->flag_fiche_agrement = true;
                             $projetformation->code_comite_pleiniere = $comitep->code_comite ;
                             $projetformation->update();
 

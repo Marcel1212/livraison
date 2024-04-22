@@ -709,13 +709,26 @@ $nombre = count($conseilleragence);
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="text-center mb-4">
-                        <h3 class="mb-2">Traitement d'une action du projet de formation</h3>
+                        <h3 class="mb-2">Traitement d'un projet de formation</h3>
                         <p class="text-muted"></p>
                     </div>
                     <form id="editUserForm" class="row g-3" method="POST"
                         action="{{ route($lien . '.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($planformation->id_projet_formation), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                         @csrf
                         @method('put')
+                        <div class="col-md mb-md-0 mb-2">
+                            <div class="form-check custom-option custom-option-icon">
+                                <label class="form-check-label custom-option-content" for="customRadioIcon1">
+                                    <span class="custom-option-body">
+                                        <i class="ti ti-briefcase"></i>
+                                        <span class="custom-option-title"> {{ $typeproj->libelle }}
+                                            <?php ?> </span>
+                                        <small> {{ $typeproj->description }} </small>
+                                    </span>
+
+                                </label>
+                            </div>
+                        </div>
 
 
                         <div class="card accordion-item">
@@ -1287,7 +1300,7 @@ $nombre = count($conseilleragence);
                                     <tr>
                                         <th>N°</th>
                                         <th>Critère</th>
-                                        <th>status</th>
+                                        <th>Statut</th>
                                         <th>Commentaire</th>
                                     </tr>
                                 </thead>

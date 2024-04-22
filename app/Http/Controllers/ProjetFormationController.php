@@ -65,7 +65,7 @@ class ProjetFormationController extends Controller
              //dd('ee');
             $num_agce = Auth::user()->num_agce;
             $num_agce = intval($num_agce);
-            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce],['flag_statut_instruction','=',null]])->get();
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['num_agce','=',$num_agce],['flag_statut_instruction','=',null],['flag_affect_departement','=',null]])->get();
 
         }else if ($nomrole == 'DIRECTEUR'){
             // Liste des projet de formation a traiter par le directeur
@@ -79,13 +79,13 @@ class ProjetFormationController extends Controller
             // Liste des projet de formation a traiter par le chef de departement
             $num_agce = Auth::user()->num_agce;
             $num_agce = intval($num_agce);
-            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['num_agce','=',$num_agce]])->get();
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['num_agce','=',$num_agce],['flag_affect_service','=',null]])->get();
 
         }else if ($nomrole == 'CHEF DE SERVICE'){
              // Liste des projet de formation a traiter par le chef de service
              $num_agce = Auth::user()->num_agce;
              $num_agce = intval($num_agce);
-            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['flag_affect_service','=',true],['num_agce','=',$num_agce]])->get();
+            $demandeenroles = ProjetFormation::where([['flag_soumis','=',true],['flag_affect_departement','=',true],['flag_affect_service','=',true],['num_agce','=',$num_agce],['flag_affect_conseiller_formation','=',null]])->get();
 
         }else if ($nomrole == 'CONSEILLER EN FORMATION'){
              // Liste des projet de formation a traiter par le conseiller en formation
@@ -668,6 +668,7 @@ class ProjetFormationController extends Controller
                     $projetformation->titre_projet_instruction = $data["titre_projet_instruction"]; //
                     $projetformation->commpetences_instruction = $data["competences_instruction"];
                     $cout_projet_formation = str_replace(' ', '', $data["cout_projet_instruction"]) ;
+                    //dd($cout_projet_formation);
                     $projetformation->cout_projet_instruction = $cout_projet_formation;
                     $projetformation->save();
 
@@ -683,6 +684,7 @@ class ProjetFormationController extends Controller
                     $input['zone_projet'] = ucfirst($input['zone_projey']);
                     $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
                     $input['fonction'] = ucfirst($input['fonction']);
+                    $input['cout_projet_instruction'] = $cout_projet_formation;
                     $input['telephone'] = ucfirst($input['telephone']);
                     $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
                     $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
@@ -730,6 +732,7 @@ class ProjetFormationController extends Controller
                     $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
                     $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
                     $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
+                    $input['cout_projet_instruction'] = $cout_projet_formation;
                     $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
                     $input['autre_acteur'] = ucfirst($input['autre_acteur']);
                     $input['roles_autres'] = ucfirst($input['roles_autres']);

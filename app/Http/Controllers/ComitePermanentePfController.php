@@ -441,11 +441,13 @@ class ComitePermanentePfController extends Controller
                     'code_fiche_agrement' => 'PRF'
                 ]);
 
-                $plan = ProjetFormation::find($id);
-                $plan->update([
-                    'flag_fiche_agrement' => true,
+                // Mise  a jour projet formatuon
 
-                ]);
+                // $plan = ProjetFormation::find($id);
+                // $plan->update([
+                //     'flag_fiche_agrement' => true,
+
+                // ]);
                 //$nbreplanvalide = PlanFormationAValiderParUser::where([['id_plan_formation','=',$idplan],['flag_valide_plan_formation','=',true]])->get();
                 //$nbrav = count($nbreplanvalide);
                 //if($nbrav == $nombredeconseilleragence){
