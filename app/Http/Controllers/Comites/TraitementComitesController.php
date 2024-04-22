@@ -251,11 +251,8 @@ class TraitementComitesController extends Controller
                 }
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetetude')->with('success', 'Succes : Mise a jour reussi ');
             }
-
         }
-
     }
-
 
     public function editplanformation($id,$id1,$id2)
     {
