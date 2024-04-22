@@ -117,14 +117,25 @@ class TraitementComitesTechniquesController extends Controller
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
-        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
-        ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-        ->join('comite','cahier_comite.id_comite','comite.id_comite')
-        ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
-        ->where([['cahier_comite.id_comite','=',$id],
-                ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
-                ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
-        ->get();
+        if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
+            $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+                ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+                ->join('comite','cahier_comite.id_comite','comite.id_comite')
+                ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+                ->where([['cahier_comite.id_comite','=',$id],
+                    ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
+                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
+                ->get();
+        }elseif(@$comite->categorieComite->type_code_categorie_comite=='CC'){
+            $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
+                ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+                ->join('comite','cahier_comite.id_comite','comite.id_comite')
+                ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+                ->where([['cahier_comite.id_comite','=',$id],
+                    ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
+                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
+                ->get();
+        }
 
         //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
 
@@ -497,6 +508,8 @@ class TraitementComitesTechniquesController extends Controller
                 }
 
 
+                $comite = Comite::find($idcomite);
+
                 return view('comites.traitementcomitetechniques.editprojetetude',
                     compact('idetape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
@@ -506,6 +519,7 @@ class TraitementComitesTechniquesController extends Controller
                         'secteuractivite_projet',
                         'motifs',
                         'formjuridique',
+                        'comite',
                         'offre_financiere',
                         'secteuractivite'));
 
@@ -931,7 +945,6 @@ class TraitementComitesTechniquesController extends Controller
             $projet_etude = ProjetEtude::find($id);
 
             if($request->action === 'Modifier'){
-
                 $projet_etude->titre_projet_instruction = $request->titre_projet_instruction;
                 $projet_etude->contexte_probleme_instruction = $request->contexte_probleme_instruction;
                 $projet_etude->objectif_general_instruction = $request->objectif_general_instruction;
@@ -956,11 +969,23 @@ class TraitementComitesTechniquesController extends Controller
             }
 
             if($request->action === 'Traiter_valider_projet'){
-                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                $projet_etude->update();
-                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                $comite = Comite::find($idcomite);
+
+                if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
+                    $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                    $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                    $projet_etude->update();
+                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                }
+
+                if(@$comite->categorieComite->type_code_categorie_comite=='CC'){
+                    $projet_etude->flag_valider_cc_projet_etude = true;
+                    $projet_etude->date_valider_cc_projet_etude = now();
+                    $projet_etude->update();
+                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                }
             }
+
         }
     }
 

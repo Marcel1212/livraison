@@ -653,9 +653,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             <th>Nombre de bénéficiaire de l'action de formation</th>
                             <th>Nombre de groupe</th>
                             <th>Nombre d'heures par groupe</th>
-                            <th>Coût de l'action</th>
                             <th>Coût de l'action accordée</th>
                             <th>Statut</th>
+                            <th>Substitution</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -668,20 +668,20 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                <td>{{ $actionplanformation->cout_action_formation_plan }}</td>
-                                <td>{{ $actionplanformation->cout_accorde_action_formation }}</td>
+                                <td>{{ number_format($actionplanformation->cout_accorde_action_formation,0,',',' ')}} F CFA</td>
                                 <td>
-                                        @if($actionplanformation->demandeSubstitution && $actionplanformation->flag_substitution==false)
-                                            @if($actionplanformation->demandeSubstitution->flag_validation_demande_plan_substi==true)
-                                                <span class="badge bg-info xs">En attente de modification</span>
-                                            @else
-                                                <span class="badge bg-warning  xs">Demande de substitution</span>
-                                           @endif
-{{--                                        @elseif($actionplanformation->flag_substitution==true)--}}
-{{--                                            <span class="badge bg-primary xs w-100">Substitué</span>--}}
+                                    <span class="badge bg-success xs">Valide</span>
+                                </td>
+                                <td>
+                                    @if($actionplanformation->demandeSubstitution && $actionplanformation->flag_substitution==false)
+                                        @if($actionplanformation->demandeSubstitution->flag_validation_demande_plan_substi==true)
+                                            <span class="badge bg-success xs">Substitué</span>
                                         @else
-                                            <span class="badge bg-success xs">Valide</span>
+                                            <span class="badge bg-warning  xs">En attente </span>
                                         @endif
+                                    @else
+                                        <span class="badge bg-secondary xs">Aucune demande</span>
+                                    @endif
                                 </td>
                                 <td align="center">
                                     {{--                                        @can($lien.'-edit')--}}

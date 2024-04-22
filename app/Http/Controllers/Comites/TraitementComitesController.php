@@ -249,7 +249,6 @@ class TraitementComitesController extends Controller
                         'date_traitement_effectuer_commission' => Carbon::now()
                     ]);
                 }
-
                 return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetetude')->with('success', 'Succes : Mise a jour reussi ');
             }
 

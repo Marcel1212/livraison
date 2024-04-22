@@ -223,7 +223,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                                 Modifier
                                             </button>
                                         <?php } ?>
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary">Suivant</button>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                             Retour</a>
@@ -414,7 +414,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </div>
                                     <div class="col-12 col-md-2" align="right"> <br>
                                         <button type="submit" name="action" value="valider_comite_technique"
-                                            class="btn btn-sm btn-success me-sm-3 me-1"
+                                            class="btn btn-sm btn-success"
                                             onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider le comité</button>
 
                                     </div>
