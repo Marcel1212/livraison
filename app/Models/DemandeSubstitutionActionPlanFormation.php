@@ -42,5 +42,8 @@ class DemandeSubstitutionActionPlanFormation extends Model
         'id_motif_demande_plan_substi'
     ];
 
-
+    public function caracteristiqueTypeFormation()
+    {
+        return $this->belongsTo(CaracteristiqueTypeFormation::class, 'id_caracteristique_type_formation_substi', 'id_caracteristique_type_formation');
+    }
 }

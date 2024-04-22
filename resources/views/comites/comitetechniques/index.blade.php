@@ -85,7 +85,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ $comitep->commentaire_comite }}</td>
                                 <td align="center">
                                     <?php if($comitep->flag_statut_comite == true){ ?>
-                                        <span class="badge bg-success">Terminer</span>
+                                        <span class="badge bg-success">Terminé</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>
                                     <?php } ?>

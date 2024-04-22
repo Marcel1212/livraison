@@ -412,28 +412,49 @@ $idconnect = Auth::user()->id;
                             </div>
                         </div>
                         <div class="tab-pane fade @if($idetape==4) show active @endif" id="navs-top-traitementinstructionprojetetude" role="tabpanel">
-                            <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect){?>
-                            <div class="col-12" align="right">
-                                <div class="row">
+                            @if(@$comite->categorieComite->type_code_categorie_comite=='CT')
+                                @if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect)
+                                    <div class="col-12" align="right">
+                                    <div class="row">
+                                        <div class="col-8">
+                                        </div>
+                                        <div class="col-4" align="right">
 
-
-                                    <div class="col-8">
-                                    </div>
-                                    <div class="col-4" align="right">
-
-                                        <form method="POST" class="form mb-2" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
-                                            @csrf
-                                            @method('put')
-                                            <button type="submit" name="action" value="Traiter_valider_projet"
-                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                Valider le projet
-                                            </button>
-                                        </form>
+                                            <form method="POST" class="form mb-2" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
+                                                @csrf
+                                                @method('put')
+                                                <button type="submit" name="action" value="Traiter_valider_projet"
+                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                    Valider le projet
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php } ?>
+                                @endif
+                            @elseif(@$comite->categorieComite->type_code_categorie_comite=='CC')
+                                @if($projet_etude->flag_valider_cc_projet_etude != true)
+                                    <div class="col-12" align="right">
+                                    <div class="row">
 
+
+                                        <div class="col-8">
+                                        </div>
+                                        <div class="col-4" align="right">
+
+                                            <form method="POST" class="form mb-2" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
+                                                @csrf
+                                                @method('put')
+                                                <button type="submit" name="action" value="Traiter_valider_projet"
+                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                    Valider le projet
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            @endif
 
                             <form  method="POST" id="formTraitement" class="form" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
                                 @csrf
@@ -567,12 +588,21 @@ $idconnect = Auth::user()->id;
 
                                     <div class="col-12" align="right">
                                         <hr>
-                                        <?php  if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect){?>
+                                        @if(@$comite->categorieComite->type_code_categorie_comite=='CT')
+                                            @if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect){?>
                                             <button type="submit" name="action" value="Modifier"
                                                     class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                 Modifier
                                             </button>
-                                        <?php } ?>
+                                            @endif
+                                        @elseif(@$comite->categorieComite->type_code_categorie_comite=='CC')
+                                                @if($projet_etude->flag_valider_cc_projet_etude != true)
+                                            <button type="submit" name="action" value="Modifier"
+                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                Modifier
+                                            </button>
+                                            @endif
+                                        @endif
                                         <a  href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
