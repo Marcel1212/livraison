@@ -175,13 +175,13 @@ $nombre = count($conseilleragence);
                             Actions du projet de formation
                         </button>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-top-recevabilite" aria-controls="navs-top-recevabilite"
                             aria-selected="false">
                             Cahier
                         </button>
-                    </li>
+                    </li> --}}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
@@ -289,23 +289,6 @@ $nombre = count($conseilleragence);
 
                     <div class="tab-pane fade show active" id="navs-top-actionformation" role="tabpanel">
 
-                        <div class="col-12" align="right">
-
-                            <div class="row">
-
-
-                                <div class="col-7">
-                                </div>
-                                <div class="col-4">
-
-                                </div>
-                                <div class="col-1">
-                                    <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                        href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt(1)]) }}">
-                                        Retour</a>
-                                </div>
-                            </div>
-                        </div>
                         <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
                             style="margin-top: 13px !important">
                             <thead>
@@ -398,313 +381,17 @@ $nombre = count($conseilleragence);
                             </tbody>
                         </table>
                     </div>
-                    <div class="tab-pane fade" id="navs-top-recevabilite" role="tabpanel">
+                </div>
+                <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
 
-
-
-                    </div>
-                    <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
-
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 
+
     <!-- Edit User Modal -->
-
-    {{-- @foreach ($infosactionplanformations as $infosactionplanformation)
-        <div class="modal fade" id="traiterActionFomationPlan<?php //echo $infosactionplanformation->id_action_formation_plan;
-        ?>" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-xl modal-simple modal-edit-user">
-                <div class="modal-content p-3 p-md-5">
-                    <div class="modal-body">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        <div class="text-center mb-4">
-                            <h3 class="mb-2">Traitement d'une action de plan de formation</h3>
-                            <p class="text-muted"></p>
-                        </div>
-                        <form id="editUserForm" class="row g-3" method="POST"
-                            action="{{ route($lien . '.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
-                            @csrf
-                            @method('put')
-                            <div class="col-12 col-md-12">
-                                <label class="form-label" for="masse_salariale">Entreprise</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->raison_social_entreprises }}"
-                                    disabled="disabled" />
-                            </div>
-
-
-                            <div class="col-12 col-md-12">
-                                <label class="form-label" for="intitule_action_formation_plan">Intitulé de l'action de
-                                    formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->intitule_action_formation_plan }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-12">
-                                <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif
-                                    pédagogique</label>
-                                <textarea class="form-control form-control-sm" name="objectif_pedagogique_fiche_agre"
-                                    id="objectif_pedagogique_fiche_agre" rows="6" disabled="disabled"><?php echo @$infosactionplanformation->objectif_pedagogique_fiche_agre; ?></textarea>
-
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="masse_salariale">Masse salariale</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ number_format(@$infosactionplanformation->masse_salariale, 0, ',', ' ') }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="part_entreprise">Part entreprise</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ number_format(@$infosactionplanformation->part_entreprise, 0, ',', ' ') }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="structure_etablissement_action_">Structure ou établissement
-                                    de formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->structure_etablissement_action_ }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_stagiaire_action_formati">Nombre de
-                                    stagiaires</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->nombre_stagiaire_action_formati }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_groupe_action_formation_">Nombre de groupes</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->nombre_groupe_action_formation_ }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_heure_action_formation_p">Nombre d'heures par
-                                    groupes</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->nombre_heure_action_formation_p }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="nombre_jour_action_formation">Nombre de jours</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->nombre_jour_action_formation }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">Coût de la formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ number_format(@$infosactionplanformation->cout_action_formation_plan, 0, ',', ' ') }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">Type de formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->type_formation }}" disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label">Caractéristique type de formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="but_formation">But de la formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->but_formation }}" disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="date_debut_fiche_agrement">Date début de
-                                    réalisation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->date_debut_fiche_agrement }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="date_fin_fiche_agrement">Date fin de réalisation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->date_fin_fiche_agrement }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->lieu_formation_fiche_agrement }}"
-                                    disabled="disabled" />
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->cadre_fiche_demande_agrement }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="agent_maitrise_fiche_demande_ag">Nombre d'agents de
-                                    maitrise</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->agent_maitrise_fiche_demande_ag }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="employe_fiche_demande_agrement">Nombre d'employés /
-                                    ouvriers</label>
-                                <input type="number" class="form-control form-control-sm"
-                                    value="{{ @$infosactionplanformation->employe_fiche_demande_agrement }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="cout_total_fiche_agrement">Coût de financement</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ number_format(@$infosactionplanformation->montant_attribuable_fdfp, 0, ',', ' ') }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <label class="form-label" for="cout_accorde_action_formation">Montant accordée</label>
-                                <input type="text" class="form-control form-control-sm"
-                                    value="{{ number_format(@$infosactionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}"
-                                    disabled="disabled" />
-                            </div>
-                            <div class="col-12 col-md-3">
-                                <div class="mb-1">
-                                    <label>Facture proforma </label> <br>
-                                    <span class="badge bg-secondary"><a target="_blank"
-                                            onclick="NewWindow('{{ asset('/pieces/facture_proforma_action_formation/' . $infosactionplanformation->facture_proforma_action_formati) }}','',screen.width/2,screen.height,'yes','center',1);">
-                                            Voir la pièce </a> </span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-12">
-                                <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
-                                <!--<input
-                                                type="number"
-                                                class="form-control form-control-sm"
-                                                value="{{ @$infosactionplanformation->cout_accorde_action_formation }}"
-                                                disabled="disabled" />-->
-                                <textarea class="form-control form-control-sm" name="commentaire_action_formation" id="commentaire_action_formation"
-                                    rows="6" disabled="disabled">{{ @$infosactionplanformation->commentaire_action_formation }}</textarea>
-                            </div>
-
-
-                            @if (@$planformation->user_conseiller != Auth::user()->id)
-                                <?php
-                                $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id, $infosactionplanformation->id_action_formation_plan);
-                                
-                                //echo $resultatT;
-                                
-                                ?>
-                                <hr />
-
-                                @if (count($resultatTCPCU) < 1)
-                                    <h2>Critères évaluations</h2>
-
-                                    <div class="card card-custom" style="width: 100%">
-                                        <div class="card-body">
-                                            <table class="table table-bordered table-hover table-checkable"
-                                                style="margin-top: 13px !important">
-                                                <thead>
-                                                    <tr>
-                                                        <th>N°</th>
-                                                        <th>Critère</th>
-                                                        <th>status</th>
-                                                        <th>commentaire</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                $i=0;
-                                                    foreach ($criteres as $key => $res):
-                                                ?>
-                                                    <tr>
-                                                        <td>
-                                                            {{ ++$i }}
-                                                            <input type="hidden" class="form-control"
-                                                                name="id_critere_evaluation/{{ $res->id_critere_evaluation }}"
-                                                                value="{{ $res->id_critere_evaluation }}" />
-                                                        </td>
-                                                        <td>{{ $res->libelle_critere_evaluation }}</td>
-                                                        <td align="center">
-                                                            <select class="select2 form-select" data-allow-clear="true"
-                                                                name="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}"
-                                                                id="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}">
-                                                                <option value="">-----------</option>
-                                                                <option value="true">D'accord</option>
-                                                                <option value="false">Pas d'accord</option>
-                                                            </select>
-                                                        </td>
-                                                        <td align="center">
-                                                            <textarea class="form-control form-control-sm" name="commentaire_critere/{{ $res->id_critere_evaluation }}"
-                                                                id="commentaire_critere/{{ $res->id_critere_evaluation }}" rows="6"></textarea>
-                                                        </td>
-
-                                                    </tr>
-                                                    <?php endforeach; ?>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endif
-                            @else
-                                <hr />
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Montant accordée <strong style="color:red;">*</strong>: </label>
-                                        <input type="number" name="cout_accorde_action_formation"
-                                            id="cout_accorde_action_formation" class="form-control form-control-sm"
-                                            value="{{ @$infosactionplanformation->cout_accorde_action_formation }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <label class="form-label" for="billings-country">Motif de validation <strong
-                                            style="color:red;">(obligatoire si action a corrigé)</strong></label>
-
-                                    <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif"
-                                        id="id_motif">
-                                        <?= $motif ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                        <textarea class="form-control form-control-sm" name="commentaire" id="commentaire" rows="6"></textarea>
-                                    </div>
-                                </div>
-                            @endif
-
-
-
-                            <div class="col-12 text-center">
-
-                                @if (@$planformation->user_conseiller != Auth::user()->id)
-                                    @if (count($resultatTCPCU) < 1)
-                                        <button
-                                            onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;'
-                                            type="submit" name="action"
-                                            value="Traiter_action_formation_valider_critere"
-                                            class="btn btn-success me-sm-3 me-1">Valider</button>
-                                    @endif
-                                @else
-                                    <button
-                                        onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;'
-                                        type="submit" name="action" value="Traiter_action_formation_valider"
-                                        class="btn btn-success me-sm-3 me-1">Valider</button>
-                                @endif
-                                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                                    aria-label="Close">
-                                    Annuler
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach --}}
 
 
 
@@ -1536,9 +1223,9 @@ $nombre = count($conseilleragence);
         </div>
 
     </div>
-    </div>
-    </div>
-    </div>
+
+
+
 
 
 @endsection
