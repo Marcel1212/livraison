@@ -39,7 +39,6 @@ class ComitesTechniquesController extends Controller
                         ->join('processus_comite','processus_comite_lie_comite.id_processus_comite','processus_comite.id_processus_comite')
                         ->where('categorie_comite.code_categorie_comite','CT')
                         ->get();
-                        //dd($comites);
         Audit::logSave([
 
             'action'=>'INDEX',
@@ -173,42 +172,58 @@ class ComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comite = Comite::find($id);
-        //dd($comite);
+        //dd($comite->id_categorie_comite);
+        // Coordination ID = 2
+        $idcategoriecomite = $comite->id_categorie_comite;
 
         $directionselection = Direction::where('id_direction',$comite->departement->id_direction)->first();
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
+        //dd($processuscomite->processusComite->code_processus_comite);
 
-        if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
-            $demandes = DB::table('vue_plans_projets_formation')->whereNotExists(function ($query) use ($id){
-                $query->select('*')
-                    ->from('cahier_comite')
-                    ->whereColumn('cahier_comite.id_demande','=','vue_plans_projets_formation.id_demande')
-                    ->where('cahier_comite.id_comite',$id);
-            })
-                ->join('caracteristique_marge_departement','vue_plans_projets_formation.departement','caracteristique_marge_departement.id_departement')
-                ->where([
-                    ['caracteristique_marge_departement.flag_cmd','=',true],
-                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite],
-                    ['vue_plans_projets_formation.departement','=', $comite->id_departement],
-                ])
-                ->get();
-        }elseif(@$comite->categorieComite->type_code_categorie_comite=='CC'){
+        //dd($processuscomite->processusComite());
+        if ($idcategoriecomite == 2){
             $demandes = DB::table('vue_plans_projets_formation_coordination')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
-                    ->from('cahier_comite')
-                    ->whereColumn('cahier_comite.id_demande','=','vue_plans_projets_formation_coordination.id_demande')
-                    ->where('cahier_comite.id_comite',$id);
-            })->join('caracteristique_marge_departement','vue_plans_projets_formation_coordination.departement','caracteristique_marge_departement.id_departement')
-                ->where([
-                    ['caracteristique_marge_departement.flag_cmd','=',true],
-                    ['vue_plans_projets_formation_coordination.code_processus','=',$processuscomite->processusComite->code_processus_comite],
-                    ['vue_plans_projets_formation_coordination.departement','=', $comite->id_departement],
-                ])
-                ->get();
+                ->from('cahier_comite')
+                ->whereColumn('cahier_comite.id_demande','=','vue_plans_projets_formation_coordination.id_demande')
+                ->where('cahier_comite.id_comite',$id);
+                 })->join('caracteristique_marge_departement','vue_plans_projets_formation_coordination.departement','caracteristique_marge_departement.id_departement')
+                 ->where([
+                 ['caracteristique_marge_departement.flag_cmd','=',true],
+                 ['vue_plans_projets_formation_coordination.code_processus','=',$processuscomite->processusComite->code_processus_comite],
+                 ['vue_plans_projets_formation_coordination.departement','=', $comite->id_departement],
+                 ])
+                // ->where('caracteristique_marge_departement.flag_cmd',true)
+                // ->where('vue_plans_projets_formation.departement', Auth::user()->id_departement)
+                 //->Where('vue_plans_projets_formation.code_processus',$processuscomite->processusComite->code_processus_comite)
+                 ->get();
+        }else{
+             $demandes = DB::table('vue_plans_projets_formation')->whereNotExists(function ($query) use ($id){
+            $query->select('*')
+            ->from('cahier_comite')
+            ->whereColumn('cahier_comite.id_demande','=','vue_plans_projets_formation.id_demande')
+            ->where('cahier_comite.id_comite',$id);
+             })->join('caracteristique_marge_departement','vue_plans_projets_formation.departement','caracteristique_marge_departement.id_departement')
+             ->where([
+             ['caracteristique_marge_departement.flag_cmd','=',true],
+             ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite],
+             ['vue_plans_projets_formation.departement','=', $comite->id_departement],
+             ])
+            // ->where('caracteristique_marge_departement.flag_cmd',true)
+            // ->where('vue_plans_projets_formation.departement', Auth::user()->id_departement)
+             //->Where('vue_plans_projets_formation.code_processus',$processuscomite->processusComite->code_processus_comite)
+             ->get();
         }
 
+        //dd($demandes);
+        //$querydemande->orWhere('vue_plans_projets_formation.code_processus',$processuscomite->processusComite->code_processus_comite);
+
+        //$demandes = $querydemande;
+
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
+
+        //dd($cahiers);
 
         $comiteparticipants = ComiteParticipant::Select('comite_participant.id_comite as id_comite', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile','comite_participant.id_comite_participant as id_comite_participant')
                                                 ->join('users','comite_participant.id_user_comite_participant','users.id')
@@ -216,6 +231,7 @@ class ComitesTechniquesController extends Controller
                                                 ->join('roles', 'model_has_roles.role_id', 'roles.id')
                                                 ->where([['id_comite','=',$id]])
                                                 ->get();
+         //ComiteParticipant::where([['id_comite','=',$id]])->get();
 
         $personneressources = 	User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
                                 ->whereNotExists(function ($query) use ($id){
@@ -229,7 +245,16 @@ class ComitesTechniquesController extends Controller
                                     ['flag_admin_users', '=', false],
                                     ['roles.id', '!=', 15],
                                 ])->get();
+            /*User::with('agence:num_agce,lib_agce')
+                            ->select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
+                            ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+                            ->join('roles', 'model_has_roles.role_id', 'roles.id')
+                            ->where([['flag_demission_users', '=', false],
+                                    ['flag_admin_users', '=', false],
+                                    ['roles.id', '!=', 15]])
+                            ->get();*/
 
+                            //dd($personneressources);
         $personneressource = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($personneressources as $comp) {
             $personneressource .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) . ' ( '.mb_strtoupper($comp->profile).' ) '." </option>";
@@ -250,30 +275,38 @@ class ComitesTechniquesController extends Controller
             $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
         }
 
-
-        if(@$comite->categorieComite->type_code_categorie_comite=='CT') {
-            $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
-                ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-                ->where([['cahier_comite.id_comite','=',$id],
+        if ($idcategoriecomite == 2){ // Coordination
+            $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
+            ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+            ->where([['cahier_comite.id_comite','=',$id],
                     ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
-                ->get();
-        }elseif(@$comite->categorieComite->type_code_categorie_comite=='CC'){
-            $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation_coordination')
-                ->join('cahier_comite','vue_plans_projets_formation_coordination.id_demande','cahier_comite.id_demande')
-                ->where([['cahier_comite.id_comite','=',$id],
-                    ['vue_plans_projets_formation_coordination.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
-                ->get();
+            ->get();
+        }else{
+        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+                                    ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+                                    ->where([['cahier_comite.id_comite','=',$id],
+                                            ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
+                                    ->get();
         }
 
+
+        //dd($listedemandesss);
         Audit::logSave([
+
             'action'=>'MODIFIER',
+
             'code_piece'=>$id,
+
             'menu'=>'COMITES',
+
             'etat'=>'Succès',
+
             'objet'=>'COMITES TECHNIQUES'
+
         ]);
 
         return view('comites.comitetechniques.edit', compact('comite','idetape','id','processuscomite','demandes','cahiers','directions','directionselection','processuscomitesListe','typecomitesListe','comiteparticipants','personneressource','listedemandesss'));
+
     }
 
     /**
@@ -285,11 +318,13 @@ class ComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comitep = Comite::find($id);
+        //dd($comitep);
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
         if ($request->isMethod('put')) {
 
             $data = $request->all();
+
 
             if ($data['action'] == 'Modifier'){
 
@@ -341,6 +376,9 @@ class ComitesTechniquesController extends Controller
             if ($data['action'] == 'creer_cahier_plans_projets'){
 
                 $input = $request->all();
+                //dd($data);
+                //dd($comitep->id_categorie_comite);
+                $idcategoriecomite = $comitep->id_categorie_comite ; // 2 pour la coordination
 
                 if(isset($input['demande'])){
 
@@ -387,46 +425,38 @@ class ComitesTechniquesController extends Controller
                             'code_demande'=>$codeprocessus
                         ]);
 
-                        //Comité Technique
-                        if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
-                            if($codeprocessus =='PF'){
-                                $plan = PlanFormation::find($iddemande);
-                                $plan->update([
-                                    'flag_passer_comite_technique' => true
-                                ]);
-                            }
+                        if($codeprocessus =='PF'){
 
-                            if($codeprocessus =='PE'){
-                                $projet_etude = ProjetEtude::find($iddemande);
-                                $projet_etude->flag_passer_comite_technique = true;
-                                $projet_etude->update();
+                            $plan = PlanFormation::find($iddemande);
+                            $plan->update([
+                                'flag_passer_comite_technique' => true
+                            ]);
 
-                            }
+                        }
 
-                            if($codeprocessus =='PRF'){
-                                // Recuperation du Projet de formation
-                                $projetformation = ProjetFormation::find($iddemande);
+                        if($codeprocessus =='PE'){
+
+                            $projet_etude = ProjetEtude::find($iddemande);
+                            $projet_etude->flag_passer_comite_technique = true;
+                            $projet_etude->update();
+
+                        }
+
+                        if($codeprocessus =='PRF'){
+
+                            // Recuperation du Projet de formation
+                            //dd($idcategoriecomite);
+                            $projetformation = ProjetFormation::find($iddemande);
+                            if($idcategoriecomite == '2'){
+                                $projetformation->flag_passer_comite_coordination = true;
+                            }else{
                                 $projetformation->flag_passer_comite_technique = true;
-                                $projetformation->update();
-
                             }
+
+                            $projetformation->update();
+
                         }
 
-                        //Comité de coordination
-                        if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
-                            if($codeprocessus =='PE'){
-                                $projet_etude = ProjetEtude::find($iddemande);
-                                $projet_etude->flag_passer_comite_technique_cc = true;
-                                $projet_etude->update();
-                            }
-
-                            if($codeprocessus =='PRF'){
-                                // Recuperation du Projet de formation
-                                $projetformation = ProjetFormation::find($iddemande);
-                                $projetformation->flag_passer_comite_technique_cc = true;
-                                $projetformation->update();
-                            }
-                        }
 
                     }
 
@@ -520,12 +550,18 @@ class ComitesTechniquesController extends Controller
                     }
 
                     Audit::logSave([
+
                         'action'=>'MISE A JOUR',
+
                         'code_piece'=>$id,
+
                         'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' )',
+
                         'etat'=>'Succès',
+
                         'objet'=>'COMITES TECHNIQUES'
-                    ]);
+
+                        ]);
 
                     return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
@@ -608,9 +644,7 @@ class ComitesTechniquesController extends Controller
 
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes conviés au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                           Vous êtes priés de bien vouloir prendre connaissance des documents suivants <br><br>
-                                            <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
-                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
+                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
                                 ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -647,6 +681,8 @@ class ComitesTechniquesController extends Controller
             }
 
             if ($data['action'] == 'valider_comite_technique'){
+                $comite = Comite::find($id);
+                //dd($comite->id_categorie_comite);
 
                 $listedemandesss = DB::table('vue_plans_projets_formation_traiter')
                 ->join('cahier_comite','vue_plans_projets_formation_traiter.id_demande','cahier_comite.id_demande')
@@ -666,48 +702,40 @@ class ComitesTechniquesController extends Controller
 
                     }
 
-                    //Comité Technique
-                    if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
-                        if($demande->code_processus =='PE'){
-                            $projet_etude = ProjetEtude::find($demande->id_demande);
-                            $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                            $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                            $projet_etude->update();
-//
-                        }
+                    if($demande->code_processus =='PE'){
 
-                        if($demande->code_demande =='PRF'){
-                            // Recuperation du Projet de formation
+                        $projet_etude = ProjetEtude::find($demande->id_demande);
+                        $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                        $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                        $projet_etude->id_processus = 8;
+                        $projet_etude->update();
+
+                    }
+
+                    if($demande->code_demande =='PRF'){
+                        //dd($comite->id_categorie_comite);
+                        if($comite->id_categorie_comite == 2){
                             $projetformation = ProjetFormation::find($demande->id_demande);
-                            //dd($data);
+                            //dd($projetformation);
                             // Modification du projet de formation -- flag et ajout du code
-                            $projetformation->flag_comite_pleiniere = true;
-                            $projetformation->code_comite_pleiniere = $comitep->code_comite ;
-                            $projetformation->id_processus = 10 ; // Processus 10
-                            $projetformation->id_comite_pleiniere = $id ;
-                            $projetformation->update();
-
-                        }
-
-                    }
-
-                    //Comité de coordination
-                    if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
-                        if($demande->code_processus =='PE'){
-                            $projet_etude = ProjetEtude::find($demande->id_demande);
-                            $projet_etude->flag_valider_cc_projet_etude = true;
-                            $projet_etude->date_valider_cc_projet_etude = now();
-                            $projet_etude->update();
-                        }
-
-                        if($demande->code_processus =='PRF'){
-                            // Recuperation du Projet de formation
-                            $projetformation = ProjetFormation::find($demande->id_demande);
                             $projetformation->flag_valider_cc_projet_formation = true;
-                            $projetformation->date_valider_cc_projet_formation = now();
                             $projetformation->update();
+                        }else{
+
+                        // Recuperation du Projet de formation
+                        $projetformation = ProjetFormation::find($demande->id_demande);
+                        //dd($data);
+                        // Modification du projet de formation -- flag et ajout du code
+                        $projetformation->flag_comite_pleiniere = true;
+                        $projetformation->code_comite_pleiniere = $comitep->code_comite ;
+                        $projetformation->id_processus = 10 ; // Processus 10
+                        $projetformation->id_comite_pleiniere = $id ;
+                        $projetformation->update();
                         }
+
+
                     }
+
                 }
 
                 $majcomite = $comitep->update([
@@ -715,8 +743,11 @@ class ComitesTechniquesController extends Controller
                     'date_fin_comite' => Carbon::now()
                 ]);
 
+
                 return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
+
             }
+
         }
     }
 
