@@ -38,7 +38,11 @@ class ComitesController extends Controller
      */
     public function index()
     {
-        $comites = Comite::all();
+        $comites = Comite::Join('categorie_comite','comite.id_categorie_comite','categorie_comite.id_categorie_comite')
+                        ->join('processus_comite_lie_comite','comite.id_comite','processus_comite_lie_comite.id_comite')
+                        ->join('processus_comite','processus_comite_lie_comite.id_processus_comite','processus_comite.id_processus_comite')
+                        ->where('categorie_comite.code_categorie_comite','CP')
+                        ->get(); // all();
         Audit::logSave([
 
             'action'=>'INDEX',
