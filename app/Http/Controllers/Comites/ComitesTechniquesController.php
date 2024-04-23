@@ -39,6 +39,7 @@ class ComitesTechniquesController extends Controller
                         ->join('processus_comite','processus_comite_lie_comite.id_processus_comite','processus_comite.id_processus_comite')
                         ->where('categorie_comite.code_categorie_comite','CT')
                         ->get();
+                        //dd($comites);
         Audit::logSave([
 
             'action'=>'INDEX',
@@ -117,6 +118,7 @@ class ComitesTechniquesController extends Controller
             ]);
 
             $input = $request->all();
+            //dd($input);
             $dateanneeencours = Carbon::now()->format('Y');
             $input['id_user_comite'] = Auth::user()->id;
             $infostypecomite = CategorieComite::find($input['id_categorie_comite']);
