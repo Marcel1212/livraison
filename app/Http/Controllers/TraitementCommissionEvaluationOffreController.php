@@ -57,7 +57,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                 ->get()
                 ->groupby('libelle_critere_evaluation_offre_tech');
 
-
+            $projet_etude = $cahier->projet_etude;
             $offretechcommissionevalsouscriteres = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->count();
 
             $note_commissions = NotationCommissionEvaluationOffreTech::where('id_commission_evaluation_offre',@$cahier->id_commission_evaluation_offre)
@@ -120,6 +120,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                         'dossier_intention',
                         'lettre_engagement',
                         'cahier',
+                        'projet_etude',
                         'offretechcommissionevals',
                         'commissioneparticipant',
                         'offre_technique',

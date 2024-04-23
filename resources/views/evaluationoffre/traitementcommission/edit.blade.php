@@ -261,14 +261,132 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <hr>
                                 <a class="btn btn-sm btn-outline-secondary waves-effect  me-sm-3 me-1"
                                    href="/{{$lien }}">Retour</a>
-                                <a href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($cahier->projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
+                                <a href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($id),\App\Helpers\Crypt::UrlCrypt(2)]) }}"
                                    class="btn btn-sm btn-primary">Suivant</a>
                             </div>
 
                         </div>
                     </div>
                     <div class="tab-pane fade @if($idetape==2) show active @endif" id="navs-top-infoprojetetude" role="tabpanel">
+                        <div class="row mt-2">
 
+
+                            <div class="row">
+                                <div class="row">
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-12">
+                                                <label>Titre du projet <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="titre_projet_instruction"
+                                                       required="required" id="titre_projet_instruction"
+                                                       disabled
+                                                       value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
+                                                       class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-6">
+                                                <label>Financement sollicité <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="montant_demande_projet"
+                                                       required="required" id="montant_demande_projet"
+                                                       disabled
+                                                       value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"
+                                                       class="form-control form-control-sm number">
+                                            </div>
+
+                                            <div class="mb-1 col-md-6">
+                                                <label>Secteur d'activité du projet <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <select name="id_secteur_activite"
+                                                        disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
+                                                        <?= $secteuractivite_projet; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
+                                    <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_instruction !!}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
+                                    <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_instruction !!}</div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
+                                    <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_instruction !!}</div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
+                                    </label>
+                                    <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendus_instruction !!}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
+                                    <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_instruction !!}</div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="cible_instruction">Cible <span style="color:red;">*</span>
+                                    </label>
+                                    <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_instruction !!}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-12 mt-2">
+                                <div class="mb-1">
+                                    <label for="methodologie_instruction">Méthodologie <span style="color:red;">*</span></label>
+                                    <div id="methodologie_instruction" class="rounded-1">{!!@$projet_etude->methodologie_instruction !!}</div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-12 mt-2">
+                                    <div class="mb-1">
+                                        <label for="montant_projet_instruction">Financement accordé <span style="color:red;">*</span>
+                                        </label>
+                                        <input type="text" name="montant_projet_instruction" id="montant_projet_instruction"  class="number form-control form-control-sm number" disabled
+                                               value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                    <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
+                                    @if($projet_etude->piece_jointe_instruction)
+                                        <div><span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                      onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span></div>
+
+                                    @endif
+                                    <div id="" class="form-text">
+                                        <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
+                                            maxi : 5Mo</em>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane fade @if($idetape==3) show active @endif" id="navs-top-piecesprojetetude"
                          role="tabpanel">
