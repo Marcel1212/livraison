@@ -98,8 +98,6 @@ class AgreementController extends Controller
 //            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
                 ->where('id_plan_de_formation', $id_plan_de_formation)->get();
 
-        dd($actionplanformations);
-
         return view('agreement.show', compact('actionformations','plan_de_formation'));
     }
 

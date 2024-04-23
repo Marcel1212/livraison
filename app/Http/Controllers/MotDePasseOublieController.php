@@ -54,7 +54,7 @@ class MotDePasseOublieController extends Controller
                 $logo = Menu::get_logo();
 
                 if(isset($user->tel_users)){
-                    SmsPerso::sendSMS($user->tel_users,"Votre code OTP pour la réinitialisation de votre mot de passe est : ".$mot_de_passe->code_mot_de_passe_oublie);
+                    SmsPerso::sendSMS($user->tel_users,"Votre code OTP pour la reinitialisation de votre mot de passe est : ".$mot_de_passe->code_mot_de_passe_oublie);
                 }
 
                 $sujet = "Code de réinitialisation - FDFP";
