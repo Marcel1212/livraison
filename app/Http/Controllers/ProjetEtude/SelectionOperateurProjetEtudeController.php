@@ -132,17 +132,21 @@ class SelectionOperateurProjetEtudeController extends Controller{
                             $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
 
                             if (isset($user->email)) {
-                                $sujet = "Sélection opérateur";
+                                $sujet = "Offre de services";
                                 $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                                $messageMail = "<b>Cher, $name  ,</b>
-                                    <br><br>Vous avez été retenu pour le projet d'étude intitulé : ".$projet_etude_valide->titre_projet_instruction.".
+                                $messageMail = "<b>Monsieur le Directeur,</b>
+                                    <br><br>Le FDFP envisage de recruter un cabinet de consultants pour la réalisation du projet d'étude intitulé : ".$projet_etude_valide->titre_projet_instruction.".
+                                    <br>De ce fait nous vous prions de bien vouloir vous rapprocher de";
+                                if(isset($projet_etude_valide->id_user)){
+                                    $messageMail .= $projet_etude_valide->chargedetude->name." ".$projet_etude_valide->chargedetude->prenom_users;
+                                }
 
-                                    <br><br>Nous vous prions de bien vouloir vous rendre au siège de FDFP afin de recupérer le dossier d'appel d'offre dudit projet.
+                                $messageMail .=", Conseiller chargé d’études (@$projet_etude_valide->chargedetude->tel_users / @$projet_etude_valide->chargedetude->email), Responsable du Projet qui se tient à votre disposition pour toutes informations complémentaires.
+                                        Vous souhaitant bonne réception, nous vous prions d’agréer, Monsieur le Directeur, nos salutations distinguées.
                                     <br>
-
-                                    <br><br><br>
+                                    <br>
+                                    <br>
                                     -----
-
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
@@ -183,24 +187,56 @@ class SelectionOperateurProjetEtudeController extends Controller{
                     $projet_etude_valide->date_validation_selection_operateur = now();
                     $projet_etude_valide->update();
 
-                    $entreprise = Entreprises::where('id_entreprises',$projet_etude_valide->id_operateur_selection)->first();
-                    $name = $entreprise->raison_social_entreprises;
-                    $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
-
-                    if (isset($user->email)) {
-                        $sujet = "Sélection opérateur";
-                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                        $messageMail = "<b>Cher, $name  ,</b>
-                                    <br><br>Vous avez été retenu pour l'exécution du projet d'étude intitulé : ".$projet_etude_valide->titre_projet_instruction.".
+                    $operateurs = $projet_etude_valide->operateurs()->get();
+                    if(isset($operateurs)){
+                        foreach ($operateurs as $operateur){
+                            $entreprise = Entreprises::where('id_entreprises',$projet_etude_valide->id_operateur_selection)->first();
+                            $name = $entreprise->raison_social_entreprises;
+                            $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
+                            if($projet_etude_valide->id_operateur_selection==$operateur->id_entreprises){
+                                if (isset($user->email)) {
+                                    $sujet = $projet_etude_valide->titre_projet_instruction;
+                                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                    $messageMail = "<b>Monsieur le Directeur,</b>
+                                    <br><br>J’ai l’honneur de vous informer que votre offre a été retenue à l’issue de l’appel d’offres restreint réalisé par le Fonds de Développement de la Formation Professionnelle (FDFP) relatif au projet « ".$projet_etude_valide->titre_projet_instruction."».
+                                    Cependant, nous souhaiterions ouvrir une négociation avec vous relativement au coût global du projet que vous proposé.<br>
+                                    Merci de nous faire part de votre décision dans un délai de huit (8) jours, soit au plus tard avant le @$projet_etude_valide->date_validation_selection_operateur->addDays(8) <br><br><br>
                                     <br>
-                                    <br><br><br>
+                                    Veuillez agréer, <b>Monsieur le Directeur</b>, l’expression de nos salutations distinguées.
+                                    <br>
+                                    <br>
+                                    <br>
                                     -----
-
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                    -----";
+                                    $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+
+                                }else{
+                                    if (isset($user->email)) {
+                                        $sujet = $projet_etude_valide->titre_projet_instruction;
+                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                        $messageMail = "<b>Monsieur le Directeur,</b>
+                                        <br><br>Je vous remercie de votre récente candidature à la suite de l’appel d’offres restreints lancé pour le projet susmentionné en objet.
+                                        J’ai néanmoins le regret de vous informer que votre offre n’a pas été retenue par la Commission d’Ouverture et de Jugement des Offres (COJO) du FDFP lors de son assise du 02 octobre 2023.<br>
+                                        La Direction des Etudes, de l’Evaluation, de la Qualité, la Prospective et de la Communication (D2EQPC) se tient à votre disposition pour toutes les informations relatives à l’analyse de votre offre, et pour toutes autres préoccupations éventuelles.<br><br><br>
+                                        <br>
+                                        En espérant que vous continuerez à participer aux appels d'offres restreints que nous lancerons, je vous prie d’agréer, <b>Monsieur le Directeur</b>, l’expression de mes sentiments distingués.
+                                        <br>
+                                        <br>
+                                        <br>
+                                        -----
+                                        Ceci est un mail automatique, Merci de ne pas y répondre.
+                                        -----";
+                                            $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                    }
+                                }
+                            }
+                        }
                     }
+
+
+
+
                 }
                 return redirect('/selectionoperateurprojetetude/'.Crypt::UrlCrypt($id_projet_etude).'/'.Crypt::UrlCrypt(4).'/edit')->with('success','Succès: Sélection effectuée');
             }else{
