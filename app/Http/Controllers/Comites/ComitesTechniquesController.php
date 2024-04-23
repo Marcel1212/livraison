@@ -436,10 +436,19 @@ class ComitesTechniquesController extends Controller
 
                         if($codeprocessus =='PE'){
 
-                            $projet_etude = ProjetEtude::find($iddemande);
-                            $projet_etude->flag_passer_comite_technique = true;
-                            $projet_etude->update();
+                            if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
+                                $projet_etude = ProjetEtude::find($iddemande);
+                                $projet_etude->flag_passer_comite_technique = true;
+                                $projet_etude->update();
+                            }
 
+                            if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
+                                if($codeprocessus =='PE'){
+                                    $projet_etude = ProjetEtude::find($iddemande);
+                                    $projet_etude->flag_passer_comite_technique_cc = true;
+                                    $projet_etude->update();
+                                }
+                            }
                         }
 
                         if($codeprocessus =='PRF'){
@@ -644,7 +653,9 @@ class ComitesTechniquesController extends Controller
 
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes conviés au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
+                                           Vous êtes priés de bien vouloir prendre connaissance des documents suivants <br><br>
+                                            <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
                                 ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -703,13 +714,21 @@ class ComitesTechniquesController extends Controller
                     }
 
                     if($demande->code_processus =='PE'){
+                        //Comité technique
+                        if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
+                                $projet_etude = ProjetEtude::find($demande->id_demande);
+                                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                                $projet_etude->update();
+                        }
 
-                        $projet_etude = ProjetEtude::find($demande->id_demande);
-                        $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                        $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                        $projet_etude->id_processus = 8;
-                        $projet_etude->update();
-
+                        //Comité de coordination
+                        if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
+                                $projet_etude = ProjetEtude::find($demande->id_demande);
+                                $projet_etude->flag_valider_cc_projet_etude = true;
+                                $projet_etude->date_valider_cc_projet_etude = now();
+                                $projet_etude->update();
+                        }
                     }
 
                     if($demande->code_demande =='PRF'){

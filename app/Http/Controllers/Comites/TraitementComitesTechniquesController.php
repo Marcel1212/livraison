@@ -1057,10 +1057,20 @@ class TraitementComitesTechniquesController extends Controller
             }
 
             if($request->action === 'Traiter_valider_projet'){
-                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                $projet_etude->update();
-                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                $comite = Comite::find($idcomite);
+                if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
+                    $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                    $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                    $projet_etude->update();
+                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                }
+
+                if(@$comite->categorieComite->type_code_categorie_comite=='CC'){
+                    $projet_etude->flag_valider_cc_projet_etude = true;
+                    $projet_etude->date_valider_cc_projet_etude = now();
+                    $projet_etude->update();
+                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
+                }
             }
         }
     }
