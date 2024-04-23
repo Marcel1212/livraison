@@ -484,8 +484,7 @@ class TraitementComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcomite =  $id;
 
-
-//        $comite = Comite::find($id);
+        $comite = Comite::find($id);
         $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
 
         if(isset($id1)){
