@@ -826,6 +826,7 @@ class TraitementComitesController extends Controller
         $idcahier =  Crypt::UrldeCrypt($id3);
         $comite = Comite::find($idcomite);
 
+
         $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
         $cahiersplanprojet = CahierPlansProjets::find($idcahier);
 
@@ -892,6 +893,7 @@ class TraitementComitesController extends Controller
                     'secteuractivite_projet',
                     'motifs',
                     'idetape',
+                    'idcahier',
                     'cahiersplanprojet',
                     'pay',
                     'comite',
