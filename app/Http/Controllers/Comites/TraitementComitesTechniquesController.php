@@ -545,6 +545,7 @@ class TraitementComitesTechniquesController extends Controller
                         'offre_technique',
                         'projet_etude',
                         'idcomite',
+                        'comite',
                         'secteuractivite_projet',
                         'motifs',
                         'formjuridique',
