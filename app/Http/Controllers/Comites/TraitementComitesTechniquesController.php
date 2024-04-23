@@ -121,9 +121,9 @@ class TraitementComitesTechniquesController extends Controller
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
-        //dd($processuscomite);
+        //dd($idcategoriecomite);
 
-        if($idcategoriecomite = 2){
+        if($idcategoriecomite == 2){
             $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
             ->join('comite','cahier_comite.id_comite','comite.id_comite')
@@ -133,6 +133,7 @@ class TraitementComitesTechniquesController extends Controller
                     ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
             ->get();
         }else{
+            //dd('ici');
             $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
         ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
         ->join('comite','cahier_comite.id_comite','comite.id_comite')
@@ -322,7 +323,7 @@ class TraitementComitesTechniquesController extends Controller
         $idcategoriecomite = $comite->id_categorie_comite;
 
         //dd($processuscomite);
-        if($idcategoriecomite = 2){
+        if($idcategoriecomite == 2){
             $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
             ->join('comite','cahier_comite.id_comite','comite.id_comite')

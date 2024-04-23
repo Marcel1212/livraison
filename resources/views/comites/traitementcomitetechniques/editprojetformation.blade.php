@@ -340,7 +340,7 @@ $nombre = count($conseilleragence);
                                     <td align="center">
                                         <?php
                                         $idcategoriecomite;
-                                        if ($idcategoriecomite = 2) {
+                                        if ($idcategoriecomite == 2) {
                                             $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf_coord(Auth::user()->id, $planformation->id_projet_formation);
                                         } else {
                                             $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
@@ -1291,7 +1291,7 @@ $nombre = count($conseilleragence);
 
                 <?php
                 //$resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
-                if ($idcategoriecomite = 2) {
+                if ($idcategoriecomite == 2) {
                     $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf_coord(Auth::user()->id, $planformation->id_projet_formation);
                 } else {
                     $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
@@ -1463,7 +1463,7 @@ $nombre = count($conseilleragence);
                             <ul class="timeline pt-3">
                                 <?php
                                 $idcategoriecomite;
-                                if ($idcategoriecomite = 2) {
+                                if ($idcategoriecomite == 2) {
                                     $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf_coord($planformation->id_projet_formation);
                                 } else {
                                     $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf($planformation->id_projet_formation);
