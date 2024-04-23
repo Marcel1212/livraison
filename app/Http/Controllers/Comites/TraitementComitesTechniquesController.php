@@ -10,6 +10,8 @@ use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
 use App\Models\TraitementParCriterePrf;
+use App\Models\TraitementParCriterePrfCoord;
+use App\Models\TraitementParCritereCommentairePrfCoord;
 use Illuminate\Http\Request;
 use App\Models\TypeProjetFormation;
 use Image;
@@ -113,30 +115,43 @@ class TraitementComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comite = Comite::find($id);
+       // dd($comite->id_categorie_comite);
+       $idcategoriecomite = $comite->id_categorie_comite;
 
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
 
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
+        //dd($processuscomite);
 
-        if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
-            $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
-                ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-                ->join('comite','cahier_comite.id_comite','comite.id_comite')
-                ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
-                ->where([['cahier_comite.id_comite','=',$id],
-                    ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
-                    ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
-                ->get();
-        }elseif(@$comite->categorieComite->type_code_categorie_comite=='CC'){
+        if($idcategoriecomite = 2){
             $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
-                ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
-                ->join('comite','cahier_comite.id_comite','comite.id_comite')
-                ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
-                ->where([['cahier_comite.id_comite','=',$id],
+            ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+            ->join('comite','cahier_comite.id_comite','comite.id_comite')
+            ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+            ->where([['cahier_comite.id_comite','=',$id],
                     ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
                     ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
-                ->get();
+            ->get();
+        }else{
+            $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+        ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+        ->join('comite','cahier_comite.id_comite','comite.id_comite')
+        ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+        ->where([['cahier_comite.id_comite','=',$id],
+                ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
+                ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
+        ->get();
         }
+        //dd($listedemandesss);
+
+        // $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+        // ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+        // ->join('comite','cahier_comite.id_comite','comite.id_comite')
+        // ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+        // ->where([['cahier_comite.id_comite','=',$id],
+        //         ['comite_participant.id_user_comite_participant','=',Auth::user()->id],
+        //         ['vue_plans_projets_formation.code_processus','=',$processuscomite->processusComite->code_processus_comite]])
+        // ->get();
 
         //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
 
@@ -300,16 +315,30 @@ class TraitementComitesTechniquesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcomite =  $id;
         $comite = Comite::find($id);
+        //dd($comite);
         $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
+        $idcategoriecomite = $comite->id_categorie_comite;
+
         //dd($processuscomite);
-        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+        if($idcategoriecomite = 2){
+            $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
+            ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+            ->join('comite','cahier_comite.id_comite','comite.id_comite')
+            ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+            ->where([['cahier_comite.id_comite','=',$id],['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
+            ->get();
+        }else{
+            $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
         ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
         ->join('comite','cahier_comite.id_comite','comite.id_comite')
         ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
         ->where([['cahier_comite.id_comite','=',$id],['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
         ->get();
+        }
+        //dd($listedemandesss);
+
 
         //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
 
@@ -440,7 +469,7 @@ class TraitementComitesTechniquesController extends Controller
         return view('comites.traitementcomitetechniques.editprojetformation', compact(
             'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss',
             'planformation','infoentreprise', 'piecesetude1', 'piecesetude2','typeproj', 'piecesetude3', 'piecesetude4','piecesetude5','piecesetude6','piecesetude7',
-            'idcomite','criteres'
+            'idcomite','criteres','idcategoriecomite'
         ));
 
     }
@@ -510,8 +539,6 @@ class TraitementComitesTechniquesController extends Controller
                 }
 
 
-                $comite = Comite::find($idcomite);
-
                 return view('comites.traitementcomitetechniques.editprojetetude',
                     compact('idetape','pay','pieces_projets','avant_projet_tdr',
                         'courier_demande_fin',
@@ -521,7 +548,6 @@ class TraitementComitesTechniquesController extends Controller
                         'secteuractivite_projet',
                         'motifs',
                         'formjuridique',
-                        'comite',
                         'offre_financiere',
                         'secteuractivite'));
 
@@ -548,6 +574,9 @@ class TraitementComitesTechniquesController extends Controller
         $idactionformation =  Crypt::UrldeCrypt($id);
         $idcomite =  Crypt::UrldeCrypt($id2);
         $etape =  Crypt::UrldeCrypt($id3);
+        $comite = Comite::find($idcomite);
+        $idcategorie = $comite->id_categorie_comite;
+
 
 
         if ($request->isMethod('put')) {
@@ -559,6 +588,7 @@ class TraitementComitesTechniquesController extends Controller
            // Projet formation
 
            if($data['action'] === 'Traiter_action_formation_valider_critere_prf'){
+            //dd($data);
 
             //$actionplan = ActionFormationPlan::find($idactionformation);
             // Id projet formation
@@ -577,31 +607,85 @@ class TraitementComitesTechniquesController extends Controller
                                             ['processus_comite.code_processus_comite','=','PRF']])
                                     ->get();
             //dd($lignescriterevalides);
+            if ($idcategorie == 2) {
+                //dd('1');
+                foreach ($lignescriterevalides as $uneligne) {
 
-            foreach ($lignescriterevalides as $uneligne) {
+                    $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
+                    $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
+                    $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
 
-                $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
-                $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
-                $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
+                    $traitementcritere = TraitementParCriterePrfCoord::create([
+                        'id_user_traitement_par_critere' => Auth::user()->id,
+                        //'id_demande' => $idactionformation,
+                        'id_projet_formation' => $idactionformation,
+                        'id_critere_evaluation' => $id_critere_evaluation,
+                        //'code_traitement' => 'PRF',
+                        'flag_critere_evaluation' => true,
+                    ]);
 
-                $traitementcritere = TraitementParCriterePrf::create([
-                    'id_user_traitement_par_critere' => Auth::user()->id,
-                    //'id_demande' => $idactionformation,
-                    'id_projet_formation' => $idactionformation,
-                    'id_critere_evaluation' => $id_critere_evaluation,
-                    //'code_traitement' => 'PRF',
-                    'flag_critere_evaluation' => true,
-                ]);
+                    $traitementcommentaire = TraitementParCritereCommentairePrfCoord::create([
+                        'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+                        'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+                        'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
+                       // 'code_traitement' => 'PRF',
+                        'commentaire_critere' => $commentaire_critere,
+                    ]);
 
-                $traitementcommentaire = TraitementParCritereCommentairePrf::create([
-                    'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
-                    'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
-                    'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
-                   // 'code_traitement' => 'PRF',
-                    'commentaire_critere' => $commentaire_critere,
-                ]);
+                }
+            }else{
+                foreach ($lignescriterevalides as $uneligne) {
 
+                    $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
+                    $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
+                    $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
+
+                    $traitementcritere = TraitementParCriterePrf::create([
+                        'id_user_traitement_par_critere' => Auth::user()->id,
+                        //'id_demande' => $idactionformation,
+                        'id_projet_formation' => $idactionformation,
+                        'id_critere_evaluation' => $id_critere_evaluation,
+                        //'code_traitement' => 'PRF',
+                        'flag_critere_evaluation' => true,
+                    ]);
+
+                    $traitementcommentaire = TraitementParCritereCommentairePrf::create([
+                        'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+                        'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+                        'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
+                       // 'code_traitement' => 'PRF',
+                        'commentaire_critere' => $commentaire_critere,
+                    ]);
+
+                }
+                //dd('2');
             }
+            //dd($idcategorie);
+
+            // foreach ($lignescriterevalides as $uneligne) {
+
+            //     $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
+            //     $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
+            //     $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
+
+            //     $traitementcritere = TraitementParCriterePrf::create([
+            //         'id_user_traitement_par_critere' => Auth::user()->id,
+            //         //'id_demande' => $idactionformation,
+            //         'id_projet_formation' => $idactionformation,
+            //         'id_critere_evaluation' => $id_critere_evaluation,
+            //         //'code_traitement' => 'PRF',
+            //         'flag_critere_evaluation' => true,
+            //     ]);
+
+            //     $traitementcommentaire = TraitementParCritereCommentairePrf::create([
+            //         'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+            //         'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+            //         'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
+            //        // 'code_traitement' => 'PRF',
+            //         'commentaire_critere' => $commentaire_critere,
+            //     ]);
+
+            // }
             // Mise a jour du projet de formation
             // $projetformation->flag_comite_pleiniere = true ;
             // $projetformation->save()  ;
@@ -947,6 +1031,7 @@ class TraitementComitesTechniquesController extends Controller
             $projet_etude = ProjetEtude::find($id);
 
             if($request->action === 'Modifier'){
+
                 $projet_etude->titre_projet_instruction = $request->titre_projet_instruction;
                 $projet_etude->contexte_probleme_instruction = $request->contexte_probleme_instruction;
                 $projet_etude->objectif_general_instruction = $request->objectif_general_instruction;
@@ -971,23 +1056,11 @@ class TraitementComitesTechniquesController extends Controller
             }
 
             if($request->action === 'Traiter_valider_projet'){
-                $comite = Comite::find($idcomite);
-
-                if(@$comite->categorieComite->type_code_categorie_comite=='CT'){
-                    $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                    $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                    $projet_etude->update();
-                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
-                }
-
-                if(@$comite->categorieComite->type_code_categorie_comite=='CC'){
-                    $projet_etude->flag_valider_cc_projet_etude = true;
-                    $projet_etude->date_valider_cc_projet_etude = now();
-                    $projet_etude->update();
-                    return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
-                }
+                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                $projet_etude->update();
+                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succès : Le projet d\'étude a été traité');
             }
-
         }
     }
 

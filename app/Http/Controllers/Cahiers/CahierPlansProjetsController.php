@@ -227,12 +227,13 @@ class CahierPlansProjetsController extends Controller
                                 ->where('vppdpct.code_processus','=',$cahier->processusComite->code_processus_comite)
                                 ->get();
 
-        //dd($cahierplansprojets);
+        //dd($cahier->code_pieces_cahier_plans_projets);
         //Projet formation
         if($cahier->code_pieces_cahier_plans_projets == 'PRF'){
             $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier as vppdpct')
             ->where('vppdpct.code_processus','PRF')
             ->get();
+            //dd($demandes);
 
             //  $cahierplansprojets = DB::table('ligne_cahier_plans_projets as vppdpct')
             //  ->join('projet_formation','vppdpct.id_demande','projet_formation.id_projet_formation')

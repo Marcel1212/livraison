@@ -339,7 +339,12 @@ $nombre = count($conseilleragence);
                                     </td> --}}
                                     <td align="center">
                                         <?php
-                                        $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
+                                        $idcategoriecomite;
+                                        if ($idcategoriecomite = 2) {
+                                            $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf_coord(Auth::user()->id, $planformation->id_projet_formation);
+                                        } else {
+                                            $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
+                                        }
                                         
                                         ?>
 
@@ -1285,7 +1290,12 @@ $nombre = count($conseilleragence);
                 <br>
 
                 <?php
-                $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
+                //$resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
+                if ($idcategoriecomite = 2) {
+                    $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf_coord(Auth::user()->id, $planformation->id_projet_formation);
+                } else {
+                    $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
+                }
                 
                 ?>
 
@@ -1451,7 +1461,15 @@ $nombre = count($conseilleragence);
                         <h5 class="card-header">Recommandation</h5>
                         <div class="card-body pb-2">
                             <ul class="timeline pt-3">
-                                <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf($planformation->id_projet_formation); ?>
+                                <?php
+                                $idcategoriecomite;
+                                if ($idcategoriecomite = 2) {
+                                    $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf_coord($planformation->id_projet_formation);
+                                } else {
+                                    $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf($planformation->id_projet_formation);
+                                }
+                                
+                                ?>
                                 @foreach ($ResultatTraitement as $res)
                                     <li
                                         class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
