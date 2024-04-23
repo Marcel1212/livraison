@@ -1069,7 +1069,7 @@ $idpart = Auth::user()->id_partenaire;
                     <div class="modal-body">
                       <p>
                                                     <?php
-                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenue dans ce document.
+                                                    $message = "Je soussigné(e) <strong>$infoentreprise->nom_prenom_dirigeant</strong>, Directeur général, atteste l'exactitude des informations contenue dans ce document.
 
                                                     En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                                     ?>

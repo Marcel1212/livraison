@@ -152,7 +152,8 @@ class HomeController extends Controller
                         'cpwd' => 'required',
                         'npwd' => 'required',
                         'vpwd' => 'required',
-                        'tel_entreprises' => 'required'
+                        'tel_entreprises' => 'required',
+                        'nom_prenom_dirigeant' => 'required'
                     ],[
                         'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
                         'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
@@ -162,6 +163,7 @@ class HomeController extends Controller
                         'cpwd.required' => 'Veuillez ajouter l\' ancien mot de passe.',
                         'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
+                        'nom_prenom_dirigeant.required' => 'Veuillez ajouter le nom et prenom du dirigeant.',
                     ]);
 
                     /***** verification du mot de passe */
@@ -186,6 +188,7 @@ class HomeController extends Controller
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
                         $input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
                         $input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
+                        $input['nom_prenom_dirigeant'] = mb_strtoupper($input['nom_prenom_dirigeant']);
                         $entreprise = Entreprises::find($infoentreprise->id_entreprises);
                         $entreprise->update($input);
                         return redirect('/dashboard')
@@ -285,7 +288,8 @@ class HomeController extends Controller
                         'cpwd' => 'required',
                         'npwd' => 'required',
                         'vpwd' => 'required',
-                        'tel_entreprises' => 'required'
+                        'tel_entreprises' => 'required',
+                        'nom_prenom_dirigeant' => 'required'
                     ],[
                         'localisation_geographique_entreprise.required' => 'Veuillez ajouter votre localisation.',
                         'repere_acces_entreprises.required' => 'Veuillez ajouter un repere d\'accès.',
@@ -295,6 +299,7 @@ class HomeController extends Controller
                         'cpwd.required' => 'Veuillez ajouter l\' ancien mot de passe.',
                         'npwd.required' => 'Veuillez ajouter le nouveau mot de passe.',
                         'vpwd.required' => 'Veuillez ressaisir le nouveau mot de passe.',
+                        'nom_prenom_dirigeant.required' => 'Veuillez ajouter le nom et prenom du dirigeant.',
                     ]);
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
@@ -318,6 +323,7 @@ class HomeController extends Controller
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
                         $input['repere_acces_entreprises'] = mb_strtoupper($input['repere_acces_entreprises']);
                         $input['adresse_postal_entreprises'] = mb_strtoupper($input['adresse_postal_entreprises']);
+                        $input['nom_prenom_dirigeant'] = mb_strtoupper($input['nom_prenom_dirigeant']);
                         $entreprise = Entreprises::find($infoentreprise->id_entreprises);
                         $entreprise->update($input);
                         return redirect('/dashboard')
