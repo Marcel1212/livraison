@@ -211,11 +211,12 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                     -----";
                                     $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
 
+                                }
                                 }else{
-                                    if (isset($operateur->email_entreprises)) {
-                                        $sujet = $projet_etude_valide->titre_projet_instruction;
-                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                                        $messageMail = "<b>Monsieur le Directeur,</b>
+                                if (isset($operateur->email_entreprises)) {
+                                    $sujet = $projet_etude_valide->titre_projet_instruction;
+                                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                    $messageMail = "<b>Monsieur le Directeur,</b>
                                         <br><br>Je vous remercie de votre récente candidature à la suite de l’appel d’offres restreints lancé pour le projet susmentionné en objet.
                                         J’ai néanmoins le regret de vous informer que votre offre n’a pas été retenue par la Commission d’Ouverture et de Jugement des Offres (COJO) du FDFP lors de son assise du 25 Avril 2024.<br>
                                         La Direction des Etudes, de l’Evaluation, de la Qualité, la Prospective et de la Communication (D2EQPC) se tient à votre disposition pour toutes les informations relatives à l’analyse de votre offre, et pour toutes autres préoccupations éventuelles.<br><br><br>
@@ -227,8 +228,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                         -----
                                         Ceci est un mail automatique, Merci de ne pas y répondre.
                                         -----";
-                                            $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
-                                    }
+                                    $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
                                 }
                             }
                         }
