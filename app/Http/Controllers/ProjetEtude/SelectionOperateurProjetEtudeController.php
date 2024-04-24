@@ -209,7 +209,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----";
-                                    $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                    $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
 
                                 }else{
                                     if (isset($operateur->email_entreprises)) {
@@ -227,7 +227,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                                         -----
                                         Ceci est un mail automatique, Merci de ne pas y répondre.
                                         -----";
-                                            $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                            $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
                                     }
                                 }
                             }
