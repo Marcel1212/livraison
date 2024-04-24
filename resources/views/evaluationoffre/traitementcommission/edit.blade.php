@@ -515,7 +515,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                                             <td>
                                                                                 <input name="note_operations[{{$operateur->id_entreprises}}][{{$offretechcommissioneval->souscritereevaluationoffretech->id_sous_critere_evaluation_offre_tech}}][]" type="number"
                                                                                        min="0"
-                                                                                                value="{{@$offretechcommissioneval->noteEvaluationOffre($operateur->id_entreprises,$commissioneparticipant->id_user_commission_evaluation_offre_participant)->note_notation_commission_evaluation_offre_tech}}"
+                                                                                                value="{{@$offretechcommissioneval->noteEvaluationOffre($offretechcommissioneval->id_commission_evaluation_offre,$operateur->id_entreprises,$commissioneparticipant->id_user_commission_evaluation_offre_participant)->note_notation_commission_evaluation_offre_tech}}"
                                                                                        class="form-control form-control-sm"
                                                                                        max="{{$offretechcommissioneval->note_offre_tech_commission_evaluation_offre}}"/>
                                                                             </td>
