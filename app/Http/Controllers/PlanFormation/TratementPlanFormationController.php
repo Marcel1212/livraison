@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PlanFormation;
 
+use App\Helpers\SmsPerso;
 use Illuminate\Http\Request;
 use App\Helpers\Audit;
 use App\Models\Activites;
@@ -322,6 +323,17 @@ class TratementPlanFormationController extends Controller
                     'objet'=>'PLAN DE FORMATION'
 
                 ]);
+                $infoentreprise = Entreprises::find($planformation1->id_entreprises);
+                //Envoi SMS Validé
+                if (isset($infoentreprise->tel_entreprises)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>,
+                        Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.
+                        <br>
+                        Nous apprécions votre intérêt pour notre services.<br>
+                        Cordialement,
+                        L'équipe e-FDFP";
+                    SmsPerso::sendSMS($infoentreprise->tel_entreprises,$content);
+                }
 
                 return redirect('traitementplanformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
 
@@ -360,7 +372,7 @@ class TratementPlanFormationController extends Controller
                     $sujet = "Recevabilité du plan de formation sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                     $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre paln de formation sur e-FDFP, et
+                                    <br><br>Nous avons examiné votre plan de formation sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
                                     <br><b>Motif de rejet  : </b> ".@$planformation1->motif->libelle_motif."
@@ -382,6 +394,19 @@ class TratementPlanFormationController extends Controller
                     //$messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
 
+                //Envoi SMS Rejeté
+                if (isset($infoentreprise->tel_entreprises)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
+                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$planformation1->motif->libelle_motif."
+                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
+                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
+                        Cordialement,
+                        L'équipe e-FDFP";
+                    SmsPerso::sendSMS($infoentreprise->tel_entreprises,$content);
+                }
+//
                 Audit::logSave([
 
                     'action'=>'MISE A JOUR',
