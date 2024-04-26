@@ -629,6 +629,21 @@ if ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == nul
                                                                 </div>
 
                                                             </div>
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    <div class="mb-4">
+                                                                        <label class="form-label">Domaine selectionné :
+                                                                            <span style="color:red;"></span></label>
+                                                                        <div class="align-items-center">
+                                                                            <span class="badge bg-info rounded-pill">
+
+                                                                                <?php echo $projetetude->domaineFormation->libelle; ?>
+                                                                            </span>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

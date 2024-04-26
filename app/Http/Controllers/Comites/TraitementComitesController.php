@@ -169,13 +169,16 @@ class TraitementComitesController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
         $id1 =  Crypt::UrldeCrypt($id1);
+        //$id2 =  Crypt::UrldeCrypt($id2);
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcahier =  Crypt::UrldeCrypt($id3);
         $idcomite =  $id;
+        //dd($data);
 
         if($request->isMethod('put')){
 
             $data = $request->all();
+            //dd($data);
 
             if($data['action'] === 'Valider_les_actions_des_plans_de_formations'){
                 $planformation = PlanFormation::find($id1);
@@ -263,7 +266,7 @@ class TraitementComitesController extends Controller
                 $projet_etude = ProjetFormation::find($id1);
                 $idcahier =  Crypt::UrldeCrypt($id2);
                 $cahier = CahierPlansProjets::find($idcahier);
-                //dd($projet_etude);
+                //dd($idetape);
 
                 if($cahier->code_commission_permante_comite_gestion=='COP'){
                     $projet_etude->update([
@@ -311,7 +314,7 @@ class TraitementComitesController extends Controller
                     ]);
                 }
 
-                return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetformation')->with('success', 'Succes : Mise a jour reussi ');
+                return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/'.Crypt::UrlCrypt(1).'/edit/projetformation')->with('success', 'Succes : Mise a jour reussi ');
             }
 
         }
@@ -493,7 +496,7 @@ class TraitementComitesController extends Controller
         $id1 =  Crypt::UrldeCrypt($id1);
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcomite =  $id;
-        //dd($id1);
+        //dd($idetape);
 
         $comite = Comite::find($id);
 
