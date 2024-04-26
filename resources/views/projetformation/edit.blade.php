@@ -666,6 +666,36 @@
                                                                 </div>
 
                                                             </div>
+                                                            <div class="row">
+                                                                <?php if ($projetetude->flag_soumis == false ){ ?>
+                                                                <div class="col-md-4 ">
+                                                                    <div class="mb-4">
+                                                                        <label class="form-label">Domaine de formation
+                                                                            <span style="color:red;"></span></label>
+                                                                        <select id="id_domaine" name="id_domaine"
+                                                                            class="select2 select2-size-sm form-select">
+
+                                                                            <?php echo $domaine; ?>
+
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <?php }?>
+
+                                                                <div class="col-md-4">
+                                                                    <div class="mb-4">
+                                                                        <label class="form-label">Domaine selectionné :
+                                                                            <span style="color:red;"></span></label>
+                                                                        <div class="align-items-center">
+                                                                            <span class="badge bg-info rounded-pill">
+
+                                                                                <?php echo $projetetude->domaineFormation->libelle; ?>
+                                                                            </span>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -83,8 +83,9 @@
                                                                 et des efforts à acquérir de nouvelles compétences et à approfondir
                                                                 ses connaissances existantes. </small> --}}
                                                             </span>
-                                                            <input name="typeprojetformation" class="form-check-input" required="required"
-                                                                type="radio" value={{ $proj->id_type_projet_formation }}
+                                                            <input name="typeprojetformation" class="form-check-input"
+                                                                required="required" type="radio"
+                                                                value={{ $proj->id_type_projet_formation }}
                                                                 id="customRadioIcon1.<?php echo $proj->id_type_projet_formatio; ?>"checked="">
                                                         </label>
                                                     </div>
@@ -303,6 +304,17 @@
                                                                     </div>
                                                                 </div>
 
+                                                            </div>
+                                                            <div class="row">
+                                                                <label class="form-label">Domaine de formation <span
+                                                                        style="color:red;">*</span></label>
+                                                                <select id="id_domaine" name="id_domaine"
+                                                                    class="select2 select2-size-sm form-select"
+                                                                    required="required">
+
+                                                                    <?php echo $domaine; ?>
+
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>

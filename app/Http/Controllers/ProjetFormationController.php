@@ -26,6 +26,7 @@ use App\Models\Departement;
 use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Models\ProjetFormationInstruction;
+use App\Models\DomaineProjetFormation;
 use App\Helpers\GenerateCode as Gencode;
 use Spatie\Permission\Models\Role;
 use Hash;
@@ -107,6 +108,13 @@ class ProjetFormationController extends Controller
 
         $typeprojetformation = TypeProjetFormation::all();
 
+        $domaines = DomaineProjetFormation::all();
+        $domaine = "<option value=''> Selectionnez un domaine </option>";
+        foreach ($domaines as $comp) {
+            $domaine .= "<option value='" . $comp->id_domaine_projet_formation  . "'>" . $comp->libelle." </option>";
+        }
+        //dd($domaine);
+
         $activites = Activites::all();
         $activite = "<option value=''> Selectionnez une activité </option>";
         foreach ($activites as $comp) {
@@ -131,7 +139,7 @@ class ProjetFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        return view('projetformation.create', compact('activite','centreimpot','localite','pay','entreprise','user','typeprojetformation'));
+        return view('projetformation.create', compact('activite','domaine','centreimpot','localite','pay','entreprise','user','typeprojetformation'));
     }
 
     /**
@@ -321,6 +329,7 @@ class ProjetFormationController extends Controller
             $input['cout_projet_formation'] = $cout_projet_formation;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['id_type_projet_formation'] = $input['typeprojetformation'];
+            $input['id_domaine_projet_formation'] = $input['id_domaine'];
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);
             $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
@@ -427,7 +436,14 @@ class ProjetFormationController extends Controller
         $entreprise_info = Entreprises::find($projetetude->id_entreprises);
         $typeprojetformation = TypeProjetFormation::all();
         $typeproj = '';
-        //dd($entreprise->raison_social_entreprises);
+        //dd($projetetude);
+
+        $domaines = DomaineProjetFormation::all();
+        $domaine = "<option value=''> Selectionnez un domaine </option>";
+        foreach ($domaines as $comp) {
+            $domaine .= "<option value='" . $comp->id_domaine_projet_formation  . "'>" . $comp->libelle." </option>";
+        }
+        //dd($domaine);
 
         //dd($projetetude['titre_projet_etude']);
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','1']])->get();
@@ -614,7 +630,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('conseiller_name','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
+        return view('projetformation.edit', compact('conseiller_name','domaine','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
     }
 
 
@@ -1095,6 +1111,7 @@ class ProjetFormationController extends Controller
                 $projetformation->telephone = $data['telephone'];
                 $input['id_type_projet_formation'] = $data['typeprojetformation'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
+                $projetformation->id_domaine_projet_formation = $data['id_domaine'];
                 $projetformation->cout_projet_formation = $cout_projet_formation;
                 // $projetformation->acteurs = $data['acteurs_projet'];
                 // $projetformation->role_p = $data['role_projet'];
