@@ -277,6 +277,14 @@ $part = PartEntreprisesHelper::get_part_entreprise();
                                             </div>
                                         </div>
 
+                                        <div class="col-md-4 col-12">
+                                            <div class="mb-1">
+                                                <label>Contact du responsable formation <strong style="color:red;">*</strong> </label>
+                                                <input type="text" name="contact_professionnel_charge_plan_formation" id="contact_professionnel_charge_plan_formation"
+                                                    class="form-control form-control-sm" required="required">
+                                            </div>
+                                        </div>
+
 
 
 

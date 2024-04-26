@@ -37,6 +37,7 @@ use File;
 use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Http\Controllers\Controller;
+use App\Models\FicheAgrementButFormation;
 
 class TratementPlanFormationController extends Controller
 {
@@ -97,12 +98,15 @@ class TratementPlanFormationController extends Controller
         $ficheagrement = null;
         $beneficiaires = null;
         $planformation = null;
+        $butformations = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+            $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
+
         }
 
         Audit::logSave([
@@ -119,7 +123,7 @@ class TratementPlanFormationController extends Controller
 
         ]);
 
-        return view('planformations.traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation','butformations'));
     }
 
     /**
@@ -192,14 +196,15 @@ class TratementPlanFormationController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+                                        //->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
+                                        ->join('domaine_formation','domaine_formation.id_domaine_formation','=','domaine_formation.id_domaine_formation')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
+        //$butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
 
 
 //        dd($infosactionplanformations);
@@ -259,6 +264,8 @@ class TratementPlanFormationController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
 
+        $logo = Menu::get_logo();
+
         if ($request->isMethod('put')) {
             $data = $request->all();
             //dd($data);
@@ -309,6 +316,35 @@ class TratementPlanFormationController extends Controller
 
                 $planformation = PlanFormation::find($id);
                 $planformation->update($input);
+                $planformation1 = PlanFormation::find($id);
+
+                $infoentreprise = Entreprises::find($planformation1->id_entreprises);
+                //dd($planformation1->contact_professionnel_charge_plan_formation);
+                //Envoi SMS Validé
+                if (isset($planformation1->contact_professionnel_charge_plan_formation)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.Nous apprécions votre intérêt pour notre services.Cordialement,L'équipe e-FDFP";
+                    SmsPerso::sendSMS($planformation1->contact_professionnel_charge_plan_formation,$content);
+                }
+
+                //Envoi email
+        /*         if (isset($planformation1->email_professionnel_charge_plan_formation)) {
+                    $sujet = "Recevabilité du plan de formation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.
+                                    <br><br>Nous apprécions votre intérêt pour notre services.<br>
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->email_professionnel_charge_plan_formation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                    //$messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                } */
+
 
                 Audit::logSave([
 
@@ -323,17 +359,6 @@ class TratementPlanFormationController extends Controller
                     'objet'=>'PLAN DE FORMATION'
 
                 ]);
-                $infoentreprise = Entreprises::find($planformation1->id_entreprises);
-                //Envoi SMS Validé
-                if (isset($infoentreprise->tel_entreprises)) {
-                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>,
-                        Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.
-                        <br>
-                        Nous apprécions votre intérêt pour notre services.<br>
-                        Cordialement,
-                        L'équipe e-FDFP";
-                    SmsPerso::sendSMS($infoentreprise->tel_entreprises,$content);
-                }
 
                 return redirect('traitementplanformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
 
@@ -395,7 +420,7 @@ class TratementPlanFormationController extends Controller
                 }
 
                 //Envoi SMS Rejeté
-                if (isset($infoentreprise->tel_entreprises)) {
+                if (isset($planformation1->contact_professionnel_charge_plan_formation)) {
                     $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
                         malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$planformation1->motif->libelle_motif."
                         <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
@@ -404,7 +429,7 @@ class TratementPlanFormationController extends Controller
                         soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
                         Cordialement,
                         L'équipe e-FDFP";
-                    SmsPerso::sendSMS($infoentreprise->tel_entreprises,$content);
+                    SmsPerso::sendSMS($planformation1->contact_professionnel_charge_plan_formation,$content);
                 }
 //
                 Audit::logSave([

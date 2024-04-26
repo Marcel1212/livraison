@@ -37,6 +37,7 @@ use App\Helpers\PartEntreprisesHelper;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\SecteurActivite;
 use App\Http\Controllers\Controller;
+use App\Models\FicheAgrementButFormation;
 
 class PlanFormationController extends Controller
 {
@@ -139,6 +140,7 @@ class PlanFormationController extends Controller
                 'nom_prenoms_charge_plan_formati' => 'required',
                 'fonction_charge_plan_formation' => 'required',
                 'email_professionnel_charge_plan_formation' => 'required',
+                'contact_professionnel_charge_plan_formation' => 'required',
                 //'nombre_salarie_plan_formation' => 'required',
                 'id_type_entreprise' => 'required',
                 'masse_salariale' => 'required',
@@ -147,6 +149,7 @@ class PlanFormationController extends Controller
                 'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                 'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                 'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
+                'contact_professionnel_charge_plan_formation.required' => 'Veuillez ajouter un contact .',
                 //'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                 'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                 'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
@@ -255,12 +258,14 @@ class PlanFormationController extends Controller
         $actionplan = null;
         $ficheagrement = null;
         $beneficiaires = null;
+        $butformations = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+            $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
         }
 
         Audit::logSave([
@@ -278,7 +283,7 @@ class PlanFormationController extends Controller
         ]);
 
         //dd($planformation);
-        return view('planformations.planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.planformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation','butformations'));
     }
 
     /**
@@ -312,6 +317,7 @@ class PlanFormationController extends Controller
             $paysc .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
         $butformations = ButFormation::where([['flag_actif_but_formation','=',true]])->get();
+        $butformationsss = ButFormation::where([['flag_actif_but_formation','=',true]])->get();
         $butformation = "<option value=''> Selectionnez le but de la formation </option>";
         foreach ($butformations as $comp) {
             $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
@@ -364,7 +370,7 @@ class PlanFormationController extends Controller
 
             ]);
 
-        return view('planformations.planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation'));
+        return view('planformations.planformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations','categorieprofessionelle','categorieplans','structureformation','idetape','secteuractivites','paysc','montantactionplanformation','butformations','butformationsss'));
 
     }
 
@@ -385,6 +391,7 @@ class PlanFormationController extends Controller
                     'nom_prenoms_charge_plan_formati' => 'required',
                     'fonction_charge_plan_formation' => 'required',
                     'email_professionnel_charge_plan_formation' => 'required',
+                    'contact_professionnel_charge_plan_formation' => 'required',
                     //'nombre_salarie_plan_formation' => 'required',
                     'id_type_entreprise' => 'required',
                     'masse_salariale' => 'required',
@@ -393,6 +400,7 @@ class PlanFormationController extends Controller
                     'nom_prenoms_charge_plan_formati.required' => 'Veuillez ajouter une personne en charge de la formation.',
                     'fonction_charge_plan_formation.required' => 'Veuillez ajouter la fonction de la personne en chrage de la formation.',
                     'email_professionnel_charge_plan_formation.required' => 'Veuillez ajouter une adresse email.',
+                    'contact_professionnel_charge_plan_formation.required' => 'Veuillez ajouter un contact .',
                     //'nombre_salarie_plan_formation.required' => 'Veuillez ajouter le nombre de salarié.',
                     'id_type_entreprise.unique' => 'Veuillez selectionnez un type d\'entreprise',
                     'masse_salariale.required' => 'Veuillez ajouter la massse salariale.',
@@ -595,7 +603,7 @@ class PlanFormationController extends Controller
                     'cadre_fiche_demande_agrement' => 'required',
                     'agent_maitrise_fiche_demande_ag' => 'required',
                     'employe_fiche_demande_agrement' => 'required',
-                    'id_secteur_activite' => 'required',
+                    //'id_secteur_activite' => 'required',
                     'file_beneficiare' => 'required|mimes:xlsx,XLSX|max:5120',
                     'facture_proforma_action_formati' => 'required|mimes:pdf,PDF,png,jpg,jpeg,PNG,JPG,JPEG|max:5120'
                 ],[
@@ -620,7 +628,7 @@ class PlanFormationController extends Controller
                     'cadre_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre de cadre.',
                     'agent_maitrise_fiche_demande_ag.required' => 'Veuillez ajoutez le nombre d\'agent de maitrise.',
                     'employe_fiche_demande_agrement.required' => 'Veuillez ajoutez le nombre d\employe .',
-                    'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
+                    //'id_secteur_activite.required' => 'Veuillez selectionner un secteur activité.',
                     'file_beneficiare.required' => 'Veuillez ajoutez le fichier excel contenant la liste des beneficiaires.',
                     'facture_proforma_action_formati.required' => 'Veuillez ajoutez la massse salariale.',
                     'file_beneficiare.mimes' => 'Les formats requises pour le fichier excel contenant la liste des beneficiaires est: xlsx,XLSX.',
@@ -870,6 +878,17 @@ class PlanFormationController extends Controller
                         'total_beneficiaire_fiche_demand' =>$nbrebene
                     ]);
 
+               }
+
+               $tab = $input['id_but_formation'];
+
+               foreach ($tab as $key => $value) {
+                   //dd($value); exit;
+                   FicheAgrementButFormation::create([
+                       'id_fiche_agrement'=> $insertedIdFicheAgrement,
+                       'id_but_formation'=> $value,
+                       'flag_fiche_a_agrement_but_formation'=>true
+                   ]);
                }
 
                if (isset($data['file_beneficiare'])){

@@ -195,8 +195,10 @@ $logo = Menu::get_logo();
                                                                                     <td align="left" class=""><span
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class=""><span
-                                                                                            class="">{{$ficheagrement->butFormation->but_formation }}  </span>
+                                                                                        class="">
+                                                                                        @foreach ($butformations as $butformationf)
+                                                                                            <span class=""> {{$butformationf->butFormation->but_formation }}  </span>
+                                                                                        @endforeach
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -206,8 +208,7 @@ $logo = Menu::get_logo();
                                                                                     <td align="left" class=""><span
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class=""><span
-                                                                                            class="">{{$ficheagrement->date_debut_fiche_agrement }}  </span>
+                                                                                        class=""><span class=""> {{$ficheagrement->date_debut_fiche_agrement }}  </span>
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class="">&nbsp;
@@ -309,12 +310,12 @@ $logo = Menu::get_logo();
                                                                                         class="">&nbsp;
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
-                                                                                        nowrap="nowrap" class=""><strong>Secteur d'activité</strong>
+                                                                                        nowrap="nowrap" class=""><strong>Domaine de formation</strong>
                                                                                     </td>
                                                                                     <td align="left" class="">:
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class="">{{$actionplan->secteurActivite->libelle_secteur_activite }}
+                                                                                        class="">{{@$actionplan->domaineFormation->libelle_domaine_formation }}
                                                                                     </td>
                                                                                 </tr>
 

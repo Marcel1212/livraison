@@ -263,6 +263,14 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
+                                        <label>Contact du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <input type="text" name="contact_professionnel_charge_plan_formation" id="contact_professionnel_charge_plan_formation"
+                                            class="form-control form-control-sm" value="{{@$planformation->contact_professionnel_charge_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
                                         <label>Nombre de salariés déclarés à la CNPS </label>
                                         <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
                                                class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
@@ -293,12 +301,21 @@
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->part_entreprise_previsionnel, 0, ',', ' ')}}" disabled="disabled">
                                     </div>
                                 </div>
-                                <div class="col-md-4 col-12">
+                                <div class="col-md-2 col-12">
                                     <div class="mb-1">
 
                                         <label>Budget de financement </label>
                                         <input type="text" name="montant_financement_budget" id="montant_financement_budget"
                                                class="form-control form-control-sm" value="{{number_format(@$planformation->montant_financement_budget, 0, ',', ' ')}}" disabled="disabled">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-12">
+                                    <div class="mb-1">
+
+                                        <label>Code plan </label>
+                                        <input type="text" name="code_plan_formation" id="code_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
                                     </div>
                                 </div>
 
@@ -320,14 +337,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
 
-                                        <label>Code plan </label>
-                                        <input type="text" name="code_plan_formation" id="code_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->code_plan_formation}}" disabled="disabled">
-                                    </div>
-                                </div>
 
                                 <div class="col-12" align="right">
                                     <hr>
