@@ -33,7 +33,7 @@ class SmsPerso
 
             ]);
         } catch (\Exception $e) {
-
+            dd($e);
         }
     }
 }

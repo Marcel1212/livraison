@@ -49,9 +49,9 @@ $(function () {
                     required: true,
                 },
 
-                'id_secteur_activite': {
+/*                 'id_secteur_activite': {
                     required: true,
-                },
+                }, */
 
                 'cadre_fiche_demande_agrement': {
                     required: true,
@@ -100,7 +100,7 @@ $(function () {
                     extension: "Les formats requises pour le fichier excel contenant la liste des beneficiaires est: xlsx,XLSX.",
                     filesize: "la taille maximale doit etre 5 MegaOctets.",
                 },
-                id_secteur_activite: "Veuillez selectionner un secteur activité.",
+                //id_secteur_activite: "Veuillez selectionner un secteur activité.",
                 employe_fiche_demande_agrement: "Veuillez ajoutez le nombre d\employe .",
                 agent_maitrise_fiche_demande_ag: "Veuillez ajoutez le nombre d\'agent de maitrise.",
                 cadre_fiche_demande_agrement: "Veuillez ajoutez le nombre de cadre.",
