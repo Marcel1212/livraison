@@ -25,7 +25,7 @@
 
     @php($Module=' Comités')
     @php($titre='Liste des comites')
-    @php($soustitre='Tenue de comite')
+    @php($soustitre='Tenue de comite pour le cahier')
     @php($lien='traitementcomite')
     @php($lienacceuil='dashboard')
 

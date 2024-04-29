@@ -76,15 +76,15 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entrepriseinterneplan', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                    $("#id_domaine_formation").prop( "disabled", false );
-                    $("#id_domaine_formation_div").show();
+                   // $("#id_domaine_formation").prop( "disabled", false );
+                   // $("#id_domaine_formation_div").show();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
 
-                        $.get('/domaineformation/'+tels.id_entreprises, function (data) {
+                        $.get('/domaineformations', function (data) {
                             //alert(tels.id_entreprises); //exit;
                             $('#id_domaine_formation').empty();
                             $.each(data, function (index, tels) {
@@ -107,8 +107,8 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entreprisecabinetformation', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                    $("#id_domaine_formation").prop( "disabled", false );
-                    $("#id_domaine_formation_div").show();
+                  //  $("#id_domaine_formation").prop( "disabled", false );
+                  //  $("#id_domaine_formation_div").show();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
@@ -141,14 +141,25 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entreprisecabinetetrangerformation', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                    $('#id_domaine_formation').empty();
-                    $("#id_domaine_formation").prop( "disabled", true );
-                    $("#id_domaine_formation_div").hide();
+                   // $('#id_domaine_formation').empty();
+                    //$("#id_domaine_formation").prop( "disabled", true );
+                    //$("#id_domaine_formation_div").hide();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
+
+                        $.get('/domaineformations', function (data) {
+                            //alert(tels.id_entreprises); //exit;
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
                     });
                 });
 
@@ -162,8 +173,8 @@ $idpart = Auth::user()->id_partenaire;
             var SelectEntreprise = document.getElementById("id_entreprise_structure_formation_plan_formation");
             let SelectedEntrepriseValue = SelectEntreprise.options[SelectEntreprise.selectedIndex].value;
             //alert(SelectedEntrepriseValue);
-            $("#id_domaine_formation").prop( "disabled", false );
-            $("#id_domaine_formation_div").show();
+            //$("#id_domaine_formation").prop( "disabled", false );
+            //$("#id_domaine_formation_div").show();
             $.get('/domaineformation/'+SelectedEntrepriseValue, function (data) {
                             //alert(data); //exit;
                             $('#id_domaine_formation').empty();

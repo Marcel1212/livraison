@@ -18,6 +18,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('comitetechniques/{id}/{id1}/update', [ComitesTechniquesController::class, 'update'])->name('comitetechniques.update');
         Route::get('comitetechniques/{id}/{id1}/edit', [ComitesTechniquesController::class, 'edit'])->name('comitetechniques.edit');
         Route::get('comitetechniques/{id}/delete', [ComitesTechniquesController::class, 'delete'])->name('comitetechniques.delete');
+        Route::get('comitetechniques/{id}/{id1}/{id2}/edit/planformation', [ComitesTechniquesController::class, 'editplanformation'])->name('comitetechniques.edit.planformation');
+        Route::get('comitetechniques/{id}/{id1}/{id2}/edit/projetetude', [ComitesTechniquesController::class, 'editprojetetude'])->name('comitetechniques.edit.projetetude');
+        Route::get('comitetechniques/{id}/{id1}/{id2}/edit/projetformation', [ComitesTechniquesController::class, 'editprojetformation'])->name('comitetechniques.edit.projetformation');
 
     });
 

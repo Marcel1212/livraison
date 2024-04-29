@@ -13,6 +13,7 @@
     use App\Helpers\ConseillerParAgence;
     use App\Helpers\ListeTraitementCritereParUser;
     use App\Helpers\NombreActionValiderParLeConseiller;
+    use App\Helpers\ListePlanFormationSoumis;
     $conseilleragence = ConseillerParAgence::get_conseiller_par_agence($NumAgce,$Iddepartement);
     $conseillerplan = NombreActionValiderParLeConseiller::get_conseiller_valider_plan($planformation->id_plan_de_formation , Auth::user()->id);
     $nombre = count($conseilleragence);
@@ -690,14 +691,14 @@
                                   value="{{@$infosactionplanformation->caracteristiqueTypeFormation->libelle_ctf}}"
                                   disabled="disabled" />
                               </div>
-                            <div class="col-12 col-md-3">
-                            <label class="form-label" for="but_formation">But de la formation</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-sm"
-                                value="{{@$infosactionplanformation->but_formation}}"
-                                disabled="disabled" />
-                            </div>
+                              <div class="col-12 col-md-3">
+                                <label class="form-label" for="id_domaine_formation">Domaine de formation</label>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm"
+                                  value="{{@$infosactionplanformation->libelle_domaine_formation}}"
+                                  disabled="disabled" />
+                              </div>
                             <div class="col-12 col-md-3">
                             <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation</label>
                             <input
@@ -769,6 +770,20 @@
                                                 <span class="badge bg-secondary"><a target="_blank"
                                                 onclick="NewWindow('{{ asset("/pieces/facture_proforma_action_formation/". $infosactionplanformation->facture_proforma_action_formati)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                 Voir la pièce  </a> </span>
+                                    </div>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <div class="mb-1">
+                                    <label class="form-label" for="">But de la formation </label>
+
+                                    <?php
+                                        $butformationsenres =    ListePlanFormationSoumis::get_liste_but_formations(@$infosactionplanformation->id_fiche_agrement);
+                                    ?>
+                                    @foreach ($butformationsenres as $pc)
+                                    <input type="text" name="" class="form-control form-control-sm"
+                                        value="{{ $pc->butFormation->but_formation }}"
+                                        disabled />
+                                    @endforeach
                                     </div>
                             </div>
                             <div class="col-12 col-md-12">
@@ -1079,6 +1094,21 @@
                                                 Voir la pièce  </a> </span>
                                     </div>
                             </div>
+
+                            <div class="col-12 col-md-3">
+                                <div class="mb-1">
+                                    <label class="form-label" for="">But de la formation </label>
+
+                                    <?php
+                                        $butformationsenres =    ListePlanFormationSoumis::get_liste_but_formations(@$infosactionplanformation->id_fiche_agrement);
+                                    ?>
+                                    @foreach ($butformationsenres as $pc)
+                                    <input type="text" name="" class="form-control form-control-sm"
+                                        value="{{ $pc->butFormation->but_formation }}"
+                                        disabled />
+                                    @endforeach
+                                    </div>
+                            </div>
                             <div class="col-12 col-md-12">
                             <label class="form-label" for="cout_accorde_action_formation">Commentaire</label>
                             <!--<input
@@ -1188,6 +1218,24 @@
                                                                     <span class="badge bg-label-danger">Traité le {{ $res->created_at }}</span>
                                                                 </div>
                                                             </div>
+                                                        @endif
+                                                        <br/><br/><br/>
+                                                        @if ($res->flag_traite_par_user_conserne == true)
+                                                        <div class="row">
+                                                            <span>
+                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)
+                                                                    Prise en compte
+                                                                @else
+                                                                    Pas prise en compte
+                                                                @endif
+                                                            </span>
+
+
+                                                        <div>
+                                                            <span>Reponse :
+                                                                {{ @$res->commentaire_reponse }}</span>
+                                                        </div>
+                                                        </div>
                                                         @endif
                                                     </div>
 
