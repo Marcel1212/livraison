@@ -244,6 +244,29 @@
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="col-md-12 col-10">
+                                    <div class="row">
+                                        <div class="mb-1 col-md-6">
+                                            <label>Lieu de réalisation <span
+                                                    style="color:red;">*</span>
+                                            </label>
+                                            <input type="text" name="lieu_realisation_projet"
+                                                   id="lieu_realisation_projet"
+                                                   value="{{@$projet_etude->lieu_realisation_projet}}"
+                                                   class="form-control form-control-sm ">
+                                        </div>
+
+                                        <div class="mb-1 col-md-6">
+                                            <label>Date prévisionnelle de démarrage
+                                            </label>
+                                            <input type="date" name="date_previsionnelle_demarrage_projet"
+                                                   id="date_previsionnelle_demarrage_projet"
+                                                   value="{{@$projet_etude->date_previsionnelle_demarrage_projet}}"
+                                                   class="form-control form-control-sm ">
+                                        </div>
+                                    </div>
 
                                 </div>
 
@@ -307,15 +330,15 @@
 
                                 <div class="col-12" align="right">
                                     <hr>
+
+
+                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
                                     @if(@$projet_etude->flag_soumis==false)
                                         <button type="submit" name="action" value="Modifier"
-                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                class="btn btn-sm btn-primary me-sm-3 me-1 waves-effect waves-float waves-light">
                                             Modifier
                                         </button>
                                     @endif
-
-                                    <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
-
                                     @if(@$projet_etude->flag_soumis==false)
 
                                     <button type="submit" name="action" value="Modifier_suivant"
@@ -334,7 +357,7 @@
                             @if(@$projet_etude->flag_soumis == false)
                                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                                     <div class="alert-body text-center">
-                                       Info : les types de pièces marqués (<span class="text-danger">*</span>) il vous faut ajouter ces types de pièces et la pièce jointe associée avant de soumettre le projet d'étude
+                                       Info : Tous les types de pièces marqués (<span class="text-danger">*</span>) et leurs pièces associées doivent être ajouté avant de pouvoir soumettre le projet d'étude
                                     </div>
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>

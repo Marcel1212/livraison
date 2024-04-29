@@ -46,6 +46,13 @@
             @endif
 
             <div class="col-xl-12">
+                <div align="right">
+                    <button type="button"
+                            class="btn rounded-pill btn-outline-success waves-effect waves-light"
+                            data-bs-toggle="modal" data-bs-target="#modalToggle">
+                        Voir le parcours d'affectation
+                    </button>
+                </div>
                 <h6 class="text-muted"></h6>
                 <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -267,6 +274,29 @@
                                             </div>
                                         </div>
 
+                                    </div>
+
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-6">
+                                                <label>Lieu de réalisation <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="lieu_realisation_projet"
+                                                       id="lieu_realisation_projet" disabled
+                                                       value="{{@$projet_etude->lieu_realisation_projet}}"
+                                                       class="form-control form-control-sm ">
+                                            </div>
+
+                                            <div class="mb-1 col-md-6">
+                                                <label>Date prévisionnelle de démarrage
+                                                </label>
+                                                <input type="date" name="date_previsionnelle_demarrage_projet"
+                                                       id="date_previsionnelle_demarrage_projet" disabled
+                                                       value="{{@$projet_etude->date_previsionnelle_demarrage_projet}}"
+                                                       class="form-control form-control-sm ">
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -512,7 +542,156 @@
 
         </div>
     </div>
-    <!-- END: Content-->
+    <div class="col-md-4 col-12">
+        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle"
+             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Parcours d'affectation du projet d'étude</h5>
+                        <div class="card-body pb-2">
+                            <ul class="timeline pt-3">
+                                @if($projet_etude->flag_soumis_chef_depart==false)
+                                    <li class="timeline-item pb-4 timeline-item-primary  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">1.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE DEPARTEMENT</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                        <div class="row ">
+                                                            <div>
+                                                                <span>Observation : </span>
+                                                            </div>
+                                                            <div>
+                                                                <span>Affecté le  </span>
+                                                            </div>
+                                                        </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @else
+                                    <li class="timeline-item pb-4 timeline-item-success  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">1.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE DEPARTEMENT</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="row ">
+                                                        <div>
+                                                            <span>Observation : {{@$projet_etude->commentaires_cd}}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span>Affecté le {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_chef_depart ))}} par {{@$projet_etude->chefDepartement->name}}
+                                                                {{@$projet_etude->chefDepartement->prenom_users}}
+                                                            à  {{@$projet_etude->chefService->name}}
+                                                                {{@$projet_etude->chefService->prenom_users}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endif
+
+                                    @if($projet_etude->flag_soumis_chef_service==false)
+                                        <li class="timeline-item pb-4 timeline-item-primary  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0"></h6>
+                                                    <span class="text-muted"><strong></strong></span>
+                                                    <div class="timeline-header border-bottom mb-3">
+                                                        <h6 class="mb-0">2.</h6>
+                                                        <span class="text-muted"><strong>CHEF DE SERVICE</strong></span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="row ">
+                                                            <div>
+                                                                <span>Observation : </span>
+                                                            </div>
+                                                            <div>
+                                                                <span>Affecté le  </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @else
+                                        <li class="timeline-item pb-4 timeline-item-success  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                            <div class="timeline-event">
+
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0"></h6>
+                                                    <span class="text-muted"><strong></strong></span>
+                                                    <div class="timeline-header border-bottom mb-3">
+                                                        <h6 class="mb-0">2.</h6>
+                                                        <span class="text-muted"><strong>CHEF DE SERVICE</strong></span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="row ">
+                                                            <div>
+                                                                <span>Observation : {{@$projet_etude->commentaires_cd}}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>Affecté le {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_chef_service ))}} par {{@$projet_etude->chefService->name}}
+                                                                    {{@$projet_etude->chefService->prenom_users}}
+                                                            à  {{@$projet_etude->chargedetude->name}}
+                                                                    {{@$projet_etude->chargedetude->prenom_users}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endif
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js_perso')

@@ -121,7 +121,7 @@ class ProjetEtudeController extends Controller
                 'champ_etude' => 'required',
                 'cible' => 'required',
                 'id_secteur_activite' => 'required',
-
+                'lieu_realisation_projet'=>'required'
             ],[
                 'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                 'montant_demande_projet.required' => 'Veuillez ajouter le le financement sollicité',
@@ -132,7 +132,7 @@ class ProjetEtudeController extends Controller
                 'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                 'cible.required' => 'Veuillez ajouter une cible',
                 'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
-
+                'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
             ]);
             $user = User::find(Auth::user()->id);
             $user_id = Auth::user()->id;
@@ -147,6 +147,8 @@ class ProjetEtudeController extends Controller
             $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
             $projet_etude->champ_etude_projet_etude = $request->champ_etude;
             $projet_etude->cible_projet_etude = $request->cible;
+            $projet_etude->lieu_realisation_projet = $request->lieu_realisation_projet;
+            $projet_etude->date_previsionnelle_demarrage_projet = $request->date_previsionnelle_demarrage_projet;
             $projet_etude->montant_demande_projet_etude = str_replace(' ', '', $request->montant_demande_projet);
 
             $projet_etude->id_secteur_activite = $request->id_secteur_activite;
@@ -288,6 +290,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude' => 'required',
                     'cible' => 'required',
                     'id_secteur_activite' => 'required',
+                    'lieu_realisation_projet'=>'required'
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                     'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
@@ -298,6 +301,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
                 $user = User::find(Auth::user()->id);
@@ -313,7 +317,8 @@ class ProjetEtudeController extends Controller
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
                 $projet_etude->id_secteur_activite = $request->id_secteur_activite;
-
+                $projet_etude->lieu_realisation_projet = $request->lieu_realisation_projet;
+                $projet_etude->date_previsionnelle_demarrage_projet = $request->date_previsionnelle_demarrage_projet;
                 $projet_etude->update();
 
                 Audit::logSave([
@@ -338,6 +343,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude' => 'required',
                     'cible' => 'required',
                     'id_secteur_activite' => 'required',
+                    'lieu_realisation_projet' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                     'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
@@ -348,6 +354,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
                 $user = User::find(Auth::user()->id);

@@ -17,6 +17,7 @@ use App\Models\DemandeSubstitutionActionPlanFormation;
 use App\Models\Entreprises;
 use App\Models\FicheADemandeAgrement;
 use App\Models\FicheAgrement;
+use App\Models\FicheAgrementButFormation;
 use App\Models\Motif;
 use App\Models\Parcours;
 use App\Models\Pays;
@@ -69,9 +70,12 @@ class TraitementDemandeSubstitutionPlanController extends Controller
         $caracteristiques = CaracteristiqueTypeFormation::All();
         $butformations = ButFormation::all();
         $secteuractivites = SecteurActivite::all();
-        $fiche_a_demande_agrement = new FicheADemandeAgrement();
         $beneficiaire_formation = new BeneficiairesFormation();
 
+        $fiche_a_demande_agrement = FicheADemandeAgrement::where('id_action_formation_plan',$id_action)->first();
+
+        $butformationsficheademandeagrements = FicheAgrementButFormation::where('id_fiche_agrement',
+            @$fiche_a_demande_agrement->id_fiche_agrement)->get();
 
         $motifs = Motif::where('code_motif','SAF')->get();
         $typeformations = TypeFormation::all();
@@ -79,16 +83,14 @@ class TraitementDemandeSubstitutionPlanController extends Controller
         $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
         $motif_substitutions = Motif::where('code_motif','SAF')->get();
 
-        $actionplanformation = ActionFormationPlan::select('action_formation_plan.*','demande_substi_action_formation.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.id_but_formation','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')->
-            join('demande_substi_action_formation','action_formation_plan.id_action_formation_plan','demande_substi_action_formation.id_action_formation_plan_substi')
+        $actionplanformation = ActionFormationPlan::select('action_formation_plan.*','demande_substi_action_formation.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','type_formation.*')->
+                  join('demande_substi_action_formation','action_formation_plan.id_action_formation_plan','demande_substi_action_formation.id_action_formation_plan_substi')
                 ->join('users','demande_substi_action_formation.id_user','users.id')
                 ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                 ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                 ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                 ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
-//                ->where('demande_substi_action_formation.flag_validation_demande_plan_substi',false)
+                ->join('domaine_formation','domaine_formation.id_domaine_formation','=','domaine_formation.id_domaine_formation')
                 ->where('action_formation_plan.id_action_formation_plan',$id_action)
                 ->first();
 
@@ -107,9 +109,9 @@ class TraitementDemandeSubstitutionPlanController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        $type_entreprises = TypeEntreprise::where([['flag_type_entreprise','=',true]])->get();
-        $typeentreprise = "<option value=''> Selectionnez le type d'entreprise </option>";
-        foreach ($type_entreprises as $comp) {
+        $typeentreprises = TypeEntreprise::where([['flag_type_entreprise','=',true]])->get();
+        $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
+        foreach ($typeentreprises as $comp) {
             $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
         }
 
@@ -160,6 +162,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
             'ResultCptVal',
             'etape',
             'categorieplans',
+            'butformationsficheademandeagrements',
             'typeentreprise',
             'butformations','typeformations','categorieprofessionelles',
             'structureformations','motifs','demande_substitution',
@@ -224,6 +227,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $old_structure_etablissement_action_substi = $substitution->structure_etablissement_action_substi;
                     $old_id_entreprise_structure_formation_action_substi = $substitution->id_entreprise_structure_formation_action_substi;
                     $old_id_caracteristique_type_formation_substi = $substitution->id_caracteristique_type_formation_substi;
+                    $old_id_domaine_formation_substi = $substitution->id_domaine_formation_substi;
 
                     $old_id_type_formation = $substitution->id_type_formation_substi;
                     $old_id_but_formation = $substitution->id_but_formation_substi;
@@ -241,6 +245,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $action->structure_etablissement_action_ = $substitution->structure_etablissement_action_substi;
                     $action->id_entreprise_structure_formation_action = $substitution->id_entreprise_structure_formation_action_substi;
                     $action->id_caracteristique_type_formation = $substitution->id_caracteristique_type_formation_substi;
+                    $action->id_domaine_formation = $substitution->id_domaine_formation;
                     $action->update();
 
                     $substitution->intitule_action_formation_plan_substi = $old_intitule_action_formation_plan_substi;
@@ -251,6 +256,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $substitution->id_but_formation_substi = $old_id_but_formation;
                     $substitution->lieu_formation_fiche_agrement_substi = $old_lieu_formation_fiche_agrement;
                     $substitution->objectif_pedagogique_fiche_agre_substi = $old_objectif_pedagogique_fiche_agre;
+                    $substitution->id_domaine_formation_substi = $old_id_domaine_formation_substi;
                     $substitution->flag_demande_substitution_action_valider_par_processus = true;
                     $substitution->flag_validation_demande_plan_substi = true;
                     $substitution->date_validation_demande_plan_substi = now();
@@ -267,6 +273,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                         $entreprise = Entreprises::find($request->id_entreprise_structure_formation_plan_formation);
                         $substitution->structure_etablissement_action_substi =mb_strtoupper($entreprise->raison_social_entreprises);
                         $substitution->lieu_formation_fiche_agrement_substi = $request->lieu_formation_fiche_agrement;
+                        $substitution->id_domaine_formation_substi = $request->id_domaine_formation;
                         $substitution->update();
                     }
                 }

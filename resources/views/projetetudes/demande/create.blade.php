@@ -230,6 +230,27 @@
                                 </div>
 
                             </div>
+                            <div class="col-md-12 col-10">
+                                <div class="row">
+                                    <div class="mb-1 col-md-6">
+                                        <label>Lieu de réalisation <span
+                                                style="color:red;">*</span>
+                                        </label>
+                                        <input type="text" name="lieu_realisation_projet"
+                                               id="lieu_realisation_projet"
+                                               class="form-control form-control-sm ">
+                                    </div>
+
+                                    <div class="mb-1 col-md-6">
+                                        <label>Date prévisionnelle de démarrage
+                                        </label>
+                                        <input type="date" name="date_previsionnelle_demarrage_projet"
+                                               id="date_previsionnelle_demarrage_projet"
+                                               class="form-control form-control-sm ">
+                                    </div>
+                                </div>
+
+                            </div>
 
                         <div class="row">
                             <div class="col-md-6 col-12">

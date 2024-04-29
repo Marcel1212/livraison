@@ -175,6 +175,7 @@ class AffectationProjetEtudeController extends Controller
                 $projet_etude = ProjetEtude::find($id);
                 if(isset($projet_etude)){
                     $projet_etude->id_chef_serv = $request->id_chef_serv;
+                    $projet_etude->id_chef_dep = Auth::user()->id;
                     $projet_etude->commentaires_cd = $request->commentaires_cd;
                     $projet_etude->date_soumis_chef_depart = now();
                     $projet_etude->flag_soumis_chef_depart = true;

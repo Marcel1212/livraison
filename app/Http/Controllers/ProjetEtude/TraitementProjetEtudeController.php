@@ -243,6 +243,8 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
                         $projet_etude->cible_instruction = $request->cible_instruction;
                         $projet_etude->methodologie_instruction = $request->methodologie_instruction;
+                        $projet_etude->lieu_realisation_projet_instruction = $request->lieu_realisation_projet_instruction;
+                        $projet_etude->date_previsionnelle_demarrage_projet_instruction = $request->date_previsionnelle_demarrage_projet_instruction;
                         $projet_etude->montant_projet_instruction =str_replace(' ', '', $request->montant_projet_instruction);
                         $projet_etude->id_secteur_activite = $request->id_secteur_activite;
 
