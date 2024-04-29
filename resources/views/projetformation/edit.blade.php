@@ -667,34 +667,96 @@
 
                                                             </div>
                                                             <div class="row">
-                                                                <?php if ($projetetude->flag_soumis == false ){ ?>
-                                                                <div class="col-md-4 ">
-                                                                    <div class="mb-4">
-                                                                        <label class="form-label">Domaine de formation
-                                                                            <span style="color:red;"></span></label>
-                                                                        <select id="id_domaine" name="id_domaine"
-                                                                            class="select2 select2-size-sm form-select">
+                                                                <?php if ($projetetude->flag_soumis == false || $projetetude->flag_recevabilite == true && $projetetude->flag_statut_instruction == null   ){ ?>
+                                                                <form method="POST" class="form"
+                                                                    action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($projetetude->id_projet_formation)]) }}"
+                                                                    enctype="multipart/form-data">
+                                                                    @csrf
+                                                                    @method('put')
+                                                                    <div class="row">
+                                                                        <div class="col-md-4 ">
+                                                                            <div class="mb-4">
+                                                                                <label class="form-label">Domaine de
+                                                                                    formation
+                                                                                    <span
+                                                                                        style="color:red;"></span></label>
 
-                                                                            <?php echo $domaine; ?>
+                                                                                <select id="id_domaine"
+                                                                                    name="id_domaine[]"
+                                                                                    class="select2 form-select-sm input-group"
+                                                                                    aria-label="Default select example"
+                                                                                    multiple>
+                                                                                    <?= $domaine ?>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 col-md-4" align="right"> <br>
+                                                                            <button type="submit" name="action"
+                                                                                value="ajouter_domaine_formation"
+                                                                                class="btn btn-sm btn-primary me-sm-3 me-1"
+                                                                                onclick='javascript:if (!confirm("Voulez-vous ajouter ces domaines de formations ?")) return false;'>Ajouter</button>
+                                                                        </div>
+                                                                </form>
 
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
+                                                                <br>
+                                                                <table
+                                                                    class="table table-bordered table-striped table-hover table-sm"
+                                                                    id="" style="margin-top: 13px !important">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>No</th>
+                                                                            <th>Nom du domaine </th>
+                                                                            <?php if ($projetetude->flag_soumis == false || $projetetude->flag_recevabilite == true ) {     ?>
+                                                                            <th>Action</th><?php }?>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <?php $i = 0; ?>
+                                                                        @foreach ($domaineformationselect as $key => $domaineformationselectionne)
+                                                                            <?php $i += 1; ?>
+                                                                            <tr>
+                                                                                <td>{{ $i }}</td>
+                                                                                <td>{{ $domaineformationselectionne->libelle_domaine }}
+                                                                                </td> <?php if ($projetetude->flag_soumis == false || $projetetude->flag_recevabilite == true ) {     ?>
+                                                                                <td>
+
+
+                                                                                    <a href="{{ route($lien . '.show', \App\Helpers\Crypt::UrlCrypt($domaineformationselectionne->id_liste_domain_select)) }}"
+                                                                                        class=""
+                                                                                        onclick='javascript:if (!confirm("Voulez-vous supprimer ce domaine du projet de formation ?")) return false;'
+                                                                                        title="Suprimer"> <img
+                                                                                            src='/assets/img/trash-can-solid.png'>
+                                                                                    </a>
+
+                                                                                </td><?php }
+                                                                                    ?>
+                                                                            </tr>
+                                                                        @endforeach
+
+                                                                    </tbody>
+                                                                </table>
                                                                 <?php }?>
 
+                                                                <?php if ($projetetude->flag_soumis == true && $projetetude->flag_recevabilite == false ){ ?>
+
                                                                 <div class="col-md-4">
-                                                                    <div class="mb-4">
-                                                                        <label class="form-label">Domaine selectionné :
+                                                                    <div class="mb-6">
+                                                                        <label class="form-label">Domaine(s) selectionné(s)
+                                                                            :
                                                                             <span style="color:red;"></span></label>
                                                                         <div class="align-items-center">
-                                                                            <span class="badge bg-info rounded-pill">
+                                                                            @foreach ($domaineformationselect as $key => $domaineformationselectionne)
+                                                                                <span class="badge bg-info rounded-pill">
 
-                                                                                <?php echo $projetetude->domaineFormation->libelle; ?>
-                                                                            </span>
+                                                                                    <?php echo $domaineformationselectionne->libelle_domaine;
+                                                                                    ?>
+                                                                                </span>
+                                                                            @endforeach
 
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <?php } ?>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -308,12 +308,19 @@
                                                             <div class="row">
                                                                 <label class="form-label">Domaine de formation <span
                                                                         style="color:red;">*</span></label>
-                                                                <select id="id_domaine" name="id_domaine"
+                                                                {{-- <select id="id_domaine" name="id_domaine"
                                                                     class="select2 select2-size-sm form-select"
                                                                     required="required">
 
-                                                                    <?php echo $domaine; ?>
+                                                                    <?php //echo $domaine;
+                                                                    ?>
 
+                                                                </select> --}}
+
+                                                                <select id="id_domaine" name="id_domaine[]"
+                                                                    class="select2 form-select-sm input-group"
+                                                                    aria-label="Default select example" multiple>
+                                                                    <?= $domaine ?>
                                                                 </select>
                                                             </div>
                                                         </div>
