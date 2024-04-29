@@ -112,8 +112,8 @@ $logo = Menu::get_logo();
             <td width="40%" style="float: right;margin-top: 2px">
                 <div style="text-align: center">
                     <p  style="margin: 0px !important;padding: 0px;">Monsieur le Directeur Général</p>
-                    <p style="margin: 0px !important;padding: 0px;font-weight: bold">XXXXXXXXXXXX</p>
-                    <p  style="margin: 0px !important;padding: 0px;font-weight: bold">XX BP XXX</p>
+                    <p style="margin: 0px !important;padding: 0px;font-weight: bold">{{ $infosentreprise->nom_prenom_dirigeant }}</p>
+                    <p  style="margin: 0px !important;padding: 0px;font-weight: bold">{{ $infosentreprise->adresse_postal_entreprises }}</p>
                     <h2 style="text-decoration: underline;font-size: 18px">ABIDJAN 01</h2>
                 </div>
 
@@ -134,12 +134,12 @@ $logo = Menu::get_logo();
                     J'ai l'honneur de vous informer que la commission permanente du Fonds de
                     Développement de la formation Professionnelle (FDFP) a agréé le plan de formation
                     2023 de votre entreprise, au cours de sa réunion du
-                    <b>12/12/2023</b>. Les conditions d'agrément sont indiquées sur la fiche ci-jointe
+                    <b>{{ $agrement->created_at }}</b>. Les conditions d'agrément sont indiquées sur la fiche ci-jointe
                 </p>
                 <p>
                 Vous êtes invités à réaliser toutes les actions de formation agréées et à déposer les
                 dossiers de demande de remboussement au plus tard le
-                <b>31/07/2024</b>. Toutefois, ces
+                <b>{{$agrement->created_at->addMonth(6) }} </b>. Toutefois, ces
                 dossiers devront nous être transmis au fur et à mesurede la réalisation des actions.
                 </p>
                 <p>
@@ -307,13 +307,13 @@ $logo = Menu::get_logo();
                                     <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ number_format($actionformation->cout_action_formation_plan) }}</p>
                                 </td>
                                 <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
+                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ number_format($actionformation->cout_action_formation_plan) }}</p>
+                                </td>
+                                <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                     <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ number_format($actionformation->utilisation_direct_action_formation) }}</p>
                                 </td>
                                 <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                     <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ number_format($actionformation->finan_complemantaire_action_formation) }}</p>
-                                </td>
-                                <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
-                                    <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ 0 }}</p>
                                 </td>
                                 <td style="width: 90.85pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                     <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $actionformation->type_formation }}</p>
@@ -349,13 +349,13 @@ $logo = Menu::get_logo();
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $total6 }}</p>
                             </td>
                             <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $total8 }}</p>
+                            </td>
+                            <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $total10 }}</p>
                             </td>
                             <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $total11 }}</p>
-                            </td>
-                            <td style="width: 35.2pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
-                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>{{ $total9 }}</p>
                             </td>
                             <td style="width: 90.85pt;border-top: none;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;vertical-align: top;">
                                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:0cm;margin-left:0cm;font-size:11.0pt;font-family:"Calibri",sans-serif;line-height:normal;'>&nbsp;</p>

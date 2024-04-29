@@ -33,6 +33,7 @@ use File;
 use Hash;
 use Carbon\Carbon;
 use App\Helpers\Crypt;
+use App\Models\FicheAgrement;
 use Rap2hpoutre\FastExcel\FastExcel;
 @ini_set('max_execution_time',0);
 class AgreementController extends Controller
@@ -93,12 +94,17 @@ class AgreementController extends Controller
             ->where('id_plan_de_formation', $id_plan_de_formation)
             ->first();
 
+        $infosentreprise = Entreprises::find($plan_de_formation->id_entreprises);
+
+        $agrement = FicheAgrement::where([['code_fiche_agrement','=','PF'],['id_demande','=',$id_plan_de_formation]])->first();
+        //dd($infosentreprise);
+
         $actionformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
             ->Join('type_formation','fiche_a_demande_agrement.id_type_formation','type_formation.id_type_formation')
 //            ->Join('entreprises','action_formation_plan.id_entreprise_structure_formation_action','entreprises.id_entreprises')
                 ->where('id_plan_de_formation', $id_plan_de_formation)->get();
 
-        return view('agreement.show', compact('actionformations','plan_de_formation'));
+        return view('agreement.show', compact('actionformations','plan_de_formation','infosentreprise','agrement'));
     }
 
     /**

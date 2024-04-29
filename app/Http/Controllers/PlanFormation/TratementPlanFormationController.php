@@ -347,7 +347,7 @@ class TratementPlanFormationController extends Controller
                     $sujet = "Recevabilité du plan de formation sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                     $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.
+                                    <br><br>Nous sommes ravis de vous informer que votre plan de formation est jugé recevable.
                                     <br><br>Nous apprécions votre intérêt pour notre services.<br>
                                     Cordialement,
                                     L'équipe e-FDFP
