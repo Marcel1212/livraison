@@ -558,7 +558,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-4 col-12" id="id_domaine_formation_div">
                                 <label>Domaine de formation <strong style="color:red;">*</strong></label>
                                 <select class="select2 form-select @error('id_domaine_formation')
@@ -566,7 +565,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @enderror"
                                         data-allow-clear="true" name="id_domaine_formation"
                                         id="id_domaine_formation">
-                                    <option value='0'></option>
+                                    <option value='{{@$actionplanformation->id_domaine_formation}}' selected>{{@$actionplanformation->libelle_domaine_formation}}</option>
                                 </select>
                                 @error('id_domaine_formation')
                                 <div class=""><label class="error">{{ $message }}</label></div>
@@ -660,17 +659,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     value="{{@$actionplanformation->nombre_groupe_action_formation_}}"
                                     disabled="disabled" />
                             </div>
-
-
-
-
-
-
-
-
-
-
-
                             <div class="col-12 col-md-3 mb-4 ">
                                 <div class="mb-1 ">
                                     <label>Facture proforma </label> <br>
@@ -685,18 +673,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 <div id="objectif_pedagogique_fiche_agre" class="rounded-1">{!!@$actionplanformation->objectif_pedagogique_fiche_agre!!}</div>
                                 <input class="form-control" type="hidden" id="objectif_pedagogique_fiche_agre_val" name="objectif_pedagogique_fiche_agre_val"/>
                             </div>
-
-{{--                            <hr>--}}
-{{--                            <div class="col-12" align="right">--}}
-
-{{--                                <button--}}
-{{--                                    onclick='javascript:if (!confirm("Voulez-vous soumettre la demande d annulation de cette action de formation à un conseiller ? . Cette action est irreversible")) return false;'--}}
-{{--                                    type="submit" name="action" value="Enregistrer_soumettre_demande_annulation"--}}
-{{--                                    class="btn btn-sm btn-success me-sm-3 me-1">Valider le traitement--}}
-{{--                                </button>--}}
-{{--                                <a href="/{{$lien}}" class="btn btn-sm btn-outline-secondary me-sm-3 me-1">Retour</a>--}}
-{{--                            </div>--}}
-
                         </div>
 
                         <div class="row">
@@ -1072,12 +1048,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
     <script type="text/javascript">
         // document.getElementById("Activeajoutercabinetformation").disabled = true;
         function changeFunction() {
-            //alert('code');exit;
             var selectBox = document.getElementById("id_type_formation");
             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
-
             $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
-                //alert(data); //exit;
                 $('#id_caracteristique_type_formation').empty();
                 $.each(data, function (index, tels) {
                     $('#id_caracteristique_type_formation').append($('<option>', {
@@ -1086,59 +1059,16 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                     }));
                 });
             });
-
-            if(selectedValue == 3){
-
-                //function telUpdate() {
-                //alert('testanc'); //exit;
-
-                document.getElementById("Activeajoutercabinetformation").disabled = true;
-
-                $.get('/entrepriseinterneplan', function (data) {
-                    //alert(data); //exit;
-                    $('#id_entreprise_structure_formation_plan_formation').empty();
-                    // $("#id_domaine_formation").prop( "disabled", false );
-                    // $("#id_domaine_formation_div").show();
-                    $.each(data, function (index, tels) {
-                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                            value: tels.id_entreprises,
-                            text: tels.raison_social_entreprises,
-                        }));
-
-                        $.get('/domaineformations', function (data) {
-                            //alert(tels.id_entreprises); //exit;
-                            $('#id_domaine_formation').empty();
-                            $.each(data, function (index, tels) {
-                                $('#id_domaine_formation').append($('<option>', {
-                                    value: tels.id_domaine_formation,
-                                    text: tels.libelle_domaine_formation,
-                                }));
-                            });
-                        });
-                    });
-                });
-                // }
-
-            }
-
             if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
-
                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-
                 $.get('/entreprisecabinetformation', function (data) {
-                    //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                    //  $("#id_domaine_formation").prop( "disabled", false );
-                    //  $("#id_domaine_formation_div").show();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
-
                         $.get('/domaineformation/'+tels.id_entreprises, function (data) {
-                            //alert(tels.id_entreprises); //exit;
-                            // alert(data); //exit;
                             $('#id_domaine_formation').empty();
                             $.each(data, function (index, tels) {
                                 $('#id_domaine_formation').append($('<option>', {
@@ -1147,30 +1077,42 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 }));
                             });
                         });
-
                     });
-
                 });
-
             }
-
-
-            if(selectedValue == 4){
-
-                document.getElementById("Activeajoutercabinetformation").disabled = false;
-
-                $.get('/entreprisecabinetetrangerformation', function (data) {
-                    //alert(data); //exit;
+            if(selectedValue == 3){
+                alert(0);
+                document.getElementById("Activeajoutercabinetformation").disabled = true;
+                $.get('/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                     $('#id_entreprise_structure_formation_plan_formation').empty();
-                    // $('#id_domaine_formation').empty();
-                    //$("#id_domaine_formation").prop( "disabled", true );
-                    //$("#id_domaine_formation_div").hide();
+                    $.each(data, function (index, tels) {
+                        console.log(data);
+                        $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
+                            value: tels.id_entreprises,
+                            text: tels.raison_social_entreprises,
+                        }));
+                        $.get('/domaineformations', function (data) {
+                            console.log(data);
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
+                    });
+                });
+            }
+            if(selectedValue == 4){
+                document.getElementById("Activeajoutercabinetformation").disabled = false;
+                $.get('/entreprisecabinetetrangerformation', function (data) {
+                    $('#id_entreprise_structure_formation_plan_formation').empty();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
-
                         $.get('/domaineformations', function (data) {
                             //alert(tels.id_entreprises); //exit;
                             $('#id_domaine_formation').empty();
@@ -1183,20 +1125,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                         });
                     });
                 });
-
-                //$('#Activeajoutercabinetformation').removeAttr('disabled');
-                // $('#cabinetetranger').modal('show');
-
             }
         }
         function changeFunction1(){
             var SelectEntreprise = document.getElementById("id_entreprise_structure_formation_plan_formation");
             let SelectedEntrepriseValue = SelectEntreprise.options[SelectEntreprise.selectedIndex].value;
-            //alert(SelectedEntrepriseValue);
-            //$("#id_domaine_formation").prop( "disabled", false );
-            //$("#id_domaine_formation_div").show();
             $.get('/domaineformation/'+SelectedEntrepriseValue, function (data) {
-                //alert(data); //exit;
                 $('#id_domaine_formation').empty();
                 $.each(data, function (index, tels) {
                     $('#id_domaine_formation').append($('<option>', {

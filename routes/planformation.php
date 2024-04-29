@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('ajoutcabinetetrangere', [AjaxController::class, 'ajoutcabinetetrangere'])->name('ajoutcabinetetrangere');
     Route::get('/entrepriseinterneplan', [ListeLierController::class, 'getEntrepriseinterneplan']);
+    Route::get('/entrepriseinterneplanGeneral/{id}', [ListeLierController::class, 'getEntrepriseinterneplanGeneral']);
+
     Route::get('/listedepartement', [ListeLierController::class, 'getDepartement']);
     Route::get('/listeagencedepartement/{id}', [ListeLierController::class, 'getAgenceDepartement']);
     Route::get('/entreprisecabinetformation', [ListeLierController::class, 'getEntreprisecabinetformation']);

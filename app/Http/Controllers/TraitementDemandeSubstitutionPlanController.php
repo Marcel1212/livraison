@@ -83,7 +83,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
         $structureformations = Entreprises::where('flag_habilitation_entreprise',true)->get();
         $motif_substitutions = Motif::where('code_motif','SAF')->get();
 
-        $actionplanformation = ActionFormationPlan::select('action_formation_plan.*','demande_substi_action_formation.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','type_formation.*')->
+        $actionplanformation = ActionFormationPlan::select('action_formation_plan.*','demande_substi_action_formation.*','plan_formation.*','entreprises.*','domaine_formation.*','fiche_a_demande_agrement.*','type_formation.*')->
                   join('demande_substi_action_formation','action_formation_plan.id_action_formation_plan','demande_substi_action_formation.id_action_formation_plan_substi')
                 ->join('users','demande_substi_action_formation.id_user','users.id')
                 ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
