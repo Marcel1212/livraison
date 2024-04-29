@@ -168,7 +168,6 @@ $idpart = Auth::user()->id_partenaire;
 
             }
         }
-
         function changeFunction1(){
             var SelectEntreprise = document.getElementById("id_entreprise_structure_formation_plan_formation");
             let SelectedEntrepriseValue = SelectEntreprise.options[SelectEntreprise.selectedIndex].value;
