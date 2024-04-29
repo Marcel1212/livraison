@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/listeagencedepartement/{id}', [ListeLierController::class, 'getAgenceDepartement']);
     Route::get('/entreprisecabinetformation', [ListeLierController::class, 'getEntreprisecabinetformation']);
     Route::get('/domaineformation/{id}', [ListeLierController::class, 'getDomaineFormation']);
+    Route::get('/domaineformations', [ListeLierController::class, 'getDomaineFormations']);
     Route::get('/entreprisecabinetetrangerformation', [ListeLierController::class, 'getEntreprisecabinetetrangerformation']);
     Route::get('/entreprisecabinetetrangerformationmax', [ListeLierController::class, 'getEntreprisecabinetetrangerformationmax']);
     Route::get('/caracteristiqueTypeFormationlist/{id}', [ListeLierController::class, 'getCaracteristiqueTypeFormation']);

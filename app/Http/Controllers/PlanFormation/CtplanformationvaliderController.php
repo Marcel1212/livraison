@@ -38,6 +38,7 @@ use Image;
 use File;
 use Auth;
 use App\Http\Controllers\Controller;
+use App\Models\FicheAgrementButFormation;
 
 class CtplanformationvaliderController extends Controller
 {
@@ -116,12 +117,15 @@ class CtplanformationvaliderController extends Controller
         $ficheagrement = null;
         $beneficiaires = null;
         $planformation = null;
+        $butformations = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+            $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
+
         }
 
         Audit::logSave([
@@ -138,7 +142,7 @@ class CtplanformationvaliderController extends Controller
 
         ]);
 
-        return view('planformations.ctplanformationvalider.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.ctplanformationvalider.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation','butformations'));
     }
 
     /**
@@ -198,13 +202,12 @@ class CtplanformationvaliderController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','type_formation.*','domaine_formation.*')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
+                                        ->join('domaine_formation','action_formation_plan.id_domaine_formation','=','domaine_formation.id_domaine_formation')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
 
         //dd($infosactionplanformations);
@@ -306,13 +309,12 @@ class CtplanformationvaliderController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
+                                        ->join('domaine_formation','action_formation_plan.id_domaine_formation','=','domaine_formation.id_domaine_formation')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
 
         //dd($infosactionplanformations);

@@ -37,6 +37,7 @@ use App\Models\ComiteParticipant;
 use App\Models\CritereEvaluation;
 use App\Models\Entreprises;
 use App\Models\FicheADemandeAgrement;
+use App\Models\FicheAgrementButFormation;
 use App\Models\Motif;
 use App\Models\Pays;
 use App\Models\PlanFormation;
@@ -256,13 +257,12 @@ class TraitementComitesTechniquesController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','type_formation.*','domaine_formation.*')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
+                                        ->join('domaine_formation','domaine_formation.id_domaine_formation','=','domaine_formation.id_domaine_formation')
                                         ->where([['action_formation_plan.id_plan_de_formation','=',$id1]])->get();
 
         $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
@@ -934,6 +934,27 @@ class TraitementComitesTechniquesController extends Controller
                     $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
                     $infosfchieupdate->update($input);
 
+                }
+
+                if(isset($input['id_but_formation'])){
+                    $tab = $input['id_but_formation'];
+
+                    if(count($tab)>=1){
+                        $butagrements = FicheAgrementButFormation::where([['id_fiche_agrement','=',$idficheagre]])->get();
+
+                        foreach ($butagrements as $butagrement) {
+                            FicheAgrementButFormation::where([['id_fiche_a_agrement_but_formation','=',$butagrement->id_fiche_a_agrement_but_formation]])->delete();
+                        }
+
+                        foreach ($tab as $key => $value) {
+                            //dd($value); exit;
+                            FicheAgrementButFormation::create([
+                                'id_fiche_agrement'=> $idficheagre,
+                                'id_but_formation'=> $value,
+                                'flag_fiche_a_agrement_but_formation'=>true
+                            ]);
+                        }
+                    }
                 }
 
                 Audit::logSave([

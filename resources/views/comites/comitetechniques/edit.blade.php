@@ -437,6 +437,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <th>Date fin instruction</th>
                                         <th>Coût accordé</th>
                                         <th>Statut</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -469,6 +470,22 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             @else
                                                 <span class="badge bg-warning">En cours</span>
                                             @endif
+                                        </td>
+                                        <td align="center" nowrap="nowrap">
+                                            @can($lien.'-edit')
+                                            @if($demande->code_processus =='PF')
+                                                <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endif
+                                            @if($demande->code_processus =='PE')
+                                                <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endif
+                                            @if($demande->code_processus =='PRF')
+                                                <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endif
+                                        @endcan
                                         </td>
                                     </tr>
                                 @endforeach
