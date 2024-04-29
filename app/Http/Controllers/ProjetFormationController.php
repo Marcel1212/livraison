@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Models\Activites;
+use App\Models\ListeDomaineProjetFormation;
 use App\Models\CentreImpot;
 use App\Models\Localite;
 use App\Models\Pays;
@@ -329,7 +330,7 @@ class ProjetFormationController extends Controller
             $input['cout_projet_formation'] = $cout_projet_formation;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['id_type_projet_formation'] = $input['typeprojetformation'];
-            $input['id_domaine_projet_formation'] = $input['id_domaine'];
+           // $input['id_domaine_projet_formation'] = $input['id_domaine'];
             $input['operateur'] = ucfirst($input['operateur']);
             $input['promoteur'] = ucfirst($input['promoteur']);
             $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
@@ -402,6 +403,14 @@ class ProjetFormationController extends Controller
                 'libelle_pieces' => $input['doc_autre_document']
             ]);
 
+            // Enregistrement des domaines de formation
+            $tab = $input['id_domaine'];
+            foreach ($tab as $key => $value) {
+                ListeDomaineProjetFormation::create([
+                    'id_projet_formation'=> $id_projet,
+                    'id_domaine_formation'=> $value,
+                ]);
+            }
 
         }
         return redirect('projetformation/'.Crypt::UrlCrypt($id_projet).'/edit')->with('success', 'Succes : Votre projet de formation  a été crée ');
@@ -414,7 +423,16 @@ class ProjetFormationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Recuperation de l'id du projet
+        //Suppresion du domaine
+        $id =  Crypt::UrldeCrypt($id);
+        $liste = ListeDomaineProjetFormation::find($id);
+        $idprojetformation = $liste->id_projet_formation;
+        ListeDomaineProjetFormation::where('id_liste_domaine_projet_formation', $id)->delete();
+        // Redirection vers le prjet
+        return redirect('projetformation/'.Crypt::UrlCrypt($idprojetformation).'/edit')
+        ->with('success', 'Domaine de formation supprimé au projet avec succès');
+        //dd($id);
     }
 
     /**
@@ -438,12 +456,32 @@ class ProjetFormationController extends Controller
         $typeproj = '';
         //dd($projetetude);
 
-        $domaines = DomaineProjetFormation::all();
+        //$domaines = DomaineProjetFormation::all();
+        $domaines = DomaineProjetFormation::select('*')
+        ->whereNotExists(function ($query) use ($id){
+            $query->select('*')
+                ->from('liste_domaine_projet_formation')
+                ->whereColumn('liste_domaine_projet_formation.id_domaine_formation','=','domaine_projet_formation.id_domaine_projet_formation')
+                ->where('liste_domaine_projet_formation.id_projet_formation','=',$id);
+        })->get();
+        //dd($domaines);
         $domaine = "<option value=''> Selectionnez un domaine </option>";
         foreach ($domaines as $comp) {
             $domaine .= "<option value='" . $comp->id_domaine_projet_formation  . "'>" . $comp->libelle." </option>";
         }
-        //dd($domaine);
+
+        //$domaineformationselect = ListeDomaineProjetFormation::where('id_projet_formation','=', $id)->get();
+
+
+        $domaineformationselect = ListeDomaineProjetFormation::Select('liste_domaine_projet_formation.id_liste_domaine_projet_formation as id_liste_domain_select',
+         'domaine_projet_formation.libelle as libelle_domaine')
+        ->join('projet_formation','liste_domaine_projet_formation.id_projet_formation','projet_formation.id_projet_formation')
+        ->join('domaine_projet_formation', 'liste_domaine_projet_formation.id_domaine_formation', 'domaine_projet_formation.id_domaine_projet_formation')
+        ->where([['liste_domaine_projet_formation.id_projet_formation','=',$id]])
+        ->get();
+        //dd($domaineformationselect);
+
+
 
         //dd($projetetude['titre_projet_etude']);
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','1']])->get();
@@ -630,7 +668,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('conseiller_name','domaine','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
+        return view('projetformation.edit', compact('conseiller_name','domaine','domaineformationselect','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
     }
 
 
@@ -646,7 +684,31 @@ class ProjetFormationController extends Controller
         if ($request->isMethod('put')) {
 
             $data = $request->all();
-            //dd($data);
+            //dd($id);
+
+            // Ajout des domaines de formation
+            if($data['action'] === 'ajouter_domaine_formation'){
+                if (isset($data['id_domaine'])){
+                    // Non vide
+                    $tab = $data['id_domaine'];
+                    foreach ($tab as $key => $value) {
+                        ListeDomaineProjetFormation::create([
+                            'id_projet_formation'=> $id,
+                            'id_domaine_formation'=> $value,
+                        ]);
+                    }
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')
+                    ->with('success', 'Domaine de formation ajouté au projet avec succès');
+                }else{
+                    // Vide
+                    return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')
+                            ->with('error', 'Veuillez selectionner au moins un domaine de formation');
+                }
+
+            }
+
+    // dd($data);
+
 
             // Soumission instructions
             if($data['action'] === 'soumission_recevabilite_global_instruction'){
@@ -1148,8 +1210,11 @@ class ProjetFormationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         //
+        exit('kenke');
+        $id =  Crypt::UrldeCrypt($id);
+        dd($id);
     }
 }
