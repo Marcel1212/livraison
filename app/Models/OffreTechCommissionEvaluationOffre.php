@@ -56,11 +56,13 @@ class OffreTechCommissionEvaluationOffre extends Model
         return $this->belongsTo(CritereEvaluationOffreTech::class, 'id_critere_evaluation_offre_tech', 'id_critere_evaluation_offre_tech');
     }
 
-    public function noteEvaluationOffre($id,$id1){
+    public function noteEvaluationOffre($id0,$id,$id1){
         return $this->belongsTo(NotationCommissionEvaluationOffreTech::class,'id_sous_critere_evaluation_offre_tech','id_sous_critere_evaluation_offre_tech')
             ->where('notation_commission_evaluation_offre_tech.id_operateur',$id)
             ->where('notation_commission_evaluation_offre_tech.id_user_notation_commission_evaluation_offre',$id1)
+            ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id0)
             ->first()
+//            $offretechcommissioneval->id_commission_evaluation_offre
             ;
     }
 

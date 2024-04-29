@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PlanFormation;
 
+use App\Helpers\SmsPerso;
 use Illuminate\Http\Request;
 use App\Helpers\Audit;
 use App\Models\Activites;
@@ -27,6 +28,7 @@ use App\Helpers\GenerateCode as Gencode;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\FicheAgrement;
 use App\Models\SecteurActivite;
+use App\Helpers\ListePlanFormationSoumis;
 use Carbon\Carbon;
 use Hash;
 use DB;
@@ -36,6 +38,7 @@ use File;
 use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Http\Controllers\Controller;
+use App\Models\FicheAgrementButFormation;
 
 class TratementPlanFormationController extends Controller
 {
@@ -96,12 +99,15 @@ class TratementPlanFormationController extends Controller
         $ficheagrement = null;
         $beneficiaires = null;
         $planformation = null;
+        $butformations = null;
 
         if ($idVal != null) {
             $actionplan = ActionFormationPlan::find($idVal);
             $ficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->first();
             $beneficiaires = BeneficiairesFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
             $planformation = PlanFormation::where([['id_plan_de_formation','=',$actionplan->id_plan_de_formation]])->first();
+            $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
+
         }
 
         Audit::logSave([
@@ -118,7 +124,7 @@ class TratementPlanFormationController extends Controller
 
         ]);
 
-        return view('planformations.traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation'));
+        return view('planformations.traitementplanformation.show', compact(  'actionplan','ficheagrement', 'beneficiaires','planformation','butformations'));
     }
 
     /**
@@ -174,11 +180,20 @@ class TratementPlanFormationController extends Controller
         }
 
 //        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
-        $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$id)
+/*         $actionplanformations = ActionFormationPlan::where('id_plan_de_formation',$id)
+            ->where(function ($query) {
+                $query->where('flag_annulation_action', false)
+                    ->orwhereNull('flag_annulation_action');
+            })->get(); */
+
+            $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')
+                ->where('id_plan_de_formation',$id)
             ->where(function ($query) {
                 $query->where('flag_annulation_action', false)
                     ->orwhereNull('flag_annulation_action');
             })->get();
+
+            //dd($actionplanformations);
 
         $categorieplans = CategoriePlan::where(function ($query) use ($id,$planformation) {
             $query->where('id_plan_de_formation', $id)
@@ -191,17 +206,24 @@ class TratementPlanFormationController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*')
                                         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
                                         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
                                         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-                                        ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+                                        //->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
                                         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-                                        ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
-                                        ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get();
+                                        ->join('domaine_formation','domaine_formation.id_domaine_formation','=','domaine_formation.id_domaine_formation')
+                                        ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
+                                        ->get();
+        //$butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->get();
 
+        $infosactionplanformationsficheagrements = ActionFormationPlan::select('action_formation_plan.*','fiche_a_demande_agrement.*')
+            ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+            ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+            ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
+            ->get();
 
-//        dd($infosactionplanformations);
+       // dd($infosactionplanformationsficheagrements);
 
         $nombreaction = count($actionplanformations);
 
@@ -209,7 +231,7 @@ class TratementPlanFormationController extends Controller
 
         $nombreactionvalider = count($actionvalider);
 
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->orderBy('id_action_formation_plan','asc')->get();
+        $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->get();
 
         $montantactionplanformation = 0;
 
@@ -245,7 +267,7 @@ class TratementPlanFormationController extends Controller
                 ]);
 
         return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations',
-                            'categorieprofessionelle','categorieplans','motif','infosactionplanformations',
+                            'categorieprofessionelle','categorieplans','motif','infosactionplanformations','infosactionplanformationsficheagrements',
                             'nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation',
                             'montantactionplanformationacc','secteuractivites','butformations','typeformationss','paysc'));
 
@@ -257,6 +279,8 @@ class TratementPlanFormationController extends Controller
     public function update(Request $request, $id)
     {
         $id =  Crypt::UrldeCrypt($id);
+
+        $logo = Menu::get_logo();
 
         if ($request->isMethod('put')) {
             $data = $request->all();
@@ -308,6 +332,35 @@ class TratementPlanFormationController extends Controller
 
                 $planformation = PlanFormation::find($id);
                 $planformation->update($input);
+                $planformation1 = PlanFormation::find($id);
+
+                $infoentreprise = Entreprises::find($planformation1->id_entreprises);
+                //dd($planformation1->contact_professionnel_charge_plan_formation);
+                //Envoi SMS Validé
+                if (isset($planformation1->contact_professionnel_charge_plan_formation)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", Nous sommes ravis de vous ravis de vous informer que votre plan de formation est jugé recevable.Nous apprécions votre intérêt pour notre services.Cordialement,L'équipe e-FDFP";
+                    SmsPerso::sendSMS($planformation1->contact_professionnel_charge_plan_formation,$content);
+                }
+
+                //Envoi email
+                 if (isset($planformation1->email_professionnel_charge_plan_formation)) {
+                    $sujet = "Recevabilité du plan de formation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre plan de formation est jugé recevable.
+                                    <br><br>Nous apprécions votre intérêt pour notre services.<br>
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($planformation1->email_professionnel_charge_plan_formation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                    //$messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                }
+
 
                 Audit::logSave([
 
@@ -360,7 +413,7 @@ class TratementPlanFormationController extends Controller
                     $sujet = "Recevabilité du plan de formation sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                     $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre paln de formation sur e-FDFP, et
+                                    <br><br>Nous avons examiné votre plan de formation sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
                                     <br><b>Motif de rejet  : </b> ".@$planformation1->motif->libelle_motif."
@@ -382,6 +435,19 @@ class TratementPlanFormationController extends Controller
                     //$messageMailEnvoi = Email::get_envoimailTemplate($planformation1->planformation1, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
                 }
 
+                //Envoi SMS Rejeté
+                if (isset($planformation1->contact_professionnel_charge_plan_formation)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
+                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$planformation1->motif->libelle_motif."
+                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
+                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
+                        Cordialement,
+                        L'équipe e-FDFP";
+                    SmsPerso::sendSMS($planformation1->contact_professionnel_charge_plan_formation,$content);
+                }
+//
                 Audit::logSave([
 
                     'action'=>'MISE A JOUR',
@@ -665,6 +731,29 @@ class TratementPlanFormationController extends Controller
                     $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
                     $infosfchieupdate->update($input);
 
+
+                    if(isset($input['id_but_formation'])){
+                        $tab = $input['id_but_formation'];
+
+                        if(count($tab)>=1){
+                            $butagrements = FicheAgrementButFormation::where([['id_fiche_agrement','=',$idficheagre]])->get();
+
+                            foreach ($butagrements as $butagrement) {
+                                FicheAgrementButFormation::where([['id_fiche_a_agrement_but_formation','=',$butagrement->id_fiche_a_agrement_but_formation]])->delete();
+                            }
+
+                            foreach ($tab as $key => $value) {
+                                //dd($value); exit;
+                                FicheAgrementButFormation::create([
+                                    'id_fiche_agrement'=> $idficheagre,
+                                    'id_but_formation'=> $value,
+                                    'flag_fiche_a_agrement_but_formation'=>true
+                                ]);
+                            }
+                        }
+                    }
+
+
                 }
 
                 Audit::logSave([
@@ -715,6 +804,70 @@ class TratementPlanFormationController extends Controller
                 ]);
 
                 return redirect()->route('traitementplanformation.index')->with('success', 'Succes : Plan de formation soumis ');
+
+            }
+
+            if($data['action'] === 'Traiter_action_formation_beneficiaire'){
+
+                $ficheA = FicheADemandeAgrement::find($id);
+
+                $idactionplanf = $ficheA->id_action_formation_plan;
+
+                $actionplan = ActionFormationPlan::find($idactionplanf);
+
+                $idplan = $actionplan->id_plan_de_formation;
+
+                $data = $request->all();
+
+               // dd($data);
+
+                    $beneficiaires = ListePlanFormationSoumis::get_liste_beneficiare($id);
+
+                    foreach ($beneficiaires as $beneficiaire) {
+
+                        $id_beneficiaire_formation =  $data["id_beneficiaire_formation/$beneficiaire->id_beneficiaire_formation"];
+                        $nom_prenoms =  $data["nom_prenoms/$beneficiaire->id_beneficiaire_formation"];
+                        $genre =  $data["genre/$beneficiaire->id_beneficiaire_formation"];
+                        $annee_naissance =  $data["annee_naissance/$beneficiaire->id_beneficiaire_formation"];
+                        $nationalite =  $data["nationalite/$beneficiaire->id_beneficiaire_formation"];
+                        $fonction =  $data["fonction/$beneficiaire->id_beneficiaire_formation"];
+                        $categorie =  $data["categorie/$beneficiaire->id_beneficiaire_formation"];
+                        $annee_embauche =  $data["annee_embauche/$beneficiaire->id_beneficiaire_formation"];
+                        $matricule_cnps =  $data["matricule_cnps/$beneficiaire->id_beneficiaire_formation"];
+
+                        $Majbeneficiaire = BeneficiairesFormation::find($id_beneficiaire_formation);
+
+                        $inputMAJ['nom_prenoms'] = $nom_prenoms;
+                        $inputMAJ['genre'] = $genre;
+                        $inputMAJ['annee_naissance'] = $annee_naissance;
+                        $inputMAJ['nationalite'] = $nationalite;
+                        $inputMAJ['fonction'] = $fonction;
+                        $inputMAJ['categorie'] = $categorie;
+                        $inputMAJ['annee_embauche'] = $annee_embauche;
+                        $inputMAJ['matricule_cnps'] = $matricule_cnps;
+
+                        //dd($Majbeneficiaire,$inputMAJ);
+
+                        $Majbeneficiaire->update($inputMAJ);
+
+                    }
+
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'PLAN DE FORMATION (Instruction: Liste des beneficiaires mise a jour.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'PLAN DE FORMATION'
+
+                ]);
+
+                return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Liste des beneficiaires mise a jour ');
 
             }
 

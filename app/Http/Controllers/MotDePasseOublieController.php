@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Menu;
+use App\Helpers\SmsPerso;
 use App\Http\Requests\MotDePasseOubieRequest;
 use App\Models\Entreprises;
 use App\Models\HistoriqueMotDePasse;
@@ -37,19 +38,24 @@ class MotDePasseOublieController extends Controller
                 $mot_de_passe_trouv = MotDePasseOublie::where('email_mot_de_passe_oublie',$request->email_mot_de_passe_oublie)
                     ->where('flag_expired_mot_de_passe_oublie',false)->first();
                 if(isset($mot_de_passe_trouv)){
-//                    if($now->isAfter($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)!=true){
-//                        return redirect('/modifiermotdepasse')->with('success', 'Info:  Vous pouvez réessayer dans '.CarbonInterval::seconds(Carbon::parse($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)->diffInSeconds($now))->cascade()->forHumans());
-//                    }
+                    if($now->isAfter($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)!=true){
+                        return redirect('/motdepasseoublie')->with('error', 'Vous pouvez réessayer dans '.CarbonInterval::seconds(Carbon::parse($mot_de_passe_trouv->date_expired_mot_de_passe_oublie)->diffInSeconds($now))->cascade()->forHumans());
+                    }
                     $mot_de_passe_trouv->flag_expired_mot_de_passe_oublie = true;
                     $mot_de_passe_trouv->update();
                 }
+                $user = User::where('email',$request->email_mot_de_passe_oublie)->first();
                 $mot_de_passe = new MotDePasseOublie();
                 $mot_de_passe->email_mot_de_passe_oublie = $request->email_mot_de_passe_oublie;
                 $mot_de_passe->code_mot_de_passe_oublie = $this->generateOtp();
-                $mot_de_passe->tel_mot_de_passe_oublie = $now->addMinute(5);
+                $mot_de_passe->date_expired_mot_de_passe_oublie = $now->addMinute(5);
+                $mot_de_passe->tel_mot_de_passe_oublie = @$user->tel_users;
                 $mot_de_passe->save();
                 $logo = Menu::get_logo();
-                $user = User::where('email',$request->email_mot_de_passe_oublie)->first();
+
+                if(isset($user->tel_users)){
+                    SmsPerso::sendSMS($user->tel_users,"Votre code OTP pour la reinitialisation de votre mot de passe est : ".$mot_de_passe->code_mot_de_passe_oublie);
+                }
 
                 $sujet = "Code de réinitialisation - FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -64,7 +70,6 @@ class MotDePasseOublieController extends Controller
                                     Dans le cas où vous n'avez tentez de réinitialiser votre mot de passe veuillez ignorer ce mail
                                     -----
                                     ";
-        //                                    <br><br>Ce code exipre dans 5 minutes
 
         $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $user->name, $messageMail, $sujet, $titre);
             return redirect('motdepasseoublie/'.Crypt::UrlCrypt($request->email_mot_de_passe_oublie).'/otp');

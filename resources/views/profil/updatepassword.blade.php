@@ -206,7 +206,18 @@
                                                            required="required">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Nom et prenom du dirigeant </label>
+                                                    <input type="text" name="nom_prenom_dirigeant"
+                                                           id="nom_prenom_dirigeant"
+                                                           class="form-control form-control-sm"
+                                                           placeholder="Nom et prenom du dirigeant"
+                                                           value="{{@$infoentreprise->nom_prenom_dirigeant}}"
+                                                           required="required">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Repère d'accès </label>
                                                     <input type="text" name="repere_acces_entreprises"
@@ -217,7 +228,7 @@
                                                            required="required">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Adresse postale </label>
                                                     <input type="text" name="adresse_postal_entreprises"

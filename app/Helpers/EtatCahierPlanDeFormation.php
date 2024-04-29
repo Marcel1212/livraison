@@ -13,10 +13,10 @@ class EtatCahierPlanDeFormation
          $planformations = DB::table("ligne_cahier_plans_projets as lcpf")
                             ->join("plan_formation as pf","lcpf.id_demande","=","pf.id_plan_de_formation")
                             ->join("action_formation_plan as afp","pf.id_plan_de_formation","=","afp.id_plan_de_formation")
-                            ->join("secteur_activite as sa","afp.id_secteur_activite","=","sa.id_secteur_activite")
-                            ->selectRaw("count(sa.id_secteur_activite) as nombre,  sa.libelle_secteur_activite as secteur_activite")
+                            ->join("domaine_formation as sa","afp.id_domaine_formation","=","sa.id_domaine_formation")
+                            ->selectRaw("count(sa.id_domaine_formation) as nombre,  sa.libelle_domaine_formation as secteur_activite")
                             ->where("lcpf.id_cahier_plans_projets", $numAgce)
-                            ->groupBy("sa.id_secteur_activite","sa.libelle_secteur_activite")
+                            ->groupBy("sa.id_domaine_formation","sa.libelle_domaine_formation")
                             ->get();
 
         return (isset($planformations) ? $planformations : '');
@@ -51,7 +51,8 @@ class EtatCahierPlanDeFormation
                             ->join("plan_formation as pf","lcpf.id_demande","=","pf.id_plan_de_formation")
                             ->join("action_formation_plan as afp","pf.id_plan_de_formation","=","afp.id_plan_de_formation")
                             ->join("fiche_a_demande_agrement as fada","afp.id_action_formation_plan","=","fada.id_action_formation_plan")
-                            ->join("but_formation as bf","fada.id_but_formation","=","bf.id_but_formation")
+                            ->join("fiche_a_agrement_but_formation as fagbf","fada.id_fiche_agrement","=","fagbf.id_fiche_agrement")
+                            ->join("but_formation as bf","fagbf.id_but_formation","=","bf.id_but_formation")
                             ->selectRaw("count(bf.id_but_formation) as nombre , bf.but_formation")
                             ->where("lcpf.id_cahier_plans_projets", $numAgce)
                             ->groupBy("bf.id_but_formation","bf.but_formation")

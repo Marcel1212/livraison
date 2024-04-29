@@ -26,7 +26,6 @@ class TraitementCommissionEvaluationOffreController extends Controller
         $commissionevals = CommissionEvaluationOffre::Join('commission_evaluation_offre_participant','commission_evaluation_offre.id_commission_evaluation_offre','commission_evaluation_offre_participant.id_commission_evaluation_offre')
             ->where('id_user_commission_evaluation_offre_participant',Auth::user()->id)
             ->where('commission_evaluation_offre_participant.flag_statut_valider_commission_evaluation_offre_participant',false)
-            ->where('flag_statut_commission_evaluation_offre',false)
             ->get();
 
         Audit::logSave([
@@ -58,7 +57,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                 ->get()
                 ->groupby('libelle_critere_evaluation_offre_tech');
 
-
+            $projet_etude = $cahier->projet_etude;
             $offretechcommissionevalsouscriteres = OffreTechCommissionEvaluationOffre::where('id_commission_evaluation_offre',$id)->count();
 
             $note_commissions = NotationCommissionEvaluationOffreTech::where('id_commission_evaluation_offre',@$cahier->id_commission_evaluation_offre)
@@ -121,6 +120,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                         'dossier_intention',
                         'lettre_engagement',
                         'cahier',
+                        'projet_etude',
                         'offretechcommissionevals',
                         'commissioneparticipant',
                         'offre_technique',

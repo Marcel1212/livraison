@@ -29,7 +29,7 @@ class ListeTraitementCritereParUser
 
     public static function get_traitement_crietere_tout_commentaire_user($idaction)
     {
-        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','critere_evaluation.*','users.*','roles.name as profil')
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','traitement_par_critere_commentaire.created_at as datej','critere_evaluation.*','users.name as name','users.prenom_users as prenom_users','roles.name as profil')
                             ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
                             ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
                             ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
@@ -45,6 +45,49 @@ class ListeTraitementCritereParUser
         return (isset($traitement) ? $traitement : '');
     }
 
+    public static function get_traitement_crietere_tout_commentaire_user_statut_total($idaction)
+    {
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','critere_evaluation.*')
+                            ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                            ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                            ->where([['traitement_par_critere.id_action_formation_plan','=',$idaction]])->get();
+
+        return (isset($traitement) ? $traitement : '');
+    }
+
+    public static function get_traitement_crietere_tout_commentaire_user_statut_echec($idaction)
+    {
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','critere_evaluation.*')
+                            ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                            ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                            ->where([['traitement_par_critere.id_action_formation_plan','=',$idaction],
+                            ['traitement_par_critere_commentaire.flag_traitement_par_critere_commentaire','=',false]
+                            ])->get();
+
+        return (isset($traitement) ? $traitement : '');
+    }
+    public static function get_traitement_crietere_tout_commentaire_user_statut_success($idaction)
+    {
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','critere_evaluation.*')
+                            ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                            ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                            ->where([['traitement_par_critere.id_action_formation_plan','=',$idaction],
+                            ['traitement_par_critere_commentaire.flag_traitement_par_critere_commentaire','=',true]])->get();
+
+        return (isset($traitement) ? $traitement : '');
+    }
+
+    public static function get_traitement_crietere_tout_commentaire_user_statut_echec_traiter($idaction)
+    {
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','critere_evaluation.*')
+                            ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                            ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                            ->where([['traitement_par_critere.id_action_formation_plan','=',$idaction],
+                            ['traitement_par_critere_commentaire.flag_traitement_par_critere_commentaire','=',false],
+                            ['traitement_par_critere_commentaire.flag_traite_par_user_conserne','=',true]])->get();
+
+        return (isset($traitement) ? $traitement : '');
+    }
     // Projet Formatioon
     public static function get_traitement_crietere_tout_commentaire_user_prf($idaction)
     {

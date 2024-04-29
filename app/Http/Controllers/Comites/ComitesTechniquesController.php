@@ -23,9 +23,20 @@ use App\Models\ProcessusComite;
 use App\Models\ProcessusComiteLieComite;
 use App\Models\User;
 use App\Helpers\Menu;
+use App\Models\ActionFormationPlan;
+use App\Models\ButFormation;
+use App\Models\CategoriePlan;
+use App\Models\CategorieProfessionelle;
+use App\Models\CritereEvaluation;
+use App\Models\Entreprises;
+use App\Models\Motif;
+use App\Models\Pays;
 use App\Models\PlanFormation;
 use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
+use App\Models\SecteurActivite;
+use App\Models\TypeEntreprise;
+use App\Models\TypeFormation;
 
 class ComitesTechniquesController extends Controller
 {
@@ -73,7 +84,7 @@ class ComitesTechniquesController extends Controller
             $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
         }
 
-        $directions = Direction::where([['flag_direction','=',true]])->get();
+        $directions = Direction::where([['flag_direction','=',true],['id_direction','=',Auth::user()->id_direction]])->get();
 
         //dd($typecomitesListe);
         Audit::logSave([
@@ -261,7 +272,7 @@ class ComitesTechniquesController extends Controller
         }
 
 
-        $directions = Direction::where([['flag_direction','=',true]])->get();
+        $directions = Direction::where([['flag_direction','=',true],['id_direction','=',Auth::user()->id_direction]])->get();
 
         $typecomites = CategorieComite::where([['flag_actif_categorie_comite','=',true],['code_categorie_comite','=','CT']])->orderBy('libelle_categorie_comite')->get();
         $typecomitesListe = "<option value='".$comite->categorieComite->id_categorie_comite."'> ".$comite->categorieComite->libelle_categorie_comite." </option>";
@@ -436,10 +447,19 @@ class ComitesTechniquesController extends Controller
 
                         if($codeprocessus =='PE'){
 
-                            $projet_etude = ProjetEtude::find($iddemande);
-                            $projet_etude->flag_passer_comite_technique = true;
-                            $projet_etude->update();
+                            if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
+                                $projet_etude = ProjetEtude::find($iddemande);
+                                $projet_etude->flag_passer_comite_technique = true;
+                                $projet_etude->update();
+                            }
 
+                            if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
+                                if($codeprocessus =='PE'){
+                                    $projet_etude = ProjetEtude::find($iddemande);
+                                    $projet_etude->flag_passer_comite_technique_cc = true;
+                                    $projet_etude->update();
+                                }
+                            }
                         }
 
                         if($codeprocessus =='PRF'){
@@ -643,8 +663,10 @@ class ComitesTechniquesController extends Controller
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
 
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes conviés au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                            <br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a>"
+                                            <br><br>Vous êtes convié au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
+                                           Vous êtes prié de bien vouloir prendre connaissance des documents suivants <br><br>
+                                            <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
                                 ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -703,13 +725,21 @@ class ComitesTechniquesController extends Controller
                     }
 
                     if($demande->code_processus =='PE'){
+                        //Comité technique
+                        if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
+                                $projet_etude = ProjetEtude::find($demande->id_demande);
+                                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                                $projet_etude->update();
+                        }
 
-                        $projet_etude = ProjetEtude::find($demande->id_demande);
-                        $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                        $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                        $projet_etude->id_processus = 8;
-                        $projet_etude->update();
-
+                        //Comité de coordination
+                        if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
+                                $projet_etude = ProjetEtude::find($demande->id_demande);
+                                $projet_etude->flag_valider_cc_projet_etude = true;
+                                $projet_etude->date_valider_cc_projet_etude = now();
+                                $projet_etude->update();
+                        }
                     }
 
                     if($demande->code_demande =='PRF'){
@@ -749,6 +779,132 @@ class ComitesTechniquesController extends Controller
             }
 
         }
+    }
+
+    public function editplanformation($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id;
+
+        $comite = Comite::find($id);
+
+        //dd($idcomite);
+        $cahiers = CahierComite::where([['id_comite','=',$id]])->get();
+
+        $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
+
+        $listedemandesss = DB::table('vue_plans_projets_formation_traiter as vue_plans_projets_formation')
+        ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
+        ->join('comite','cahier_comite.id_comite','comite.id_comite')
+        ->join('comite_participant','comite.id_comite','comite_participant.id_comite')
+        ->where([['cahier_comite.id_comite','=',$id],['comite_participant.id_user_comite_participant','=',Auth::user()->id]])
+        ->get();
+
+        //$comiteparticipants = ComiteParticipant::where([['id_comite','=',$id]])->get();
+
+        $comiteparticipants = ComiteParticipant::Select('comite_participant.id_comite as id_comite', 'users.name as name','users.prenom_users as prenom_users','roles.name as profile','comite_participant.id_comite_participant as id_comite_participant')
+        ->join('users','comite_participant.id_user_comite_participant','users.id')
+        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+        ->where([['id_comite','=',$id]])
+        ->get();
+
+        $planformation = PlanFormation::find($id1);
+        $infoentreprise = Entreprises::find($planformation->id_entreprises);
+
+        $typeentreprises = TypeEntreprise::all();
+        $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
+        foreach ($typeentreprises as $comp) {
+            $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
+        }
+
+
+        $pays = Pays::all();
+        $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        $butformations = ButFormation::all();
+        $butformation = "<option value=''> Selectionnez le but de la formation </option>";
+        foreach ($butformations as $comp) {
+            $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
+        }
+
+        $typeformations = TypeFormation::all();
+        $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
+        foreach ($typeformations as $comp) {
+            $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
+        }
+
+        $categorieprofessionelles = CategorieProfessionelle::all();
+        $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
+        foreach ($categorieprofessionelles as $comp) {
+            $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
+        }
+
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id1]])->get();
+
+        $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id1]])->get();
+
+        $motifs = Motif::where([['code_motif','=','CTPAF']])->get();
+        $motif = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','type_formation.*','domaine_formation.*')
+                                        ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+                                        ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+                                        ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+                                        ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+                                        ->join('domaine_formation','domaine_formation.id_domaine_formation','=','domaine_formation.id_domaine_formation')
+                                        ->where([['action_formation_plan.id_plan_de_formation','=',$id1]])->get();
+
+        $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','PF']])
+                                    ->get();
+
+     /******************** secteuractivites *********************************/
+        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+                        ->orderBy('libelle_secteur_activite')
+                        ->get();
+
+
+        $typeformationss = TypeFormation::where('flag_actif_formation','=',true)->orderBy('type_formation')->get();
+
+        $butformations = ButFormation::all();
+        $butformation = "<option value=''> Selectionnez le but de la formation </option>";
+        foreach ($butformations as $comp) {
+            $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
+        }
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'TENUE DE COMITES TECHNIQUES'
+
+        ]);
+
+        return view('comites.comitetechniques.editplanformation', compact(
+            'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss',
+            'planformation','infoentreprise','typeentreprise','pay','typeformation','butformation',
+            'actionplanformations','categorieprofessionelle','categorieplans','motif','infosactionplanformations',
+            'idcomite','criteres','secteuractivites','typeformationss','butformations'
+        ));
+
     }
 
     /**

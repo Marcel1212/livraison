@@ -589,7 +589,7 @@ $idconnect = Auth::user()->id;
                                     <div class="col-12" align="right">
                                         <hr>
                                         @if(@$comite->categorieComite->type_code_categorie_comite=='CT')
-                                            @if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect){?>
+                                            @if( $projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude == $idconnect)
                                             <button type="submit" name="action" value="Modifier"
                                                     class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                 Modifier

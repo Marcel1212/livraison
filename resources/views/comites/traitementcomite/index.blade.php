@@ -11,7 +11,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 @section('content')
 
     @php($Module='Comite')
-    @php($titre='Liste des comites techniques')
+    @php($titre='Liste des comites ')
     @php($lien='traitementcomite')
     @php($lienacceuil='dashboard')
 
