@@ -1137,5 +1137,18 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 });
             });
         }
-    </script>@endsection
+
+        @if(@$ResultCptVal->priorite_combi_proc==1 && $parcoursexist->count()<=0)
+        $("#objectif_pedagogique_fiche_agre_val").hide();
+        document.getElementById('planForm').onsubmit = function(){
+            $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
+        }
+        var objectif_pedagogique_fiche_agre = new Quill('#objectif_pedagogique_fiche_agre',{theme: 'snow'});
+        @else
+        var objectif_pedagogique_fiche_agre_sup = new Quill('#objectif_pedagogique_fiche_agre_sup',{theme: 'snow'});
+        objectif_pedagogique_fiche_agre_sup.disable();
+
+        @endif
+    </script>
+@endsection
 
