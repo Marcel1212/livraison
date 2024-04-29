@@ -1085,13 +1085,11 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 $.get('/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                     $('#id_entreprise_structure_formation_plan_formation').empty();
                     $.each(data, function (index, tels) {
-                        console.log(data);
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
                         $.get('/domaineformations', function (data) {
-                            console.log(data);
                             $('#id_domaine_formation').empty();
                             $.each(data, function (index, tels) {
                                 $('#id_domaine_formation').append($('<option>', {
