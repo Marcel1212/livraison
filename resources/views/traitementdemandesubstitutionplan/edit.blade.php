@@ -1081,7 +1081,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                 });
             }
             if(selectedValue == 3){
-                alert(0);
                 document.getElementById("Activeajoutercabinetformation").disabled = true;
                 $.get('/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                     $('#id_entreprise_structure_formation_plan_formation').empty();
