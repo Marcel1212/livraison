@@ -236,10 +236,23 @@ class TraitementDemandeSubstitutionPlanController extends Controller
 
 
                     $fiche_a_demande->id_type_formation = $substitution->id_type_formation_substi;
-                    $fiche_a_demande->id_but_formation = $substitution->id_but_formation_substi;
                     $fiche_a_demande->lieu_formation_fiche_agrement = $substitution->lieu_formation_fiche_agrement_substi;
                     $fiche_a_demande->objectif_pedagogique_fiche_agre = $substitution->objectif_pedagogique_fiche_agre_substi;
                     $fiche_a_demande->update();
+
+                    $fiche_agrement_but_delelete_all = FicheAgrementButFormation::where('id_fiche_agrement',$fiche_a_demande->id_fiche_agrement)->get();
+                    foreach ($fiche_agrement_but_delelete_all as $item) {
+                        $item->delete();
+                    }
+
+                    $tab = $input['id_but_formation'];
+                    foreach ($tab as $key => $value) {
+                        FicheAgrementButFormation::create([
+                            'id_fiche_agrement'=> $fiche_a_demande->id_fiche_agrement,
+                            'id_but_formation'=> $value,
+                            'flag_fiche_a_agrement_but_formation'=>true
+                        ]);
+                    }
 
                     $action->intitule_action_formation_plan = $substitution->intitule_action_formation_plan_substi;
                     $action->structure_etablissement_action_ = $substitution->structure_etablissement_action_substi;
