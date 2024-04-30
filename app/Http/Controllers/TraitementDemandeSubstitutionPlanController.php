@@ -245,13 +245,15 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                         $item->delete();
                     }
 
-                    $tab = $request->id_but_formation;
-                    foreach ($tab as $key => $value) {
-                        FicheAgrementButFormation::create([
-                            'id_fiche_agrement'=> $fiche_a_demande->id_fiche_agrement,
-                            'id_but_formation'=> $value,
-                            'flag_fiche_a_agrement_but_formation'=>true
-                        ]);
+                    if(isset($request->id_but_formation)){
+                        $tab = $request->id_but_formation;
+                        foreach ($tab as $key => $value) {
+                            FicheAgrementButFormation::create([
+                                'id_fiche_agrement'=> $fiche_a_demande->id_fiche_agrement,
+                                'id_but_formation'=> $value,
+                                'flag_fiche_a_agrement_but_formation'=>true
+                            ]);
+                        }
                     }
 
                     $action->intitule_action_formation_plan = $substitution->intitule_action_formation_plan_substi;
