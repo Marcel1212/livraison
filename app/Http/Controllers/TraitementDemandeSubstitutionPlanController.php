@@ -245,7 +245,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                         $item->delete();
                     }
 
-                    $tab = $input['id_but_formation'];
+                    $tab = $request->id_but_formation;
                     foreach ($tab as $key => $value) {
                         FicheAgrementButFormation::create([
                             'id_fiche_agrement'=> $fiche_a_demande->id_fiche_agrement,
