@@ -124,7 +124,7 @@ $logo = Menu::get_logo();
                                         @isset($commissioneparticipants)
                                             @foreach($commissioneparticipants as $key=>$commissioneparticipant)
                                                 <td>
-                                                    {{@$offretechcommissioneval->noteEvaluationOffre($operateur->id_entreprises,$commissioneparticipant->id_user_commission_evaluation_offre_participant)->note_notation_commission_evaluation_offre_tech}}
+                                                    {{@$offretechcommissioneval->noteEvaluationOffre($offretechcommissioneval->id_commission_evaluation_offre,$operateur->id_entreprises,$commissioneparticipant->id_user_commission_evaluation_offre_participant)->note_notation_commission_evaluation_offre_tech}}
                                                 </td>
                                             @endforeach
                                         @endisset

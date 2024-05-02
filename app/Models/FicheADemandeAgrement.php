@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property float $id_fiche_agrement
  * @property float $id_type_formation
- * @property float $id_but_formation
  * @property float $id_action_formation_plan
  * @property string $date_debut_fiche_agrement
  * @property string $date_fin_fiche_agrement
@@ -53,7 +52,7 @@ class FicheADemandeAgrement extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_formation', 'id_but_formation','id_action_formation_plan_substi', 'id_action_formation_plan', 'date_debut_fiche_agrement', 'date_fin_fiche_agrement', 'lieu_formation_fiche_agrement', 'cout_total_fiche_agrement', 'objectif_pedagogique_fiche_agre', 'flag_valide_fiche_agrement', 'created_at', 'updated_at', 'cadre_fiche_demande_agrement', 'agent_maitrise_fiche_demande_ag', 'employe_fiche_demande_agrement', 'total_beneficiaire_fiche_demand','file_beneficiare_fiche_agrement'];
+    protected $fillable = ['id_type_formation', 'id_action_formation_plan_substi', 'id_action_formation_plan', 'date_debut_fiche_agrement', 'date_fin_fiche_agrement', 'lieu_formation_fiche_agrement', 'cout_total_fiche_agrement', 'objectif_pedagogique_fiche_agre', 'flag_valide_fiche_agrement', 'created_at', 'updated_at', 'cadre_fiche_demande_agrement', 'agent_maitrise_fiche_demande_ag', 'employe_fiche_demande_agrement', 'total_beneficiaire_fiche_demand','file_beneficiare_fiche_agrement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -74,10 +73,10 @@ class FicheADemandeAgrement extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function butFormation()
+/*     public function butFormation()
     {
         return $this->belongsTo('App\Models\ButFormation', 'id_but_formation', 'id_but_formation');
-    }
+    } */
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

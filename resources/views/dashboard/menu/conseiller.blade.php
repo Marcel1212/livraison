@@ -79,7 +79,7 @@ $demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en
                         <tr>
                             <th>Entreprise</th>
                             <th>Date de soumission</th>
-                            <th class="text-end">Action</th>
+                            <th class="text-end">Instruction</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -106,7 +106,7 @@ $demande_annulation_en_traitement = DemandeAnnulation::get_demande_annulation_en
                                      @can($lien.'-edit')
                                         <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation)) }}"
                                            class=" "
-                                           title="Modifier"><img
+                                           title="Faire la recevabilité"><img
                                                 src='/assets/img/editing.png'></a>
                                     @endcan
                                 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ProjetEtude;
 
 use App\Helpers\Crypt;
+use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
@@ -160,32 +161,28 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                             $projet_etude->flag_validation_selection_operateur = false;
                             $projet_etude->update();
 
-
-//                            $infoentreprise = Entreprises::find($projet_etude_valide->id_entreprises);
-//
-//                            //Envoie notification au charger de plan de formation en cas de validation
-//                            if (isset($planformation->email_professionnel_charge_plan_formation)) {
-//                                $sujet = "Demande d'annulation du plan de formation (code:" .
-//                                    @$planformation->code_plan_formation . ") sur e-FDFP";
-//
-//                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-//                                $messageMail = "<b>Cher,  " . $infoentreprise->raison_social_entreprises . " ,</b>
-//                                        <br><br>Nous sommes ravis de vous informer que votre demande d'annulation du plan de formation (code: "
-//                                    . @$planformation->code_plan_formation .
-//                                    ") sur e-FDFP a été validé avec succès.
-//                                         <br>
-//                                         <br>
-//                                            Cordialement,
-//                                            <br>
-//                                            L'équipe e-FDFP
-//                                        <br><br><br>
-//                                        -----
-//                                        Ceci est un mail automatique, Merci de ne pas y répondre.
-//                                        -----
-//                                        ";
-//    //                    $planformation->email_professionnel_charge_plan_formation
-//                                $messageMailEnvoi = Email::get_envoimailTemplate("ncho.hermann.dorgeles@gmail.com", $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
-//                            }
+                            $operateurs = $projet_etude->operateurs()->get();
+                            if(isset($operateurs)){
+                                foreach ($operateurs as $operateur){
+                                    if (isset($operateur->email_entreprises)) {
+                                        $sujet = $projet_etude->titre_projet_instruction;
+                                        $titre = "";
+                                        $name ="";
+                                        $messageMail = "<b>Monsieur le Directeur,</b>
+                                        <br><br>Le FDFP envisage de recruter un cabinet de consultants pour la réalisation du projet susmentionné en objet.
+                                        <br> <br>A cet effet, nous vous invitons à prendre contact avec  M. ".@$projet_etude->chargedetude->name." ".@$projet_etude->chargedetude->prenom_users."
+                                        , Conseiller chargé d’études (".@$projet_etude->chargedetude->email." / ". @$projet_etude->chargedetude->tel_users."), Responsable du Projet pour toutes informations complémentaires que vous voudriez avoir. <br>
+                                        <br>  <br>Vous souhaitant bonne réception, nous vous prions d’agréer, <b>Monsieur le Directeur</b>, nos salutations distinguées.
+                                        <br>
+                                        <br>
+                                        <br>
+                                        -----
+                                        Ceci est un mail automatique, Merci de ne pas y répondre.
+                                        -----";
+                                        $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
+                                    }
+                                }
+                            }
                         }
 
                         return redirect('traitementselectionoperateurprojetetude/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');

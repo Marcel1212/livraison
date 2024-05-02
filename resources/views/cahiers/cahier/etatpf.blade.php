@@ -77,7 +77,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
                   <div id="piechart1" style="width: 900px; height: 300px;"></div></td>
               </tr>
               <tr>
-                <td colspan="4" align="center"><label>Nombre d'action par secteur activite</label></td>
+                <td colspan="4" align="center"><label>Nombre d'action par domaine de formation</label></td>
               </tr>
               <tr>
                 <td colspan="4" align="center"><span >
@@ -156,7 +156,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
         function drawChart() {
 
         var data = google.visualization.arrayToDataTable([
-            ['Secteur activite', 'Nombre'],
+            ['Domaine de formation', 'Nombre'],
 
                 @foreach ($etatsecteuractivite as $category) // On parcourt les catégories
                 [ "{{ $category->secteur_activite }}", {{ $category->nombre }} ], // Proportion des produits de la catégorie
@@ -164,7 +164,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
         ]);
 
           var options = {
-            title: 'Secteur activite',
+            title: 'Domaine de formation',
             is3D: true,
           };
 

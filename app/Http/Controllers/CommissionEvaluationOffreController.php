@@ -341,18 +341,19 @@ class CommissionEvaluationOffreController extends Controller
                             $sujet = "Tenue de commission d'évaluation ";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes conviés à la commission d'évaluation qui se déroulera  à partir du ".$commissionevaluationoffre->date_debut_commission_evaluation_offre;
+                                            <br><br>Vous êtes convié à la commission d'évaluation qui se déroulera  à partir du ".$commissionevaluationoffre->date_debut_commission_evaluation_offre;
 
                             if(isset($commissionevaluationoffre->date_fin_commission_evaluation_offre)){
                                 $messageMail.=" au".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
                             }
 
-                            $messageMail.=".<br><br> Vous êtes priés de bien vouloir prendre connaissance des documents suivants <a href=\"".route('traitementcommissionevaluationoffres.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\">Cliquez ici</a> <br/>".
-
-                                "<br><br><br>
-                                -----
+                            $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre evaluation <br><br>
+                                            <a class=\"o_text-white\" href=\"".route('traitementcommissionevaluationoffres.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Faire son évaluation</a>"
+                                ."<br><br><br>
+                                            -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
-                                -----
+                                            -----
                                             ";
                             $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
                         }

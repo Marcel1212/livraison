@@ -55,8 +55,6 @@ $idpart = Auth::user()->id_partenaire;
             var selectBox = document.getElementById("id_type_formation");
             let selectedValue = selectBox.options[selectBox.selectedIndex].value;
 
-           // alert(selectedValue);
-
             $.get('/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
                      //alert(data); //exit;
                     $('#id_caracteristique_type_formation').empty();
@@ -78,13 +76,24 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entrepriseinterneplan', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
+                   // $("#id_domaine_formation").prop( "disabled", false );
+                   // $("#id_domaine_formation_div").show();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
 
-
+                        $.get('/domaineformations', function (data) {
+                            //alert(tels.id_entreprises); //exit;
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
                     });
                 });
                 // }
@@ -98,12 +107,28 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entreprisecabinetformation', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
+                  //  $("#id_domaine_formation").prop( "disabled", false );
+                  //  $("#id_domaine_formation_div").show();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
+
+                        $.get('/domaineformation/'+tels.id_entreprises, function (data) {
+                            //alert(tels.id_entreprises); //exit;
+                           // alert(data); //exit;
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
+
                     });
+
                 });
 
             }
@@ -116,11 +141,25 @@ $idpart = Auth::user()->id_partenaire;
                 $.get('/entreprisecabinetetrangerformation', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
+                   // $('#id_domaine_formation').empty();
+                    //$("#id_domaine_formation").prop( "disabled", true );
+                    //$("#id_domaine_formation_div").hide();
                     $.each(data, function (index, tels) {
                         $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
+
+                        $.get('/domaineformations', function (data) {
+                            //alert(tels.id_entreprises); //exit;
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
                     });
                 });
 
@@ -128,10 +167,24 @@ $idpart = Auth::user()->id_partenaire;
                // $('#cabinetetranger').modal('show');
 
             }
+        }
 
-
-
-
+        function changeFunction1(){
+            var SelectEntreprise = document.getElementById("id_entreprise_structure_formation_plan_formation");
+            let SelectedEntrepriseValue = SelectEntreprise.options[SelectEntreprise.selectedIndex].value;
+            //alert(SelectedEntrepriseValue);
+            //$("#id_domaine_formation").prop( "disabled", false );
+            //$("#id_domaine_formation_div").show();
+            $.get('/domaineformation/'+SelectedEntrepriseValue, function (data) {
+                            //alert(data); //exit;
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
         }
     </script>
 
@@ -361,9 +414,9 @@ $idpart = Auth::user()->id_partenaire;
 
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Nombre de salariés déclarés à la CNPS <strong style="color:red;">*</strong></label>
-                                        <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
-                                               class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
+                                        <label>Contact du responsable formation <strong style="color:red;">*</strong> </label>
+                                        <input type="text" name="contact_professionnel_charge_plan_formation" id="contact_professionnel_charge_plan_formation"
+                                            class="form-control form-control-sm" value="{{@$planformation->contact_professionnel_charge_plan_formation}}">
                                     </div>
                                 </div>
 
@@ -386,6 +439,13 @@ $idpart = Auth::user()->id_partenaire;
                                     </div>
                                 </div>
 
+                                <div class="col-md-4 col-12">
+                                    <div class="mb-1">
+                                        <label>Nombre de salariés déclarés à la CNPS <strong style="color:red;">*</strong></label>
+                                        <input type="number" name="nombre_salarie_plan_formation" id="nombre_salarie_plan_formation"
+                                               class="form-control form-control-sm" value="{{@$planformation->nombre_salarie_plan_formation}}" disabled="disabled">
+                                    </div>
+                                </div>
                                 <!--<div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Seuil de cotisation </label>
@@ -681,7 +741,7 @@ $idpart = Auth::user()->id_partenaire;
 
                                         <select class="select2 form-select-sm input-group @error('id_entreprise_structure_formation_plan_formation')
                                         error
-                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation">
+                                        @enderror" name="id_entreprise_structure_formation_plan_formation" id="id_entreprise_structure_formation_plan_formation" onchange="changeFunction1();">
                                             <option value='0'></option>
                                             <?php //echo $structureformation; ?>
                                         </select>
@@ -698,21 +758,37 @@ $idpart = Auth::user()->id_partenaire;
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-4">
-                            <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong></label>
-                            <select
-                                id="id_but_formation"
-                                name="id_but_formation"
-                                class="select2 form-select input-group @error('id_but_formation')
+
+                            <div class="col-md-4 col-12" id="id_domaine_formation_div">
+                                <label>Domaine de formation <strong style="color:red;">*</strong></label>
+                                <select class="select2 form-select @error('id_domaine_formation')
                                 error
                                 @enderror"
-                                aria-label="Default select example" >
-                                <?= $butformation; ?>
-                            </select>
-                            @error('id_but_formation')
-                            <div class=""><label class="error">{{ $message }}</label></div>
-                            @enderror
+                                                data-allow-clear="true" name="id_domaine_formation"
+                                                id="id_domaine_formation">
+<option value='0'></option>
+                                </select>
+                                @error('id_domaine_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
                             </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
+                                <input
+                                    type="text"
+                                    id="lieu_formation_fiche_agrement"
+                                    name="lieu_formation_fiche_agrement"
+                                    class="form-control form-control-sm @error('lieu_formation_fiche_agrement')
+                                    error
+                                    @enderror"
+                                    value="{{ old('lieu_formation_fiche_agrement') }}"
+                                     />
+                                     @error('lieu_formation_fiche_agrement')
+                                     <div class=""><label class="error">{{ $message }}</label></div>
+                                     @enderror
+                                </div>
+
                             <div class="col-12 col-md-2">
                             <label class="form-label" for="date_debut_fiche_agrement">Date début de réalisation </label>
                             <input
@@ -733,21 +809,7 @@ $idpart = Auth::user()->id_partenaire;
                                 value="{{ old('date_fin_fiche_agrement') }}"
                                 />
                             </div>
-                            <div class="col-12 col-md-4">
-                            <label class="form-label" for="lieu_formation_fiche_agrement">Lieu de formation <strong style="color:red;">*</strong></label>
-                            <input
-                                type="text"
-                                id="lieu_formation_fiche_agrement"
-                                name="lieu_formation_fiche_agrement"
-                                class="form-control form-control-sm @error('lieu_formation_fiche_agrement')
-                                error
-                                @enderror"
-                                value="{{ old('lieu_formation_fiche_agrement') }}"
-                                 />
-                                 @error('lieu_formation_fiche_agrement')
-                                 <div class=""><label class="error">{{ $message }}</label></div>
-                                 @enderror
-                            </div>
+
                             <!--<div class="col-12 col-md-4">
                             <label class="form-label" for="cout_total_fiche_agrement">Cout total fiche agrement <strong style="color:red;">*</strong></label>
                             <input
@@ -757,22 +819,7 @@ $idpart = Auth::user()->id_partenaire;
                                 class="form-control form-control-sm"
                                  />
                             </div>-->
-                            <div class="col-md-4 col-12">
-                                <label>Secteur d'activité <strong style="color:red;">*</strong></label>
-                                <select class="select2 form-select @error('id_secteur_activite')
-                                error
-                                @enderror"
-                                                data-allow-clear="true" name="id_secteur_activite"
-                                                id="id_secteur_activite">
-                                    <option value="">-- Sélectionnez un secteur d'activité--- </option>
-                                     @foreach ($secteuractivites as $activite)
-                                        <option value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
-                                    @endforeach
-                                </select>
-                                @error('id_secteur_activite')
-                                <div class=""><label class="error">{{ $message }}</label></div>
-                                @enderror
-                            </div>
+
 
                             <div class="col-12 col-md-4">
                             <label class="form-label" for="cadre_fiche_demande_agrement">Nombre de cadres <strong style="color:red;">*</strong></label>
@@ -821,6 +868,22 @@ $idpart = Auth::user()->id_partenaire;
                                  @error('employe_fiche_demande_agrement')
                                  <div class=""><label class="error">{{ $message }}</label></div>
                                  @enderror
+                            </div>
+
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="id_but_formation">But de la formation <strong style="color:red;">*</strong> <span style="color: blue">(Vous pouvez sélectionner plusieurs)</span></label>
+                                <select
+                                    id="id_but_formation"
+                                    name="id_but_formation[]"
+                                    class="select2 form-select input-group @error('id_but_formation')
+                                    error
+                                    @enderror"
+                                    aria-label="Default select example" multiple>
+                                    <?= $butformation; ?>
+                                </select>
+                                @error('id_but_formation')
+                                <div class=""><label class="error">{{ $message }}</label></div>
+                                @enderror
                             </div>
 
                             <div class="col-12 col-md-4">
@@ -1069,7 +1132,7 @@ $idpart = Auth::user()->id_partenaire;
                     <div class="modal-body">
                       <p>
                                                     <?php
-                                                    $message = "Je, soussigné(e) <strong>$infoentreprise->raison_social_entreprises</strong>, Directeur général, atteste l'exactitude des informations contenue dans ce document.
+                                                    $message = "Je soussigné(e) <strong>$infoentreprise->nom_prenom_dirigeant</strong>, Directeur général, atteste l'exactitude des informations contenue dans ce document.
 
                                                     En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                                     ?>

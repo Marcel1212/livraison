@@ -27,7 +27,7 @@ $nombre = count($conseilleragence);
     @php($Module = ' Comités')
     @php($titre = 'Liste des comites plénières')
     @php($soustitre = 'Tenue de comite plénière')
-    @php($lien = 'traitementcomitetechniques')
+    @php($lien = 'comitetechniques')
 
     <script type="text/javascript">
         document.getElementsByClassName("Activeajoutercabinetformation")[0].disabled = true;
@@ -217,13 +217,7 @@ $nombre = count($conseilleragence);
                             Actions du plan de formation
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link disabled" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-recevabilite" aria-controls="navs-top-recevabilite"
-                            aria-selected="false">
-                            Cahier
-                        </button>
-                    </li>
+
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade" id="navs-top-planformation" role="tabpanel">
@@ -460,8 +454,9 @@ $nombre = count($conseilleragence);
                                 <hr>
 
 
-                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{ $lien }}">
-                                    Retour</a>
+                                <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt(4)]) }}">
+                                Retour</a>
                             </div>
                         </div>
 
@@ -511,7 +506,7 @@ $nombre = count($conseilleragence);
                                 </div>
                                 <div class="col-1">
                                     <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                        href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                        href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt(4)]) }}">
                                         Retour</a>
                                 </div>
                             </div>
@@ -526,7 +521,6 @@ $nombre = count($conseilleragence);
                                     <th>Coût de l'action</th>
                                     <th>Coût de financement</th>
                                     <th>Coût de l'action accordée</th>
-                                    <th>Statut traitement</th>
                                     <th>Statut critère</th>
                                     <th>Commentaire</th>
                                     <th>Action</th>
@@ -546,21 +540,7 @@ $nombre = count($conseilleragence);
                                         </td>
                                         <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}
                                         </td>
-                                        <td align="center">
-                                            @if (@$planformation->user_conseiller == Auth::user()->id)
-                                                @if ($actionplanformation->flag_action_formation_traiter_comite_technique == true)
-                                                    <span class="badge bg-success">Traité</span>
-                                                @else
-                                                    <span class="badge bg-warning">Non traité</span>
-                                                @endif
-                                            @else
-                                                <?php
-                                                $value = ListeTraitementCritereParUser::get_traitement_crietere_par_user(Auth::user()->id, $actionplanformation->id_action_formation_plan);
 
-                                                echo $value;
-                                                ?>
-                                            @endif
-                                        </td>
                                         <td align="center">
                                                 <?php
                                                     $statuttotal = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_statut_total($actionplanformation->id_action_formation_plan);
@@ -853,110 +833,10 @@ $nombre = count($conseilleragence);
                             </div>
 
 
-                            @if (@$planformation->user_conseiller != Auth::user()->id)
-                                <?php
-                                $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id, $infosactionplanformation->id_action_formation_plan);
-
-                                //echo $resultatT;
-
-                                ?>
-                                <hr />
-
-                                @if (count($resultatTCPCU) < 1)
-                                    <h2>Critères évaluations</h2>
-
-                                    <div class="card card-custom" style="width: 100%">
-                                        <div class="card-body">
-                                            <table class="table table-bordered table-hover table-checkable"
-                                                style="margin-top: 13px !important">
-                                                <thead>
-                                                    <tr>
-                                                        <th>N°</th>
-                                                        <th>Critère</th>
-                                                        <th>status</th>
-                                                        <th>commentaire</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                $i=0;
-                                                    foreach ($criteres as $key => $res):
-                                                ?>
-                                                    <tr>
-                                                        <td>
-                                                            {{ ++$i }}
-                                                            <input type="hidden" class="form-control"
-                                                                name="id_critere_evaluation/{{ $res->id_critere_evaluation }}"
-                                                                value="{{ $res->id_critere_evaluation }}" />
-                                                        </td>
-                                                        <td>{{ $res->libelle_critere_evaluation }}</td>
-                                                        <td align="center">
-                                                            <select class="select2 form-select" data-allow-clear="true"
-                                                                name="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}"
-                                                                id="flag_traitement_par_critere_commentaire/{{ $res->id_critere_evaluation }}">
-                                                                <option value="">-----------</option>
-                                                                <option value="true">D'accord</option>
-                                                                <option value="false">Pas d'accord</option>
-                                                            </select>
-                                                        </td>
-                                                        <td align="center">
-                                                            <textarea class="form-control form-control-sm" name="commentaire_critere/{{ $res->id_critere_evaluation }}"
-                                                                id="commentaire_critere/{{ $res->id_critere_evaluation }}" rows="6"></textarea>
-                                                        </td>
-
-                                                    </tr>
-                                                    <?php endforeach; ?>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                @endif
-                            @else
-                                <hr />
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Montant accordée <strong style="color:red;">*</strong>: </label>
-                                        <input type="number" name="cout_accorde_action_formation"
-                                            id="cout_accorde_action_formation" class="form-control form-control-sm"
-                                            value="{{ @$infosactionplanformation->cout_accorde_action_formation }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <label class="form-label" for="billings-country">Motif de validation <strong
-                                            style="color:red;">(obligatoire si action a corrigé)</strong></label>
-
-                                    <select class="form-select form-select-sm" data-allow-clear="true" name="id_motif"
-                                        id="id_motif">
-                                        <?= $motif ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 col-12">
-                                    <div class="mb-1">
-                                        <label>Commentaire <strong style="color:red;">*</strong>: </label>
-                                        <textarea class="form-control form-control-sm" name="commentaire" id="commentaire" rows="6"></textarea>
-                                    </div>
-                                </div>
-                            @endif
-
-
 
                             <div class="col-12 text-center">
 
-                                @if (@$planformation->user_conseiller != Auth::user()->id)
-                                    @if (count($resultatTCPCU) < 1)
-                                        <button
-                                            onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;'
-                                            type="submit" name="action"
-                                            value="Traiter_action_formation_valider_critere"
-                                            class="btn btn-success me-sm-3 me-1">Valider</button>
-                                    @endif
-                                @else
-                                    <button
-                                        onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;'
-                                        type="submit" name="action" value="Traiter_action_formation_valider"
-                                        class="btn btn-success me-sm-3 me-1">Valider</button>
-                                @endif
+
                                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                                     aria-label="Close">
                                     Annuler
@@ -1374,25 +1254,26 @@ $nombre = count($conseilleragence);
                                                                         {{ $res->datej }}</span>
                                                                 </div>
                                                             </div>
-                                                        @endif
-                                                        <br/><br/><br/>
-                                                        @if ($res->flag_traite_par_user_conserne == true)
-                                                        <div class="row">
-                                                            <span>
-                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)
-                                                                    Prise en compte
-                                                                @else
-                                                                    Pas prise en compte
-                                                                @endif
-                                                            </span>
+                                                            @endif
+                                                            <br/><br/><br/>
+                                                            @if ($res->flag_traite_par_user_conserne == true)
+                                                            <div class="row">
+                                                                <span>
+                                                                    Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)
+                                                                        Prise en compte
+                                                                    @else
+                                                                        Pas prise en compte
+                                                                    @endif
+                                                                </span>
 
 
-                                                        <div>
-                                                            <span>Reponse :
-                                                                {{ @$res->commentaire_reponse }}</span>
-                                                        </div>
-                                                        </div>
-                                                        @endif
+                                                            <div>
+                                                                <span>Reponse :
+                                                                    {{ @$res->commentaire_reponse }}</span>
+                                                            </div>
+                                                            </div>
+                                                            @endif
+
                                                     </div>
 
                                                 </div>

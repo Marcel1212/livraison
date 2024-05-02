@@ -6,6 +6,8 @@ use App\Models\CaracteristiqueTypeFormation;
 use App\Models\Direction;
 use App\Models\Entreprises;
 use App\Http\Controllers\Controller;
+use App\Models\DomaineFormation;
+use App\Models\DomaineFormationCabinet;
 use Illuminate\Http\Request;
 use App\Models\PageSelect;
 use App\Models\PlanFormation;
@@ -84,6 +86,26 @@ class ListeLierController extends Controller
             ])->get();
 
          return $departements;
+    }
+
+    public function getDomaineFormation($id)
+    {
+
+         $domaines = DomaineFormationCabinet::Join('domaine_formation','domaine_formation_cabinet.id_domaine_formation','domaine_formation.id_domaine_formation')->where([
+            ['domaine_formation_cabinet.id_entreprises','=',$id],['flag_domaine_formation_cabinet','=',true]
+            ])->get();
+
+         return $domaines;
+    }
+
+    public function getDomaineFormations()
+    {
+
+         $domaines = DomaineFormation::where([
+            ['flag_domaine_formation','=',true]
+            ])->get();
+
+         return $domaines;
     }
 
     public function getAgenceDepartement($iddepartement=0)

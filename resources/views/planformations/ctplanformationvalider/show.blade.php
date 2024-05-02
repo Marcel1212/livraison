@@ -107,7 +107,7 @@ $logo = Menu::get_logo();
                                                                                         <span class="">: </span></td>
                                                                                     <td valign="middle" class=""><span
                                                                                             class="entete2"><span
-                                                                                                class=""> <?php echo wordwrap($actionplan->intitule_action_formation_plan,84,"<br>\n"); ?>  </span></span>
+                                                                                                class=""><?php echo wordwrap($actionplan->intitule_action_formation_plan ,84,"<br>\n"); ?> </span></span>
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
                                                                                         nowrap="nowrap" class="">&nbsp;
@@ -195,8 +195,10 @@ $logo = Menu::get_logo();
                                                                                     <td align="left" class=""><span
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class=""><span
-                                                                                            class="">{{$ficheagrement->butFormation->but_formation }}  </span>
+                                                                                        class="">
+                                                                                        @foreach ($butformations as $butformationf)
+                                                                                            <span class=""> {{$butformationf->butFormation->but_formation }}  </span>
+                                                                                        @endforeach
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -206,8 +208,7 @@ $logo = Menu::get_logo();
                                                                                     <td align="left" class=""><span
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class=""><span
-                                                                                            class="">{{$ficheagrement->date_debut_fiche_agrement }}  </span>
+                                                                                        class=""><span class=""> {{$ficheagrement->date_debut_fiche_agrement }}  </span>
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class="">&nbsp;
@@ -255,7 +256,7 @@ $logo = Menu::get_logo();
                                                                                             class="">: </span></td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class=""><span
-                                                                                            class=""><?php echo wordwrap($ficheagrement->objectif_pedagogique_fiche_agre,84,"<br>\n"); ?>   </span>
+                                                                                            class=""><?php echo wordwrap($ficheagrement->objectif_pedagogique_fiche_agre,84,"<br>\n"); ?>  </span>
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
                                                                                         class="">&nbsp;
@@ -309,46 +310,23 @@ $logo = Menu::get_logo();
                                                                                         class="">&nbsp;
                                                                                     </td>
                                                                                     <td height="22" valign="middle"
-                                                                                        nowrap="nowrap" class=""><strong>Proformat</strong>
+                                                                                        nowrap="nowrap" class=""><strong>Domaine de formation</strong>
                                                                                     </td>
                                                                                     <td align="left" class="">:
                                                                                     </td>
                                                                                     <td valign="middle" nowrap="nowrap"
-                                                                                        class=""><span class="badge bg-secondary"><a target="_blank"
-                                                            href="{{ asset("/pieces/facture_proforma_action_formation/". $actionplan->facture_proforma_action_formati)}}">
-                                                            Voir la pièce  </a></span>
+                                                                                        class="">{{@$actionplan->domaineFormation->libelle_domaine_formation }}
                                                                                     </td>
                                                                                 </tr>
-
-                                                                                <tr>
-                                                                                    <td height="22" valign="middle"
-                                                                                            nowrap="nowrap" class="">
-                                                                                            <strong>Secteur d'activité</strong></td>
-                                                                                        <td align="left" class=""><span
-                                                                                                class="">: </span></td>
-                                                                                        <td valign="middle" nowrap="nowrap"
-                                                                                            class=""><span
-                                                                                                class="">{{ @$actionplan->secteurActivite->libelle_secteur_activite }}  </span>
-                                                                                        </td>
-                                                                                        <td valign="middle" nowrap="nowrap"
-                                                                                            class="">&nbsp;
-                                                                                        </td>
-                                                                                        <td height="22" valign="middle"
-                                                                                            nowrap="nowrap" class=""><strong></strong>
-                                                                                        </td>
-                                                                                        <td align="left" class="">:
-                                                                                        </td>
-                                                                                        <td valign="middle" nowrap="nowrap"
-                                                                                            class="">
-                                                                                        </td>
-                                                                                    </tr>
 
 
                                                                             </table>
                                                                         </td>
+
                                                                     </tr>
                                                                 </table>
                                                             </td>
+
                                                         </tr>
                                                     </table>
                                                     <td valign="top">&nbsp;</td>
