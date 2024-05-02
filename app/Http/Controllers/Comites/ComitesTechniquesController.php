@@ -49,6 +49,7 @@ class ComitesTechniquesController extends Controller
                         ->join('processus_comite_lie_comite','comite.id_comite','processus_comite_lie_comite.id_comite')
                         ->join('processus_comite','processus_comite_lie_comite.id_processus_comite','processus_comite.id_processus_comite')
                         ->where('categorie_comite.code_categorie_comite','CT')
+                        ->where('comite.id_user_comite',Auth::user()->id)
                         ->get();
         Audit::logSave([
 
@@ -663,7 +664,7 @@ class ComitesTechniquesController extends Controller
 
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes convié au comité technique  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                           Vous êtes prié de bien vouloir prendre connaissance des documents el clianquant sur le lien suivants <br><br>
+                                           Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivants <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
                                 ."<br><br><br>
