@@ -355,7 +355,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         @if (count($comiteparticipants) >= 1)
                                             <button type="submit" name="action" value="Invitation_personne_ressouce"
                                                 class="btn btn-sm btn-success me-sm-3 me-1"
-                                                onclick='javascript:if (!confirm("Voulez-vous envoyer les invitations a ces personnes pour cet Ct ?")) return false;'>Envoyer
+
+                                                onclick='javascript:if(!confirm("Voulez-vous envoyer les invitations a ces personnes pour cet Ct ?")){ return false;}'>Envoyer
                                                 les invitations</button>
                                         @endif
                                     </div>

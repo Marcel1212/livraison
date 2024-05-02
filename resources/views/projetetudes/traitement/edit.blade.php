@@ -276,13 +276,21 @@
                                             </div>
 
                                             <div class="mb-1 col-md-6">
-                                                <label>Secteur d'activité du projet <span
+                                                <label>Domaine du projet <span
                                                         style="color:red;">*</span>
                                                 </label>
-                                                <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
                                                     disabled
                                                     @endif>
-                                                    <?= $secteuractivite_projet; ?>
+                                                    @foreach($domaine_projets as $domaine_projet)
+                                                        <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                @if($projet_etude->flag_enregistrer==true)
+                                                                    @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                                        selected
+                                                                     @endif
+                                                                  @endif
+                                                        >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -502,7 +510,12 @@
                            </label>
                            <input type="text" name="titre_projet_instruction"
                                   required="required" id="titre_projet_instruction"
-                                  value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                  @endif
+
                                   class="form-control form-control-sm">
                        </div>
                    </div>
@@ -521,11 +534,23 @@
                        </div>
 
                        <div class="mb-1 col-md-6">
-                           <label>Secteur d'activité du projet <span
+                           <label>Domaine du projet <span
                                    style="color:red;">*</span>
                            </label>
-                           <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" >
-                               <?= $secteuractivite_projet; ?>
+                           <select name="id_domaine_projet_instruction" class="select2 form-select-sm input-group" data-allow-clear="true">
+                              @foreach($domaine_projets as $domaine_projet)
+                                   <option value="{{$domaine_projet->id_domaine_formation}}"
+                                           @if($projet_etude->flag_enregistrer==true)
+                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet_instruction==$domaine_projet->id_domaine_projet_instruction)
+                                                    selected
+                                                @endif
+                                            @else
+                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                    selected
+                                                @endif
+                                          @endif
+                                   >{{$domaine_projet->libelle_domaine_formation}}</option>
+                              @endforeach
                            </select>
                        </div>
                    </div>
@@ -539,7 +564,11 @@
                            </label>
                            <input type="text" name="lieu_realisation_projet_instruction"
                                   id="lieu_realisation_projet"
-                                  value="{{@$projet_etude->lieu_realisation_projet}}"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->lieu_realisation_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->lieu_realisation_projet}}@endisset"
+                                  @endif
                                   class="form-control form-control-sm ">
                        </div>
 
@@ -548,7 +577,11 @@
                            </label>
                            <input type="date" name="date_previsionnelle_demarrage_projet_instruction"
                                   id="date_previsionnelle_demarrage_projet"
-                                  value="{{@$projet_etude->date_previsionnelle_demarrage_projet}}"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->date_previsionnelle_demarrage_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->date_previsionnelle_demarrage_projet}}@endisset"
+                                  @endif
                                   class="form-control form-control-sm ">
                        </div>
                    </div>
@@ -561,14 +594,24 @@
            <div class="mb-1">
                <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="contexte_probleme_instruction_val" name="contexte_probleme_instruction"/>
-               <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
+               <div id="contexte_probleme_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->contexte_probleme_instruction!!}
+                   @else
+                       {!!@$projet_etude->contexte_probleme_projet_etude!!}
+                   @endif</div>
            </div>
        </div>
        <div class="col-md-6 col-12 mt-2">
            <div class="mb-1">
                <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="objectif_general_instruction_val" name="objectif_general_instruction"/>
-               <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude !!}</div>
+               <div id="objectif_general_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->objectif_general_instruction!!}
+                   @else
+                       {!!@$projet_etude->objectif_general_projet_etude!!}
+                   @endif</div>
 
            </div>
        </div>
@@ -576,7 +619,13 @@
            <div class="mb-1">
                <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
                <input class="form-control" type="text" id="objectif_specifique_instruction_val" name="objectif_specifique_instruction"/>
-               <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud !!}</div>
+               <div id="objectif_specifique_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->objectif_specifique_instruction!!}
+                   @else
+                       {!!@$projet_etude->objectif_specifique_projet_etud!!}
+                   @endif
+               </div>
 
            </div>
        </div>
@@ -585,14 +634,26 @@
                <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                </label>
                <input class="form-control" type="text" id="resultat_attendu_instruction_val" name="resultat_attendu_instruction"/>
-               <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude !!}</div>
+               <div id="resultat_attendu_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->resultat_attendu_instruction!!}
+                   @else
+                       {!!@$projet_etude->resultat_attendu_projet_etude!!}
+                   @endif
+               </div>
            </div>
        </div>
        <div class="col-md-6 col-12 mt-2">
            <div class="mb-1">
                <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="champ_etude_instruction_val" name="champ_etude_instruction"/>
-               <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude !!}</div>
+               <div id="champ_etude_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->champ_etude_instruction!!}
+                   @else
+                       {!!@$projet_etude->champ_etude_projet_etude!!}
+                   @endif
+               </div>
 
            </div>
        </div>
@@ -601,7 +662,12 @@
                <label for="cible_instruction">Cible <span style="color:red;">*</span>
                </label>
                <input class="form-control" type="text" id="cible_instruction_val" name="cible_instruction"/>
-               <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_projet_etude !!}</div>
+               <div id="cible_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->cible_instruction!!}
+                   @else
+                       {!!@$projet_etude->cible_projet_etude!!}
+                   @endif</div>
            </div>
        </div>
        <div class="col-md-12 col-12 mt-2">
@@ -618,12 +684,26 @@
                <div class="mb-1">
                    <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
                    </label>
-                   <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="form-control form-control-sm number">
+                   <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="form-control form-control-sm number"
+                          value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}"
+                   >
                </div>
            </div>
            <div class="col-md-6 mt-2">
                <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
-               <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
+               <input type="file" name="fichier_instruction" class="form-control" placeholder=""
+                      @if(!$projet_etude->piece_jointe_instruction)
+                      required="required"
+                   @endif
+
+               >
+               <div>
+                   @isset($projet_etude->piece_jointe_instruction)
+                       <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                   @endisset
+               </div>
                <div id="defaultFormControlHelp" class="form-text">
                    <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
                        maxi : 5Mo</em>
@@ -638,7 +718,7 @@
            <div class="col-md-12 col-12">
                <div class="mb-1">
                    <label>Commentaires <strong style="color:red;">(Obligatoire si rejeté)*</strong>: </label>
-                   <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="10">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
+                   <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="10">{{@$projet_etude->commentaires_instruction}}</textarea>
                </div>
            </div>
        </div>
@@ -650,10 +730,15 @@
                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" id="SoumettreCT">
                Soumettre au comité
            </button>
+               <button type="submit" name="action" value="EnregistrerInstruction"
+                       class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                   Enregistrer
+               </button>
                <button type="submit" name="action" value="RejetInstruction"
                        class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
                    Rejeter
                </button>
+
            @endif
            <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
@@ -688,10 +773,6 @@
            <button type="submit" name="action" value="Recevable"
                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
                Recevable
-           </button>
-           <button type="submit" name="action" value="MettreEnAttente"
-                   class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light" >
-               Mettre en attente
            </button>
            <button type="submit" name="action" value="NonRecevable"
                    class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >

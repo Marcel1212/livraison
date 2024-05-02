@@ -257,21 +257,20 @@
                                                 <input type="text" name="montant_demande_projet"
                                                        required="required" id="montant_demande_projet"
                                                            disabled
-                                                       value ="{{@$projet_etude->montant_demande_projet_etude}}"
-
+                                                       value ="{{number_format(@$projet_etude->montant_demande_projet_etude,0,',',' ')}}"
                                                        class="form-control form-control-sm number">
                                             </div>
 
-                                            <div class="mb-1 col-md-6">
-                                                <label>Secteur d'activité du projet <span
-                                                        style="color:red;">*</span>
-                                                </label>
-                                                <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
-                                                    disabled
-                                                    @endif>
-                                                    <?= $secteuractivite_projet; ?>
-                                                </select>
-                                            </div>
+                                                <div class="mb-1 col-md-6">
+                                                    <label>Domaine du projet <span
+                                                            style="color:red;">*</span>
+                                                    </label>
+                                                    <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                        disabled
+                                                        @endif>
+                                                        <?= $domaine_projet; ?>
+                                                    </select>
+                                                </div>
                                         </div>
 
                                     </div>
@@ -469,7 +468,7 @@
                                             <br>
 
                                             <div class="col-12" align="right">
-                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1 " align="right">Précédent</a>
+                                                <a  href="{{route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary " align="right">Précédent</a>
                                                 @if(@$projet_etude->flag_soumis_chef_depart==false)
 
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chef de service sélectionné ? . Cette action est irréversible.")) return false;'  type="submit" name="action"
@@ -517,7 +516,7 @@
                                         <div class="col-12" align="left">
                                             <br>
                                             <div class="col-12" align="right">
-                                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1" align="right">Précédent</a>
+                                                <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary " align="right">Précédent</a>
                                                 @if(@$projet_etude->flag_soumis_chef_service==false)
 
                                                 <button onclick='javascript:if (!confirm("Voulez-vous attribuer ce projet au chargé d étude sélectionné ? . Cette action est irréversible.")) return false;' type="submit" name="action"

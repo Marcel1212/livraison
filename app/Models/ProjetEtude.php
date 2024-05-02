@@ -73,7 +73,10 @@ class ProjetEtude extends Model
         'date_previsionnelle_demarrage_projet','lieu_realisation_projet',
         'date_previsionnelle_demarrage_projet_instruction','lieu_realisation_projet_instruction',
 
-        'flag_passer_comite_technique ','montant_projet','date_fiche_agrement', 'titre_projet_etude', 'contexte_probleme_projet_etude', 'objectif_general_projet_etude', 'objectif_specifique_projet_etud', 'resultat_attendu_projet_etude', 'champ_etude_projet_etude', 'cible_projet_etude', 'updated_at', 'created_at', 'id_user', 'id_user_affecte', 'flag_soumis', 'flag_valide', 'flag_rejet', 'date_soumis', 'date_valide', 'date_rejet', 'statut_instruction', 'commentaires_instruction', 'titre_projet_instruction', 'contexte_probleme_instruction', 'objectif_general_instruction', 'objectif_specifique_instruction', 'resultat_attendus_instruction', 'champ_etude_instruction', 'cible_instruction', 'methodologie_instruction', 'piece_jointe_instruction', 'date_instruction', 'id_chef_dep', 'commentaires_cd','date_trans_chef_s','flag_soumis_chef_service','id_chef_serv','flag_soumis_charge_etude','commentaires_cs','date_trans_charg_etude','id_charge_etude','commentaires_recevabilite','flag_attente_rec','date_mis_en_attente','motif_rec','id_processus','code_dossier', 'montant_projet_instruction','num_agce','code_projet_etude','flag_fiche_agrement'];
+        'flag_passer_comite_technique ','montant_projet','date_fiche_agrement',
+        'titre_projet_etude', 'contexte_probleme_projet_etude', 'objectif_general_projet_etude',
+        'objectif_specifique_projet_etud', 'resultat_attendu_projet_etude',
+        'champ_etude_projet_etude', 'cible_projet_etude', 'updated_at', 'created_at', 'id_user', 'id_user_affecte', 'flag_soumis', 'flag_valide', 'flag_rejet', 'date_soumis', 'date_valide', 'date_rejet', 'statut_instruction', 'commentaires_instruction', 'titre_projet_instruction', 'contexte_probleme_instruction', 'objectif_general_instruction', 'objectif_specifique_instruction', 'resultat_attendus_instruction', 'champ_etude_instruction', 'cible_instruction', 'methodologie_instruction', 'piece_jointe_instruction', 'date_instruction', 'id_chef_dep', 'commentaires_cd','date_trans_chef_s','flag_soumis_chef_service','id_chef_serv','flag_soumis_charge_etude','commentaires_cs','date_trans_charg_etude','id_charge_etude','commentaires_recevabilite','flag_attente_rec','date_mis_en_attente','motif_rec','id_processus','code_dossier', 'montant_projet_instruction','num_agce','code_projet_etude','flag_fiche_agrement'];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -99,7 +102,6 @@ class ProjetEtude extends Model
         return $this->belongsTo(User::class, 'id_charge_etude', 'id');
     }
 
-
       /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -112,6 +114,12 @@ class ProjetEtude extends Model
     {
         return $this->belongsTo('App\Models\SecteurActivite', 'id_secteur_activite', 'id_secteur_activite');
     }
+
+    public function DomaineProjetEtude()
+    {
+        return $this->belongsTo(DomaineFormation::class, 'id_domaine_projet', 'id_domaine_formation');
+    }
+
 
     public function chefDepartement()
     {

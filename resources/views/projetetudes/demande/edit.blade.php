@@ -228,19 +228,19 @@
                                                    @if(@$projet_etude->flag_soumis==true)
                                                        disabled
                                                    @endif
-                                                   value ="{{@$projet_etude->montant_demande_projet_etude}}"
+                                                   value ="{{number_format(@$projet_etude->montant_demande_projet_etude,0,',',' ')}}"
 
                                                    class="form-control form-control-sm number">
                                         </div>
 
                                         <div class="mb-1 col-md-6">
-                                            <label>Secteur d'activité du projet <span
+                                            <label>Domaine du projet <span
                                                     style="color:red;">*</span>
                                             </label>
-                                            <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                            <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
                                                 disabled
                                                 @endif>
-                                                    <?= $secteuractivite_projet; ?>
+                                                    <?= $domaine_projet; ?>
                                             </select>
                                         </div>
                                     </div>
