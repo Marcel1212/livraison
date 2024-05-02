@@ -82,10 +82,12 @@ $logo = Menu::get_logo();
                 <tr>
                     <td width="40%" style="float: right;margin-top: 2px">
                         <div style="text-align: center">
-                            <p style="margin: 0px !important;padding: 0px;">Monsieur le Directeur Général</p>
-                            <p style="margin: 0px !important;padding: 0px;font-weight: bold">XXXXXXXXXXXX</p>
-                            <p style="margin: 0px !important;padding: 0px;font-weight: bold">XX BP XXX</p>
-                            <h2 style="text-decoration: underline;font-size: 18px">ABIDJAN 01</h2>
+                            <div style="text-align: center">
+                                <p  style="margin: 0px !important;padding: 0px;">Monsieur le Directeur Général</p>
+                                <p style="margin: 0px !important;padding: 0px;font-weight: bold">{{ $infosentreprise->nom_prenom_dirigeant }}</p>
+                                <p  style="margin: 0px !important;padding: 0px;font-weight: bold">{{ $infosentreprise->adresse_postal_entreprises }}</p>
+                                <h2 style="text-decoration: underline;font-size: 18px">ABIDJAN 01</h2>
+                            </div>
                         </div>
 
                     </td>
@@ -106,7 +108,7 @@ $logo = Menu::get_logo();
                             Développement de la formation Professionnelle (FDFP) a agréé le projet d'étude
                              votre entreprise, au cours de sa réunion du
                             <b>
-                                {{@$agreement->date_fiche_agrement}}
+                                {{ date('d/m/Y h:i:s',strtotime(@$agreement->date_fiche_agrement ))}}
                             </b>. Les conditions d'agrément sont indiquées sur la fiche ci-jointe
                         </p>
 
@@ -162,7 +164,7 @@ $logo = Menu::get_logo();
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Lieu de réalisation</span></td>
-                <td><span></span></td>
+                <td><span>{{@$agreement->lieu_realisation_projet_instruction}}</span></td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Promoteur</span></td>
@@ -197,7 +199,8 @@ $logo = Menu::get_logo();
 
             <tr>
                 <td><span style="font-weight: bold">Date prévisionnelle de démarrage</span></td>
-                <td></td>
+                <td>{{ date('d/m/Y',strtotime(@$agreement->date_previsionnelle_demarrage_projet ))}}</td>
+
             </tr>
 
             <tr>

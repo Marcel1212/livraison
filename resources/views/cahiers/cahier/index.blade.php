@@ -78,8 +78,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <td>{{ @$cahier->code_cahier_plans_projets }}</td>
                                         <td>{{ @$cahier->processusComite->libelle_processus_comite }}</td>
                                         <td>{{ @$cahier->commentaire_cahier_plans_projets }}</td>
-                                        <td>{{ $cahier->date_creer_cahier_plans_projets }}</td>
-                                        <td>{{ $cahier->date_soumis_cahier_plans_projets }}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$cahier->date_creer_cahier_plans_projets))}}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$cahier->date_soumis_cahier_plans_projets))}}</td>
                                         <td align="center">
                                             <?php if($cahier->flag_statut_cahier_plans_projets == true){ ?>
                                             <span class="badge bg-success">Terminé</span>

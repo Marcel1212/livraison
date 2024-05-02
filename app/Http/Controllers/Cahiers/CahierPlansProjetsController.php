@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Helpers\EtatCahierPlanDeFormation;
 use App\Models\CategorieComite;
+@ini_set('max_execution_time',0);
 
 class CahierPlansProjetsController extends Controller
 {

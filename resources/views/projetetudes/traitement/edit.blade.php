@@ -541,11 +541,11 @@
                               @foreach($domaine_projets as $domaine_projet)
                                    <option value="{{$domaine_projet->id_domaine_formation}}"
                                            @if($projet_etude->flag_enregistrer==true)
-                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet_instruction==$domaine_projet->id_domaine_projet_instruction)
+                                                @if($projet_etude->id_domaine_projet_instruction==$domaine_projet->id_domaine_formation)
                                                     selected
                                                 @endif
                                             @else
-                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_formation)
                                                     selected
                                                 @endif
                                           @endif

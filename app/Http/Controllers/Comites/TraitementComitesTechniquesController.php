@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Comites;
 use App\Http\Controllers\Controller;
 use App\Models\Cahier;
 use App\Models\Comite;
+use App\Models\DomaineFormation;
 use App\Models\FormeJuridique;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProjetEtude;
@@ -48,7 +49,7 @@ use App\Models\TraitementParCritereCommentaire;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
 
-@ini_set('max_execution_time',0);
+    @ini_set('max_execution_time',0);
 class TraitementComitesTechniquesController extends Controller
 {
     /**
@@ -501,13 +502,13 @@ class TraitementComitesTechniquesController extends Controller
                 $offre_financiere = PiecesProjetEtude::where('id_projet_etude',$projet_etude->id_projet_etude)
                     ->where('code_pieces','offre_financiere')->first();
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
 
                 $infoentreprise = Entreprises::find($projet_etude->id_entreprises)->first();
@@ -546,7 +547,7 @@ class TraitementComitesTechniquesController extends Controller
                         'projet_etude',
                         'idcomite',
                         'comite',
-                        'secteuractivite_projet',
+                        'domaine_projets',
                         'motifs',
                         'formjuridique',
                         'offre_financiere',
@@ -1053,7 +1054,6 @@ class TraitementComitesTechniquesController extends Controller
             $projet_etude = ProjetEtude::find($id);
 
             if($request->action === 'Modifier'){
-
                 $projet_etude->titre_projet_instruction = $request->titre_projet_instruction;
                 $projet_etude->contexte_probleme_instruction = $request->contexte_probleme_instruction;
                 $projet_etude->objectif_general_instruction = $request->objectif_general_instruction;
@@ -1061,6 +1061,7 @@ class TraitementComitesTechniquesController extends Controller
                 $projet_etude->resultat_attendus_instruction = $request->resultat_attendu_instruction;
                 $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
                 $projet_etude->cible_instruction = $request->cible_instruction;
+                $projet_etude->id_domaine_projet_instruction = $request->id_domaine_projet_instruction;
                 $projet_etude->methodologie_instruction = $request->methodologie_instruction;
                 $projet_etude->montant_projet_instruction = str_replace(' ', '', $request->montant_projet_instruction);
                 if (isset($request->fichier_instruction)){
