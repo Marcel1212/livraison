@@ -316,7 +316,7 @@ class TraitementComitesController extends Controller
                     ]);
                 }
 
-                return redirect('traitementcomite/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetformation')->with('success', 'Succes : Projet de formation validé , la fiche d\'agreement est disponible. ');
+                return redirect('traitementcomite/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projeformation')->with('success', 'Succes : Projet de formation validé , la fiche d\'agreement est disponible. ');
             }
 
         }
@@ -552,6 +552,7 @@ class TraitementComitesController extends Controller
         $id = Crypt::UrldeCrypt($id1);
         $idetape = Crypt::UrldeCrypt($id2);
         $idcahier =  Crypt::UrldeCrypt($id3);
+
         $comite = Comite::find($idcomite);
         //dd('id_projet_formation . ' .$id) ;
 
