@@ -669,7 +669,6 @@ class ComitesTechniquesController extends Controller
                         }
 
                         if($comitep->categorieComite->type_code_categorie_comite=="CC"){
-                            dd($email);
                             if (isset($email)) {
                                 $nom_prenom = $nom .' '. $prenom;
                                 $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
@@ -685,10 +684,10 @@ class ComitesTechniquesController extends Controller
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                             -----
                                             ";
-
                                 $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
                             }
                         }
+                    }
 
 
                     Audit::logSave([
@@ -788,10 +787,7 @@ class ComitesTechniquesController extends Controller
 
 
                 return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
-
             }
-
-        }
         }
     }
 
