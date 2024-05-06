@@ -96,8 +96,7 @@
                                         <div class="row">
 
                                             <div class="col-md-12">
-                                                <label class="form-label" for="state">Centre d'impôt
-                                                    <strong style="color:red;">*</strong></label>
+                                                <label class="form-label" for="state">Cabinet de fomation<strong style="color:red;">*</strong></label>
 
                                                 <select class="select2 form-select
                                                         @error('id_entreprises')

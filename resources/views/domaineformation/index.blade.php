@@ -58,7 +58,7 @@
                             <tr>
                                 <td>{{ ++$i }}</td>
                                 <td>{{ $res->libelle_domaine_formation }}</td>
-                                <td>{{ $res->libelle_domaine_formation }}</td>
+                                <td>{{ $res->code_domaine_formation }}</td>
                                 <td align="center">
                                         <?php if($res->flag_domaine_formation == true){ ?>
                                     <span class="badge bg-success">Actif</span>
