@@ -254,7 +254,7 @@
                                                     </label>
                                                     <select name="id_secteur_activite"
                                                             disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                        <?= $secteuractivite_projet; ?>
+                                                        <?= $domaine_projet; ?>
                                                     </select>
                                                 </div>
                                             </div>

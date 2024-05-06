@@ -349,67 +349,105 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             @method('put')
                                 <?php if (!isset($cahier)){ ?>
                             <div class="col-12" align="right">
-                                <button type="submit" name="action" value="creer_cahier_offre_projets"
+                                <button type="submit"
+                                        onclick='javascript:if (!confirm("Voulez-vous ajouter ce projet à la commission ? Cette action est irréversible.")) return false;'
+                                        name="action" value="creer_cahier_offre_projets"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                     Ajouter à la commission
                                 </button>
                             </div>
                             <?php } ?>
-
-                            <table class="table table-bordered table-striped table-hover table-sm"
-                                   id="exampleData"
-                                   style="margin-top: 13px !important">
-                                <thead>
-                                <tr>
-                                    @if (!isset($cahier))
-                                        <th></th>
-                                    @else
-                                        <th>N°</th>
-                                    @endif
-                                    <th>Code</th>
-                                    <th>Entreprise</th>
-                                    <th>Chargé d'étude</th>
-                                    <th>Titre du projet</th>
-                                    <th>Date soumis au FDFP</th>
-                                    <th>Date fin instruction</th>
-                                    <th>Cout accordé</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($projet_etudes as $key => $projet_etude)
+                            @if (!isset($cahier))
+                                <table class="table table-bordered table-striped table-hover table-sm"
+                                       id="exampleData"
+                                       style="margin-top: 13px !important">
+                                    <thead>
                                     <tr>
-                                        @if (!isset($cahier))
-                                            <td>
-                                                <input type="radio"
-                                                       value="<?php echo $projet_etude->id_projet_etude;?>"
-                                                       name="demande"
-                                                       id="demande<?php echo $projet_etude->id_projet_etude;?>"/>
-                                            </td>
-                                        @else
-                                            <td>
-                                                {{$key+1}}
-                                            </td>
-                                        @endif
-
-                                        <td>{{ @$projet_etude->code_projet_etude}}</td>
-                                        <td>{{ @$projet_etude->entreprise->ncc_entreprises }}
-                                            / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
-                                        <td>{{ @$projet_etude->chargedetude->name  }}
-                                            / {{ @$projet_etude->chargedetude->prenom_users  }}</td>
-                                        <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
-                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
-                                        <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_instruction ))}}</td>
-                                        <td align="rigth">{{ number_format($projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
-                                        <td align="center">
-                                            <a onclick="NewWindow('{{ route('agreementprojetetude' . '.show', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"
-                                               target="_blank" class=" " title="Afficher"><img
-                                                    src='/assets/img/eye-solid.png'></a>
-                                        </td>
+                                        <th></th>
+                                        <th>Code</th>
+                                        <th>Entreprise</th>
+                                        <th>Chargé d'étude</th>
+                                        <th>Titre du projet</th>
+                                        <th>Date soumis au FDFP</th>
+                                        <th>Date fin instruction</th>
+                                        <th>Cout accordé</th>
+                                        <th>Action</th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($projet_etudes as $key => $projet_etude)
+                                        <tr>
+                                            @if (!isset($cahier))
+                                                <td>
+                                                    <input type="radio"
+                                                           value="<?php echo $projet_etude->id_projet_etude;?>"
+                                                           name="demande"
+                                                           id="demande<?php echo $projet_etude->id_projet_etude;?>"/>
+                                                </td>
+                                            @else
+                                                <td>
+                                                    {{$key+1}}
+                                                </td>
+                                            @endif
+
+                                            <td>{{ @$projet_etude->code_projet_etude}}</td>
+                                            <td>{{ @$projet_etude->entreprise->ncc_entreprises }}
+                                                / {{ @$projet_etude->entreprise->raison_social_entreprises}}</td>
+                                            <td>{{ @$projet_etude->chargedetude->name  }}
+                                                / {{ @$projet_etude->chargedetude->prenom_users  }}</td>
+                                            <td>{{ Str::title(Str::limit($projet_etude->titre_projet_instruction, 40,'...')) }}</td>
+                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->created_at ))}}</td>
+                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_instruction ))}}</td>
+                                            <td align="rigth">{{ number_format($projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+                                            <td align="center">
+                                                <a onclick="NewWindow('{{ route('agreementprojetetude' . '.show', \App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"
+                                                   target="_blank" class=" " title="Afficher"><img
+                                                        src='/assets/img/eye-solid.png'></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <h5>Projet d'étude sélectionné pour cette commission </h5>
+                                <table class="table table-bordered table-striped table-hover table-sm"
+                                       id="exampleData"
+                                       style="margin-top: 13px !important">
+                                    <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Code</th>
+                                        <th>Entreprise</th>
+                                        <th>Chargé d'étude</th>
+                                        <th>Titre du projet</th>
+                                        <th>Date soumis au FDFP</th>
+                                        <th>Date fin instruction</th>
+                                        <th>Cout accordé</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>{{ @$cahier->projet_etude->code_projet_etude}}</td>
+                                            <td>{{ @$cahier->projet_etude->entreprise->ncc_entreprises }}
+                                                / {{ @$cahier->projet_etude->entreprise->raison_social_entreprises}}</td>
+                                            <td>{{ @$cahier->projet_etude->chargedetude->name  }}
+                                                / {{ @$cahier->projet_etude->chargedetude->prenom_users  }}</td>
+                                            <td>{{ Str::title(Str::limit($cahier->projet_etude->titre_projet_instruction, 40,'...')) }}</td>
+                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$cahier->projet_etude->created_at ))}}</td>
+                                            <td>{{ date('d/m/Y h:i:s',strtotime(@$cahier->projet_etude->date_instruction ))}}</td>
+                                            <td align="rigth">{{ number_format(@$cahier->projet_etude->montant_projet_instruction, 0, ',', ' ') }}</td>
+                                            <td align="center">
+                                                <a onclick="NewWindow('{{ route('agreementprojetetude' . '.show', \App\Helpers\Crypt::UrlCrypt(@$cahier->projet_etude->id_projet_etude)) }}','',screen.width*2,screen.height,'yes','center',1);"
+                                                   target="_blank" class=" " title="Afficher"><img
+                                                        src='/assets/img/eye-solid.png'></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            @endif
+
                         </form>
                         @if(isset($cahier))
                             <div class="col-12" align="right">
@@ -470,12 +508,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
                                     <div class="col-12 col-md-2" align="right"><br>
                                         <button type="submit" name="action" value="Enregistrer_Offre_Tech"
-                                                class="btn btn-sm btn-primary me-sm-3 me-1">Ajouter
+                                                class="btn btn-sm btn-primary me-sm-3 mt-1 me-1">Ajouter
                                         </button>
                                     </div>
-
-
-
                                 </div>
                             </form>
                         @endif

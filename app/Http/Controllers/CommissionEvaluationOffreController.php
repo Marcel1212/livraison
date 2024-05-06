@@ -147,12 +147,13 @@ class CommissionEvaluationOffreController extends Controller
         }
 
 
-        $projet_etudes = ProjetEtude::whereNotExists(function ($query) use ($id){
+        $projet_etudes = ProjetEtude::where('flag_fiche_agrement',true)
+            ->where('flag_selection_operateur_valider_par_processus',true)
+        ->whereNotExists(function ($query) use ($id){
             $query->select('*')
                 ->from('cahier_commission_evaluation_offre')
                 ->whereColumn('cahier_commission_evaluation_offre.id_projet_etude','=','projet_etude.id_projet_etude');
-        })->where('flag_fiche_agrement',true)
-            ->where('flag_selection_operateur_valider_par_processus',true)
+        })
             ->get();
 
         $cahier = CahierCommissionEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->first();
@@ -347,7 +348,7 @@ class CommissionEvaluationOffreController extends Controller
                                 $messageMail.=" au".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
                             }
 
-                            $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre evaluation <br><br>
+                            $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre evaluation en cliquant sur le lien suivant <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcommissionevaluationoffres.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Faire son évaluation</a>"
                                 ."<br><br><br>

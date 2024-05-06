@@ -7,6 +7,8 @@ use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
+use App\Models\DomaineFormation;
+use App\Models\Entreprises;
 use App\Models\FormeJuridique;
 use App\Models\Parcours;
 use App\Models\Pays;
@@ -82,9 +84,18 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
                 $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
             }
 
-            $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-            foreach ($secteuractivite_projets as $comp) {
-                $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+//            $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+//            foreach ($secteuractivite_projets as $comp) {
+//                $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+//            }
+
+            $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                ->orderBy('libelle_domaine_formation')
+                ->get();
+
+            $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtudeInstruction->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+            foreach ($domaine_projets as $comp) {
+                $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
             }
         }
 
@@ -110,7 +121,7 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
         return view('projetetudes.traitement_selection_operateur.edit', compact(
             'formjuridique',
-            'secteuractivite_projet','pay','pieces_projets','projet_etude','id_combi_proc','entreprise','entreprise_mail','ResultProssesList','parcoursexist'));
+            'domaine_projet','pay','pieces_projets','projet_etude','id_combi_proc','entreprise','entreprise_mail','ResultProssesList','parcoursexist'));
     }
 
     public function update(Request $request, $id_projet_etude)
@@ -158,32 +169,96 @@ class TraitementSelectionOperateurProjetEtudeController extends Controller
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
                             $projet_etude->flag_selection_operateur_valider_par_processus = true;
+                            $projet_etude->date_selection_operateur_valider_par_processus = now();
                             $projet_etude->flag_validation_selection_operateur = false;
                             $projet_etude->update();
 
                             $operateurs = $projet_etude->operateurs()->get();
                             if(isset($operateurs)){
                                 foreach ($operateurs as $operateur){
-                                    if (isset($operateur->email_entreprises)) {
-                                        $sujet = $projet_etude->titre_projet_instruction;
-                                        $titre = "";
-                                        $name ="";
+                                    $entreprise = Entreprises::where('id_entreprises',$operateur->id_entreprises)->first();
+                                    $name = $entreprise->raison_social_entreprises;
+                                    $user = User::where('id_partenaire',$entreprise->id_entreprises)->first();
+
+                                    if (isset($user->email)) {
+                                        $sujet = "Offre de services";
+                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
                                         $messageMail = "<b>Monsieur le Directeur,</b>
-                                        <br><br>Le FDFP envisage de recruter un cabinet de consultants pour la réalisation du projet susmentionné en objet.
-                                        <br> <br>A cet effet, nous vous invitons à prendre contact avec  M. ".@$projet_etude->chargedetude->name." ".@$projet_etude->chargedetude->prenom_users."
-                                        , Conseiller chargé d’études (".@$projet_etude->chargedetude->email." / ". @$projet_etude->chargedetude->tel_users."), Responsable du Projet pour toutes informations complémentaires que vous voudriez avoir. <br>
-                                        <br>  <br>Vous souhaitant bonne réception, nous vous prions d’agréer, <b>Monsieur le Directeur</b>, nos salutations distinguées.
+                                    <br><br>Le FDFP envisage de recruter un cabinet de consultants pour la réalisation du projet d'étude intitulé : <b>".$projet_etude->titre_projet_instruction.".</b>
+                                    <br>
+                                    A cet effet, nous vous invitons à nous faire parvenir <b>une offre technique</b> et <b>une offre financière</b> séparées et en <b>cinq (05) exemplaires</b> chacune, sur la base des termes de référence (TDR) que nous joignons à la présente
+                                    Vous voudriez bien nous faire parvenir directement au Secrétariat de la Direction des Etudes, de l’Evaluation, de la Qualité, de la Prospective et de la Communication (D2EQPC)
+                                     vos offres au plus tard le".$projet_etude->date_selection_operateur_valider_par_processus->addDays(14);
+                                        if(isset($projet_etude->id_user)){
+                                            $messageMail .= $projet_etude->chargedetude->name." ".$projet_etude->chargedetude->prenom_users;
+                                        }
+
+
+
+                                        $messageMail .=", Conseiller chargé d’études (@$projet_etude->chargedetude->tel_users / @$projet_etude->chargedetude->email), Responsable du Projet qui se tient à votre disposition pour toutes informations complémentaires.
+                                        Vous souhaitant bonne réception, nous vous prions d’agréer, Monsieur le Directeur, nos salutations distinguées.
+                                        <br>
+                                        Cliquez sur le lien ci-dessous pour prendre connaissance du TDR
                                         <br>
                                         <br>
+                                        <a class=\"o_text-white\" href=\"".asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter le TDR</a>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                    }
+
+                                    else{
+                                        $sujet = "Offre de services";
+                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                        $messageMail = "<b>Monsieur le Directeur,</b>
+                                    <br><br>Le FDFP envisage de recruter un cabinet de consultants pour la réalisation du projet d'étude intitulé : <b>".$projet_etude->titre_projet_instruction.".</b>
+                                    <br>
+                                    <br>
+                                    A cet effet, nous vous invitons à nous faire parvenir <b>une offre technique</b> et <b>une offre financière</b> séparées et en <b>cinq (05) exemplaires</b> chacune, sur la base des termes de référence (TDR) que nous joignons à la présente.
+                                    <br>
+                                    <br>
+
+                                    Vous voudriez bien nous faire parvenir directement au Secrétariat de la Direction des Etudes, de l’Evaluation, de la Qualité, de la Prospective et de la Communication (<b>D2EQPC</b>)
+                                     vos offres au plus tard le ".date('d/m/Y',strtotime($projet_etude->date_selection_operateur_valider_par_processus->addDays(14)));
+                                        if(isset($projet_etude->id_user)){
+                                            $messageMail .= ", Conseiller chargé d’études ".$projet_etude->chargedetude->name." ".$projet_etude->chargedetude->prenom_users."(".$projet_etude->chargedetude->tel_users." / ".$projet_etude->chargedetude->email.")";
+                                        }
+
+
+                                        $messageMail .=", Responsable du Projet qui se tient à votre disposition pour toutes informations complémentaires.
                                         <br>
-                                        -----
-                                        Ceci est un mail automatique, Merci de ne pas y répondre.
-                                        -----";
-                                        $messageMailEnvoi = Email::get_envoimailTemplate($operateur->email_entreprises, $name, $messageMail, $sujet, $titre);
+                                        <br>
+                                        Vous souhaitant bonne réception, nous vous prions d’agréer, <b>Monsieur le Directeur</b>, nos salutations distinguées.
+                                        <br>
+                                        Cliquez sur le lien ci-dessous pour prendre connaissance du TDR
+                                        <br>
+                                        <br>
+                                        <a class=\"o_text-white\" href=\"".asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter le TDR</a>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+
+
+                                        $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email_entreprises, $name, $messageMail, $sujet, $titre);
+
                                     }
                                 }
-                            }
-                        }
+                            }                        }
 
                         return redirect('traitementselectionoperateurprojetetude/' . Crypt::UrlCrypt($id_projet_etude) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
                     }

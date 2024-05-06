@@ -96,13 +96,14 @@ $logo = Menu::get_logo();
                                     @else
                                         {{round(@$note,2)}}
                                     @endif
-                                @elseif(($montant_inf > intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                    && $montant_sup <intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)))
+                                @elseif($montant_inf <= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin
+                                    ) && $montant_sup >= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
+                                   )
                                     <?php
                                         $note = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
                                     ?>
                                     {{round(@$note,2)}}
-                                    @elseif(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)>$montant_sup)
+                                @elseif(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)>$montant_sup)
                                         <?php
                                             $note = ((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                                     /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20)-

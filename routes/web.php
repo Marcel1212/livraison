@@ -568,6 +568,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('commissionevaluationoffres/{id}/show/offrefin', [CommissionEvaluationOffreController::class, 'showOffreFin'])->name('commissionevaluationoffres.offrefin.show');
 
 
+
 //    Route::group(['middleware' => ['can:traitementcomitetechniques-index']], function () {
 
         Route::get('traitementcommissionevaluationoffres', [TraitementCommissionEvaluationOffreController::class, 'index'])->name('traitementcommissionevaluationoffres');
