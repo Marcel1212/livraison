@@ -635,16 +635,7 @@ class ComitesTechniquesController extends Controller
                     ->where([['cahier_comite.id_comite','=',$id]])
                     ->get();
 
-//                    $affichedemande = [];
-//
-//                    foreach ($listedemandesss as $listedemandess) {
-//                       $affichedemande = '<strong>Code</strong>:'.$listedemandess->code.';  <strong>raison sociale</strong>:'.$listedemandess->raison_sociale.'; <strong>cout accordée</strong>:'.number_format($listedemandess->montant_total, 0, ',', ' ').'.';
-//                    }
-
                     foreach($listepersonnes as $personne){
-
-
-                       // dd("".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)]));
                         $logo = Menu::get_logo();
 
                         $email = $personne->user->email;
@@ -656,7 +647,7 @@ class ComitesTechniquesController extends Controller
                         }else{
                             $datefin = ' ';
                         }
-
+                        dd($comitep->categorieComite->type_code_categorie_comite);
                         if($comitep->categorieComite->type_code_categorie_comite=="CT"){
                             if (isset($email)) {
                                 $nom_prenom = $nom .' '. $prenom;
