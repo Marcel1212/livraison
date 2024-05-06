@@ -658,7 +658,7 @@ class TraitementComitesTechniquesController extends Controller
            // Projet formation
 
            if($data['action'] === 'Traiter_action_formation_valider_critere_prf'){
-            dd($data);
+            //dd($data);
 
             //$actionplan = ActionFormationPlan::find($idactionformation);
             // Id projet formation
