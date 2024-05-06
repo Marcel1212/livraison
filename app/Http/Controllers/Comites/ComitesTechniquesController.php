@@ -647,7 +647,6 @@ class ComitesTechniquesController extends Controller
                         }else{
                             $datefin = ' ';
                         }
-                        dd($comitep->categorieComite->type_code_categorie_comite);
                         if($comitep->categorieComite->type_code_categorie_comite=="CT"){
                             if (isset($email)) {
                                 $nom_prenom = $nom .' '. $prenom;
@@ -670,6 +669,7 @@ class ComitesTechniquesController extends Controller
                         }
 
                         if($comitep->categorieComite->type_code_categorie_comite=="CC"){
+                            dd($email);
                             if (isset($email)) {
                                 $nom_prenom = $nom .' '. $prenom;
                                 $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
