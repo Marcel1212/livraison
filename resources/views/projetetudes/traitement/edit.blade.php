@@ -43,6 +43,13 @@
             @endif
 
             <div class="col-xl-12">
+                <div align="right">
+                    <button type="button"
+                            class="btn rounded-pill btn-outline-success waves-effect waves-light"
+                            data-bs-toggle="modal" data-bs-target="#modalToggle">
+                        Voir le parcours d'affectation
+                    </button>
+                </div>
                 <h6 class="text-muted"></h6>
                 <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -249,7 +256,7 @@
                                                 <input type="text" name="titre_projet"
                                                        required="required" id="titre_projet"
                                                        disabled
-                                                       value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                                       value ="{{@$projet_etude->titre_projet_etude}}"
                                                        class="form-control form-control-sm">
                                             </div>
                                         </div>
@@ -269,14 +276,46 @@
                                             </div>
 
                                             <div class="mb-1 col-md-6">
-                                                <label>Secteur d'activité du projet <span
+                                                <label>Domaine du projet <span
                                                         style="color:red;">*</span>
                                                 </label>
-                                                <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
                                                     disabled
                                                     @endif>
-                                                    <?= $secteuractivite_projet; ?>
+                                                    @foreach($domaine_projets as $domaine_projet)
+                                                        <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                @if($projet_etude->flag_enregistrer==true)
+                                                                    @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                                        selected
+                                                                     @endif
+                                                                  @endif
+                                                        >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                    @endforeach
                                                 </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12 col-10">
+                                        <div class="row">
+                                            <div class="mb-1 col-md-6">
+                                                <label>Lieu de réalisation <span
+                                                        style="color:red;">*</span>
+                                                </label>
+                                                <input type="text" name="lieu_realisation_projet"
+                                                       id="lieu_realisation_projet" disabled
+                                                       value="{{@$projet_etude->lieu_realisation_projet}}"
+                                                       class="form-control form-control-sm ">
+                                            </div>
+
+                                            <div class="mb-1 col-md-6">
+                                                <label>Date prévisionnelle de démarrage
+                                                </label>
+                                                <input type="date" name="date_previsionnelle_demarrage_projet"
+                                                       id="date_previsionnelle_demarrage_projet" disabled
+                                                       value="{{@$projet_etude->date_previsionnelle_demarrage_projet}}"
+                                                       class="form-control form-control-sm ">
                                             </div>
                                         </div>
 
@@ -471,7 +510,12 @@
                            </label>
                            <input type="text" name="titre_projet_instruction"
                                   required="required" id="titre_projet_instruction"
-                                  value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->titre_projet_etude}}@endisset"
+                                  @endif
+
                                   class="form-control form-control-sm">
                        </div>
                    </div>
@@ -490,30 +534,84 @@
                        </div>
 
                        <div class="mb-1 col-md-6">
-                           <label>Secteur d'activité du projet <span
+                           <label>Domaine du projet <span
                                    style="color:red;">*</span>
                            </label>
-                           <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" >
-                               <?= $secteuractivite_projet; ?>
+                           <select name="id_domaine_projet_instruction" class="select2 form-select-sm input-group" data-allow-clear="true">
+                              @foreach($domaine_projets as $domaine_projet)
+                                   <option value="{{$domaine_projet->id_domaine_formation}}"
+                                           @if($projet_etude->flag_enregistrer==true)
+                                                @if($projet_etude->id_domaine_projet_instruction==$domaine_projet->id_domaine_formation)
+                                                    selected
+                                                @endif
+                                            @else
+                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_formation)
+                                                    selected
+                                                @endif
+                                          @endif
+                                   >{{$domaine_projet->libelle_domaine_formation}}</option>
+                              @endforeach
                            </select>
                        </div>
                    </div>
 
                </div>
+               <div class="col-md-12 col-10">
+                   <div class="row">
+                       <div class="mb-1 col-md-6">
+                           <label>Lieu de réalisation <span
+                                   style="color:red;">*</span>
+                           </label>
+                           <input type="text" name="lieu_realisation_projet_instruction"
+                                  id="lieu_realisation_projet"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->lieu_realisation_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->lieu_realisation_projet}}@endisset"
+                                  @endif
+                                  class="form-control form-control-sm ">
+                       </div>
+
+                       <div class="mb-1 col-md-6">
+                           <label>Date prévisionnelle de démarrage
+                           </label>
+                           <input type="date" name="date_previsionnelle_demarrage_projet_instruction"
+                                  id="date_previsionnelle_demarrage_projet"
+                                  @if($projet_etude->flag_enregistrer==true)
+                                      value ="@isset($projet_etude){{$projet_etude->date_previsionnelle_demarrage_projet_instruction}}@endisset"
+                                  @else
+                                      value ="@isset($projet_etude){{$projet_etude->date_previsionnelle_demarrage_projet}}@endisset"
+                                  @endif
+                                  class="form-control form-control-sm ">
+                       </div>
+                   </div>
+
+               </div>
+
            </div>
        </div>
        <div class="col-md-6 col-12 mt-2">
            <div class="mb-1">
                <label for="contexte_probleme_instruction">Contexte ou Problèmes constatés <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="contexte_probleme_instruction_val" name="contexte_probleme_instruction"/>
-               <div id="contexte_probleme_instruction" class="rounded-1">{!!@$projet_etude->contexte_probleme_projet_etude !!}</div>
+               <div id="contexte_probleme_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->contexte_probleme_instruction!!}
+                   @else
+                       {!!@$projet_etude->contexte_probleme_projet_etude!!}
+                   @endif</div>
            </div>
        </div>
        <div class="col-md-6 col-12 mt-2">
            <div class="mb-1">
                <label for="objectif_general_instruction">Objectif Général <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="objectif_general_instruction_val" name="objectif_general_instruction"/>
-               <div id="objectif_general_instruction" class="rounded-1">{!!@$projet_etude->objectif_general_projet_etude !!}</div>
+               <div id="objectif_general_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->objectif_general_instruction!!}
+                   @else
+                       {!!@$projet_etude->objectif_general_projet_etude!!}
+                   @endif</div>
 
            </div>
        </div>
@@ -521,7 +619,13 @@
            <div class="mb-1">
                <label for="objectif_specifique_instruction">Objectifs spécifiques <span style="color:red;">*</span> </label>
                <input class="form-control" type="text" id="objectif_specifique_instruction_val" name="objectif_specifique_instruction"/>
-               <div id="objectif_specifique_instruction" class="rounded-1">{!!@$projet_etude->objectif_specifique_projet_etud !!}</div>
+               <div id="objectif_specifique_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->objectif_specifique_instruction!!}
+                   @else
+                       {!!@$projet_etude->objectif_specifique_projet_etud!!}
+                   @endif
+               </div>
 
            </div>
        </div>
@@ -530,14 +634,26 @@
                <label for="resultat_attendu_instruction">Résultats attendus <span style="color:red;">*</span>
                </label>
                <input class="form-control" type="text" id="resultat_attendu_instruction_val" name="resultat_attendu_instruction"/>
-               <div id="resultat_attendu_instruction" class="rounded-1">{!!@$projet_etude->resultat_attendu_projet_etude !!}</div>
+               <div id="resultat_attendu_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->resultat_attendu_instruction!!}
+                   @else
+                       {!!@$projet_etude->resultat_attendu_projet_etude!!}
+                   @endif
+               </div>
            </div>
        </div>
        <div class="col-md-6 col-12 mt-2">
            <div class="mb-1">
                <label for="champ_etude_instruction">Champ de l’étude <span style="color:red;">*</span></label>
                <input class="form-control" type="text" id="champ_etude_instruction_val" name="champ_etude_instruction"/>
-               <div id="champ_etude_instruction" class="rounded-1">{!!@$projet_etude->champ_etude_projet_etude !!}</div>
+               <div id="champ_etude_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->champ_etude_instruction!!}
+                   @else
+                       {!!@$projet_etude->champ_etude_projet_etude!!}
+                   @endif
+               </div>
 
            </div>
        </div>
@@ -546,7 +662,12 @@
                <label for="cible_instruction">Cible <span style="color:red;">*</span>
                </label>
                <input class="form-control" type="text" id="cible_instruction_val" name="cible_instruction"/>
-               <div id="cible_instruction" class="rounded-1">{!!@$projet_etude->cible_projet_etude !!}</div>
+               <div id="cible_instruction" class="rounded-1">
+                   @if($projet_etude->flag_enregistrer==true)
+                       {!!@$projet_etude->cible_instruction!!}
+                   @else
+                       {!!@$projet_etude->cible_projet_etude!!}
+                   @endif</div>
            </div>
        </div>
        <div class="col-md-12 col-12 mt-2">
@@ -563,12 +684,26 @@
                <div class="mb-1">
                    <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
                    </label>
-                   <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="form-control form-control-sm number">
+                   <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="form-control form-control-sm number"
+                          value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}"
+                   >
                </div>
            </div>
            <div class="col-md-6 mt-2">
                <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
-               <input type="file" name="fichier_instruction" class="form-control" placeholder="" required="required">
+               <input type="file" name="fichier_instruction" class="form-control" placeholder=""
+                      @if(!$projet_etude->piece_jointe_instruction)
+                      required="required"
+                   @endif
+
+               >
+               <div>
+                   @isset($projet_etude->piece_jointe_instruction)
+                       <span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span>
+                   @endisset
+               </div>
                <div id="defaultFormControlHelp" class="form-text">
                    <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
                        maxi : 5Mo</em>
@@ -583,7 +718,7 @@
            <div class="col-md-12 col-12">
                <div class="mb-1">
                    <label>Commentaires <strong style="color:red;">(Obligatoire si rejeté)*</strong>: </label>
-                   <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="10">{{@$planformation->commentaire_recevable_plan_formation}}</textarea>
+                   <textarea class="form-control form-control-sm"  name="commentaires_instruction" id="commentaires_instruction" rows="10">{{@$projet_etude->commentaires_instruction}}</textarea>
                </div>
            </div>
        </div>
@@ -595,10 +730,15 @@
                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" id="SoumettreCT">
                Soumettre au comité
            </button>
+               <button type="submit" name="action" value="EnregistrerInstruction"
+                       class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                   Enregistrer
+               </button>
                <button type="submit" name="action" value="RejetInstruction"
                        class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
                    Rejeter
                </button>
+
            @endif
            <a  href="{{ route($lien.'.edit',['id'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-1" align="right">Précédent</a>
            <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
@@ -616,7 +756,7 @@
    @method('put')
    <div class="row">
        <div class="col-md-6 col-12">
-           <label class="form-label" for="billings-country">Motif de Recevabilité <strong style="color:red;">*</strong></label>
+           <label class="form-label" for="billings-country">Motif de recevabilité <strong style="color:red;">*</strong></label>
 
            <select class="form-select" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
                <?= $motifs; ?>
@@ -633,10 +773,6 @@
            <button type="submit" name="action" value="Recevable"
                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
                Recevable
-           </button>
-           <button type="submit" name="action" value="MettreEnAttente"
-                   class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light" >
-               Mettre en attente
            </button>
            <button type="submit" name="action" value="NonRecevable"
                    class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
@@ -714,8 +850,157 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4 col-12">
+        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle"
+             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Parcours d'affectation du projet d'étude</h5>
+                        <div class="card-body pb-2">
+                            <ul class="timeline pt-3">
+                                @if($projet_etude->flag_soumis_chef_depart==false)
+                                    <li class="timeline-item pb-4 timeline-item-primary  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">1.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE DEPARTEMENT</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="row ">
+                                                        <div>
+                                                            <span>Observation : </span>
+                                                        </div>
+                                                        <div>
+                                                            <span>Affecté le  </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-<!-- END: Content-->
+                                            </div>
+                                        </div>
+                                    </li>
+                                @else
+                                    <li class="timeline-item pb-4 timeline-item-success  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">1.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE DEPARTEMENT</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="row ">
+                                                        <div>
+                                                            <span>Observation : {{@$projet_etude->commentaires_cd}}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span>Affecté le {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_chef_depart ))}} par {{@$projet_etude->chefDepartement->name}}
+                                                                {{@$projet_etude->chefDepartement->prenom_users}}
+                                                            à  {{@$projet_etude->chefService->name}}
+                                                                {{@$projet_etude->chefService->prenom_users}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endif
+
+                                @if($projet_etude->flag_soumis_chef_service==false)
+                                    <li class="timeline-item pb-4 timeline-item-primary  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">2.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE SERVICE</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="row ">
+                                                        <div>
+                                                            <span>Observation : </span>
+                                                        </div>
+                                                        <div>
+                                                            <span>Affecté le  </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @else
+                                    <li class="timeline-item pb-4 timeline-item-success  border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-success primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0"></h6>
+                                                <span class="text-muted"><strong></strong></span>
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">2.</h6>
+                                                    <span class="text-muted"><strong>CHEF DE SERVICE</strong></span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="row ">
+                                                        <div>
+                                                            <span>Observation : {{@$projet_etude->commentaires_cd}}</span>
+                                                        </div>
+                                                        <div>
+                                                                <span>Affecté le {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_chef_service ))}} par {{@$projet_etude->chefService->name}}
+                                                                    {{@$projet_etude->chefService->prenom_users}}
+                                                            à  {{@$projet_etude->chargedetude->name}}
+                                                                    {{@$projet_etude->chargedetude->prenom_users}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('js_perso')

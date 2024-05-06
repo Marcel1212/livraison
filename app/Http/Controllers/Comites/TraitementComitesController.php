@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Comites;
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
 use App\Helpers\Audit;
+use App\Models\DomaineFormation;
 use App\Models\FormeJuridique;
 use App\Models\PiecesProjetEtude;
 use App\Models\ProcessusComite;
@@ -869,28 +870,38 @@ class TraitementComitesController extends Controller
                     $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
                 }
 
-
-                /******************** secteuractivites *********************************/
-                $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
-                $secteuractivite = "<option value=''> Selectionnez un secteur activité </option>";
-                foreach ($secteuractivites as $comp) {
-                    $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
+
                 $motif = Motif::where('code_motif','=','PRE')->get();;
                 $motifs = "<option value='".$projet_etude->motif->id_motif."'> " . $projet_etude->motif->libelle_motif . "</option>";
                 foreach ($motif as $comp) {
                     $motifs .= "<option value='" . $comp->id_motif  . "' >" . $comp->libelle_motif ." </option>";
                 }
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+//                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+//                    ->orderBy('libelle_secteur_activite')
+//                    ->get();
+//
+//                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
+//                foreach ($secteuractivite_projets as $comp) {
+//                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+//                }
+
+
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
 
 
@@ -900,16 +911,16 @@ class TraitementComitesController extends Controller
                     'formjuridique',
                     'projet_etude','pieces_projets','avant_projet_tdr',
                     'idcomite',
-                    'secteuractivite_projet',
+                    'domaine_projet',
                     'motifs',
                     'idetape',
                     'idcahier',
                     'cahiersplanprojet',
                     'pay',
+                    'domaine_projets',
                     'comite',
                     'cahiersplanprojet',
-                    'offre_financiere',
-                    'secteuractivite'
+                    'offre_financiere'
                 ));
 
             }

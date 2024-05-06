@@ -258,13 +258,19 @@ $idconnect = Auth::user()->id;
                                             </div>
 
                                             <div class="mb-1 col-md-6">
-                                                <label>Secteur d'activité du projet <span
+                                                <label>Domaine du projet <span
                                                         style="color:red;">*</span>
                                                 </label>
-                                                <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
                                                     disabled
                                                     @endif>
-                                                    <?= $secteuractivite_projet; ?>
+                                                    @foreach($domaine_projets as $domaine_projet)
+                                                        <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                                    selected
+                                                            @endif
+                                                        >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -423,7 +429,7 @@ $idconnect = Auth::user()->id;
                                             <form method="POST" class="form mb-2" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
                                                 @csrf
                                                 @method('put')
-                                                <button type="submit" name="action" value="Traiter_valider_projet"
+                                                <button type="submit" onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' name="action" value="Traiter_valider_projet"
                                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Valider le projet
                                                 </button>
@@ -472,7 +478,11 @@ $idconnect = Auth::user()->id;
                                                         </label>
                                                         <input type="text" name="titre_projet_instruction"
                                                                required="required" id="titre_projet_instruction"
-                                                               value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
+                                                               @if($projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude != $idconnect)
+                                                                   disabled
+                                                               @endif
+
+                                                                       value ="@isset($projet_etude){{$projet_etude->titre_projet_instruction}}@endisset"
                                                                class="form-control form-control-sm">
                                                     </div>
                                                 </div>
@@ -491,11 +501,22 @@ $idconnect = Auth::user()->id;
                                                     </div>
 
                                                     <div class="mb-1 col-md-6">
-                                                        <label>Secteur d'activité du projet <span
+                                                        <label>Domaine du projet <span
                                                                 style="color:red;">*</span>
                                                         </label>
-                                                        <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                            <?= $secteuractivite_projet; ?>
+                                                        <select name="id_domaine_projet_instruction" class="select2 form-select-sm input-group" data-allow-clear="true"
+                                                                @if($projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude != $idconnect)
+                                                                    disabled
+                                                            @endif
+                                                        >
+
+                                                            @foreach($domaine_projets as $domaine_projet)
+                                                                <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                    @if($projet_etude->id_domaine_projet_instruction==$domaine_projet->id_domaine_projet)
+                                                                         selected
+                                                                    @endif
+                                                                >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -564,18 +585,32 @@ $idconnect = Auth::user()->id;
                                                 <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
                                                 </label>
                                                 <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="number form-control form-control-sm number"
+                                                       @if($projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude != $idconnect)
+                                                           disabled
+                                                       @endif
+
                                                        value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
                                             </div>
                                         </div>
                                         <div class="col-md-6 mt-2">
                                             <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
-                                            <input type="file" name="fichier_instruction" class="form-control" placeholder="" >
-                                            @if($projet_etude->piece_jointe_instruction)
-                                                <span class="badge bg-secondary mt-1"><a target="_blank"
-                                                                                         onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                            Voir la pièce  </a> </span>
+                                            @if($projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude != $idconnect)
+                                                @if($projet_etude->piece_jointe_instruction)
+                                                    <div><span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                             onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span></div>
 
+                                                @endif
+                                            @else
+                                                <input type="file" name="fichier_instruction" class="form-control" placeholder="" >
+                                                @if($projet_etude->piece_jointe_instruction)
+                                                    <div><span class="badge bg-secondary mt-1"><a target="_blank"
+                                                                                             onclick="NewWindow('{{ asset("pieces_projet/fichier_instruction/". $projet_etude->piece_jointe_instruction)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce  </a> </span></div>
+
+                                                @endif
                                             @endif
+
                                             <div id="defaultFormControlHelp" class="form-text">
                                                 <em> Fichiers autorisés : PDF, WORD, JPG, JPEG, PNG <br>Taille
                                                     maxi : 5Mo</em>
@@ -694,6 +729,16 @@ $idconnect = Auth::user()->id;
         $("#resultat_attendu_val").hide();
         $("#champ_etude_val").hide();
         $("#cible_val").hide();
+
+        @if($projet_etude->flag_soumis_ct_pleniere == true and $projet_etude->flag_valider_ct_pleniere_projet_etude!=true and $projet_etude->id_charge_etude != $idconnect)
+            contexte_probleme_instruction.disable();
+            objectif_general_instruction.disable();
+            objectif_specifique_instruction.disable();
+            resultat_attendu_instruction.disable();
+            champ_etude_instruction.disable();
+            cible_instruction.disable();
+            methodologie_instruction.disable();
+        @endif
 
         //Desactivate if is submit
         contexte_probleme.disable();

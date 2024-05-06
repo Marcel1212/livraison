@@ -46,4 +46,10 @@ class DemandeSubstitutionActionPlanFormation extends Model
     {
         return $this->belongsTo(CaracteristiqueTypeFormation::class, 'id_caracteristique_type_formation_substi', 'id_caracteristique_type_formation');
     }
+
+    public function domaineFormation()
+    {
+        return $this->belongsTo(DomaineFormation::class, 'id_domaine_formation_substi', 'id_domaine_formation');
+    }
+
 }

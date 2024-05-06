@@ -12,27 +12,27 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property DomaineFormation $domaineFormation
- * @property Entreprise $entreprise
+ * @property Entreprises $entreprise
  */
 class DomaineFormationCabinet extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'domaine_formation_cabinet';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_domaine_formation_cabinet';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -55,6 +55,6 @@ class DomaineFormationCabinet extends Model
      */
     public function entreprise()
     {
-        return $this->belongsTo('App\Models\Entreprise', 'id_entreprises', 'id_entreprises');
+        return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
     }
 }

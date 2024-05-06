@@ -599,5 +599,12 @@ Route::group(['middleware' => ['auth']], function () {
 //    Route::put('comites/{id}/{id1}/update', [ComitesController::class, 'update'])->name('comites.update');
 //    Route::get('comites/{id}/{id1}/edit', [ComitesController::class, 'edit'])->name('comites.edit');
 
+    /* route domaine de fromation */
+
+    Route::group(['middleware' => ['can:domaineformation-index']], function () {
+        Route::resources([
+            'domaineformation' => App\Http\Controllers\DomaineFormationController::class,
+        ]);
+    });
 
 });

@@ -272,8 +272,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$demande->raison_sociale  }}</td>
                                         <td>{{ @$demande->nom_conseiller }}</td>
                                         <td>{{ @$demande->code }}</td>
-                                        <td>{{ $demande->date_demande }}</td>
-                                        <td>{{ $demande->date_soumis }}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_demande))}}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_soumis))}}</td>
                                         <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
                                     </tr>
                                 @endforeach
@@ -366,8 +366,8 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{ @$demande->raison_sociale  }}</td>
                                         <td>{{ @$demande->nom_conseiller }}</td>
                                         <td>{{ @$demande->code }}</td>
-                                        <td>{{ $demande->date_demande }}</td>
-                                        <td>{{ $demande->date_soumis }}</td>
+                                        <td>{{date('d/m/Y H:i:s',strtotime(@$demande->date_demande))}}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_soumis))}}</td>
                                         <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
                                     </tr>
                                 @endforeach

@@ -145,8 +145,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @endif
                                             </td>
                                             <td>{{ @$demande->code_cahier_plans_projets }}</td>
-                                            <td>{{ @$demande->date_creer_cahier_plans_projets }}</td>
-                                            <td>{{ @$demande->date_soumis_cahier_plans_projets }}</td>
+                                            <td>{{ date('d/m/Y',strtotime(@$demande->date_creer_cahier_plans_projets))}}</td>
+                                            <td>{{ date('d/m/Y',strtotime(@$demande->date_soumis_cahier_plans_projets))}}</td>
                                             <td>{{ $demande->commentaire_cahier_plans_projets }}</td>
                                             <td>
                                                 @if (@$demande->flag_traitement_effectuer_commission == true)

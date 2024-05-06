@@ -220,12 +220,35 @@
                                     </div>
 
                                     <div class="mb-1 col-md-6">
-                                        <label>Secteur d'activité du projet <span
+                                        <label>Domaine du projet <span
                                                 style="color:red;">*</span>
                                         </label>
-                                        <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true">
-                                                <?= $secteuractivite_projet; ?>
+                                        <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true">
+                                            @foreach($domaine_formations as $domaine_formation)
+                                                <option value="{{@$domaine_formation->id_domaine_formation}}">{{@$domaine_formation->libelle_domaine_formation}}</option>
+                                            @endforeach
                                         </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 col-10">
+                                <div class="row">
+                                    <div class="mb-1 col-md-6">
+                                        <label>Lieu de réalisation <span
+                                                style="color:red;">*</span>
+                                        </label>
+                                        <input type="text" name="lieu_realisation_projet"
+                                               id="lieu_realisation_projet"
+                                               class="form-control form-control-sm ">
+                                    </div>
+
+                                    <div class="mb-1 col-md-6">
+                                        <label>Date prévisionnelle de démarrage
+                                        </label>
+                                        <input type="date" name="date_previsionnelle_demarrage_projet"
+                                               id="date_previsionnelle_demarrage_projet"
+                                               class="form-control form-control-sm ">
                                     </div>
                                 </div>
 

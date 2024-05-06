@@ -159,25 +159,34 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         @enderror"
                                             data-allow-clear="true" name="id_processus_comite[]" id="id_processus_comite"
                                             multiple>
-                                            <?php echo $processuscomitesListe; ?>
+                                            @foreach ($processuscomites as $pc)
+                                                    <option value="{{$pc->id_processus_comite}}"
+                                                        @foreach($comite->processusComiteLieComites as $processusComite)
+                                                            @if($processusComite->id_processus_comite==$pc->id_processus_comite) selected @endif
+                                                        @endforeach>{{@$pc->libelle_processus_comite}}
+
+                                                    </option>
+                                            @endforeach
+
+{{--                                            <?php echo $processuscomitesListe; ?>--}}
                                         </select>
                                         @error('id_processus_comite')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                         @enderror
                                     </div>
-                                    <div class="col-md-2 col-12">
-                                        <div class="mb-1">
-                                            <label>Liste des processus <strong style="color:red;">*</strong></label>
-                                            @foreach ($processuscomite as $pc)
-                                                <input type="text" name="" class="form-control form-control-sm"
-                                                    value="{{ $pc->processusComite->libelle_processus_comite }}"
-                                                    disabled />
-                                            @endforeach
+{{--                                    <div class="col-md-2 col-12">--}}
+{{--                                        <div class="mb-1">--}}
+{{--                                            <label>Liste des processus <strong style="color:red;">*</strong></label>--}}
+{{--                                            @foreach ($processuscomite as $pc)--}}
+{{--                                                <input type="text" name="" class="form-control form-control-sm"--}}
+{{--                                                    value="{{ $pc->processusComite->libelle_processus_comite }}"--}}
+{{--                                                    disabled />--}}
+{{--                                            @endforeach--}}
 
-                                        </div>
-                                    </div>
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
-                                    <div class="col-md-2 col-12">
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Date de debut <strong style="color:red;">*</strong></label>
                                             <input type="date" name="date_debut_comite"
@@ -186,7 +195,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         </div>
                                     </div>
 
-                                    <div class="col-md-2 col-12">
+                                    <div class="col-md-3 col-12">
                                         <div class="mb-1">
                                             <label>Date de fin </label>
                                             <input type="date" name="date_fin_comite"
@@ -248,8 +257,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     name="allcb" /></th>
                                             <th>Type processus </th>
                                             <th>Code du cahier </th>
-                                            <th>Date creation </th>
-                                            <th>Date de soumission a la commission</th>
+                                            <th>Date de création </th>
+                                            <th>Date de soumission à la commission</th>
                                             <th>Commentaire</th>
                                         </tr>
                                     </thead>
@@ -277,8 +286,10 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     @endif
                                                 </td>
                                                 <td>{{ @$demande->code_cahier_plans_projets }}</td>
-                                                <td>{{ @$demande->date_creer_cahier_plans_projets }}</td>
-                                                <td>{{ @$demande->date_soumis_cahier_plans_projets }}</td>
+                                                <td>
+                                                    {{ date('d/m/Y',strtotime(@$demande->date_creer_cahier_plans_projets))}}</td>
+                                                <td>
+                                                    {{ date('d/m/Y',strtotime(@$demande->date_soumis_cahier_plans_projets))}}</td>
                                                 <td>{{ $demande->commentaire_cahier_plans_projets }}</td>
                                             </tr>
                                         @endforeach
@@ -442,8 +453,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <th></th>
                                         <th>Type processus </th>
                                         <th>Code du cahier </th>
-                                        <th>Date creation </th>
-                                        <th>Date de soumission a la commission</th>
+                                        <th>Date de création </th>
+                                        <th>Date de soumission à la commission</th>
                                         <th>Commentaire</th>
                                         <th>Statut</th>
                                     </tr>
@@ -467,8 +478,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @endif
                                             </td>
                                             <td>{{ @$demande->code_cahier_plans_projets }}</td>
-                                            <td>{{ @$demande->date_creer_cahier_plans_projets }}</td>
-                                            <td>{{ @$demande->date_soumis_cahier_plans_projets }}</td>
+                                            <td>{{ date('d/m/Y',strtotime(@$demande->date_creer_cahier_plans_projets))}}</td>
+                                            <td>{{ date('d/m/Y',strtotime(@$demande->date_soumis_cahier_plans_projets))}}</td>
                                             <td>{{ $demande->commentaire_cahier_plans_projets }}</td>
                                             <td align="center" nowrap="nowrap">
                                                 @if ($comite->flag_statut_comite == true)

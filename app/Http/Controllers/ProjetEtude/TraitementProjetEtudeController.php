@@ -6,6 +6,7 @@ use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
+use App\Models\DomaineFormation;
 use App\Models\Entreprises;
 use App\Models\FormeJuridique;
 use App\Models\Motif;
@@ -75,17 +76,6 @@ class TraitementProjetEtudeController extends Controller
                     $statutinst .= "<option value='" . $comp->id_statut_operation  . "'>" . $comp->libelle_statut_operation ." </option>";
                 }
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
-                    ->get();
-
-                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
-                }
-
-
-
                 $pays = Pays::all();
                 $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
                 foreach ($pays as $comp) {
@@ -100,8 +90,18 @@ class TraitementProjetEtudeController extends Controller
                 foreach ($secteuractivites as $comp) {
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
+
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
+                    ->get();
+
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
+                }
+
                 return view('projetetudes.traitement.edit', compact(
-                    'secteuractivite_projet',
+                    'domaine_projets',
                     'formjuridique',
 
                 'statutinst','motifs','id_etape','avant_projet_tdr','courier_demande_fin','offre_technique','offre_financiere','pieces_projets','projet_etude','infoentreprise','pay','secteuractivites'));
@@ -152,39 +152,41 @@ class TraitementProjetEtudeController extends Controller
                         return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succès : Information mise à jour');
                     }
                 }
-                if($request->action === 'MettreEnAttente'){
-                    if(isset($projet_etude)){
-                        $projet_etude->flag_attente_rec = true;
-                        $projet_etude->id_motif_recevable = $request->id_motif_recevable;
-                        $projet_etude->date_mis_en_attente = now();
-                        $projet_etude->commentaires_recevabilite = $request->commentaires_recevabilite;
-                        $projet_etude->num_agce = Auth::user()->num_agce;
-                        $projet_etude->update();
 
-                        $entreprise  = Entreprises::find($projet_etude->id_entreprises);
-                        $user = User::where('login_users','=',$entreprise->ncc_entreprises)->first();
-                        $logo = Menu::get_logo();
+//                if($request->action === 'MettreEnAttente'){
+//                    if(isset($projet_etude)){
+//                        $projet_etude->flag_attente_rec = true;
+//                        $projet_etude->id_motif_recevable = $request->id_motif_recevable;
+//                        $projet_etude->date_mis_en_attente = now();
+//                        $projet_etude->commentaires_recevabilite = $request->commentaires_recevabilite;
+//                        $projet_etude->num_agce = Auth::user()->num_agce;
+//                        $projet_etude->update();
+//
+//                        $entreprise  = Entreprises::find($projet_etude->id_entreprises);
+//                        $user = User::where('login_users','=',$entreprise->ncc_entreprises)->first();
+//                        $logo = Menu::get_logo();
+//
+//                        if (isset($user->email)) {
+//                            $sujet = "Recevabilité du projet d'étude sur e-FDFP";
+//                            $titre = "Bienvenue sur ".@$logo->mot_cle;
+//                            $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
+//                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
+//                                   mis en attente nous vous prions de bien vouloir patienter.
+//                                    <br><br><br>
+//                                    -----
+//                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+//                                    -----
+//                                    ";
+//                            $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+//
+//                        }else{
+//
+//                        }
+//                        return redirect()->route('traitementprojetetude.index')->with('success', 'Projet d\'étude mis en attente avec succès.');
+//
+//                    }
+//                }
 
-                        if (isset($user->email)) {
-                            $sujet = "Recevabilité du projet d'étude sur e-FDFP";
-                            $titre = "Bienvenue sur ".@$logo->mot_cle;
-                            $messageMail = "<b>Cher,  ".$entreprise->raison_social_entreprises." ,</b>
-                                    <br><br>Nous avons examiné votre projet d'étude sur e-FDFP, et il a été
-                                   mis en attente nous vous prions de bien vouloir patienter.
-                                    <br><br><br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-                            $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $entreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
-
-                        }else{
-
-                        }
-                        return redirect()->route('traitementprojetetude.index')->with('success', 'Projet d\'étude mis en attente avec succès.');
-
-                    }
-                }
                 if($request->action === 'NonRecevable'){
                     $this->validate($request, [
                         'id_motif_recevable' => 'required',
@@ -229,8 +231,100 @@ class TraitementProjetEtudeController extends Controller
 
                     }
                 }
+                if($request->action === 'EnregistrerInstruction') {
+                    if (isset($projet_etude)) {
+                        $this->validate($request, [
+                            'titre_projet_instruction' => 'required',
+                            'contexte_probleme_instruction' => 'required',
+                            'objectif_general_instruction' => 'required',
+                            'objectif_specifique_instruction' => 'required',
+                            'resultat_attendu_instruction' => 'required',
+                            'champ_etude_instruction' => 'required',
+                            'cible_instruction' => 'required',
+                            'methodologie_instruction' => 'required',
+                            'lieu_realisation_projet_instruction' => 'required',
+                            'date_previsionnelle_demarrage_projet_instruction' => 'required',
+                            'montant_projet_instruction' => 'required',
+                            'id_domaine_projet_instruction' => 'required|exists:domaine_formation,id_domaine_formation',
+                        ],
+                            [
+                            'titre_projet_instruction.required' => 'veuillez ajouter un titre',
+                            'contexte_probleme_instruction.required' => 'veuillez ajouter le contexte ou problème constaté',
+                            'objectif_general_instruction.required' => 'veuillez ajouter l\'objectif Général',
+                            'objectif_specifique_instruction.required' => 'veuillez ajouter les objectifs spécifiques',
+                            'resultat_attendu_instruction.required' => 'veuillez ajouter les résultats attendus',
+                            'champ_etude_instruction.required' => 'veuillez ajouter le champ de l\'étude',
+                            'cible_instruction.required' => 'veuillez ajouter la cible',
+                            'methodologie_instruction.required' => 'veuillez ajouter la méthodologie',
+                            'lieu_realisation_projet_instruction.required' => 'veuillez ajouter le lieu de réaliastion du projet',
+                            'date_previsionnelle_demarrage_projet_instruction.required' => 'veuillez ajouter la date prévisionnelle de démarrage du projet',
+                            'montant_projet_instruction.required' => 'veuillez ajouter le montant à accorder',
+                            'id_domaine_projet_instruction.required' => 'veuillez ajouter le domaine de projet',
+                        ]);
+
+                        $projet_etude->flag_enregistrer = true;
+                        $projet_etude->date_enregistrer = now();
+                        $projet_etude->commentaires_instruction = $request->commentaires_instruction;
+                        $projet_etude->titre_projet_instruction = $request->titre_projet_instruction;
+                        $projet_etude->contexte_probleme_instruction = $request->contexte_probleme_instruction;
+                        $projet_etude->objectif_general_instruction = $request->objectif_general_instruction;
+                        $projet_etude->objectif_specifique_instruction = $request->objectif_specifique_instruction;
+                        $projet_etude->resultat_attendus_instruction = $request->resultat_attendu_instruction;
+                        $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
+                        $projet_etude->cible_instruction = $request->cible_instruction;
+                        $projet_etude->commentaires_instruction = $request->commentaires_instruction;
+                        $projet_etude->methodologie_instruction = $request->methodologie_instruction;
+                        $projet_etude->lieu_realisation_projet_instruction = $request->lieu_realisation_projet_instruction;
+                        $projet_etude->date_previsionnelle_demarrage_projet_instruction = $request->date_previsionnelle_demarrage_projet_instruction;
+                        $projet_etude->montant_projet_instruction =str_replace(' ', '', $request->montant_projet_instruction);
+                        $projet_etude->id_domaine_projet_instruction = $request->id_domaine_projet_instruction;
+
+                        if (isset($request->fichier_instruction)){
+                            $filefront = $request->fichier_instruction;
+                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
+                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+                                $projet_etude->piece_jointe_instruction = $fileName1;
+                            }else{
+                                return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
+                            }
+                        }
+                        $projet_etude->update();
+                        return redirect('traitementprojetetude/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Projet d\'étude enregistrer avec succès');
+                    }
+                }
+
                 if($request->action === 'SoumettreCT'){
                     if(isset($projet_etude)){
+                        $this->validate($request, [
+                            'titre_projet_instruction' => 'required',
+                            'contexte_probleme_instruction' => 'required',
+                            'objectif_general_instruction' => 'required',
+                            'objectif_specifique_instruction' => 'required',
+                            'resultat_attendu_instruction' => 'required',
+                            'champ_etude_instruction' => 'required',
+                            'cible_instruction' => 'required',
+                            'methodologie_instruction' => 'required',
+                            'lieu_realisation_projet_instruction' => 'required',
+                            'date_previsionnelle_demarrage_projet_instruction' => 'required',
+                            'montant_projet_instruction' => 'required',
+                            'id_domaine_projet_instruction' => 'required|exists:domaine_formation,id_domaine_formation',
+                        ],
+                            [
+                                'titre_projet_instruction.required' => 'veuillez ajouter un titre',
+                                'contexte_probleme_instruction.required' => 'veuillez ajouter le contexte ou problème constaté',
+                                'objectif_general_instruction.required' => 'veuillez ajouter l\'objectif Général',
+                                'objectif_specifique_instruction.required' => 'veuillez ajouter les objectifs spécifiques',
+                                'resultat_attendu_instruction.required' => 'veuillez ajouter les résultats attendus',
+                                'champ_etude_instruction.required' => 'veuillez ajouter le champ de l\'étude',
+                                'cible_instruction.required' => 'veuillez ajouter la cible',
+                                'methodologie_instruction.required' => 'veuillez ajouter la méthodologie',
+                                'lieu_realisation_projet_instruction.required' => 'veuillez ajouter le lieu de réaliastion du projet',
+                                'date_previsionnelle_demarrage_projet_instruction.required' => 'veuillez ajouter la date prévisionnelle de démarrage du projet',
+                                'montant_projet_instruction.required' => 'veuillez ajouter le montant à accorder',
+                                'id_domaine_projet_instruction.required' => 'veuillez ajouter le domaine de projet',
+                            ]);
+
                         $projet_etude->statut_instruction = true;
                         $projet_etude->flag_soumis_ct_pleniere = true;
                         $projet_etude->date_instruction = now();
@@ -243,8 +337,10 @@ class TraitementProjetEtudeController extends Controller
                         $projet_etude->champ_etude_instruction = $request->champ_etude_instruction;
                         $projet_etude->cible_instruction = $request->cible_instruction;
                         $projet_etude->methodologie_instruction = $request->methodologie_instruction;
+                        $projet_etude->lieu_realisation_projet_instruction = $request->lieu_realisation_projet_instruction;
+                        $projet_etude->date_previsionnelle_demarrage_projet_instruction = $request->date_previsionnelle_demarrage_projet_instruction;
                         $projet_etude->montant_projet_instruction =str_replace(' ', '', $request->montant_projet_instruction);
-                        $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+                        $projet_etude->id_domaine_projet_instruction = $request->id_domaine_projet_instruction;
 
                         if (isset($request->fichier_instruction)){
                             $filefront = $request->fichier_instruction;
@@ -280,17 +376,46 @@ class TraitementProjetEtudeController extends Controller
                         return redirect()->route('traitementprojetetude.index')->with('success', 'Projet d\'étude soumis avec succès.');
                     }
                 }
+
                 if($request->action === 'RejetInstruction'){
                     if(isset($projet_etude)){
+                        $this->validate($request, [
+                            'titre_projet_instruction' => 'required',
+                            'contexte_probleme_instruction' => 'required',
+                            'objectif_general_instruction' => 'required',
+                            'objectif_specifique_instruction' => 'required',
+                            'resultat_attendu_instruction' => 'required',
+                            'champ_etude_instruction' => 'required',
+                            'cible_instruction' => 'required',
+                            'methodologie_instruction' => 'required',
+                            'lieu_realisation_projet_instruction' => 'required',
+                            'date_previsionnelle_demarrage_projet_instruction' => 'required',
+                            'montant_projet_instruction' => 'required',
+                            'commentaires_instruction' => 'required',
+                            'id_domaine_projet_instruction' => 'required|exists:domaine_formation,id_domaine_formation|mimes:PNG,png,PDF,pdf,JPG,jpg,jpeg,JPEG'
+                        ],
+                            [
+                                'titre_projet_instruction.required' => 'veuillez ajouter un titre',
+                                'contexte_probleme_instruction.required' => 'veuillez ajouter le contexte ou problème constaté',
+                                'objectif_general_instruction.required' => 'veuillez ajouter l\'objectif Général',
+                                'objectif_specifique_instruction.required' => 'veuillez ajouter les objectifs spécifiques',
+                                'resultat_attendu_instruction.required' => 'veuillez ajouter les résultats attendus',
+                                'champ_etude_instruction.required' => 'veuillez ajouter le champ de l\'étude',
+                                'cible_instruction.required' => 'veuillez ajouter la cible',
+                                'methodologie_instruction.required' => 'veuillez ajouter la méthodologie',
+                                'lieu_realisation_projet_instruction.required' => 'veuillez ajouter le lieu de réaliastion du projet',
+                                'date_previsionnelle_demarrage_projet_instruction.required' => 'veuillez ajouter la date prévisionnelle de démarrage du projet',
+                                'montant_projet_instruction.required' => 'veuillez ajouter le montant à accorder',
+                                'id_domaine_projet_instruction.required' => 'veuillez ajouter le domaine de projet',
+                                'commentaires_instruction.required' => 'veuillez ajoiuter le commentaire',
+
+                            ]);
+
                         if (isset($request->fichier_instruction)){
                             $filefront = $request->fichier_instruction;
-                            if($filefront->extension() == "png" || $filefront->extension() == "PNG" || $filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "JPG" || $filefront->extension() == "jpg" || $filefront->extension() == "JPEG" || $filefront->extension() == "jpeg"){
-                                $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
-                                $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
-                                $projet_etude->piece_jointe_instruction = $fileName1;
-                            }else{
-                                return redirect('projetetudes.traitement/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(4).'/edit')->with('error', 'Veuillez changer le type de fichier de l\'instruction');
-                            }
+                            $fileName1 = 'fichier_instruction'. '_' . rand(111,99999) . '_' . 'fichier_instruction' . '_' . time() . '.' . $filefront->extension();
+                            $filefront->move(public_path('pieces_projet/fichier_instruction/'), $fileName1);
+                            $projet_etude->piece_jointe_instruction = $fileName1;
                         }
                         $projet_etude->statut_instruction = false;
                         $projet_etude->flag_soumis_ct_pleniere = false;

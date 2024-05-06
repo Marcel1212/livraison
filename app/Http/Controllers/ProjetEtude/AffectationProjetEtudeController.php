@@ -7,6 +7,7 @@ use App\Helpers\Menu;
 use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\Direction;
+use App\Models\DomaineFormation;
 use App\Models\FormeJuridique;
 use App\Models\Pays;
 use App\Models\PiecesProjetEtude;
@@ -78,15 +79,14 @@ class AffectationProjetEtudeController extends Controller
 
                 $projet_etude = ProjetEtude::find($id);
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".@$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
-
 
 
                 if (isset($projet_etude)) {
@@ -109,7 +109,8 @@ class AffectationProjetEtudeController extends Controller
                         $pay .= "<option value='" . $comp->id_pays . "'>" . $comp->indicatif . " </option>";
                     }
                     return view('projetetudes.affectation.edit', compact('chef_services',
-                        'secteuractivite_projet','formjuridique',
+                        'formjuridique',
+                        'domaine_projet',
                         'pieces_projets', 'id_etape', 'pay', 'role', 'projet_etude'));
                 }
             }
@@ -123,13 +124,13 @@ class AffectationProjetEtudeController extends Controller
                         $formjuridique .= "<option value='" . $comp->id_forme_juridique  . "'>" . $comp->libelle_forme_juridique ." </option>";
                     }
 
-                    $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                        ->orderBy('libelle_secteur_activite')
+                    $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                        ->orderBy('libelle_domaine_formation')
                         ->get();
 
-                    $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                    foreach ($secteuractivite_projets as $comp) {
-                        $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                    $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                    foreach ($domaine_projets as $comp) {
+                        $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                     }
 
                     $charger_etudes = DB::table('users')
@@ -153,7 +154,7 @@ class AffectationProjetEtudeController extends Controller
                             'formjuridique',
                             'pay',
                             'role',
-                            'secteuractivite_projet',
+                            'domaine_projet',
                             'projet_etude'));
                 }
             }
@@ -175,6 +176,7 @@ class AffectationProjetEtudeController extends Controller
                 $projet_etude = ProjetEtude::find($id);
                 if(isset($projet_etude)){
                     $projet_etude->id_chef_serv = $request->id_chef_serv;
+                    $projet_etude->id_chef_dep = Auth::user()->id;
                     $projet_etude->commentaires_cd = $request->commentaires_cd;
                     $projet_etude->date_soumis_chef_depart = now();
                     $projet_etude->flag_soumis_chef_depart = true;

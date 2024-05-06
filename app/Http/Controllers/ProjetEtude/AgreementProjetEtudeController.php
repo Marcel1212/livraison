@@ -97,8 +97,14 @@ class AgreementProjetEtudeController extends Controller
                 if ($role== 'ENTREPRISE'){
                     $agreement = $agreement->where('projet_etude.id_entreprises',Auth::user()->id_partenaire);
                 }
+
+
         $agreement = $agreement->first();
-        return view('projetetudes.agreementprojetetude.show', compact('agreement'));
+        $projet_etude = ProjetEtude::where('id_projet_etude', $id)
+            ->first();
+        $infosentreprise = Entreprises::find($projet_etude->id_entreprises);
+
+        return view('projetetudes.agreementprojetetude.show', compact('agreement','infosentreprise'));
     }
 
     /**

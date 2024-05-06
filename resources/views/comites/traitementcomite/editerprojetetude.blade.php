@@ -253,15 +253,14 @@
 
                                                class="form-control form-control-sm number">
                                     </div>
-
                                     <div class="mb-1 col-md-6">
-                                        <label>Secteur d'activité du projet <span
+                                        <label>Domaine du projet <span
                                                 style="color:red;">*</span>
                                         </label>
-                                        <select name="id_secteur_activite" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                        <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
                                             disabled
                                             @endif>
-                                            <?= $secteuractivite_projet; ?>
+                                            <?= $domaine_projet; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -386,7 +385,7 @@
                                             @csrf
                                             @method('put')
                                             <div align="right">
-                                                <button type="submit" name="action" value="Traiter_valider_projet"
+                                                <button type="submit" name="action" onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' value="Traiter_valider_projet"
                                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                                     Valider le projet d'étude pour ce comité
                                                 </button>
@@ -442,12 +441,21 @@
                                                         </div>
 
                                                         <div class="mb-1 col-md-6">
-                                                            <label>Secteur d'activité du projet <span
+                                                            <label>Domaine du projet <span
                                                                     style="color:red;">*</span>
                                                             </label>
-                                                            <select name="id_secteur_activite"
-                                                                    disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                                <?= $secteuractivite_projet; ?>
+                                                            <select name="id_domaine_projet" class="select2 form-select-sm input-group" data-allow-clear="true"  @if(@$projet_etude->flag_soumis==true)
+                                                                disabled
+                                                                @endif>
+                                                                    @foreach($domaine_projets as $domaine_projet)
+                                                                        <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                                @if($projet_etude->id_domaine_projet_instruction==$domaine_projet->id_domaine_formation)
+                                                                                        selected
+                                                                                @endif
+                                                                        >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                                    @endforeach
+
+                                                                <?= $domaine_projet; ?>
                                                             </select>
                                                         </div>
                                                     </div>

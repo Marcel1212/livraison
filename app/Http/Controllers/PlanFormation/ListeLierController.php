@@ -27,6 +27,12 @@ class ListeLierController extends Controller
 
     }
 
+    public function getEntrepriseinterneplanGeneral($id)
+    {
+        $entreprise = Entreprises::where([['id_entreprises','=',$id]])->get();
+        return $entreprise;
+    }
+
     public function getEntreprisecabinetformation()
     {
 

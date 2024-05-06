@@ -9,6 +9,7 @@ use App\Helpers\InfosEntreprise;
 use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\Direction;
+use App\Models\DomaineFormation;
 use App\Models\Entreprises;
 use App\Models\FormeJuridique;
 use App\Models\Pays;
@@ -60,9 +61,7 @@ class ProjetEtudeController extends Controller
     {
         $pays = Pays::where('flag_actif_pays',true)->get();
         $formjuridiques = FormeJuridique::where('flag_actif_forme_juridique',true)->get();
-
         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
-
         $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
 
         foreach ($formjuridiques as $comp) {
@@ -93,6 +92,8 @@ class ProjetEtudeController extends Controller
             $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
         }
 
+        $domaine_formations = DomaineFormation::where('flag_domaine_formation',true)->get();
+
         Audit::logSave([
             'action'=>'VISITE',
             'code_piece'=>'',
@@ -101,7 +102,12 @@ class ProjetEtudeController extends Controller
             'objet'=>'PROJET ETUDE'
         ]);
 
-        return view('projetetudes.demande.create', compact('formjuridique','infoentreprise','secteuractivite_projet','pay','secteuractivites'));
+        return view('projetetudes.demande.create', compact('formjuridique',
+            'infoentreprise',
+            'secteuractivite_projet',
+            'pay',
+            'domaine_formations',
+            'secteuractivites'));
     }
 
     /**
@@ -120,8 +126,8 @@ class ProjetEtudeController extends Controller
                 'resultat_attendu' => 'required',
                 'champ_etude' => 'required',
                 'cible' => 'required',
-                'id_secteur_activite' => 'required',
-
+                'id_domaine_projet' => 'required',
+                'lieu_realisation_projet'=>'required'
             ],[
                 'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                 'montant_demande_projet.required' => 'Veuillez ajouter le le financement sollicité',
@@ -131,8 +137,8 @@ class ProjetEtudeController extends Controller
                 'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
                 'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                 'cible.required' => 'Veuillez ajouter une cible',
-                'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
-
+                'id_domaine_projet.required' => 'Veuillez ajouter un domaine du projet d\'étude',
+                'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
             ]);
             $user = User::find(Auth::user()->id);
             $user_id = Auth::user()->id;
@@ -147,9 +153,11 @@ class ProjetEtudeController extends Controller
             $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
             $projet_etude->champ_etude_projet_etude = $request->champ_etude;
             $projet_etude->cible_projet_etude = $request->cible;
+            $projet_etude->lieu_realisation_projet = $request->lieu_realisation_projet;
+            $projet_etude->date_previsionnelle_demarrage_projet = $request->date_previsionnelle_demarrage_projet;
             $projet_etude->montant_demande_projet_etude = str_replace(' ', '', $request->montant_demande_projet);
 
-            $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+            $projet_etude->id_domaine_projet = $request->id_domaine_projet;
             $projet_etude->flag_soumis = false;
             $projet_etude->flag_valide = false;
             $projet_etude->flag_rejet = false;
@@ -223,15 +231,14 @@ class ProjetEtudeController extends Controller
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".$projet_etude->secteurActivite->id_secteur_activite."'> " . $projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtude->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtude->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
-
 
                 $formjuridique = "<option value='".$infoentreprise->formeJuridique->id_forme_juridique."'> " . $infoentreprise->formeJuridique->libelle_forme_juridique . "</option>";
 
@@ -254,7 +261,7 @@ class ProjetEtudeController extends Controller
                     'offre_technique',
                     'offre_financiere',
                     'secteuractivite',
-                    'secteuractivite_projet',
+                    'domaine_projet',
                     'pieces_projets',
                     'projet_etude',
                     'infoentreprise',
@@ -288,6 +295,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude' => 'required',
                     'cible' => 'required',
                     'id_secteur_activite' => 'required',
+                    'lieu_realisation_projet'=>'required'
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                     'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
@@ -298,6 +306,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
                 $user = User::find(Auth::user()->id);
@@ -313,7 +322,8 @@ class ProjetEtudeController extends Controller
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
                 $projet_etude->id_secteur_activite = $request->id_secteur_activite;
-
+                $projet_etude->lieu_realisation_projet = $request->lieu_realisation_projet;
+                $projet_etude->date_previsionnelle_demarrage_projet = $request->date_previsionnelle_demarrage_projet;
                 $projet_etude->update();
 
                 Audit::logSave([
@@ -338,6 +348,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude' => 'required',
                     'cible' => 'required',
                     'id_secteur_activite' => 'required',
+                    'lieu_realisation_projet' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
                     'montant_demande_projet.required' => 'Veuillez ajouter le financement sollicité',
@@ -348,6 +359,7 @@ class ProjetEtudeController extends Controller
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
                     'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
                 $user = User::find(Auth::user()->id);
