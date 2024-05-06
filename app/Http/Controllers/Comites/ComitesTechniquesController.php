@@ -675,6 +675,7 @@ class ComitesTechniquesController extends Controller
                                             ";
 
                                 $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                            }
                         }
 
                         if($comitep->categorieComite->type_code_categorie_comite=="CC"){
@@ -695,13 +696,9 @@ class ComitesTechniquesController extends Controller
                                             ";
 
                                 $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                            }
                         }
 
-
-
-                        }
-
-                    }
 
                     Audit::logSave([
 
@@ -803,6 +800,7 @@ class ComitesTechniquesController extends Controller
 
             }
 
+        }
         }
     }
 
