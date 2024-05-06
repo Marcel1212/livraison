@@ -322,7 +322,7 @@ class TraitementComitesTechniquesController extends Controller
 
         $idcategoriecomite = $comite->id_categorie_comite;
 
-        //dd($processuscomite);
+        //dd($idcategoriecomite);
         if($idcategoriecomite == 2){
             $listedemandesss = DB::table('vue_plans_projets_formation_coordination_traiter as vue_plans_projets_formation')
             ->join('cahier_comite','vue_plans_projets_formation.id_demande','cahier_comite.id_demande')
@@ -584,12 +584,81 @@ class TraitementComitesTechniquesController extends Controller
 
             $data = $request->all();
 
-           //dd($data);
+            //dd($data); // Auth::user()->id
+            if($data['action'] === 'Traiter_action_formation_valider_critere_prf_valider_cc'){
+                //dd(strtotime(now()));
+
+                //$actionplan = ActionFormationPlan::find($idactionformation);
+                // Id projet formation
+                $idprojetformation = $idactionformation;
+                // Recuperation du projet de formation
+                $projetformation = ProjetFormation::find($idprojetformation);
+                //dd($projetformation);
+                $projetformation->flag_coordination = true;
+                $projetformation->save();
+                //dd($projetformation);
+
+                $idplan = $projetformation->id_projet_formation;
+
+
+
+
+                Audit::logSave([
+
+                    'action'=>'VALIDATION PROJET FORMATION',
+
+                    'code_piece'=>$idactionformation,
+
+                    'menu'=>'COMITES COORDINATION' . '/ ID VALIDATEUR :' . Auth::user()->id,
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'Validation du projet de formation comité de coordination'
+
+                ]);
+
+                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($etape).'/edit/projetformation')->with('success', 'Succes : Le projet de formation a été validé en comité de coordination ');
+
+            }
+           if($data['action'] === 'Traiter_action_formation_valider_critere_prf_valider'){
+            //dd($data);
+
+            //$actionplan = ActionFormationPlan::find($idactionformation);
+            // Id projet formation
+            $idprojetformation = $idactionformation;
+            // Recuperation du projet de formation
+            $projetformation = ProjetFormation::find($idprojetformation);
+            $projetformation->flag_processus_etape = true;
+            $projetformation->save();
+            //dd($projetformation);
+
+            $idplan = $projetformation->id_projet_formation;
+
+
+
+
+            Audit::logSave([
+
+                'action'=>'VALIDATION PROJET FORMATION',
+
+                'code_piece'=>$idactionformation,
+
+                'menu'=>'COMITES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'Validation du projet de formation comité technique'
+
+            ]);
+
+            return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($etape).'/edit/projetformation')->with('success', 'Succes : Le projet de formation a été validé ');
+
+        }
 
            // Projet formation
 
            if($data['action'] === 'Traiter_action_formation_valider_critere_prf'){
-            //dd($data);
+            dd($data);
 
             //$actionplan = ActionFormationPlan::find($idactionformation);
             // Id projet formation

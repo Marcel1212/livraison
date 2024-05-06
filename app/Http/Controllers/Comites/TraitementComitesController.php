@@ -13,6 +13,7 @@ use App\Helpers\InfosEntreprise;
 use App\Models\Departement;
 use App\Models\Service;
 use App\Models\StatutOperation;
+use App\Models\ListeDomaineProjetFormation;
 use App\Helpers\Menu;
 use App\Helpers\Email;
 use App\Helpers\GenerateCode as Gencode;
@@ -266,7 +267,7 @@ class TraitementComitesController extends Controller
                 $projet_etude = ProjetFormation::find($id1);
                 $idcahier =  Crypt::UrldeCrypt($id2);
                 $cahier = CahierPlansProjets::find($idcahier);
-                //dd($idetape);
+                //dd($idcomite);
 
                 if($cahier->code_commission_permante_comite_gestion=='COP'){
                     $projet_etude->update([
@@ -314,7 +315,7 @@ class TraitementComitesController extends Controller
                     ]);
                 }
 
-                return redirect('traitementcomite/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/'.Crypt::UrlCrypt(1).'/edit/projetformation')->with('success', 'Succes : Mise a jour reussi ');
+                return redirect('traitementcomite/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idcahier).'/'.Crypt::UrlCrypt(1).'/edit/projetformation')->with('success', 'Succes : Projet de formation validé , la fiche d\'agreement est disponible. ');
             }
 
         }
@@ -495,7 +496,7 @@ class TraitementComitesController extends Controller
         $id1 =  Crypt::UrldeCrypt($id1);
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcomite =  $id;
-        //dd($idetape);
+        dd($idetape);
 
         $comite = Comite::find($id);
 
@@ -572,8 +573,15 @@ class TraitementComitesController extends Controller
         $projetetude = ProjetFormation::find($id);
         $entreprise_info = Entreprises::find($projetetude->id_entreprises);
         //dd($entreprise->raison_social_entreprises);
+        // Domaine Formation
+        $domaineformationselect = ListeDomaineProjetFormation::Select('liste_domaine_projet_formation.id_liste_domaine_projet_formation as id_liste_domain_select',
+         'domaine_projet_formation.libelle as libelle_domaine')
+        ->join('projet_formation','liste_domaine_projet_formation.id_projet_formation','projet_formation.id_projet_formation')
+        ->join('domaine_projet_formation', 'liste_domaine_projet_formation.id_domaine_formation', 'domaine_projet_formation.id_domaine_projet_formation')
+        ->where([['liste_domaine_projet_formation.id_projet_formation','=',$id]])
+        ->get();
 
-        //dd($projetetude['titre_projet_etude']);
+       // dd($projetetude);
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','1']])->get();
         $piecesetude1 = $piecesetude['0']['libelle_pieces'];
         $piecesetude = PiecesProjetFormation::where([['id_projet_formation','=',$id],['code_pieces','=','2']])->get();
@@ -758,7 +766,7 @@ class TraitementComitesController extends Controller
         compact('conseiller_name','service_name','listeservice','departement_name','listedepartment','entreprise_info',
         'user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude',
         'cahiersplanprojet','comite','formjuridiques',
-        'listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
+        'listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7','domaineformationselect'));
 
 
             }

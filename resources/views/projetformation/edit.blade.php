@@ -388,7 +388,11 @@
                                                             <span class="custom-option-body">
                                                                 <i class="ti ti-briefcase"></i>
                                                                 <span class="custom-option-title"> {{ $proj->libelle }}
-                                                                    <?php ?> </span>
+                                                                    <?php if ($projetetude->id_type_projet_formation == $proj->id_type_projet_formation) {
+                                                                        $checked = 'checked';
+                                                                    } else {
+                                                                        $checked = '';
+                                                                    } ?> </span>
                                                                 {{-- <small>Le perfectionnement est un engagement envers l'amélioration
                                                                 personnelle et professionnelle, qui implique de consacrer du temps
                                                                 et des efforts à acquérir de nouvelles compétences et à approfondir
@@ -396,7 +400,8 @@
                                                             </span>
                                                             <input name="typeprojetformation" class="form-check-input"
                                                                 type="radio" value={{ $proj->id_type_projet_formation }}
-                                                                id="customRadioIcon1.<?php echo $proj->id_type_projet_formatio; ?>"checked="">
+                                                                id="customRadioIcon1.<?php echo $proj->id_type_projet_formatio; ?>"
+                                                                <?php echo $checked; ?>>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -536,12 +541,21 @@
                                                                     <div class="mb-1">
                                                                         <label>Operateur <span style="color:red;">*</span>
                                                                         </label>
-                                                                        <input type="text" name="operateur"
+                                                                        <select id="operateur" name="operateur"
+                                                                            class="select2 select2-size-sm form-select"
+                                                                            required="required" <?php echo $disable; ?>>
+
+                                                                            <?php echo $operateur_selected;
+                                                                            ?>
+
+                                                                        </select>
+                                                                        {{-- <input type="text" name="operateur"
                                                                             required="required" id="operateur"
                                                                             class="form-control form-control-sm"
                                                                             placeholder="ex : Perfectionnement .."
-                                                                            <?php echo $disable; ?>
-                                                                            value="{{ $projetetude->operateur }}">
+                                                                            <?php //echo $disable;
+                                                                            ?>
+                                                                            value="{{ $projetetude->operateur }}"> --}}
                                                                     </div>
                                                                     <div class="mb-1">
                                                                         <label>Promoteur <span style="color:red;">*</span>
