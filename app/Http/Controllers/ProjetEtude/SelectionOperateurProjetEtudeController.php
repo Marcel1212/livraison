@@ -128,8 +128,7 @@ class SelectionOperateurProjetEtudeController extends Controller{
                 }
 
                 if($request->action=="Enregistrer_soumettre_selection"){
-                    $logo = Menu::get_logo();
-                    $operateurs = $projet_etude_valide->operateurs()->get();
+                    $projet_etude_valide->id_processus_selection = true;
                     $projet_etude_valide->flag_soumis_selection_operateur = true;
                     $projet_etude_valide->date_soumis_selection_operateur = now();
                     $projet_etude_valide->update();
@@ -162,6 +161,9 @@ class SelectionOperateurProjetEtudeController extends Controller{
                     $projet_etude_valide->update();
 
                     $operateurs = $projet_etude_valide->operateurs()->get();
+
+                    $logo = Menu::get_logo();
+
                     if(isset($operateurs)){
                         foreach ($operateurs as $operateur){
                             $entreprise = Entreprises::where('id_entreprises',$projet_etude_valide->id_operateur_selection)->first();
@@ -269,13 +271,13 @@ class SelectionOperateurProjetEtudeController extends Controller{
         $input['ncc_entreprises'] = $numfdfp1;
 
         Entreprises::create($input);
-        $data = Entreprises::latest()->first();
+        $id_entreprises = Entreprises::latest()->first()->id_entreprises;
 
         $projet_etude = ProjetEtude::find($id_projet_etude);
 
         $domaine_formation_cabinet = new DomaineFormationCabinet();
         $domaine_formation_cabinet->id_domaine_formation = $projet_etude->id_domaine_projet_instruction;
-        $domaine_formation_cabinet->id_entreprises = $data->id_entreprises;
+        $domaine_formation_cabinet->id_entreprises = $id_entreprises;
         $domaine_formation_cabinet->flag_domaine_formation_cabinet = true;
         $domaine_formation_cabinet->save();
 

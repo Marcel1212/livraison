@@ -345,10 +345,10 @@ class CommissionEvaluationOffreController extends Controller
                                             <br><br>Vous êtes convié à la commission d'évaluation qui se déroulera  à partir du ".$commissionevaluationoffre->date_debut_commission_evaluation_offre;
 
                             if(isset($commissionevaluationoffre->date_fin_commission_evaluation_offre)){
-                                $messageMail.=" au".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
+                                $messageMail.=" au ".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
                             }
 
-                            $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre evaluation en cliquant sur le lien suivant <br><br>
+                            $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre évaluation en cliquant sur le lien suivant : <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcommissionevaluationoffres.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Faire son évaluation</a>"
                                 ."<br><br><br>
