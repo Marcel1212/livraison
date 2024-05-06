@@ -197,10 +197,18 @@
                                                                     <div class="mb-1">
                                                                         <label>Operateur <span style="color:red;">*</span>
                                                                         </label>
-                                                                        <input type="text" name="operateur"
+                                                                        <select id="operateur" name="operateur"
+                                                                            class="select2 select2-size-sm form-select"
+                                                                            required="required">
+
+                                                                            <?php echo $operateur_selected;
+                                                                            ?>
+
+                                                                        </select>
+                                                                        {{-- <input type="text" name="operateur"
                                                                             required="required" id="operateur"
                                                                             class="form-control form-control-sm"
-                                                                            placeholder="ex : CAF ..">
+                                                                            placeholder="ex : CAF .."> --}}
                                                                     </div>
                                                                     <div class="mb-1">
                                                                         <label>Promoteur <span style="color:red;">*</span>

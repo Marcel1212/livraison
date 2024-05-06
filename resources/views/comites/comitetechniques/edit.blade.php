@@ -294,8 +294,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 <td>{{ @$demande->raison_sociale }}</td>
                                                 <td>{{ @$demande->nom_conseiller }}</td>
                                                 <td>{{ @$demande->code }}</td>
-                                                <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_demande))}}</td>
-                                                <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_soumis))}}</td>
+                                                <td>{{ $demande->date_demande }}</td>
+                                                <td>{{ $demande->date_soumis }}</td>
                                                 <td align="rigth">
                                                     {{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
                                             </tr>
@@ -355,8 +355,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         @if (count($comiteparticipants) >= 1)
                                             <button type="submit" name="action" value="Invitation_personne_ressouce"
                                                 class="btn btn-sm btn-success me-sm-3 me-1"
-
-                                                onclick='javascript:if(!confirm("Voulez-vous envoyer les invitations a ces personnes pour cet Ct ?")){return false;}'>Envoyer
+                                                onclick='javascript:if (!confirm("Voulez-vous envoyer les invitations a ces personnes pour cet Ct ?")) return false;'>Envoyer
                                                 les invitations</button>
                                         @endif
                                     </div>
@@ -468,53 +467,57 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 </thead>
                                 <tbody>
 
-                                <?php //dd($planformations);
-                                $i=0 ?>
-                                @foreach ($listedemandesss as $key => $demande)
-                                    <tr>
-                                        <td> {{ ++$i }}</td>
-                                        <td>
-                                            @if ($demande->code_processus =='PF')
-                                                PLAN DE FORMATION
-                                            @endif
-                                            @if ($demande->code_processus =='PE')
-                                                PROJET ETUDE
-                                            @endif
-                                            @if ($demande->code_processus =='PRF')
-                                                PROJET DE FORMATION
-                                            @endif
-                                        </td>
-                                        <td>{{ @$demande->raison_sociale  }}</td>
-                                        <td>{{ @$demande->nom_conseiller }}</td>
-                                        <td>{{ @$demande->code }}</td>
-                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_demande))}}</td>
-                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_soumis))}}</td>
-                                        <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}</td>
-                                        <td align="center" nowrap="nowrap">
-                                            @if($comite->flag_statut_comite == true)
-                                                <span class="badge bg-success">Traité</span>
-                                            @else
-                                                <span class="badge bg-warning">En cours</span>
-                                            @endif
-                                        </td>
-                                        <td align="center" nowrap="nowrap">
-                                            @can($lien.'-edit')
-                                            @if($demande->code_processus =='PF')
-                                                <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                            @endif
-                                            @if($demande->code_processus =='PE')
-                                                <a href="{{ route($lien.'.edit.projetetude',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                            @endif
-                                            @if($demande->code_processus =='PRF')
-                                                <a href="{{ route($lien.'.edit.projetformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
-                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                            @endif
-                                        @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                    <?php //dd($planformations);
+                                    $i = 0; ?>
+                                    @foreach ($listedemandesss as $key => $demande)
+                                        <tr>
+                                            <td> {{ ++$i }}</td>
+                                            <td>
+                                                @if ($demande->code_processus == 'PF')
+                                                    PLAN DE FORMATION
+                                                @endif
+                                                @if ($demande->code_processus == 'PE')
+                                                    PROJET ETUDE
+                                                @endif
+                                                @if ($demande->code_processus == 'PRF')
+                                                    PROJET DE FORMATION
+                                                @endif
+                                            </td>
+                                            <td>{{ @$demande->raison_sociale }}</td>
+                                            <td>{{ @$demande->nom_conseiller }}</td>
+                                            <td>{{ @$demande->code }}</td>
+                                            <td>{{ $demande->date_demande }}</td>
+                                            <td>{{ $demande->date_soumis }}</td>
+                                            <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}
+                                            </td>
+                                            <td align="center" nowrap="nowrap">
+                                                @if ($comite->flag_statut_comite == true)
+                                                    <span class="badge bg-success">Traité</span>
+                                                @else
+                                                    <span class="badge bg-warning">En cours</span>
+                                                @endif
+                                            </td>
+                                            <td align="center" nowrap="nowrap">
+                                                @can($lien . '-edit')
+                                                    @if ($demande->code_processus == 'PF')
+                                                        <a href="{{ route($lien . '.edit.planformation', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endif
+                                                    @if ($demande->code_processus == 'PE')
+                                                        <a href="{{ route($lien . '.edit.projetetude', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endif
+                                                    @if ($demande->code_processus == 'PRF')
+                                                        <a href="{{ route($lien . '.edit.projetformation', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endif
+                                                @endcan
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
 

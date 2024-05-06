@@ -106,7 +106,14 @@ class ProjetFormationController extends Controller
         $user = User::find(Auth::user()->id);
         $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
         //dd($user->email);
+        $operateurs_valide = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)->get();
+        //dd($operateurs_valide);
+        $operateur_selected = "<option value=''> Selectionnez un opérateur </option>";
+        foreach ($operateurs_valide as $operateur) {
+            $operateur_selected .= "<option value='" .$operateur->id_entreprises. "'>" . mb_strtoupper($operateur->raison_social_entreprises) . " </option>";
+        }
 
+        //dd($operateur_selected);
         $typeprojetformation = TypeProjetFormation::all();
 
         $domaines = DomaineProjetFormation::all();
@@ -140,7 +147,7 @@ class ProjetFormationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        return view('projetformation.create', compact('activite','domaine','centreimpot','localite','pay','entreprise','user','typeprojetformation'));
+        return view('projetformation.create', compact('activite','domaine','centreimpot','operateur_selected','localite','pay','entreprise','user','typeprojetformation'));
     }
 
     /**
@@ -331,7 +338,7 @@ class ProjetFormationController extends Controller
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['id_type_projet_formation'] = $input['typeprojetformation'];
            // $input['id_domaine_projet_formation'] = $input['id_domaine'];
-            $input['operateur'] = ucfirst($input['operateur']);
+            $input['id_operateur'] = $input['operateur'];
             $input['promoteur'] = ucfirst($input['promoteur']);
             $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
             $input['zone_projet'] = ucfirst($input['zone_projey']);
@@ -454,7 +461,14 @@ class ProjetFormationController extends Controller
         $entreprise_info = Entreprises::find($projetetude->id_entreprises);
         $typeprojetformation = TypeProjetFormation::all();
         $typeproj = '';
-        //dd($projetetude);
+        //dd($projetetude->id_type_projet_formation);
+        $operateurs_valide = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)->get();
+        $operateur_selected = "<option value='" .$projetetude->operateur_selectionne->id_entreprises. "'>" . mb_strtoupper($projetetude->operateur_selectionne->raison_social_entreprises) . " </option>";
+        foreach ($operateurs_valide as $operateur) {
+            $operateur_selected .= "<option value='" .$operateur->id_entreprises. "'>" . mb_strtoupper($operateur->raison_social_entreprises) . " </option>";
+        }
+
+        //dd($operateur_selected);
 
         //$domaines = DomaineProjetFormation::all();
         $domaines = DomaineProjetFormation::select('*')
@@ -668,7 +682,7 @@ class ProjetFormationController extends Controller
         }
         //dd($motifs);
 
-        return view('projetformation.edit', compact('conseiller_name','domaine','domaineformationselect','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
+        return view('projetformation.edit', compact('conseiller_name','operateur_selected','domaine','domaineformationselect','typeproj','typeprojetformation','service_name','listeservice','departement_name','listedepartment','entreprise_info','user','nomrole','entreprise','motifs','motif_p','etat_dossier','statuts','motifs','user_ce_name','user_cs_name','projetetude','listeuserfinal','piecesetude1','piecesetude2','piecesetude3','piecesetude4' ,'piecesetude5','piecesetude6','piecesetude7'));
     }
 
 
@@ -1162,8 +1176,9 @@ class ProjetFormationController extends Controller
                 }
 
                 $projetformation = ProjetFormation::find($id);
+                //dd($data['typeprojetformation']);
                 $projetformation->titre_projet_etude = $data['titre_projet'];
-                $projetformation->operateur = $data['operateur'];
+                $projetformation->id_operateur = $data['operateur'];
                 $projetformation->promoteur = $data['promoteur'];
                 $projetformation->beneficiaires_cible = $data['beneficiaire_cible'];
                 $projetformation->zone_projet = $data['zone_projey'];
@@ -1171,9 +1186,9 @@ class ProjetFormationController extends Controller
                 //$input['cout_projet_formation'] = $cout_projet_formation;
                 $projetformation->fonction = $data['fonction'];
                 $projetformation->telephone = $data['telephone'];
-                $input['id_type_projet_formation'] = $data['typeprojetformation'];
+                $projetformation->id_type_projet_formation = $data['typeprojetformation'];
                 $projetformation->environnement_contexte = $data['environnement_contexte'];
-                $projetformation->id_domaine_projet_formation = $data['id_domaine'];
+                //$projetformation->id_domaine_projet_formation = $data['id_domaine'];
                 $projetformation->cout_projet_formation = $cout_projet_formation;
                 // $projetformation->acteurs = $data['acteurs_projet'];
                 // $projetformation->role_p = $data['role_projet'];

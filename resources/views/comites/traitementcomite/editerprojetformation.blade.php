@@ -635,10 +635,23 @@ if ($projetetude->flag_soumis == true and $projetetude->flag_recevabilite == nul
                                                                         <label class="form-label">Domaine selectionné :
                                                                             <span style="color:red;"></span></label>
                                                                         <div class="align-items-center">
-                                                                            <span class="badge bg-info rounded-pill">
+                                                                            <div class="col-md-4">
+                                                                                <div class="mb-6">
+                                                                                    <label class="form-label">Domaine(s) selectionné(s)
+                                                                                        :
+                                                                                        <span style="color:red;"></span></label>
+                                                                                    <div class="align-items-center">
+                                                                                        @foreach ($domaineformationselect as $key => $domaineformationselectionne)
+                                                                                            <span class="badge bg-info rounded-pill">
 
-                                                                                <?php echo $projetetude->domaineFormation->libelle; ?>
-                                                                            </span>
+                                                                                                <?php echo $domaineformationselectionne->libelle_domaine;
+                                                                                                ?>
+                                                                                            </span>
+                                                                                        @endforeach
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
 
                                                                         </div>
                                                                     </div>
