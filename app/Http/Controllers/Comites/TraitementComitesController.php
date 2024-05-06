@@ -497,7 +497,7 @@ class TraitementComitesController extends Controller
         $id1 =  Crypt::UrldeCrypt($id1);
         $idetape =  Crypt::UrldeCrypt($id2);
         $idcomite =  $id;
-        dd($idetape);
+        //dd($idetape);
 
         $comite = Comite::find($id);
 
