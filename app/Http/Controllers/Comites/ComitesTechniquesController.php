@@ -657,23 +657,48 @@ class ComitesTechniquesController extends Controller
                             $datefin = ' ';
                         }
 
-                        if (isset($email)) {
-                            $nom_prenom = $nom .' '. $prenom;
-                            $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
-                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        if($comitep->categorieComite->type_code_categorie_comite=="CT"){
+                            if (isset($email)) {
+                                $nom_prenom = $nom .' '. $prenom;
+                                $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
+                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
 
-                            $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
+                                $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes convié au comité technique  qui se déroulera  à partir du ".date('d/m/Y',strtotime(@$comitep->date_debut_comite))." ".$datefin. ".
                                            Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivant : <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
-                                ."<br><br><br>
+                                    ."<br><br><br>
                                             -----
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                             -----
                                             ";
 
-                            $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                                $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                        }
+
+                        if($comitep->categorieComite->type_code_categorie_comite=="CC"){
+                            if (isset($email)) {
+                                $nom_prenom = $nom .' '. $prenom;
+                                $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
+                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
+                                            <br><br>Vous êtes convié au comité de coordination  qui se déroulera  à partir du ".date('d/m/Y',strtotime(@$comitep->date_debut_comite))." ".$datefin. ".
+                                           Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivant : <br><br>
+                                            <a class=\"o_text-white\" href=\"".route('traitementcomitetechniques.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
+                                    ."<br><br><br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+
+                                $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                        }
+
+
+
                         }
 
                     }
