@@ -330,11 +330,11 @@ $nombre = count($conseilleragence);
                                         } else {
                                             $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
                                         }
-                                        
+
                                         ?>
                                         @if ($idcategoriecomite == 1)
                                             @if ($planformation->id_conseiller_formation == Auth::user()->id)
-                                                @if ($planformation->id_conseiller_formation == true)
+                                                @if ($planformation->flag_processus_etape == true)
                                                     <span class="badge bg-success">Valider</span>
                                                 @else
                                                     <span class="badge bg-warning">Non traité</span>
@@ -1014,7 +1014,7 @@ $nombre = count($conseilleragence);
                 } else {
                     $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
                 }
-                
+
                 ?>
 
                 @if (count($resultatTCPCU) < 1)
@@ -1140,7 +1140,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="text" name="titre_projet" required="required"
                                                     id="titre_projet" class="form-control form-control-sm"
-                                                    placeholder="ex : Perfectionnement .." disabled
+                                                    placeholder="ex : Perfectionnement .."
                                                     value="{{ $planformation->titre_projet_etude }}">
                                             </div>
                                             <div class="mb-1">
@@ -1148,7 +1148,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="text" name="operateur" required="required"
                                                     id="operateur" class="form-control form-control-sm"
-                                                    placeholder="ex : Perfectionnement .." disabled
+                                                    placeholder="ex : Perfectionnement .."
                                                     value="{{ $planformation->operateur }}">
                                             </div>
                                             <div class="mb-1">
@@ -1156,7 +1156,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="text" name="promoteur" required="required"
                                                     id="promoteur" class="form-control form-control-sm"
-                                                    placeholder="ex : Perfectionnement .." disabled
+                                                    placeholder="ex : Perfectionnement .."
                                                     value="{{ $planformation->promoteur }}">
                                             </div>
                                         </div>
@@ -1166,7 +1166,7 @@ $nombre = count($conseilleragence);
                                             <div class="mb-1">
                                                 <label>Beneficiaire / Cible <span style="color:red;">*</span></label>
                                                 <textarea class="form-control" required="required" rows="3" id="exampleFormControlTextarea"
-                                                    name="beneficiaire_cible" style="height: 121px;"disabled><?php echo $planformation->beneficiaires_cible; ?></textarea>
+                                                    name="beneficiaire_cible" style="height: 121px;"><?php echo $planformation->beneficiaires_cible; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -1174,7 +1174,7 @@ $nombre = count($conseilleragence);
                                                 <label>Zone du projet <span style="color:red;">*</span>
                                                 </label>
                                                 <textarea required="required" class="form-control" rows="3" id="exampleFormControlTextarea"
-                                                    name="zone_projey" style="height: 121px;"disabled><?php echo $planformation->zone_projet; ?></textarea>
+                                                    name="zone_projey" style="height: 121px;"><?php echo $planformation->zone_projet; ?></textarea>
 
                                             </div>
                                         </div>
@@ -1199,7 +1199,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="text" name="nom_prenoms" id="titre_projet"
                                                     class="form-control form-control-sm"
-                                                    placeholder="ex : Koa Augustin .." disabled
+                                                    placeholder="ex : Koa Augustin .."
                                                     value="{{ $planformation->nom_prenoms }}">
                                             </div>
                                         </div>
@@ -1211,7 +1211,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="text" name="fonction" id="fonction"
                                                     class="form-control form-control-sm"
-                                                    placeholder="ex : Charge d'etude .." disabled
+                                                    placeholder="ex : Charge d'etude .."
                                                     value="{{ $planformation->fonction }}">
                                             </div>
                                         </div>
@@ -1223,7 +1223,7 @@ $nombre = count($conseilleragence);
                                                 </label>
                                                 <input type="number" name="telephone" minlength="9" maxlength="10"
                                                     id="telephone" class="form-control form-control-sm"
-                                                    placeholder="ex : 02014575777" disabled
+                                                    placeholder="ex : 02014575777"
                                                     value="{{ $planformation->telephone }}">
                                             </div>
                                         </div>
@@ -1250,7 +1250,7 @@ $nombre = count($conseilleragence);
                                                 <label>Environnement /
                                                     contexte <span style="color:red;">*</span></label>
                                                 <textarea class="form-control" required="required" rows="4" id="exampleFormControlTextarea"
-                                                    name="environnement_contexte" style="height: 150px;" disabled><?php echo $planformation->environnement_contexte; ?></textarea>
+                                                    name="environnement_contexte" style="height: 150px;"><?php echo $planformation->environnement_contexte; ?></textarea>
                                             </div>
                                         </div>
 
@@ -1309,14 +1309,14 @@ $nombre = count($conseilleragence);
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="formtabs-first-name">Roles</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_beneficiaire"
-                                                            style="height: 150px;" disabled><?php echo $planformation->roles_beneficiaire; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->roles_beneficiaire; ?></textarea>
 
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label"
                                                             for="formtabs-last-name">Responsabilités</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_beneficiaires"
-                                                            style="height: 150px;" disabled><?php echo $planformation->responsabilites_beneficiaires; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->responsabilites_beneficiaires; ?></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1325,13 +1325,13 @@ $nombre = count($conseilleragence);
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="formtabs-first-name">Roles</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_promoteur"
-                                                            style="height: 150px;" disabled><?php echo $planformation->roles_promoteur; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->roles_promoteur; ?></textarea>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label"
                                                             for="formtabs-last-name">Responsabilités</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_promoteur"
-                                                            style="height: 150px;" disabled><?php echo $planformation->responsabilites_promoteur; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->responsabilites_promoteur; ?></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1341,13 +1341,13 @@ $nombre = count($conseilleragence);
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="formtabs-first-name">Roles</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_partenaires"
-                                                            style="height: 150px;" disabled><?php echo $planformation->roles_partenaires; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->roles_partenaires; ?></textarea>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label"
                                                             for="formtabs-last-name">Responsabilités</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_partenaires"
-                                                            style="height: 150px;" disabled><?php echo $planformation->responsabilites_partenaires; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->responsabilites_partenaires; ?></textarea>
                                                     </div>
 
 
@@ -1361,7 +1361,7 @@ $nombre = count($conseilleragence);
                                                         <label>Precisez
                                                         </label>
                                                         <input type="text" name="autre_acteur" id="autre_acteur"
-                                                            class="form-control form-control-sm" disabled
+                                                            class="form-control form-control-sm"
                                                             value="{{ $planformation->autre_acteur }} "
                                                             placeholder="ex : Panelistes">
                                                     </div>
@@ -1371,13 +1371,13 @@ $nombre = count($conseilleragence);
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="formtabs-first-name">Roles</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="roles_autres"
-                                                            style="height: 150px;"disabled><?php echo $planformation->roles_autres; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->roles_autres; ?></textarea>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label"
                                                             for="formtabs-last-name">Responsabilités</label>
                                                         <textarea class="form-control" rows="4" id="exampleFormControlTextarea" name="responsabilites_autres"
-                                                            style="height: 150px;"disabled><?php echo $planformation->responsabilites_autres; ?></textarea>
+                                                            style="height: 150px;"><?php echo $planformation->responsabilites_autres; ?></textarea>
                                                     </div>
 
 
@@ -1408,7 +1408,7 @@ $nombre = count($conseilleragence);
                                                 <label>Problèmes
                                                 </label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="problemes_odf"
-                                                    style="height: 121px;"disabled><?php echo $planformation->problemes; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->problemes; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6  col-12">
@@ -1418,7 +1418,7 @@ $nombre = count($conseilleragence);
                                                     Impacts / Effet
                                                 </label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="manifestation_impacts_odf"
-                                                    style="height: 121px;" disabled><?php echo $planformation->manifestation_impact_effet; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->manifestation_impact_effet; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -1428,7 +1428,7 @@ $nombre = count($conseilleragence);
                                                     de résolution
                                                 </label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="moyens_problemes_odf"
-                                                    style="height: 121px;"disabled><?php echo $planformation->moyens_probables; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->moyens_probables; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -1436,7 +1436,7 @@ $nombre = count($conseilleragence);
                                             </label>
                                             <input type="number" name="cout_projet_formation" required="required"
                                                 id="cout_projet_formation" class="form-control form-control-sm"
-                                                placeholder="ex : 2000000" disabled value=<?php echo $planformation->cout_projet_formation; ?>>
+                                                placeholder="ex : 2000000" value=<?php echo $planformation->cout_projet_formation; ?>>
                                         </div>
 
                                     </div>
@@ -1460,7 +1460,7 @@ $nombre = count($conseilleragence);
                                                 <label>
                                                     Compétences</label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="competences_odf"
-                                                    style="height: 121px;" disabled><?php echo $planformation->competences; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->competences; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -1470,7 +1470,7 @@ $nombre = count($conseilleragence);
                                                     compétences
                                                 </label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="evaluation_competences_odf"
-                                                    style="height: 121px;" disabled><?php echo $planformation->evaluation_contexte; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->evaluation_contexte; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
@@ -1478,7 +1478,7 @@ $nombre = count($conseilleragence);
                                                 <label> Sources de
                                                     verification</label>
                                                 <textarea class="form-control" rows="3" id="exampleFormControlTextarea" name="sources_verification_odf"
-                                                    style="height: 121px;"disabled><?php echo $planformation->source_verification; ?></textarea>
+                                                    style="height: 121px;"><?php echo $planformation->source_verification; ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1677,7 +1677,7 @@ $nombre = count($conseilleragence);
                 } else {
                     $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
                 }
-                
+
                 ?>
 
                 @if (count($resultatTCPCU) < 1)
@@ -1699,7 +1699,7 @@ $nombre = count($conseilleragence);
                                         onclick='javascript:if (!confirm("Voulez-vous rejeter cette action ?")) return false;'
                                         type="submit" name="action"
                                         value="Traiter_action_formation_valider_prf_rejete"
-                                        class="btn btn-warning me-sm-3 me-1">Rejeter</button>
+                                        class="btn btn-warning me-sm-3 me-1">Ajourner</button>
                                 @endif
                                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                                     aria-label="Close">
@@ -2301,7 +2301,7 @@ $nombre = count($conseilleragence);
                 } else {
                     $resultatTCPCU = ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user_prf(Auth::user()->id, $planformation->id_projet_formation);
                 }
-                
+
                 ?>
 
                 @if (count($resultatTCPCU) < 1)
@@ -2323,7 +2323,7 @@ $nombre = count($conseilleragence);
                                         onclick='javascript:if (!confirm("Voulez-vous rejeter cette action ?")) return false;'
                                         type="submit" name="action"
                                         value="Traiter_action_formation_valider_prf_rejete_cc"
-                                        class="btn btn-warning me-sm-3 me-1">Rejeter</button>
+                                        class="btn btn-warning me-sm-3 me-1">Ajourner</button>
                                 @endif
                                 <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
                                     aria-label="Close">
@@ -2437,7 +2437,7 @@ $nombre = count($conseilleragence);
                                 } else {
                                     $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_prf($planformation->id_projet_formation);
                                 }
-                                
+
                                 ?>
                                 @foreach ($ResultatTraitement as $res)
                                     <li
