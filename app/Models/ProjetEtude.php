@@ -69,8 +69,8 @@ class ProjetEtude extends Model
     protected $fillable = ['id_entreprises',
         'flag_valider_comite_permanente_projet_etude','date_valider_comite_permanente_projet_etude',
         'flag_valider_comite_gestion_projet_etude','date_valider_comite_gestion_projet_etude',
-
         'date_previsionnelle_demarrage_projet','lieu_realisation_projet',
+        'id_domaine_formation',
         'date_previsionnelle_demarrage_projet_instruction','lieu_realisation_projet_instruction',
 
         'flag_passer_comite_technique ','montant_projet','date_fiche_agrement',
@@ -118,6 +118,11 @@ class ProjetEtude extends Model
     public function DomaineProjetEtude()
     {
         return $this->belongsTo(DomaineFormation::class, 'id_domaine_projet', 'id_domaine_formation');
+    }
+
+    public function DomaineProjetEtudeInstruction()
+    {
+        return $this->belongsTo(DomaineFormation::class, 'id_domaine_projet_instruction', 'id_domaine_formation');
     }
 
 
