@@ -87,8 +87,8 @@ class FicheADemandeAgrement extends Model
     }
 
     //protected $dates = ['date_debut_fiche_agrement', 'date_fin_fiche_agrement'];
-    /*protected $casts = [
+    protected $casts = [
         'date_debut_fiche_agrement' => 'datetime',
         'date_fin_fiche_agrement' => 'datetime'
-    ];*/
+    ];
 }
