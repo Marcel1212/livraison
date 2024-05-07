@@ -900,7 +900,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                     id="date_debut_fiche_agrement"
                                     name="date_debut_fiche_agrement"
                                     class="form-control form-control-sm"
-                                    value="{{@$infosactionplanformation->date_debut_fiche_agrement}}"
+                                    value="{{@$infosactionplanformation->date_debut_fiche_agrement->format('Y-m-d')}}"
                                    />
                                 </div>
                                 <div class="col-12 col-md-2">
@@ -910,7 +910,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                     id="date_fin_fiche_agrement"
                                     name="date_fin_fiche_agrement"
                                     class="form-control form-control-sm"
-                                    value="{{@$infosactionplanformation->date_fin_fiche_agrement}}"
+                                    value="{{@$infosactionplanformation->date_fin_fiche_agrement->format('Y-m-d')}}"
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
