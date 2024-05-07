@@ -86,5 +86,9 @@ class FicheADemandeAgrement extends Model
         return $this->belongsTo('App\Models\ActionFormationPlan', 'id_action_formation_plan', 'id_action_formation_plan');
     }
 
-    protected $dates = ['date_debut_fiche_agrement', 'date_fin_fiche_agrement'];
+    //protected $dates = ['date_debut_fiche_agrement', 'date_fin_fiche_agrement'];
+    /*protected $casts = [
+        'date_debut_fiche_agrement' => 'datetime',
+        'date_fin_fiche_agrement' => 'datetime'
+    ];*/
 }

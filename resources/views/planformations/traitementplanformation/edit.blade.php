@@ -900,7 +900,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                     id="date_debut_fiche_agrement"
                                     name="date_debut_fiche_agrement"
                                     class="form-control form-control-sm"
-                                    value="{{@$infosactionplanformation->date_debut_fiche_agrement->format('Y-m-d')}}"
+                                    value="{{Carbon\Carbon::parse(@$infosactionplanformation->date_debut_fiche_agrement)->format('Y-m-d')}}"
                                    />
                                 </div>
                                 <div class="col-12 col-md-2">
@@ -910,7 +910,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                     id="date_fin_fiche_agrement"
                                     name="date_fin_fiche_agrement"
                                     class="form-control form-control-sm"
-                                    value="{{@$infosactionplanformation->date_fin_fiche_agrement->format('Y-m-d')}}"
+                                    value="{{Carbon\Carbon::parse(@$infosactionplanformation->date_fin_fiche_agrement)->format('Y-m-d')}}"
                                     />
                                 </div>
                                 <div class="col-12 col-md-4">
@@ -1281,7 +1281,7 @@ use App\Helpers\ListePlanFormationSoumis;
 
                             if(selectedValue == 3){
                                 document.getElementById("Activeajoutercabinetformation").disabled = true;
-                                $.get('{{url('/')}}/entrepriseinterneplan', function (data) {
+                                $.get('{{url('/')}}/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                                     $('#id_entreprise_structure_formation_plan_formation_'+i).empty();
                                     $.each(data, function (index, tels) {
                                         $('#id_entreprise_structure_formation_plan_formation_'+i).append($('<option>', {
