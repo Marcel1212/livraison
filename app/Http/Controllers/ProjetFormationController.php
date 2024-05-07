@@ -11,6 +11,7 @@ use App\Models\Localite;
 use App\Models\Pays;
 use App\Models\Motif;
 use App\Models\StatutOperation;
+use App\Models\ProjetFormationEntreprises;
 use App\Models\DemandeEnrolement;
 use App\Models\ProjetFormation;
 use App\Models\AgenceLocalite;
@@ -333,11 +334,9 @@ class ProjetFormationController extends Controller
             $input['code_projet_formation'] = 'PRF-'.Gencode::randStrGen(4, 5);
             // Modification du montant
             $cout_projet_formation = str_replace(' ', '', $data["cout_projet_formation"]) ;
-            //dd($cout_projet_formation);
             $input['cout_projet_formation'] = $cout_projet_formation;
             $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
             $input['id_type_projet_formation'] = $input['typeprojetformation'];
-           // $input['id_domaine_projet_formation'] = $input['id_domaine'];
             $input['id_operateur'] = $input['operateur'];
             $input['promoteur'] = ucfirst($input['promoteur']);
             $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
@@ -346,9 +345,6 @@ class ProjetFormationController extends Controller
             $input['fonction'] = ucfirst($input['fonction']);
             $input['telephone'] = ucfirst($input['telephone']);
             $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
-            // $input['acteurs'] = ucfirst($input['acteurs_projet']);
-            // $input['role_p'] = ucfirst($input['role_projet']);
-            // $input['responsabilite'] = ucfirst($input['responsabilite_projet']);
             $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
             $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
             $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
@@ -358,7 +354,6 @@ class ProjetFormationController extends Controller
             $input['autre_acteur'] = ucfirst($input['autre_acteur']);
             $input['roles_autres'] = ucfirst($input['roles_autres']);
             $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
-
             $input['problemes'] = ucfirst($input['problemes_odf']);
             $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
             $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
@@ -767,36 +762,73 @@ class ProjetFormationController extends Controller
 
 
                     // Enregistrement des modifications de l'instruction par le conseiller
-                    $input = $request->all();
+                    //$input = $request->all();
                     //dd(intval($projetformation->id_projet_formation));
-                    $input['id_projet_formation'] = intval($projetformation->id_projet_formation);
-                    $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
-                    $input['operateur'] = ucfirst($input['operateur']);
-                    $input['promoteur'] = ucfirst($input['promoteur']);
-                    $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
-                    $input['zone_projet'] = ucfirst($input['zone_projey']);
-                    $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
-                    $input['fonction'] = ucfirst($input['fonction']);
-                    $input['cout_projet_instruction'] = $cout_projet_formation;
-                    $input['telephone'] = ucfirst($input['telephone']);
-                    $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
-                    $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
-                    $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
-                    $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
-                    $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
-                    $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
-                    $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
-                    $input['autre_acteur'] = ucfirst($input['autre_acteur']);
-                    $input['roles_autres'] = ucfirst($input['roles_autres']);
-                    $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
-                    $input['problemes'] = ucfirst($input['problemes_odf']);
-                    $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
-                    $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
-                    $input['competences'] = ucfirst($input['competences_odf']);
-                    $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
-                    $input['source_verification'] = ucfirst($input['sources_verification_odf']);
+                    // $input['id_projet_formation'] = intval($projetformation->id_projet_formation);
+                    // $input['titre_projet_etude'] = ucfirst($input['titre_projet']);
+                    // $input['operateur'] = ucfirst($input['operateur']);
+                    // $input['promoteur'] = ucfirst($input['promoteur']);
+                    // $input['beneficiaires_cible'] = ucfirst($input['beneficiaire_cible']);
+                    // $input['zone_projet'] = ucfirst($input['zone_projey']);
+                    // $input['nom_prenoms'] = ucfirst($input['nom_prenoms']);
+                    // $input['fonction'] = ucfirst($input['fonction']);
+                    // $input['cout_projet_instruction'] = $cout_projet_formation;
+                    // $input['telephone'] = ucfirst($input['telephone']);
+                    // $input['environnement_contexte'] = ucfirst($input['environnement_contexte']);
+                    // $input['roles_beneficiaire'] = ucfirst($input['roles_beneficiaire']);
+                    // $input['responsabilites_beneficiaires'] = ucfirst($input['responsabilites_beneficiaires']);
+                    // $input['roles_promoteur'] = ucfirst($input['roles_promoteur']);
+                    // $input['responsabilites_promoteur'] = ucfirst($input['responsabilites_promoteur']);
+                    // $input['roles_partenaires'] = ucfirst($input['roles_partenaires']);
+                    // $input['responsabilites_partenaires'] = ucfirst($input['responsabilites_partenaires']);
+                    // $input['autre_acteur'] = ucfirst($input['autre_acteur']);
+                    // $input['roles_autres'] = ucfirst($input['roles_autres']);
+                    // $input['responsabilites_autres'] = ucfirst($input['responsabilites_autres']);
+                    // $input['problemes'] = ucfirst($input['problemes_odf']);
+                    // $input['manifestation_impact_effet'] = ucfirst($input['manifestation_impacts_odf']);
+                    // $input['moyens_probables'] = ucfirst($input['moyens_problemes_odf']);
+                    // $input['competences'] = ucfirst($input['competences_odf']);
+                    // $input['evaluation_contexte'] = ucfirst($input['evaluation_competences_odf']);
+                    // $input['source_verification'] = ucfirst($input['sources_verification_odf']);
 
-                    ProjetFormationInstruction::create($input);
+                    // ProjetFormationInstruction::create($input);
+
+                    $projetformation = ProjetFormation::find($id);
+                //dd($data['typeprojetformation']);
+                $projetformation->titre_projet_etude = $data['titre_projet'];
+                $projetformation->id_operateur = $data['operateur'];
+                $projetformation->promoteur = $data['promoteur'];
+                $projetformation->beneficiaires_cible = $data['beneficiaire_cible'];
+                $projetformation->zone_projet = $data['zone_projey'];
+                $projetformation->nom_prenoms = $data['nom_prenoms'];
+                //$input['cout_projet_formation'] = $cout_projet_formation;
+                $projetformation->fonction = $data['fonction'];
+                $projetformation->telephone = $data['telephone'];
+                //$projetformation->id_type_projet_formation = $data['typeprojetformation'];
+                $projetformation->environnement_contexte = $data['environnement_contexte'];
+                //$projetformation->id_domaine_projet_formation = $data['id_domaine'];
+                $projetformation->cout_projet_formation = $cout_projet_formation;
+                // $projetformation->acteurs = $data['acteurs_projet'];
+                // $projetformation->role_p = $data['role_projet'];
+                // $projetformation->responsabilite = $data['responsabilite_projet'];
+                $projetformation->roles_beneficiaire = $data['roles_beneficiaire'];
+                $projetformation->responsabilites_beneficiaires = $data['responsabilites_beneficiaires'];
+                $projetformation->roles_promoteur = $data['roles_promoteur'];
+                $projetformation->responsabilites_promoteur = $data['responsabilites_promoteur'];
+                $projetformation->roles_partenaires = $data['roles_partenaires'];
+                $projetformation->responsabilites_partenaires = $data['responsabilites_partenaires'];
+                $projetformation->autre_acteur = $data['autre_acteur'];
+                $projetformation->roles_autres = $data['roles_autres'];
+                $projetformation->responsabilites_autres = $data['responsabilites_autres'];
+
+
+                $projetformation->problemes = $data['problemes_odf'];
+                $projetformation->manifestation_impact_effet = $data['manifestation_impacts_odf'];
+                $projetformation->moyens_probables = $data['moyens_problemes_odf'];
+                $projetformation->competences = $data['competences_odf'];
+                $projetformation->evaluation_contexte = $data['evaluation_competences_odf'];
+                $projetformation->source_verification = $data['sources_verification_odf'];
+                $projetformation->save();
                     return redirect('projetformation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Projet formation instruit avec succes');
                     }else{
                         $etat_rec = false ;
@@ -979,39 +1011,77 @@ class ProjetFormationController extends Controller
             }
             // Traitement de la soumission du plan de formation au driecteur
             if($data['action'] === 'soumettre'){
-                //dd($id);
-                // ID du plan
-                $date_soumission = Carbon::now();
-                $projetformation = ProjetFormation::find($id);
-                //dd($projetformation);
-                $projetformation->flag_soumis = true;
-                $projetformation->date_soumis = $date_soumission;
-                // Attribution au directeur
-                $num_agce = Auth::user()->num_agce;
-                //dd($num_agce);
-                // Recuperation du numero d'agence
-                $numncc = Auth::user()->login_users;
-                $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
-                $id_localite = $entreprise->id_localite_entreprises;
-                $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
-                //dd($localite_info);
-                $id_agence = $localite_info[0]->id_agence;
-                //dd($id_agence);
-                // Requete d'affectation au directeur d'agence
-                // $directeur = DB::table('users')
-                // ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                // ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                // ->select('users.name', 'users.prenom_users', 'users.id')
-                // ->where([['roles.id','=',25],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
-                // ->get();
-                //dd(intval($directeur[0]->id));
-                //$projetformation->id_user_affecte = intval($directeur[0]->id);
-                $projetformation->num_agce = $id_agence;
-                // Recuperation de l'id Traitement a faire
-                // $user_id = Auth::user()->id;
-                $projetformation->id_processus = 10;
-                $projetformation->save();
-                return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au FDFP avec succès.');
+               //dd($data);
+            // Enregistrement des donnes dans la table Projet Formation Entreprises
+            $user = User::find(Auth::user()->id);
+            $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
+            $id_entreprise = $entreprise->id_entreprises;
+            //
+            $cout_projet_formation = str_replace(',', '', $data["cout_projet_formation"]) ;
+            //$cout_projet_formation = intval(str_replace(' ', '', $data["cout_projet_formation"]))  ;
+            //dd($cout_projet_formation);
+            $input['cout_projet_formation'] = $cout_projet_formation;
+            $input['titre_projet_etude'] = ucfirst($data['titre_projet']);
+            $input['id_type_projet_formation'] = $data['typeprojetformation'];
+            $input['id_operateur'] = $data['operateur'];
+            $input['id_projet_formation'] = $id;
+            $input['promoteur'] = ucfirst($data['promoteur']);
+            $input['beneficiaires_cible'] = ucfirst($data['beneficiaire_cible']);
+            $input['zone_projet'] = ucfirst($data['zone_projey']);
+            $input['nom_prenoms'] = ucfirst($data['nom_prenoms']);
+            $input['fonction'] = ucfirst($data['fonction']);
+            $input['telephone'] = ucfirst($data['telephone']);
+            $input['environnement_contexte'] = ucfirst($data['environnement_contexte']);
+            $input['roles_beneficiaire'] = ucfirst($data['roles_beneficiaire']);
+            $input['responsabilites_beneficiaires'] = ucfirst($data['responsabilites_beneficiaires']);
+            $input['roles_promoteur'] = ucfirst($data['roles_promoteur']);
+            $input['responsabilites_promoteur'] = ucfirst($data['responsabilites_promoteur']);
+            $input['roles_partenaires'] = ucfirst($data['roles_partenaires']);
+            $input['responsabilites_partenaires'] = ucfirst($data['responsabilites_partenaires']);
+            $input['autre_acteur'] = ucfirst($data['autre_acteur']);
+            $input['roles_autres'] = ucfirst($data['roles_autres']);
+            $input['responsabilites_autres'] = ucfirst($data['responsabilites_autres']);
+            $input['problemes'] = ucfirst($data['problemes_odf']);
+            $input['manifestation_impact_effet'] = ucfirst($data['manifestation_impacts_odf']);
+            $input['moyens_probables'] = ucfirst($data['moyens_problemes_odf']);
+            $input['competences'] = ucfirst($data['competences_odf']);
+            $input['evaluation_contexte'] = ucfirst($data['evaluation_competences_odf']);
+            $input['source_verification'] = ucfirst($data['sources_verification_odf']);
+            $input['id_entreprises'] = $id_entreprise ;
+
+            ProjetFormationEntreprises::create($input);
+            // ID du plan
+            $date_soumission = Carbon::now();
+            $projetformation = ProjetFormation::find($id);
+            //dd($projetformation);
+            $projetformation->flag_soumis = true;
+            $projetformation->date_soumis = $date_soumission;
+            // Attribution au directeur
+            $num_agce = Auth::user()->num_agce;
+            //dd($num_agce);
+            // Recuperation du numero d'agence
+            $numncc = Auth::user()->login_users;
+            $entreprise = InfosEntreprise::get_infos_entreprise($numncc);
+            $id_localite = $entreprise->id_localite_entreprises;
+            $localite_info = AgenceLocalite::where('id_localite','=',$id_localite)->get();
+            //dd($localite_info);
+            $id_agence = $localite_info[0]->id_agence;
+            //dd($id_agence);
+            // Requete d'affectation au directeur d'agence
+            // $directeur = DB::table('users')
+            // ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            // ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            // ->select('users.name', 'users.prenom_users', 'users.id')
+            // ->where([['roles.id','=',25],['users.num_agce','=',$id_agence]/*,['users.num_direction','=',$num_direction]*/])
+            // ->get();
+            //dd(intval($directeur[0]->id));
+            //$projetformation->id_user_affecte = intval($directeur[0]->id);
+            $projetformation->num_agce = $id_agence;
+            // Recuperation de l'id Traitement a faire
+            // $user_id = Auth::user()->id;
+            $projetformation->id_processus = 10;
+            $projetformation->save();
+            return redirect()->route('projetformation.index')->with('success', 'Projet de formation soumis au FDFP avec succès.');
 
             }
 
