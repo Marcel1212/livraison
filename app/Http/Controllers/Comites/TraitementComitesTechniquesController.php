@@ -622,7 +622,7 @@ class TraitementComitesTechniquesController extends Controller
 
             }
            if($data['action'] === 'Traiter_action_formation_valider_critere_prf_valider'){
-            //dd($data);
+           // dd($data);
 
             //$actionplan = ActionFormationPlan::find($idactionformation);
             // Id projet formation
@@ -630,6 +630,43 @@ class TraitementComitesTechniquesController extends Controller
             // Recuperation du projet de formation
             $projetformation = ProjetFormation::find($idprojetformation);
             $projetformation->flag_processus_etape = true;
+            $projetformation->save();
+            // Modification des donnes
+            $projetformation = ProjetFormation::find($idprojetformation);
+            //dd($data['typeprojetformation']);
+            $projetformation->titre_projet_etude = $data['titre_projet'];
+            $projetformation->id_operateur = $data['operateur'];
+            $projetformation->promoteur = $data['promoteur'];
+            $projetformation->beneficiaires_cible = $data['beneficiaire_cible'];
+            $projetformation->zone_projet = $data['zone_projey'];
+            $projetformation->nom_prenoms = $data['nom_prenoms'];
+            //$input['cout_projet_formation'] = $cout_projet_formation;
+            $projetformation->fonction = $data['fonction'];
+            $projetformation->telephone = $data['telephone'];
+            //$projetformation->id_type_projet_formation = $data['typeprojetformation'];
+            $projetformation->environnement_contexte = $data['environnement_contexte'];
+            //$projetformation->id_domaine_projet_formation = $data['id_domaine'];
+            $projetformation->cout_projet_formation =  $data['cout_projet_formation'];
+            // $projetformation->acteurs = $data['acteurs_projet'];
+            // $projetformation->role_p = $data['role_projet'];
+            // $projetformation->responsabilite = $data['responsabilite_projet'];
+            $projetformation->roles_beneficiaire = $data['roles_beneficiaire'];
+            $projetformation->responsabilites_beneficiaires = $data['responsabilites_beneficiaires'];
+            $projetformation->roles_promoteur = $data['roles_promoteur'];
+            $projetformation->responsabilites_promoteur = $data['responsabilites_promoteur'];
+            $projetformation->roles_partenaires = $data['roles_partenaires'];
+            $projetformation->responsabilites_partenaires = $data['responsabilites_partenaires'];
+            $projetformation->autre_acteur = $data['autre_acteur'];
+            $projetformation->roles_autres = $data['roles_autres'];
+            $projetformation->responsabilites_autres = $data['responsabilites_autres'];
+
+
+            $projetformation->problemes = $data['problemes_odf'];
+            $projetformation->manifestation_impact_effet = $data['manifestation_impacts_odf'];
+            $projetformation->moyens_probables = $data['moyens_problemes_odf'];
+            $projetformation->competences = $data['competences_odf'];
+            $projetformation->evaluation_contexte = $data['evaluation_competences_odf'];
+            $projetformation->source_verification = $data['sources_verification_odf'];
             $projetformation->save();
             //dd($projetformation);
 
@@ -640,7 +677,7 @@ class TraitementComitesTechniquesController extends Controller
 
             Audit::logSave([
 
-                'action'=>'VALIDATION PROJET FORMATION',
+                'action'=>'VALIDATION PROJET FORMATION AU COMITE TECHNIQUE',
 
                 'code_piece'=>$idactionformation,
 
