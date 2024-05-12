@@ -47,6 +47,7 @@
                                         <thead>
                                         <tr>
                                             <th>No</th>
+                                            <th>Entreprises</th>
                                             <th>Montant</th>
                                             <th>Mois</th>
                                             <th>Année</th>
@@ -60,6 +61,7 @@
                                         @foreach ($cotisations as $key => $cotisation)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
+                                                <td>{{ $cotisation->entreprise->raison_social_entreprises }}</td>
                                                 <td>{{ number_format($cotisation->montant) }}</td>
                                                 <td>
                                                     <?php

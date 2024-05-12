@@ -1,5 +1,9 @@
 @if(auth()->user()->can('cotisation-create'))
 
+<?php
+    $anneemincotisation = $dateannee-2;
+?>
+
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Cotisation')
@@ -58,7 +62,31 @@
                                         @csrf
                                         <div class="row">
 
-                                              <div class="col-md-6 col-12">
+                                              <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Entreprises</label>
+                                                    <select class="select2 form-select"
+                                                            data-allow-clear="true" name="id_entreprise"
+                                                    id="id_entreprise"
+                                                            required="required">
+                                                        <?php echo $entreprise; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Type de cotisation</label>
+                                                    <select class="select2 form-select"
+                                                            data-allow-clear="true" name="id_type_cotisation"
+                                                    id="id_type_cotisation"
+                                                            required="required">
+                                                        <?php echo $typeCotisation; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Montant</label>
                                                     <input type="number" min="0" name="montant" id="montant"
@@ -66,11 +94,27 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Mois (exemple : 1960-01)</label>
-                                                    <input type="month" name="mois_cotisation" id="mois_cotisation"
-                                                    class="form-control form-control-sm" pattern="[0-9]{4}-[0-9]{2}">
+                                                    <label>Mois</label>
+                                                    <input type="number" name="mois_cotisation" id="mois_cotisation"
+                                                    class="form-control form-control-sm" min="1" max="12">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Année</label>
+                                                    <input type="number" name="annee_cotisation" id="annee_cotisation"
+                                                    class="form-control form-control-sm" min="{{ $anneemincotisation }}">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Commentaire</label>
+                                                    <textarea  name="commentaire_coti" id="commentaire_coti"
+                                                           class="form-control form-control-sm"> </textarea>
                                                 </div>
                                             </div>
 
@@ -95,6 +139,11 @@
         </div>
 
     <!-- END: Content-->
+
+<script>
+        //Select2 localité entreprise
+        $("#id_entreprise").select2().val({{old('id_entreprise')}});
+</script>
 
 @endsection
 @else

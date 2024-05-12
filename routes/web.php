@@ -614,4 +614,10 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
+    Route::group(['middleware' => ['can:typecotisations-index']], function () {
+        Route::resources([
+            'typecotisations' => App\Http\Controllers\TypeCotisationController::class,
+        ]);
+    });
+
 });
