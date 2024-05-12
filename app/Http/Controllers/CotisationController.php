@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\InfosEntreprise;
 use App\Models\Cotisation;
+use App\Models\Entreprises;
+use App\Models\TypeCotisation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +32,22 @@ class CotisationController extends Controller
      */
     public function create()
     {
-        return view('cotisation.create');
+        $date = Carbon::now();
+        $dateannee = $date->format('Y');
+
+        $entreprises = Entreprises::where([['flag_actif_entreprises','=',true]])->get();
+        $entreprise = "<option value=''> Selectionnez une entreprise </option>";
+        foreach ($entreprises as $comp) {
+            $entreprise .= "<option value='" . $comp->id_entreprises . "'>" . $comp->ncc_entreprises . "/" . $comp->raison_social_entreprises ." </option>";
+        }
+
+        $typeCotisations = TypeCotisation::where([['flag_type_cotisation','=',true]])->get();
+        $typeCotisation = "<option value=''> Selectionnez le type de cotisation </option>";
+        foreach ($typeCotisations as $comp) {
+            $typeCotisation .= "<option value='" . $comp->id_type_cotisation . "'>" . $comp->libelle_type_cotisation . " </option>";
+        }
+
+        return view('cotisation.create', compact('dateannee','entreprise','typeCotisation'));
     }
 
     /**
@@ -64,7 +81,7 @@ class CotisationController extends Controller
            // dd($mois);
 
             $input = $request->all();
-
+            $input['id_agent'] = Auth::user()->id;
             $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
 
             $verifis = Cotisation::where([['annee_cotisation','=',$input['annee_cotisation']],['mois_cotisation','=',$input['mois_cotisation']],['id_entreprise','=',$input['id_entreprise']]])->get();
