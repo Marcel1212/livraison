@@ -64,4 +64,15 @@ class MoyenCotisation
 
         return (isset($nombredelignecotisation) ? $nombredelignecotisation : '');
     }
+
+    public static function get_verif_cotisation_entreprise($entreprise)
+    {
+        $date = Carbon::now();
+        $dateannee = $date->format('Y');
+        $lignecotisations = Cotisation::where([['id_entreprise','=',$entreprise],['annee_cotisation','=',$dateannee]])->get();
+
+        $nombredelignecotisation = count($lignecotisations);
+
+        return (isset($nombredelignecotisation) ? $nombredelignecotisation : '');
+    }
 }
