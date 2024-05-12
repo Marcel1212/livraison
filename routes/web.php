@@ -608,4 +608,10 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
+    Route::group(['middleware' => ['can:variations-index']], function () {
+        Route::resources([
+            'variations' => App\Http\Controllers\VariationPourcentageCleRepartitionFinController::class,
+        ]);
+    });
+
 });

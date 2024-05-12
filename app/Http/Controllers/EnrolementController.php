@@ -673,6 +673,11 @@ class EnrolementController extends Controller
 
                 $demandeenrole1 = DemandeEnrolement::find($id);
 
+                //Envoi SMS recevable
+                if (isset($demandeenrole1->tel_demande_enrolement)) {
+                    $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                    SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
+                }
 
                 return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
@@ -697,7 +702,7 @@ class EnrolementController extends Controller
                 $demandeenrole->update($input);
 
                 $demandeenrole1 = DemandeEnrolement::find($id);
-
+                $logo = Menu::get_logo();
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Recevabilité de demande enrolement sur e-FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -759,7 +764,7 @@ class EnrolementController extends Controller
 
                 $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
 
-                Entreprises::create([
+                $entreprise = Entreprises::create([
                     'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
                     'numero_fdfp_entreprises' => $numfdfp,
                     'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
@@ -776,8 +781,8 @@ class EnrolementController extends Controller
                     'flag_actif_entreprises' => true
                 ]);
 
-                $insertedId = Entreprises::latest()->first()->id_entreprises;
-                $entreprise = Entreprises::latest()->first();
+                $insertedId = $entreprise->id_entreprises;
+                //$entreprise = Entreprises::latest()->first();
 
                 if (isset($demandeenrole1->piece_dfe_demande_enrolement)) {
                     Pieces::create([
@@ -875,17 +880,14 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Validé
                 if (isset($cel_users)) {
-                    $content = "Cher ".$name."<br>, Nous sommes ravis de vous accueillir sur notre plateforme ! Votre compte a été créé avec
-                        succès, et il est maintenant prêt à être utilisé. Voici un récapitulatif de vos informations de compte :<br>
-                        Nom d'utilisateur :".$name."
-                        <br>Adresse e-mail : ".$emailcli."
-                        <br>Identifiant : ".$ncc_entreprises."
-                        <br>Mot de passe : ".$passwordCli."
-                        <br>Date de création du compte : ".$entreprise->created_at."
-                        <br><br>
-                        Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :".url()."a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                        SMS dans 48h ouvrée";
+
+                    $content = "CHER ".$name." , NOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE.";
+
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
+
+                    $content1 = " VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name." ADRESSE E-MAIL : ".$emailcli." IDENTIFIANT : ".$ncc_entreprises."  MOT DE PASSE : ".$passwordCli."  DATE DE CREATION DU COMPTE : ".$entreprise->created_at."  POUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : http://fdfp.ldfgroupe.com";
+
+                    SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content1);
                 }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
