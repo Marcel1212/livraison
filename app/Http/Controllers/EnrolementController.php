@@ -533,10 +533,8 @@ class EnrolementController extends Controller
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                    $messageMail = "<b>Cher,  $rais ,</b>
-                                    <br><br>Votre demande d'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                                    SMS dans 48h ouvrées
-                                    <br><br><br>
+                    $messageMail = "<b>Cher(e),  $rais ,</b>
+                                    <br><br>Votre demande d'enrôlement a été effectuée avec succès. Le traitement de votre demande s'effectuera dans un délai de 48h!
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -547,8 +545,7 @@ class EnrolementController extends Controller
 
                 //Envoyer notification via SMS
                 if($input['tel_demande_enrolement']){
-                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE D ACTIVATION DE COMPTE SUR LE PORTAIL ".route('/')." A BIEN ETE PRISE EN COMPTE.\nVOUS RECEVREZ VOS PARAMETRES D ACCES PAR MAIL OU
-                    SMS DANS 48H OUVREE";
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE D ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.\nLE TRAITEMENT DE VOTRE DEMANDE S EFFECTUERA DANS UN DELAI DE 48h !";
                     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
                 }
 
