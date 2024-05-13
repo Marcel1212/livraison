@@ -674,7 +674,7 @@ class EnrolementController extends Controller
 
                 //Envoi SMS recevable
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 
@@ -728,14 +728,16 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Rejeté
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
-                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".$demandeenrole1->motif1->libelle_motif."
-                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
-                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
-                        Cordialement,
-                        L'équipe e-FDFP";
+
+//                  $content = " ".$demandeenrole1->raison_sociale_demande_enroleme.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
+
+
+                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS AVONS EXAMINE VOTRE DEMANDE D ACTIVATION DE COMPTE SUR".route('/').", ET
+                        MALHEUREUSEMENT, NOUS NE POUVONS PAS L APPROUVER POUR LA RAISON SUIVANTE:".$demandeenrole1->motif1->libelle_motif."
+                        \nSI VOUS ESTIMEZ QUE CELA EST UNE ERREUR OU SI VOUS AVEZ DES INFORMATIONS SUPPLEMENTAIRES A FOURIR, N HESITEZ PAS A NOUS CONTACTER POUR OBTENIR DE L AIDE.\n
+                        NOUS APPRECIONS VOTRE INTERET POUR NOTRE SERVICE ET ESPERONS QUE VOUS ENVISAGEREZ DE SOUMETTRE UNE NOUVELLE DEMANDE LORSQUE LES PROBLEMES SONT RESOLUS.\n
+                        CORDIALEMENT\n,
+                        L'EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 
