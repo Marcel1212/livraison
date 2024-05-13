@@ -547,8 +547,8 @@ class EnrolementController extends Controller
 
                 //Envoyer notification via SMS
                 if($input['tel_demande_enrolement']){
-                    $content = "Cher(e) ".$rais.",\nvotre demande d’activation de compte sur le portail ".route('/')." a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                    SMS dans 48h ouvrée";
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE D ACTIVATION DE COMPTE SUR LE PORTAIL ".route('/')." A BIEN ETE PRISE EN COMPTE.\nVOUS RECEVREZ VOS PARAMETRES D ACCES PAR MAIL OU
+                    SMS DANS 48H OUVREE";
                     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
                 }
 
