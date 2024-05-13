@@ -36,13 +36,13 @@ class GrilleDeRepartitionFC
 
             $montantbudgetfinal1 = $montantbudget + $montantcotisation;
 
-            if ($pourcentagenoncalcule->flag_signe_variation == true) {
+/*             if ($pourcentagenoncalcule->flag_signe_variation == true) {
                 $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 + $montantbudgetfinal1*$pourcentage;
             }else{
                 $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 - $montantbudgetfinal1*$pourcentage;
-            }
+            } */
 
-            $montantbudgetfinal = $montantbudgetfinalapresapplicationpourcentage.'/'.$resultat->id_cle_de_repartition_financement;
+            $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
 
 
         }else{
@@ -52,13 +52,13 @@ class GrilleDeRepartitionFC
             $montantbudgetfinal1 = $montantbudget + $montantcotisation;
 
 
-            if ($pourcentagenoncalcule->flag_signe_variation == true) {
+            /* if ($pourcentagenoncalcule->flag_signe_variation == true) {
                 $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 + $montantbudgetfinal1*$pourcentage;
             }else{
                 $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 - $montantbudgetfinal1*$pourcentage;
-            }
+            } */
 
-            $montantbudgetfinal = $montantbudgetfinalapresapplicationpourcentage.'/'.$resultat->id_cle_de_repartition_financement;
+            $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
         }
 
 

@@ -50,6 +50,7 @@
                                             <th>Signe</th>
                                             <th>Commentaire</th>
                                             <th>Actif</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -73,6 +74,14 @@
                                                         <?php } else { ?>
                                                         <span class="badge bg-danger">Inactif</span>
                                                         <?php } ?>
+                                                    </td>
+                                                    <td align="center">
+                                                        @can($lien.'-edit')
+                                                            <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($part->id_vpcrf)) }}"
+                                                               class=" "
+                                                               title="Modifier"><img src='/assets/img/editing.png'></a>
+                                                        @endcan
+
                                                     </td>
                                                 </tr>
                                             @endforeach
