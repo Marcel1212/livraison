@@ -1319,7 +1319,7 @@ $nombre = count($conseilleragence);
 {{--        @endforeach--}}
 
         @foreach ($infosactionplanformations as $infosactionplanformation)
-            @if(Auth->user()->id!=$planformation->user_conseiller)
+            @if(Auth::user()->id!=$planformation->user_conseiller)
                 <div class="col-md-4 col-12">
                 <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle<?php echo $infosactionplanformation->id_action_formation_plan; ?>"
                     aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;" aria-hidden="true">
