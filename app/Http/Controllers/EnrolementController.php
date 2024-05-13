@@ -588,6 +588,7 @@ class EnrolementController extends Controller
     {
         $id = \App\Helpers\Crypt::UrldeCrypt($id);
         $demandeenrole = DemandeEnrolement::find($id);
+        $logo = Menu::get_logo();
 
         if ($request->isMethod('put')) {
 
@@ -674,11 +675,24 @@ class EnrolementController extends Controller
 
                 //Envoi SMS recevable
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
+                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
+                if (isset($demandeenrole1->email_demande_enrolement)) {
+                        $sujet = "Recevabilité de demande votre d'enrôlement sur e-FDFP";
+                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        $messageMail = "<b>Cher(e) $name ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'enrôlement est jugée recevable. Nous apprécions votre intérêt pour nos services.<br><br> Cordialement l'équipe E-FDFP.
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                        $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+                }
 
-                return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+                    return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
                 // return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }
