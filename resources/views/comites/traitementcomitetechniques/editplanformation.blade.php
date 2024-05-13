@@ -1334,72 +1334,72 @@ $nombre = count($conseilleragence);
                         <div class="card">
                             <h5 class="card-header">Mes appréciations</h5>
                             <div class="card-body pb-2">
-                                <ul class="timeline pt-3">
-                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>
-                                    @foreach ($ResultatTraitement as $res)
-                                        <li
-                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
-                                            <span
-                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
-                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
-                                            </span>
-                                            <div class="timeline-event">
-                                                <div class="timeline-header border-bottom mb-3">
-                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}
-                                                        ({{ $res->profil }})</h6>
-                                                    <span class="text-muted"><strong>Critère :
-                                                            {{ $res->libelle_critere_evaluation }}</strong></span>
-                                                </div>
-                                                <div class="d-flex justify-content-between flex-wrap mb-2">
-                                                    <div class="d-flex align-items-center">
-                                                        @if ($res->flag_traitement_par_critere_commentaire == true)
-                                                            <div class="row ">
-                                                                <div>
-                                                                    <span>Observation :
-                                                                        {{ $res->commentaire_critere }}</span>
-                                                                </div>
-                                                                <div>
-                                                                    <span>Traité le {{ $res->datej }}</span>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        @if ($res->flag_traitement_par_critere_commentaire === false)
-                                                            <div class="row">
-                                                                <div>
-                                                                    <span>Observation :
-                                                                        {{ $res->commentaire_critere }}</span>
-                                                                </div>
-                                                                <div>
-                                                                    <span class="badge bg-label-danger">Traité le
-                                                                        {{ $res->datej }}</span>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                        <br/><br/><br/>
-                                                        @if ($res->flag_traite_par_user_conserne == true)
-                                                        <div class="row">
-                                                            <span>
-                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)
-                                                                    Prise en compte
-                                                                @else
-                                                                    Pas prise en compte
-                                                                @endif
-                                                            </span>
+{{--                                <ul class="timeline pt-3">--}}
+{{--                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>--}}
+{{--                                    @foreach ($ResultatTraitement as $res)--}}
+{{--                                        <li--}}
+{{--                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">--}}
+{{--                                            <span--}}
+{{--                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">--}}
+{{--                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>--}}
+{{--                                            </span>--}}
+{{--                                            <div class="timeline-event">--}}
+{{--                                                <div class="timeline-header border-bottom mb-3">--}}
+{{--                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}--}}
+{{--                                                        ({{ $res->profil }})</h6>--}}
+{{--                                                    <span class="text-muted"><strong>Critère :--}}
+{{--                                                            {{ $res->libelle_critere_evaluation }}</strong></span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="d-flex justify-content-between flex-wrap mb-2">--}}
+{{--                                                    <div class="d-flex align-items-center">--}}
+{{--                                                        @if ($res->flag_traitement_par_critere_commentaire == true)--}}
+{{--                                                            <div class="row ">--}}
+{{--                                                                <div>--}}
+{{--                                                                    <span>Observation :--}}
+{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
+{{--                                                                </div>--}}
+{{--                                                                <div>--}}
+{{--                                                                    <span>Traité le {{ $res->datej }}</span>--}}
+{{--                                                                </div>--}}
+{{--                                                            </div>--}}
+{{--                                                        @endif--}}
+{{--                                                        @if ($res->flag_traitement_par_critere_commentaire === false)--}}
+{{--                                                            <div class="row">--}}
+{{--                                                                <div>--}}
+{{--                                                                    <span>Observation :--}}
+{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
+{{--                                                                </div>--}}
+{{--                                                                <div>--}}
+{{--                                                                    <span class="badge bg-label-danger">Traité le--}}
+{{--                                                                        {{ $res->datej }}</span>--}}
+{{--                                                                </div>--}}
+{{--                                                            </div>--}}
+{{--                                                        @endif--}}
+{{--                                                        <br/><br/><br/>--}}
+{{--                                                        @if ($res->flag_traite_par_user_conserne == true)--}}
+{{--                                                        <div class="row">--}}
+{{--                                                            <span>--}}
+{{--                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)--}}
+{{--                                                                    Prise en compte--}}
+{{--                                                                @else--}}
+{{--                                                                    Pas prise en compte--}}
+{{--                                                                @endif--}}
+{{--                                                            </span>--}}
 
 
-                                                        <div>
-                                                            <span>Reponse :
-                                                                {{ @$res->commentaire_reponse }}</span>
-                                                        </div>
-                                                        </div>
-                                                        @endif
-                                                    </div>
+{{--                                                        <div>--}}
+{{--                                                            <span>Reponse :--}}
+{{--                                                                {{ @$res->commentaire_reponse }}</span>--}}
+{{--                                                        </div>--}}
+{{--                                                        </div>--}}
+{{--                                                        @endif--}}
+{{--                                                    </div>--}}
 
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </li>--}}
+{{--                                    @endforeach--}}
+{{--                                </ul>--}}
                             </div>
                         </div>
 
@@ -1424,7 +1424,7 @@ $nombre = count($conseilleragence);
                         <div class="card">
                             <h5 class="card-header">Recommandation</h5>
                             <div class="card-body pb-2">
-                                <ul class="timeline pt-3">
+{{--                                <ul class="timeline pt-3">--}}
 {{--                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); ?>--}}
 {{--                                    @foreach ($ResultatTraitement as $res)--}}
 {{--                                        <li--}}
@@ -1529,7 +1529,7 @@ $nombre = count($conseilleragence);
 {{--                                            </div>--}}
 {{--                                        </li>--}}
 {{--                                    @endforeach--}}
-                                </ul>
+{{--                                </ul>--}}
                             </div>
                         </div>
 
