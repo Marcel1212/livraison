@@ -338,7 +338,7 @@ class TratementPlanFormationController extends Controller
                 //dd($planformation1->contact_professionnel_charge_plan_formation);
                 //Envoi SMS Validé
                 if (isset($planformation1->contact_professionnel_charge_plan_formation)) {
-                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS RAVIS DE VOUS INFORMER QUE VOTRE PLAN DE FORMATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE PLAN DE FORMATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
                     SmsPerso::sendSMS($planformation1->contact_professionnel_charge_plan_formation,$content);
                 }
 
