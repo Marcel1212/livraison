@@ -546,10 +546,54 @@ $nombre = count($conseilleragence);
                                         </td>
                                         <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}
                                         </td>
+                                        <td align="center">
+                                            @if (@$planformation->user_conseiller == Auth::user()->id)
+                                                @if ($actionplanformation->flag_action_formation_traiter_comite_technique == true)
+                                                    <span class="badge bg-success">Traité</span>
+                                                @else
+                                                    <span class="badge bg-warning">Non traité</span>
+                                                @endif
+                                            @else
+                                                <?php
+                                                $value = ListeTraitementCritereParUser::get_traitement_crietere_par_user(Auth::user()->id, $actionplanformation->id_action_formation_plan);
 
-                                        <td>
+                                                echo $value;
+                                                ?>
+                                            @endif
+                                        </td>
+                                        <td align="center">
+                                                <?php
+                                                    $statuttotal = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_statut_total($actionplanformation->id_action_formation_plan);
+                                                    $statuttraitesucces = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_statut_success($actionplanformation->id_action_formation_plan);
+                                                    $statuttraiteechec = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_statut_echec($actionplanformation->id_action_formation_plan);
+                                                    $statuttraiteechecreponse = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user_statut_echec_traiter($actionplanformation->id_action_formation_plan);
 
-                                        </td>                                        <td>
+                                                    //dd(count($statuttotal),count($statuttraitesucces),count($statuttraiteechec),count($statuttraiteechecreponse));
+                                                ?>
+                                                @if(count($statuttraiteechec) != 0 and count($statuttraiteechecreponse) !=0)
+                                                    <?php $res = count($statuttraiteechec) - count($statuttraiteechecreponse); //echo $res;?>
+                                                    @if ($res != 0)
+                                                        <span class="badge bg-danger">avis non traité <strong style="">(<?php echo $res;?>)</strong></span>
+                                                    @else
+                                                        <span class="badge bg-success">avis traité</span>
+                                                    @endif
+                                                @endif
+
+                                                @if(count($statuttraiteechec) == 0 and count($statuttraiteechecreponse) !=0)
+                                                    <span class="badge bg-danger">avis non traité </span>
+                                                @endif
+
+                                                @if(count($statuttraiteechec) != 0 and count($statuttraiteechecreponse) ==0)
+                                                    <span class="badge bg-danger">avis non traité <strong style="">(<?php echo count($statuttraiteechec);?>)</strong></span>
+                                                @endif
+
+                                                @if(count($statuttraiteechec) == 0 and count($statuttraiteechecreponse) ==0 and count($statuttotal)==0 and count($statuttraitesucces)==0)
+                                                    <span class="badge bg-warning">avis non traité</span>
+                                                @endif
+
+                                                @if(count($statuttotal) == count($statuttraitesucces) and count($statuttotal)>0 and count($statuttraitesucces)>0)
+                                                    <span class="badge bg-success">avis traité</span>
+                                                @endif
 
                                         </td>
                                         <td align="center" nowrap>
