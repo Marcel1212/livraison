@@ -387,7 +387,7 @@
                                             <div align="right">
                                                 <button type="submit" name="action" onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;' value="Traiter_valider_projet"
                                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Valider le projet d'étude pour ce comité
+                                                    Valider le projet d'étude pour cette commission
                                                 </button>
                                             </div>
                                     </form>
@@ -400,8 +400,10 @@
                                             @method('put')
                                             <div align="right">
                                                 <button type="submit" name="action" value="Traiter_valider_projet"
+                                                        onclick='javascript:if (!confirm("Voulez-vous effectuer ce traitement ? Cette action est irréversible")) return false;'
                                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                    Valider le projet d'étude pour cette commission
+                                                    Valider le projet d'étude pour ce comité
+
                                                 </button>
                                             </div>
                                         </form>
@@ -429,16 +431,24 @@
                                                 </div>
                                                 <div class="col-md-12 col-10">
                                                     <div class="row">
-                                                        <div class="mb-1 col-md-6">
-                                                            <label>Financement sollicité <span
-                                                                    style="color:red;">*</span>
-                                                            </label>
-                                                            <input type="text" name="montant_demande_projet"
-                                                                   required="required" id="montant_demande_projet"
-                                                                   disabled
-                                                                   value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"
-                                                                   class="form-control form-control-sm number">
+                                                        <div class="col-md-6 col-12 mt-2">
+                                                            <div class="mb-1">
+                                                                <label for="montant_projet_instruction">Financement accordé <span style="color:red;">*</span>
+                                                                </label>
+                                                                <input type="text" name="montant_projet_instruction" id="montant_projet_instruction"  class="number form-control form-control-sm number" disabled
+                                                                       value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
+                                                            </div>
                                                         </div>
+{{--                                                        <div class="mb-1 col-md-6">--}}
+{{--                                                            <label>Financement sollicité <span--}}
+{{--                                                                    style="color:red;">*</span>--}}
+{{--                                                            </label>--}}
+{{--                                                            <input type="text" name="montant_demande_projet"--}}
+{{--                                                                   required="required" id="montant_demande_projet"--}}
+{{--                                                                   disabled--}}
+{{--                                                                   value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"--}}
+{{--                                                                   class="form-control form-control-sm number">--}}
+{{--                                                        </div>--}}
 
                                                         <div class="mb-1 col-md-6">
                                                             <label>Domaine du projet <span
@@ -519,14 +529,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6 col-12 mt-2">
-                                                <div class="mb-1">
-                                                    <label for="montant_projet_instruction">Financement accordé <span style="color:red;">*</span>
-                                                    </label>
-                                                    <input type="text" name="montant_projet_instruction" id="montant_projet_instruction"  class="number form-control form-control-sm number" disabled
-                                                           value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
-                                                </div>
-                                            </div>
+
                                             <div class="col-md-6 mt-2">
                                                 <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
                                                 @if($projet_etude->piece_jointe_instruction)

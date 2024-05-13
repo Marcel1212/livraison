@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Comites;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
+use App\Models\Entreprises;
 use Illuminate\Http\Request;
 use App\Helpers\Audit;
 use App\Models\ProcessusComite;
@@ -631,6 +632,10 @@ class ComitesController extends Controller
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PF'){
 
                             $plan = PlanFormation::find($infoscahier->id_demande);
+
+                            $entreprise = Entreprises::where('id_entreprises',$plan->id_entreprises)->first();
+                            $rais = $entreprise->raison_social_entreprises;
+
                             FicheAgrement::create([
                                 'id_demande' => $plan->id_plan_de_formation,
                                 'id_comite_permanente' => $id,
@@ -645,11 +650,18 @@ class ComitesController extends Controller
                                 'date_fiche_agrement' => Carbon::now()
                             ]);
 
+                            //Envoi SMS
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de plan de formation est disponible, veuillez-vous connecter sur le portail ".url();
+                            SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
+
                         }
 
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PE'){
 
                             $projet_etude = ProjetEtude::find($infoscahier->id_demande);
+
+                            $entreprise = Entreprises::where('id_entreprises',$projet_etude->id_entreprises)->first();
+                            $rais = $entreprise->raison_social_entreprises;
 
                             if($infoscahier->code_commission_permante_comite_gestion == 'COP'){
                                 FicheAgrement::create([
@@ -676,6 +688,10 @@ class ComitesController extends Controller
                             $projet_etude->flag_fiche_agrement = true;
                             $projet_etude->date_fiche_agrement = now();
                             $projet_etude->update();
+
+                            //Envoi SMS
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet d'etude , veuillez-vous connecter sur le portail ".url();
+                            SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
 
@@ -713,6 +729,9 @@ class ComitesController extends Controller
                            // $projetformation->flag_fiche_agrement = true;
                             $projetformation->code_comite_pleiniere = $comitep->code_comite ;
                             $projetformation->update();
+
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet de formation , veuillez-vous connecter sur le portail ".url();
+                            SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
 

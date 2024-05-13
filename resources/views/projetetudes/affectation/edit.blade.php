@@ -668,7 +668,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <div class="row ">
                                                             <div>
-                                                                <span>Observation : {{@$projet_etude->commentaires_cd}}</span>
+                                                                <span>Observation : {{@$projet_etude->commentaires_cs}}</span>
                                                             </div>
                                                             <div>
                                                                 <span>Affecté le {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_soumis_chef_service ))}} par {{@$projet_etude->chefService->name}}

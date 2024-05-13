@@ -149,7 +149,7 @@ $logo = Menu::get_logo();
         <br>
     </div>
     <div style="margin-top: 2px">
-        {{\SimpleSoftwareIO\QrCode\Facades\QrCode::size(130)->generate('Code agrement : AGREMENT Date : 04/01/2024' )}}
+
     </div>
     <div  class="tableagrement">
     <table>
@@ -157,22 +157,41 @@ $logo = Menu::get_logo();
             <tr>
                 <td><span style="font-weight: bold;">Titre du projet</span></td>
                 <td><span style="font-weight: bold">{{@$agreement->titre_projet_instruction}}</span></td>
+                <td><span style="font-weight: bold">
+                    @isset($agreement->op_raison_social_entreprises)
+                            {!!\SimpleSoftwareIO\QrCode\Facades\QrCode::size(75)->generate("Titre du projet: ".$agreement->titre_projet_instruction."\n\nCode du projet : ".$agreement->code_projet_etude
+                            ."\nPromoteur : ".$agreement->raison_social_entreprises."\nOpérateur : ".$agreement->op_raison_social_entreprises
+                            ."\nDate prévisionnnelle de démarrage : ".date('d/m/Y',strtotime(@$agreement->date_previsionnelle_demarrage_projet))
+                            ."\nLigne Budgetaire de financement : Taxe de formation professionnelle continue"
+                             ."\nFinancement sollicité FDFP : ".number_format(@$agreement->montant_projet_instruction, 0, ',', ' ')
+                            )  !!}
+                   @else
+                           {!!\SimpleSoftwareIO\QrCode\Facades\QrCode::size(75)->generate("Titre du projet: ".$agreement->titre_projet_instruction."\n\nCode du projet : ".$agreement->code_projet_etude
+                           ."\nPromoteur : ".$agreement->raison_social_entreprises."\nOpérateur : EN APPEL D'OFFRE"
+                           ."\nDate prévisionnnelle de démarrage : ".date('d/m/Y',strtotime(@$agreement->date_previsionnelle_demarrage_projet))
+                           ."\nLigne Budgetaire de financement : Taxe de formation professionnelle continue"
+                           ."\nFinancement sollicité FDFP : ".number_format(@$agreement->montant_projet_instruction, 0, ',', ' ')
+                           ) !!}
+                    @endisset
+
+
+                    </span></td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Code du projet</span></td>
-                <td><span>{{@$agreement->code_projet_etude}}</span></td>
+                <td colspan="2"><span>{{@$agreement->code_projet_etude}}</span></td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Lieu de réalisation</span></td>
-                <td><span>{{@$agreement->lieu_realisation_projet_instruction}}</span></td>
+                <td colspan="2"><span>{{@$agreement->lieu_realisation_projet_instruction}}</span></td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Promoteur</span></td>
-                <td><span>{{@$agreement->raison_social_entreprises}}</span></td>
+                <td colspan="2"><span>{{@$agreement->raison_social_entreprises}}</span></td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Opérateur </span></td>
-                <td>
+                <td colspan="2">
                     @isset($agreement->op_raison_social_entreprises)
                         <span>{{@$agreement->op_raison_social_entreprises}}</span>
                     @else
@@ -182,45 +201,45 @@ $logo = Menu::get_logo();
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Objectif général </span></td>
-                <td>{!!@$agreement->objectif_general_instruction!!}</td>
+                <td colspan="2">{!!@$agreement->objectif_general_instruction!!}</td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Objectifs spécifiques </span></td>
-                <td>{!!@$agreement->objectif_specifique_instruction!!}</td>
+                <td colspan="2">{!!@$agreement->objectif_specifique_instruction!!}</td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Champs de l’étude</span></td>
-                <td>{!!@$agreement->champ_etude_instruction!!}</td>
+                <td colspan="2">{!!@$agreement->champ_etude_instruction!!}</td>
             </tr>
             <tr>
                 <td><span style="font-weight: bold">Méthodologie</span></td>
-                <td>{!!@$agreement->methodologie_instruction!!}</td>
+                <td colspan="2">{!!@$agreement->methodologie_instruction!!}</td>
             </tr>
 
             <tr>
                 <td><span style="font-weight: bold">Date prévisionnelle de démarrage</span></td>
-                <td>{{ date('d/m/Y',strtotime(@$agreement->date_previsionnelle_demarrage_projet ))}}</td>
+                <td colspan="2">{{ date('d/m/Y',strtotime(@$agreement->date_previsionnelle_demarrage_projet ))}}</td>
 
             </tr>
 
             <tr>
                 <td><span style="font-weight: bold">Durée et étalement</span></td>
-                <td></td>
+                <td colspan="2"></td>
             </tr>
 
             <tr>
                 <td><span style="font-weight: bold">Ligne budgétaire de financement FDFP</span></td>
-                <td>Taxe de formation professionnelle continue</td>
+                <td colspan="2">Taxe de formation professionnelle continue</td>
             </tr>
 
             <tr>
                 <td><span style="font-weight: bold">Financement sollicité FDFP</span></td>
-                <td><span style="font-weight: bold">{{number_format(@$agreement->montant_projet_instruction, 0, ',', ' ')}} FCFA TTC</span></td>
+                <td colspan="2"><span style="font-weight: bold">{{number_format(@$agreement->montant_projet_instruction, 0, ',', ' ')}} FCFA TTC</span></td>
             </tr>
 
             <tr>
                 <td><span style="font-weight: bold">Avis de la Commission Technique</span></td>
-                <td>
+                <td colspan="2">
                     <span>
                         Cette étude permettra au FDFP d’optimiser ses actions auprès des TPE, en étant efficient dans le financement de formations adaptées aux besoins des entreprises. Aussi, pour les Branches professionnelles, elle permettra de contribuer au développement des compétences de leurs membres pour renforcer leur secteur respectif et voire participer à une économie plus forte.
                         <br><br>
@@ -228,8 +247,6 @@ $logo = Menu::get_logo();
                     </span>
                 </td>
             </tr>
-
-
         </tbody>
     </table></div>
 </body>

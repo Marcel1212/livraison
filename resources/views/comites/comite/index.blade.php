@@ -79,11 +79,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <td>{{ @$comitep->code_comite }}</td>
                                 <td>{{ @$comitep->categorieComite->libelle_categorie_comite }}</td>
                                 <td>{{ date('d/m/Y',strtotime(@$comitep->date_debut_comite))}}</td>
-                                <td>{{ date('d/m/Y',strtotime(@$comitep->date_fin_comite))}}</td>
+                                <td>@isset($comitep->date_fin_comite){{ date('d/m/Y',strtotime(@$comitep->date_fin_comite))}}@endisset</td>
                                 <td>{{ $comitep->commentaire_comite }}</td>
                                 <td align="center">
                                     <?php if($comitep->flag_statut_comite == true){ ?>
-                                        <span class="badge bg-success">Terminer</span>
+                                        <span class="badge bg-success">Terminé</span>
                                     <?php  }else{?>
                                             <span class="badge bg-warning">En cours</span>
                                     <?php } ?>

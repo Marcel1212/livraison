@@ -398,6 +398,7 @@
                                 <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Type d'opérateur </th>
                                     <th>Opérateur </th>
                                 </tr>
                                 </thead>
@@ -406,6 +407,13 @@
                                     @foreach ($projet_etude->operateurs as $key => $operateur)
                                         <tr>
                                             <td>{{ $key+1 }}</td>
+                                            <td>
+                                                @if($operateur->flag_cabinet_etranger=='true')
+                                                    Etranger
+                                                @else
+                                                    Intra
+                                                @endif
+                                            </td>
                                             <td>{{ $operateur->ncc_entreprises }} / {{ $operateur->raison_social_entreprises }}</td>
                                         </tr>
                                     @endforeach

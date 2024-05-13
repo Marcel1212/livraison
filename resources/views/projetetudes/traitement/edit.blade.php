@@ -284,11 +284,9 @@
                                                     @endif>
                                                     @foreach($domaine_projets as $domaine_projet)
                                                         <option value="{{$domaine_projet->id_domaine_formation}}"
-                                                                @if($projet_etude->flag_enregistrer==true)
-                                                                    @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_projet)
+                                                                    @if($projet_etude->id_domaine_projet==$domaine_projet->id_domaine_formation)
                                                                         selected
                                                                      @endif
-                                                                  @endif
                                                         >{{$domaine_projet->libelle_domaine_formation}}</option>
                                                     @endforeach
                                                 </select>
@@ -545,7 +543,7 @@
                                                     selected
                                                 @endif
                                             @else
-                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet==$domaine_projet->id_domaine_formation)
+                                                @if($projet_etude->id_domaine_projet==$domaine_projet->id_domaine_formation)
                                                     selected
                                                 @endif
                                           @endif
@@ -685,7 +683,9 @@
                    <label for="montant_projet_instruction">Financement à accorder <span style="color:red;">*</span>
                    </label>
                    <input type="text" name="montant_projet_instruction" id="montant_projet_instruction" class="form-control form-control-sm number"
-                          value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}"
+                         @if(isset($projet_etude->montant_projet_instruction))
+                             value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}"
+                          @endif
                    >
                </div>
            </div>

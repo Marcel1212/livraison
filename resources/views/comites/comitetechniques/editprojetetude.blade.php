@@ -5,10 +5,10 @@ $idconnect = Auth::user()->id;
 
 
 @section('content')
-    @php($Module=' Comités')
-    @php($titre='Liste des comites plénières')
-    @php($soustitre='Tenue de comite plénière')
-    @php($lien='traitementcomitetechniques')
+    @php($Module = ' Comités')
+    @php($titre = 'Liste des comites plénières')
+    @php($soustitre = 'Tenue de comite plénière')
+    @php($lien = 'comitetechniques')
 
 
     <!-- BEGIN: Content-->
@@ -462,7 +462,7 @@ $idconnect = Auth::user()->id;
                                 @endif
                             @endif
 
-                            <form  method="POST" id="formTraitement" class="form" action="{{ route($lien.'.cahierupdateprojetetude', [\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),\App\Helpers\Crypt::UrlCrypt($idcomite),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
+                            <form  method="POST" id="formTraitement" class="form" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <div class="row mt-2">

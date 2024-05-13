@@ -398,7 +398,7 @@
                                         </div>
                                         <div class="col-md-1 mt-4" align="right">
                                             <button style="line-height:1.25rem" type="submit" value="Enregistrer_selection" name="action" class="btn btn-primary btn-sm waves-effect waves-light">
-                                                Ajouter
+                                                Sélectionné
                                             </button>
                                         </div>
                                     </div>
@@ -584,15 +584,7 @@
                                                 <strong style="color:red;">*</strong></label>
                                             <select name="id_domaine_formation"
                                                     disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                @foreach($domaine_projets as $domaine_projet)
-                                                    <option value="{{$domaine_projet->id_domaine_formation}}"
-                                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet_instruction==$domaine_projet->id_domaine_formation)
-                                                                    selected
-                                                                @endif
-
-                                                    >{{$domaine_projet->libelle_domaine_formation}}</option>
-                                                @endforeach
-
+                                                <?= $domaine_projet; ?>
                                             </select>
                                         </div>
 
