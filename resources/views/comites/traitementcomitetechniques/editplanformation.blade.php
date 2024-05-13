@@ -1334,72 +1334,72 @@ $nombre = count($conseilleragence);
                         <div class="card">
                             <h5 class="card-header">Mes appréciations</h5>
                             <div class="card-body pb-2">
-{{--                                <ul class="timeline pt-3">--}}
-{{--                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>--}}
-{{--                                    @foreach ($ResultatTraitement as $res)--}}
-{{--                                        <li--}}
-{{--                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">--}}
-{{--                                            <span--}}
-{{--                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">--}}
-{{--                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>--}}
-{{--                                            </span>--}}
-{{--                                            <div class="timeline-event">--}}
-{{--                                                <div class="timeline-header border-bottom mb-3">--}}
-{{--                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}--}}
-{{--                                                        ({{ $res->profil }})</h6>--}}
-{{--                                                    <span class="text-muted"><strong>Critère :--}}
-{{--                                                            {{ $res->libelle_critere_evaluation }}</strong></span>--}}
-{{--                                                </div>--}}
-{{--                                                <div class="d-flex justify-content-between flex-wrap mb-2">--}}
-{{--                                                    <div class="d-flex align-items-center">--}}
-{{--                                                        @if ($res->flag_traitement_par_critere_commentaire == true)--}}
-{{--                                                            <div class="row ">--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Observation :--}}
-{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Traité le {{ $res->datej }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        @endif--}}
-{{--                                                        @if ($res->flag_traitement_par_critere_commentaire === false)--}}
-{{--                                                            <div class="row">--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Observation :--}}
-{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span class="badge bg-label-danger">Traité le--}}
-{{--                                                                        {{ $res->datej }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        @endif--}}
-{{--                                                        <br/><br/><br/>--}}
-{{--                                                        @if ($res->flag_traite_par_user_conserne == true)--}}
-{{--                                                        <div class="row">--}}
-{{--                                                            <span>--}}
-{{--                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)--}}
-{{--                                                                    Prise en compte--}}
-{{--                                                                @else--}}
-{{--                                                                    Pas prise en compte--}}
-{{--                                                                @endif--}}
-{{--                                                            </span>--}}
+                                <ul class="timeline pt-3">
+                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); //ListeTraitementCritereParUser::get_traitement_crietere_par_commentaire_user(Auth::user()->id,$infosactionplanformation->id_action_formation_plan); ?>
+                                    @foreach ($ResultatTraitement as $res)
+                                        <li
+                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                            <span
+                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                            </span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}
+                                                        ({{ $res->profil }})</h6>
+                                                    <span class="text-muted"><strong>Critère :
+                                                            {{ $res->libelle_critere_evaluation }}</strong></span>
+                                                </div>
+                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                    <div class="d-flex align-items-center">
+                                                        @if ($res->flag_traitement_par_critere_commentaire == true)
+                                                            <div class="row ">
+                                                                <div>
+                                                                    <span>Observation :
+                                                                        {{ $res->commentaire_critere }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span>Traité le {{ $res->datej }}</span>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if ($res->flag_traitement_par_critere_commentaire === false)
+                                                            <div class="row">
+                                                                <div>
+                                                                    <span>Observation :
+                                                                        {{ $res->commentaire_critere }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="badge bg-label-danger">Traité le
+                                                                        {{ $res->datej }}</span>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        <br/><br/><br/>
+                                                        @if ($res->flag_traite_par_user_conserne == true)
+                                                        <div class="row">
+                                                            <span>
+                                                                Statut : @if (@$res->flag_traitement_par_critere_commentaire_traiter == true)
+                                                                    Prise en compte
+                                                                @else
+                                                                    Pas prise en compte
+                                                                @endif
+                                                            </span>
 
 
-{{--                                                        <div>--}}
-{{--                                                            <span>Reponse :--}}
-{{--                                                                {{ @$res->commentaire_reponse }}</span>--}}
-{{--                                                        </div>--}}
-{{--                                                        </div>--}}
-{{--                                                        @endif--}}
-{{--                                                    </div>--}}
+                                                        <div>
+                                                            <span>Reponse :
+                                                                {{ @$res->commentaire_reponse }}</span>
+                                                        </div>
+                                                        </div>
+                                                        @endif
+                                                    </div>
 
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </li>--}}
-{{--                                    @endforeach--}}
-{{--                                </ul>--}}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
 
@@ -1424,112 +1424,112 @@ $nombre = count($conseilleragence);
                         <div class="card">
                             <h5 class="card-header">Recommandation</h5>
                             <div class="card-body pb-2">
-{{--                                <ul class="timeline pt-3">--}}
-{{--                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); ?>--}}
-{{--                                    @foreach ($ResultatTraitement as $res)--}}
-{{--                                        <li--}}
-{{--                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">--}}
-{{--                                            <span--}}
-{{--                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">--}}
-{{--                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>--}}
-{{--                                            </span>--}}
-{{--                                            <div class="timeline-event">--}}
-{{--                                                <div class="timeline-header border-bottom mb-3">--}}
-{{--                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}--}}
-{{--                                                        ({{ $res->profil }})</h6>--}}
-{{--                                                    <span class="text-muted"><strong>Critère :--}}
-{{--                                                            {{ $res->libelle_critere_evaluation }}</strong></span>--}}
-{{--                                                </div>--}}
-{{--                                                <div class="d-flex justify-content-between flex-wrap mb-2">--}}
-{{--                                                    <div class="d-flex align-items-center">--}}
-{{--                                                        @if ($res->flag_traitement_par_critere_commentaire == true)--}}
-{{--                                                            <div class="row ">--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Observation :--}}
-{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Traité le {{ $res->datej }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                            </div>--}}
-{{--                                                        @endif--}}
-{{--                                                        @if ($res->flag_traitement_par_critere_commentaire === false)--}}
-{{--                                                            <div class="row">--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span>Observation :--}}
-{{--                                                                        {{ $res->commentaire_critere }}</span>--}}
-{{--                                                                </div>--}}
-{{--                                                                <div>--}}
-{{--                                                                    <span class="badge bg-label-danger">Traité le--}}
-{{--                                                                        {{ $res->datej }}</span>--}}
-{{--                                                                </div> <br /><br /><br />--}}
-{{--                                                                @if ($res->flag_traite_par_user_conserne != true)--}}
-{{--                                                                    <div>--}}
-{{--                                                                        <form id="editUserFormMessage" class="row g-3"--}}
-{{--                                                                            method="POST"--}}
-{{--                                                                            action="{{ route($lien . '.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">--}}
-{{--                                                                            @csrf--}}
-{{--                                                                            @method('put')--}}
-{{--                                                                            <input type="hidden"--}}
-{{--                                                                                name="id_traitement_par_critere_commentaire"--}}
-{{--                                                                                value="{{ $res->id_traitement_par_critere_commentaire }}" />--}}
-{{--                                                                            <div class="row">--}}
-{{--                                                                                <div class="col-md-4 col-12">--}}
-{{--                                                                                    <label class="form-label"--}}
-{{--                                                                                        for="">Statut </label>--}}
-{{--                                                                                    <select class="select2 form-select"--}}
-{{--                                                                                        data-allow-clear="true"--}}
-{{--                                                                                        name="flag_traitement_par_critere_commentaire_traiter"--}}
-{{--                                                                                        id="flag_traitement_par_critere_commentaire_traiter">--}}
-{{--                                                                                        <option value="">-------------}}
-{{--                                                                                        </option>--}}
-{{--                                                                                        <option value="true">Prise en--}}
-{{--                                                                                            compte</option>--}}
-{{--                                                                                        <option value="false">Pas prise en--}}
-{{--                                                                                            compte</option>--}}
-{{--                                                                                    </select>--}}
-{{--                                                                                </div>--}}
-{{--                                                                                <div class="col-md-6 col-12">--}}
-{{--                                                                                    <label class="form-label"--}}
-{{--                                                                                        for="">Reponse </label>--}}
-{{--                                                                                    <textarea class="form-control form-control-sm" name="commentaire_reponse" id="commentaire_reponse" rows="6"></textarea>--}}
-{{--                                                                                </div>--}}
-{{--                                                                                <div class="col-md-2 col-12">--}}
-{{--                                                                                    <br />--}}
-{{--                                                                                    <button--}}
-{{--                                                                                        onclick='javascript:if (!confirm("Voulez-vous traité cette action ?")) return false;'--}}
-{{--                                                                                        type="submit" name="action"--}}
-{{--                                                                                        value="Traiter_action_formation_valider_reponse"--}}
-{{--                                                                                        class="btn btn-warning btn-sm me-sm-3 me-1">Traité</button>--}}
+                                <ul class="timeline pt-3">
+                                    <?php $ResultatTraitement = ListeTraitementCritereParUser::get_traitement_crietere_tout_commentaire_user($infosactionplanformation->id_action_formation_plan); ?>
+                                    @foreach ($ResultatTraitement as $res)
+                                        <li
+                                            class="timeline-item pb-4 timeline-item-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                            <span
+                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->flag_traitement_par_critere_commentaire == true){ ?>success<?php }else if($res->flag_traitement_par_critere_commentaire == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                            </span>
+                                            <div class="timeline-event">
+                                                <div class="timeline-header border-bottom mb-3">
+                                                    <h6 class="mb-0">{{ $res->name }} {{ $res->prenom_users }}
+                                                        ({{ $res->profil }})</h6>
+                                                    <span class="text-muted"><strong>Critère :
+                                                            {{ $res->libelle_critere_evaluation }}</strong></span>
+                                                </div>
+                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                    <div class="d-flex align-items-center">
+                                                        @if ($res->flag_traitement_par_critere_commentaire == true)
+                                                            <div class="row ">
+                                                                <div>
+                                                                    <span>Observation :
+                                                                        {{ $res->commentaire_critere }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span>Traité le {{ $res->datej }}</span>
+                                                                </div>
+                                                            </div>
+                                                        @endif
+                                                        @if ($res->flag_traitement_par_critere_commentaire === false)
+                                                            <div class="row">
+                                                                <div>
+                                                                    <span>Observation :
+                                                                        {{ $res->commentaire_critere }}</span>
+                                                                </div>
+                                                                <div>
+                                                                    <span class="badge bg-label-danger">Traité le
+                                                                        {{ $res->datej }}</span>
+                                                                </div> <br /><br /><br />
+                                                                @if ($res->flag_traite_par_user_conserne != true)
+                                                                    <div>
+                                                                        <form id="editUserFormMessage" class="row g-3"
+                                                                            method="POST"
+                                                                            action="{{ route($lien . '.cahierupdate', [\App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan), \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}">
+                                                                            @csrf
+                                                                            @method('put')
+                                                                            <input type="hidden"
+                                                                                name="id_traitement_par_critere_commentaire"
+                                                                                value="{{ $res->id_traitement_par_critere_commentaire }}" />
+                                                                            <div class="row">
+                                                                                <div class="col-md-4 col-12">
+                                                                                    <label class="form-label"
+                                                                                        for="">Statut </label>
+                                                                                    <select class="select2 form-select"
+                                                                                        data-allow-clear="true"
+                                                                                        name="flag_traitement_par_critere_commentaire_traiter"
+                                                                                        id="flag_traitement_par_critere_commentaire_traiter">
+                                                                                        <option value="">-----------
+                                                                                        </option>
+                                                                                        <option value="true">Prise en
+                                                                                            compte</option>
+                                                                                        <option value="false">Pas prise en
+                                                                                            compte</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="col-md-6 col-12">
+                                                                                    <label class="form-label"
+                                                                                        for="">Reponse </label>
+                                                                                    <textarea class="form-control form-control-sm" name="commentaire_reponse" id="commentaire_reponse" rows="6"></textarea>
+                                                                                </div>
+                                                                                <div class="col-md-2 col-12">
+                                                                                    <br />
+                                                                                    <button
+                                                                                        onclick='javascript:if (!confirm("Voulez-vous traité cette action ?")) return false;'
+                                                                                        type="submit" name="action"
+                                                                                        value="Traiter_action_formation_valider_reponse"
+                                                                                        class="btn btn-warning btn-sm me-sm-3 me-1">Traité</button>
 
-{{--                                                                                </div>--}}
-{{--                                                                            </div>--}}
-{{--                                                                        </form>--}}
-{{--                                                                    </div>--}}
-{{--                                                                @else--}}
-{{--                                                                    <div>--}}
-{{--                                                                        <span>--}}
-{{--                                                                            Statut : @if ($res->flag_traitement_par_critere_commentaire_traiter == true)--}}
-{{--                                                                                Prise en compte--}}
-{{--                                                                            @else--}}
-{{--                                                                                Pas prise en compte--}}
-{{--                                                                            @endif--}}
-{{--                                                                        </span>--}}
-{{--                                                                    </div>--}}
-{{--                                                                    <div>--}}
-{{--                                                                        <span>Reponse :--}}
-{{--                                                                            {{ $res->commentaire_reponse }}</span>--}}
-{{--                                                                    </div>--}}
-{{--                                                                @endif--}}
-{{--                                                            </div>--}}
-{{--                                                        @endif--}}
-{{--                                                    </div>--}}
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                @else
+                                                                    <div>
+                                                                        <span>
+                                                                            Statut : @if ($res->flag_traitement_par_critere_commentaire_traiter == true)
+                                                                                Prise en compte
+                                                                            @else
+                                                                                Pas prise en compte
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span>Reponse :
+                                                                            {{ $res->commentaire_reponse }}</span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        @endif
+                                                    </div>
 
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </li>--}}
-{{--                                    @endforeach--}}
-{{--                                </ul>--}}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
 
