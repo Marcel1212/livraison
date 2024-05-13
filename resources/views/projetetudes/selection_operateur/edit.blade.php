@@ -507,7 +507,6 @@
 
                                 @if(@$projet_etude->flag_selection_operateur_valider_par_processus==true && isset($projet_etude->id_operateur_selection))
                                     <hr>
-
                                     <form action="{{route($lien.'.mark',['id_projet_etude'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude),'id_etape'=>\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)])}}" method="post">
                                         @method('put')
                                         @csrf

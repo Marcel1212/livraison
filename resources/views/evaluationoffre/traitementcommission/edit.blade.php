@@ -456,6 +456,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 @csrf
                                 <div align="right">
                                     <button type="submit" name="action" value="Valider"
+                                            onclick='javascript:if (!confirm("Voulez-vous valider votre evaluation ? cette action est irréversible")) return false;'
                                             class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                         Valider
                                     </button>

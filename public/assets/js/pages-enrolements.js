@@ -5,7 +5,11 @@ $(function () {
     $.validator.addMethod('filesize', function (value, element, param) {
         return this.optional(element) || (element.files[0].size <= param)
     }, 'la taille maximale doit être de 5 MegaOctets');
-    // jQuery Validation
+
+    $.validator.addMethod('numbertel', function (value) {
+        return value.substr(0, 2)!=='27' && value.substr(0, 2)!=='21' && value.substr(0, 2)!=='25';
+    }, 'les numéros fixes ne sont pas acceptés');
+
     // --------------------------------------------------------------------
     if (enrolementForm.length) {
         enrolementForm.validate({
@@ -25,7 +29,8 @@ $(function () {
                 'tel_demande_enrolement': {
                     required: true,
                     maxlength:10,
-                    minlength:10
+                    minlength:10,
+                    numbertel: true
                 },
                 'id_localite': {
                     required: true,
