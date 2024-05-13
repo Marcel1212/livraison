@@ -880,20 +880,12 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Validé
                 if (isset($cel_users)) {
-
-                    $content = "CHER ".$name." , NOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE.";
-
+                    $content = "CHER ".$name." , NOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name." ADRESSE E-MAIL : ".$emailcli." IDENTIFIANT : ".$ncc_entreprises."  MOT DE PASSE : ".$passwordCli."  DATE DE CREATION DU COMPTE : ".$entreprise->created_at."  POUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : http://fdfp.ldfgroupe.com";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
-
-                    $content1 = " VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name." ADRESSE E-MAIL : ".$emailcli." IDENTIFIANT : ".$ncc_entreprises."  MOT DE PASSE : ".$passwordCli."  DATE DE CREATION DU COMPTE : ".$entreprise->created_at."  POUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : http://fdfp.ldfgroupe.com";
-
-                    SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content1);
                 }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
-
             }
-
         }
     }
 
