@@ -688,7 +688,7 @@ class EnrolementController extends Controller
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-                        $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+                        $messageMailEnvoi = Email::get_envoimailTemplate($demandeenrole1->email_demande_enrolement, $demandeenrole1->raison_sociale_demande_enroleme, $messageMail, $sujet, $titre);
                 }
 
 
