@@ -90,6 +90,8 @@ class EnrolementController extends Controller
      */
     public function store(Request $request)
     {
+        $logo = Menu::get_logo();
+
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'id_forme_juridique' => 'required',
