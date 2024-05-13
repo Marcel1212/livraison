@@ -882,7 +882,7 @@ class EnrolementController extends Controller
                                     <br><b>Date de création du compte : : </b> $entreprise->created_at
                                     <br><br>
                                     <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
-                                            www.e-fdfp.ci
+                                            ".route('/')."
                                     <br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -895,7 +895,7 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Validé
                 if (isset($cel_users)) {
-                    $content = "CHER ".$name." , NOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name." ADRESSE E-MAIL : ".$emailcli." IDENTIFIANT : ".$ncc_entreprises."  MOT DE PASSE : ".$passwordCli."  DATE DE CREATION DU COMPTE : ".$entreprise->created_at."  POUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : http://fdfp.ldfgroupe.com";
+                    $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name."\nADRESSE E-MAIL : ".$emailcli."\nIDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 
