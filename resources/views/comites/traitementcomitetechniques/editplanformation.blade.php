@@ -546,22 +546,10 @@ $nombre = count($conseilleragence);
                                         </td>
                                         <td>{{ number_format($actionplanformation->cout_accorde_action_formation, 0, ',', ' ') }}
                                         </td>
-                                        <td align="center">
-                                            @if (@$planformation->user_conseiller == Auth::user()->id)
-                                                @if ($actionplanformation->flag_action_formation_traiter_comite_technique == true)
-                                                    <span class="badge bg-success">Traité</span>
-                                                @else
-                                                    <span class="badge bg-warning">Non traité</span>
-                                                @endif
-                                            @else
-                                                <?php
-                                                $value = ListeTraitementCritereParUser::get_traitement_crietere_par_user(Auth::user()->id, $actionplanformation->id_action_formation_plan);
 
-                                                echo $value;
-                                                ?>
-                                            @endif
-                                        </td>
                                         <td>
+
+                                        </td>                                        <td>
 
                                         </td>
                                         <td align="center" nowrap>
