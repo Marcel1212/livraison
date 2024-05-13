@@ -103,6 +103,8 @@ class CahierPlansProjetsController extends Controller
             $input = $request->all();
             $processus = ProcessusComite::find($input['id_processus_comite']);
 
+           // dd($input = $request->all());
+
             if (isset($input['id_departement'])) {
                 $departement = Departement::find($input['id_departement']);
                 $input['code_cahier_plans_projets'] = $departement->code_profil_departement.'-'. Gencode::randStrGen(4, 5).'-'.Carbon::now()->format('Y');
@@ -205,8 +207,8 @@ class CahierPlansProjetsController extends Controller
                 $valeur1 = 65000001;
                 $valeur2 = 3000000000000000000;
             }
-
-            $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier')->whereNotExists(function ($query) use ($id){
+           // dd($valeur1,$valeur2);
+/*             $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
                 ->from('ligne_cahier_plans_projets')
                 ->whereColumn('ligne_cahier_plans_projets.id_demande','=','vue_plans_projets_dispobinle_pour_cahier.id_demande')
@@ -217,7 +219,18 @@ class CahierPlansProjetsController extends Controller
                  ['vue_plans_projets_dispobinle_pour_cahier.code_processus','=',$cahier->processusComite->code_processus_comite],
                  ])
                  ->whereBetween('montant_total', [$valeur1, $valeur2])
-                 ->get();
+                 ->get(); */
+
+                 $demandes = DB::table('vue_plans_projets_dispobinle_pour_cahier')->whereNotExists(function ($query) use ($id){
+                    $query->select('*')
+                    ->from('ligne_cahier_plans_projets')
+                    ->whereColumn('ligne_cahier_plans_projets.id_demande','=','vue_plans_projets_dispobinle_pour_cahier.id_demande')
+                    ->where('ligne_cahier_plans_projets.id_cahier_plans_projets',$id);
+                     })->where([
+                     ['vue_plans_projets_dispobinle_pour_cahier.code_processus','=',$cahier->processusComite->code_processus_comite],
+                     ])
+                     ->whereBetween('montant_total', [$valeur1, $valeur2])
+                     ->get();
         }
 
 
