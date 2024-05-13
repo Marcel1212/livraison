@@ -681,7 +681,7 @@ class EnrolementController extends Controller
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                         $sujet = "Recevabilité de demande votre d'enrôlement sur e-FDFP";
                         $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                        $messageMail = "<b>Cher(e) $name ,</b>
+                        $messageMail = "<b>Cher(e) $demandeenrole1->raison_sociale_demande_enroleme ,</b>
                                     <br><br>Nous sommes ravis de vous informer que votre demande d'enrôlement est jugée recevable. Nous apprécions votre intérêt pour nos services.<br><br> Cordialement l'équipe E-FDFP.
                                     <br><br><br>
                                     -----
