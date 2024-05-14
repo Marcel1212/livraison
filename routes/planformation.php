@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cahierplanformation/{id}/{id2}/{id3}/agrementupdate', [CahierplanformationController::class, 'agrementupdate'])->name('cahierplanformation.agrementupdate');
 
     Route::get('planformation/{id}/deleteapf', [PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
+
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');
 
     Route::group(['middleware' => ['can:traitementplanformation-index']], function () {
@@ -107,6 +108,8 @@ Route::group(['middleware' => ['auth']], function () {
             'traitementplanformation' => TratementPlanFormationController::class,
         ]);
     });
+
+    Route::get('traitementplanformation/{id}/informationaction', [TratementPlanFormationController::class, 'informationaction'])->name('traitementplanformation.informationaction');
 
     Route::group(['middleware' => ['can:ctplanformation-index']], function () {
         Route::resources([
