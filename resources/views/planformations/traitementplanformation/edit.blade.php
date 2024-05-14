@@ -676,7 +676,7 @@ use App\Helpers\ListePlanFormationSoumis;
                   </div>
                 </div>
     </div>
-    <?php //dd($infosactionplanformationsficheagrements); ?>
+
     <!-- Edit User Modal -->
           @foreach($infosactionplanformations as $key=>$infosactionplanformation)
               <?php $key = $key+1 ?>
@@ -1266,8 +1266,7 @@ use App\Helpers\ListePlanFormationSoumis;
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
 
                 <script type="text/javascript">
-                    {{--var all_count_actions = {{$infosactionplanformations->count()}};--}}
-                    {{--for(var i=1; i < all_count_actions+1 ; i++){--}}
+
                         var selectBox = $("#id_type_formation_"+i);
                         selectBox.on("change", function() {
                             let selectedValue = $(this).val();
@@ -1358,7 +1357,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                 });
                             }
                         });
-                    // }
+
                 </script>
 
                 <script type="text/javascript">
