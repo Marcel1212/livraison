@@ -295,7 +295,7 @@ class TratementPlanFormationController extends Controller
             $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
         }*/
 
-        return response()->json([$infosactionplanformations]);
+        return response()->json($infosactionplanformations);
 
     }
     /**
