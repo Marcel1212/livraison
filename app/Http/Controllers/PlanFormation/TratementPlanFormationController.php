@@ -307,7 +307,9 @@ class TratementPlanFormationController extends Controller
             $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
         }*/
 
-        return response()->json($infosactionplanformations);
+        $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$infosactionplanformations->id_fiche_agrement]])->get();
+
+        return response()->json(['information'=>$infosactionplanformations, 'butformations'=>$butformations]);
 
     }
     /**
