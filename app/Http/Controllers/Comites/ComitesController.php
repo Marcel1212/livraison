@@ -651,7 +651,7 @@ class ComitesController extends Controller
                             ]);
 
                             //Envoi SMS
-                            $content = "Cher(e) ".$rais.",\nvotre agrément de plan de formation est disponible, veuillez-vous connecter sur le portail ".url();
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de plan de formation est disponible, veuillez-vous connecter sur le portail ".route('/');
                             SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
@@ -690,7 +690,7 @@ class ComitesController extends Controller
                             $projet_etude->update();
 
                             //Envoi SMS
-                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet d'etude , veuillez-vous connecter sur le portail ".url();
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet d'etude , veuillez-vous connecter sur le portail ".route('/');
                             SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
@@ -730,7 +730,7 @@ class ComitesController extends Controller
                             $projetformation->code_comite_pleiniere = $comitep->code_comite ;
                             $projetformation->update();
 
-                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet de formation , veuillez-vous connecter sur le portail ".url();
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de projet de formation , veuillez-vous connecter sur le portail ".route('/');
                             SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
