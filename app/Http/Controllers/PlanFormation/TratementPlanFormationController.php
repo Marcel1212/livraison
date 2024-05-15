@@ -290,7 +290,7 @@ class TratementPlanFormationController extends Controller
 
         $id =  Crypt::UrldeCrypt($id);
 
-        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*')
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*','caracteristique_type_formation.*')
         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
