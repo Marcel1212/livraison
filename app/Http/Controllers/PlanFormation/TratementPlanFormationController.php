@@ -40,6 +40,7 @@ use Rap2hpoutre\FastExcel\FastExcel;
 use App\Http\Controllers\Controller;
 use App\Models\FicheAgrementButFormation;
 
+@ini_set('max_execution_time',0);
 class TratementPlanFormationController extends Controller
 {
     /**
@@ -278,7 +279,9 @@ class TratementPlanFormationController extends Controller
 
                 ]);
 
-        return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations',
+        return view('planformations.traitementplanformation.edit', compact('planformation',
+            'infoscaracteristique',
+            'infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations',
                             'categorieprofessionelle','categorieplans','motif','infosactionplanformations','infosactionplanformationsficheagrements',
                             'nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation',
                             'montantactionplanformationacc','secteuractivites','butformations','typeformationss','paysc','infoscaracteristique'));
