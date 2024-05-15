@@ -244,6 +244,7 @@ class TratementPlanFormationController extends Controller
         $montantactionplanformation = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->sum('cout_action_formation_plan');
         $montantactionplanformationacc = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->sum('cout_accorde_action_formation');
 
+        $infoscaracteristique = CaracteristiqueTypeFormation::where([['flag_ctf','=',true]])->get();
 /*         $montantactionplanformation = 0;
 
         foreach ($actionplanformations as $actionplanformation){
@@ -280,7 +281,7 @@ class TratementPlanFormationController extends Controller
         return view('planformations.traitementplanformation.edit', compact('planformation','infoentreprise','typeentreprise','pay','typeformation','butformation','actionplanformations',
                             'categorieprofessionelle','categorieplans','motif','infosactionplanformations','infosactionplanformationsficheagrements',
                             'nombreaction','nombreactionvalider','historiquesplanformations','montantactionplanformation',
-                            'montantactionplanformationacc','secteuractivites','butformations','typeformationss','paysc'));
+                            'montantactionplanformationacc','secteuractivites','butformations','typeformationss','paysc','infoscaracteristique'));
 
     }
 
