@@ -294,7 +294,7 @@ class TratementPlanFormationController extends Controller
         ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
         ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
         ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-        //->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
+        ->join('caracteristique_type_formation','action_formation_plan.id_caracteristique_type_formation','=','caracteristique_type_formation.id_caracteristique_type_formation')
         ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
         ->join('domaine_formation','action_formation_plan.id_domaine_formation','=','domaine_formation.id_domaine_formation')
         ->where([['action_formation_plan.id_action_formation_plan','=',$id]])
