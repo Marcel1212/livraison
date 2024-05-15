@@ -223,6 +223,14 @@ class TratementPlanFormationController extends Controller
             ->where([['action_formation_plan.id_plan_de_formation','=',$id]])
             ->get();
 
+/*         $beneficiairesaction = ActionFormationPlan::select('action_formation_plan.*','fiche_a_demande_agrement.*')
+                ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+                ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+                ->join('beneficiaires_formation','fiche_a_demande_agrement.id_fiche_agrement','=','beneficiaires_formation.id_fiche_agrement')
+                ->where([['action_formation_plan.id_plan_de_formation','=',$id]])->get(); */
+
+            //BeneficiairesFormation::where([['id_fiche_agrement','=',$idficheagrement]])->get();
+
        // dd($infosactionplanformationsficheagrements);
 
         $nombreaction = count($actionplanformations);
@@ -233,7 +241,10 @@ class TratementPlanFormationController extends Controller
 
         $actionplanformations = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->get();
 
-        $montantactionplanformation = 0;
+        $montantactionplanformation = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->sum('cout_action_formation_plan');
+        $montantactionplanformationacc = ActionFormationPlan::Join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','fiche_a_demande_agrement.id_action_formation_plan')->where([['action_formation_plan.id_plan_de_formation','=',$id]])->orderBy('action_formation_plan.id_action_formation_plan','asc')->sum('cout_accorde_action_formation');
+
+/*         $montantactionplanformation = 0;
 
         foreach ($actionplanformations as $actionplanformation){
             $montantactionplanformation += $actionplanformation->cout_action_formation_plan;
@@ -243,7 +254,7 @@ class TratementPlanFormationController extends Controller
 
         foreach ($actionplanformations as $actionplanformation){
             $montantactionplanformationacc += $actionplanformation->cout_accorde_action_formation;
-        }
+        } */
 
                 /******************** secteuractivites *********************************/
                 $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)

@@ -1041,10 +1041,10 @@ use App\Helpers\ListePlanFormationSoumis;
                   </div>
                 </div>
             </div>
-          @endforeach
+{{--           @endforeach
 
           @foreach($infosactionplanformationsficheagrements as $key=>$infosactionplanformation)
-              <?php $key = $key+1 ?>
+              <?php $key = $key+1 ?> --}}
             <div class="modal fade" id="traiterBeneficiaire<?php echo $infosactionplanformation->id_fiche_agrement ?>" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-xl modal-simple modal-edit-user">
                   <div class="modal-content p-5 p-md-5">
