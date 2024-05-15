@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Comites;
 
+use App\Helpers\SmsPerso;
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
 use App\Models\Entreprises;
