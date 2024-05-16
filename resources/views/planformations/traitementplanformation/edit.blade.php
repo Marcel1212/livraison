@@ -1,6 +1,8 @@
 <?php
 use App\Helpers\ListePlanFormationSoumis;
 ?>
+@ini_set('max_execution_time',0);
+@ini_set('memory_limit','10002M');
 @if(auth()->user()->can('traitementplanformation-edit'))
 @extends('layouts.backLayout.designadmin')
 @section('content')

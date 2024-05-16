@@ -41,7 +41,8 @@ use App\Http\Controllers\Controller;
 use App\Models\FicheAgrementButFormation;
 use Illuminate\Http\JsonResponse;
 
-
+@ini_set('max_execution_time',0);
+@ini_set('memory_limit','10002M');
 class TratementPlanFormationController extends Controller
 {
     /**
