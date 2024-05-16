@@ -39,6 +39,7 @@ use Auth;
 use Rap2hpoutre\FastExcel\FastExcel;
 use App\Http\Controllers\Controller;
 use App\Models\FicheAgrementButFormation;
+use Illuminate\Http\JsonResponse;
 
 @ini_set('max_execution_time',0);
 class TratementPlanFormationController extends Controller
@@ -315,6 +316,17 @@ class TratementPlanFormationController extends Controller
         return response()->json(['information'=>$infosactionplanformations, 'butformations'=>$butformations]);
 
     }
+
+    public function informationbeneficiaireformation($id)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $infosactionplanformations =  BeneficiairesFormation::where([['id_fiche_agrement','=',$id]])->get();
+
+        return response()->json(['information'=>$infosactionplanformations]);
+
+    }
     /**
      * Update the specified resource in storage.
      */
@@ -508,7 +520,9 @@ class TratementPlanFormationController extends Controller
 
             }
 
-            if($data['action'] === 'Traiter_action_formation'){
+ /*            if($data['action'] === 'Traiter_action_formation'){
+
+                dd($request);
                 $actionplan = ActionFormationPlan::find($id);
 
                 $idplan = $actionplan->id_plan_de_formation;
@@ -813,7 +827,7 @@ class TratementPlanFormationController extends Controller
                 ]);
 
                 return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
-            }
+            } */
 
             if($data['action'] === 'Soumission_ct_plan_formation'){
 
@@ -914,6 +928,396 @@ class TratementPlanFormationController extends Controller
             }
 
         }
+    }
+
+
+    public function traitementactionformation(Request $request, $id): JsonResponse
+    {
+
+       // if($data['action'] === 'Traiter_action_formation'){
+             $id =  Crypt::UrldeCrypt($id);
+           // dd($request->all());
+
+            $actionplan = ActionFormationPlan::find($id);
+
+            $idplan = $actionplan->id_plan_de_formation;
+
+            //dd($idplan);
+
+            $infosplanformation = PlanFormation::find($idplan);
+
+            $part_entreprise = $infosplanformation->part_entreprise;
+            $montant_financement_budget = $infosplanformation->montant_financement_budget;
+            $utilisationfinancecompletaire = $montant_financement_budget-$part_entreprise;
+
+            //----------------recuperation de la somme du montant du champ utilisation direct
+
+            $utilisationdirectslignes = ActionFormationPlan::where([['id_plan_de_formation','=',$idplan]])->get();
+
+            $montantutilisationdirects = 0;
+
+            foreach ($utilisationdirectslignes as $actionplanformation){
+                $montantutilisationdirects += $actionplanformation->utilisation_direct_action_formation;
+            }
+
+            $montantutilisationdirect = $montantutilisationdirects;
+
+
+            $this->validate($request, [
+                'cout_accorde_action_formation' => 'required',
+                //'commentaire_action_formation' => 'required',
+            ],[
+                'cout_accorde_action_formation.required' => 'Veuillez ajouter le montant accordé.',
+                //'commentaire_action_formation.required' => 'Veuillez ajouter un commentaire.',
+            ]);
+
+            $input = $request->all();
+            //dd($input['cout_action_formation_plan']);
+            //$planformationupadteinfos = PlanFormation::find($idplan);
+
+            //$planformationupadteinfos->update($input);
+
+            $input['cout_accorde_action_formation'] = str_replace(' ', '', $input['cout_accorde_action_formation']);
+
+            if($input['cout_accorde_action_formation']==0){
+
+                $this->validate($request, [
+                    'motif_non_financement_action_formation' => 'required'
+                ],[
+                    'motif_non_financement_action_formation.required' => 'Veuillez selectionnez le motif de non financement.',
+                ]);
+
+                $input['flag_valide_action_formation_pl'] = true;
+
+                $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+
+
+                $actionplanupdate = ActionFormationPlan::find($id);
+
+                $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                $input['nombre_jour_action_formation'] = $nombredejour;
+
+                //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
+
+                $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                if($infoscaracteristique->code_ctf == "CGF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CFD"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CCEF"){
+
+                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSEF"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                if($coutaccordeactionformation > $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }else{
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }
+
+                //dd($input['cout_accorde_action_formation'],$input['montant_attribuable_fdfp']);
+
+                                //--------mise des conditions
+
+            if($montantutilisationdirect == $part_entreprise){
+                $input['utilisation_direct_action_formation'] = 0;
+                $input['finan_complemantaire_action_formation'] = $input['cout_accorde_action_formation'];
+            }
+
+            if ($montantutilisationdirect < $part_entreprise) {
+
+                $montantutilisationdirectrestcalcul =  $part_entreprise - $montantutilisationdirect;
+
+                if ($montantutilisationdirectrestcalcul < $input['cout_accorde_action_formation']) {
+
+                    $montantutilisationdirectrest = $input['cout_accorde_action_formation'] - $montantutilisationdirectrestcalcul;
+
+                    $input['utilisation_direct_action_formation'] = $montantutilisationdirectrestcalcul;
+                    $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                }
+
+                if ($montantutilisationdirectrestcalcul == $input['cout_accorde_action_formation']) {
+
+                    $montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                    $input['utilisation_direct_action_formation'] = $montantutilisationdirectrest;
+                    $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                }
+
+                if ($montantutilisationdirectrestcalcul > $input['cout_accorde_action_formation']) {
+
+                    //$montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                    $input['utilisation_direct_action_formation'] = $input['cout_accorde_action_formation'];
+                    $input['finan_complemantaire_action_formation'] = 0;
+                }
+            }
+
+                $input['flag_action_formation_plan_traite_instruction'] = true;
+                $input['date_action_formation_plan_traite_instruction'] = Carbon::now();
+
+                $actionplanupdate->update($input);
+
+                $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                $idficheagre = $infosficheagrement->id_fiche_agrement;
+                $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                $infosfchieupdate->update($input);
+
+            }else{
+
+                $input['flag_valide_action_formation_pl'] = true;
+
+                $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+
+                $actionplanupdate = ActionFormationPlan::find($id);
+
+                $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                $input['nombre_jour_action_formation'] = $nombredejour;
+
+                //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
+
+                $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                if($infoscaracteristique->code_ctf == "CGF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CFD"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CCEF"){
+
+                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSEF"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                if($coutaccordeactionformation > $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }else{
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }
+
+                                //--------mise des conditions
+
+            if($montantutilisationdirect == $part_entreprise){
+                $input['utilisation_direct_action_formation'] = 0;
+                $input['finan_complemantaire_action_formation'] = $input['cout_accorde_action_formation'];
+            }
+
+            if ($montantutilisationdirect < $part_entreprise) {
+
+                $montantutilisationdirectrestcalcul =  $part_entreprise - $montantutilisationdirect;
+
+                if ($montantutilisationdirectrestcalcul < $input['cout_accorde_action_formation']) {
+
+                    $montantutilisationdirectrest = $input['cout_accorde_action_formation'] - $montantutilisationdirectrestcalcul;
+
+                    $input['utilisation_direct_action_formation'] = $montantutilisationdirectrestcalcul;
+                    $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                }
+
+                if ($montantutilisationdirectrestcalcul == $input['cout_accorde_action_formation']) {
+
+                    $montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                    $input['utilisation_direct_action_formation'] = $montantutilisationdirectrest;
+                    $input['finan_complemantaire_action_formation'] = $montantutilisationdirectrest;
+                }
+
+                if ($montantutilisationdirectrestcalcul > $input['cout_accorde_action_formation']) {
+
+                    //$montantutilisationdirectrest = $montantutilisationdirectrestcalcul/2;
+
+                    $input['utilisation_direct_action_formation'] = $input['cout_accorde_action_formation'];
+                    $input['finan_complemantaire_action_formation'] = 0;
+                }
+            }
+
+                $input['flag_action_formation_plan_traite_instruction'] = true;
+                $input['date_action_formation_plan_traite_instruction'] = Carbon::now();
+
+                $actionplanupdate->update($input);
+
+                $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                $idficheagre = $infosficheagrement->id_fiche_agrement;
+                $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                $infosfchieupdate->update($input);
+
+
+                if(isset($input['id_but_formation'])){
+                    $tab = $input['id_but_formation'];
+
+                    if(count($tab)>=1){
+                        $butagrements = FicheAgrementButFormation::where([['id_fiche_agrement','=',$idficheagre]])->get();
+
+                        foreach ($butagrements as $butagrement) {
+                            FicheAgrementButFormation::where([['id_fiche_a_agrement_but_formation','=',$butagrement->id_fiche_a_agrement_but_formation]])->delete();
+                        }
+
+                        foreach ($tab as $key => $value) {
+                            //dd($value); exit;
+                            FicheAgrementButFormation::create([
+                                'id_fiche_agrement'=> $idficheagre,
+                                'id_but_formation'=> $value,
+                                'flag_fiche_a_agrement_but_formation'=>true
+                            ]);
+                        }
+                    }
+                }
+
+
+            }
+
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'PLAN DE FORMATION (Instruction: Action de plan de formation Traité.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
+            //return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Action de plan de formation Traité ');
+        //}
+
+        return response()->json(['success' => 'mise a jour effectué']);
+    }
+
+    public function traitementactionformationbenefiaire(Request $request, $id): JsonResponse
+    {
+
+        //if($data['action'] === 'Traiter_action_formation_beneficiaire'){
+
+            $id =  Crypt::UrldeCrypt($id);
+
+            $ficheA = FicheADemandeAgrement::find($id);
+
+            $idactionplanf = $ficheA->id_action_formation_plan;
+
+            $actionplan = ActionFormationPlan::find($idactionplanf);
+
+            $idplan = $actionplan->id_plan_de_formation;
+
+            $data = $request->all();
+
+            //dd($data);
+
+
+                $beneficiaires = ListePlanFormationSoumis::get_liste_beneficiare($id);
+
+                foreach ($beneficiaires as $beneficiaire) {
+
+                    $id_beneficiaire_formation =  $data["id_beneficiaire_formation/$beneficiaire->id_beneficiaire_formation"];
+                    $nom_prenoms =  $data["nom_prenoms/$beneficiaire->id_beneficiaire_formation"];
+                    $genre =  $data["genre/$beneficiaire->id_beneficiaire_formation"];
+                    $annee_naissance =  $data["annee_naissance/$beneficiaire->id_beneficiaire_formation"];
+                    $nationalite =  $data["nationalite/$beneficiaire->id_beneficiaire_formation"];
+                    $fonction =  $data["fonction/$beneficiaire->id_beneficiaire_formation"];
+                    $categorie =  $data["categorie/$beneficiaire->id_beneficiaire_formation"];
+                    $annee_embauche =  $data["annee_embauche/$beneficiaire->id_beneficiaire_formation"];
+                    $matricule_cnps =  $data["matricule_cnps/$beneficiaire->id_beneficiaire_formation"];
+
+                    $Majbeneficiaire = BeneficiairesFormation::find($id_beneficiaire_formation);
+
+                    $inputMAJ['nom_prenoms'] = $nom_prenoms;
+                    $inputMAJ['genre'] = $genre;
+                    $inputMAJ['annee_naissance'] = $annee_naissance;
+                    $inputMAJ['nationalite'] = $nationalite;
+                    $inputMAJ['fonction'] = $fonction;
+                    $inputMAJ['categorie'] = $categorie;
+                    $inputMAJ['annee_embauche'] = $annee_embauche;
+                    $inputMAJ['matricule_cnps'] = $matricule_cnps;
+
+                    //dd($Majbeneficiaire,$inputMAJ);
+
+                    $Majbeneficiaire->update($inputMAJ);
+
+                }
+
+
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'PLAN DE FORMATION (Instruction: Liste des beneficiaires mise a jour.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'PLAN DE FORMATION'
+
+            ]);
+
+           // return redirect('traitementplanformation/'.Crypt::UrlCrypt($idplan).'/edit')->with('success', 'Succes : Liste des beneficiaires mise a jour ');
+
+        //}
+
+        return response()->json(['success' => 'mise a jour effectué']);
     }
 
     /**

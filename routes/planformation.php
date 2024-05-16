@@ -110,6 +110,9 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('traitementplanformation/{id}/informationaction', [TratementPlanFormationController::class, 'informationaction'])->name('traitementplanformation.informationaction');
+    Route::get('traitementplanformation/{id}/informationbeneficiaireaction', [TratementPlanFormationController::class, 'informationbeneficiaireformation'])->name('traitementplanformation.informationbeneficiaireaction');
+    Route::post('traitementplanformation/{id}/update/action/formation', [TratementPlanFormationController::class, 'traitementactionformation'])->name('traitementplanformation.action.formation');
+    Route::post('traitementplanformation/{id}/update/beneficiaire/action/formation', [TratementPlanFormationController::class, 'traitementactionformationbenefiaire'])->name('traitementplanformation.beneficiaire.action.formation');
 
     Route::group(['middleware' => ['can:ctplanformation-index']], function () {
         Route::resources([

@@ -8,6 +8,9 @@ use App\Helpers\ListePlanFormationSoumis;
     @php($titre='Liste des plans de formations')
     @php($soustitre='Instruction')
     @php($lien='traitementplanformation')
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- BEGIN: Content-->
     <h5 class="py-2 mb-1">
         <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
@@ -598,7 +601,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                                                         <img src='/assets/img/editing.png'>
                                                                     </a>
                                                                     <a type="button"
-                                                                    class="" data-bs-toggle="modal" data-bs-target="#traiterBeneficiaire<?php  echo $actionplanformation->id_fiche_agrement; ?>" href="#myModal11" data-url="http://example.com">
+                                                                    class="traiterBeneficiaire" data-bs-toggle="modal" data-bs-target="#traiterBeneficiaire" data-id="{{\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_fiche_agrement)}}" href="#">
                                                                         <img src='/assets/img/display.png'>
                                                                     </a>
                                                             <?php } ?>
@@ -678,10 +681,10 @@ use App\Helpers\ListePlanFormationSoumis;
                         <h3 class="mb-2">Traitement d'une action de plan de formation</h3>
                         <p class="text-muted"></p>
                       </div>
-                        <form id="" class="row g-3 actionformationForm" method="POST" action="">
+                        <form id="ajax_taitement_par_action" class="row g-3 actionformationForm">
 {{--                            <form id="" class="row g-3 actionformationForm" method="POST" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_action_formation_plan)) }}">--}}
-{{--                            @csrf--}}
-{{--                            @method('put')--}}
+                           @csrf
+                           @method('post')
 
                             <div class="col-12 col-md-3">
                                 <label class="form-label" for="montant_financement_budget"><strong style="color:green;">Budget crédit</strong></label>
@@ -741,7 +744,7 @@ use App\Helpers\ListePlanFormationSoumis;
                         </div>
                         <div class="col-md-12 mb-5">
                             <label class="form-label" for="objectif_pedagogique_fiche_agre">Objectif pédagogique <strong style="color:red;">*</strong></label>
-                            <input class="form-control objectif_pedagogique_fiche_agre_val @error('objectif_pedagogique_fiche_agre') error @enderror" type="text" id="" name="objectif_pedagogique_fiche_agre"/>
+                            <input class="form-control  @error('objectif_pedagogique_fiche_agre') error @enderror" type="text" id="objectif_pedagogique_fiche_agre_val" name="objectif_pedagogique_fiche_agre"/>
                             <div id="objectif_pedagogique_fiche_agre" class="rounded-1 objectif_pedagogique_fiche_agre"></div>
                            @error('objectif_pedagogique_fiche_agre')
                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -881,7 +884,7 @@ use App\Helpers\ListePlanFormationSoumis;
                             <div class="col-12 col-md-4">
                                 <div class="mb-1">
                                     <label class="form-label" for="">But de la formation </label>
-                                    <select class="select2 form-select form-select-sm" multiple data-allow-clear="true" name="but_formation" id="but_formation">
+                                    <select class="select2 form-select form-select-sm" multiple data-allow-clear="true" name="id_but_formation[]" id="but_formation">
                                         @foreach ($butformations as $pc)
                                             <option value="{{ $pc->id_but_formation }}">
                                                 {{$pc->but_formation}}
@@ -975,14 +978,14 @@ use App\Helpers\ListePlanFormationSoumis;
                         </div>
                         <div class="col-md-12 col-12">
                             <div class="mb-1">
-                                <label>Commentaire <strong style="color:red;">*</strong>: </label>
+                                <label>Commentaire : </label>
                                 <textarea class="form-control form-control-sm"  name="commentaire_action_formation" id="commentaire_action_formation" rows="6"></textarea>
                             </div>
                         </div>
 
                         <div class="col-12 text-center">
                         <?php if($planformation->flag_soumis_ct_plan_formation != true){?>
-                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation" class="btn btn-primary me-sm-3 me-1">Enregistrer</button>
+                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette action ?")) return false;' type="submit" name="action" value="Traiter_action_formation" class="btn btn-primary me-sm-3 me-1 btn-submit">Enregistrer</button>
                           <?php } ?>
                           <button
                             type="reset"
@@ -997,104 +1000,63 @@ use App\Helpers\ListePlanFormationSoumis;
                   </div>
                 </div>
             </div>
-{{--           @endforeach
 
-          @foreach($infosactionplanformationsficheagrements as $key=>$infosactionplanformation)
-              <?php $key = $key+1 ?> --}}
-{{--            <div class="modal fade" id="traiterBeneficiaire<?php echo $infosactionplanformation->id_fiche_agrement ?>" tabindex="-1" aria-hidden="true">--}}
-{{--                <div class="modal-dialog modal-xl modal-simple modal-edit-user">--}}
-{{--                  <div class="modal-content p-5 p-md-5">--}}
-{{--                    <div class="modal-body">--}}
-{{--                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>--}}
-{{--                      <div class="text-center mb-4">--}}
-{{--                        <h3 class="mb-2">Traitement des bénéficiaires</h3>--}}
-{{--                        <p class="text-muted"></p>--}}
-{{--                      </div>--}}
+            <div class="modal fade" id="traiterBeneficiaire" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-simple modal-edit-user">
+                 <div class="modal-content p-5 p-md-5">
+                   <div class="modal-body">
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      <div class="text-center mb-4">
+                        <h3 class="mb-2">Traitement des bénéficiaires</h3>
+                        <p class="text-muted"></p>
+                     </div>
 
 {{--                      <form id="" class="row g-3 actionformationbeneficiaireForm" method="POST" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($infosactionplanformation->id_fiche_agrement)) }}">--}}
-{{--                            @csrf--}}
-{{--                            @method('put')--}}
+                      <form id="ajax_traiter_Beneficiaire" class="row g-3 actionformationbeneficiaireForm" method="POST" action="">
+                           @csrf
+                            @method('post')
 
-{{--                            <table class="table table-bordered table-hover table-checkable"--}}
-{{--                               style="margin-top: 13px !important">--}}
-{{--                            <thead>--}}
-{{--                            <tr>--}}
-{{--								<th>N°</th>--}}
-{{--                                <th>Nom et prénoms</th>--}}
-{{--                                <th>Genre</th>--}}
-{{--                                <th>Année de naissance</th>--}}
-{{--                                <th>Nationalité</th>--}}
-{{--                                <th>Fonction</th>--}}
-{{--                                <th>Catégorie</th>--}}
-{{--                                <th>Année d'embauche</th>--}}
-{{--                                <th>Matricule CNPS</th>--}}
-{{--                            </tr>--}}
+                           <table class="table table-bordered table-hover table-checkable"
+                               style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+								<th>N°</th>
+                                <th>Nom et prénoms</th>
+                                <th>Genre</th>
+                                <th>Année de naissance</th>
+                                <th>Nationalité</th>
+                                <th>Fonction</th>
+                                <th>Catégorie</th>
+                                <th>Année d'embauche</th>
+                                <th>Matricule CNPS</th>
+                            </tr>
 
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                            <?php--}}
-{{--							$beneficiaires = ListePlanFormationSoumis::get_liste_beneficiare($infosactionplanformation->id_fiche_agrement);--}}
-{{--                            $i=0;--}}
-{{--                            foreach ($beneficiaires as $key => $res):--}}
-{{--                            $i++;--}}
-
-{{--                            ?>--}}
-{{--                                <tr>--}}
-{{--                                    <td>--}}
-{{--                                        {{ $i }}--}}
-{{--                                        <input type="hidden" class="form-control form-control-sm" name="id_beneficiaire_formation/{{ $res->id_beneficiaire_formation }}" value="{{$res->id_beneficiaire_formation}}"/>--}}
-{{--                                    </td>--}}
-{{--                                    <td>--}}
-{{--									    <input type="text" class="form-control form-control-sm" value="{{$res->nom_prenoms}}" name="nom_prenoms/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--                                    <td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->genre}}" name="genre/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->annee_naissance}}" name="annee_naissance/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->nationalite}}" name="nationalite/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->fonction}}" name="fonction/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->categorie}}" name="categorie/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->annee_embauche}}" name="annee_embauche/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
-{{--									<td>--}}
-{{--										<input type="text" class="form-control form-control-sm" value="{{$res->matricule_cnps}}" name="matricule_cnps/{{ $res->id_beneficiaire_formation }}"/>--}}
-{{--									</td>--}}
+                            </thead>
+                            <tbody id="beneficiaire">
 
 
-{{--                                </tr>--}}
-{{--                            <?php endforeach; ?>--}}
 
+                            </tbody>
+                        </table>
 
-{{--                            </tbody>--}}
-{{--                        </table>--}}
+                       <div class="col-12 text-center">
+                      <?php if($planformation->flag_soumis_ct_plan_formation != true){?>
+                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette liste de bénéficiaire ?")) return false;' type="submit" name="action" value="Traiter_action_formation_beneficiaire" class="btn btn-primary me-sm-3 me-1 btn-submit">Modifier</button>
+                          <?php } ?>
+                         <button
+                            type="reset"
+                            class="btn btn-label-secondary"
+                            data-bs-dismiss="modal"
+                            aria-label="Close">
+                            Annuler
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
 
-{{--                        <div class="col-12 text-center">--}}
-{{--                        <?php if($planformation->flag_soumis_ct_plan_formation != true){?>--}}
-{{--                          <button onclick='javascript:if (!confirm("Voulez-vous Traiter cette liste de bénéficiaire ?")) return false;' type="submit" name="action" value="Traiter_action_formation_beneficiaire" class="btn btn-primary me-sm-3 me-1">Modifier</button>--}}
-{{--                          <?php } ?>--}}
-{{--                          <button--}}
-{{--                            type="reset"--}}
-{{--                            class="btn btn-label-secondary"--}}
-{{--                            data-bs-dismiss="modal"--}}
-{{--                            aria-label="Close">--}}
-{{--                            Annuler--}}
-{{--                          </button>--}}
-{{--                        </div>--}}
-{{--                      </form>--}}
-{{--                    </div>--}}
-{{--                  </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--          @endforeach--}}
 
 
             <!--<div id='myModal' class='modal fade' tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
@@ -1388,9 +1350,12 @@ use App\Helpers\ListePlanFormationSoumis;
                                 }else{
                                     cout_accorde_action_formation.val(data.information.montant_attribuable_fdfp);
                                 }
+
+                                const but = [];
                                 $.each(data.butformations, function(key,val) {
-                                    but_formation.val(val.id_but_formation).trigger('change');
+                                    but.push(val.id_but_formation);
                                 });
+                                but_formation.val(but).trigger('change');
                                 objectif_pedagogique_fiche_agre.root.innerHTML = data.information.objectif_pedagogique_fiche_agre;
                                 id_domaine_formation.append("<option selected value="+data.information.id_domaine_formation+">"+data.information.libelle_domaine_formation+"</option>");
                                 id_entreprise_structure_formation_plan_formation.append("<option selected value="+data.information.id_entreprise_structure_formation_action+">"+data.information.structure_etablissement_action_+"</option>");
@@ -1422,9 +1387,129 @@ use App\Helpers\ListePlanFormationSoumis;
                         id_entreprise_structure_formation_plan_formation.empty();
                         objectif_pedagogique_fiche_agre.root.innerHTML = '';
                     }
+
+                    //Traitement des beneficiaire lie a une action
+                    //Initialisation des variables
+                    var idbene;
+                    var traiterBeneficiaireModal = $("#traiterBeneficiaire");
+
+
+                    $(document).on('click', '.traiterBeneficiaire', function () {
+                        idbene = $(this).data('id');
+                        traiterBeneficiaireModal.modal('show');
+                        $("#beneficiaire").empty();
+                        $.get("{{url('/')}}/traitementplanformation/"+idbene+"/informationbeneficiaireaction",
+                        function (data) {
+                            $.each(data.information, function(key,val) {
+                                $("#beneficiaire").append("<tr>"+
+                                    "<td><input type=\"hidden\" class=\"form-control form-control-sm\" name=\"id_beneficiaire_formation/"+val.id_beneficiaire_formation+"\" value="+val.id_beneficiaire_formation+">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.nom_prenoms+"\" name=\"nom_prenoms/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.genre+"\" name=\"genre/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.annee_naissance+"\" name=\"annee_naissance/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.nationalite+"\" name=\"nationalite/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.fonction+"\" name=\"fonction/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.categorie+"\" name=\"categorie/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.annee_embauche+"\" name=\"annee_embauche/"+val.id_beneficiaire_formation+"\">"+
+                                        "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.matricule_cnps+"\" name=\"matricule_cnps/"+val.id_beneficiaire_formation+"\">"
+                                        +"</td></tr>")
+                            });
+                                console.log(data);
+                            }
+                        );
+                    });
+
                 </script>
 
 
+
+                <script>
+
+                    $(document).ready(function(){
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                    })
+
+
+                    $(document).ready(function () {
+                        $('#ajax_taitement_par_action').submit(function (e) {
+                            e.preventDefault();
+                            $("#objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre.root.innerHTML);
+
+                            var formData = new FormData(this);
+
+                            console.log(formData);
+                            //formData.append('_token','{!! csrf_token() !!}'),
+                             $.ajax({
+                                url: "{{url('/')}}/traitementplanformation/"+id+"/update/action/formation",
+                                type: 'post',
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    //console(response);
+                                    alert('Your form has been sent successfully.');
+                                    location.reload();
+                                },
+                                error: function(response){
+                                    $('#ajax_taitement_par_action').find(".print-error-msg").find("ul").html('');
+                                    $('#ajax_taitement_par_action').find(".print-error-msg").css('display','block');
+                                    $.each( response.responseJSON.errors, function( key, value ) {
+                                        $('#ajax_taitement_par_action').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                    });
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+                <script>
+
+                    $(document).ready(function(){
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+                    })
+
+
+                    $(document).ready(function () {
+                        $('#ajax_traiter_Beneficiaire').submit(function (e) {
+                            e.preventDefault();
+
+                            var formData = new FormData(this);
+
+                            console.log(formData);
+                            $.ajax({
+                                url: "{{url('/')}}/traitementplanformation/"+idbene+"/update/beneficiaire/action/formation",
+                                type: 'post',
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    //console(response);
+                                    alert('Your form has been sent successfully.');
+                                    location.reload();
+                                },
+                                error: function(response){
+                                    $('#ajax_traiter_Beneficiaire').find(".print-error-msg").find("ul").html('');
+                                    $('#ajax_traiter_Beneficiaire').find(".print-error-msg").css('display','block');
+                                    $.each( response.responseJSON.errors, function( key, value ) {
+                                        $('#ajax_traiter_Beneficiaire').find(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+                                    });
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+                <script>
+
+
+                </script>
 
 
                 <script type="text/javascript">
@@ -1500,13 +1585,13 @@ use App\Helpers\ListePlanFormationSoumis;
 
                 var commentaireplanformationForm = $("#commentaireplanformationForm");
 
-                var form = document.querySelectorAll('.actionformationForm');
+                /*var form = document.querySelectorAll('.actionformationForm');
                 for (let i = 0; i < form.length; i++) {
                     const data_element = form[i];
                     data_element.onsubmit =function(){
-                        $(".objectif_pedagogique_fiche_agre_val").val(objectif_pedagogique_fiche_agre[i].root.innerHTML)
+
                     }
-                }
+                }*/
 
                  commentaireplanformationForm.onsubmit = function(){
                     $("#commentaire_plan_formation_val").val(commentaire_plan_formation.root.innerHTML);
