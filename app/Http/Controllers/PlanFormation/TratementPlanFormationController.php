@@ -41,7 +41,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FicheAgrementButFormation;
 use Illuminate\Http\JsonResponse;
 
-@ini_set('max_execution_time',0);
+
 class TratementPlanFormationController extends Controller
 {
     /**
