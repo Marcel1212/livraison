@@ -1221,22 +1221,15 @@ use App\Helpers\ListePlanFormationSoumis;
                 <script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
                 <script src="{{asset('assets/js/additional-methods.js')}}"></script>
                 <script type="text/javascript">
-                    var selectBox = $("#id_type_formation");
-                    selectBox.on("change", function() {
-                        let selectedValue = $(this).val();
-                        $.get('{{url('/')}}/caracteristiqueTypeFormationlist/'+selectedValue, function (data) {
-                            //alert(data); //exit;
-                            $('#id_caracteristique_type_formation').empty();
-                            $.each(data, function (index, tels) {
-                                $('#id_caracteristique_type_formation').append($('<option>', {
-                                    value: tels.id_caracteristique_type_formation,
-                                    text: tels.libelle_ctf,
-                                }));
-                            });
-                        });
+                    var id_type_formation_val;
+                    $("#id_type_formation").on("change", function() {
+                        id_type_formation_val = $(this).val();
+                        caracteristiqueTypeFormation(id_type_formation_val);
 
-                        if(selectedValue == 3){
-                            document.getElementById("Activeajoutercabinetformation").disabled = true;
+                        //Pas de problème à ce niveau
+                        if(id_type_formation_val==3){
+                            $("#Activeajoutercabinetformation").prop( "disabled", true );
+                            //Recupération de l'entreprise ayant soumit le plan de formation
                             $.get('{{url('/')}}/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                                 $('#id_entreprise_structure_formation_plan_formation').empty();
                                 $.each(data, function (index, tels) {
@@ -1244,74 +1237,90 @@ use App\Helpers\ListePlanFormationSoumis;
                                         value: tels.id_entreprises,
                                         text: tels.raison_social_entreprises,
                                     }));
-
-                                    $.get('{{url('/')}}/domaineformations', function (data) {
-                                        //alert(tels.id_entreprises); //exit;
-                                        $('#id_domaine_formation').empty();
-                                        $.each(data, function (index, tels) {
-                                            $('#id_domaine_formation').append($('<option>', {
-                                                value: tels.id_domaine_formation,
-                                                text: tels.libelle_domaine_formation,
-                                            }));
-                                        });
-                                    });
                                 });
+                                domaineformations();
                             });
                         }
 
-                        if(selectedValue == 1 || selectedValue ==2 || selectedValue == 5){
-                            document.getElementById("Activeajoutercabinetformation").disabled = true;
+                        //Pas de problème à ce niveau
+                        if(id_type_formation_val == 1 || id_type_formation_val ==2 || id_type_formation_val == 5){
+                            $("#Activeajoutercabinetformation").prop( "disabled", true );
                             $.get('{{url('/')}}/entreprisecabinetformation', function (data) {
-                                //alert(data); //exit;
                                 $('#id_entreprise_structure_formation_plan_formation').empty();
                                 $.each(data, function (index, tels) {
                                     $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
                                         value: tels.id_entreprises,
                                         text: tels.raison_social_entreprises,
                                     }));
-
-                                    $.get('{{url('/')}}/domaineformation/'+tels.id_entreprises, function (data) {
-                                        //alert(tels.id_entreprises); //exit;
-                                        // alert(data); //exit;
-                                        $('#id_domaine_formation').empty();
-                                        $.each(data, function (index, tels) {
-                                            $('#id_domaine_formation').append($('<option>', {
-                                                value: tels.id_domaine_formation,
-                                                text: tels.libelle_domaine_formation,
-                                            }));
-                                        });
-                                    });
                                 });
                             });
+                            domaineformation($("#id_entreprise_structure_formation_plan_formation").val());
                         }
 
-                        if(selectedValue == 4){
-                            document.getElementById("Activeajoutercabinetformation").disabled = false;
+                        //Pas de problème à ce niveau
+                        if(id_type_formation_val == 4){
+                            $('#Activeajoutercabinetformation').prop( 'disabled', false );
+                            //Recupération des cabinet etranger
                             $.get('{{url('/')}}/entreprisecabinetetrangerformation', function (data) {
-                                //alert(data); //exit;
                                 $('#id_entreprise_structure_formation_plan_formation').empty();
-                                $.each(data, function (index, tels) {
+                                $.each(data, function (index, val) {
                                     $('#id_entreprise_structure_formation_plan_formation').append($('<option>', {
-                                        value: tels.id_entreprises,
-                                        text: tels.raison_social_entreprises,
+                                        value: val.id_entreprises,
+                                        text: val.raison_social_entreprises,
                                     }));
-
-                                    $.get('{{url('/')}}/domaineformations', function (data) {
-                                        //alert(tels.id_entreprises); //exit;
-                                        $('#id_domaine_formation').empty();
-                                        $.each(data, function (index, tels) {
-                                            $('#id_domaine_formation').append($('<option>', {
-                                                value: tels.id_domaine_formation,
-                                                text: tels.libelle_domaine_formation,
-                                            }));
-                                        });
-                                    });
                                 });
                             });
+                            //Recupérer tous les domaines de formation dans le cas où l'entreprise est etrangère
+                            domaineformations();
                         }
                     });
 
-                    //Traitement Action formation
+                    //Recuperation des domaine de formation en fonction des entreprises selectionnée
+                    $("#id_entreprise_structure_formation_plan_formation").on("change", function() {
+                        if(id_type_formation_val == 1 || id_type_formation_val ==2 || id_type_formation_val == 5){
+                            domaineformation($(this).val());
+                        }
+                    })
+
+                    function caracteristiqueTypeFormation(id_type_formation_val){
+                        $.get('{{url('/')}}/caracteristiqueTypeFormationlist/'+id_type_formation_val, function (data) {
+                            $('#id_caracteristique_type_formation').empty();
+                            $.each(data, function (index, val) {
+                                $('#id_caracteristique_type_formation').append($('<option>', {
+                                    value: val.id_caracteristique_type_formation,
+                                    text: val.libelle_ctf,
+                                }));
+                            });
+                        });
+                    }
+
+                    function domaineformations(){
+                        $.get('{{url('/')}}/domaineformations', function (data) {
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, val) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: val.id_domaine_formation,
+                                    text: val.libelle_domaine_formation,
+                                }));
+                            });
+                        });
+                    }
+
+                    function domaineformation(id_entreprises){
+                        $.get('{{url('/')}}/domaineformation/'+id_entreprises+'/listformation', function (data) {
+                            $('#id_domaine_formation').empty();
+                            $.each(data, function (index, tels) {
+                                $('#id_domaine_formation').append($('<option>', {
+                                    value: tels.id_domaine_formation,
+                                    text: tels.libelle_domaine_formation,
+                                }));
+                            });
+                        });
+                    }
+
+
+
+                        //Traitement Action formation
                     //Initialisation des variables
                     var id;
                     var traiterActionFomationModal = $("#traiterActionFomationPlan");
@@ -1364,8 +1373,13 @@ use App\Helpers\ListePlanFormationSoumis;
                                 cout_action_formation_plan.val(data.information.cout_action_formation_plan);
                                 montant_attribuable_fdfp.val(data.information.montant_attribuable_fdfp);
                                 commentaire_action_formation.val(data.information.commentaire_action_formation);
-                                date_debut_fiche_agrement.val(data.information.date_debut_fiche_agrement.split(' ')[0]);
-                                date_fin_fiche_agrement.val(data.information.date_fin_fiche_agrement.split(' ')[0]);
+                                if(data.information.date_debut_fiche_agrement!=null){
+                                    date_debut_fiche_agrement.val(data.information.date_debut_fiche_agrement.split(' ')[0]);
+                                }
+
+                                if(data.information.date_fin_fiche_agrement!=null){
+                                    date_fin_fiche_agrement.val(data.information.date_fin_fiche_agrement.split(' ')[0]);
+                                }
                                 nombre_stagiaire_action_formati.val(data.information.nombre_stagiaire_action_formati);
                                 if(data.information.cout_accorde_action_formation<data.information.montant_attribuable_fdfp){
                                     cout_accorde_action_formation.val(data.information.cout_action_formation_plan);
@@ -1377,7 +1391,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                 $.each(data.butformations, function(key,val) {
                                     but_formation.val(val.id_but_formation).trigger('change');
                                 });
-                                objectif_pedagogique_fiche_agre.pasteHTML(data.information.objectif_pedagogique_fiche_agre);
+                                objectif_pedagogique_fiche_agre.root.innerHTML = data.information.objectif_pedagogique_fiche_agre;
                                 id_domaine_formation.append("<option selected value="+data.information.id_domaine_formation+">"+data.information.libelle_domaine_formation+"</option>");
                                 id_entreprise_structure_formation_plan_formation.append("<option selected value="+data.information.id_entreprise_structure_formation_action+">"+data.information.structure_etablissement_action_+"</option>");
                                 id_caracteristique_type_formation.append("<option selected value="+data.information.id_caracteristique_type_formation+">"+data.information.libelle_ctf+"</option>");
@@ -1406,7 +1420,7 @@ use App\Helpers\ListePlanFormationSoumis;
                         nombre_stagiaire_action_formati.empty();
                         id_domaine_formation.empty();
                         id_entreprise_structure_formation_plan_formation.empty();
-                        objectif_pedagogique_fiche_agre.pasteHTML("");
+                        objectif_pedagogique_fiche_agre.root.innerHTML = '';
                     }
                 </script>
 
