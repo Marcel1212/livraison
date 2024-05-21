@@ -322,6 +322,14 @@ class TraitementComitesTechniquesController extends Controller
         $processuscomite = ProcessusComiteLieComite::where([['id_comite','=',$id]])->first();
 
         $idcategoriecomite = $comite->id_categorie_comite;
+        $projetetude = ProjetFormation::find($id1);
+        $operateurs_valide = Entreprises::where('flag_operateur',true)->where('flag_actif_entreprises',true)->get();
+        $operateur_selected = "<option value='" .$projetetude->operateur_selectionne->id_entreprises. "'>" . mb_strtoupper($projetetude->operateur_selectionne->raison_social_entreprises) . " </option>";
+        foreach ($operateurs_valide as $operateur) {
+            $operateur_selected .= "<option value='" .$operateur->id_entreprises. "'>" . mb_strtoupper($operateur->raison_social_entreprises) . " </option>";
+        }
+        //dd($operateur_selected);
+
 
         //dd($idcategoriecomite);
         if($idcategoriecomite == 2){
@@ -374,63 +382,6 @@ class TraitementComitesTechniquesController extends Controller
             $piecesetude7 = null ;
         }
         $infoentreprise = Entreprises::find($planformation->id_entreprises);
-        // if($planformation->user_conseiller == Auth::user()->id){
-        //     dd('true');
-        // }else{
-        //     dd('rrr');
-        // }
-        //dd($infoentreprise);
-
-        // $typeentreprises = TypeEntreprise::all();
-        // $typeentreprise = "<option value='".$planformation->typeEntreprise->id_type_entreprise."'>".$planformation->typeEntreprise->lielle_type_entrepise." </option>";
-        // foreach ($typeentreprises as $comp) {
-        //     $typeentreprise .= "<option value='" . $comp->id_type_entreprise  . "'>" . mb_strtoupper($comp->lielle_type_entrepise) ." </option>";
-        // }
-
-
-        // $pays = Pays::all();
-        // $pay = "<option value='".@$infoentreprise->pay->id_pays."'> " . @$infoentreprise->pay->indicatif . "</option>";
-        // foreach ($pays as $comp) {
-        //     $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
-        // }
-
-        // $butformations = ButFormation::all();
-        // $butformation = "<option value=''> Selectionnez le but de la formation </option>";
-        // foreach ($butformations as $comp) {
-        //     $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
-        // }
-
-        // $typeformations = TypeFormation::all();
-        // $typeformation = "<option value=''> Selectionnez le type  de la formation </option>";
-        // foreach ($typeformations as $comp) {
-        //     $typeformation .= "<option value='" . $comp->id_type_formation  . "'>" . mb_strtoupper($comp->type_formation) ." </option>";
-        // }
-
-        // $categorieprofessionelles = CategorieProfessionelle::all();
-        // $categorieprofessionelle = "<option value=''> Selectionnez la categorie </option>";
-        // foreach ($categorieprofessionelles as $comp) {
-        //     $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
-        // }
-
-        // $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id1]])->get();
-
-        // $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id1]])->get();
-
-        // $motifs = Motif::where([['code_motif','=','CTPAF']])->get();
-        // $motif = "<option value=''> Selectionnez un motif </option>";
-        // foreach ($motifs as $comp) {
-        //     $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
-        // }
-
-        // $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','but_formation.*','type_formation.*','secteur_activite.id_secteur_activite as id_secteur_activitee','secteur_activite.libelle_secteur_activite')
-        //                                 ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
-        //                                 ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
-        //                                 ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
-        //                                 ->join('but_formation','fiche_a_demande_agrement.id_but_formation','=','but_formation.id_but_formation')
-        //                                 ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
-        //                                 ->join('secteur_activite','action_formation_plan.id_secteur_activite','=','secteur_activite.id_secteur_activite')
-        //                                 ->where([['action_formation_plan.id_plan_de_formation','=',$id1]])->get();
-
         $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
                                     ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
                                     ->where([['critere_evaluation.flag_critere_evaluation','=',true],
@@ -438,21 +389,7 @@ class TraitementComitesTechniquesController extends Controller
                                             ['processus_comite.code_processus_comite','=','PRF']])
                                     ->get();
 
-        //dd($criteres);
 
-     /******************** secteuractivites *********************************/
-        // $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-        //                 ->orderBy('libelle_secteur_activite')
-        //                 ->get();
-
-
-        // $typeformationss = TypeFormation::where('flag_actif_formation','=',true)->orderBy('type_formation')->get();
-
-        // $butformations = ButFormation::all();
-        // $butformation = "<option value=''> Selectionnez le but de la formation </option>";
-        // foreach ($butformations as $comp) {
-        //     $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
-        // }
 
         Audit::logSave([
 
@@ -471,7 +408,7 @@ class TraitementComitesTechniquesController extends Controller
         return view('comites.traitementcomitetechniques.editprojetformation', compact(
             'comite','idetape','id','id1','processuscomite','cahiers','comiteparticipants','listedemandesss',
             'planformation','infoentreprise', 'piecesetude1', 'piecesetude2','typeproj', 'piecesetude3', 'piecesetude4','piecesetude5','piecesetude6','piecesetude7',
-            'idcomite','criteres','idcategoriecomite'
+            'idcomite','criteres','idcategoriecomite','operateur_selected'
         ));
 
     }
@@ -622,7 +559,7 @@ class TraitementComitesTechniquesController extends Controller
 
             }
            if($data['action'] === 'Traiter_action_formation_valider_critere_prf_valider'){
-           // dd($data);
+           //dd($data);
 
             //$actionplan = ActionFormationPlan::find($idactionformation);
             // Id projet formation
@@ -646,7 +583,7 @@ class TraitementComitesTechniquesController extends Controller
             //$projetformation->id_type_projet_formation = $data['typeprojetformation'];
             $projetformation->environnement_contexte = $data['environnement_contexte'];
             //$projetformation->id_domaine_projet_formation = $data['id_domaine'];
-            $projetformation->cout_projet_formation =  $data['cout_projet_formation'];
+            $projetformation->cout_projet_instruction =  $data['cout_projet_instruction'];
             // $projetformation->acteurs = $data['acteurs_projet'];
             // $projetformation->role_p = $data['role_projet'];
             // $projetformation->responsabilite = $data['responsabilite_projet'];

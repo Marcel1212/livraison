@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Helpers\SmsPerso;
 use Illuminate\Http\Request;
 use App\Models\Activites;
 use App\Models\ListeDomaineProjetFormation;
@@ -725,6 +726,12 @@ class ProjetFormationController extends Controller
 
                 //dd($data);
 
+                    // $content = "Cher client , Nous avons examiné votre demande de projet de formation , et malheureusement, nous ne pouvons pas l'approuver. Veuillez vous rapprocher de l'equipe pour des informations supplementaire.
+                    //     Cordialement.
+                    //     L'équipe e-FDFP";
+                    // SmsPerso::sendSMS('0777386397',$content);
+                    // Numero de telephone de l'entreprise
+
                     // Document
                     if (isset($data['doc_autre_document_instruction'])){
                         //dd($data);
@@ -749,6 +756,8 @@ class ProjetFormationController extends Controller
                     ]);
                     $date_soumission = Carbon::now();
                     $projetformation = ProjetFormation::find($id);
+                    $numentreprise = $projetformation->entreprise->cellulaire_professionnel_entreprises ;
+                    //dd($numentreprise);
                     if($data['statut_rec_global_instruction'] === "RECEVABLE"){
                         $etat_rec = true ;
                     $projetformation->flag_statut_instruction = $etat_rec;
@@ -759,6 +768,11 @@ class ProjetFormationController extends Controller
                     //dd($cout_projet_formation);
                     $projetformation->cout_projet_instruction = $cout_projet_formation;
                     $projetformation->save();
+
+                    $content = "Cher client , Nous avons examiné votre demande de projet de formation , et le projet a été approuver. Veuillez vous rapprocher de l'equipe pour des informations supplementaire.
+                        Cordialement.
+                        L'équipe e-FDFP";
+                    SmsPerso::sendSMS($numentreprise,$content);
 
 
                     // Enregistrement des modifications de l'instruction par le conseiller
@@ -840,6 +854,10 @@ class ProjetFormationController extends Controller
                     $cout_projet_formation = intval(str_replace(' ', '', $data["cout_projet_instruction"]))  ;
                     $projetformation->cout_projet_instruction = $cout_projet_formation ;
                     $projetformation->save();
+                    $content = "Cher client , Nous avons examiné votre demande de projet de formation , et malheureusement, nous ne pouvons pas l'approuver. Veuillez vous rapprocher de l'equipe pour des informations supplementaire.
+                    Cordialement.
+                    L'équipe e-FDFP";
+                SmsPerso::sendSMS($numentreprise,$content);
 
                     // Enregistrement des modifications de l'instruction par le conseiller
                     $input['id_projet_formation_instruction'] = intval($projetformation->id_projet_formation);

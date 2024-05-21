@@ -1146,10 +1146,21 @@ $nombre = count($conseilleragence);
                                             <div class="mb-1">
                                                 <label>Operateur <span style="color:red;">*</span>
                                                 </label>
-                                                <input type="text" name="operateur" required="required"
-                                                    id="operateur" class="form-control form-control-sm"
+                                                <select id="operateur" name="operateur"
+                                                    class="select2 select2-size-sm form-select" required="required"
+                                                    <?php //echo $disable;
+                                                    ?>>
+                                                    <?php echo $operateur_selected;
+                                                    ?>
+
+                                                </select>
+                                                {{-- <input type="text" name="operateur"
+                                                    required="required" id="operateur"
+                                                    class="form-control form-control-sm"
                                                     placeholder="ex : Perfectionnement .."
-                                                    value="{{ $planformation->operateur }}">
+                                                    <?php //echo $disable;
+                                                    ?>
+                                                    value="{{ $projetetude->operateur }}"> --}}
                                             </div>
                                             <div class="mb-1">
                                                 <label>Promoteur <span style="color:red;">*</span>
@@ -1432,11 +1443,12 @@ $nombre = count($conseilleragence);
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-12">
-                                            <label>Cout de la formation <span style="color:red;">*</span>
+                                            <label>Cout de la formation proposé par l'entreprise <span
+                                                    style="color:red;">*</span>
                                             </label>
                                             <input type="number" name="cout_projet_formation" required="required"
                                                 id="cout_projet_formation" class="form-control form-control-sm"
-                                                placeholder="ex : 2000000" value=<?php echo $planformation->cout_projet_formation; ?>>
+                                                placeholder="ex : 2000000" disabled value=<?php echo $planformation->cout_projet_formation; ?>>
                                         </div>
 
                                     </div>
@@ -1647,7 +1659,7 @@ $nombre = count($conseilleragence);
                                                     </label>
                                                     <input name="cout_projet_instruction" required="required"
                                                         type="number" id="cout_projet_instruction"
-                                                        class="form-control form-control-sm" disabled
+                                                        class="form-control form-control-sm"
                                                         value="{{ $planformation->cout_projet_instruction }}"
                                                         placeholder="200000">
 
@@ -1766,10 +1778,21 @@ $nombre = count($conseilleragence);
                                             <div class="mb-1">
                                                 <label>Operateur <span style="color:red;">*</span>
                                                 </label>
-                                                <input type="text" name="operateur" required="required"
-                                                    id="operateur" class="form-control form-control-sm"
-                                                    placeholder="ex : Perfectionnement .." disabled
-                                                    value="{{ $planformation->operateur }}">
+                                                <select id="operateur" name="operateur"
+                                                    class="select2 select2-size-sm form-select" required="required"
+                                                    <?php //echo $disable;
+                                                    ?>>
+                                                    <?php echo $operateur_selected;
+                                                    ?>
+
+                                                </select>
+                                                {{-- <input type="text" name="operateur"
+                                                    required="required" id="operateur"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="ex : Perfectionnement .."
+                                                    <?php //echo $disable;
+                                                    ?>
+                                                    value="{{ $projetetude->operateur }}"> --}}
                                             </div>
                                             <div class="mb-1">
                                                 <label>Promoteur <span style="color:red;">*</span>
