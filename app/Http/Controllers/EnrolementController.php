@@ -90,6 +90,8 @@ class EnrolementController extends Controller
      */
     public function store(Request $request)
     {
+        $logo = Menu::get_logo();
+
         if ($request->isMethod('post')) {
             $this->validate($request, [
                 'id_forme_juridique' => 'required',
@@ -533,10 +535,8 @@ class EnrolementController extends Controller
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                    $messageMail = "<b>Cher,  $rais ,</b>
-                                    <br><br>Votre demande d'activation de compte sur le portail www.e-fdfp.ci a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                                    SMS dans 48h ouvrées
-                                    <br><br><br>
+                    $messageMail = "<b>Cher(e),  $rais ,</b>
+                                    <br><br>Votre demande d'enrôlement a été effectuée avec succès. Le traitement de votre demande s'effectuera dans un délai de 48h!
                                     <br><br><br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -547,8 +547,7 @@ class EnrolementController extends Controller
 
                 //Envoyer notification via SMS
                 if($input['tel_demande_enrolement']){
-                    $content = "Cher(e) ".$rais.", <br>votre demande d’activation de compte sur le portail".url()."a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                    SMS dans 48h ouvrée";
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE D ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.\nLE TRAITEMENT DE VOTRE DEMANDE S EFFECTUERA DANS UN DELAI DE 48h !";
                     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
                 }
 
@@ -589,6 +588,7 @@ class EnrolementController extends Controller
     {
         $id = \App\Helpers\Crypt::UrldeCrypt($id);
         $demandeenrole = DemandeEnrolement::find($id);
+        $logo = Menu::get_logo();
 
         if ($request->isMethod('put')) {
 
@@ -673,8 +673,26 @@ class EnrolementController extends Controller
 
                 $demandeenrole1 = DemandeEnrolement::find($id);
 
+                //Envoi SMS recevable
+                if (isset($demandeenrole1->tel_demande_enrolement)) {
+                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
+                    SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
+                }
+                if (isset($demandeenrole1->email_demande_enrolement)) {
+                        $sujet = "Recevabilité de demande votre d'enrôlement sur e-FDFP";
+                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        $messageMail = "<b>Cher(e) $demandeenrole1->raison_sociale_demande_enroleme ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'enrôlement est jugée recevable. Nous apprécions votre intérêt pour nos services.<br><br> Cordialement l'équipe E-FDFP.
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                        $messageMailEnvoi = Email::get_envoimailTemplate($demandeenrole1->email_demande_enrolement, $demandeenrole1->raison_sociale_demande_enroleme, $messageMail, $sujet, $titre);
+                }
 
-                return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+                    return redirect('enrolement/' . Crypt::UrlCrypt($id) . '/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
                 // return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }
@@ -697,7 +715,7 @@ class EnrolementController extends Controller
                 $demandeenrole->update($input);
 
                 $demandeenrole1 = DemandeEnrolement::find($id);
-
+                $logo = Menu::get_logo();
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Recevabilité de demande enrolement sur e-FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -724,14 +742,16 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Rejeté
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
-                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".$demandeenrole1->motif1->libelle_motif."
-                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
-                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
-                        Cordialement,
-                        L'équipe e-FDFP";
+
+//                  $content = " ".$demandeenrole1->raison_sociale_demande_enroleme.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
+
+
+                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS AVONS EXAMINE VOTRE DEMANDE D ACTIVATION DE COMPTE SUR".route('/').", ET
+                        MALHEUREUSEMENT, NOUS NE POUVONS PAS L APPROUVER POUR LA RAISON SUIVANTE:".$demandeenrole1->motif1->libelle_motif."
+                        \nSI VOUS ESTIMEZ QUE CELA EST UNE ERREUR OU SI VOUS AVEZ DES INFORMATIONS SUPPLEMENTAIRES A FOURIR, N HESITEZ PAS A NOUS CONTACTER POUR OBTENIR DE L AIDE.\n
+                        NOUS APPRECIONS VOTRE INTERET POUR NOTRE SERVICE ET ESPERONS QUE VOUS ENVISAGEREZ DE SOUMETTRE UNE NOUVELLE DEMANDE LORSQUE LES PROBLEMES SONT RESOLUS.\n
+                        CORDIALEMENT\n,
+                        L'EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 
@@ -759,7 +779,7 @@ class EnrolementController extends Controller
 
                 $numfdfp = 'fdfp' . Gencode::randStrGen(4, 5);
 
-                Entreprises::create([
+                $entreprise = Entreprises::create([
                     'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
                     'numero_fdfp_entreprises' => $numfdfp,
                     'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
@@ -776,8 +796,8 @@ class EnrolementController extends Controller
                     'flag_actif_entreprises' => true
                 ]);
 
-                $insertedId = Entreprises::latest()->first()->id_entreprises;
-                $entreprise = Entreprises::latest()->first();
+                $insertedId = $entreprise->id_entreprises;
+                //$entreprise = Entreprises::latest()->first();
 
                 if (isset($demandeenrole1->piece_dfe_demande_enrolement)) {
                     Pieces::create([
@@ -862,7 +882,7 @@ class EnrolementController extends Controller
                                     <br><b>Date de création du compte : : </b> $entreprise->created_at
                                     <br><br>
                                     <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
-                                            www.e-fdfp.ci
+                                            ".route('/')."
                                     <br>
                                     -----
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
@@ -875,23 +895,12 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Validé
                 if (isset($cel_users)) {
-                    $content = "Cher ".$name."<br>, Nous sommes ravis de vous accueillir sur notre plateforme ! Votre compte a été créé avec
-                        succès, et il est maintenant prêt à être utilisé. Voici un récapitulatif de vos informations de compte :<br>
-                        Nom d'utilisateur :".$name."
-                        <br>Adresse e-mail : ".$emailcli."
-                        <br>Identifiant : ".$ncc_entreprises."
-                        <br>Mot de passe : ".$passwordCli."
-                        <br>Date de création du compte : ".$entreprise->created_at."
-                        <br><br>
-                        Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :".url()."a bien été prise en compte. Vous recevrez vos paramètres d’accès par email ou
-                        SMS dans 48h ouvrée";
+                    $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name."\nADRESSE E-MAIL : ".$emailcli."\nIDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
-
             }
-
         }
     }
 

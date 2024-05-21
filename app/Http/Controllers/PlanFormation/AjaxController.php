@@ -33,9 +33,9 @@ class AjaxController extends Controller
             $input['numero_fdfp_entreprises'] = $numfdfp;
             $input['ncc_entreprises'] = $numfdfp1;
 
-            Entreprises::create($input);
+            $data = Entreprises::create($input);
 
-            $data = Entreprises::latest()->first();
+            //$data = Entreprises::latest()->first();
 
             return response()->json(['success' => 'Cabinet étranger ajouté avec succès','data'=>$data]);
     }

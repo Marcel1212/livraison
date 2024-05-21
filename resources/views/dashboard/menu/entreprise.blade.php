@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
 use App\Helpers\InfosEntreprise;
+use App\Helpers\MoyenCotisation;
 
 $iduser = Auth::user()->id;
 $iduserpart = Auth::user()->id_partenaire;
@@ -25,6 +26,10 @@ $projetformationrecevable = ProjetFormation::where([['id_user', '=', $iduser], [
 $projetformationrejete = ProjetFormation::where([['id_user', '=', $iduser], ['flag_rejet', '=', true]])->get();
 
 //dd(count($projetetudeenattente));
+
+//verification si ajour de ces cotisation
+
+$verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($iduserpart);
 
 ?>
 
@@ -53,7 +58,11 @@ $projetformationrejete = ProjetFormation::where([['id_user', '=', $iduser], ['fl
                     </span>
                     <div class="content-right">
                         <p class="mb-0">&Agrave; jour de mes cotisations ?</p>
-                        <h4 class="text-success mb-0">OUI</h4>
+                        @if ($verificationcotisation>=1)
+                            <h4 class="text-success mb-0">OUI</h4>
+                        @else
+                            <h4 class="text-danger mb-0">NON</h4>
+                        @endif
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-3">

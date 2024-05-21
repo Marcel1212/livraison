@@ -188,6 +188,16 @@ class CommissionEvaluationOffreController extends Controller
                 ->where('cahier_commission_evaluation_offre.id_commission_evaluation_offre',$id);
         })->where('flag_fiche_agrement',true)->where('flag_selection_operateur_valider_par_processus',true)->get();
 
+        $classement_offre_tech_finals = DB::table('notation_commission_evaluation_offre_tech')
+            ->Join('entreprises','entreprises.id_entreprises',
+                'notation_commission_evaluation_offre_tech.id_operateur')
+            ->selectRaw('entreprises.raison_social_entreprises as entreprise,
+                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note')
+            ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
+            ->groupBy('entreprise')
+            ->orderBy('note', 'desc')
+            ->get();
+
         Audit::logSave([
             'action'=>'MODIFIER',
             'code_piece'=>$id,
@@ -211,6 +221,7 @@ class CommissionEvaluationOffreController extends Controller
             'offretechcommissioneval_sums',
             'notation_commission_evaluation_offre_tech',
             'offretechcommissioneval_tabs',
+            'classement_offre_tech_finals',
             'commissionevaluationoffre','idetape'));
     }
 
@@ -342,10 +353,11 @@ class CommissionEvaluationOffreController extends Controller
                             $sujet = "Tenue de commission d'évaluation ";
                             $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                             $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes convié à la commission d'évaluation qui se déroulera  à partir du ".$commissionevaluationoffre->date_debut_commission_evaluation_offre;
+
+                                            <br><br>Vous êtes convié à la commission d'évaluation qui se déroulera  à partir du ".date('d/m/Y',strtotime(@$commissionevaluationoffre->date_debut_commission_evaluation_offre));
 
                             if(isset($commissionevaluationoffre->date_fin_commission_evaluation_offre)){
-                                $messageMail.=" au ".$commissionevaluationoffre->date_fin_commission_evaluation_offre;
+                                $messageMail.=" au ".date('d/m/Y',strtotime(@$commissionevaluationoffre->date_fin_commission_evaluation_offre));
                             }
 
                             $messageMail .= ". Vous êtes prié de bien vouloir effectuer votre évaluation en cliquant sur le lien suivant : <br><br>
@@ -385,6 +397,7 @@ class CommissionEvaluationOffreController extends Controller
 
             }
             if($data['action'] == 'valider_offre_technique'){
+
                     $commissionevaluationoffre->update([
                         'flag_valider_offre_tech_commission_evaluation_tech'=> true,
                         'date_valider_offre_tech_commission_evaluation_tech' => Carbon::now()

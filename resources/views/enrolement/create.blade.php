@@ -263,9 +263,9 @@ $reseaux = Menu::get_info_reseaux();
                                                             </select>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label class="form-label">Téléphone <strong
+                                                            <label class="form-label">Numéro de Téléphone Mobile <strong
                                                                     style="color:red;">*</strong></label>
-                                                            <input type="number" maxlength="10" min="0"
+                                                            <input type="text" maxlength="10" min="0"
                                                                    name="tel_demande_enrolement"
                                                                    class="form-control form-control-sm
                                                                    @error('tel_demande_enrolement')

@@ -73,7 +73,7 @@ $idpart = Auth::user()->id_partenaire;
 
                 document.getElementById("Activeajoutercabinetformation").disabled = true;
 
-                $.get('/entrepriseinterneplan', function (data) {
+                $.get('/entrepriseinterneplanGeneral/{{$infoentreprise->id_entreprises}}', function (data) {
                      //alert(data); //exit;
                     $('#id_entreprise_structure_formation_plan_formation').empty();
                    // $("#id_domaine_formation").prop( "disabled", false );

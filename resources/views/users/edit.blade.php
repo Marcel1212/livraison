@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="col-md-4 col-12">
                                     <div class="mb-1">
-                                        <label>Mot de passe</label> <strong style="color: red">6 caractères minimum</strong>
+                                        <label>Mot de passe</label> <strong style="color: red">8 caractères minimum</strong>
                                         <input type="password" name="password" id="password"
                                                class="form-control form-control-sm"
                                                placeholder="Mot de passe">

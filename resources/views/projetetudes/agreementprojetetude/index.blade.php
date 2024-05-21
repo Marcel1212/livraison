@@ -60,7 +60,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <tr>
 
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40, '...')) }}</td>
+                                    <td>{{ Str::title(Str::limit($projet_etude->titre_projet_instruction, 40, '...')) }}</td>
                                     <td>{{ @$projet_etude->code_projet_etude }}</td>
                                     <td>{{ @$projet_etude->name }} {{ @$projet_etude->prenom_users }}</td>
                                     <td>{{ date('d/m/Y h:i:s', strtotime(@$projet_etude->created_at)) }}</td>

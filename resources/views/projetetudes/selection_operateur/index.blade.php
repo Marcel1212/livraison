@@ -72,7 +72,7 @@
                                             @foreach ($projet_etude_valides as  $key=>$projet_etude)
                                                 <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ Str::title(Str::limit($projet_etude->titre_projet_etude, 40,'...')) }}</td>
+                                                <td>{{ Str::title(Str::limit($projet_etude->titre_projet_instruction, 40,'...')) }}</td>
                                                 <td>{{ @$projet_etude->code_projet_etude}}</td>
                                                 <td>{{ @$projet_etude->chargedetude->name }} {{ @$projet_etude->chargedetude->prenom_users }}</td>
                                                     <td>@isset($projet_etude->date_fiche_agrement) {{ date('d/m/Y h:i:s',strtotime(@$projet_etude->date_fiche_agrement ))}} @endisset</td>

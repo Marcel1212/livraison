@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/listedepartement', [ListeLierController::class, 'getDepartement']);
     Route::get('/listeagencedepartement/{id}', [ListeLierController::class, 'getAgenceDepartement']);
     Route::get('/entreprisecabinetformation', [ListeLierController::class, 'getEntreprisecabinetformation']);
-    Route::get('/domaineformation/{id}', [ListeLierController::class, 'getDomaineFormation']);
+    Route::get('/domaineformation/{id}/listformation', [ListeLierController::class, 'getDomaineFormation']);
     Route::get('/domaineformations', [ListeLierController::class, 'getDomaineFormations']);
     Route::get('/entreprisecabinetetrangerformation', [ListeLierController::class, 'getEntreprisecabinetetrangerformation']);
     Route::get('/entreprisecabinetetrangerformationmax', [ListeLierController::class, 'getEntreprisecabinetetrangerformationmax']);
@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cahierplanformation/{id}/{id2}/{id3}/agrementupdate', [CahierplanformationController::class, 'agrementupdate'])->name('cahierplanformation.agrementupdate');
 
     Route::get('planformation/{id}/deleteapf', [PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
+
     Route::get('ctplanformationvalider/{id}/{id2}/editer', [CtplanformationvaliderController::class, 'editer'])->name('ctplanformationvalider.editer');
 
     Route::group(['middleware' => ['can:traitementplanformation-index']], function () {
@@ -107,6 +108,11 @@ Route::group(['middleware' => ['auth']], function () {
             'traitementplanformation' => TratementPlanFormationController::class,
         ]);
     });
+
+    Route::get('traitementplanformation/{id}/informationaction', [TratementPlanFormationController::class, 'informationaction'])->name('traitementplanformation.informationaction');
+    Route::get('traitementplanformation/{id}/informationbeneficiaireaction', [TratementPlanFormationController::class, 'informationbeneficiaireformation'])->name('traitementplanformation.informationbeneficiaireaction');
+    Route::post('traitementplanformation/{id}/update/action/formation', [TratementPlanFormationController::class, 'traitementactionformation'])->name('traitementplanformation.action.formation');
+    Route::post('traitementplanformation/{id}/update/beneficiaire/action/formation', [TratementPlanFormationController::class, 'traitementactionformationbenefiaire'])->name('traitementplanformation.beneficiaire.action.formation');
 
     Route::group(['middleware' => ['can:ctplanformation-index']], function () {
         Route::resources([

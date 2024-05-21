@@ -5,12 +5,16 @@ namespace App\Helpers;
 
 use App\Models\CleDeRepartitionFinancement;
 use App\Models\Entreprises;
+use App\Models\VariationPourcentageCleRepartitionFin;
 use Illuminate\Support\Facades\DB;
 
 class GrilleDeRepartitionFC
 {
     public static function get_calcul_financement($montantcotisation)
     {
+        $pourcentagenoncalcule = VariationPourcentageCleRepartitionFin::where([['flag_actif_vpcrf','=',true]])->first();
+        $pourcentage = $pourcentagenoncalcule->valeur_vpcrf/100;
+
         $clerepartitions = CleDeRepartitionFinancement::get();
         $resultat=null;
         foreach($clerepartitions as $clerepartition){
@@ -32,7 +36,14 @@ class GrilleDeRepartitionFC
 
             $montantbudgetfinal1 = $montantbudget + $montantcotisation;
 
+/*             if ($pourcentagenoncalcule->flag_signe_variation == true) {
+                $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 + $montantbudgetfinal1*$pourcentage;
+            }else{
+                $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 - $montantbudgetfinal1*$pourcentage;
+            } */
+
             $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
+
 
         }else{
 
@@ -40,8 +51,16 @@ class GrilleDeRepartitionFC
 
             $montantbudgetfinal1 = $montantbudget + $montantcotisation;
 
+
+            /* if ($pourcentagenoncalcule->flag_signe_variation == true) {
+                $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 + $montantbudgetfinal1*$pourcentage;
+            }else{
+                $montantbudgetfinalapresapplicationpourcentage = $montantbudgetfinal1 - $montantbudgetfinal1*$pourcentage;
+            } */
+
             $montantbudgetfinal = $montantbudgetfinal1.'/'.$resultat->id_cle_de_repartition_financement;
         }
+
 
         return (isset($montantbudgetfinal) ? $montantbudgetfinal : '');
     }

@@ -68,8 +68,8 @@ Route::group(['middleware' => ['auth']], function () {
         //'localite' => App\Http\Controllers\LocaliteController::class,
 //        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
         'projetformation' => App\Http\Controllers\ProjetFormationController::class,
-        'enrolement' => App\Http\Controllers\EnrolementController::class,
-        'comitetechniquepe' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
+        // 'enrolement' => App\Http\Controllers\EnrolementController::class,
+        // 'comitetechniquepe' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
         //'statutoperations' => App\Http\Controllers\StatutOperationController::class,
         //'motifs' => App\Http\Controllers\MotifController::class,
         //'planformation' => App\Http\Controllers\PlanFormationController::class,
@@ -79,10 +79,10 @@ Route::group(['middleware' => ['auth']], function () {
         //'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
         //'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
         //'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
-        'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
-        'ctprojetetude' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
-       // 'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
-        'ctprojetformationvalider' => App\Http\Controllers\CtprojetformationvaliderController::class,
+    //     'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
+    //     'ctprojetetude' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
+    //    // 'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
+    //     'ctprojetformationvalider' => App\Http\Controllers\CtprojetformationvaliderController::class,
         //'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
         //'ctplanformationpleniere' => App\Http\Controllers\ComitePleniereController::class,
         //'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
@@ -335,7 +335,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('traitementdemandeannulationplan/{id}/{id2}/edit', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'edit'])->name('traitementdemandeannulationplan.edit');
     Route::put('traitementdemandeannulationplan/{id}/update', [App\Http\Controllers\TraitementDemandeAnnulationPlanController::class, 'update'])->name('traitementdemandeannulationplan.update');
 
-   Route::put('comitetechniquepe/{id}/update', [\App\Http\Controllers\ProjetEtude\CtprojetetudeController::class, 'update'])->name('comitetechniquepe.update');
+//    Route::put('comitetechniquepe/{id}/update', [\App\Http\Controllers\ProjetEtude\CtprojetetudeController::class, 'update'])->name('comitetechniquepe.update');
 
     //'comitetechniquepe' => App\Http\Controllers\CtprojetetudeController::class,
 
@@ -605,6 +605,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['can:domaineformation-index']], function () {
         Route::resources([
             'domaineformation' => App\Http\Controllers\DomaineFormationController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:variations-index']], function () {
+        Route::resources([
+            'variations' => App\Http\Controllers\VariationPourcentageCleRepartitionFinController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typecotisations-index']], function () {
+        Route::resources([
+            'typecotisations' => App\Http\Controllers\TypeCotisationController::class,
         ]);
     });
 
