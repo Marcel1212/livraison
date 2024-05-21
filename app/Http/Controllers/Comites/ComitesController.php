@@ -210,12 +210,6 @@ class ComitesController extends Controller
         }
 
         $processuscomites = ProcessusComite::where([['flag_processus_comite','=',true]])->orderBy('libelle_processus_comite')->get();
-//       // foreach ($processuscomite as $processuscomitef) {
-//            $processuscomitesListe = "<option value=''>  </option>";
-//        //}
-//        foreach ($processuscomites as $comp) {
-//            $processuscomitesListe .= "<option value='" . $comp->id_processus_comite . "'>" . mb_strtoupper($comp->libelle_processus_comite) . " </option>";
-//        }
 
         $personneressources = 	User::select('users.id as id','users.name as name','users.prenom_users as prenom_users', 'roles.name as profile')
                 ->whereNotExists(function ($query) use ($id){
@@ -549,7 +543,7 @@ class ComitesController extends Controller
                         $nom = $personne->user->name;
                         $prenom = $personne->user->prenom_users;
                         if(isset($comitep->date_fin_comite)){
-                            $datefin = 'jusqu\'au '. $comitep->date_fin_comite;
+                            $datefin = 'jusqu\'au '. date('d/m/Y',strtotime(@$comitep->date_fin_comite));
                         }else{
                             $datefin = ' ';
                         }
@@ -560,8 +554,8 @@ class ComitesController extends Controller
                                 $sujet = "Tenue de ".$comitep->categorieComite->libelle_categorie_comite."";
                                 $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                                 $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
-                                            <br><br>Vous êtes convié à la commission permanente  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                            Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivants <br><br>
+                                            <br><br>Vous êtes convié à la commission permanente  qui se déroulera  à partir du ".date('d/m/Y',strtotime(@$comitep->date_debut_comite))." ".$datefin. ".
+                                            Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivant : <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
                                     ."<br><br><br>
@@ -581,7 +575,7 @@ class ComitesController extends Controller
                                 $titre = "Bienvenue sur " . @$logo->mot_cle . "";
                                 $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
                                             <br><br>Vous êtes convié au comité de gestion  qui se déroulera  à partir du ".$comitep->date_debut_comite." ".$datefin. ".
-                                            Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivants <br><br>
+                                            Vous êtes prié de bien vouloir prendre connaissance des documents en cliquant sur le lien suivant : <br><br>
                                             <a class=\"o_text-white\" href=\"".route('traitementcomite.edit',['id'=>Crypt::UrlCrypt($id),'id1'=>Crypt::UrlCrypt(1)])."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
                                             font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Consulter les documents</a>"
                                     ."<br><br><br>
@@ -633,8 +627,6 @@ class ComitesController extends Controller
                     $infoscahiers = CahierPlansProjets::Join('ligne_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets')->where([['cahier_plans_projets.id_cahier_plans_projets','=',$demande->id_cahier_plans_projets]])->get();
                     //dd($infoscahiers);
                     foreach ($infoscahiers as $infoscahier) {
-                        //dd($infoscahier->code_pieces_ligne_cahier_plans_projets);
-
 
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PF'){
 

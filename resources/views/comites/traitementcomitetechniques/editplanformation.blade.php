@@ -573,26 +573,26 @@ $nombre = count($conseilleragence);
                                                 @if(count($statuttraiteechec) != 0 and count($statuttraiteechecreponse) !=0)
                                                     <?php $res = count($statuttraiteechec) - count($statuttraiteechecreponse); //echo $res;?>
                                                     @if ($res != 0)
-                                                        <span class="badge bg-danger">Avis général pas bon <strong style="">(<?php echo $res;?>)</strong></span>
+                                                        <span class="badge bg-danger">avis non traité <strong style="">(<?php echo $res;?>)</strong></span>
                                                     @else
-                                                        <span class="badge bg-success">Avis prise en compte</span>
+                                                        <span class="badge bg-success">avis traité</span>
                                                     @endif
                                                 @endif
 
                                                 @if(count($statuttraiteechec) == 0 and count($statuttraiteechecreponse) !=0)
-                                                    <span class="badge bg-danger">Avis général pas bon </span>
+                                                    <span class="badge bg-danger">avis non traité </span>
                                                 @endif
 
                                                 @if(count($statuttraiteechec) != 0 and count($statuttraiteechecreponse) ==0)
-                                                    <span class="badge bg-danger">Avis général pas bon <strong style="">(<?php echo count($statuttraiteechec);?>)</strong></span>
+                                                    <span class="badge bg-danger">avis non traité <strong style="">(<?php echo count($statuttraiteechec);?>)</strong></span>
                                                 @endif
 
                                                 @if(count($statuttraiteechec) == 0 and count($statuttraiteechecreponse) ==0 and count($statuttotal)==0 and count($statuttraitesucces)==0)
-                                                    <span class="badge bg-warning">Pas encore traité</span>
+                                                    <span class="badge bg-warning">avis non traité</span>
                                                 @endif
 
                                                 @if(count($statuttotal) == count($statuttraitesucces) and count($statuttotal)>0 and count($statuttraitesucces)>0)
-                                                    <span class="badge bg-success">Avis général bon</span>
+                                                    <span class="badge bg-success">avis traité</span>
                                                 @endif
 
                                         </td>

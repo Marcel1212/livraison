@@ -33,8 +33,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-
-
             <div class="col-xl-12">
                 <div class="nav-align-top nav-tabs-shadow mb-4">
                     <ul class="nav nav-tabs" role="tablist">
@@ -239,12 +237,12 @@
                                                 </div>
 
                                                 <div class="mb-1 col-md-6">
-                                                    <label>Secteur d'activité du projet <span
+                                                    <label>Domaine du projet <span
                                                             style="color:red;">*</span>
                                                     </label>
-                                                    <select name="id_secteur_activite"
+                                                    <select name="id_domaine_projet"
                                                             disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                        <?= $secteuractivite_projet; ?>
+                                                        <?= $domaine_projet; ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -419,10 +417,19 @@
                                         @method('put')
                                         @csrf
                                         <div class="row mb-5">
-                                            <div class="col-md-9">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Type de cabinet<span style="color:red;">*</span></label>
+                                                <select class="select2 form-select-sm input-group" id="type_cabinet"
+                                                        onchange="changeFunction();" name="type_cabinet">
+                                                    <option value=""></option>
+                                                    <option value="intra">Intra</option>
+                                                    <option value="etranger">Etranger</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-5">
                                                 <label class="form-label">Opérateurs<span style="color:red;">*</span></label>
-                                                <select class="select2 form-select-sm input-group" name="operateur">
-                                                    <?=$operateur_selected?>
+                                                <select class="select2 form-select-sm input-group" id="operateur" name="operateur">
+                                                    <option value=''></option>
                                                 </select>
                                             </div>
                                             <div class="col-md-3 mt-4" align="right">
@@ -551,7 +558,7 @@
                                             placeholder="id_projet_etude"
                                             aria-describedby="email3"/>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label class="form-label" for="raison_social_entreprises">Raison sociale
                                                 <strong style="color:red;">*</strong></label>
                                             <input type="text" id="raison_social_entreprises"
@@ -564,9 +571,28 @@
                                         <div class="col-md-6">
                                             <label class="form-label" for="id_secteur_activite">Secteur d'activité
                                                 <strong style="color:red;">*</strong></label>
-                                            <select name="id_secteur_activite_entreprise"
-                                                    readonly="readonly" class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                <?= $secteuractivite_projet; ?>
+                                            <select name="id_secteur_activite"
+                                                     class="select2 form-select-sm input-group" data-allow-clear="true" >
+                                                @foreach($secteur_activites as $secteur_activite)
+                                                    <option value="{{$secteur_activite->id_secteur_activite}}">{{$secteur_activite->libelle_secteur_activite}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label" for="id_domaine_formation">Domaine du projet
+                                                <strong style="color:red;">*</strong></label>
+                                            <select name="id_domaine_formation"
+                                                    disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
+                                                @foreach($domaine_projets as $domaine_projet)
+                                                    <option value="{{$domaine_projet->id_domaine_formation}}"
+                                                                @if($projet_etude->DomaineProjetEtude->id_domaine_projet_instruction==$domaine_projet->id_domaine_formation)
+                                                                    selected
+                                                                @endif
+
+                                                    >{{$domaine_projet->libelle_domaine_formation}}</option>
+                                                @endforeach
+
                                             </select>
                                         </div>
 
@@ -590,8 +616,13 @@
                                                    for="billings-country">Indicatif <strong style="color:red;">*</strong> </label>
                                             <select class="select2 form-select-sm input-group" readonly=""
                                                     name="indicatif_entreprises" required="required">
-                                                <?php echo "+" .$paysc; ?>
-
+                                                @foreach($pays as $pay)
+                                                    <option value="{{@$pay->id_pays}}"
+                                                    @if($entreprise->pay->id_pays==$pay->id_pays)
+                                                        selected
+                                                    @endif
+                                                    >+{{@$pay->indicatif}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
 
@@ -681,6 +712,38 @@
         champ_etude_instruction.disable();
         cible_instruction.disable();
         methodologie_instruction.disable();
+
+
+        function changeFunction() {
+            var selectBox = document.getElementById("type_cabinet");
+            let selectedValue = selectBox.options[selectBox.selectedIndex].value;
+
+            if(selectedValue == 'intra'){
+                document.getElementById("ajouterCabinetEtranger").disabled = true;
+                $.get('/cabinetintra/{{\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)}}/list', function (data) {
+                    $('#operateur').empty();
+                    $.each(data, function (index, operateur) {
+                        $('#operateur').append($('<option>', {
+                            value: operateur.id_entreprises,
+                            text: operateur.raison_social_entreprises,
+                        }));
+                    });
+                });
+            }
+
+            if(selectedValue == 'etranger'){
+                document.getElementById("ajouterCabinetEtranger").disabled = false;
+                $.get('/cabinetetranger/{{\App\Helpers\Crypt::UrlCrypt($projet_etude->id_projet_etude)}}/list', function (data) {
+                    $('#operateur').empty();
+                    $.each(data, function (index, operateur) {
+                        $('#operateur').append($('<option>', {
+                            value: operateur.id_entreprises,
+                            text: operateur.raison_social_entreprises,
+                        }));
+                    });
+                });
+            }
+        }
     </script>
 
 @endsection

@@ -112,10 +112,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('selectionoperateurprojetetude/{id_projet_etude}/{id_operateur}/deleteoperateurpe', [SelectionOperateurProjetEtudeController::class, 'deleteoperateurpe'])->name('selectionoperateurprojetetude.deleteoperateurpe');
     Route::post('projetetudeajoutcabinetetrangere', [SelectionOperateurProjetEtudeController::class, 'storeCabinetEtranger'])->name('projetetude.ajoutcabinetetrangere');
 
+
     //Traitement sélection opérateur
     Route::get('traitementselectionoperateurprojetetude', [TraitementSelectionOperateurProjetEtudeController::class, 'index'])->name('traitementselectionoperateurprojetetude.index');
     Route::get('traitementselectionoperateurprojetetude/{id_projet_etude}/{id_combi_proc}/edit', [TraitementSelectionOperateurProjetEtudeController::class, 'edit'])->name('traitementselectionoperateurprojetetude.edit');
     Route::put('traitementselectionoperateurprojetetude/{id_projet_etude}/update', [TraitementSelectionOperateurProjetEtudeController::class, 'update'])->name('traitementselectionoperateurprojetetude.update');
 
+    Route::get('cabinetintra/{id}/list', [SelectionOperateurProjetEtudeController::class, 'cabinetintra'])->name('projetetude.cabinetintra');
+    Route::get('cabinetetranger/{id}/list', [SelectionOperateurProjetEtudeController::class, 'cabinetetranger'])->name('projetetude.cabinetetranger');
+    Route::get('projetetudefichier/{id}/fichier', [SelectionOperateurProjetEtudeController::class, 'projetetudefichier'])->name('projetetude.fichier');
 
 });

@@ -7,6 +7,7 @@ use App\Helpers\Crypt;
 use App\Models\CahierCommissionEvaluationOffre;
 use App\Models\CommissionEvaluationOffre;
 use App\Models\CommissionParticipantEvaluationOffre;
+use App\Models\DomaineFormation;
 use App\Models\Entreprises;
 use App\Models\FormeJuridique;
 use App\Models\Motif;
@@ -102,13 +103,13 @@ class TraitementCommissionEvaluationOffreController extends Controller
                     $secteuractivite .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
                 }
 
-                $secteuractivite_projets = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                    ->orderBy('libelle_secteur_activite')
+                $domaine_projets = DomaineFormation::where('flag_domaine_formation', '=', true)
+                    ->orderBy('libelle_domaine_formation')
                     ->get();
 
-                $secteuractivite_projet = "<option value='".$cahier->projet_etude->secteurActivite->id_secteur_activite."'> " . $cahier->projet_etude->secteurActivite->libelle_secteur_activite . "</option>";
-                foreach ($secteuractivite_projets as $comp) {
-                    $secteuractivite_projet .= "<option value='" . $comp->id_secteur_activite . "'>" . mb_strtoupper($comp->libelle_secteur_activite) . " </option>";
+                $domaine_projet = "<option value='".$projet_etude->DomaineProjetEtudeInstruction->id_domaine_formation."'> " . $projet_etude->DomaineProjetEtudeInstruction->libelle_domaine_formation . "</option>";
+                foreach ($domaine_projets as $comp) {
+                    $domaine_projet .= "<option value='" . $comp->id_domaine_formation."'>" . mb_strtoupper($comp->libelle_domaine_formation) . " </option>";
                 }
 
                 return view('evaluationoffre.traitementcommission.edit',
@@ -127,7 +128,7 @@ class TraitementCommissionEvaluationOffreController extends Controller
                         'note_commissions',
                         'offretechcommissionevalsouscriteres',
                         'formjuridique',
-                        'secteuractivite_projet',
+                        'domaine_projet',
                         'id',
                         'offre_financiere',
                         'secteuractivite'));

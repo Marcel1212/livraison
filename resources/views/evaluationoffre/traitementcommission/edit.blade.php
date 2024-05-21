@@ -290,23 +290,23 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <div class="col-md-12 col-10">
                                         <div class="row">
                                             <div class="mb-1 col-md-6">
-                                                <label>Financement sollicité <span
+                                                <label>Financement accordé <span
                                                         style="color:red;">*</span>
                                                 </label>
                                                 <input type="text" name="montant_demande_projet"
                                                        required="required" id="montant_demande_projet"
                                                        disabled
-                                                       value ="{{number_format(@$projet_etude->montant_demande_projet_etude, 0, ',', ' ')}}"
+                                                       value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}"
                                                        class="form-control form-control-sm number">
                                             </div>
 
                                             <div class="mb-1 col-md-6">
-                                                <label>Secteur d'activité du projet <span
+                                                <label>Domaine du projet <span
                                                         style="color:red;">*</span>
                                                 </label>
                                                 <select name="id_secteur_activite"
                                                         disabled class="select2 form-select-sm input-group" data-allow-clear="true" >
-                                                        <?= $secteuractivite_projet; ?>
+                                                        <?= $domaine_projet; ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -363,14 +363,6 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-12 mt-2">
-                                    <div class="mb-1">
-                                        <label for="montant_projet_instruction">Financement accordé <span style="color:red;">*</span>
-                                        </label>
-                                        <input type="text" name="montant_projet_instruction" id="montant_projet_instruction"  class="number form-control form-control-sm number" disabled
-                                               value ="{{number_format(@$projet_etude->montant_projet_instruction, 0, ',', ' ')}}">
-                                    </div>
-                                </div>
                                 <div class="col-md-6 mt-2">
                                     <label class="form-label" for="fichier_instruction">Pièce jointe <span style="color:red;">*</span></label>
                                     @if($projet_etude->piece_jointe_instruction)
