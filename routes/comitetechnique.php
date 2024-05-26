@@ -44,4 +44,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    Route::get('traitementcomitetechniques/{id}/{id1}/informationaction', [TraitementComitesTechniquesController::class, 'informationaction'])->name('traitementcomitetechniques.informationaction');
+    Route::get('traitementcomitetechniques/{id}/commentairetoutuser', [TraitementComitesTechniquesController::class, 'commentairetoutuser'])->name('traitementcomitetechniques.commentairetoutuser');
+    Route::post('traitementcomitetechniques/{id}/update/action/formation', [TraitementComitesTechniquesController::class, 'traitementactionformation'])->name('traitementcomitetechniques.action.formation');
+    Route::post('traitementcomitetechniques/{id}/update/action/formation/corriger', [TraitementComitesTechniquesController::class, 'traitementactionformationcorriger'])->name('traitementcomitetechniques.action.formation.corriger');
+
+
 });
