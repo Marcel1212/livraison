@@ -27,6 +27,7 @@ use App\Helpers\Email;
 use App\Helpers\Audit;
 use App\Helpers\Menu;
 use App\Models\ActionFormationPlan;
+use App\Models\BeneficiairesFormation;
 use App\Models\PiecesProjetFormation;
 use App\Models\ButFormation;
 use App\Models\CahierComite;
@@ -48,6 +49,7 @@ use App\Models\TraitementParCritere;
 use App\Models\TraitementParCritereCommentaire;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
+use Illuminate\Http\JsonResponse;
 
     @ini_set('max_execution_time',0);
 class TraitementComitesTechniquesController extends Controller
@@ -248,7 +250,7 @@ class TraitementComitesTechniquesController extends Controller
             $categorieprofessionelle .= "<option value='" . $comp->id_categorie_professionelle  . "'>" . mb_strtoupper($comp->categorie_profeessionnelle) ." </option>";
         }
 
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id1]])->get();
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id1]])->orderBy('pirorite_action_formation','desc')->get();
 
         $categorieplans = CategoriePlan::where([['id_plan_de_formation','=',$id1]])->get();
 
@@ -820,62 +822,7 @@ class TraitementComitesTechniquesController extends Controller
 
            // Plan formation
 
-            if($data['action'] === 'Traiter_action_formation_valider_critere'){
 
-                $actionplan = ActionFormationPlan::find($idactionformation);
-
-                $idplan = $actionplan->id_plan_de_formation;
-
-                //dd($data);
-
-                $lignescriterevalides = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
-                                        ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
-                                        ->where([['critere_evaluation.flag_critere_evaluation','=',true],
-                                                ['categorie_comite.code_categorie_comite','=','CT'],
-                                                ['processus_comite.code_processus_comite','=','PF']])
-                                        ->get();
-
-                foreach ($lignescriterevalides as $uneligne) {
-
-                    $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
-                    $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
-                    $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
-
-                    $traitementcritere = TraitementParCritere::create([
-                        'id_user_traitement_par_critere' => Auth::user()->id,
-                        'id_demande' => $idplan,
-                        'id_action_formation_plan' => $idactionformation,
-                        'id_critere_evaluation' => $id_critere_evaluation,
-                        'flag_critere_evaluation' => true,
-                    ]);
-
-                    $traitementcommentaire = TraitementParCritereCommentaire::create([
-                        'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
-                        'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
-                        'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
-                        'commentaire_critere' => $commentaire_critere,
-                    ]);
-
-                }
-
-
-                Audit::logSave([
-
-                    'action'=>'MODIFIER',
-
-                    'code_piece'=>$idactionformation,
-
-                    'menu'=>'COMITES',
-
-                    'etat'=>'Succès',
-
-                    'objet'=>'TENUE DE COMITES TECHNIQUES(traitement par les critéres )'
-
-                ]);
-
-                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($etape).'/edit/planformation')->with('success', 'Succes : Enregistrement reussi ');
-
-            }
 
             if($data['action'] === 'Traiter_action_formation_valider_correction'){
 
@@ -1082,7 +1029,7 @@ class TraitementComitesTechniquesController extends Controller
 
             }
 
-            if($data['action'] === 'Traiter_action_formation_valider'){
+/*             if($data['action'] === 'Traiter_action_formation_valider'){
 
                 $actionplan = ActionFormationPlan::find($idactionformation);
 
@@ -1093,7 +1040,7 @@ class TraitementComitesTechniquesController extends Controller
 
                 return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($idcomite).'/'.Crypt::UrlCrypt($idplan).'/'.Crypt::UrlCrypt($etape).'/edit/planformation')->with('success', 'Succes : Enregistrement reussi ');
 
-            }
+            } */
 
             if($data['action'] === 'Traiter_action_formation_valider_reponse'){
 
@@ -1210,5 +1157,370 @@ class TraitementComitesTechniquesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function informationaction($id, $id1)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $iduser = $id1;
+
+        $infosactionplanformations = ActionFormationPlan::select('action_formation_plan.*','plan_formation.*','entreprises.*','fiche_a_demande_agrement.*','domaine_formation.*','type_formation.*','caracteristique_type_formation.*')
+        ->join('plan_formation','action_formation_plan.id_plan_de_formation','=','plan_formation.id_plan_de_formation')
+        ->join('fiche_a_demande_agrement','action_formation_plan.id_action_formation_plan','=','fiche_a_demande_agrement.id_action_formation_plan')
+        ->join('entreprises','plan_formation.id_entreprises','=','entreprises.id_entreprises')
+        ->join('caracteristique_type_formation','action_formation_plan.id_caracteristique_type_formation','=','caracteristique_type_formation.id_caracteristique_type_formation')
+        ->join('type_formation','fiche_a_demande_agrement.id_type_formation','=','type_formation.id_type_formation')
+        ->join('domaine_formation','action_formation_plan.id_domaine_formation','=','domaine_formation.id_domaine_formation')
+        ->where([['action_formation_plan.id_action_formation_plan','=',$id]])
+        ->first();
+
+        //dd($infosactionplanformations);
+        /*$butformations = ButFormation::all();
+        $butformation = "<option value=''> Selectionnez le but de la formation </option>";
+        foreach ($butformations as $comp) {
+            $butformation .= "<option value='" . $comp->id_but_formation  . "'>" . mb_strtoupper($comp->but_formation) ." </option>";
+        }*/
+
+        $butformations = FicheAgrementButFormation::where([['id_fiche_agrement','=',$infosactionplanformations->id_fiche_agrement]])->get();
+
+        $traitement = TraitementParCritere::Join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+        ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+        ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+        ->where([['traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','=',$iduser],['traitement_par_critere.id_action_formation_plan','=',$id]])->get();
+
+        $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','PF']])
+                                    ->get();
+
+        return response()->json(['information'=>$infosactionplanformations, 'butformations'=>$butformations , 'traitement'=>$traitement, 'criteres'=>$criteres]);
+
+    }
+
+    public function commentairetoutuser($id)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','traitement_par_critere_commentaire.created_at as datej','critere_evaluation.*','users.name as name','users.prenom_users as prenom_users','roles.name as profil')
+                        ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                        ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                        ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+                        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+                        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+                        ->where([['flag_demission_users', '=', false],
+                                ['flag_admin_users', '=', false],
+                                ['roles.id', '!=', 15]])
+                        ->where([['traitement_par_critere.id_action_formation_plan','=',$id]])->get();
+
+        return response()->json(['information'=>$traitement]);
+
+    }
+
+    public function traitementactionformation(Request $request, $id): JsonResponse
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+        $actionplan = ActionFormationPlan::find($id);
+
+        $idplan = $actionplan->id_plan_de_formation;
+
+        $data = $request->all();
+        //dd($data);
+
+        $lignescriterevalides = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                        ['categorie_comite.code_categorie_comite','=','CT'],
+                                        ['processus_comite.code_processus_comite','=','PF']])
+                                ->get();
+
+        foreach ($lignescriterevalides as $uneligne) {
+
+            $id_critere_evaluation = $data["id_critere_evaluation/$uneligne->id_critere_evaluation"];
+            $flag_traitement_par_critere_commentaire = $data["flag_traitement_par_critere_commentaire/$uneligne->id_critere_evaluation"];
+            $commentaire_critere = $data["commentaire_critere/$uneligne->id_critere_evaluation"];
+
+            $traitementcritere = TraitementParCritere::create([
+                'id_user_traitement_par_critere' => Auth::user()->id,
+                'id_demande' => $idplan,
+                'id_action_formation_plan' => $id,
+                'id_critere_evaluation' => $id_critere_evaluation,
+                'flag_critere_evaluation' => true,
+            ]);
+
+            $traitementcommentaire = TraitementParCritereCommentaire::create([
+                'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+                'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+                'flag_traitement_par_critere_commentaire' => $flag_traitement_par_critere_commentaire,
+                'commentaire_critere' => $commentaire_critere,
+            ]);
+
+        }
+
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'TENUE DE COMITES TECHNIQUES(traitement par les critéres )'
+
+        ]);
+
+        return response()->json(['success' => 'mise a jour effectué']);
+    }
+
+    public function traitementactionformationcorriger(Request $request, $id): JsonResponse
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+        $actionplan = ActionFormationPlan::find($id);
+
+        $idplan = $actionplan->id_plan_de_formation;
+
+        $data = $request->all();
+        //dd($data);die();
+
+        if(isset($data['is_valide'])){
+
+            $actionplan = ActionFormationPlan::find($id);
+
+            $idplan = $actionplan->id_plan_de_formation;
+
+            $input['flag_action_formation_traiter_comite_technique'] = true;
+            $actionplan->update($input);
+
+            Audit::logSave([
+
+                'action'=>'MODIFIER',
+
+                'code_piece'=>$id,
+
+                'menu'=>'COMITES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'TENUE DE COMITES TECHNIQUES(traitement par les critéres )'
+
+            ]);
+
+            return response()->json(['success' => 'mise a jour effectué']);
+
+        }else{
+
+            $actionplan = ActionFormationPlan::find($id);
+
+            $idplan = $actionplan->id_plan_de_formation;
+
+            $this->validate($request, [
+                'cout_accorde_action_formation' => 'required',
+                'commentaire_comite_technique' => 'required',
+            ],[
+                'cout_accorde_action_formation.required' => 'Veuillez ajouter le montant accordé.',
+                'commentaire_comite_technique.required' => 'Veuillez ajouter un commentaire.',
+            ]);
+
+            $input = $request->all();
+
+
+            $input['cout_accorde_action_formation'] = str_replace(' ', '', $input['cout_accorde_action_formation']);
+
+            if($input['cout_accorde_action_formation']==0){
+
+                $this->validate($request, [
+                    'motif_non_financement_action_formation' => 'required'
+                ],[
+                    'motif_non_financement_action_formation.required' => 'Veuillez selectionnez le motif de non financement.',
+                ]);
+
+                $input['flag_valide_action_formation_pl'] = true;
+
+                $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+
+
+                $actionplanupdate = ActionFormationPlan::find($id);
+
+                $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                $input['nombre_jour_action_formation'] = $nombredejour;
+
+                //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
+
+                $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                if($infoscaracteristique->code_ctf == "CGF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CFD"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CCEF"){
+
+                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSEF"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                if($coutaccordeactionformation > $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }else{
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }
+
+                //dd($input['cout_accorde_action_formation'],$input['montant_attribuable_fdfp']);
+
+                $actionplanupdate->update($input);
+
+                $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                $idficheagre = $infosficheagrement->id_fiche_agrement;
+                $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                $infosfchieupdate->update($input);
+
+            }else{
+
+                $input['flag_valide_action_formation_pl'] = true;
+
+                $input['nombre_stagiaire_action_formati'] = $input['agent_maitrise_fiche_demande_ag'] + $input['employe_fiche_demande_agrement'] + $input['cadre_fiche_demande_agrement'];
+
+                $actionplanupdate = ActionFormationPlan::find($id);
+
+                $nombredejour = $input['nombre_heure_action_formation_p']/8;
+
+                $input['nombre_jour_action_formation'] = $nombredejour;
+
+                //$infoscaracteristique = CaracteristiqueTypeFormation::find($actionplanupdate->id_caracteristique_type_formation);
+
+                $infoscaracteristique = CaracteristiqueTypeFormation::find($input['id_caracteristique_type_formation']);
+
+                $input['cout_action_formation_plan'] = $actionplanupdate->cout_action_formation_plan;
+
+
+                if($infoscaracteristique->code_ctf == "CGF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_groupe_action_formation_'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSF"){
+
+                    $montantcoutactionattribuable = $infoscaracteristique->montant_ctf*$nombredejour*$input['nombre_stagiaire_action_formati'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CFD"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CCEF"){
+
+                    $montantcoutactionattribuable = ($infoscaracteristique->montant_ctf*$input['nombre_groupe_action_formation_'] + $infoscaracteristique->cout_herbement_formateur_ctf)*$nombredejour;
+
+                }
+
+                if($infoscaracteristique->code_ctf == "CSEF"){
+
+                    $montantcoutactionattribuable = $input['cout_action_formation_plan'];
+
+                }
+
+                $input['montant_attribuable_fdfp'] = $montantcoutactionattribuable;
+
+                $coutaccordeactionformation = $input['cout_accorde_action_formation'];
+
+                if($coutaccordeactionformation > $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $montantcoutactionattribuable;
+                }elseif ($coutaccordeactionformation < $montantcoutactionattribuable){
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }else{
+                    $input['cout_accorde_action_formation'] = $coutaccordeactionformation;
+                }
+
+                $actionplanupdate->update($input);
+
+                $infosficheagrement = FicheADemandeAgrement::where([['id_action_formation_plan','=',$id]])->first();
+                $idficheagre = $infosficheagrement->id_fiche_agrement;
+                $infosfchieupdate = FicheADemandeAgrement::find($idficheagre);
+                $infosfchieupdate->update($input);
+
+            }
+
+            if(isset($input['id_but_formation'])){
+                $tab = $input['id_but_formation'];
+
+                if(count($tab)>=1){
+                    $butagrements = FicheAgrementButFormation::where([['id_fiche_agrement','=',$idficheagre]])->get();
+
+                    foreach ($butagrements as $butagrement) {
+                        FicheAgrementButFormation::where([['id_fiche_a_agrement_but_formation','=',$butagrement->id_fiche_a_agrement_but_formation]])->delete();
+                    }
+
+                    foreach ($tab as $key => $value) {
+                        //dd($value); exit;
+                        FicheAgrementButFormation::create([
+                            'id_fiche_agrement'=> $idficheagre,
+                            'id_but_formation'=> $value,
+                            'flag_fiche_a_agrement_but_formation'=>true
+                        ]);
+                    }
+                }
+            }
+
+
+            Audit::logSave([
+
+                'action'=>'MODIFIER',
+
+                'code_piece'=>$id,
+
+                'menu'=>'COMITES',
+
+                'etat'=>'Succès',
+
+                'objet'=>'TENUE DE COMITES TECHNIQUES(traitement par les critéres )'
+
+            ]);
+
+            return response()->json(['success' => 'mise a jour effectué']);
+
+        }
+
     }
 }
