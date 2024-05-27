@@ -1597,7 +1597,7 @@ $nombre = count($conseilleragence);
 
                             var formData = new FormData(this);
 
-                            console.log(formData);
+                            //console.log(formData);
                             //formData.append('_token','{!! csrf_token() !!}'),
                              $.ajax({
                                 url: "{{url('/')}}/traitementcomitetechniques/"+id+"/update/action/formation",
@@ -1643,7 +1643,7 @@ $nombre = count($conseilleragence);
                         $('#ajax_taitement_par_action_conseiller').submit(function (e) {
                             e.preventDefault();
                             var formData = new FormData(this);
-                            console.log(formData);
+                            //console.log(formData);
 
                              $.ajax({
                                 url: "{{url('/')}}/traitementcomitetechniques/"+id+"/update/action/formation/corriger",
@@ -1699,7 +1699,7 @@ $nombre = count($conseilleragence);
                                                                             ""+res.commentaire_critere+" </span>"+
                                                                     "</div>"+
                                                                     "<div>"+
-                                                                        "<span>Traité le  "+res.datej+" </span>"+
+                                                                        "<span class=\""+((res.flag_traitement_par_critere_commentaire==false)?+"badge bg-label-danger" : "")+"\">Traité le  "+res.datej+" </span>"+
                                                                     "</div>"+
                                                                 "</div>"+
 
@@ -1728,6 +1728,7 @@ $nombre = count($conseilleragence);
                         //console.log(data);
                         //initvalue();
                         $.each(data.information, function(key,res) {
+                            //console.log(res)
                             $("#commentaireappreciationresponse").append("<li class=\"timeline-item pb-4 timeline-item-"+((res.flag_traitement_par_critere_commentaire==true)?"success ":((res.flag_traitement_par_critere_commentaire==false)?"primary ":"danger "))+"border-left-dashed\">"+
                                                 "<span "+
                                                     "class=\"timeline-indicator-advanced timeline-indicator-"+((res.flag_traitement_par_critere_commentaire==true)?"success ":((res.flag_traitement_par_critere_commentaire==false)?"primary ":"danger "))+"\">"+
@@ -1741,22 +1742,24 @@ $nombre = count($conseilleragence);
                                                     "</div>"+
                                                     "<div class=\"d-flex justify-content-between flex-wrap mb-2\">"+
                                                         "<div class=\"d-flex align-items-center\">"+
-
                                                                 "<div class=\"row\">"+
                                                                     "<div>"+
                                                                         "<span>Observation :"+
                                                                             ""+res.commentaire_critere+" </span>"+
                                                                     "</div>"+
                                                                     "<div>"+
-                                                                        "<span>Traité le  "+res.datej+" </span>"+
+                                                                        "<span class=\""+((res.flag_traitement_par_critere_commentaire==false)?"badge bg-label-danger" : "")+"\">Traité le  "+res.datej+" </span>"+
                                                                     "</div>"+
                                                                 "</div>"+
                                                                 "<div>"+
+                                                                    ((res.flag_traitement_par_critere_commentaire==false)?
+                                                                    (res.flag_traite_par_user_conserne!=true?
+
                                                                    "<form id=\"editUserFormMessage\" class=\"row g-3\""+
                                                                                     "method=\"POST\""+
-                                                                                    "action=\"{{ route($lien . '.cahierupdate', ["+id+", \App\Helpers\Crypt::UrlCrypt($idcomite), \App\Helpers\Crypt::UrlCrypt($idetape)]) }}\">"+
-                                                                                    "@csrf"+
-                                                                                    "@method('put')"+
+                                                                                    "action=\"{{url('/')}}/traitementcomitetechniques/"+id+"/{{\App\Helpers\Crypt::UrlCrypt($idcomite) }}/{{\App\Helpers\Crypt::UrlCrypt($idetape)}}/cahierupdate\">"+
+                                                                                   "<input type=\"hidden\" name=\"_method\" value=\"PUT\">"+
+                                                                                    "<input type=\"hidden\" name=\"_token\" value=\"{{csrf_token()}}\">"+
                                                                                     "<input type=\"hidden\""+
                                                                                         "name=\"id_traitement_par_critere_commentaire\""+
                                                                                         "value=\""+res.id_traitement_par_critere_commentaire+"\"/>"+
@@ -1768,7 +1771,7 @@ $nombre = count($conseilleragence);
                                                                                                 "name=\"flag_traitement_par_critere_commentaire_traiter\""+
                                                                                                 "id=\"flag_traitement_par_critere_commentaire_traiter\">"+
                                                                                                 "<option value=\"\">-----------</option>"+
-                                                                                                "<option value=\"true\">Prise en compte</option>+"
+                                                                                                "<option value=\"true\">Prise en compte</option>"+
                                                                                                 "<option value=\"false\">Pas prise en compte</option>"+
                                                                                             "</select>"+
                                                                                         "</div>"+
@@ -1779,17 +1782,23 @@ $nombre = count($conseilleragence);
                                                                                         "<div class=\"col-md-2 col-12\">"+
                                                                                             "<br />"+
                                                                                             "<button"+
-                                                                                                "onclick=\'javascript:if (!confirm(\"Voulez-vous traité cette action ?\")) return false;'\""+
-                                                                                                "type=\"submit\" name=\"action\""+
-                                                                                                "value=\"Traiter_action_formation_valider_reponse\""+
-                                                                                                "class=\"btn btn-warning btn-sm me-sm-3 me-1\">Traité</button>"+
+                                                                                                " onclick=\'javascript:if (!confirm(\"Voulez-vous traité cette action ?\")) return false;'\""+
+                                                                                                " type=\"submit\" name=\"action\""+
+                                                                                                " value=\"Traiter_action_formation_valider_reponse\""+
+                                                                                                " class=\"btn btn-warning btn-sm me-sm-3 me-1\">Traité</button>"+
 
                                                                                         "</div>"+
                                                                                     "</div>"+
-                                                                                "</form>"+
+                                                                                "</form>":"<div>"+
+                                                                                "<span>Statut: "+((res.flag_traitement_par_critere_commentaire_traiter==true)? "Prise en compte":"Pas prise en compte")+
+                                                                                "</span>"+
                                                                             "</div>"+
+                                                                            "<div><span>Reponse :"+res.commentaire_reponse+
+                                                                            "</span></div>"+
+                                                                            "</div>"):"")+
 
-                                                        "</div>"+
+
+                                                                            "</div>"+
 
                                                     "</div>"+
                                                 "</div>"+
