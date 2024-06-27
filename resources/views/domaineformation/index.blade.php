@@ -1,4 +1,4 @@
-@if(auth()->user()->can('domaineformation-index'))
+@if(auth()->user()->can('domainesformations-index'))
 
 @extends('layouts.backLayout.designadmin')
 
@@ -6,7 +6,7 @@
 
     @php($Module='Paramétrage')
     @php($titre='Liste des domaines formations')
-    @php($lien='domaineformation')
+    @php($lien='domainesformations')
 
 
 
