@@ -114,10 +114,11 @@ $idpart = Auth::user()->id_partenaire;
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
+                        $('#id_domaine_formation').empty();
 
-                        $.get('/domaineformation/'+tels.id_entreprises, function (data) {
+/*                         $.get('/domaineformation/'+tels.id_entreprises, function (data) {
                             //alert(tels.id_entreprises); //exit;
-                           // alert(data); //exit;
+                            //alert(data); //exit;
                             $('#id_domaine_formation').empty();
                             $.each(data, function (index, tels) {
                                 $('#id_domaine_formation').append($('<option>', {
@@ -125,7 +126,7 @@ $idpart = Auth::user()->id_partenaire;
                                     text: tels.libelle_domaine_formation,
                                 }));
                             });
-                        });
+                        }); */
 
                     });
 
@@ -174,6 +175,7 @@ $idpart = Auth::user()->id_partenaire;
             //alert(SelectedEntrepriseValue);
             //$("#id_domaine_formation").prop( "disabled", false );
             //$("#id_domaine_formation_div").show();
+            $('#id_domaine_formation').empty();
             $.get('/domaineformation/'+SelectedEntrepriseValue, function (data) {
                             //alert(data); //exit;
                             $('#id_domaine_formation').empty();

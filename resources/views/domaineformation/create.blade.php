@@ -1,11 +1,11 @@
-@if(auth()->user()->can('domaineformation-create'))
+@if(auth()->user()->can('domainesformations-create'))
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
     @php($Module='Paramétrage')
     @php($titre='Liste des domaines formations')
     @php($soustitre='Ajouter une domaine formation')
-    @php($lien='domaineformation')
+    @php($lien='domainesformations')
     <!-- BEGIN: Content-->
     <div class="app-content content ">
         <div class="content-overlay"></div>

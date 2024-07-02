@@ -602,9 +602,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     /* route domaine de fromation */
 
-    Route::group(['middleware' => ['can:domaineformation-index']], function () {
+    Route::group(['middleware' => ['can:domainesformations-index']], function () {
         Route::resources([
-            'domaineformation' => App\Http\Controllers\DomaineFormationController::class,
+            'domainesformations' => App\Http\Controllers\DomaineFormationController::class,
         ]);
     });
 
