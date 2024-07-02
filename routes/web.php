@@ -34,7 +34,7 @@ Route::match(['get', 'post'], '/enrolements', [App\Http\Controllers\EnrolementCo
 //Route::match(['get', 'post'], '/projetetude', [App\Http\Controllers\ProjetEtudeController::class, 'index'])->name('projetetude.index');
 Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
 Route::get('/secteuractivilitelistes/{id}', [App\Http\Controllers\EnrolementController::class, 'getsecteuractivilitelistes']);
-//Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
+Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
 //Route::match(['post'], '/test', [App\Http\Controllers\PlanFormationController::class, 'test'])->name('test');
 Route::get('/deconnexion', [App\Http\Controllers\HomeController::class, 'deconnexion']);
