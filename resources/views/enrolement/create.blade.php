@@ -203,7 +203,9 @@ $reseaux = Menu::get_info_reseaux();
                                                                 <div class="mb-1"><label class="error">{{ $message }}</label></div>
                                                             @enderror
                                                         </div>
-                                                        <div class="col-md-8">
+
+
+                                                        <div class="col-md-6">
                                                             <label class="form-label" for="raison_sociale_demande_enroleme">Raison sociale
                                                                 <strong style="color:red;">*</strong></label>
                                                             <input type="text" id="raison_sociale_demande_enroleme"
@@ -219,6 +221,24 @@ $reseaux = Menu::get_info_reseaux();
                                                                         <div class="mb-1"><label class="error">{{ $message }}</label></div>
                                                                     @enderror
                                                         </div>
+
+                                                        <div class="col-md-2">
+                                                            <label class="form-label" for="sigl_demande_enrolement">Sigle
+                                                                <strong style="color:red;">*</strong></label>
+                                                            <input type="text" id="sigl_demande_enrolement"
+                                                                   name="sigl_demande_enrolement"
+                                                                   class="form-control form-control-sm
+                                                                   @error('sigl_demande_enrolement')
+                                                                        error
+                                                                   @enderror"
+                                                                   placeholder="Sigle"
+                                                                   required="required"
+                                                                   value="{{ old('sigl_demande_enrolement') }}"/>
+                                                                    @error('sigl_demande_enrolement')
+                                                                        <div class="mb-1"><label class="error">{{ $message }}</label></div>
+                                                                    @enderror
+                                                        </div>
+
 
                                                         <div class="col-md-4">
                                                             <label class="form-label" for="email">Email <strong
