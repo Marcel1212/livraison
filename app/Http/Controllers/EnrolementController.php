@@ -311,6 +311,11 @@ class EnrolementController extends Controller
                     $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
 
+                if($input['tel_demande_enrolement']){
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
+                    SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
+                }
+
                 /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
 
                 /*$demandeenrole1 = DemandeEnrolement::find($insertedDemandeenreolementId);
@@ -546,10 +551,10 @@ class EnrolementController extends Controller
                 }
 
                 //Envoyer notification via SMS
-/*                 if($input['tel_demande_enrolement']){
+                if($input['tel_demande_enrolement']){
                     $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
                     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
-                } */
+                }
 
             }
         }
@@ -640,7 +645,7 @@ class EnrolementController extends Controller
                 }
 
                 //Envoi SMS Rejeté
-/*                 if (isset($demandeenrole1->tel_demande_enrolement)) {
+                if (isset($demandeenrole1->tel_demande_enrolement)) {
                     $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
                         malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".$demandeenrole1->motif->libelle_motif."
                         <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
@@ -650,7 +655,7 @@ class EnrolementController extends Controller
                         Cordialement,
                         L'équipe e-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
-                } */
+                }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
             }
@@ -741,7 +746,7 @@ class EnrolementController extends Controller
                 }
 
                 //Envoi SMS Rejeté
-/*                 if (isset($demandeenrole1->tel_demande_enrolement)) {
+                if (isset($demandeenrole1->tel_demande_enrolement)) {
 
 //                  $content = " ".$demandeenrole1->raison_sociale_demande_enroleme.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
 
@@ -753,7 +758,7 @@ class EnrolementController extends Controller
                         CORDIALEMENT\n,
                         L'EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
-                } */
+                }
 
                 return redirect()->route('enrolement.index')->with('success', 'Recevabilité effectué avec succès.');
             }
@@ -894,10 +899,10 @@ class EnrolementController extends Controller
                 }
 
                 //Envoi SMS Validé
-/*                 if (isset($cel_users)) {
+                if (isset($cel_users)) {
                     $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name."\nADRESSE E-MAIL : ".$emailcli."\nIDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
-                } */
+                }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
             }
