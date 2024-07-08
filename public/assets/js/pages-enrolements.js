@@ -20,6 +20,9 @@ $(function () {
                 'raison_sociale_demande_enroleme': {
                     required: true,
                 },
+                'sigl_demande_enrolement': {
+                    required: true,
+                },
                 'email_demande_enrolement': {
                     required: true,
                 },
@@ -75,6 +78,7 @@ $(function () {
             },
             messages: {
                 raison_sociale_demande_enroleme: "Veuillez ajouter votre raison sociale",
+                sigl_demande_enrolement: "Veuillez ajouter votre sigle",
                 email_demande_enrolement: "Veuillez ajouter un email",
                 indicatif_demande_enrolement: "Veuillez ajouter un indicatif",
 
