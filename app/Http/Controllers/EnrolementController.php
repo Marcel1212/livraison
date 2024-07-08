@@ -107,6 +107,7 @@ class EnrolementController extends Controller
 
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
+                    'sigl_demande_enrolement' => 'required',
                     'email_demande_enrolement' =>['required','email', 'unique:users,email',
                             Rule::unique('demande_enrolement')->where(function($query) use ($data) {
                                 $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
@@ -146,6 +147,7 @@ class EnrolementController extends Controller
                     'g-recaptcha-response' => ['required', new ReCaptcha]
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
+                    'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
                     'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
@@ -444,6 +446,7 @@ class EnrolementController extends Controller
                 $data = $request->all();
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
+                    'sigl_demande_enrolement' => 'required',
                     'email_demande_enrolement' =>['required','email', 'unique:users,email',
                         Rule::unique('demande_enrolement')->where(function($query) use ($data) {
                             $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
@@ -471,6 +474,7 @@ class EnrolementController extends Controller
                     'g-recaptcha-response' => ['required', new Recaptcha],
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale',
+                    'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email',
                     'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif',
