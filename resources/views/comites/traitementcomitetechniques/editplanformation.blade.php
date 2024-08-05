@@ -1515,7 +1515,7 @@ $nombre = count($conseilleragence);
                     }
                     nombre_stagiaire_action_formati.val(data.information.nombre_stagiaire_action_formati);
                     if(data.information.cout_accorde_action_formation<data.information.montant_attribuable_fdfp){
-                        cout_accorde_action_formation.val(data.information.cout_action_formation_plan);
+                        cout_accorde_action_formation.val(data.information.cout_accorde_action_formation);
                     }else if(data.information.cout_action_formation_plan>data.information.montant_attribuable_fdfp){
                         cout_accorde_action_formation.val(data.information.montant_attribuable_fdfp);
                     }else{
