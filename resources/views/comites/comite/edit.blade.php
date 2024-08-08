@@ -244,7 +244,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <div class="col-12" align="right">
                                     <button type="submit" name="action" value="creer_cahier_plans_projets"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Ajouter au cahier
+                                        Ajouter a la commission
                                     </button>
                                 </div>
                                 <?php } ?>
