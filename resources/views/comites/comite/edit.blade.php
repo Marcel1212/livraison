@@ -30,8 +30,8 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
 
     @section('content')
         @php($Module = 'Comités')
-        @php($titre = 'Liste des comités')
-        @php($soustitre = 'Tenue de comité')
+        @php($titre = 'Liste des comités/commissions')
+        @php($soustitre = 'Tenue de comité/commission')
         @php($lien = 'comites')
         @php($lienacceuil = 'dashboard')
 
@@ -94,7 +94,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             } ?>" role="tab" data-bs-toggle="tab"
                                 data-bs-target="#navs-top-planformation" aria-controls="navs-top-planformation"
                                 aria-selected="true">
-                                Comité
+                                Comité/commission
                             </button>
                         </li>
                         <li class="nav-item">
@@ -123,7 +123,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             } ?>" role="tab" data-bs-toggle="tab"
                                 data-bs-target="#navs-top-cahieraprescomite" aria-controls="navs-top-cahieraprescomite"
                                 aria-selected="false">
-                                Valider le comité
+                                Valider le comité/la commission
                             </button>
                         </li>
                     </ul>
@@ -244,7 +244,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <div class="col-12" align="right">
                                     <button type="submit" name="action" value="creer_cahier_plans_projets"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Ajouter a la commission
+                                        Ajouter
                                     </button>
                                 </div>
                                 <?php } ?>
@@ -436,8 +436,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     <div class="col-12 col-md-2" align="right"> <br>
                                         <button type="submit" name="action" value="valider_comite_technique"
                                             class="btn btn-sm btn-success me-sm-3 me-1"
-                                            onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider
-                                            le comité</button>
+                                            onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider</button>
 
                                     </div>
 
