@@ -12,6 +12,7 @@ use App\Models\ButFormation;
 use App\Models\CaracteristiqueTypeFormation;
 use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
+use App\Helpers\Email;
 use App\Models\DemandeAnnulationPlan;
 use App\Models\DemandeSubstitutionActionPlanFormation;
 use App\Models\Entreprises;
@@ -173,6 +174,7 @@ class TraitementDemandeSubstitutionPlanController extends Controller
     public function update(Request $request, $id)
     {
         $id =  Crypt::UrldeCrypt($id);
+        $logo = Menu::get_logo();
 
         if(isset($id)){
             $demande_substitution = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_substi',$id)->first();
@@ -240,22 +242,6 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $fiche_a_demande->objectif_pedagogique_fiche_agre = $substitution->objectif_pedagogique_fiche_agre_substi;
                     $fiche_a_demande->update();
 
-//                    $fiche_agrement_but_delelete_all = FicheAgrementButFormation::where('id_fiche_agrement',$fiche_a_demande->id_fiche_agrement)->get();
-//                    foreach ($fiche_agrement_but_delelete_all as $item) {
-//                        $item->delete();
-//                    }
-
-//                    if(isset($request->id_but_formation)){
-//                        $tab = $request->id_but_formation;
-//                        foreach ($tab as $key => $value) {
-//                            FicheAgrementButFormation::create([
-//                                'id_fiche_agrement'=> $fiche_a_demande->id_fiche_agrement,
-//                                'id_but_formation'=> $value,
-//                                'flag_fiche_a_agrement_but_formation'=>true
-//                            ]);
-//                        }
-//                    }
-
                     $action->intitule_action_formation_plan = $substitution->intitule_action_formation_plan_substi;
                     $action->structure_etablissement_action_ = $substitution->structure_etablissement_action_substi;
                     $action->id_entreprise_structure_formation_action = $substitution->id_entreprise_structure_formation_action_substi;
@@ -276,6 +262,34 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $substitution->flag_validation_demande_plan_substi = true;
                     $substitution->date_validation_demande_plan_substi = now();
                     $substitution->update();
+
+
+                    $planformation = PlanFormation::where('id_plan_de_formation',$action->id_plan_de_formation)->first();
+                    $infoentreprise = Entreprises::find(@$planformation->id_entreprises);
+
+                    //Envoi Mail à l'entreprise pour la prise en compte  de la demande de substitution
+                    if (isset($planformation->email_professionnel_charge_plan_formation)) {
+                        $sujet = "Substitution de d'action de formation sur e-FDFP";
+                        $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                        $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                        <br><br>Nous avons examiné votre demande de substitution de l'action
+
+                                        de formation intitulé : ".$action->intitule_action_formation_plan." sur e-FDFP, et
+                                        elle a été approuvé avec succès."."
+                                        <br><br>
+                                        <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                            fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                            Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                            soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                            Cordialement,
+                                            L'équipe e-FDFP
+                                        <br><br><br>
+                                        -----
+                                        Ceci est un mail automatique, Merci de ne pas y répondre.
+                                        -----
+                                        ";
+                        $messageMailEnvoi = Email::get_envoimailTemplate($planformation->email_professionnel_charge_plan_formation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                    }
                 }else{
                     if (@$ResultCptVal->priorite_combi_proc==1){
                         $substitution = DemandeSubstitutionActionPlanFormation::where('id_action_formation_plan_substi',$id)->first();
@@ -340,7 +354,12 @@ class TraitementDemandeSubstitutionPlanController extends Controller
                     $demande_substitution->flag_rejeter_demande_annulation_plan = true;
                     $demande_substitution->date_validation_demande_annulation_plan = now();
                     $demande_substitution->update();
+
+
                 }
+
+                //Envoi Mail à l'entreprise pour la prise le rejet de la demande de substitution
+
 
                 return redirect('traitementdemandesubstitutionplan/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id_combi_proc).'/edit')->with('success', 'Succes : Operation validée avec succes ');
             }
