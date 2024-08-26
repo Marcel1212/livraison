@@ -884,7 +884,7 @@ Retour</a>
                                                 @endif
                                             </td>
                                             <td>
-                                                {{round(($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre+round(@$note,2))}}
+                                                {{round(($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre+round(@$note,2),2 )}}
                                             </td>
                                         </tr>
                                     @endif
