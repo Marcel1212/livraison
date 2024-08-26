@@ -836,19 +836,24 @@ Retour</a>
                                         <tr data-sort="{{($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre+round(@$note,2)}}">
                                             <td>{{$key+1}}</td>
                                             <td>{{$classement_offre_tech_final->entreprise}}</td>
-                                            <td>{{($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre}}</td>
+                                            <td>{{round(($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre,2)}}</td>
                                             <td>
                                                     <?php
                                                     $montant_inf = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) - (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre/100));
                                                     $montant_sup = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) + (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre/100));
                                                     ?>
+                                                @if($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)!=null)
+
                                                 @if(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)<$montant_inf)
                                                         <?php
                                                         $note = (intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)
                                                                 /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20
                                                         ?>
                                                     @if($note<0)
-                                                        0
+                                                                <?php
+                                                                $note = 0
+                                                                ?>
+                                                            {{$note}}
                                                     @else
                                                         {{round(@$note,2)}}
                                                     @endif
@@ -867,9 +872,14 @@ Retour</a>
                                                                         -@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20*2)
                                                         ?>
                                                     @if($note<0)
-                                                        0
+                                                        <?php
+                                                                $note = 0
+                                                            ?>
+                                                        {{$note}}
+
                                                     @else
                                                         {{round(@$note,2)}}
+                                                    @endif
                                                     @endif
                                                 @endif
                                             </td>
