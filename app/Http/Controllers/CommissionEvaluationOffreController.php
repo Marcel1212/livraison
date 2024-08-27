@@ -203,7 +203,7 @@ class CommissionEvaluationOffreController extends Controller
             ->get();
 
         foreach ($classement_offre_tech_finals as $classement){
-            if($commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin!=null){
+            if(isset($commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin)){
                 $note_financiere =$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin;
             }else{
                 $note_financiere =0;
