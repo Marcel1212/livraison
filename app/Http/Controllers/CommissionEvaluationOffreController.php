@@ -203,12 +203,18 @@ class CommissionEvaluationOffreController extends Controller
             ->get();
 
         foreach ($classement_offre_tech_finals as $classement){
+            if($commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin!=null){
+                $note_financiere =$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin;
+            }else{
+                $note_financiere =0;
+            }
+
             if($classement->note > $commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre){
                 $combinedArray[] = [
                     'entreprise' => $classement->entreprise,
                     'note_technique' => round((($classement->note/100) *$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre)),
-                    'note_financiere' => round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin)/20),2),
-                    'note_finale' => round((($classement->note/100) *$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre)) + round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin)/20),2)
+                    'note_financiere' => round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$note_financiere)/20),2),
+                    'note_finale' => round((($classement->note/100) *$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre)) + round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$note_financiere)/20),2)
                 ];
             }
         }
