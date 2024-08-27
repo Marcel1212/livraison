@@ -814,7 +814,9 @@ Retour</a>
 </div>
 </form>
         <?php
-        $data_sorteds = collect($combinedArray)->sortByDesc('note_finale')->toArray();
+            if(isset($combinedArray)){
+                $data_sorteds = collect($combinedArray)->sortByDesc('note_finale')->toArray();
+            }
         ?>
         <?php
         $i=1;

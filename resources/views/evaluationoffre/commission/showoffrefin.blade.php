@@ -77,13 +77,15 @@ $logo = Menu::get_logo();
             </tr>
 
             <?php
-                $data_sorteds = collect($combinedArray)->sortByDesc('note')->toArray();
+                if(isset($combinedArray)){
+                    $data_sorteds = collect($combinedArray)->sortByDesc('note')->toArray();
+                }
             ?>
             <?php
                 $i=1;
             ?>
-
-            @foreach(@$data_sorteds as $key=>$data)
+            @isset($data_sorteds)
+                @foreach(@$data_sorteds as $key=>$data)
                 <tr>
                     <td>{{$i++}}</td>
                     <td>
@@ -99,6 +101,7 @@ $logo = Menu::get_logo();
                     </td>
                 </tr>
             @endforeach
+            @endisset
     </tbody>
 </table>
 </div>
