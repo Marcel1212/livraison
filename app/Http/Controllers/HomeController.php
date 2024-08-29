@@ -100,8 +100,14 @@ class HomeController extends Controller
         return view('profil.profil')->with(compact('naroles'));
     }
 
-    public function updatepassword(Request $request)
+    public function updatepassword(Request $request, $id=null)
     {
+
+        if (isset($id)) {
+            $idetape = \App\Helpers\Crypt::UrldeCrypt($id);
+        }else{
+            $idetape = 1;
+        }
 
         $idutil = Auth::user()->id;
 
@@ -182,7 +188,8 @@ class HomeController extends Controller
                             'id_utilisateur'=> $users->id,
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
-                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        // mise a jour du mot de passe
+                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
@@ -227,7 +234,8 @@ class HomeController extends Controller
                             'id_utilisateur'=> $users->id,
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
-                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        // mise a jour du mot de passe
+                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
                             ->with('success', 'Votre mot de passe a été  modifié avec succes');
@@ -317,7 +325,8 @@ class HomeController extends Controller
                             'id_utilisateur'=> $users->id,
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
-                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        // mise a jour du mot de passe
+                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
@@ -362,7 +371,8 @@ class HomeController extends Controller
                             'id_utilisateur'=> $users->id,
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
-                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        // mise a jour du mot de passe
+                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
                             ->with('success', 'Votre mot de passe a été  modifié avec succes');
@@ -436,7 +446,7 @@ class HomeController extends Controller
             $listeactivites = [];
         }*/
 
-        return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay','activite','listeactivites'));
+        return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay','activite','listeactivites','idetape'));
 
     }
 
