@@ -510,6 +510,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::match(['get', 'post'], '/modifiermotdepasse', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifier.mot.passe');
+    Route::match(['get', 'post'], '/modifiermotdepasse/{id}', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifiermotpasse');
     Route::match(['get', 'post'], '/deleteactiviteentreprise/{id}', [App\Http\Controllers\HomeController::class, 'deleteactiviteentreprise'])->name('deleteactiviteentreprise');
 
 
