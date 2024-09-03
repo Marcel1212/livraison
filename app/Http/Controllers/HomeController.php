@@ -15,7 +15,10 @@ use App\Models\Activites;
 use App\Models\ActivitesEntreprises;
 use App\Models\Pays;
 use App\Helpers\Crypt;
+use App\Models\CompositionCapitale;
 use App\Models\HistoriqueMotDePasse;
+use App\Models\TypeCompositionCapitale;
+
 //use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -131,7 +134,7 @@ class HomeController extends Controller
                     $this->validate($request, [
                         'id_activites' => 'required'
                     ],[
-                        'id_activites.required' => 'Veuillez ajouter votre localisation.',
+                        'id_activites.required' => 'Veuillez ajouter votre activité.',
                     ]);
 
                     $input = $request->all();
@@ -144,7 +147,9 @@ class HomeController extends Controller
                         return redirect('/modifiermotdepasse')->with('error', 'Cette Activité existe déjà');
                     }else{
                         ActivitesEntreprises::create($input);
-                        return redirect('/modifiermotdepasse')->with('success', 'Activité ajoutée avec succès');
+                       // return redirect('/modifiermotdepasse')->with('success', 'Activité ajoutée avec succès');
+                        return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(4))->with('success', 'Succes : Enregistrement reussi ');
+
                     }
                 }
 
@@ -189,7 +194,7 @@ class HomeController extends Controller
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
                         // mise a jour du mot de passe
-                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        User::where(['id' => $users->id])->update(['password' => $pass]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
@@ -198,13 +203,38 @@ class HomeController extends Controller
                         $input['nom_prenom_dirigeant'] = mb_strtoupper($input['nom_prenom_dirigeant']);
                         $entreprise = Entreprises::find($infoentreprise->id_entreprises);
                         $entreprise->update($input);
-                        return redirect('/dashboard')
+                        return redirect('/modifiermotdepasse')
                             ->with('success', 'Votre mot de passe et information de l\'entreprise a été  modifié avec succes');
 
                     } else {
                         return redirect('/modifiermotdepasse')
                             ->with('error', 'Veuillez renseigner l\'ancien mot de passe ');
                     }
+
+                }
+
+                if ($data['action'] == 'terminer'){
+
+                    User::where(['id' => $users->id])->update(['flag_mdp' => 1]);
+                    return redirect('/modifiermotdepasse')->with('success', 'Vos informations ont été mise a jour avec succes');
+                }
+
+                if ($data['action'] == 'compositionCapitale'){
+                    $this->validate($request, [
+                        'id_type_composition_capitale' => 'required',
+                        'montant_composition_capitale' => 'required',
+                    ],[
+                        'id_type_composition_capitale.required' => 'Veuillez selectionner le type de composition de capitale.',
+                        'montant_composition_capitale.required' => 'Veuillez ajouter le montant du capitale.',
+                    ]);
+
+                    $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+                    $input = $request->all();
+                    $input['id_entreprises'] = $infoentreprise->id_entreprises;
+
+                    CompositionCapitale::create($input);
+
+                    return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(3))->with('success', 'Succes : Enregistrement reussi ');
 
                 }
 
@@ -235,7 +265,7 @@ class HomeController extends Controller
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
                         // mise a jour du mot de passe
-                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
                             ->with('success', 'Votre mot de passe a été  modifié avec succes');
@@ -264,11 +294,11 @@ class HomeController extends Controller
 
                 if ($data['action'] == 'profil_entreprise_activite'){
 
-                   // dd($request->all());
+                    //dd($request->all());
                     $this->validate($request, [
                         'id_activites' => 'required'
                     ],[
-                        'id_activites.required' => 'Veuillez ajouter votre localisation.',
+                        'id_activites.required' => 'Veuillez ajouter votre activité.',
                     ]);
 
                     $input = $request->all();
@@ -281,8 +311,28 @@ class HomeController extends Controller
                         return redirect('/modifiermotdepasse')->with('error', 'Cette Activité existe déjà');
                     }else{
                         ActivitesEntreprises::create($input);
-                        return redirect('/modifiermotdepasse')->with('success', 'Activité ajoutée avec succès');
+                       // return redirect('/modifiermotdepasse')->with('success', 'Activité ajoutée avec succès');
+                        return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(4))->with('success', 'Succes : Enregistrement reussi ');
+
                     }
+                }
+
+                if ($data['action'] == 'compositionCapitale'){
+                    $this->validate($request, [
+                        'id_type_composition_capitale' => 'required',
+                        'montant_composition_capitale' => 'required',
+                    ],[
+                        'id_type_composition_capitale.required' => 'Veuillez selectionner le type de composition de capitale.',
+                        'montant_composition_capitale.required' => 'Veuillez ajouter le montant du capitale.',
+                    ]);
+
+                    $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+                    $input = $request->all();
+                    $input['id_entreprises'] = $infoentreprise->id_entreprises;
+
+                    CompositionCapitale::create($input);
+
+                    return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(3))->with('success', 'Succes : Enregistrement reussi ');
 
                 }
 
@@ -326,7 +376,7 @@ class HomeController extends Controller
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
                         // mise a jour du mot de passe
-                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        User::where(['id' => $users->id])->update(['password' => $pass]);
                         $input = $request->all();
                         $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
                         $input['localisation_geographique_entreprise'] = mb_strtoupper($input['localisation_geographique_entreprise']);
@@ -358,7 +408,7 @@ class HomeController extends Controller
                     ]);
 
                     $verifmdp = Crypt::VerifierMotDePasse($data['npwd']);
-//dd($verifmdp);
+                    //dd($verifmdp);
                     if($verifmdp != "mot de passe correcte"){
                         return redirect('/modifiermotdepasse')->with('error', '.'.$verifmdp.'.');
                     }
@@ -372,7 +422,7 @@ class HomeController extends Controller
                             'ancien_mot_de_passe_hash'=> $users->password
                         ]);
                         // mise a jour du mot de passe
-                        //User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
+                        User::where(['id' => $users->id])->update(['password' => $pass, 'flag_mdp' => 1]);
 
                         return redirect('/dashboard')
                             ->with('success', 'Votre mot de passe a été  modifié avec succes');
@@ -431,8 +481,16 @@ class HomeController extends Controller
         }
 //dd($infoentreprise);
         //if(isset($infoentreprise)){
+            $identreprise = @$infoentreprise->id_entreprises;
+            $activites = Activites::whereNotExists(function ($query) use ($identreprise){
+                $query->select('*')
+                    ->from('activites_entreprises')
+                    ->whereColumn('activites_entreprises.id_activites','=','activites.id_activites')
+                    ->where('activites_entreprises.id_entreprises',$identreprise);
+            })->where('flag_activites',true)
+            ->get();
 
-            $activites = Activites::where([['flag_activites','=',true]])->get();
+            //Activites::where([['flag_activites','=',true]])->get();
             $activite = "<option value=''> -- Sélectionnez une activité -- </option>";
             foreach ($activites as $comp) {
                 $activite .= "<option value='" . @$comp->id_activites  . "'>" . @$comp->libelle_activites ." </option>";
@@ -445,16 +503,64 @@ class HomeController extends Controller
             $activite = [];
             $listeactivites = [];
         }*/
+        $identreprise = @$infoentreprise->id_entreprises;
+        $typeCompoCapitMAJ = TypeCompositionCapitale::whereNotExists(function ($query) use ($identreprise){
+            $query->select('*')
+                ->from('composition_capitale')
+                ->whereColumn('composition_capitale.id_type_composition_capitale','=','type_composition_capitale.id_type_composition_capitale')
+                ->where('composition_capitale.id_entreprises',$identreprise);
+        })->where('flag_type_composition_capitale',true)
+        ->get();
 
-        return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay','activite','listeactivites','idetape'));
+      $typeCompoCapitMAJList = "<option value='' > selectionnez un statut</option>";
+      foreach ($typeCompoCapitMAJ as $comp) {
+          $typeCompoCapitMAJList .= "<option value='" . $comp->id_type_composition_capitale . "'   >" . strtoupper($comp->libelle_type_composition_capitale) . " </option>";
+      }
+
+        $listecompocapitales = CompositionCapitale::where([['id_entreprises','=',@$identreprise],['flag_composition_capitale','=',true]])->get();
+
+        return view('profil.updatepassword')->with(compact('tabl', 'naroles','infoentreprise','pay','activite','listeactivites','idetape','typeCompoCapitMAJList','listecompocapitales'));
 
     }
 
+    public function saveLocation(Request $request)
+    {
+
+        $this->validate($request, [
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ],[
+            'latitude.required' => 'Veuillez ajouter la latitude.',
+            'longitude.required' => 'Veuillez ajouter la longitude.',
+        ]);
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+
+        $input = $request->all();
+
+        $input['latitude_entreprises'] = $input['latitude'];
+        $input['longitude_entreprises'] = $input['longitude'];
+
+        $entreprise = Entreprises::find($infoentreprise->id_entreprises);
+        $entreprise->update($input);
+
+        return response()->json(['message' => 'Position enregistrée avec succès!']);
+    }
     public function deleteactiviteentreprise($id){
         $idVal = Crypt::UrldeCrypt($id);
 
         ActivitesEntreprises::where([['id_activites_entreprises','=',$idVal]])->delete();
 
-        return redirect('/modifiermotdepasse')->with('success', 'Activité supprimée avec succès');
+        //return redirect('/modifiermotdepasse')->with('success', 'Activité supprimée avec succès');
+        return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(4))->with('success', 'Succes : Suppression reussi ');
+    }
+
+    public function deletecompositioncapitale($id){
+        $idVal = Crypt::UrldeCrypt($id);
+
+        CompositionCapitale::where([['id_composition_capitale','=',$idVal]])->delete();
+
+        return redirect('modifiermotdepasse/'.Crypt::UrlCrypt(3))->with('success', 'Succes : Suppression reussi ');
+
     }
 }
