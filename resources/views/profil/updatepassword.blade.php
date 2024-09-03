@@ -73,8 +73,8 @@
                                         <span>{{Auth::user()->email}}</span>
                                     </li>
                                     <li class="mb-75">
-                                        <span class="fw-bolder me-25">Status:</span>
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="fw-bolder me-25">Statut:</span>
+                                        <span class="badge bg-success">Actif</span>
                                     </li>
                                     <li class="mb-75">
                                         <span class="fw-bolder me-25">Role:</span>
@@ -385,14 +385,73 @@
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade <?php if($idetape==3){ echo "show active";} ?>" id="navs-top-compositioncapitale" role="tabpanel">
-                                                    <hr>
-                                                    <div class="col-sm-12"  align="right">
-                                                        <a  href="{{ route('modifiermotpasse',[\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-defult me-sm-3 me-1">Précédent</a>
-                                                        <button type="submit" name="action" value="coposition_capitale"
-                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                            Ajouter
-                                                        </button>
-                                                        <a  href="{{ route('modifiermotpasse',[\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-warning me-sm-3 me-1">Suivant</a>
+                                                    <div class="card">
+                                                        <div class="table-responsive">
+                                                            <div id="DataTables_Table_0_wrapper"
+                                                                 class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                                                <div class="card-body">
+                                                                    <form method="POST" enctype="multipart/form-data"
+                                                                        class="form form-horizontal"
+                                                                        action="{{ route('modifier.mot.passe') }}">
+                                                                        @csrf
+                                                                        <div class="row">
+                                                                            <div class="col-md-5 col-12">
+                                                                                <label class="form-label">Liste des types de composition de capitale </label>
+
+                                                                                <select class="select21 form-select"
+                                                                                        data-allow-clear="true" name="id_type_composition_capitale"
+                                                                                        required="required">
+                                                                                    <?= $typeCompoCapitMAJList; ?>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div class="col-md-3 col-12">
+                                                                                <label class="form-label">Montant </label>
+                                                                                <input type="number" class="form-control form-control-sm" min="0" name="montant_composition_capitale"/>
+                                                                            </div>
+                                                                            <div class="col-md-4"  align="right"><br/>
+
+																				<a  href="{{ route('modifiermotpasse',[\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-defult me-sm-3 me-1">Précédent</a>
+																				<button type="submit" name="action" value="compositionCapitale"
+																						class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+																					Ajouter
+																				</button>
+																				<a  href="{{ route('modifiermotpasse',[\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-warning me-sm-3 me-1">Suivant</a>
+                                                                            </div>
+
+
+                                                                        </div>
+                                                                    </form>
+
+                                                                    <table class="table table-bordered table-striped table-hover table-sm "
+                                                                        id=""
+                                                                        style="margin-top: 13px !important">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No</th>
+                                                                                <th>composition de capitale </th>
+                                                                                <th>montant </th>
+                                                                                <th >Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <?php $i=0; ?>
+                                                                            @foreach ($listecompocapitales as $key => $listecompocapitale)
+                                                                                <tr>
+                                                                                    <td>{{ ++$i }}</td>
+                                                                                    <td>{{ $listecompocapitale->typeCompositionCapitale->libelle_type_composition_capitale }}</td>
+                                                                                    <td>{{ number_format($listecompocapitale->montant_composition_capitale, 0, ',', ' ') }}</td>
+                                                                                    <td align="center">
+                                                                                    <a href="{{ route('deletecompositioncapitale',\App\Helpers\Crypt::UrlCrypt($listecompocapitale->id_composition_capitale)) }}"
+                                                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cette ligne ?")) return false;'
+                                                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="tab-pane fade <?php if($idetape==4){ echo "show active";} ?>" id="navs-top-activite" role="tabpanel">
@@ -411,7 +470,7 @@
 
                                                                                 <select class="select21 form-select"
                                                                                         data-allow-clear="true" name="id_activites"
-                                                                                        required="required">
+                                                                                        >
                                                                                     <?= $activite; ?>
                                                                                 </select>
                                                                             </div>
@@ -584,8 +643,8 @@
         document.getElementById('savePosition').addEventListener('click', function() {
             if (selectedMarker) {
                 const pos = selectedMarker.getLatLng();
-                //savePosition(pos.lat, pos.lng);
-                alert(pos.lat);alert(pos.lng);
+                savePosition(pos.lat, pos.lng);
+                //alert(pos.lat);alert(pos.lng);
             } else {
                 alert('Veuillez sélectionner une position sur la carte.');
             }
@@ -605,7 +664,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.message);
+                //console.log(data.message);
+                alert('Position enregistrée avec succès!');
+                location.reload(); // Actualiser la page après l'enregistrement
             })
             .catch(error => console.error('Erreur:', error));
         }

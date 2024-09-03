@@ -51,6 +51,9 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->group(base_path('routes/cahiers.php'));
 
+            Route::middleware('web')
+                ->group(base_path('routes/habilitation.php'));
+
 
         });
     }
