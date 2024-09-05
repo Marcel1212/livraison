@@ -21,9 +21,11 @@ use App\Helpers\Crypt;
                 <?php } elseif($nacodes == "ENTREPRISE") { ?>
                 @include('dashboard.menu.entreprise')
                 <?php } elseif($nacodes == "AGTENR") { ?>
-                @include('dashboard.menu.agentenroleur')                
+                @include('dashboard.menu.agentenroleur')
                 <?php } elseif($nacodes == "CONSEILLER") { ?>
                 @include('dashboard.menu.conseiller')
+                <?php } elseif($nacodes == "CHEFSERVICE") { ?>
+                @include('dashboard.menu.chefservice')
                 <?php } else { ?>
                 @include('dashboard.menu.autre')
                 <?php } ?>

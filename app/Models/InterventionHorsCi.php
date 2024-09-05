@@ -15,27 +15,27 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $created_at
  * @property string $updated_at
  * @property DemandeHabilitation $demandeHabilitation
- * @property Pay $pay
+ * @property Pays $pay
  */
 class InterventionHorsCi extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'intervention_hors_ci';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_intervention_hors_ci';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -58,6 +58,6 @@ class InterventionHorsCi extends Model
      */
     public function pay()
     {
-        return $this->belongsTo('App\Models\Pay', 'id_pays', 'id_pays');
+        return $this->belongsTo('App\Models\Pays', 'id_pays', 'id_pays');
     }
 }

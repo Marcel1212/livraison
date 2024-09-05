@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
+use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -17,5 +18,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
         Route::get('demandehabilitation/{id}/deleteapf', [DemandeHabilitationController::class, 'deleteadh'])->name('demandehabilitation.deleteadh');
 	});
+
+    Route::group(['middleware' => ['can:traitementdemandehabilitation-index']], function () {
+        Route::resources([
+            'traitementdemandehabilitation' => TraitementDemandeHabilitationController::class,
+        ]);
+    });
+
+    Route::get('traitementdemandehabilitation/{id}/informationaction', [TraitementDemandeHabilitationController::class, 'informationaction'])->name('traitementdemandehabilitation.informationaction');
+    Route::get('traitementdemandehabilitation/{id}/informationbeneficiaireaction', [TraitementDemandeHabilitationController::class, 'informationbeneficiaireformation'])->name('traitementdemandehabilitation.informationbeneficiaireaction');
+    Route::post('traitementdemandehabilitation/{id}/update/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformation'])->name('traitementdemandehabilitation.action.formation');
+    Route::post('traitementdemandehabilitation/{id}/update/beneficiaire/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformationbenefiaire'])->name('traitementdemandehabilitation.beneficiaire.action.formation');
+
 
 });

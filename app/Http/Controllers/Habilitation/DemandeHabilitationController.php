@@ -222,6 +222,11 @@ class DemandeHabilitationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
+        $payList = "<option value=''> Selectionnez un pays</option>";
+        foreach ($pays as $comp) {
+            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
+        }
+
         $typemoyenpermanentes = TypeMoyenPermanent::where([['flag_type_moyen_permanent','=',true]])->get();
         $typemoyenpermanenteList = "<option value=''> Selectionnez la type de moyen </option>";
         foreach ($typemoyenpermanentes as $comp) {
@@ -271,11 +276,13 @@ class DemandeHabilitationController extends Controller
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get();
 
+        $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
+
 
         return view('habilitation.demande.edit', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-                    'domaineDemandeHabilitations','domainedemandeList','formateurs'));
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
     }
 
     /**
@@ -355,6 +362,20 @@ class DemandeHabilitationController extends Controller
 
                 $moyenP = MoyenPermanente::create($input);
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape type moeyn permanente'
+
+                ]);
+
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Moyen permanente ajouter avec success ');
 
             }
@@ -381,6 +402,20 @@ class DemandeHabilitationController extends Controller
                     ]);
                 }
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape intervention'
+
+                ]);
+
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Demande intervention ajouter avec success ');
 
             }
@@ -406,6 +441,20 @@ class DemandeHabilitationController extends Controller
                     ]);
                 }
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape organisation information'
+
+                ]);
+
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
 
             }
@@ -425,6 +474,20 @@ class DemandeHabilitationController extends Controller
                 $input['id_demande_habilitation'] = $id;
 
                 DomaineDemandeHabilitation::create($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape domaine de formation'
+
+                ]);
 
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
 
@@ -491,7 +554,140 @@ class DemandeHabilitationController extends Controller
 
                 FormateurDomaineDemandeHabilitation::create($input);
 
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape ajouter formateur'
+
+                ]);
+
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
+
+            }
+
+            if ($data['action'] == 'AjouterDivers'){
+
+                $this->validate($request, [
+                    'information_catalogue_demande_habilitation' => 'required',
+                    'information_seul_activite_demande_habilitation' => 'required',
+                    'materiel_didactique_demande_habilitation' => 'required'
+                ],[
+                    'information_catalogue_demande_habilitation.required' => 'Veuillez selectionner l\'information catalogue.',
+                    'information_seul_activite_demande_habilitation.required' => 'Veuillez selectionner l\'information seul activite.',
+                    'materiel_didactique_demande_habilitation.required' => 'Veuillez ajouter le materiel didactique.'
+                ]);
+
+                $input = $request->all();
+
+
+                if (isset($input['dernier_catalogue_demande_habilitation'])){
+
+                    $filefront = $input['dernier_catalogue_demande_habilitation'];
+
+                    //dd($filefront->extension());
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'dernier_catalogue_demande_habilitation'. '_' . rand(111,99999) . '_' . 'catalogue'. '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/catalogue/'), $fileName1);
+
+                        $input['dernier_catalogue_demande_habilitation'] = $fileName1;
+                    }
+
+                }
+
+                $demandehabilitation->update($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape divers'
+
+                ]);
+
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
+
+            }
+
+            if ($data['action'] == 'AjouterInterventionsHorsCis'){
+
+                $this->validate($request, [
+                    'objet_intervention_hors_ci' => 'required',
+                    'annee_intervention_hors_ci' => 'required',
+                    'id_pays' => 'required',
+                    'quel_financement_intervention_hors_ci' => 'required'
+                ],[
+                    'objet_intervention_hors_ci.required' => 'Veuillez ajouter l\'objet .',
+                    'annee_intervention_hors_ci.required' => 'Veuillez ajouter l\'année intervention.',
+                    'id_pays.required' => 'Veuillez selectionner le pays.',
+                    'quel_financement_intervention_hors_ci.required' => 'Veuillez ajouter le financement.'
+                ]);
+
+                $input = $request->all();
+
+                $input['id_demande_habilitation'] = $id;
+                $input['objet_intervention_hors_ci'] = mb_strtoupper($input['objet_intervention_hors_ci']);
+                $input['quel_financement_intervention_hors_ci'] = mb_strtoupper($input['quel_financement_intervention_hors_ci']);
+
+                InterventionHorsCi::create($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape intervention hors du pays'
+
+                ]);
+
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
+
+            }
+
+            if ($data['action'] == 'Enregistrer_soumettre_demande_habilitation'){
+
+                DemandeHabilitation::where('id_demande_habilitation',$id)->update([
+                    'flag_soumis_demande_habilitation' => true,
+                    'date_soumis_demande_habilitation' => Carbon::now()
+                ]);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape soumission'
+
+                ]);
+
+               return redirect()->route('demandehabilitation.index')->with('success', 'Demande habilitation soumis avec succès.');
 
             }
 

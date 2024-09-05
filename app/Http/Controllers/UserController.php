@@ -327,7 +327,7 @@ class UserController extends Controller
                 $user->update($input);
                 DB::table('model_has_roles')->where('model_id', $id)->delete();
                 $exploeprofil = explode("/",$request->input('roles'));
-                //dd($exploeprofil);
+               // dd($exploeprofil);
                 $valprofile = $exploeprofil[0];
                 $valcodeprofile = $exploeprofil[1];
                 //$user->assignRole($request->input('roles'));
