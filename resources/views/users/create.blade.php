@@ -105,7 +105,7 @@
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Identifiant</label> <strong style="color: red">6 caractères minimum</strong>
+                                                    <label>Identifiant</label> <strong style="color: red">8 caractères minimum</strong>
                                                     <input type="text" name="login_users" id="login_users"
                                                            class="form-control form-control-sm"
                                                            placeholder="Identifiant" minlength="6"
