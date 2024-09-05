@@ -35,7 +35,25 @@ class TraitementDemandeHabilitationController extends Controller
     public function index()
     {
         $numAgce = Auth::user()->num_agce;
-        $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        if($codeRoles == 'CHEFSERVICE'){
+            $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
+        }else{
+            $habilitations = [];
+        }
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'HABILITATION (Traitement)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
 
         return view('habilitation.traitementdemandehabilitation.index',compact('habilitations'));
     }
@@ -160,6 +178,20 @@ class TraitementDemandeHabilitationController extends Controller
             $chargerHabilitationsList = [];
             $NombreDemandeHabilitation = [];
         }
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'HABILITATION (Traitement de HABILITATION)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
 
 
         return view('habilitation.traitementdemandehabilitation.edit', compact('demandehabilitation','infoentreprise','banque','pay',

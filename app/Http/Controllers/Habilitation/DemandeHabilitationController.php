@@ -278,6 +278,19 @@ class DemandeHabilitationController extends Controller
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
 
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
 
         return view('habilitation.demande.edit', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
