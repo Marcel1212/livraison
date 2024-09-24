@@ -4,7 +4,9 @@ use App\Helpers\AnneeExercice;
 use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
+use App\Helpers\Menu;
 
+$codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 ?>
 
@@ -57,7 +59,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==1){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-informationentreprise"
@@ -69,7 +71,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if( $idetape==2 and isset($demandehabilitation) ){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-moyenpermanente"
@@ -81,7 +83,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==3 and count($moyenpermanentes)==1){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-intervention"
@@ -93,7 +95,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==4 and count($interventions)>0){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-organisationformation"
@@ -105,7 +107,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==5 and count($organisations)>0){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-domaineformation"
@@ -117,7 +119,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==6 and count($organisations)>0){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-formateur"
@@ -129,7 +131,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==7 and count($formateurs)>0){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-divers"
@@ -141,7 +143,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link"
+                                class="nav-link <?php if($idetape==8 and count($formateurs)>0){ echo "active";} ?>"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-Soumettre"
@@ -150,21 +152,52 @@ use App\Helpers\PartEntreprisesHelper;
                                 Intervention hors du pays
                                 </button>
                             </li>
-                            <li class="nav-item">
-                                <button
-                                type="button"
-                                class="nav-link active"
-                                role="tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#navs-top-affectation"
-                                aria-controls="navs-top-affectation"
-                                aria-selected="false">
-                                Affectation
-                                </button>
-                            </li>
+                            @if ($codeRoles == 'CHEFSERVICE')
+                                <li class="nav-item">
+                                    <button
+                                    type="button"
+                                    class="nav-link <?php if($idetape==9 ){ echo "active";} ?>"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-affectation"
+                                    aria-controls="navs-top-affectation"
+                                    aria-selected="false">
+                                    Affectation
+                                    </button>
+                                </li>
+                            @else
+                                <?php if($demandehabilitation->flag_reception_demande_habilitation!=true){ ?>
+                                    <li class="nav-item">
+                                        <button
+                                        type="button"
+                                        class="nav-link <?php if($idetape==9 ){ echo "active";} ?>"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#navs-top-"
+                                        aria-controls="navs-top-recevabilite"
+                                        aria-selected="false">
+                                        Recevabilité
+                                        </button>
+                                    </li>
+                                <?php }else{ ?>
+                                    <li class="nav-item">
+                                        <button
+                                        type="button"
+                                        class="nav-link <?php if($idetape==9 ){ echo "active";} ?>"
+                                        role="tab"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#navs-top-traitement"
+                                        aria-controls="navs-top-traitement"
+                                        aria-selected="false">
+                                        Traitement
+                                        </button>
+                                    </li>
+                                <?php } ?>
+                            @endif
+
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade" id="navs-top-informationentreprise" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
 
                                     <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
                                          @csrf
@@ -358,7 +391,7 @@ use App\Helpers\PartEntreprisesHelper;
                                     </form>
 
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-moyenpermanente" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==2 and isset($demandehabilitation)){ echo "show active";} ?>" id="navs-top-moyenpermanente" role="tabpanel">
 
                                     <table class="table table-bordered table-striped table-hover table-sm"
                                         id=""
@@ -394,7 +427,7 @@ use App\Helpers\PartEntreprisesHelper;
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-intervention" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==3 and count($moyenpermanentes)>0){ echo "show active";} ?>" id="navs-top-intervention" role="tabpanel">
 
                                         <table class="table table-bordered table-striped table-hover table-sm"
                                             id=""
@@ -426,7 +459,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             </tbody>
                                         </table>
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-organisationformation" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==4 and count($interventions)>0){ echo "show active";} ?>" id="navs-top-organisationformation" role="tabpanel">
 
                                         <table class="table table-bordered table-striped table-hover table-sm"
                                             id=""
@@ -458,7 +491,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             </tbody>
                                         </table>
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-domaineformation" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==5 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-domaineformation" role="tabpanel">
                                         <table class="table table-bordered table-striped table-hover table-sm"
                                             id=""
                                             style="margin-top: 13px !important">
@@ -491,7 +524,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             </tbody>
                                         </table>
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-formateur" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
 
                                         <table class="table table-bordered table-striped table-hover table-sm"
                                             id=""
@@ -559,7 +592,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             </tbody>
                                         </table>
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-divers" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==7 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-divers" role="tabpanel">
                                            <div class="row">
                                             <div class="col-md-6">
                                                 <div class="row">
@@ -668,7 +701,7 @@ use App\Helpers\PartEntreprisesHelper;
                                            </div>
 
                                 </div>
-                                <div class="tab-pane fade" id="navs-top-Soumettre" role="tabpanel">
+                                <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
 
                                        <table class="table table-bordered table-striped table-hover table-sm"
                                            id=""
@@ -707,87 +740,163 @@ use App\Helpers\PartEntreprisesHelper;
                                        </table>
 
                                 </div>
-
-                                <div class="tab-pane fade show active" id="navs-top-affectation" role="tabpanel">
-                                    <?php if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
-                                    <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}">
-                                        @csrf
-                                       @method('put')
-                                       <div class="row">
-                                            <div class="col-md-12">
+                                @if ($codeRoles == 'CHEFSERVICE')
+                                     <?php //if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
+                                        <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-affectation" role="tabpanel">
+                                            <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                @csrf
+                                                @method('put')
                                                 <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
 
-                                                    <div class="col-md-6 col-12">
-                                                        <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
-                                                        <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
-                                                            error
-                                                            @enderror" data-allow-clear="true" name="id_charge_habilitation">
-                                                            <?= $chargerHabilitationsList; ?>
-                                                        </select>
-                                                        @error('id_charge_habilitation')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Commentaire  <strong style="color:red;">*</strong></label>
-                                                            <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                <div class="col-md-6 col-12">
+                                                                    <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
+                                                                    <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
+                                                                        error
+                                                                        @enderror" data-allow-clear="true" name="id_charge_habilitation">
+                                                                        <?= $chargerHabilitationsList; ?>
+                                                                    </select>
+                                                                    @error('id_charge_habilitation')
+                                                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                                                    @enderror
+                                                                </div>
+                                                                <div class="col-md-6 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label>Commentaire  <strong style="color:red;">*</strong></label>
+                                                                        <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                    </div>
+                                                                    @error('commantaire_cs')
+                                                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                                                    @enderror
+                                                                </div>
+
+                                                            </div>
                                                         </div>
-                                                        @error('commantaire_cs')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
 
+
+                                                    <div class="col-12" align="right">
+                                                        <hr>
+
+
+
+                                                            <button type="submit" name="action" value="FaireAttribution"
+                                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                    Attribution
+                                                            </button>
+
+
+                                                        <hr>
+                                                    </div>
                                                 </div>
+                                                <br/>
+                                            </form>
+
+                                            <section class="app-user-list">
+                                                <div class="row">
+                                                    @foreach ($NombreDemandeHabilitation as $nbre)
+                                                        <div class="col-lg-3 col-sm-6">
+                                                            <div class="card">
+                                                                <div class="card-body d-flex align-items-center justify-content-between">
+                                                                    <div>
+                                                                        <h3 class="fw-bolder mb-75">{{ $nbre->count }}</h3>
+                                                                        <span>{{ $nbre->name }} {{ $nbre->prenom_users }}</span>
+                                                                    </div>
+                                                                    <div class="avatar bg-light-primary p-50">
+                                                                        <span class="avatar-content">
+                                                                            <i data-feather="user" class="font-medium-4"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </section>
+                                            <div class="col-12" align="right">
+                                                <hr>
+
+                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                    Retour</a>
                                             </div>
-
-
-                                           <div class="col-12" align="right">
-                                               <hr>
-
-
-
-                                                   <button type="submit" name="action" value="FaireAttribution"
-                                                           class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                           Attribution
-                                                   </button>
-
-
-                                               <hr>
-                                           </div>
-                                       </div>
-                                       <br/>
-                                   </form>
-                                   <?php } ?>
-                                    <section class="app-user-list">
-                                        <div class="row">
-                                            @foreach ($NombreDemandeHabilitation as $nbre)
-                                                <div class="col-lg-3 col-sm-6">
-                                                    <div class="card">
-                                                        <div class="card-body d-flex align-items-center justify-content-between">
-                                                            <div>
-                                                                <h3 class="fw-bolder mb-75">{{ $nbre->count }}</h3>
-                                                                <span>{{ $nbre->name }} {{ $nbre->prenom_users }}</span>
-                                                            </div>
-                                                            <div class="avatar bg-light-primary p-50">
-                                                                <span class="avatar-content">
-                                                                    <i data-feather="user" class="font-medium-4"></i>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
                                         </div>
-                                    </section>
-                                    <div class="col-12" align="right">
-                                        <hr>
+                                    <?php //} ?>
+                            @else
+                                <?php if ($demandehabilitation->flag_reception_demande_habilitation != true){ ?>
+                                <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-recevabilite" role="tabpanel">
+                                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
+                                            <div class="row">
+                                                        <div class="col-md-6 col-12">
+                                                                <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
 
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                            Retour</a>
-                                    </div>
+                                                                    <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+                                                                        <?= $motif; ?>
+                                                                    </select>
+                                                            </div>
+                                                            <div class="col-md-6 col-12">
+                                                                <div class="mb-1">
+                                                                    <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                                    <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12" align="right">
+                                                            <hr>
+                                                                <button type="submit" name="action" value="Recevable"
+                                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                                                    Recevable
+                                                                </button>
+                                                                <button type="submit" name="action" value="NonRecevable"
+                                                                        class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                                    Non recevable
+                                                                </button>
+                                                                <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                                href="/{{$lien }}">
+                                                                    Retour</a>
+                                                            </div>
+                                            </div>
+                                    </form>
                                 </div>
+                                <?php }else{ ?>
+                                    <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
+                                        <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('put')
+                                                <div class="row">
+                                                            <div class="col-md-6 col-12">
+                                                                    <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
+
+                                                                        <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+                                                                            <?= $motif; ?>
+                                                                        </select>
+                                                                </div>
+                                                                <div class="col-md-6 col-12">
+                                                                    <div class="mb-1">
+                                                                        <label>Commentaire Recevabilité traitemebbt <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                                        <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12" align="right">
+                                                                <hr>
+                                                                    <button type="submit" name="action" value="Recevable"
+                                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                                                        Recevable
+                                                                    </button>
+                                                                    <button type="submit" name="action" value="NonRecevable"
+                                                                            class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                                        Non recevable
+                                                                    </button>
+                                                                    <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                                    href="/{{$lien }}">
+                                                                        Retour</a>
+                                                                </div>
+                                                </div>
+                                        </form>
+                                    </div>
+                                <?php } ?>
+                            @endif
                             </div>
                         </div>
                     </div>

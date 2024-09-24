@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_entreprises
  * @property float $id_charge_habilitation
  * @property float $id_chef_service
+ * @property float $id_motif_recevable
  * @property string $nom_responsable_demande_habilitation
  * @property string $fonction_demande_habilitation
  * @property string $maison_mere_demande_habilitation
@@ -80,7 +81,7 @@ class DemandeHabilitation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'nom_responsable_demande_habilitation', 'fonction_demande_habilitation', 'maison_mere_demande_habilitation', 'agence_domiciliation_demande_habilitation', 'type_entreprise', 'flag_demande_habilitation', 'date_creer_demande_habilitation', 'flag_creer_demande_habilitation', 'date_soumis_demande_habilitation', 'flag_soumis_demande_habilitation', 'date_reception_demande_habilitation', 'flag_reception_demande_habilitation', 'date_rejet_demande_habilitation', 'flag_rejet_demande_habilitation', 'date_valide_demande_habilitation', 'flag_valide_demande_habilitation', 'materiel_didactique_demande_habilitation', 'information_catalogue_demande_habilitation', 'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation', 'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation', 'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation', 'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation', 'flag_soumis_charge_habilitation', 'commentaire_recevabilite'];
+    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'nom_responsable_demande_habilitation', 'fonction_demande_habilitation', 'maison_mere_demande_habilitation', 'agence_domiciliation_demande_habilitation', 'type_entreprise', 'flag_demande_habilitation', 'date_creer_demande_habilitation', 'flag_creer_demande_habilitation', 'date_soumis_demande_habilitation', 'flag_soumis_demande_habilitation', 'date_reception_demande_habilitation', 'flag_reception_demande_habilitation', 'date_rejet_demande_habilitation', 'flag_rejet_demande_habilitation', 'date_valide_demande_habilitation', 'flag_valide_demande_habilitation', 'materiel_didactique_demande_habilitation', 'information_catalogue_demande_habilitation', 'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation', 'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation', 'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation', 'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation', 'flag_soumis_charge_habilitation', 'commentaire_recevabilite','id_motif_recevable'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -152,5 +153,13 @@ class DemandeHabilitation extends Model
     public function entreprise()
     {
         return $this->belongsTo('App\Models\Entreprises', 'id_entreprises', 'id_entreprises');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function motif()
+    {
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 }

@@ -11,8 +11,8 @@ $IdUser = Auth::user()->id;
 $numAgce = Auth::user()->num_agce;
 //dd($IdUser,$numAgce);
 
-$demandehabilitations = ListeDemandeHabilitationSoumis::get_liste_demande_habilitation_soumis($numAgce);
-$demandehabilitationsnv = ListeDemandeHabilitationSoumis::get_liste_demande_habilitation_soumis_nouvelle_demande($numAgce);
+$demandehabilitations = ListeDemandeHabilitationSoumis::get_liste_demande_habilitation_soumis_charge_habilitation($IdUser);
+$demandehabilitationsnv = ListeDemandeHabilitationSoumis::get_liste_demande_habilitation_soumis_nouvelle_demande_charger_H($IdUser);
 $demandehabilitationsex = [];
 $demandehabilitationsre = [];
 $demandehabilitationssb = [];
@@ -110,8 +110,8 @@ $demandehabilitationssup = [];
                             <td class="pt-2">
                                 <div class="d-flex justify-content-start align-items-center mt-lg-4">
                                     <div class="d-flex flex-column">
-                                        <h6 class="mb-0">{{$demandehabilitation->ncc_entreprises}}</h6>
-                                        <small class="text-truncate text-muted">{{$demandehabilitation->raison_social_entreprises}}</small>
+                                        <h6 class="mb-0">{{$demandehabilitation->entreprise->ncc_entreprises}}</h6>
+                                        <small class="text-truncate text-muted">{{$demandehabilitation->entreprise->raison_social_entreprises}}</small>
                                     </div>
                                 </div>
                             </td>
@@ -134,8 +134,8 @@ $demandehabilitationssup = [];
                             <td class="text-end pt-2">
                                 <div class="user-progress mt-lg-4">
                                      @can($lien.'-edit')
-                                     <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}"
-                                        class=" "
+                                        <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}"
+                                           class=" "
                                            title="Faire la recevabilité"><img
                                                 src='/assets/img/editing.png'></a>
                                     @endcan

@@ -118,7 +118,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </td>
                                     <td align="center">
                                         @can($lien.'-edit')
-                                            <a href="{{ route($lien.'.edit',\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}"
+                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                             class=" "
                                             title="Modifier"><img
                                                     src='/assets/img/editing.png'></a>
