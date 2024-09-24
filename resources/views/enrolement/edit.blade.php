@@ -81,11 +81,19 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-8 col-12">
+                                            <div class="col-md-6 col-12">
                                                 <div class="mb-1">
                                                     <label>Raison sociale </label>
                                                     <input type="text"
                                                            class="form-control form-control-sm" value="{{$demandeenrole->raison_sociale_demande_enroleme}}"
+                                                           disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-12">
+                                                <div class="mb-1">
+                                                    <label>Sigle </label>
+                                                    <input type="text"
+                                                           class="form-control form-control-sm" value="{{$demandeenrole->sigl_demande_enrolement}}"
                                                            disabled="disabled">
                                                 </div>
                                             </div>

@@ -107,6 +107,7 @@ class EnrolementController extends Controller
 
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
+                    'sigl_demande_enrolement' => 'required',
                     'email_demande_enrolement' =>['required','email', 'unique:users,email',
                             Rule::unique('demande_enrolement')->where(function($query) use ($data) {
                                 $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
@@ -146,6 +147,7 @@ class EnrolementController extends Controller
                     'g-recaptcha-response' => ['required', new ReCaptcha]
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
+                    'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle.',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email.',
                     'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur.',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif.',
@@ -269,6 +271,7 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
+                $input['sigl_demande_enrolement'] = mb_strtoupper($input['sigl_demande_enrolement']);
                 if (isset($input['numero_cnps_demande_enrolement'])) {
                     $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
                 }
@@ -291,7 +294,7 @@ class EnrolementController extends Controller
 
                 $insertedDemandeenreolementId = DemandeEnrolement::latest()->first()->id_demande_enrolement;
 
-                $rais = $input['raison_sociale_demande_enroleme'];
+                $rais = $input['sigl_demande_enrolement'];
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -309,6 +312,11 @@ class EnrolementController extends Controller
 
 
                     $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
+                }
+
+                if($input['tel_demande_enrolement']){
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
+                    SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
                 }
 
                 /*************** second partie  de traitemente du profil collecte de taxe automatique*********/
@@ -438,6 +446,7 @@ class EnrolementController extends Controller
                 $data = $request->all();
                 $this->validate($request, [
                     'raison_sociale_demande_enroleme' => 'required',
+                    'sigl_demande_enrolement' => 'required',
                     'email_demande_enrolement' =>['required','email', 'unique:users,email',
                         Rule::unique('demande_enrolement')->where(function($query) use ($data) {
                             $query->where('email_demande_enrolement',$data['email_demande_enrolement'])
@@ -465,6 +474,7 @@ class EnrolementController extends Controller
                     'g-recaptcha-response' => ['required', new Recaptcha],
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale',
+                    'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle',
                     'email_demande_enrolement.required' => 'Veuillez ajouter un email',
                     'email_demande_enrolement.unique' => 'Cet email est déjà utilisé dans le système. Veuillez contacter l\'administrateur',
                     'indicatif_demande_enrolement.required' => 'Veuillez ajouter un indicatif',
@@ -510,6 +520,7 @@ class EnrolementController extends Controller
                 $input['date_depot_demande_enrolement'] = Carbon::now();
                 $input['ncc_demande_enrolement'] = mb_strtoupper($input['ncc_demande_enrolement']);
                 $input['raison_sociale_demande_enroleme'] = mb_strtoupper($input['raison_sociale_demande_enroleme']);
+                $input['sigl_demande_enrolement'] = mb_strtoupper($input['sigl_demande_enrolement']);
                 if (isset($input['numero_cnps_demande_enrolement'])) {
                     $input['numero_cnps_demande_enrolement'] = mb_strtoupper($input['numero_cnps_demande_enrolement']);
                 }
@@ -531,7 +542,7 @@ class EnrolementController extends Controller
 
                 $insertedDemandeenreolementId = DemandeEnrolement::latest()->first()->id_demande_enrolement;
 
-                $rais = $input['raison_sociale_demande_enroleme'];
+                $rais = $input['sigl_demande_enrolement'];
                 if (isset($input['email_demande_enrolement'])) {
                     $sujet = "Enrolement FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
@@ -547,7 +558,7 @@ class EnrolementController extends Controller
 
                 //Envoyer notification via SMS
                 if($input['tel_demande_enrolement']){
-                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE D ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.\nLE TRAITEMENT DE VOTRE DEMANDE S EFFECTUERA DANS UN DELAI DE 48h !";
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
                     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
                 }
 
@@ -617,7 +628,7 @@ class EnrolementController extends Controller
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Rejet pour la demande enrolement sur e-FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                    $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
+                    $messageMail = "<b>Cher,  $demandeenrole1->sigl_demande_enrolement ,</b>
                                     <br><br>Nous avons examiné votre demande d'activation de compte sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
@@ -641,7 +652,7 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Rejeté
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "Cher ".$demandeenrole1->raison_sociale_demande_enroleme."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
+                    $content = "Cher ".$demandeenrole1->sigl_demande_enrolement."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
                         malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".$demandeenrole1->motif->libelle_motif."
                         <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
                         fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
@@ -675,13 +686,13 @@ class EnrolementController extends Controller
 
                 //Envoi SMS recevable
                 if (isset($demandeenrole1->tel_demande_enrolement)) {
-                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
+                    $content = "CHER(E) ".$demandeenrole1->sigl_demande_enrolement.",\n NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                         $sujet = "Recevabilité de demande votre d'enrôlement sur e-FDFP";
                         $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                        $messageMail = "<b>Cher(e) $demandeenrole1->raison_sociale_demande_enroleme ,</b>
+                        $messageMail = "<b>Cher(e) $demandeenrole1->sigl_demande_enrolement ,</b>
                                     <br><br>Nous sommes ravis de vous informer que votre demande d'enrôlement est jugée recevable. Nous apprécions votre intérêt pour nos services.<br><br> Cordialement l'équipe E-FDFP.
                                     <br><br><br>
                                     -----
@@ -719,7 +730,7 @@ class EnrolementController extends Controller
                 if (isset($demandeenrole1->email_demande_enrolement)) {
                     $sujet = "Recevabilité de demande enrolement sur e-FDFP";
                     $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                    $messageMail = "<b>Cher,  $demandeenrole1->raison_sociale_demande_enroleme ,</b>
+                    $messageMail = "<b>Cher,  $demandeenrole1->sigl_demande_enrolement ,</b>
                                     <br><br>Nous avons examiné votre demande d'enrolement sur e-FDFP, et
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
@@ -746,7 +757,7 @@ class EnrolementController extends Controller
 //                  $content = " ".$demandeenrole1->raison_sociale_demande_enroleme.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEMANDE D ENROLEMENT EST JUGE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES.\n\nCORDIALEMENT, L EQUIPE E-FDFP";
 
 
-                    $content = "CHER(E) ".$demandeenrole1->raison_sociale_demande_enroleme.",\n NOUS AVONS EXAMINE VOTRE DEMANDE D ACTIVATION DE COMPTE SUR".route('/').", ET
+                    $content = "CHER(E) ".$demandeenrole1->sigl_demande_enrolement.",\n NOUS AVONS EXAMINE VOTRE DEMANDE D ACTIVATION DE COMPTE SUR".route('/').", ET
                         MALHEUREUSEMENT, NOUS NE POUVONS PAS L APPROUVER POUR LA RAISON SUIVANTE:".$demandeenrole1->motif1->libelle_motif."
                         \nSI VOUS ESTIMEZ QUE CELA EST UNE ERREUR OU SI VOUS AVEZ DES INFORMATIONS SUPPLEMENTAIRES A FOURIR, N HESITEZ PAS A NOUS CONTACTER POUR OBTENIR DE L AIDE.\n
                         NOUS APPRECIONS VOTRE INTERET POUR NOTRE SERVICE ET ESPERONS QUE VOUS ENVISAGEREZ DE SOUMETTRE UNE NOUVELLE DEMANDE LORSQUE LES PROBLEMES SONT RESOLUS.\n
@@ -793,6 +804,7 @@ class EnrolementController extends Controller
                     'id_secteur_activite_entreprise' => $demandeenrole1->id_secteur_activite,
                     'id_forme_juridique_entreprise' => $demandeenrole1->id_forme_juridique,
                     'id_pays' => $demandeenrole1->indicatif_demande_enrolement,
+                    'sigl_entreprises' => $demandeenrole1->sigl_demande_enrolement,
                     'flag_actif_entreprises' => true
                 ]);
 
@@ -825,7 +837,7 @@ class EnrolementController extends Controller
 
                 $roles = Role::where([['code_roles', '=', 'ENTREPRISE']])->first();
 
-                $name = $entreprise->raison_social_entreprises;
+                $name = $entreprise->sigl_entreprises;
                 $prenom_users = $entreprise->rccm_entreprises;
                 $emailcli = $demandeenrole1->email_demande_enrolement;
                 $id_partenaire = $entreprise->id_entreprises;
@@ -895,7 +907,7 @@ class EnrolementController extends Controller
 
                 //Envoi SMS Validé
                 if (isset($cel_users)) {
-                    $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME ! VOTRE COMPTE A ETE CREE AVEC SUCCES, ET IL EST MAINTENANT PRET A ETRE UTILISE. VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : NOM UTILISATEUR :".$name."\nADRESSE E-MAIL : ".$emailcli."\nIDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
+                    $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME . VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : IDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
                     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
                 }
 

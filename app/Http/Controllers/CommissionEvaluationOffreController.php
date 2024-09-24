@@ -188,7 +188,11 @@ class CommissionEvaluationOffreController extends Controller
                 ->where('cahier_commission_evaluation_offre.id_commission_evaluation_offre',$id);
         })->where('flag_fiche_agrement',true)->where('flag_selection_operateur_valider_par_processus',true)->get();
 
-        $classement_offre_tech_finals = DB::table('notation_commission_evaluation_offre_tech')
+        $classement_offre_tech_finals = DB::table('commission_evaluation_offre')
+            ->Join('cahier_commission_evaluation_offre','cahier_commission_evaluation_offre.id_commission_evaluation_offre',
+                'commission_evaluation_offre.id_commission_evaluation_offre')
+            ->Join('notation_commission_evaluation_offre_tech','notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',
+                'commission_evaluation_offre.id_commission_evaluation_offre')
             ->Join('entreprises','entreprises.id_entreprises',
                 'notation_commission_evaluation_offre_tech.id_operateur')
             ->selectRaw('entreprises.raison_social_entreprises as entreprise,
@@ -197,8 +201,25 @@ class CommissionEvaluationOffreController extends Controller
             ->groupBy('entreprise')
             ->orderBy('note', 'desc')
             ->get();
+        $combinedArray = [];
+        foreach ($classement_offre_tech_finals as $classement){
+            if(isset($commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin)){
+                $note_financiere =$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin;
+            }else{
+                $note_financiere =0;
+            }
 
-        Audit::logSave([
+            if($classement->note > $commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre){
+                $combinedArray[] = [
+                    'entreprise' => $classement->entreprise,
+                    'note_technique' => round((($classement->note/100) *$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre)),
+                    'note_financiere' => round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$note_financiere)/20),2),
+                    'note_finale' => round((($classement->note/100) *$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre)) + round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$note_financiere)/20),2)
+                ];
+            }
+        }
+
+    Audit::logSave([
             'action'=>'MODIFIER',
             'code_piece'=>$id,
             'menu'=>'EVALUATION OFFRE',
@@ -211,6 +232,7 @@ class CommissionEvaluationOffreController extends Controller
             'critereevaluationoffretechs',
             'offretechcommissionevals',
             'projet_etudes',
+            'combinedArray',
             'cahier',
             'notation_commission_evaluation_offre_fin',
             'commissioneparticipants',
@@ -435,18 +457,47 @@ class CommissionEvaluationOffreController extends Controller
                         $notation_montant->id_user_notation_commission_evaluation_offre =Auth::user()->id;
                         $notation_montant->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
                         $notation_montant->id_operateur = $entreprise->id_entreprises;
+                        $note=0;
 
+
+                    $monant = $notation_montant->montant_notation_commission_evaluation_offre_fin;
                         //Vérification sur le montant entrée
                         $notation_montant_exist = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
                             ->where('id_operateur',$entreprise->id_entreprises)
                             ->where('id_user_notation_commission_evaluation_offre',Auth::user()->id)
                             ->first();
+                        $montant_inf = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) - (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre/100));
+                        $montant_sup = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) + (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre/100));
+                        if($commissionevaluationoffre->montantfinanciere($entreprise->raison_social_entreprises)!=null){
+                            if(intval($monant)<$montant_inf){
+                                $note = (intval($monant)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20;
+                                if($note<0){
+                                  $note = 0;
+                               }else{
+                                   $note = round(@$note,2);
+                               }
+                            }elseif($montant_inf <= intval($monant) && $montant_sup >= intval($monant)){
+                               $note = 20;
+                            }elseif(intval($monant)>$montant_sup){
+                                $note = ((intval($monant)
+                                            /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20)-
+                                    (((intval($monant)
+                                                -@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20*2);
+                                if($note<0){
+                                    $note = 0;
+                                }else{
+                                    $note = round(@$note,2);
+                                }
+                              }
+                            }
 
-                        if(isset($notation_montant_exist)){
+                    if(isset($notation_montant_exist)){
                             $notation_montant_exist->montant_notation_commission_evaluation_offre_fin = str_replace(' ', '', $note_offre_fin[0]);
+                            $notation_montant_exist->note_final_commission_evaluation_offre_fin = $note;
                             $notation_montant_exist->update();
                         }else{
-                            $notation_montant->save();
+                        $notation_montant->note_final_commission_evaluation_offre_fin = $note;
+                        $notation_montant->save();
                         }
                 }
                 return redirect('commissionevaluationoffres/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(6).'/edit')->with('success', 'Succes : Enregistrement effectué avec succès ');
@@ -518,7 +569,22 @@ class CommissionEvaluationOffreController extends Controller
             ->where([['id_commission_evaluation_offre','=',$id]])
             ->get();
 
-        $classement_offre_techs = DB::table('notation_commission_evaluation_offre_tech')
+//        $classement_offre_techs = DB::table('notation_commission_evaluation_offre_tech')
+//            ->Join('entreprises','entreprises.id_entreprises',
+//                'notation_commission_evaluation_offre_tech.id_operateur')
+//            ->selectRaw('entreprises.raison_social_entreprises as entreprise,
+//                sum(note_notation_commission_evaluation_offre_tech)/'.$commissioneparticipants->count().' as note')
+//            ->where('notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',$id)
+//            ->groupBy('entreprise')
+//            ->orderBy('note', 'desc')
+//            ->get();
+
+
+        $classements = DB::table('commission_evaluation_offre')
+            ->Join('cahier_commission_evaluation_offre','cahier_commission_evaluation_offre.id_commission_evaluation_offre',
+            'commission_evaluation_offre.id_commission_evaluation_offre')
+            ->Join('notation_commission_evaluation_offre_tech','notation_commission_evaluation_offre_tech.id_commission_evaluation_offre',
+                'commission_evaluation_offre.id_commission_evaluation_offre')
             ->Join('entreprises','entreprises.id_entreprises',
                 'notation_commission_evaluation_offre_tech.id_operateur')
             ->selectRaw('entreprises.raison_social_entreprises as entreprise,
@@ -527,20 +593,19 @@ class CommissionEvaluationOffreController extends Controller
             ->groupBy('entreprise')
             ->orderBy('note', 'desc')
             ->get();
+        $combinedArray = [];
 
-//        dd($classement_offre_techs);
-
-//
-//        $cahier = CahierCommissionEvaluationOffre::where([['id_commission_evaluation_offre','=',$id]])->first();
-//
-//        $offretechcommissionevals = NotationCommissionEvaluationOffreFin::where('id_commission_evaluation_offre',$id)
-//            ->Join('critere_evaluation_offre_tech','offre_tech_commission_evaluation_offre.id_critere_evaluation_offre_tech','critere_evaluation_offre_tech.id_critere_evaluation_offre_tech')
-//            ->select('critere_evaluation_offre_tech.*','offre_tech_commission_evaluation_offre.*')
-//            ->get()
-//            ->groupby('libelle_critere_evaluation_offre_tech');
+        foreach ($classements as $classement){
+            if($classement->note > $commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre){
+                $combinedArray[] = [
+                    'entreprise' => $classement->entreprise,
+                    'note' =>round((($commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre*$commissionevaluationoffre->montantfinanciere($classement->entreprise)->note_final_commission_evaluation_offre_fin)/20),2)
+                ];
+            }
+        }
 
         return view('evaluationoffre.commission.showoffrefin',compact(
-                'id','classement_offre_techs',
+                'id','combinedArray',
                 'commissionevaluationoffre'
 
             )

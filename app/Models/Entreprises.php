@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property float $id_demande_enrolement
  * @property float $id_activite_entreprises
  * @property float $id_localite_entreprises
+ * @property float $latitude_entreprises
+ * @property float $longitude_entreprises
  * @property float $id_centre_impot
  * @property float $id_pays
  * @property float $id_secteur_activite_entreprise
@@ -24,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $email_entreprises
  * @property boolean $flag_actif_entreprises
  * @property boolean $flag_cabinet_etranger
+ * @property string $sigl_entreprises
  * @property string $created_at
  * @property string $updated_at
  * @property string $localisation_geographique_entreprise
@@ -64,7 +67,7 @@ class Entreprises extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_demande_enrolement', 'id_activite_entreprises','flag_operateur','id_localite_entreprises', 'id_centre_impot', 'id_pays', 'id_secteur_activite_entreprise', 'id_forme_juridique_entreprise', 'numero_fdfp_entreprises', 'ncc_entreprises', 'raison_social_entreprises', 'tel_entreprises', 'indicatif_entreprises', 'numero_cnps_entreprises', 'rccm_entreprises', 'flag_actif_entreprises', 'created_at', 'updated_at', 'localisation_geographique_entreprise', 'repere_acces_entreprises', 'adresse_postal_entreprises', 'cellulaire_professionnel_entreprises', 'fax_entreprises', 'flag_habilitation_entreprise','email_entreprises','flag_cabinet_etranger','nom_prenom_dirigeant'];
+    protected $fillable = ['id_demande_enrolement', 'id_activite_entreprises','flag_operateur','id_localite_entreprises', 'id_centre_impot', 'id_pays', 'id_secteur_activite_entreprise', 'id_forme_juridique_entreprise', 'numero_fdfp_entreprises', 'ncc_entreprises', 'raison_social_entreprises', 'tel_entreprises', 'indicatif_entreprises', 'numero_cnps_entreprises', 'rccm_entreprises', 'flag_actif_entreprises', 'created_at', 'updated_at', 'localisation_geographique_entreprise', 'repere_acces_entreprises', 'adresse_postal_entreprises', 'cellulaire_professionnel_entreprises', 'fax_entreprises', 'flag_habilitation_entreprise','email_entreprises','flag_cabinet_etranger','nom_prenom_dirigeant','sigl_entreprises','latitude_entreprises','longitude_entreprises'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

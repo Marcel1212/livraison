@@ -39,6 +39,7 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
 @php($lienprojeetude = 'projetetude')
 @php($lienprojetdeformation = 'projetformation')
 @php($lienplandeformation = 'planformation')
+@php($lienhabilitation = 'demandehabilitation')
 
 <!-- Hour chart  -->
 <div class="card bg-transparent shadow-none my-4 border-0">
@@ -99,7 +100,7 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
 
             <div class="col-lg-4 col-sm-6 mb-4">
                 <div class="card card-border-shadow-primary h-100">
-                    <a href="{{ route('planformation.index') }}">
+                    <a href="{{ route($lienplan.'.index') }}">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2 pb-1">
                                 <div class="avatar me-2">
@@ -117,7 +118,7 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
             </div>
             <div class="col-lg-4 col-sm-6 mb-4">
                 <div class="card card-border-shadow-warning h-100">
-                    <a href="">
+                    <a href="{{ route($lienprojetdeformation.'.index') }}">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2 pb-1">
                                 <div class="avatar me-2">
@@ -135,7 +136,7 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
             </div>
             <div class="col-lg-4 col-sm-6 mb-4">
                 <div class="card card-border-shadow-danger h-100">
-                    <a href="">
+                    <a href="{{ route($lienprojeetude.'.index') }}">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2 pb-1">
                                 <div class="avatar me-2">
@@ -145,6 +146,23 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
                                 <h4 class="ms-1 mb-0">Projet d'étude</h4>
                             </div>
                             <a href="{{ route($lienprojeetude . '.create') }}" class="mb-1">
+                                Cliquez ici pour effectuer une demande</a>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 mb-4">
+                <div class="card card-border-shadow-info h-100">
+                    <a href="{{ route($lienhabilitation.'.index') }}">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-info"><i
+                                            class="ti ti-authorization ti-md"></i></span>
+                                </div>
+                                <h4 class="ms-1 mb-0">Demande d'une habilitation</h4>
+                            </div>
+                            <a href="{{ route($lienhabilitation.'.index') }}" class="mb-1">
                                 Cliquez ici pour effectuer une demande</a>
                         </div>
                     </a>

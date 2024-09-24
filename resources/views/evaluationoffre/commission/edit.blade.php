@@ -813,6 +813,14 @@ Enregistrer
 Retour</a>
 </div>
 </form>
+        <?php
+            if(isset($combinedArray)){
+                $data_sorteds = collect($combinedArray)->sortByDesc('note_finale')->toArray();
+            }
+        ?>
+        <?php
+        $i=1;
+        ?>
 
 </div>
                     <div class="tab-pane fade @if(isset($cahier) && $commissionevaluationoffre->flag_valider_offre_tech_commission_evaluation_tech==true
@@ -826,59 +834,36 @@ Retour</a>
                                     <th>Entreprise</th>
                                     <th>Total point Offre technique / {{$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre}}</th>
                                     <th>Total point Offre Financière / {{$commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre}} </th>
-                                    <th>Total</th>
+                                    <th>Total / 100</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-
-                                @foreach(@$classement_offre_tech_finals as $key=>$classement_offre_tech_final)
-                                    @if(round($classement_offre_tech_final->note,2)>$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
-                                        <tr data-sort="{{($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre+round(@$note,2)}}">
-                                            <td>{{$key+1}}</td>
-                                            <td>{{$classement_offre_tech_final->entreprise}}</td>
-                                            <td>{{($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre}}</td>
-                                            <td>
-                                                    <?php
-                                                    $montant_inf = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) - (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre/100));
-                                                    $montant_sup = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) + (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre/100));
-                                                    ?>
-                                                @if(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)<$montant_inf)
-                                                        <?php
-                                                        $note = (intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                                /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20
-                                                        ?>
-                                                    @if($note<0)
-                                                        0
-                                                    @else
-                                                        {{round(@$note,2)}}
-                                                    @endif
-                                                @elseif($montant_inf <= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin
-                                                    ) && $montant_sup >= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                   )
-                                                        <?php
-                                                        $note = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
-                                                        ?>
-                                                    {{round(@$note,2)}}
-                                                @elseif(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)>$montant_sup)
-                                                        <?php
-                                                        $note = ((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                                    /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20)-
-                                                            (((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech_final->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                                        -@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20*2)
-                                                        ?>
-                                                    @if($note<0)
-                                                        0
-                                                    @else
-                                                        {{round(@$note,2)}}
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{($classement_offre_tech_final->note/100)*@$commissionevaluationoffre->pourcentage_offre_tech_commission_evaluation_offre+round(@$note,2)}}
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
+                                @isset($data_sorteds)
+                                    @foreach(@$data_sorteds as $key=>$data)
+                                            <tr>
+                                                <td>{{$i++}}</td>
+                                                <td>
+                                                    @isset($data['entreprise'])
+                                                        {{$data['entreprise']}}
+                                                   @endisset
+                                                </td>
+                                                <td>
+                                                @isset($data['note_technique'])
+                                                    {{$data['note_technique']}}
+                                                @endisset
+                                                <td>
+                                                    @isset($data['note_financiere'])
+                                                        {{$data['note_financiere']}}
+                                                    @endisset
+                                                </td>
+                                                <td>
+                                                    @isset($data['note_finale'])
+                                                        {{$data['note_finale']}}
+                                                    @endisset
+                                                </td>
+                                            </tr>
+                                    @endforeach
+                                @endisset
                                 </tbody>
                             </table>
                             <div class="col-12" align="right">
@@ -912,6 +897,7 @@ data: data
 });
 });
 </script>
+
 @endsection
 {{--        @else--}}
 {{--        <script type="text/javascript">--}}

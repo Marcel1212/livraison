@@ -1404,7 +1404,7 @@ use App\Helpers\ListePlanFormationSoumis;
                         function (data) {
                             $.each(data.information, function(key,val) {
                                 $("#beneficiaire").append("<tr>"+
-                                    "<td><input type=\"hidden\" class=\"form-control form-control-sm\" name=\"id_beneficiaire_formation/"+val.id_beneficiaire_formation+"\" value="+val.id_beneficiaire_formation+">"+
+                                    "<td>"+parseInt(key+1)+"<input type=\"hidden\" class=\"form-control form-control-sm\" name=\"id_beneficiaire_formation/"+val.id_beneficiaire_formation+"\" value="+val.id_beneficiaire_formation+">"+
                                         "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.nom_prenoms+"\" name=\"nom_prenoms/"+val.id_beneficiaire_formation+"\">"+
                                         "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.genre+"\" name=\"genre/"+val.id_beneficiaire_formation+"\">"+
                                         "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.annee_naissance+"\" name=\"annee_naissance/"+val.id_beneficiaire_formation+"\">"+
@@ -1415,7 +1415,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                         "<td><input type=\"text\" class=\"form-control form-control-sm\" value=\""+val.matricule_cnps+"\" name=\"matricule_cnps/"+val.id_beneficiaire_formation+"\">"
                                         +"</td></tr>")
                             });
-                                console.log(data);
+                                //console.log(data);
                             }
                         );
                     });
@@ -1452,7 +1452,7 @@ use App\Helpers\ListePlanFormationSoumis;
                                 processData: false,
                                 success: function (response) {
                                     //console(response);
-                                    alert('Your form has been sent successfully.');
+                                    alert('Traitement effectué avec succès.');
                                     location.reload();
                                 },
                                 error: function(response){

@@ -34,7 +34,7 @@ Route::match(['get', 'post'], '/enrolements', [App\Http\Controllers\EnrolementCo
 //Route::match(['get', 'post'], '/projetetude', [App\Http\Controllers\ProjetEtudeController::class, 'index'])->name('projetetude.index');
 Route::match(['get', 'post'], '/enrolements.store', [App\Http\Controllers\EnrolementController::class, 'store'])->name('enrolements.store');
 Route::get('/secteuractivilitelistes/{id}', [App\Http\Controllers\EnrolementController::class, 'getsecteuractivilitelistes']);
-//Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
+Route::resources(['enrolement' => App\Http\Controllers\EnrolementController::class,]);
 Route::match(['get', 'post'], '/connexion', [App\Http\Controllers\ConnexionController::class, 'login'])->name('connexion');
 //Route::match(['post'], '/test', [App\Http\Controllers\PlanFormationController::class, 'test'])->name('test');
 Route::get('/deconnexion', [App\Http\Controllers\HomeController::class, 'deconnexion']);
@@ -510,8 +510,12 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::match(['get', 'post'], '/modifiermotdepasse', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifier.mot.passe');
+    Route::match(['get', 'post'], '/modifiermotdepasse/{id}', [App\Http\Controllers\HomeController::class, 'updatepassword'])->name('modifiermotpasse');
     Route::match(['get', 'post'], '/deleteactiviteentreprise/{id}', [App\Http\Controllers\HomeController::class, 'deleteactiviteentreprise'])->name('deleteactiviteentreprise');
+    Route::match(['get', 'post'], '/deletecompositioncapitale/{id}', [App\Http\Controllers\HomeController::class, 'deletecompositioncapitale'])->name('deletecompositioncapitale');
 
+    /***enregistrement de la position */
+    Route::post('/save-location', [App\Http\Controllers\HomeController::class, 'saveLocation']);
 
 
     Route::group(['middleware' => ['can:parametresysteme-index']], function () {
@@ -602,9 +606,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     /* route domaine de fromation */
 
-    Route::group(['middleware' => ['can:domaineformation-index']], function () {
+    Route::group(['middleware' => ['can:domainesformations-index']], function () {
         Route::resources([
-            'domaineformation' => App\Http\Controllers\DomaineFormationController::class,
+            'domainesformations' => App\Http\Controllers\DomaineFormationController::class,
         ]);
     });
 
@@ -617,6 +621,42 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['can:typecotisations-index']], function () {
         Route::resources([
             'typecotisations' => App\Http\Controllers\TypeCotisationController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typecompositioncapitale-index']], function () {
+        Route::resources([
+            'typecompositioncapitale' => App\Http\Controllers\TypeCompositionCapitaleController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:banque-index']], function () {
+        Route::resources([
+            'banque' => App\Http\Controllers\BanqueController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typemoyenpermanent-index']], function () {
+        Route::resources([
+            'typemoyenpermanent' => App\Http\Controllers\TypeMoyenPermanentController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typeintervention-index']], function () {
+        Route::resources([
+            'typeintervention' => App\Http\Controllers\TypeInterventionController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typeorganisationformation-index']], function () {
+        Route::resources([
+            'typeorganisationformation' => App\Http\Controllers\TypeOrganisationFormationController::class,
+        ]);
+    });
+
+    Route::group(['middleware' => ['can:typedomainedemandehabilitation-index']], function () {
+        Route::resources([
+            'typedomainedemandehabilitation' => App\Http\Controllers\TypeDomaineDemandeHabilitationController::class,
         ]);
     });
 

@@ -284,7 +284,6 @@ class ProjetEtudeController extends Controller
             $projet_etude = ProjetEtude::find($id);
             $piece_etude = new PiecesProjetEtude();
             if ($request->action == 'Modifier'){
-
                 $this->validate($request, [
                     'titre_projet' => 'required',
                     'contexte_probleme' => 'required',
@@ -294,7 +293,7 @@ class ProjetEtudeController extends Controller
                     'montant_demande_projet' => 'required',
                     'champ_etude' => 'required',
                     'cible' => 'required',
-                    'id_secteur_activite' => 'required',
+                    'id_domaine_projet' => 'required',
                     'lieu_realisation_projet'=>'required'
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
@@ -305,14 +304,13 @@ class ProjetEtudeController extends Controller
                     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
-                    'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'id_domaine_projet.required' => 'Veuillez ajouter le domaine du projet',
                     'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
                 $user = User::find(Auth::user()->id);
                 $user_id = Auth::user()->id;
                 $entreprise = InfosEntreprise::get_infos_entreprise($user->login_users);
-                $projet_etude = ProjetEtude::find($id);
                 $projet_etude->titre_projet_etude = $request->titre_projet;
                 $projet_etude->contexte_probleme_projet_etude = $request->contexte_probleme;
                 $projet_etude->montant_demande_projet_etude = str_replace(' ', '', $request->montant_demande_projet);
@@ -321,7 +319,7 @@ class ProjetEtudeController extends Controller
                 $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
-                $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+                $projet_etude->id_domaine_projet = $request->id_domaine_projet;
                 $projet_etude->lieu_realisation_projet = $request->lieu_realisation_projet;
                 $projet_etude->date_previsionnelle_demarrage_projet = $request->date_previsionnelle_demarrage_projet;
                 $projet_etude->update();
@@ -347,7 +345,7 @@ class ProjetEtudeController extends Controller
                     'resultat_attendu' => 'required',
                     'champ_etude' => 'required',
                     'cible' => 'required',
-                    'id_secteur_activite' => 'required',
+                    'id_domaine_projet' => 'required',
                     'lieu_realisation_projet' => 'required',
                 ],[
                     'titre_projet.required' => 'Veuillez ajouter un titre de projet',
@@ -358,7 +356,7 @@ class ProjetEtudeController extends Controller
                     'resultat_attendu.required' => 'Veuillez ajouter un resultat attendu',
                     'champ_etude.required' => 'Veuillez ajouter un champ d\'étude',
                     'cible.required' => 'Veuillez ajouter une cible',
-                    'id_secteur_activite.required' => 'Veuillez ajouter un secteur d\'activité',
+                    'id_domaine_projet.required' => 'Veuillez ajouter un secteur d\'activité',
                     'lieu_realisation_projet.required' => 'Veuillez ajouter un lieu de réalisation',
                 ]);
 
@@ -373,7 +371,7 @@ class ProjetEtudeController extends Controller
                 $projet_etude->resultat_attendu_projet_etude = $request->resultat_attendu;
                 $projet_etude->champ_etude_projet_etude = $request->champ_etude;
                 $projet_etude->cible_projet_etude = $request->cible;
-                $projet_etude->id_secteur_activite = $request->id_secteur_activite;
+                $projet_etude->id_domaine_projet = $request->id_domaine_projet;
                 $projet_etude->update();
 
                 Audit::logSave([

@@ -69,6 +69,7 @@ class CommissionEvaluationOffre extends Model
             ->first();
     }
 
+
     public function cahiercommission()
     {
         return $this->belongsTo(CahierCommissionEvaluationOffre::class, 'id_commission_evaluation_offre','id_commission_evaluation_offre');

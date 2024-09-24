@@ -102,14 +102,21 @@
                                                         <?php echo $roles; ?>
                                                     </select>
                                                 </div>
+                                                @error('roles')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Identifiant</label> <strong style="color: red">6 caractères minimum</strong>
+                                                    <label>Identifiant</label> <strong style="color: red">8 caractères minimum</strong>
                                                     <input type="text" name="login_users" id="login_users"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Identifiant" minlength="6"
-                                                           required></div>
+                                                           placeholder="Identifiant" minlength="8" value="{{ old('login_users') }}"
+                                                           required>
+                                                </div>
+                                                @error('login_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Direction </label> <strong style="color: red">*</strong>
@@ -119,12 +126,18 @@
                                                     <option value='{{$direction->id_direction}}'>{{$direction->libelle_direction}}</option>
                                                     @endforeach
                                                 </select>
+                                                @error('id_direction')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Département</label>
                                                 <select class="select2 form-select" id='departement' name='id_departement'  class="form-control">
                                                     <option value='0'>Département</option>
                                                 </select>
+                                                @error('id_departement')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="form-label" for="state">Service</label>
@@ -132,6 +145,9 @@
                                                 <select class="select2 form-select" id='service' name='id_service' class="form-control" >
                                                     <option value='0'>Service</option>
                                                 </select>
+                                                @error('id_service')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
 
                                             <div class="col-md-4 col-12">
@@ -139,23 +155,32 @@
                                                     <label>Nom </label> <strong style="color: red">*</strong>
                                                     <input type="text" name="name" id="name"
                                                            class="form-control form-control-sm" placeholder="Nom"
-                                                           required>
+                                                           required value="{{ old('name') }}">
                                                 </div>
+                                                @error('name')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Prénoms</label> <strong style="color: red">*</strong>
                                                     <input type="text" name="prenom_users" id="prenom_users"
-                                                           class="form-control form-control-sm" placeholder="Prénoms">
+                                                           class="form-control form-control-sm" placeholder="Prénoms" value="{{ old('prenom_users') }}">
                                                 </div>
+                                                @error('prenom_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
-                                                    <label>Mot de passe</label> <strong style="color: red">6 caractères minimum</strong>
+                                                    <label>Mot de passe</label> <strong style="color: red">8 caractères minimum</strong>
                                                     <input type="password" name="password" id="password"
-                                                           class="form-control form-control-sm" minlength="6"
-                                                           placeholder="Mot de passe">
+                                                           class="form-control form-control-sm" minlength="8"
+                                                           placeholder="Mot de passe" value="{{ old('password') }}">
                                                 </div>
+                                                @error('password')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
@@ -165,43 +190,62 @@
                                                         <option value="Masculin">Masculin</option>
                                                     </select>
                                                 </div>
+                                                @error('genre_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Email :</label>  <strong style="color: red">*</strong>
                                                     <input type="email" name="email" id="email"
-                                                           class="form-control form-control-sm" placeholder="Email" required>
+                                                           class="form-control form-control-sm" placeholder="Email" required value="{{ old('email') }}">
                                                 </div>
+                                                @error('email')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Adresse :</label>
                                                     <input type="text" name="adresse_users" id="adresse_users"
-                                                           class="form-control form-control-sm" placeholder="Adresse">
+                                                           class="form-control form-control-sm" placeholder="Adresse" value="{{ old('adresse_users') }}">
                                                 </div>
+                                                @error('adresse_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Cel. :</label>
                                                     <input type="number" name="cel_users" id="cel_users"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Ex:  0102030405">
+                                                           placeholder="Ex:  0102030405" value="{{ old('cel_users') }}">
                                                 </div>
+                                                @error('cel_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Tel. :</label>
                                                     <input type="number" name="tel_users" id="tel_users"
                                                            class="form-control form-control-sm"
-                                                           placeholder="Ex:  0102030405">
+                                                           placeholder="Ex:  0102030405" value="{{ old('tel_users') }}">
                                                 </div>
+                                                @error('tel_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Antenne :</label> <strong style="color: red">*</strong>
                                                     <select class="select2 select2-size-sm form-select" name="num_agce" id="num_agce" required>
                                                         <?php echo $Entite; ?>
-                                                    </select></div>
+                                                    </select>
+                                                </div>
+                                                @error('num_agce')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-md-4 col-12">
                                                 <div class="mb-1">
@@ -210,9 +254,10 @@
                                                         <option value=true>Actif</option>
                                                         <option value=false>Inactif</option>
                                                     </select>
-
-
                                                 </div>
+                                                @error('flag_actif_users')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
                                             </div>
                                             <div class="col-12" align="right">
                                                 <hr>

@@ -114,10 +114,11 @@ $idpart = Auth::user()->id_partenaire;
                             value: tels.id_entreprises,
                             text: tels.raison_social_entreprises,
                         }));
+                        $('#id_domaine_formation').empty();
 
-                        $.get('/domaineformation/'+tels.id_entreprises, function (data) {
+/*                         $.get('/domaineformation/'+tels.id_entreprises, function (data) {
                             //alert(tels.id_entreprises); //exit;
-                           // alert(data); //exit;
+                            //alert(data); //exit;
                             $('#id_domaine_formation').empty();
                             $.each(data, function (index, tels) {
                                 $('#id_domaine_formation').append($('<option>', {
@@ -125,7 +126,7 @@ $idpart = Auth::user()->id_partenaire;
                                     text: tels.libelle_domaine_formation,
                                 }));
                             });
-                        });
+                        }); */
 
                     });
 
@@ -174,6 +175,7 @@ $idpart = Auth::user()->id_partenaire;
             //alert(SelectedEntrepriseValue);
             //$("#id_domaine_formation").prop( "disabled", false );
             //$("#id_domaine_formation_div").show();
+            $('#id_domaine_formation').empty();
             $.get('/domaineformation/'+SelectedEntrepriseValue, function (data) {
                             //alert(data); //exit;
                             $('#id_domaine_formation').empty();
@@ -463,7 +465,7 @@ $idpart = Auth::user()->id_partenaire;
                                     <?php } ?>
 
 
-                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                                     <!--<button type="button"
@@ -578,11 +580,11 @@ $idpart = Auth::user()->id_partenaire;
                         <div class="col-12" align="right">
                             <hr>
 
-                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
                             <?php if (count($categorieplans)>=1){ ?>
 
 
-                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</button>
+                            <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                             <?php } ?>
@@ -937,7 +939,7 @@ $idpart = Auth::user()->id_partenaire;
 
 
 
-                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</button>
+                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Modèle de la liste des bénéficiaires à télécharger</a>
 

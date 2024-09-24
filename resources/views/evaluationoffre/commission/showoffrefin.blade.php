@@ -73,53 +73,35 @@ $logo = Menu::get_logo();
                 <td>Rang</td>
                 <td>Entreprise</td>
                 <td>Budget proposé</td>
-                <td>Point /{{@$commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre}}</td>
+                <td>Point / {{@$commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre}}</td>
+            </tr>
 
-                @foreach(@$classement_offre_techs as $key=>$classement_offre_tech)
-                    @if(round($classement_offre_tech->note,2)>$commissionevaluationoffre->note_eliminatoire_offre_tech_commission_evaluation_offre)
-                        <tr>
-                            <td>{{$key+1}}</td>
-                            <td>{{$classement_offre_tech->entreprise}}</td>
-                            <td>{{number_format($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin, 0, ',', ' ')}}</td>
-                            <td>
-                                <?php
-                                    $montant_inf = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) - (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_inf_offre_fin_commission_evaluation_offre/100));
-                                    $montant_sup = intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction) + (intval($commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*($commissionevaluationoffre->marge_sup_offre_fin_commission_evaluation_offre/100));
-                                ?>
-                                @if(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)<$montant_inf)
-                                    <?php
-                                        $note = (intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20
-                                    ?>
-                                    @if($note<0)
-                                        0
-                                    @else
-                                        {{round(@$note,2)}}
-                                    @endif
-                                @elseif($montant_inf <= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin
-                                    ) && $montant_sup >= intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                   )
-                                    <?php
-                                        $note = $commissionevaluationoffre->pourcentage_offre_fin_commission_evaluation_offre;
-                                    ?>
-                                    {{round(@$note,2)}}
-                                @elseif(intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)>$montant_sup)
-                                        <?php
-                                            $note = ((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                    /@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20)-
-                                                    (((intval($commissionevaluationoffre->montantfinanciere($classement_offre_tech->entreprise)->montant_notation_commission_evaluation_offre_fin)
-                                                        -@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)/@$commissionevaluationoffre->cahiercommission->projet_etude->montant_projet_instruction)*20*2)
-                                        ?>
-                                    @if($note<0)
-                                        0
-                                    @else
-                                        {{round(@$note,2)}}
-                                    @endif
-                                @endif
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
+            <?php
+                if(isset($combinedArray)){
+                    $data_sorteds = collect($combinedArray)->sortByDesc('note')->toArray();
+                }
+            ?>
+            <?php
+                $i=1;
+            ?>
+            @isset($data_sorteds)
+                @foreach(@$data_sorteds as $key=>$data)
+                <tr>
+                    <td>{{$i++}}</td>
+                    <td>
+                        @isset($data['entreprise'])
+                            {{$data['entreprise']}}
+                        @endisset
+                    </td>
+                    <td>{{number_format($commissionevaluationoffre->montantfinanciere($data['entreprise'])->montant_notation_commission_evaluation_offre_fin, 0, ',', ' ')}}</td>
+                    <td>
+                        @isset($data['note'])
+                            {{$data['note']}}
+                        @endisset
+                    </td>
+                </tr>
+            @endforeach
+            @endisset
     </tbody>
 </table>
 </div>

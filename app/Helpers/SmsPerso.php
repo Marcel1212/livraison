@@ -4,33 +4,33 @@ namespace App\Helpers;
 
 class SmsPerso
 {
+    // public static function sendSMS($tel,$content)
+    // {
+    //     $client = new \GuzzleHttp\Client();
+    //     $url = "https://www.symtel.biz/fr/index.php?mod=cgibin&page=2";
+    //     $user = "dao.adama@vbs.ci";
+    //     $code = "0a8fedfe2b9417cb679763c948489a0b";
+    //     $title = 'FDFP';
+    //     $phone = '+225'.$tel;
+    //     try {
+    //         $request = $client->request('POST',$url,
+    //             [
+    //                 'form_params' => [
+    //                     'user'=>$user,
+    //                     'code'=>$code,
+    //                     'title'=>$title,
+    //                     'phone'=>$phone,
+    //                     'content'=>$content
+    //                 ]
+    //             ]
+    //         );
+    //     } catch (\Exception $e) {
+    //         dd($e);
+    //     }
+    // }
+
+
     public static function sendSMS($tel,$content)
-    {
-        $client = new \GuzzleHttp\Client();
-        $url = "https://www.symtel.biz/fr/index.php?mod=cgibin&page=2";
-        $user = "dao.adama@vbs.ci";
-        $code = "0a8fedfe2b9417cb679763c948489a0b";
-        $title = 'FDFP';
-        $phone = '+225'.$tel;
-        try {
-            $request = $client->request('POST',$url,
-                [
-                    'form_params' => [
-                        'user'=>$user,
-                        'code'=>$code,
-                        'title'=>$title,
-                        'phone'=>$phone,
-                        'content'=>$content
-                    ]
-                ]
-            );
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
-
-
-    public static function sendSMSBarnoin($tel,$content)
     {
         $client = new \GuzzleHttp\Client();
         $url = "https://www.symtel.biz/fr/index.php?mod=cgibin&page=2";

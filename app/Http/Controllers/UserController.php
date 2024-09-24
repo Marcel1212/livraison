@@ -113,11 +113,11 @@ class UserController extends Controller
 
             $this->validate($request, [
                 'name' => 'required',
-                'login_users' => 'required|unique:users,login_users|min:6',
+                'login_users' => 'required|unique:users,login_users|min:8',
                 'email' => 'required|unique:users,email',
                 'roles' => 'required',
                 'prenom_users' => 'required',
-                'password' => 'required|min:6',
+                'password' => 'required|min:8',
                 'num_agce' => 'required'
             ], [
                 'name.required' => 'Veuillez ajouter un nom.',
@@ -327,7 +327,7 @@ class UserController extends Controller
                 $user->update($input);
                 DB::table('model_has_roles')->where('model_id', $id)->delete();
                 $exploeprofil = explode("/",$request->input('roles'));
-                //dd($exploeprofil);
+               // dd($exploeprofil);
                 $valprofile = $exploeprofil[0];
                 $valcodeprofile = $exploeprofil[1];
                 //$user->assignRole($request->input('roles'));
