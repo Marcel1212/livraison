@@ -51,7 +51,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property DemandeIntervention[] $demandeInterventions
  * @property MoyenPermanente[] $moyenPermanentes
  * @property User $userchefservice
- * @property User $userchergerhabilitation
+ * @property User $userchargerhabilitation
  * @property Banque $banque
  * @property Entreprises $entreprise
  */
@@ -134,7 +134,7 @@ class DemandeHabilitation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function userchergerhabilitation()
+    public function userchargerhabilitation()
     {
         return $this->belongsTo('App\Models\User', 'id_charge_habilitation');
     }

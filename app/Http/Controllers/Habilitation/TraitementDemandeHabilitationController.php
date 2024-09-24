@@ -45,6 +45,7 @@ class TraitementDemandeHabilitationController extends Controller
         }else{
             $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
         }
+        //dd($habilitations);
         Audit::logSave([
 
             'action'=>'INDEX',
@@ -215,9 +216,10 @@ class TraitementDemandeHabilitationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request,  $id , $id1)
     {
         $id =  Crypt::UrldeCrypt($id);
+        $etape =  Crypt::UrldeCrypt($id1);
 
         $logo = Menu::get_logo();
 
@@ -243,7 +245,7 @@ class TraitementDemandeHabilitationController extends Controller
 
                 $demandehabilitation->update($input);
 
-                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($etape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -300,7 +302,7 @@ class TraitementDemandeHabilitationController extends Controller
 
                 ]);
 
-                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(9).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
+                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($etape).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
 
             }
 

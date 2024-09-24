@@ -8,6 +8,9 @@ use App\Helpers\Menu;
 
 $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
+//dd($codeRoles);
+//dd($demandehabilitation->flag_reception_demande_habilitation);
+
 ?>
 
 @if(auth()->user()->can('traitementdemandehabilitation-edit'))
@@ -166,14 +169,14 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     </button>
                                 </li>
                             @else
-                                <?php if($demandehabilitation->flag_reception_demande_habilitation!=true){ ?>
+                                <?php if($demandehabilitation->flag_reception_demande_habilitation==false){ ?>
                                     <li class="nav-item">
                                         <button
                                         type="button"
-                                        class="nav-link <?php if($idetape==9 ){ echo "active";} ?>"
+                                        class="nav-link <?php if($idetape==9 and $demandehabilitation->flag_reception_demande_habilitation==false){ echo "active";} ?>"
                                         role="tab"
                                         data-bs-toggle="tab"
-                                        data-bs-target="#navs-top-"
+                                        data-bs-target="#navs-top-recevabilite"
                                         aria-controls="navs-top-recevabilite"
                                         aria-selected="false">
                                         Recevabilité
@@ -632,6 +635,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 
                                                 <div class="row">
+                                                    @if (isset($demandehabilitation->dernier_catalogue_demande_habilitation_div))
                                                     <div class="col-md-6" id="dernier_catalogue_demande_habilitation_div">
                                                         <label class="form-label">Charge le catalogue </label>
                                                         <input type="file" name="dernier_catalogue_demande_habilitation" id="dernier_catalogue_demande_habilitation"
@@ -657,17 +661,19 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                 maxi : 5Mo</em>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-6" id="autre_activite_demande_habilitation_div">
-                                                        <div class="mb-1">
-                                                            <label>Autre activité  </label>
-                                                                    <input class="form-control @error('autre_activite_demande_habilitation') error @enderror" type="text" id="autre_activite_demande_habilitation_val" name="materiel_didactique_demande_habilitation"/>
-                                                                    <div id="autre_activite_demande_habilitation" class="rounded-1"><?php echo @$demandehabilitation->autre_activite_demande_habilitation; ?></div>
+                                                    @endif
+                                                    @if (isset($demandehabilitation->autre_activite_demande_habilitation_div))
+                                                        <div class="col-md-6" id="autre_activite_demande_habilitation_div">
+                                                            <div class="mb-1">
+                                                                <label>Autre activité  </label>
+                                                                        <input class="form-control @error('autre_activite_demande_habilitation') error @enderror" type="text" id="autre_activite_demande_habilitation_val" name="materiel_didactique_demande_habilitation"/>
+                                                                        <div id="autre_activite_demande_habilitation" class="rounded-1"><?php echo @$demandehabilitation->autre_activite_demande_habilitation; ?></div>
+                                                            </div>
+                                                            @error('autre_activite_demande_habilitation')
+                                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                                            @enderror
                                                         </div>
-                                                        @error('autre_activite_demande_habilitation')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
+                                                    @endif
 
                                                 </div>
                                              </div>
@@ -740,127 +746,92 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                        </table>
 
                                 </div>
+
                                 @if ($codeRoles == 'CHEFSERVICE')
-                                     <?php //if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
-                                        <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-affectation" role="tabpanel">
-                                            <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
-                                                @csrf
-                                                @method('put')
-                                                <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="row">
+                                            <?php //if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
+                                            <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-affectation" role="tabpanel">
+                                                <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                    @csrf
+                                                    @method('put')
+                                                    <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="row">
 
-                                                                <div class="col-md-6 col-12">
-                                                                    <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
-                                                                    <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
-                                                                        error
-                                                                        @enderror" data-allow-clear="true" name="id_charge_habilitation">
-                                                                        <?= $chargerHabilitationsList; ?>
-                                                                    </select>
-                                                                    @error('id_charge_habilitation')
-                                                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                                                    @enderror
-                                                                </div>
-                                                                <div class="col-md-6 col-12">
-                                                                    <div class="mb-1">
-                                                                        <label>Commentaire  <strong style="color:red;">*</strong></label>
-                                                                        <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
+                                                                        <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
+                                                                            error
+                                                                            @enderror" data-allow-clear="true" name="id_charge_habilitation">
+                                                                            <?= $chargerHabilitationsList; ?>
+                                                                        </select>
+                                                                        @error('id_charge_habilitation')
+                                                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                                                        @enderror
                                                                     </div>
-                                                                    @error('commantaire_cs')
-                                                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                                                    @enderror
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-
-
-                                                    <div class="col-12" align="right">
-                                                        <hr>
-
-
-
-                                                            <button type="submit" name="action" value="FaireAttribution"
-                                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                                    Attribution
-                                                            </button>
-
-
-                                                        <hr>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                            </form>
-
-                                            <section class="app-user-list">
-                                                <div class="row">
-                                                    @foreach ($NombreDemandeHabilitation as $nbre)
-                                                        <div class="col-lg-3 col-sm-6">
-                                                            <div class="card">
-                                                                <div class="card-body d-flex align-items-center justify-content-between">
-                                                                    <div>
-                                                                        <h3 class="fw-bolder mb-75">{{ $nbre->count }}</h3>
-                                                                        <span>{{ $nbre->name }} {{ $nbre->prenom_users }}</span>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <div class="mb-1">
+                                                                            <label>Commentaire  <strong style="color:red;">*</strong></label>
+                                                                            <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                        </div>
+                                                                        @error('commantaire_cs')
+                                                                        <div class=""><label class="error">{{ $message }}</label></div>
+                                                                        @enderror
                                                                     </div>
-                                                                    <div class="avatar bg-light-primary p-50">
-                                                                        <span class="avatar-content">
-                                                                            <i data-feather="user" class="font-medium-4"></i>
-                                                                        </span>
-                                                                    </div>
+
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </section>
-                                            <div class="col-12" align="right">
-                                                <hr>
 
-                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                                    Retour</a>
-                                            </div>
-                                        </div>
-                                    <?php //} ?>
-                            @else
-                                <?php if ($demandehabilitation->flag_reception_demande_habilitation != true){ ?>
-                                <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-recevabilite" role="tabpanel">
-                                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('put')
-                                            <div class="row">
-                                                        <div class="col-md-6 col-12">
-                                                                <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
 
-                                                                    <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
-                                                                        <?= $motif; ?>
-                                                                    </select>
-                                                            </div>
-                                                            <div class="col-md-6 col-12">
-                                                                <div class="mb-1">
-                                                                    <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
-                                                                    <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12" align="right">
+                                                        <div class="col-12" align="right">
                                                             <hr>
-                                                                <button type="submit" name="action" value="Recevable"
-                                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
-                                                                    Recevable
+
+
+
+                                                                <button type="submit" name="action" value="FaireAttribution"
+                                                                        class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                        Attribution
                                                                 </button>
-                                                                <button type="submit" name="action" value="NonRecevable"
-                                                                        class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
-                                                                    Non recevable
-                                                                </button>
-                                                                <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                                href="/{{$lien }}">
-                                                                    Retour</a>
+
+
+                                                            <hr>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                </form>
+
+                                                <section class="app-user-list">
+                                                    <div class="row">
+                                                        @foreach ($NombreDemandeHabilitation as $nbre)
+                                                            <div class="col-lg-3 col-sm-6">
+                                                                <div class="card">
+                                                                    <div class="card-body d-flex align-items-center justify-content-between">
+                                                                        <div>
+                                                                            <h3 class="fw-bolder mb-75">{{ $nbre->nbre_dossier_en_cours }}</h3>
+                                                                            <span>{{ $nbre->name }} {{ $nbre->prenom_users }}</span>
+                                                                        </div>
+                                                                        <div class="avatar bg-light-primary p-50">
+                                                                            <span class="avatar-content">
+                                                                                <i data-feather="user" class="font-medium-4"></i>
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                        @endforeach
+                                                    </div>
+                                                </section>
+                                                <div class="col-12" align="right">
+                                                    <hr>
+
+                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                        Retour</a>
+                                                </div>
                                             </div>
-                                    </form>
-                                </div>
-                                <?php }else{ ?>
-                                    <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
+                                        <?php //} ?>
+                                @else
+                                    <?php if ($demandehabilitation->flag_reception_demande_habilitation != true){ ?>
+                                    <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-recevabilite" role="tabpanel">
                                         <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('put')
@@ -874,7 +845,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                 </div>
                                                                 <div class="col-md-6 col-12">
                                                                     <div class="mb-1">
-                                                                        <label>Commentaire Recevabilité traitemebbt <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                                        <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
                                                                         <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
                                                                     </div>
                                                                 </div>
@@ -895,8 +866,45 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 </div>
                                         </form>
                                     </div>
-                                <?php } ?>
-                            @endif
+                                    <?php }else{ ?>
+                                        <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
+                                            <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('put')
+                                                    <div class="row">
+                                                                <div class="col-md-6 col-12">
+                                                                        <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
+
+                                                                            <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
+                                                                                <?= $motif; ?>
+                                                                            </select>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-12">
+                                                                        <div class="mb-1">
+                                                                            <label>Commentaire Recevabilité traitemebbt <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                                            <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12" align="right">
+                                                                    <hr>
+                                                                        <button type="submit" name="action" value="Recevable"
+                                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                                                            Recevable
+                                                                        </button>
+                                                                        <button type="submit" name="action" value="NonRecevable"
+                                                                                class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                                            Non recevable
+                                                                        </button>
+                                                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                                        href="/{{$lien }}">
+                                                                            Retour</a>
+                                                                    </div>
+                                                    </div>
+                                            </form>
+                                        </div>
+                                    <?php } ?>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -910,9 +918,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
         @section('js_perso')
 
             <script>
-                                        $("#dernier_catalogue_demande_habilitation_div").hide();
+                                        $("#dernier_catalogue_demande_habilitation_div").show();
 
-                                        $("#autre_activite_demande_habilitation_div").hide();
+                                        $("#autre_activite_demande_habilitation_div").show();
 
                 $('#information_catalogue_demande_habilitation').on('change', function (e) {
                     if(e.target.value=='true'){
