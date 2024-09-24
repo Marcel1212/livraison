@@ -750,77 +750,86 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 @if ($codeRoles == 'CHEFSERVICE')
                                             <?php //if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
                                             <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-affectation" role="tabpanel">
-                                                <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
-                                                    @csrf
-                                                    @method('put')
-                                                    <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="row">
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <form method="POST" enctype="multipart/form-data" id="formAttribution" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                            @csrf
+                                                            @method('put')
+                                                            <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="row">
 
-                                                                    <div class="col-md-6 col-12">
-                                                                        <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
-                                                                        <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
-                                                                            error
-                                                                            @enderror" data-allow-clear="true" name="id_charge_habilitation">
-                                                                            <?= $chargerHabilitationsList; ?>
-                                                                        </select>
-                                                                        @error('id_charge_habilitation')
-                                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                                        @enderror
-                                                                    </div>
-                                                                    <div class="col-md-6 col-12">
-                                                                        <div class="mb-1">
-                                                                            <label>Commentaire  <strong style="color:red;">*</strong></label>
-                                                                            <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                            <div class="col-md-6 col-12">
+                                                                                <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
+                                                                                <select class="select2 form-select-sm input-group @error('id_charge_habilitation')
+                                                                                    error
+                                                                                    @enderror" data-allow-clear="true" name="id_charge_habilitation">
+                                                                                    <?= $chargerHabilitationsList; ?>
+                                                                                </select>
+                                                                                @error('id_charge_habilitation')
+                                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                                @enderror
+                                                                            </div>
+                                                                            <div class="col-md-6 col-12">
+                                                                                <div class="mb-1">
+                                                                                    <label>Commentaire  <strong style="color:red;">*</strong></label>
+                                                                                    <textarea rows="3" class="form-control @error('commantaire_cs') error @enderror" name="commantaire_cs">{{ $demandehabilitation->commantaire_cs }}</textarea>
+                                                                                </div>
+                                                                                @error('commantaire_cs')
+                                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                                @enderror
+                                                                            </div>
+
                                                                         </div>
-                                                                        @error('commantaire_cs')
-                                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                                        @enderror
                                                                     </div>
 
+
+                                                                <div class="col-12" align="right">
+                                                                    <hr>
+
+
+
+                                                                        <button type="submit" name="action" value="FaireAttribution"
+                                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                                Attribution
+                                                                        </button>
+
+
+                                                                    <hr>
                                                                 </div>
                                                             </div>
+                                                            <br/>
+                                                        </form>
 
-
-                                                        <div class="col-12" align="right">
-                                                            <hr>
-
-
-
-                                                                <button type="submit" name="action" value="FaireAttribution"
-                                                                        class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                                        Attribution
-                                                                </button>
-
-
-                                                            <hr>
-                                                        </div>
                                                     </div>
-                                                    <br/>
-                                                </form>
+                                                    <div class="col-md-4">
 
-                                                <section class="app-user-list">
-                                                    <div class="row">
-                                                        @foreach ($NombreDemandeHabilitation as $nbre)
-                                                            <div class="col-lg-3 col-sm-6">
-                                                                <div class="card">
-                                                                    <div class="card-body d-flex align-items-center justify-content-between">
-                                                                        <div>
-                                                                            <h3 class="fw-bolder mb-75">{{ $nbre->nbre_dossier_en_cours }}</h3>
-                                                                            <span>{{ $nbre->name }} {{ $nbre->prenom_users }}</span>
-                                                                        </div>
-                                                                        <div class="avatar bg-light-primary p-50">
-                                                                            <span class="avatar-content">
-                                                                                <i data-feather="user" class="font-medium-4"></i>
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                        <table class="table table-bordered table-striped table-hover table-sm"
+                                                        id=""
+                                                        style="margin-top: 13px !important">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Chargés habilitations </th>
+                                                            <th>Dossiers en cours</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <?php $i=0; ?>
+                                                        @foreach ($NombreDemandeHabilitation as $key => $nbre)
+                                                            <tr>
+                                                                <td>{{ ++$i }}</td>
+                                                                <td>{{  @$nbre->name }} {{  @$nbre->prenom_users }}</td>
+                                                                <td>{{  @$nbre->nbre_dossier_en_cours }} </td>
+                                                            </tr>
                                                         @endforeach
+                                                        </tbody>
+                                                    </table>
                                                     </div>
-                                                </section>
+                                                </div>
+
+
                                                 <div class="col-12" align="right">
                                                     <hr>
 
