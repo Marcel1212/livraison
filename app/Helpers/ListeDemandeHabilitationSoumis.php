@@ -34,7 +34,7 @@ class ListeDemandeHabilitationSoumis
 
     public static function get_liste_demande_habilitation_soumis_nouvelle_demande_charger_H($IdUser)
     {
-        $demandehabilitations = DemandeHabilitation::where([['id_charge_habilitation','=',$IdUser],['type_demande','=','NOUVELLE DEMANDE'],['flag_reception_demande_habilitation','=',false]])->get();
+        $demandehabilitations = DemandeHabilitation::where([['id_charge_habilitation','=',$IdUser],['type_demande','=','NOUVELLE DEMANDE'],['flag_reception_demande_habilitation','=',false],['flag_soumis_charge_habilitation','=',true]])->get();
 
         return (isset($demandehabilitations) ? $demandehabilitations : '');
     }
