@@ -142,15 +142,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         @if(count($habilitations)<1 )
                                             <a href="{{ route($lien.'.create') }}"  class="btn btn-sm btn-info me-1 mt-1">Nouvelle demande</a>
                                         @else
-                                            <a href="#"  class="btn btn-sm btn-success me-1 mt-1">Demande d'expension </a>
+                                            <a href="#"  class="btn btn-sm btn-success me-1 mt-1">Demande d'extension </a>
                                             <a href="#"  class="btn btn-sm btn-secondary me-1 mt-1">Demande de renouvellement </a>
-                                            <a href="#"  class="btn btn-sm btn-primary me-1 mt-1">demande de subtitution </a>
-                                            <a href="#"  class="btn btn-sm btn-danger me-1 mt-1">demande de suppression </a>
+                                            <a href="#"  class="btn btn-sm btn-primary me-1 mt-1">Demande de subtitution </a>
+                                            <a href="#"  class="btn btn-sm btn-danger me-1 mt-1">Demande de suppression </a>
                                         @endif
-                                        <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button>
+                                        {{-- <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button> --}}
                                     @else
                                         <a href="#"  class="btn btn-sm btn-info me-1 mt-1">Nouvelle demande</a>
-                                        <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button>
+                                        {{-- <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button> --}}
                                     @endif
 
                                 </div>
