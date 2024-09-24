@@ -113,11 +113,11 @@ class UserController extends Controller
 
             $this->validate($request, [
                 'name' => 'required',
-                'login_users' => 'required|unique:users,login_users|min:6',
+                'login_users' => 'required|unique:users,login_users|min:8',
                 'email' => 'required|unique:users,email',
                 'roles' => 'required',
                 'prenom_users' => 'required',
-                'password' => 'required|min:6',
+                'password' => 'required|min:8',
                 'num_agce' => 'required'
             ], [
                 'name.required' => 'Veuillez ajouter un nom.',

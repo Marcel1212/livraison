@@ -26,6 +26,10 @@ use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
 use App\Models\DemandeHabilitation;
 use Carbon\Carbon;
+use App\Models\Motif;
+use App\Helpers\SmsPerso;
+use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\Email;
 
 class TraitementDemandeHabilitationController extends Controller
 {
@@ -39,7 +43,7 @@ class TraitementDemandeHabilitationController extends Controller
         if($codeRoles == 'CHEFSERVICE'){
             $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
         }else{
-            $habilitations = [];
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
         }
         Audit::logSave([
 
@@ -85,9 +89,10 @@ class TraitementDemandeHabilitationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id, $id1)
     {
         $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
 
         $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
         //dd($id);
@@ -179,6 +184,12 @@ class TraitementDemandeHabilitationController extends Controller
             $NombreDemandeHabilitation = [];
         }
 
+        $motifs = Motif::where([['code_motif','=','HAB']])->get();
+        $motif = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+
         Audit::logSave([
 
             'action'=>'MODIFIER',
@@ -195,10 +206,10 @@ class TraitementDemandeHabilitationController extends Controller
 
 
         return view('habilitation.traitementdemandehabilitation.edit', compact('demandehabilitation','infoentreprise','banque','pay',
-                    'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
+                    'id','idetape','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
-                    'chargerHabilitationsList','NombreDemandeHabilitation'));
+                    'chargerHabilitationsList','NombreDemandeHabilitation','motif'));
     }
 
     /**
@@ -208,9 +219,12 @@ class TraitementDemandeHabilitationController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
 
+        $logo = Menu::get_logo();
+
         $demandehabilitation = DemandeHabilitation::find($id);
 
         if ($request->isMethod('put')) {
+
             $data = $request->all();
 
             if ($data['action'] == 'FaireAttribution'){
@@ -225,10 +239,145 @@ class TraitementDemandeHabilitationController extends Controller
 
                 $input['date_transmi_charge_habilitation'] = Carbon::now();
                 $input['flag_soumis_charge_habilitation'] = true;
+                $input['id_chef_service'] = Auth::user()->id;
 
                 $demandehabilitation->update($input);
 
                 return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+            }
+
+            if($data['action'] === 'Recevable'){
+
+
+                $input = $request->all();
+                $dateanneeencours = Carbon::now()->format('Y');
+                $input['flag_reception_demande_habilitation'] = true;
+                $input['code_demande_habilitation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                $input['date_reception_demande_habilitation'] = Carbon::now();
+
+                $demandehabilitation = DemandeHabilitation::find($id);
+                $demandehabilitation->update($input);
+
+                $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+                //Envoi SMS Validé
+                if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE PLAN DE FORMATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                    SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                }
+
+                //Envoi email
+                 if (isset($demandehabilitation->email_responsable_habilitation)) {
+                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'habilitation est jugé recevable.
+                                    <br><br>Nous apprécions votre intérêt pour notre services.<br>
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                }
+
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'HABILITATION (Instruction: Recevabilité effectué avec succès.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION'
+
+                ]);
+
+                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(9).'/edit')->with('success', 'Succes : Recevabilité effectué avec succès. ');
+
+            }
+
+            if($data['action'] === 'NonRecevable'){
+
+                $this->validate($request, [
+                    'id_motif_recevable' => 'required'
+                ],[
+                    'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                ]);
+
+                $input = $request->all();
+                $dateanneeencours = Carbon::now()->format('Y');
+                $input['flag_reception_demande_habilitation'] = true;
+                $input['flag_rejet_demande_habilitation'] = true;
+                $input['code_demande_habilitation'] = substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                $input['date_reception_demande_habilitation'] = Carbon::now();
+                $input['date_rejet_demande_habilitation'] = Carbon::now();
+
+                $demandehabilitation = DemandeHabilitation::find($id);
+                $demandehabilitation->update($input);
+
+                $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+                if (isset($demandehabilitation->email_responsable_habilitation)) {
+                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous avons examiné votre demande habilitation sur e-FDFP, et
+                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
+
+                                    <br><b>Motif de rejet  : </b> ".@$demandehabilitation->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevable_plan_formation."
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                        Cordialement,
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                }
+
+                //Envoi SMS Rejeté
+                if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
+                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif."
+                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
+                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
+                        Cordialement,
+                        L'équipe e-FDFP";
+                    SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                }
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'HABILITATION (Instruction: La non-recevabilité a été effectué avec succès.)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION'
+
+                ]);
+
+                return redirect()->route('traitementdemandehabilitation.index')->with('success', 'Recevabilité effectué avec succès.');
 
             }
 

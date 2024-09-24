@@ -26,6 +26,8 @@ use App\Helpers\Crypt;
                 @include('dashboard.menu.conseiller')
                 <?php } elseif($nacodes == "CHEFSERVICE") { ?>
                 @include('dashboard.menu.chefservice')
+                <?php } elseif($nacodes == "CHARGEHABIL") { ?>
+                @include('dashboard.menu.chargerhabilitation')
                 <?php } else { ?>
                 @include('dashboard.menu.autre')
                 <?php } ?>
