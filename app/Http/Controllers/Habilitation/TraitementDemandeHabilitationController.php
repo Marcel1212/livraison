@@ -30,6 +30,7 @@ use App\Models\Motif;
 use App\Helpers\SmsPerso;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Email;
+use App\Models\TypeDomaineDemandeHabilitationPublic;
 
 class TraitementDemandeHabilitationController extends Controller
 {
@@ -145,9 +146,15 @@ class TraitementDemandeHabilitationController extends Controller
         $organisations = OrganisationFormation::where([['id_demande_habilitation','=',$id]])->get();
 
         $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
-        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la type de domaine de formation </option>";
+        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la finalité </option>";
         foreach ($typeDomaineDemandeHabilitation as $comp) {
             $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
+        }
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
         }
 
         $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
@@ -210,7 +217,7 @@ class TraitementDemandeHabilitationController extends Controller
                     'id','idetape','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
-                    'chargerHabilitationsList','NombreDemandeHabilitation','motif'));
+                    'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList'));
     }
 
     /**

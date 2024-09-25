@@ -1,18 +1,18 @@
-@if(auth()->user()->can('typedomainedemandehabilitation-create'))
+@if(auth()->user()->can('typedomainedemandehabilitationpublic-edit'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Paramétrage')
-    @php($titre='Liste des types domaines demandes habilitations')
-    @php($soustitre='Ajouter un type domaine demande habilitation')
-    @php($lien='typedomainedemandehabilitation')
+    @php($titre='Liste des types domaines demandes habilitations public')
+    @php($soustitre='Modifier un type domaine demande habilitation public')
+    @php($lien='typeddhpublic')
 
 
     <!-- BEGIN: Content-->
-                 <h5 class="py-2 mb-1">
-                    <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
-                </h5>
+            <h5 class="py-2 mb-1">
+                <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+            </h5>
 
             <div class="content-body">
                 @if ($message = Session::get('success'))
@@ -23,16 +23,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                @if ($message = Session::get('error'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <div class="alert-body">
-                            {{ $message }}
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
 
-                <div class="row">
+
+                    <div class="row">
                         <!-- Basic Layout -->
                         <div class="col-xxl">
                             <div class="card mb-4">
@@ -43,30 +36,32 @@
                                     </small>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update',\App\Helpers\Crypt::UrlCrypt($type->id_type_domaine_demande_habilitation_public)) }}">
                                         @csrf
+                                        @method('PUT')
                                         <div class="row">
-
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle </label>
-                                                    <input type="text" name="libelle_type_domaine_demande_habilitation" id="libelle_type_domaine_demande_habilitation"
-                                                           class="form-control form-control-sm" value=""
+                                                    <input type="text" name="libelle_type_domaine_demande_habilitation_public" id="libelle_type_domaine_demande_habilitation_public"
+                                                           class="form-control form-control-sm" value="{{$type->libelle_type_domaine_demande_habilitation_public}}"
                                                            required>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Code </label>
-                                                    <input type="text" name="code_type_domaine_demande_habilitation" id="code_type_domaine_demande_habilitation"
-                                                           class="form-control form-control-sm"/>
+                                                    <input type="text" name="code_type_type_domaine_demande_habilitation_public" id="code_type_type_domaine_demande_habilitation_public"
+                                                           class="form-control form-control-sm" value="{{$type->code_type_type_domaine_demande_habilitation_public}}"
+                                                           >
                                                 </div>
                                             </div>
 
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Actif </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_type_domaine_demande_habilitation"
+                                                    <input type="checkbox" class="form-check-input" name="flag_type_type_domaine_demande_habilitation_public" {{  ($type->flag_type_type_domaine_demande_habilitation_public == true ? ' checked' : '') }}
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
@@ -82,9 +77,10 @@
                                             </div>
                                         </div>
                                     </form>
-                                    </div>
+
                                     </div>
                 </div>
+            </div>
         </div>
     <!-- END: Content-->
 
@@ -94,17 +90,3 @@
     window.location = "{{ url('/403') }}";//here double curly bracket
 </script>
 @endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -42,7 +42,7 @@
                                         <div class="row">
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
-                                                    <label>Type de composition capitale </label>
+                                                    <label>Libelle </label>
                                                     <input type="text" name="libelle_type_domaine_demande_habilitation" id="libelle_type_domaine_demande_habilitation"
                                                            class="form-control form-control-sm" value="{{$type->libelle_type_domaine_demande_habilitation}}"
                                                            required>

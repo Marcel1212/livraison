@@ -616,8 +616,8 @@ use App\Helpers\PartEntreprisesHelper;
                                            @method('put')
                                            <div class="row">
 
-                                                <div class="col-md-6">
-                                                    <label class="form-label" for="billings-country">Type de domaine  <strong style="color:red;">*</strong></label>
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="billings-country">La finalité  <strong style="color:red;">*</strong></label>
                                                     <select class="select2 form-select-sm input-group @error('id_type_domaine_demande_habilitation')
                                                         error
                                                         @enderror" data-allow-clear="true" name="id_type_domaine_demande_habilitation">
@@ -628,7 +628,19 @@ use App\Helpers\PartEntreprisesHelper;
                                                     @enderror
                                                 </div>
 
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
+                                                    <label class="form-label" for="billings-country">Le public  <strong style="color:red;">*</strong></label>
+                                                    <select class="select2 form-select-sm input-group @error('id_type_domaine_demande_habilitation_public')
+                                                        error
+                                                        @enderror" data-allow-clear="true" name="id_type_domaine_demande_habilitation_public">
+                                                        <?= $typeDomaineDemandeHabilitationPublicList; ?>
+                                                    </select>
+                                                    @error('id_type_domaine_demande_habilitation_public')
+                                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="col-md-4">
                                                     <label class="form-label" for="billings-country">Domaine de formation <strong style="color:red;">*</strong></label>
                                                     <select class="select2 form-select-sm input-group @error('id_domaine_formation')
                                                         error
@@ -670,7 +682,8 @@ use App\Helpers\PartEntreprisesHelper;
                                             <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type domaine de formation </th>
+                                                <th>Finalité </th>
+                                                <th>Public </th>
                                                 <th>Domaine de formation </th>
                                                 <th>Action</th>
                                             </tr>
@@ -682,6 +695,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <tr>
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}</td>
+                                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>

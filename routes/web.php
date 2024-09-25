@@ -660,4 +660,10 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
     });
 
+    Route::group(['middleware' => ['can:typedomainedemandehabilitationpublic-index']], function () {
+        Route::resources([
+            'typeddhpublic' => App\Http\Controllers\TypeDomaineDemandeHabilitationPublicController::class,
+        ]);
+    });
+
 });
