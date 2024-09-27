@@ -20,6 +20,7 @@ use App\Models\MoyenPermanente;
 use App\Models\OrganisationFormation;
 use App\Models\Pays;
 use App\Models\TypeDomaineDemandeHabilitation;
+use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeIntervention;
 use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
@@ -278,6 +279,13 @@ class DemandeHabilitationController extends Controller
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
 
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
+
         Audit::logSave([
 
             'action'=>'MODIFIER',
@@ -295,7 +303,7 @@ class DemandeHabilitationController extends Controller
         return view('habilitation.demande.edit', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList'));
     }
 
     /**

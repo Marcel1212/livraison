@@ -1,12 +1,12 @@
-@if(auth()->user()->can('typedomainedemandehabilitation-create'))
+@if(auth()->user()->can('typedomainedemandehabilitationpublic-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Paramétrage')
-    @php($titre='Liste des types domaines demandes habilitations')
-    @php($soustitre='Ajouter un type domaine demande habilitation')
-    @php($lien='typedomainedemandehabilitation')
+    @php($titre='Liste des types domaines demandes habilitations public')
+    @php($soustitre='Ajouter un type domaine demande habilitation public')
+    @php($lien='typeddhpublic')
 
 
     <!-- BEGIN: Content-->
@@ -50,7 +50,7 @@
                                             <div class="col-md-8 col-12">
                                                 <div class="mb-1">
                                                     <label>Libelle </label>
-                                                    <input type="text" name="libelle_type_domaine_demande_habilitation" id="libelle_type_domaine_demande_habilitation"
+                                                    <input type="text" name="libelle_type_domaine_demande_habilitation_public" id="libelle_type_domaine_demande_habilitation_public"
                                                            class="form-control form-control-sm" value=""
                                                            required>
                                                 </div>
@@ -58,7 +58,7 @@
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Code </label>
-                                                    <input type="text" name="code_type_domaine_demande_habilitation" id="code_type_domaine_demande_habilitation"
+                                                    <input type="text" name="code_type_type_domaine_demande_habilitation_public" id="code_type_type_domaine_demande_habilitation_public"
                                                            class="form-control form-control-sm"/>
                                                 </div>
                                             </div>
@@ -66,7 +66,7 @@
                                             <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Actif </label><br>
-                                                    <input type="checkbox" class="form-check-input" name="flag_type_domaine_demande_habilitation"
+                                                    <input type="checkbox" class="form-check-input" name="flag_type_type_domaine_demande_habilitation_public"
                                                            id="colorCheck1">
                                                 </div>
                                             </div>
