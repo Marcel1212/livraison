@@ -202,7 +202,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                             <div class="tab-content">
                                 <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
 
-                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}" enctype="multipart/form-data">
                                          @csrf
                                         @method('put')
                                         <div class="row">
@@ -356,7 +356,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                     <input type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
@@ -367,7 +367,20 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-2 col-12">
+                                                <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+                                                @if (isset($demandehabilitation->titre_propriete_contrat_bail))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $demandehabilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+
+                                            </div>
+
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                     <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -378,7 +391,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2 col-12">
                                                 <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('id_banque')
                                                     error
@@ -388,6 +401,33 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @error('id_banque')
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
+                                                    error
+                                                    @enderror" data-allow-clear="true" name="flag_ecole_autre_entreprise" id="flag_ecole_autre_entreprise">
+                                                    <option value="">---Choix du type entreprise--</option>
+                                                    <option value="true" @if($demandehabilitation->flag_ecole_autre_entreprise == true ) selected @endif>Ecoles</option>
+                                                    <option value="false" @if($demandehabilitation->flag_ecole_autre_entreprise == false ) selected @endif>Autres</option>
+                                                </select>
+                                                @error('flag_ecole_autre_entreprise')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-2 col-12" id="autorisation_ouverture_ecole_div">
+                                                <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
+                                                @if (isset($demandehabilitation->autorisation_ouverture_ecole))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/autorisation_ouverture_ecole/". $demandehabilitation->autorisation_ouverture_ecole)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+
                                             </div>
 
                                         </div>
@@ -501,18 +541,21 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type domaine de formation </th>
+                                                <th>Finalité </th>
+                                                <th>Public </th>
                                                 <th>Domaine de formation </th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <?php $i = 0; ?>
+
                                                 @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
                                                 <?php $i += 1;?>
                                                             <tr>
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}</td>
+                                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
@@ -535,6 +578,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Domaine</th>
                                                 <th>Nom et prénom </th>
                                                 <th>Année d'experience </th>
                                                 <th>Cv  </th>
@@ -544,53 +588,38 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             </thead>
                                             <tbody>
                                             <?php $i = 0; ?>
-                                                @foreach ($formateurs as $key => $formateur)
-                                                <?php $i += 1;?>
-                                                            <tr>
-                                                                <td>{{ $i }}</td>
-                                                                <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
-                                                                <td>
-                                                                    <?php
-                                                                        if(isset($formateur->date_fin_formateur)){
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::parse($formateur->date_fin_formateur);
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }else {
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::now();
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }
-
-                                                                        echo $anneexperience;
-                                                                    ?>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/cv_formateur/". $formateur->cv_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/le_formateur/". $formateur->le_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
-                                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
-                                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                                                    <?php } ?>
-                                                                </td>
-                                                            </tr>
-                                                @endforeach
+                                            @foreach ($formateurs as $key => $formateur)
+                                            <?php $i += 1;?>
+                                                        <tr>
+                                                            <td>{{ $i }}</td>
+                                                            <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
+                                                            <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
+                                                            <td>{{ $formateur->annee_experience }}</td>
+                                                            <td>
+                                                                <span class="badge bg-secondary">
+                                                                    <a target="_blank"
+                                                                        onclick="NewWindow('{{ asset("/pieces/cv_formateur/". $formateur->cv_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                        Voir la pièce
+                                                                    </a>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-secondary">
+                                                                    <a target="_blank"
+                                                                        onclick="NewWindow('{{ asset("/pieces/le_formateur/". $formateur->le_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                        Voir la pièce
+                                                                    </a>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                                                <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
+                                                                class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
+                                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                                <?php } ?>
+                                                            </td>
+                                                        </tr>
+                                            @endforeach
 
                                             </tbody>
                                         </table>
@@ -877,39 +906,155 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     </div>
                                     <?php }else{ ?>
                                         <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
-                                            <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}" enctype="multipart/form-data">
-                                                    @csrf
-                                                    @method('put')
-                                                    <div class="row">
-                                                                <div class="col-md-6 col-12">
-                                                                        <label class="form-label" for="billings-country">Les motifs d'irrecevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong></label>
+    <!-- BEGIN: Content-->
+    <div class="app-content content ">
+        <div class="content-wrapper container-xxl p-0">
+            <div class="content-header row">
+            </div>
+            <div class="content-body">
+                <!-- Full calendar start -->
+                <section>
+                    <div class="app-calendar overflow-hidden border">
+                        <div class="row ">
+                            <!-- Sidebar -->
+                            <div class="col-md-2 ps-4 pt-4 pe-4 app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
+                                <div class="sidebar-wrapper">
+                                    <div class="card-body d-flex justify-content-center">
+                                        <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
+                                            <span class="align-middle">Add Event</span>
+                                        </button>
+                                    </div>
+                                    <div class="card-body pb-0">
+                                        <h5 class="section-label mb-1">
+                                            <span class="align-middle">Filter</span>
+                                        </h5>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" class="form-check-input select-all" id="select-all" checked />
+                                            <label class="form-check-label" for="select-all">View All</label>
+                                        </div>
+                                        <div class="calendar-events-filter">
+                                            <div class="form-check form-check-danger mb-1">
+                                                <input type="checkbox" class="form-check-input input-filter" id="personal" data-value="personal" checked />
+                                                <label class="form-check-label" for="personal">Personal</label>
+                                            </div>
+                                            <div class="form-check form-check-primary mb-1">
+                                                <input type="checkbox" class="form-check-input input-filter" id="business" data-value="business" checked />
+                                                <label class="form-check-label" for="business">Business</label>
+                                            </div>
+                                            <div class="form-check form-check-warning mb-1">
+                                                <input type="checkbox" class="form-check-input input-filter" id="family" data-value="family" checked />
+                                                <label class="form-check-label" for="family">Family</label>
+                                            </div>
+                                            <div class="form-check form-check-success mb-1">
+                                                <input type="checkbox" class="form-check-input input-filter" id="holiday" data-value="holiday" checked />
+                                                <label class="form-check-label" for="holiday">Holiday</label>
+                                            </div>
+                                            <div class="form-check form-check-info">
+                                                <input type="checkbox" class="form-check-input input-filter" id="etc" data-value="etc" checked />
+                                                <label class="form-check-label" for="etc">ETC</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-auto">
+                                    <img src="../../../app-assets/images/pages/calendar-illustration.png" alt="Calendar illustration" class="img-fluid" />
+                                </div>
+                            </div>
+                            <!-- /Sidebar -->
 
-                                                                            <select class="select2 form-select input-group" data-allow-clear="true" name="id_motif_recevable" id="id_motif_recevable">
-                                                                                <?= $motif; ?>
-                                                                            </select>
-                                                                    </div>
-                                                                    <div class="col-md-6 col-12">
-                                                                        <div class="mb-1">
-                                                                            <label>Commentaire Recevabilité traitemebbt <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
-                                                                            <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-12" align="right">
-                                                                    <hr>
-                                                                        <button type="submit" name="action" value="Recevable"
-                                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
-                                                                            Recevable
-                                                                        </button>
-                                                                        <button type="submit" name="action" value="NonRecevable"
-                                                                                class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
-                                                                            Non recevable
-                                                                        </button>
-                                                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
-                                                                        href="/{{$lien }}">
-                                                                            Retour</a>
-                                                                    </div>
-                                                    </div>
-                                            </form>
+                            <!-- Calendar -->
+                            <div class="col-md-10 position-relative">
+                                <div class="card shadow-none border-0 mb-0 rounded-0">
+                                    <div class="card-body pb-0">
+                                        <div id="calendar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Calendar -->
+                            <div class="body-content-overlay"></div>
+                        </div>
+                    </div>
+                    <!-- Calendar Add/Update/Delete event modal-->
+                    <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
+                        <div class="modal-dialog sidebar-lg">
+                            <div class="modal-content p-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                <div class="modal-header mb-1">
+                                    <h5 class="modal-title">Add Event</h5>
+                                </div>
+                                <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                                    <form class="event-form needs-validation" data-ajax="false" novalidate>
+                                        <div class="mb-1">
+                                            <label for="title" class="form-label">Title</label>
+                                            <input type="text" class="form-control" id="title" name="title" placeholder="Event Title" required />
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="select-label" class="form-label">Label</label>
+                                            <select class="select2 select-label form-select w-100" id="select-label" name="select-label">
+                                                <option data-label="primary" value="Business" selected>Business</option>
+                                                <option data-label="danger" value="Personal">Personal</option>
+                                                <option data-label="warning" value="Family">Family</option>
+                                                <option data-label="success" value="Holiday">Holiday</option>
+                                                <option data-label="info" value="ETC">ETC</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-1 position-relative">
+                                            <label for="start-date" class="form-label">Start Date</label>
+                                            <input type="text" class="form-control" id="start-date" name="start-date" placeholder="Start Date" />
+                                        </div>
+                                        <div class="mb-1 position-relative">
+                                            <label for="end-date" class="form-label">End Date</label>
+                                            <input type="text" class="form-control" id="end-date" name="end-date" placeholder="End Date" />
+                                        </div>
+                                        <div class="mb-1">
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" class="form-check-input allDay-switch" id="customSwitch3" />
+                                                <label class="form-check-label" for="customSwitch3">All Day</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="event-url" class="form-label">Event URL</label>
+                                            <input type="url" class="form-control" id="event-url" placeholder="https://www.google.com" />
+                                        </div>
+                                        <div class="mb-1 select2-primary">
+                                            <label for="event-guests" class="form-label">Add Guests</label>
+                                            <select class="select2 select-add-guests form-select w-100" id="event-guests" multiple>
+                                                <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
+                                                <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>
+                                                <option data-avatar="5-small.png" value="Gabrielle Robertson">Gabrielle Robertson</option>
+                                                <option data-avatar="7-small.png" value="Lori Spears">Lori Spears</option>
+                                                <option data-avatar="9-small.png" value="Sandy Vega">Sandy Vega</option>
+                                                <option data-avatar="11-small.png" value="Cheryl May">Cheryl May</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="event-location" class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="event-location" placeholder="Enter Location" />
+                                        </div>
+                                        <div class="mb-1">
+                                            <label class="form-label">Description</label>
+                                            <textarea name="event-description-editor" id="event-description-editor" class="form-control"></textarea>
+                                        </div>
+                                        <div class="mb-1 d-flex">
+                                            <button type="submit" class="btn btn-primary add-event-btn me-1">Add</button>
+                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Update</button>
+                                            <button class="btn btn-outline-danger btn-delete-event d-none">Delete</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ Calendar Add/Update/Delete event modal-->
+                </section>
+                <!-- Full calendar end -->
+
+            </div>
+        </div>
+
+    </div>
+    <!-- END: Content-->
                                         </div>
                                     <?php } ?>
                                 @endif
@@ -927,6 +1072,26 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
         @section('js_perso')
 
             <script>
+
+
+                    $("#flag_ecole_autre_entreprise").select2().val({{old('flag_ecole_autre_entreprise')}});
+
+                    var typentre = $('#flag_ecole_autre_entreprise').val();
+
+                    if (typentre == true) {
+                        $("#autorisation_ouverture_ecole_div").show();
+                    }else{
+                        $("#autorisation_ouverture_ecole_div").hide();
+                    }
+
+                    $('#flag_ecole_autre_entreprise').on('change', function (e) {
+                        if(e.target.value=='true'){
+                            $("#autorisation_ouverture_ecole_div").show();
+                        }
+                        if(e.target.value=='false'){
+                            $("#autorisation_ouverture_ecole_div").hide();
+                        }
+                    });
                                         $("#dernier_catalogue_demande_habilitation_div").show();
 
                                         $("#autre_activite_demande_habilitation_div").show();
@@ -961,9 +1126,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                 var formformateur = document.getElementById("formformateur");
 
 
-                formformateur.onsubmit = function(){
+/*                 formformateur.onsubmit = function(){
                     $("#experience_formateur_val").val(experience_formateur.root.innerHTML);
-                 }
+                 } */
 
 
                 var materiel_didactique_demande_habilitation = new Quill('#materiel_didactique_demande_habilitation', {
@@ -986,11 +1151,11 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                 var formdivers = document.getElementById("Diversformateur");
 
-                formdivers.onsubmit = function(){
+/*                 formdivers.onsubmit = function(){
                     $("#materiel_didactique_demande_habilitation_val").val(materiel_didactique_demande_habilitation.root.innerHTML);
                     $("#reference_ci_demande_habilitation_val").val(reference_ci_demande_habilitation.root.innerHTML);
                     $("#autre_activite_demande_habilitation_val").val(autre_activite_demande_habilitation.root.innerHTML);
-                 }
+                 } */
 
 
                 var quel_financement_intervention_hors_ci = new Quill('#quel_financement_intervention_hors_ci', {
@@ -1002,9 +1167,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                 var formInterventionHorsCi = document.getElementById("formInterventionHorsCi");
 
 
-                formInterventionHorsCi.onsubmit = function(){
+/*                 formInterventionHorsCi.onsubmit = function(){
                     $("#quel_financement_intervention_hors_ci_val").val(quel_financement_intervention_hors_ci.root.innerHTML);
-                 }
+                 } */
 
                  var commantaire_cs = new Quill('#commantaire_cs', {
                     theme: 'snow'
@@ -1015,9 +1180,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                 var formAttribution = document.getElementById("formAttribution");
 
 
-                formAttribution.onsubmit = function(){
+/*                 formAttribution.onsubmit = function(){
                     $("#commantaire_cs_val").val(commantaire_cs.root.innerHTML);
-                 }
+                 } */
 
                  var idactivesmoussion = $('#colorCheck1').prop('checked', false);
 

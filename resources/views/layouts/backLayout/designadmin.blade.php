@@ -42,6 +42,17 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
         rel="stylesheet"/>
+
+        <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/vendors.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/calendars/fullcalendar.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/forms/select/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/pickers/flatpickr/flatpickr.min.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-calendar.css">
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap-extended.css')}}"> --}}
+
+
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/quill/snow.css')}}"/>
 
     <!-- Icons -->
@@ -66,6 +77,10 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}"/>
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/flatpickr/flatpickr.css')}}"/>
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/apex-charts/apex-charts.css')}}"/>
+
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/plugins/forms/pickers/form-flat-pickr.css')}}">
+
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/vendor/css/pages/app-calendar.css')}}">
 
     <!-- Page CSS -->
 <style>
@@ -298,6 +313,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="{{asset('/assets/vendor/js/menu.js')}}"></script>
 
 <!-- Vendors JS -->
+<script src="{{asset('/assets/vendor/js/vendors.min.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/select2/select2.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/tagify/tagify.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/bootstrap-select/bootstrap-select.js')}}"></script>
@@ -312,6 +328,11 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <!-- Main JS -->
 <script src="{{asset('/assets/js/main.js')}}"></script>
 
+
+
+<script src="{{asset('/assets/js/forms/select/select2.full.min.js')}}"></script>
+<script src="{{asset('/assets/js/forms/validation/jquery.validate.min.js')}}"></script>
+<script src="{{asset('/assets/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
 <!-- Page JS -->
 <script src="{{asset('/assets/js/forms-selects.js')}}"></script>
 <script src="{{asset('/assets/js/forms-tagify.js')}}"></script>
@@ -319,7 +340,13 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="{{asset('/assets/js/app-academy-dashboard.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/quill/quill.min.js')}}"></script>
 
-<script>
+
+    <script src="{{asset('/assets/vendor/js/calendar/fullcalendar.min.js')}}"></script>
+    <script src="{{asset('/assets/vendor/js/app-calendar-events.js')}}"></script>
+    <script src="{{asset('/assets/vendor/js/app-calendar.js')}}"></script>
+
+
+    <script>
     var win = null;
 
     function NewWindow(mypage, myname, w, h, scroll, pos, niveau) {
@@ -387,6 +414,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
         });
     });
 </script>
+
 
 
 @yield('js_perso')
