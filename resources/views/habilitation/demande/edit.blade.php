@@ -1,14 +1,21 @@
 <?php
 
+use Carbon\Carbon;
 use App\Helpers\AnneeExercice;
 use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
+use App\Helpers\ListeDemandeHabilitationSoumis;
+
+
+$nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
+$nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite_formateur($demandehabilitation->id_demande_habilitation);
 
 
 ?>
 
 @if(auth()->user()->can('demandehabilitation-edit'))
+
 
 @extends('layouts.backLayout.designadmin')
 
@@ -154,7 +161,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <div class="tab-content">
                                 <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
 
-                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}" enctype="multipart/form-data">
                                          @csrf
                                         @method('put')
                                         <div class="row">
@@ -308,7 +315,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                     <input type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
@@ -319,7 +326,24 @@ use App\Helpers\PartEntreprisesHelper;
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4 col-12">
+                                            <div class="col-md-2 col-12">
+                                                <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+                                                @if (isset($demandehabilitation->titre_propriete_contrat_bail))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $demandehabilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+                                                <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
+                                                @error('titre_propriete_contrat_bail')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+
+                                            </div>
+
+                                            <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                     <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -330,7 +354,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
                                                 <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('id_banque')
                                                     error
@@ -341,6 +365,38 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
                                             </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
+                                                    error
+                                                    @enderror" data-allow-clear="true" name="flag_ecole_autre_entreprise" id="flag_ecole_autre_entreprise">
+                                                    <option value="">---Choix du type entreprise--</option>
+                                                    <option value="true" @if($demandehabilitation->flag_ecole_autre_entreprise == true ) selected @endif>Ecoles</option>
+                                                    <option value="false" @if($demandehabilitation->flag_ecole_autre_entreprise == false ) selected @endif>Autres</option>
+                                                </select>
+                                                @error('flag_ecole_autre_entreprise')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-2 col-12" id="autorisation_ouverture_ecole_div">
+                                                <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
+                                                @if (isset($demandehabilitation->autorisation_ouverture_ecole))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/autorisation_ouverture_ecole/". $demandehabilitation->autorisation_ouverture_ecole)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+                                                <input type="file" name="autorisation_ouverture_ecole" value="{{ old('autorisation_ouverture_ecole') }}" id="autorisation_ouverture_ecole" class="form-control form-control-sm"/>
+                                                @error('autorisation_ouverture_ecole')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+
 
 
 
@@ -712,6 +768,15 @@ use App\Helpers\PartEntreprisesHelper;
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                        @if(count($nbresollicite) != count($nbresolliciteFormateur))
+                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                <div class="alert-body" style="text-align: center">
+                                                    Vous devez avoir au moins un formateur par domaine de formation
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        @endif
+
                                         <form method="POST" enctype="multipart/form-data" id="formformateur" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}">
                                             @csrf
                                            @method('put')
@@ -758,7 +823,8 @@ use App\Helpers\PartEntreprisesHelper;
                                                         <div class="mb-1">
                                                             <label>Date de début d'experience  <strong style="color:red;">*</strong> </label>
                                                             <input type="date" name="date_debut_formateur" id="date_debut_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('date_debut_formateur') }}">
+                                                                class="form-control form-control-sm"  value="{{ old('date_debut_formateur') }}"
+                                                                onkeyup="FuncCalculAnneeExperience();">
                                                         </div>
                                                         @error('date_debut_formateur')
                                                         <div class=""><label class="error">{{ $message }}</label></div>
@@ -767,11 +833,12 @@ use App\Helpers\PartEntreprisesHelper;
 
                                                     <div class="col-md-6 col-12">
                                                         <div class="mb-1">
-                                                            <label>Date de fin d'experience  </label>
-                                                            <input type="date" name="date_fin_formateur" id="date_fin_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('date_fin_formateur') }}">
+                                                            <label>Année d'experience  </label>
+                                                            <input type="text" name="annee_experience1" id="annee_experience1"
+                                                                class="form-control form-control-sm" disabled="disabled">
+                                                            <input type="hidden" name="annee_experience" id="annee_experience"/>
                                                         </div>
-                                                        @error('date_fin_formateur')
+                                                        @error('annee_experience')
                                                         <div class=""><label class="error">{{ $message }}</label></div>
                                                         @enderror
                                                     </div>
@@ -857,6 +924,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Domaine</th>
                                                 <th>Nom et prénom </th>
                                                 <th>Année d'experience </th>
                                                 <th>Cv  </th>
@@ -870,24 +938,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <?php $i += 1;?>
                                                             <tr>
                                                                 <td>{{ $i }}</td>
+                                                                <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
                                                                 <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
-                                                                <td>
-                                                                    <?php
-                                                                        if(isset($formateur->date_fin_formateur)){
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::parse($formateur->date_fin_formateur);
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }else {
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::now();
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }
-
-                                                                        echo $anneexperience;
-                                                                    ?>
-                                                                </td>
+                                                                <td>{{ $formateur->annee_experience }}</td>
                                                                 <td>
                                                                     <span class="badge bg-secondary">
                                                                         <a target="_blank"
@@ -931,7 +984,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <select class="select2 form-select-sm input-group @error('information_catalogue_demande_habilitation')
                                                                 error
                                                                 @enderror" data-allow-clear="true" id="information_catalogue_demande_habilitation" name="information_catalogue_demande_habilitation">
-                                                                <option value=""></option>
+
                                                                 <option value="false" @if($demandehabilitation->information_catalogue_demande_habilitation == false ) selected @endif>NON</option>
                                                                 <option value="true" @if($demandehabilitation->information_catalogue_demande_habilitation == true ) selected @endif>OUI</option>
                                                             </select>
@@ -947,9 +1000,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <select class="select2 form-select-sm input-group @error('information_seul_activite_demande_habilitation')
                                                                 error
                                                                 @enderror" data-allow-clear="true"  id="information_seul_activite_demande_habilitation" name="information_seul_activite_demande_habilitation">
-                                                                <option value=""></option>
-                                                                <option value="false" @if($demandehabilitation->information_seul_activite_demande_habilitation == false ) selected @endif>NON</option>
+
                                                                 <option value="true" @if($demandehabilitation->information_seul_activite_demande_habilitation == true ) selected @endif>OUI</option>
+                                                                <option value="false" @if($demandehabilitation->information_seul_activite_demande_habilitation == false ) selected @endif>NON</option>
                                                             </select>
                                                             @error('information_seul_activite_demande_habilitation')
                                                                 <div class=""><label class="error">{{ $message }}</label></div>
@@ -1049,15 +1102,18 @@ use App\Helpers\PartEntreprisesHelper;
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <div class="col-md-12" align="right">
-                                        <button
-                                        type="button"
-                                        class="btn btn-outline-success"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#SoummissiondemandehabilitationApprouve1">
-                                        Soumettre la demande d'habilitation
-                                      </button>
-                                        </div>
+                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
+                                            <div class="col-md-12" align="right">
+                                                <button
+                                                type="button"
+                                                class="btn btn-outline-success"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#SoummissiondemandehabilitationApprouve1">
+                                                    Soumettre la demande d'habilitation
+                                                </button>
+                                            </div>
+                                        @endif
+
                                       <br/>
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -1227,9 +1283,42 @@ use App\Helpers\PartEntreprisesHelper;
         @section('js_perso')
 
             <script>
-                                        $("#dernier_catalogue_demande_habilitation_div").hide();
 
-                                        $("#autre_activite_demande_habilitation_div").hide();
+                $("#flag_ecole_autre_entreprise").select2().val({{old('flag_ecole_autre_entreprise')}});
+
+                var typentre = $('#flag_ecole_autre_entreprise').val();
+
+                if (typentre == true) {
+                    $("#autorisation_ouverture_ecole_div").show();
+                }else{
+                    $("#autorisation_ouverture_ecole_div").hide();
+                }
+
+                $('#flag_ecole_autre_entreprise').on('change', function (e) {
+                    if(e.target.value=='true'){
+                        $("#autorisation_ouverture_ecole_div").show();
+                    }
+                    if(e.target.value=='false'){
+                        $("#autorisation_ouverture_ecole_div").hide();
+                    }
+                });
+
+
+               var val =  $('#information_seul_activite_demande_habilitation').val();
+               var val1 =  $('#information_catalogue_demande_habilitation').val();
+
+               //alert($val);
+               if (val == true) {
+                    $("#dernier_catalogue_demande_habilitation_div").show();
+               }else{
+                    $("#dernier_catalogue_demande_habilitation_div").hide();
+               }
+
+               if (val1 == true) {
+                    $("#autre_activite_demande_habilitation_div").show();
+               }else{
+                    $("#autre_activite_demande_habilitation_div").hide();
+               }
 
                 $('#information_catalogue_demande_habilitation').on('change', function (e) {
                     if(e.target.value=='true'){
@@ -1323,6 +1412,47 @@ use App\Helpers\PartEntreprisesHelper;
 
 
             </script>
+
+            <script type="text/javascript">
+                function FuncCalculAnneeExperience() {
+                    // Récupérer la date de début à partir du champ de saisie
+                    var dateDebut = document.getElementById("date_debut_formateur").value.trim();
+
+                    // Vérifier si la date de début est valide
+/*                     if (dateDebut === "") {
+                        alert("Veuillez saisir une date de début.");
+                        return;
+                    } */
+
+                    // Convertir la date de début en objet Date
+                    var dateDebutObj = new Date(dateDebut);
+/*                     if (isNaN(dateDebutObj.getTime())) {
+                        alert("Date de début invalide.");
+                        return;
+                    } */
+
+                    // Obtenir la date actuelle
+                    var dateActuel = new Date();
+
+                    // Calculer la différence en mois entre la date actuelle et la date de début
+                    var diffAnnee = dateActuel.getFullYear() - dateDebutObj.getFullYear();
+                    var diffMois = dateActuel.getMonth() - dateDebutObj.getMonth();
+
+                    // Ajuster si le mois actuel est avant le mois de début
+                    if (diffMois < 0) {
+                        diffAnnee--;
+                    }
+
+                    // Afficher le résultat
+                    //alert("Expérience : " + diffAnnee + " années");
+
+                    // Mettre à jour le champ 'annee_experience' avec le résultat sans virgule
+                    document.getElementById('annee_experience').value = diffAnnee;
+                    document.getElementById('annee_experience1').value = diffAnnee;
+                }
+            </script>
+
+
 
 
         @endsection
