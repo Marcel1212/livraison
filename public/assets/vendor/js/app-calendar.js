@@ -217,9 +217,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // --------------------------------------------------------------------------------------------------
   function fetchEvents(info, successCallback) {
     // Fetch Events from API endpoint reference
-    /* $.ajax(
+    $.ajax(
       {
-        url: '../../../app-assets/data/app-calendar-events.js',
+        url: '/traitementdemandehabilitation/calendar-events', // Route to fetch events
         type: 'GET',
         success: function (result) {
           // Get requested calendars as Array
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
           console.log(error);
         }
       }
-    ); */
+    );
 
     var calendars = selectedCalendars();
     // We are reading event object from app-calendar-events.js file directly by including that file above app-calendar file.
