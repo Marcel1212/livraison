@@ -48,8 +48,8 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/forms/select/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/pickers/flatpickr/flatpickr.min.css')}}">
 
-    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-calendar.css">
-    {{-- <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap.css')}}">
+    {{-- <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-calendar.css"> --}}
+     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap-extended.css')}}"> --}}
 
 
@@ -342,8 +342,6 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
 
     <script src="{{asset('/assets/vendor/js/calendar/fullcalendar.min.js')}}"></script>
-    <script src="{{asset('/assets/vendor/js/app-calendar-events.js')}}"></script>
-    <script src="{{asset('/assets/vendor/js/app-calendar.js')}}"></script>
 
 
     <script>

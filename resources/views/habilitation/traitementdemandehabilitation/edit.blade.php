@@ -17,6 +17,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 @extends('layouts.backLayout.designadmin')
 
+
+
+
 @section('content')
 
     @php($Module='Habilitation')
@@ -555,7 +558,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                             <tr>
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}</td>
-                                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}</td>
+                                                                <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}</td>
                                                                 <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
@@ -906,155 +909,183 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     </div>
                                     <?php }else{ ?>
                                         <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
-    <!-- BEGIN: Content-->
-    <div class="app-content content ">
-        <div class="content-wrapper container-xxl p-0">
-            <div class="content-header row">
-            </div>
-            <div class="content-body">
-                <!-- Full calendar start -->
-                <section>
-                    <div class="app-calendar overflow-hidden border">
-                        <div class="row ">
-                            <!-- Sidebar -->
-                            <div class="col-md-2 ps-4 pt-4 pe-4 app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
-                                <div class="sidebar-wrapper">
-                                    <div class="card-body d-flex justify-content-center">
-                                        <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
-                                            <span class="align-middle">Add Event</span>
-                                        </button>
-                                    </div>
-                                    <div class="card-body pb-0">
-                                        <h5 class="section-label mb-1">
-                                            <span class="align-middle">Filter</span>
-                                        </h5>
-                                        <div class="form-check mb-1">
-                                            <input type="checkbox" class="form-check-input select-all" id="select-all" checked />
-                                            <label class="form-check-label" for="select-all">View All</label>
-                                        </div>
-                                        <div class="calendar-events-filter">
-                                            <div class="form-check form-check-danger mb-1">
-                                                <input type="checkbox" class="form-check-input input-filter" id="personal" data-value="personal" checked />
-                                                <label class="form-check-label" for="personal">Personal</label>
-                                            </div>
-                                            <div class="form-check form-check-primary mb-1">
-                                                <input type="checkbox" class="form-check-input input-filter" id="business" data-value="business" checked />
-                                                <label class="form-check-label" for="business">Business</label>
-                                            </div>
-                                            <div class="form-check form-check-warning mb-1">
-                                                <input type="checkbox" class="form-check-input input-filter" id="family" data-value="family" checked />
-                                                <label class="form-check-label" for="family">Family</label>
-                                            </div>
-                                            <div class="form-check form-check-success mb-1">
-                                                <input type="checkbox" class="form-check-input input-filter" id="holiday" data-value="holiday" checked />
-                                                <label class="form-check-label" for="holiday">Holiday</label>
-                                            </div>
-                                            <div class="form-check form-check-info">
-                                                <input type="checkbox" class="form-check-input input-filter" id="etc" data-value="etc" checked />
-                                                <label class="form-check-label" for="etc">ETC</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-auto">
-                                    <img src="../../../app-assets/images/pages/calendar-illustration.png" alt="Calendar illustration" class="img-fluid" />
-                                </div>
-                            </div>
-                            <!-- /Sidebar -->
+                                            <!-- Full calendar start -->
+                                                <div id="success_text"></div>
+                                                <section>
+                                                    <div class="app-calendar overflow-hidden border">
+                                                        <div class="row ">
+                                                            <!-- Sidebar -->
+                                                            <div class="col-md-2 ps-4 pt-4 pe-4 app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
+                                                                <div class="sidebar-wrapper">
+                                                                    <div class="card-body d-flex justify-content-center">
+                                                                        <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
+                                                                            <span class="align-middle">Add Event</span>
+                                                                        </button>
+                                                                    </div>
+                                {{--                                     <div class="card-body pb-0">
+                                                                        <h5 class="section-label mb-1">
+                                                                            <span class="align-middle">Filtre</span>
+                                                                        </h5>
+                                                                        <div class="form-check mb-1">
+                                                                            <input type="checkbox" class="form-check-input select-all" id="select-all" checked />
+                                                                            <label class="form-check-label" for="select-all">View All</label>
+                                                                        </div>
+                                                                        <div class="calendar-events-filter">
+                                                                            <div class="form-check form-check-danger mb-1">
+                                                                                <input type="checkbox" class="form-check-input input-filter" id="personal" data-value="personal" checked />
+                                                                                <label class="form-check-label" for="personal">Personal</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-primary mb-1">
+                                                                                <input type="checkbox" class="form-check-input input-filter" id="business" data-value="business" checked />
+                                                                                <label class="form-check-label" for="business">Business</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-warning mb-1">
+                                                                                <input type="checkbox" class="form-check-input input-filter" id="family" data-value="family" checked />
+                                                                                <label class="form-check-label" for="family">Family</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-success mb-1">
+                                                                                <input type="checkbox" class="form-check-input input-filter" id="holiday" data-value="holiday" checked />
+                                                                                <label class="form-check-label" for="holiday">Holiday</label>
+                                                                            </div>
+                                                                            <div class="form-check form-check-info">
+                                                                                <input type="checkbox" class="form-check-input input-filter" id="etc" data-value="etc" checked />
+                                                                                <label class="form-check-label" for="etc">ETC</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> --}}
+                                                                    <div class="filter-section">
+                                                                        <label for="filter-status" class="form-label">Filtrer par statut</label>
+                                                                        <select id="filter-status" class="form-select w-100">
+                                                                            <option value="">Tous</option>
+                                                                            <option value="planifier">Planifier</option>
+                                                                            <option value="commencer">Commencer</option>
+                                                                            <option value="terminer">Terminer</option>
+                                                                            <option value="annuler">Annuler</option>
+                                                                            <option value="reporter">Reporter</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Sidebar -->
 
-                            <!-- Calendar -->
-                            <div class="col-md-10 position-relative">
-                                <div class="card shadow-none border-0 mb-0 rounded-0">
-                                    <div class="card-body pb-0">
-                                        <div id="calendar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Calendar -->
-                            <div class="body-content-overlay"></div>
-                        </div>
-                    </div>
-                    <!-- Calendar Add/Update/Delete event modal-->
-                    <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
-                        <div class="modal-dialog sidebar-lg">
-                            <div class="modal-content p-0">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
-                                <div class="modal-header mb-1">
-                                    <h5 class="modal-title">Add Event</h5>
-                                </div>
-                                <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                                    <form class="event-form needs-validation" data-ajax="false" novalidate>
-                                        <div class="mb-1">
-                                            <label for="title" class="form-label">Title</label>
-                                            <input type="text" class="form-control" id="title" name="title" placeholder="Event Title" required />
-                                        </div>
-                                        <div class="mb-1">
-                                            <label for="select-label" class="form-label">Label</label>
-                                            <select class="select2 select-label form-select w-100" id="select-label" name="select-label">
-                                                <option data-label="primary" value="Business" selected>Business</option>
-                                                <option data-label="danger" value="Personal">Personal</option>
-                                                <option data-label="warning" value="Family">Family</option>
-                                                <option data-label="success" value="Holiday">Holiday</option>
-                                                <option data-label="info" value="ETC">ETC</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-1 position-relative">
-                                            <label for="start-date" class="form-label">Start Date</label>
-                                            <input type="text" class="form-control" id="start-date" name="start-date" placeholder="Start Date" />
-                                        </div>
-                                        <div class="mb-1 position-relative">
-                                            <label for="end-date" class="form-label">End Date</label>
-                                            <input type="text" class="form-control" id="end-date" name="end-date" placeholder="End Date" />
-                                        </div>
-                                        <div class="mb-1">
-                                            <div class="form-check form-switch">
-                                                <input type="checkbox" class="form-check-input allDay-switch" id="customSwitch3" />
-                                                <label class="form-check-label" for="customSwitch3">All Day</label>
-                                            </div>
-                                        </div>
-                                        <div class="mb-1">
-                                            <label for="event-url" class="form-label">Event URL</label>
-                                            <input type="url" class="form-control" id="event-url" placeholder="https://www.google.com" />
-                                        </div>
-                                        <div class="mb-1 select2-primary">
-                                            <label for="event-guests" class="form-label">Add Guests</label>
-                                            <select class="select2 select-add-guests form-select w-100" id="event-guests" multiple>
-                                                <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
-                                                <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>
-                                                <option data-avatar="5-small.png" value="Gabrielle Robertson">Gabrielle Robertson</option>
-                                                <option data-avatar="7-small.png" value="Lori Spears">Lori Spears</option>
-                                                <option data-avatar="9-small.png" value="Sandy Vega">Sandy Vega</option>
-                                                <option data-avatar="11-small.png" value="Cheryl May">Cheryl May</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-1">
-                                            <label for="event-location" class="form-label">Location</label>
-                                            <input type="text" class="form-control" id="event-location" placeholder="Enter Location" />
-                                        </div>
-                                        <div class="mb-1">
-                                            <label class="form-label">Description</label>
-                                            <textarea name="event-description-editor" id="event-description-editor" class="form-control"></textarea>
-                                        </div>
-                                        <div class="mb-1 d-flex">
-                                            <button type="submit" class="btn btn-primary add-event-btn me-1">Add</button>
-                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Update</button>
-                                            <button class="btn btn-outline-danger btn-delete-event d-none">Delete</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/ Calendar Add/Update/Delete event modal-->
-                </section>
-                <!-- Full calendar end -->
+                                                            <!-- Calendar -->
+                                                            <div class="col-md-10 position-relative">
+                                                                <div class="card shadow-none border-0 mb-0 rounded-0">
+                                                                    <div class="card-body pb-0">
+                                                                        <div id="calendar"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Calendar -->
+                                                            <div class="body-content-overlay"></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Calendar Add/Update/Delete event modal-->
+                                                    <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
+                                                        <div class="modal-dialog sidebar-lg">
+                                                            <div class="modal-content p-0">
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
+                                                                <div class="modal-header mb-1">
+                                                                    <h5 class="modal-title">Ajouter un evenement</h5>
+                                                                </div>
+                                                                <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                                                                    <div id="error_text"></div>
 
-            </div>
-        </div>
+ {{--                                                                    <form class="event-form needs-validation" data-ajax="false" novalidate>
+                                                                        <div class="mb-1">
+                                                                            <label for="title" class="form-label">Title</label>
+                                                                            <input type="text" class="form-control" id="title" name="title" value="{{ $demandehabilitation->entreprise->sigl_entreprises }}"  disabled />
+                                                                            <input type="hidden" class="form-control" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}" placeholder=""  />
+                                                                        </div>
+                                                                        <div class="mb-1">
+                                                                            <label for="select-label" class="form-label">Label</label>
+                                                                            <select class="select2 select-label form-select w-100" id="select-label" name="select-label" required>
+                                                                                <option data-label="primary" value="planifier" selected>Planifier</option>
+                                                                                <option data-label="info" value="commencer">Commencer</option>
+                                                                                <option data-label="success" value="terminer">Terminer</option>
+                                                                                <option data-label="danger" value="annuler">Annuler</option>
+                                                                                <option data-label="warning" value="reporter">Reporter</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="mb-1 position-relative">
+                                                                            <label for="start-date" class="form-label">Date de debut</label>
+                                                                            <input type="date" class="form-control" id="start-date" name="start-date" placeholder="Start Date" required/>
+                                                                        </div>
+                                                                        <div class="mb-1 position-relative">
+                                                                            <label for="end-date" class="form-label">Heure</label>
+                                                                            <input type="time" class="form-control" id="end-date" name="end-date" placeholder="End Date" required/>
+                                                                        </div>
 
-    </div>
-    <!-- END: Content-->
+                                                                        <div class="mb-1">
+                                                                            <label class="form-label">Description</label>
+                                                                            <textarea name="event-description-editor" id="event-description-editor" class="form-control" required></textarea>
+                                                                        </div>
+                                                                        <div class="mb-1 d-flex">
+                                                                            <button type="submit" class="btn btn-primary add-event-btn me-1">Add</button>
+                                                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                                                                            <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Update</button>
+                                                                            <button class="btn btn-outline-danger btn-delete-event d-none">Delete</button>
+                                                                        </div>
+                                                                    </form> --}}
+
+                                                                    <!-- Formulaire d'événement -->
+                                                                        <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
+                                                                            <!-- Champ caché pour l'ID de la demande d'habilitation -->
+                                                                            <input type="hidden" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}">
+
+                                                                            <!-- Titre de l'entreprise (désactivé) -->
+{{--                                                                             <div class="mb-1">
+                                                                                <label for="title" class="form-label">Titre</label>
+                                                                                <input type="text" class="form-control" id="title" name="title" value="{{ $demandehabilitation->entreprise->sigl_entreprises }}" disabled />
+                                                                            </div> --}}
+
+                                                                            <!-- Sélection du statut -->
+                                                                            <div class="mb-1">
+                                                                                <label for="select-label" class="form-label">Statut</label>
+                                                                                <select class="select2 select-label form-select w-100" id="select-label" name="select-label" required>
+                                                                                    <option data-label="primary" value="planifier" selected>Planifier</option>
+                                                                                    <option data-label="info" value="commencer">Commencer</option>
+                                                                                    <option data-label="success" value="terminer">Terminer</option>
+                                                                                    <option data-label="danger" value="annuler">Annuler</option>
+                                                                                    <option data-label="warning" value="reporter">Reporter</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <!-- Date de début -->
+                                                                            <div class="mb-1 position-relative">
+                                                                                <label for="start-date" class="form-label">Date de début</label>
+                                                                                <input type="date" class="form-control" id="start-date" name="start-date" placeholder="Date de début" required />
+                                                                            </div>
+
+                                                                            <!-- Heure de fin -->
+                                                                            <div class="mb-1 position-relative">
+                                                                                <label for="end-date" class="form-label">Heure de fin</label>
+                                                                                <input type="time" class="form-control" id="end-date" name="end-date" placeholder="Heure de fin" required />
+                                                                            </div>
+
+                                                                            <!-- Description de l'événement -->
+                                                                            <div class="mb-1">
+                                                                                <label for="event-description-editor" class="form-label">Description</label>
+                                                                                <textarea class="form-control" id="event-description-editor" name="event-description-editor" required></textarea>
+                                                                            </div>
+
+                                                                            <!-- Boutons d'action -->
+                                                                            <div class="d-flex mb-1">
+                                                                                <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
+                                                                                <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                                                                                <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
+                                                                                <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
+                                                                            </div>
+                                                                        </form>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--/ Calendar Add/Update/Delete event modal-->
+                                                </section>
+                                            <!-- Full calendar end -->
+
                                         </div>
                                     <?php } ?>
                                 @endif
@@ -1064,12 +1095,265 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                     </div>
                 </div>
 
+                <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
+                <input name="id_visite" class="id_visite"  type="hidden" id="id_visite"/>
 
         <!-- END: Content-->
 
         @endsection
 
+
+
+
         @section('js_perso')
+
+
+
+        <script>
+
+    var idddemha;
+    var idddemha = $('#idddemha').val();
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    editable: false,
+                    selectable: true,
+                    allDaySlot: true,
+                    locale: 'fr',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,listWeek'
+                    },
+                    businessHours: {
+                        //daysOfWeek: [1, 2, 3, 4, 5], // Lundi à vendredi
+                        startTime: '08:00',
+                        endTime: '18:00'
+                    },
+                    allDaySlot: true,
+                    buttonText: {
+                        today:    'Aujourd\'hui',
+                        month:    'Mois',
+                        week:     'Semaine',
+                        day:      'Jour',
+                        list:     'Liste'
+                    },
+                    hiddenDays: [0,6],
+                    aspectRatio: 3,
+                    events: {
+                        url: '/traitementdemandehabilitation/calendar-events', // Route Laravel pour récupérer les événements
+                        method: 'GET',
+                        extraParams: function() {
+                            return {
+                                statut: $('#filter-status').val() // Filtrer les événements selon le statut sélectionné
+                            };
+                        },
+                        failure: function() {
+                            alert('Erreur lors du chargement des événements.');
+                        }
+                    },
+                    eventDidMount: function(info) {
+                        var statut = info.event.extendedProps.selectlabel;
+                        if (statut === 'planifier') {
+                        info.el.style.backgroundColor = '#007bff';
+                        info.el.style.borderColor = '#007bff';
+                        info.el.style.color = '#000000';
+                        info.el.style.fontSize = '12px';
+                        } else if (statut === 'commencer') {
+                        info.el.style.backgroundColor = '#17a2b8';
+                        info.el.style.borderColor = '#17a2b8';
+                        info.el.style.color = '#000000';
+                        info.el.style.fontSize = '12px';
+                        } else if (statut === 'terminer') {
+                        info.el.style.backgroundColor = '#28a745';
+                        info.el.style.borderColor = '#28a745';
+                        info.el.style.color = '#000000';
+                        info.el.style.fontSize = '12px';
+                        } else if (statut === 'annuler') {
+                        info.el.style.backgroundColor = '#dc3545';
+                        info.el.style.borderColor = '#dc3545';
+                        info.el.style.color = '#000000';
+                        info.el.style.fontSize = '12px';
+                        } else if (statut === 'reporter') {
+                        info.el.style.backgroundColor = '#ffc107';
+                        info.el.style.borderColor = '#ffc107';
+                        info.el.style.color = '#000000';
+                        info.el.style.fontSize = '12px';
+                        }
+                    },
+                    dateClick: function(info) {
+                        //alert(info);
+                    resetModalForm(); // Réinitialise les champs du formulaire
+                    $('#start-date').val(info.dateStr); // Remplit la date de début automatiquement
+                    $('.add-event-btn').removeClass('d-none'); // Affiche le bouton "Add"
+                    $('.update-event-btn, .btn-delete-event').addClass('d-none'); // Cache les boutons "Update" et "Delete"
+                    $('#add-new-sidebar').modal('show');
+                     },
+                    eventClick: function(info) {
+                        // Récupération de l'ID de l'événement (visite) cliqué
+                       // var visiteId = info.event.id;
+                       var visiteId = getVisiteId(info.event);
+                        populateModalForm(info.event); // Remplit les champs du formulaire avec les informations de l'événement
+                        $('.add-event-btn').addClass('d-none'); // Cache le bouton "Add"
+                        $('.update-event-btn').removeClass('d-none'); // Affiche les boutons "Update" et "Delete"
+                        $('#add-new-sidebar').modal('show');
+                    },
+                    eventDrop: function(info) {
+                        updateEvent(info.event); // Met à jour l'événement après un drag and drop
+                    }
+                });
+
+                calendar.render();
+
+                    // Apply filter when the select option changes
+                $('#filter-status').on('change', function() {
+                    calendar.refetchEvents(); // Recharge les événements avec le nouveau filtre
+                });
+
+                // Fonction pour récupérer l'ID de la visite sélectionnée
+                function getVisiteId(event) {
+                    return event.id;
+                }
+
+                // Fonction pour réinitialiser le formulaire du modal
+                function resetModalForm() {
+                    $('#title').val('');
+                    $('#start-date').val('');
+                    $('#end-date').val('');
+                    $('#event-description-editor').val('');
+                    $('#id_visite').val('');
+                    $('#select-label').val('planifier');
+                    $('#id_demande_habilitation').val('');
+                }
+
+                // Fonction pour remplir le formulaire du modal avec les détails de l'événement
+                function populateModalForm(event) {
+                    const formattedDate = formatDateToDDMMYYYY(event.extendedProps.datevisite);
+                    //alert(event.extendedProps.datevisite);
+                   // alert(formattedDate);
+                    //console.log(event.end);
+                    // $('#title').val(event.title);
+                    // $('#start-date').val(moment(event.startStr).format('DD/MM/YYYY'));
+                    // $('#end-date').val(event.endStr);
+                    // $('#event-description-editor').append(event.eventdescriptioneditor);
+                    // $('#select-label').val(event.selectlabelStr);
+                    $('#title').val(event.title);
+                    let formattedStartDate = moment(event.extendedProps.datevisite).format('YYYY-MM-DD');
+                    $('#start-date').val(formattedStartDate);
+                    $('#end-date').val(event.extendedProps.time);
+                    $('#id_visite').val(event.id); // Stocker l'ID dans un champ caché pour une utilisation ultérieure
+                    $('#id_demande_habilitation').val(event.extendedProps.iddemandehabilitation);
+                    $('#event-description-editor').val(event.extendedProps.eventdescriptioneditor);
+                    $('#select-label').val(event.extendedProps.selectlabel);
+                }
+
+                // Fonction pour ajouter un nouvel événement
+                $('.add-event-btn').on('click', function (e) {
+                    e.preventDefault();
+                    sendEventRequest('/traitementdemandehabilitation/' + idddemha + '/store/visite', 'POST', 'Événement ajouté avec succès');
+                });
+
+                // Fonction pour mettre à jour un événement existant
+                $('.update-event-btn').on('click', function (e) {
+                    e.preventDefault();
+                    var eventId = $('#id_visite').val();
+                    sendEventRequest('/traitementdemandehabilitation/' + eventId  + '/update/visite', 'POST', 'Événement mis à jour avec succès');
+                });
+
+                // Fonction pour supprimer un événement
+                $('.btn-delete-event').on('click', function (e) {
+                    e.preventDefault();
+                    var eventId = visiteId; // Fonction à implémenter pour obtenir l'ID de l'événement sélectionné
+                    sendEventRequest('/calendar/delete/' + eventId, 'POST', 'Événement supprimé avec succès');
+                });
+
+                // Fonction générique pour envoyer une requête Ajax
+                function sendEventRequest(url, method, successMessage) {
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: {
+                            title: $('#title').val(),
+                            iddemandehabilitation: $('#id_demande_habilitation').val(),
+                            start: $('#start-date').val(),
+                            end: $('#end-date').val(),
+                            eventdescriptioneditor: $('#event-description-editor').val(),
+                            selectlabel: $('#select-label').val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+
+                            calendar.refetchEvents(); // Rafraîchir les événements du calendrier
+                            $('#add-new-sidebar').modal('hide');
+                            displayMessage('success', successMessage);
+                        },
+                        error: function (xhr) {
+                            var errors = xhr.responseJSON.errors;
+                            if (typeof errors === 'object') {
+                                displayMessage('error', formatErrors(errors)); // Fonction pour formater les erreurs
+                            }else{
+                                displayMessage('error', errors);
+                            }
+
+                        }
+                    });
+                }
+
+
+                // Fonction pour formater la date
+                function formatDateToDDMMYYYY(dateStr) {
+                    // Convertir la chaîne en objet Date
+                    const dateObj = new Date(dateStr);
+
+                    // Vérifier si la date est valide
+                    if (isNaN(dateObj.getTime())) {
+                        throw new Error('Date invalide');
+                    }
+
+                    // Extraire le jour, le mois et l'année
+                    const day = String(dateObj.getDate()).padStart(2, '0'); // Ajouter un 0 devant si nécessaire
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+                    const year = dateObj.getFullYear();
+
+                    // Retourner la date au format jj/mm/aaaa
+                    return `${day}/${month}/${year}`;
+                }
+                // Fonction pour afficher des messages (succès ou erreur)
+                function displayMessage(type, message) {
+                    //alert(message);
+                    if (type === 'success') {
+                        suces = $("#success_text")
+                        suces.empty();
+                        alertBox = suces.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
+                    } else {
+                        error = $("#error_text")
+                        error.empty();
+                        alertBox = error.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
+                    }
+
+                }
+
+                // Fonction pour formater les messages d'erreur
+                function formatErrors(errors) {
+                    var errorMessage = '';
+                    $.each(errors, function (key, value) {
+                        errorMessage += value + '<br>';
+                    });
+
+                    return errorMessage;
+                }
+
+            });
+
+
+        </script>
+
+
+
+
 
             <script>
 

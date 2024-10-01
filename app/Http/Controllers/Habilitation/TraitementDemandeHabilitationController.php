@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Habilitation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Visites;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -226,6 +227,230 @@ class TraitementDemandeHabilitationController extends Controller
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
                     'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList'));
+    }
+
+    public function fetchEvents(Request $request)
+    {
+        // $events = Visites::where([['id_charger_habilitation_visite','=',Auth::user()->id]])->get();
+        // $eventsFormatted = [];
+
+        // foreach ($events as $event) {
+        //     $eventsFormatted[] = [
+        //         'id' => $event->id_visites,
+        //         'iddemandehabilitation' => $event->id_demande_habilitation,
+        //         'title' => $event->demandeHabilitation->entreprise->sigl_entreprises,
+        //         'start' => $event->date_visite,
+        //         'end' => $event->heure_visite,
+        //         'eventdescriptioneditor' => $event->description_lieu,
+        //         'selectlabel' => $event->statut,
+        //         'allDay' => true,
+        //     ];
+        // }
+
+        // return response()->json($eventsFormatted);
+
+            // Récupère tous les événements ou applique un filtre selon le statut
+            $query = Visites::where([['id_charger_habilitation_visite','=',Auth::user()->id]]);
+
+            // Applique un filtre de statut si présent
+            if ($request->has('statut') && !empty($request->statut)) {
+                $query->where('statut', $request->statut);
+            }
+
+            $events = $query->get();
+
+            $calendarEvents = [];
+
+            foreach ($events as $event) {
+                // Attribuer une couleur en fonction du statut
+                $eventColor = $this->getEventColorByStatus($event->statut);
+                //dd($eventColor['background']);
+                $calendarEvents[] = [
+                    'id' => $event->id_visites,
+                    'iddemandehabilitation' => $event->id_demande_habilitation,
+                    'title' => $event->demandeHabilitation->entreprise->sigl_entreprises,
+                    'start' => $event->date_visite,
+                    'datevisite' => $event->date_visite,
+                    'end' => $event->date_fin_visite,
+                    'time' => $event->heure_visite,
+                    'eventdescriptioneditor' => $event->description_lieu,
+                    'selectlabel' => $event->statut,
+                    'backgroundColor' => $eventColor['background'], // Couleur de fond
+                    'textColor' => $eventColor['text'] // Couleur du texte
+                ];
+            }
+
+            return response()->json($calendarEvents);
+    }
+
+    /**
+ * Retourne une couleur pour un statut donné
+ */
+    private function getEventColorByStatus($status)
+    {
+        switch ($status) {
+            case 'planifier':
+                return ['background' => '#0d6efd', 'text' => '#ffffff']; // Bleu
+            case 'commencer':
+                return ['background' => '#17a2b8', 'text' => '#ffffff']; // Cyan
+            case 'terminer':
+                return ['background' => '#28a745', 'text' => '#ffffff']; // Vert
+            case 'annuler':
+                return ['background' => '#dc3545', 'text' => '#ffffff']; // Rouge
+            case 'reporter':
+                return ['background' => '#ffc107', 'text' => '#000000']; // Jaune
+            default:
+                return ['background' => '#6c757d', 'text' => '#ffffff']; // Gris par défaut
+        }
+    }
+
+/*     public function storeviste(Request $request,$id)
+    {
+       // dd($request);
+       if ($request->isMethod('put')) {
+            $this->validate($request, [
+                'iddemandehabilitation' => 'required',
+                'start' => 'required',
+                'selectlabel' => 'required',
+                'end' => 'required',
+                'eventdescriptioneditor' => 'required',
+            ],[
+                'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
+                'start.required' => 'Veuillez ajouter une date de debut.',
+                'selectlabel.required' => 'Veuillez ajouter un statut.',
+                'end.required' => 'Veuillez ajouter une heure.',
+                'eventdescriptioneditor.required' => 'Veuillez ajouter une description.',
+            ]);
+
+            $visite = Visites::find($request->input('iddemandehabilitation'));
+
+            if (isset($visite)) {
+                return response()->json(['status' => 'Cette demande a deja un rendez-vous, Vous pouvez modifier le rendez-vous'],400);
+            }
+
+            $visite = new Visites();
+            $visite->id_demande_habilitation = $request->input('iddemandehabilitation');
+            $visite->date_visite = $request->input('start');
+            $visite->date_fin_visite = $request->input('start');
+            $visite->statut = $request->input('selectlabel');
+            $visite->heure_visite = $request->input('end');
+            $visite->description_lieu = $request->input('eventdescriptioneditor');
+            $visite->save();
+        }
+
+        return response()->json(['status' => 'Evenement ajouter avec success'], 200);
+    } */
+
+    public function storevisite(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+            // Validation des données
+            $request->validate([
+                //'iddemandehabilitation' => 'required',
+                'start' => 'required|date',
+                'selectlabel' => 'required',
+                'end' => 'required',
+                'eventdescriptioneditor' => 'required',
+            ], [
+                //'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
+                'start.required' => 'Veuillez ajouter une date de début.',
+                'selectlabel.required' => 'Veuillez ajouter un statut.',
+                'end.required' => 'Veuillez ajouter une heure.',
+                'eventdescriptioneditor.required' => 'Veuillez ajouter une description.',
+            ]);
+
+           // dd($id);
+
+            // Vérification si une visite existe déjà
+            $visiteExists = Visites::where('id_demande_habilitation', $id)->exists();
+
+            if ($visiteExists) {
+                return response()->json([
+                    'errors' => 'Cette demande a déjà un rendez-vous, vous pouvez modifier le rendez-vous.'
+                ], 400);
+            }
+
+            $dateDebut = $request->start;
+
+            $heureDebut = $request->end;
+
+            if (strpos($heureDebut, ':') === strrpos($heureDebut, ':')) {
+                // Format sans secondes
+                $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i', $dateDebut . ' ' . $heureDebut);
+            } else {
+                // Format avec secondes
+                $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i:s', $dateDebut . ' ' . $heureDebut);
+            }
+
+            // Création d'une nouvelle visite
+            $visite = Visites::create([
+                'id_demande_habilitation' => $id,
+                'date_visite' => $dateEtHeureDebut,
+                'date_fin_visite' => Carbon::parse($request->start)->format('Y-m-d') . ' 23:59:59',
+                'statut' => $request->selectlabel,
+                'heure_visite' => $request->end,
+                'description_lieu' => $request->eventdescriptioneditor,
+                'id_charger_habilitation_visite' => Auth::user()->id,
+            ]);
+
+            return response()->json(['status' => 'Événement ajouté avec succès'], 200);
+        }
+
+        return response()->json(['status' => 'Méthode non autorisée'], 405);
+    }
+
+
+    public function updatevisite(Request $request, $id)
+    {
+        //dd($id);
+        if ($request->isMethod('post')) {
+            // Validation des données
+            $request->validate([
+                'iddemandehabilitation' => 'required',
+                'start' => 'required|date',
+                'selectlabel' => 'required',
+                'end' => 'required',
+                'eventdescriptioneditor' => 'required',
+            ], [
+                'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
+                'start.required' => 'Veuillez ajouter une date de début.',
+                'selectlabel.required' => 'Veuillez ajouter un statut.',
+                'end.required' => 'Veuillez ajouter une heure.',
+                'eventdescriptioneditor.required' => 'Veuillez ajouter une description.',
+            ]);
+
+           // dd($id);
+
+            $visitef = Visites::find($id);
+           // $dv = Carbon::createFromFormat('Y-m-d H:i:s', $request->start . ' ' . $request->end);
+            //dd($dv);
+
+            $dateDebut = $request->start;
+
+            $heureDebut = $request->end;
+
+            if (strpos($heureDebut, ':') === strrpos($heureDebut, ':')) {
+                // Format sans secondes
+                $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i', $dateDebut . ' ' . $heureDebut);
+            } else {
+                // Format avec secondes
+                $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i:s', $dateDebut . ' ' . $heureDebut);
+            }
+
+            $visite = $visitef->update([
+                'id_demande_habilitation' => $request->iddemandehabilitation,
+                'date_visite' => $dateEtHeureDebut,
+                'date_fin_visite' => Carbon::parse($request->start)->format('Y-m-d') . ' 23:59:59',//Carbon::parse($request->start)->endOfDay(),
+                'statut' => $request->selectlabel,
+                'heure_visite' => $request->end,
+                'description_lieu' => $request->eventdescriptioneditor,
+                'id_charger_habilitation_visite' => Auth::user()->id,
+            ]);
+
+            return response()->json(['status' => 'Événement modifié avec succès'], 200);
+        }
+
+        return response()->json(['status' => 'Méthode non autorisée'], 405);
     }
 
     /**
