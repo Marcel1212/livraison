@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_demande_habilitation
  * @property float $id_charger_habilitation_visite
  * @property string $date_visite
+ * @property string $date_fin_visite
  * @property string $heure_visite
+ * @property string $heure_visite_fin
+ * @property string $heure_visite_fin_reel
  * @property string $description_lieu
  * @property boolean $flag_visites
  * @property string $statut
  * @property string $created_at
  * @property string $updated_at
- * @property string $date_fin_visite
- * @property string $heure_visite_fin
- * @property string $heure_visite_fin_reel
  * @property MotifReportAnnulation[] $motifReportAnnulations
  * @property DemandeHabilitation $demandeHabilitation
- * @property User $userchargerhabilitationvisite
  * @property RapportsVisite[] $rapportsVisites
+ * @property User $userchargerhabilitationvisite
  */
 class Visites extends Model
 {
@@ -42,7 +42,7 @@ class Visites extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_demande_habilitation', 'id_charger_habilitation_visite', 'date_visite', 'heure_visite', 'description_lieu', 'flag_visites', 'statut', 'created_at', 'updated_at', 'date_fin_visite', 'heure_visite_fin', 'heure_visite_fin_reel'];
+    protected $fillable = ['id_demande_habilitation', 'date_visite', 'heure_visite', 'description_lieu', 'flag_visites', 'statut', 'created_at', 'updated_at','date_fin_visite','id_charger_habilitation_visite','heure_visite_fin','heure_visite_fin_reel'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -61,18 +61,18 @@ class Visites extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function userchargerhabilitationvisite()
-    {
-        return $this->belongsTo('App\Models\User', 'id_charger_habilitation_visite');
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function rapportsVisites()
     {
         return $this->hasMany('App\Models\RapportsVisite', 'id_visites', 'id_visites');
+    }
+
+        /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function userchargerhabilitationvisite()
+    {
+        return $this->belongsTo('App\Models\User', 'id_charger_habilitation_visite');
     }
 }

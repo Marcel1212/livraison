@@ -910,49 +910,51 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     <?php }else{ ?>
                                         <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
                                             <!-- Full calendar start -->
+                                                <?php //dd($demandehabilitation->visites->statut); ?>
+                                                <div class="row">
+                                                    <div class="col-8">
+
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                        @if (@$visites->statut == "terminer" and @$demandehabilitation->flag_soumis_comite_technique == false)
+                                                            @if (count(@$rapportVisite)>0)
+                                                                <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                                    @csrf
+                                                                    @method('put')
+                                                                    <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
+                                                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                                    Soumettre pour le comite
+                                                                    </button>
+                                                                </form>
+                                                            @else
+                                                                <button   class="btn btn-sm btn-primary ActiveRapport"
+                                                                     data-bs-toggle="modal" data-bs-target="#ActiveRapport">
+                                                                        Rapport de visite
+                                                                </button>
+                                                            @endif
+                                                        @endif
+                                                    </div>
+
+                                                    <br/>
+                                                    <br/>
+                                                </div>
                                                 <div id="success_text"></div>
+                                                <div id="success_text_rapport"></div>
                                                 <section>
                                                     <div class="app-calendar overflow-hidden border">
                                                         <div class="row ">
                                                             <!-- Sidebar -->
                                                             <div class="col-md-2 ps-4 pt-4 pe-4 app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
                                                                 <div class="sidebar-wrapper">
-                                                                    <div class="card-body d-flex justify-content-center">
-                                                                        <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
-                                                                            <span class="align-middle">Add Event</span>
-                                                                        </button>
-                                                                    </div>
-                                {{--                                     <div class="card-body pb-0">
-                                                                        <h5 class="section-label mb-1">
-                                                                            <span class="align-middle">Filtre</span>
-                                                                        </h5>
-                                                                        <div class="form-check mb-1">
-                                                                            <input type="checkbox" class="form-check-input select-all" id="select-all" checked />
-                                                                            <label class="form-check-label" for="select-all">View All</label>
+                                                                    @if (count(@$rapportVisite)<1)
+                                                                        <div class="card-body d-flex justify-content-center">
+                                                                            <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
+                                                                                <span class="align-middle">Ajouter un evenement</span>
+                                                                            </button>
                                                                         </div>
-                                                                        <div class="calendar-events-filter">
-                                                                            <div class="form-check form-check-danger mb-1">
-                                                                                <input type="checkbox" class="form-check-input input-filter" id="personal" data-value="personal" checked />
-                                                                                <label class="form-check-label" for="personal">Personal</label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-primary mb-1">
-                                                                                <input type="checkbox" class="form-check-input input-filter" id="business" data-value="business" checked />
-                                                                                <label class="form-check-label" for="business">Business</label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-warning mb-1">
-                                                                                <input type="checkbox" class="form-check-input input-filter" id="family" data-value="family" checked />
-                                                                                <label class="form-check-label" for="family">Family</label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-success mb-1">
-                                                                                <input type="checkbox" class="form-check-input input-filter" id="holiday" data-value="holiday" checked />
-                                                                                <label class="form-check-label" for="holiday">Holiday</label>
-                                                                            </div>
-                                                                            <div class="form-check form-check-info">
-                                                                                <input type="checkbox" class="form-check-input input-filter" id="etc" data-value="etc" checked />
-                                                                                <label class="form-check-label" for="etc">ETC</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> --}}
+                                                                    @endif
+
+
                                                                     <div class="filter-section">
                                                                         <label for="filter-status" class="form-label">Filtrer par statut</label>
                                                                         <select id="filter-status" class="form-select w-100">
@@ -991,59 +993,20 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                 <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                                                                     <div id="error_text"></div>
 
- {{--                                                                    <form class="event-form needs-validation" data-ajax="false" novalidate>
-                                                                        <div class="mb-1">
-                                                                            <label for="title" class="form-label">Title</label>
-                                                                            <input type="text" class="form-control" id="title" name="title" value="{{ $demandehabilitation->entreprise->sigl_entreprises }}"  disabled />
-                                                                            <input type="hidden" class="form-control" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}" placeholder=""  />
-                                                                        </div>
-                                                                        <div class="mb-1">
-                                                                            <label for="select-label" class="form-label">Label</label>
-                                                                            <select class="select2 select-label form-select w-100" id="select-label" name="select-label" required>
-                                                                                <option data-label="primary" value="planifier" selected>Planifier</option>
-                                                                                <option data-label="info" value="commencer">Commencer</option>
-                                                                                <option data-label="success" value="terminer">Terminer</option>
-                                                                                <option data-label="danger" value="annuler">Annuler</option>
-                                                                                <option data-label="warning" value="reporter">Reporter</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="mb-1 position-relative">
-                                                                            <label for="start-date" class="form-label">Date de debut</label>
-                                                                            <input type="date" class="form-control" id="start-date" name="start-date" placeholder="Start Date" required/>
-                                                                        </div>
-                                                                        <div class="mb-1 position-relative">
-                                                                            <label for="end-date" class="form-label">Heure</label>
-                                                                            <input type="time" class="form-control" id="end-date" name="end-date" placeholder="End Date" required/>
-                                                                        </div>
 
-                                                                        <div class="mb-1">
-                                                                            <label class="form-label">Description</label>
-                                                                            <textarea name="event-description-editor" id="event-description-editor" class="form-control" required></textarea>
-                                                                        </div>
-                                                                        <div class="mb-1 d-flex">
-                                                                            <button type="submit" class="btn btn-primary add-event-btn me-1">Add</button>
-                                                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                                                                            <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Update</button>
-                                                                            <button class="btn btn-outline-danger btn-delete-event d-none">Delete</button>
-                                                                        </div>
-                                                                    </form> --}}
 
                                                                     <!-- Formulaire d'événement -->
                                                                         <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
                                                                             <!-- Champ caché pour l'ID de la demande d'habilitation -->
                                                                             <input type="hidden" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}">
 
-                                                                            <!-- Titre de l'entreprise (désactivé) -->
-{{--                                                                             <div class="mb-1">
-                                                                                <label for="title" class="form-label">Titre</label>
-                                                                                <input type="text" class="form-control" id="title" name="title" value="{{ $demandehabilitation->entreprise->sigl_entreprises }}" disabled />
-                                                                            </div> --}}
+
 
                                                                             <!-- Sélection du statut -->
                                                                             <div class="mb-1">
                                                                                 <label for="select-label" class="form-label">Statut</label>
                                                                                 <select class="select2 select-label form-select w-100" id="select-label" name="select-label" required>
-                                                                                    <option data-label="primary" value="planifier" selected>Planifier</option>
+                                                                                    <option data-label="primary" value="planifier">Planifier</option>
                                                                                     <option data-label="info" value="commencer">Commencer</option>
                                                                                     <option data-label="success" value="terminer">Terminer</option>
                                                                                     <option data-label="danger" value="annuler">Annuler</option>
@@ -1053,14 +1016,24 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                                                             <!-- Date de début -->
                                                                             <div class="mb-1 position-relative">
-                                                                                <label for="start-date" class="form-label">Date de début</label>
+                                                                                <label for="start-date" class="form-label">Date de début provisoire</label>
                                                                                 <input type="date" class="form-control" id="start-date" name="start-date" placeholder="Date de début" required />
                                                                             </div>
 
                                                                             <!-- Heure de fin -->
                                                                             <div class="mb-1 position-relative">
-                                                                                <label for="end-date" class="form-label">Heure de fin</label>
-                                                                                <input type="time" class="form-control" id="end-date" name="end-date" placeholder="Heure de fin" required />
+                                                                                <label for="end-date" class="form-label">Heure de debut provisoire </label>
+                                                                                <input type="time" class="form-control" id="end-date" name="end-date" placeholder="Heure de fin provisoire" required />
+                                                                            </div>
+
+                                                                            <div class="mb-1 position-relative">
+                                                                                <label for="enddateP" class="form-label">Heure de fin provisoire </label>
+                                                                                <input type="time" class="form-control" id="enddateP" name="enddateP" placeholder="Heure de fin provisoire" required />
+                                                                            </div>
+
+                                                                            <div class="mb-1 position-relative">
+                                                                                <label for="enddateR" class="form-label">Heure de fin reel </label>
+                                                                                <input type="time" class="form-control" id="enddateR" name="enddateR" placeholder="Heure de fin reel" required />
                                                                             </div>
 
                                                                             <!-- Description de l'événement -->
@@ -1074,6 +1047,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                                 <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
                                                                                 <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
                                                                                 <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
+                                                                                <a href="" class="btn btn-success update-lien-event-btn d-none me-1">Aller sur le dossier</a>
                                                                                 <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
                                                                             </div>
                                                                         </form>
@@ -1090,9 +1064,66 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     <?php } ?>
                                 @endif
 
+
+                                <div class="modal fade" id="ActiveRapport" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-simple modal-edit-user">
+                                        <div class="modal-content p-3 p-md-5">
+                                            <div class="modal-body">
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="text-center mb-4">
+                                                    <h3 class="mb-2">Rapport apres la visite</h3>
+                                                    <p class="text-muted"></p>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="error_text_rapport"></div>
+                                                    <div class="row">
+                                                        <form class="rapport-form needs-validation" id="rapport-form" data-ajax="false" novalidate>
+                                                            <div class="col-md-3">
+                                                                <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
+                                                                <label class="form-label" for="etat_locaux_rapport">Etat des locaux
+                                                                    <strong style="color:red;">*</strong></label>
+                                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport"></textarea>
+                                                            </div>
+
+
+
+                                                            <div class="col-md-3">
+                                                                <label class="form-label" for="equipement_rapport">Equipements
+                                                                    <strong style="color:red;">*</strong></label>
+                                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport"></textarea>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="form-label" for="salubrite_rapport">Salubrité/Securité
+                                                                    <strong style="color:red;">*</strong></label>
+                                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport"></textarea>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <label class="form-label" for="contenu">Autres</label>
+                                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu"></textarea>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <label class="form-label" for="avis_comite_technique">Avis de la commission technique <strong style="color:red;">*</strong></label>
+                                                                    <textarea class="form-control form-control-sm" name="avis_comite_technique" id="avis_comite_technique"></textarea>
+                                                            </div>
+
+                                                            <button type="submit" class="btn btn-primary add-rapport-btn me-1">Ajouter</button>
+                                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
@@ -1101,7 +1132,6 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
         <!-- END: Content-->
 
         @endsection
-
 
 
 
@@ -1189,16 +1219,26 @@ var calendarEl = document.getElementById('calendar');
                     resetModalForm(); // Réinitialise les champs du formulaire
                     $('#start-date').val(info.dateStr); // Remplit la date de début automatiquement
                     $('.add-event-btn').removeClass('d-none'); // Affiche le bouton "Add"
-                    $('.update-event-btn, .btn-delete-event').addClass('d-none'); // Cache les boutons "Update" et "Delete"
+                    $('.update-event-btn, .update-lien-event-btn').addClass('d-none'); // Cache les boutons "Update" et "Delete"
                     $('#add-new-sidebar').modal('show');
                      },
                     eventClick: function(info) {
                         // Récupération de l'ID de l'événement (visite) cliqué
                        // var visiteId = info.event.id;
+                       resetModalForm();
                        var visiteId = getVisiteId(info.event);
-                        populateModalForm(info.event); // Remplit les champs du formulaire avec les informations de l'événement
-                        $('.add-event-btn').addClass('d-none'); // Cache le bouton "Add"
-                        $('.update-event-btn').removeClass('d-none'); // Affiche les boutons "Update" et "Delete"
+                       openAndRefreshModal(info.event.id);
+                        //populateModalForm(info.event); // Remplit les champs du formulaire avec les informations de l'événement
+                       // alert(info.event.extendedProps.selectlabel)
+                       if (info.event.extendedProps.selectlabel === "terminer") {
+                            $('.add-event-btn').addClass('d-none');
+                            $('.update-event-btn').addClass('d-none');
+                            $('.update-lien-event-btn').addClass('d-none'); // Affiche un bouton spécifique pour les événements terminés
+                        } else {
+                            $('.add-event-btn').addClass('d-none');
+                            $('.update-lien-event-btn').addClass('d-none');
+                            $('.update-event-btn').removeClass('d-none'); // Affiche le bouton de mise à jour pour les autres statuts
+                        }
                         $('#add-new-sidebar').modal('show');
                     },
                     eventDrop: function(info) {
@@ -1218,36 +1258,118 @@ var calendarEl = document.getElementById('calendar');
                     return event.id;
                 }
 
+                // Fonction pour réinitialiser le modal
+                function resetModal() {
+                    $('#event-form')[0].reset();  // Réinitialiser le formulaire
+                    $('#event-form .is-invalid').removeClass('is-invalid');  // Retirer les validations précédentes
+                    $('#event-form .is-valid').removeClass('is-valid');      // Retirer les validations précédentes
+                }
+
+                // Fonction pour réinitialiser le modal
+                function resetModalRapport() {
+                    $('#rapport-form')[0].reset();  // Réinitialiser le formulaire
+                    $('#rapport-form .is-invalid').removeClass('is-invalid');  // Retirer les validations précédentes
+                    $('#rapport-form .is-valid').removeClass('is-valid');      // Retirer les validations précédentes
+                }
+
+                $('#add-new-sidebar').on('hidden.bs.modal', function () {
+                    resetModal();  // Réinitialiser le modal à chaque fermeture
+                });
+
+                $('#ActiveRapport').on('hidden.bs.modal', function () {
+                    resetModalRapport();  // Réinitialiser le modal à chaque fermeture
+                });
+
+
+                // Rafraîchir le contenu du modal
+                function refreshModal(eventId) {
+                   // alert(eventId)
+                    $.ajax({
+                        url: '/traitementdemandehabilitation/calendar-events/get-event-data/' + eventId,  // URL pour récupérer les données de l'événement
+                        type: 'GET',
+                        success: function(response) {
+                            //console.log(response)
+                            // Injecter les nouvelles données dans le modal
+                            $('#id_demande_habilitation').val(response.id_demande_habilitation);
+                            $('#title').val(response.title);
+                            $('#end-date').val(response.timestart);
+                            $('#event-description-editor').val(response.eventdescriptioneditor);
+                            $('#select-label').val(response.selectlabel).change();
+                            let formattedStartDate = moment(response.datevisite).format('YYYY-MM-DD');
+                            $('#start-date').val(formattedStartDate);
+                            $('#enddateP').val(response.timeend);
+                            $('#enddateR').val(response.timeendr);
+                            $('#id_visite').val(response.id); // Stocker l'ID dans un champ caché pour une utilisation ultérieure
+                            $('.update-lien-event-btn').attr('href', response.url);
+                            // Ouvrir le modal après mise à jour
+                            $('#add-new-sidebar').modal('show');
+                        },
+                        error: function(error) {
+                            alert('Erreur lors du rafraîchissement du modal')
+                            console.log('Erreur lors du rafraîchissement du modal', error);
+                        }
+                    });
+                }
+
+
+                function openAndRefreshModal(eventId) {
+                    resetModal();  // Réinitialiser le contenu
+                    refreshModal(eventId);  // Charger les nouvelles données
+                }
+
+                // Bouton d'édition
+                $('.edit-event-btn').on('click', function(e) {
+                    e.preventDefault();
+                    let eventId = $(this).data('event-id');  // Récupérer l'ID de l'événement
+                    openAndRefreshModal(eventId);  // Rafraîchir et ouvrir le modal
+                });
+
                 // Fonction pour réinitialiser le formulaire du modal
                 function resetModalForm() {
                     $('#title').val('');
                     $('#start-date').val('');
                     $('#end-date').val('');
+                    $('#enddateP').val('');
+                    $('#enddateR').val('');
                     $('#event-description-editor').val('');
                     $('#id_visite').val('');
-                    $('#select-label').val('planifier');
+                    $('#select-label').val('planifier').change();
                     $('#id_demande_habilitation').val('');
                 }
+
+                function resetModalFormRapport() {
+                    $('#etat_locaux_rapport').val('');
+                    $('#equipement_rapport').val('');
+                    $('#salubrite_rapport').val('');
+                    $('#contenu').val('');
+                    $('#avis_comite_technique').val('');
+                    $('#id_demande_habilitation').val(idddemha);
+                }
+
+
 
                 // Fonction pour remplir le formulaire du modal avec les détails de l'événement
                 function populateModalForm(event) {
                     const formattedDate = formatDateToDDMMYYYY(event.extendedProps.datevisite);
-                    //alert(event.extendedProps.datevisite);
+                    //alert(event.extendedProps.timeendr);
                    // alert(formattedDate);
-                    //console.log(event.end);
+                   // console.log(event);
                     // $('#title').val(event.title);
                     // $('#start-date').val(moment(event.startStr).format('DD/MM/YYYY'));
                     // $('#end-date').val(event.endStr);
                     // $('#event-description-editor').append(event.eventdescriptioneditor);
                     // $('#select-label').val(event.selectlabelStr);
+                   // console.log(event)
                     $('#title').val(event.title);
                     let formattedStartDate = moment(event.extendedProps.datevisite).format('YYYY-MM-DD');
                     $('#start-date').val(formattedStartDate);
-                    $('#end-date').val(event.extendedProps.time);
+                    $('#end-date').val(event.extendedProps.timestart);
+                    $('#enddateP').val(event.extendedProps.timeend);
+                    $('#enddateR').val(event.extendedProps.timeendr);
                     $('#id_visite').val(event.id); // Stocker l'ID dans un champ caché pour une utilisation ultérieure
                     $('#id_demande_habilitation').val(event.extendedProps.iddemandehabilitation);
                     $('#event-description-editor').val(event.extendedProps.eventdescriptioneditor);
-                    $('#select-label').val(event.extendedProps.selectlabel);
+                    $("#select-label").val(event.extendedProps.selectlabel);
                 }
 
                 // Fonction pour ajouter un nouvel événement
@@ -1270,6 +1392,12 @@ var calendarEl = document.getElementById('calendar');
                     sendEventRequest('/calendar/delete/' + eventId, 'POST', 'Événement supprimé avec succès');
                 });
 
+                // Fonction pour ajouter un nouvel événement
+                $('.add-rapport-btn').on('click', function (e) {
+                    e.preventDefault();
+                    sendRapportRequest('/traitementdemandehabilitation/' + idddemha + '/rapport/visite', 'POST', 'Événement ajouté avec succès');
+                });
+
                 // Fonction générique pour envoyer une requête Ajax
                 function sendEventRequest(url, method, successMessage) {
                     $.ajax({
@@ -1280,14 +1408,16 @@ var calendarEl = document.getElementById('calendar');
                             iddemandehabilitation: $('#id_demande_habilitation').val(),
                             start: $('#start-date').val(),
                             end: $('#end-date').val(),
+                            endfin: $('#enddateP').val(),
+                            endfinR: $('#enddateR').val(),
                             eventdescriptioneditor: $('#event-description-editor').val(),
                             selectlabel: $('#select-label').val(),
                             _token: '{{ csrf_token() }}'
                         },
                         success: function (response) {
-
-                            calendar.refetchEvents(); // Rafraîchir les événements du calendrier
+                            resetModal();  // Réinitialiser le modal
                             $('#add-new-sidebar').modal('hide');
+                            calendar.refetchEvents(); // Rafraîchir les événements du calendrier
                             displayMessage('success', successMessage);
                         },
                         error: function (xhr) {
@@ -1296,6 +1426,36 @@ var calendarEl = document.getElementById('calendar');
                                 displayMessage('error', formatErrors(errors)); // Fonction pour formater les erreurs
                             }else{
                                 displayMessage('error', errors);
+                            }
+
+                        }
+                    });
+                }
+
+                function sendRapportRequest(url, method, successMessage) {
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        data: {
+                            etat_locaux_rapport: $('#etat_locaux_rapport').val(),
+                            equipement_rapport: $('#equipement_rapport').val(),
+                            salubrite_rapport: $('#salubrite_rapport').val(),
+                            contenu: $('#contenu').val(),
+                            avis_comite_technique: $('#avis_comite_technique').val(),
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (response) {
+                            resetModalRapport();  // Réinitialiser le modal
+                            $('#ActiveRapport').modal('hide');
+                            window.location.reload();
+                            displayMessageRapport('success', successMessage);
+                        },
+                        error: function (xhr) {
+                            var errors = xhr.responseJSON.errors;
+                            if (typeof errors === 'object') {
+                                displayMessageRapport('error', formatErrors(errors)); // Fonction pour formater les erreurs
+                            }else{
+                                displayMessageRapport('error', errors);
                             }
 
                         }
@@ -1330,6 +1490,20 @@ var calendarEl = document.getElementById('calendar');
                         alertBox = suces.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
                     } else {
                         error = $("#error_text")
+                        error.empty();
+                        alertBox = error.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
+                    }
+
+                }
+
+                function displayMessageRapport(type, message) {
+                    //alert(message);
+                    if (type === 'success') {
+                        suces = $("#success_text_rapport")
+                        suces.empty();
+                        alertBox = suces.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
+                    } else {
+                        error = $("#error_text_rapport")
                         error.empty();
                         alertBox = error.append('<div class="alert alert-' + (type === 'success' ? 'success' : 'danger') + '">'+message+'</div>')
                     }
