@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_rejet_demande_habilitation
  * @property string $date_valide_demande_habilitation
  * @property boolean $flag_valide_demande_habilitation
+ * @property boolean $flag_soumis_comite_technique
  * @property string $materiel_didactique_demande_habilitation
  * @property boolean $information_catalogue_demande_habilitation
  * @property string $dernier_catalogue_demande_habilitation
@@ -38,6 +39,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $code_demande_habilitation
  * @property boolean $flag_agrement_demande_habilitaion
  * @property string $date_agrement_demande_habilitation
+ * @property string $date_soumis_comite_technique
  * @property string $email_responsable_habilitation
  * @property string $contact_responsable_habilitation
  * @property string $type_demande
@@ -47,16 +49,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $commentaire_recevabilite
  * @property string $titre_propriete_contrat_bail
  * @property string $autorisation_ouverture_ecole
- * @property string $flag_ecole_autre_entreprise
- * @property DomaineDemandeHabilitation[] $domaineDemandeHabilitations
- * @property InterventionHorsCi[] $interventionHorsCis
+ * @property boolean $flag_ecole_autre_entreprise
  * @property OrganisationFormation[] $organisationFormations
  * @property DemandeIntervention[] $demandeInterventions
- * @property MoyenPermanente[] $moyenPermanentes
+ * @property Visites[] $visites
+ * @property Motif $motif
  * @property User $userchefservice
  * @property User $userchargerhabilitation
  * @property Banque $banque
  * @property Entreprises $entreprise
+ * @property MoyenPermanente[] $moyenPermanentes
+ * @property InterventionHorsCi[] $interventionHorsCis
+ * @property DomaineDemandeHabilitation[] $domaineDemandeHabilitations
  */
 class DemandeHabilitation extends Model
 {
@@ -84,23 +88,7 @@ class DemandeHabilitation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'nom_responsable_demande_habilitation', 'fonction_demande_habilitation', 'maison_mere_demande_habilitation', 'agence_domiciliation_demande_habilitation', 'type_entreprise', 'flag_demande_habilitation', 'date_creer_demande_habilitation', 'flag_creer_demande_habilitation', 'date_soumis_demande_habilitation', 'flag_soumis_demande_habilitation', 'date_reception_demande_habilitation', 'flag_reception_demande_habilitation', 'date_rejet_demande_habilitation', 'flag_rejet_demande_habilitation', 'date_valide_demande_habilitation', 'flag_valide_demande_habilitation', 'materiel_didactique_demande_habilitation', 'information_catalogue_demande_habilitation', 'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation', 'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation', 'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation', 'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation', 'flag_soumis_charge_habilitation', 'commentaire_recevabilite','id_motif_recevable','titre_propriete_contrat_bail','autorisation_ouverture_ecole','flag_ecole_autre_entreprise'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function domaineDemandeHabilitations()
-    {
-        return $this->hasMany('App\Models\DomaineDemandeHabilitation', 'id_demande_habilitation', 'id_demande_habilitation');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function interventionHorsCis()
-    {
-        return $this->hasMany('App\Models\InterventionHorsCi', 'id_demande_habilitation', 'id_demande_habilitation');
-    }
+    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'id_motif_recevable', 'nom_responsable_demande_habilitation', 'fonction_demande_habilitation', 'maison_mere_demande_habilitation', 'agence_domiciliation_demande_habilitation', 'type_entreprise', 'flag_demande_habilitation', 'date_creer_demande_habilitation', 'flag_creer_demande_habilitation', 'date_soumis_demande_habilitation', 'flag_soumis_demande_habilitation', 'date_reception_demande_habilitation', 'flag_reception_demande_habilitation', 'date_rejet_demande_habilitation', 'flag_rejet_demande_habilitation', 'date_valide_demande_habilitation', 'flag_valide_demande_habilitation', 'materiel_didactique_demande_habilitation', 'information_catalogue_demande_habilitation', 'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation', 'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation', 'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation', 'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation', 'flag_soumis_charge_habilitation', 'commentaire_recevabilite', 'titre_propriete_contrat_bail', 'autorisation_ouverture_ecole', 'flag_ecole_autre_entreprise','flag_soumis_comite_technique','date_soumis_comite_technique'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -121,9 +109,17 @@ class DemandeHabilitation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function moyenPermanentes()
+    public function visites()
     {
-        return $this->hasMany('App\Models\MoyenPermanente', 'id_demande_habilitation', 'id_demande_habilitation');
+        return $this->hasMany('App\Models\Visites', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function motif()
+    {
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 
     /**
@@ -159,10 +155,26 @@ class DemandeHabilitation extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function motif()
+    public function moyenPermanentes()
     {
-        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
+        return $this->hasMany('App\Models\MoyenPermanente', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interventionHorsCis()
+    {
+        return $this->hasMany('App\Models\InterventionHorsCi', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function domaineDemandeHabilitations()
+    {
+        return $this->hasMany('App\Models\DomaineDemandeHabilitation', 'id_demande_habilitation', 'id_demande_habilitation');
     }
 }

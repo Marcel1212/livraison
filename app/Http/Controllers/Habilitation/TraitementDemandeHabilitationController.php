@@ -31,6 +31,7 @@ use App\Models\Motif;
 use App\Helpers\SmsPerso;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Email;
+use App\Models\RapportsVisites;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
 
 class TraitementDemandeHabilitationController extends Controller
@@ -96,10 +97,17 @@ class TraitementDemandeHabilitationController extends Controller
     {
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
+        //dd($id);
 
         $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
         //dd($id);
         $demandehabilitation = DemandeHabilitation::find($id);
+
+        $visites = Visites::where([['id_demande_habilitation','=',$demandehabilitation->id_demande_habilitation]])->first();
+       // dd($demandehabilitation->visites->statut);
+       // dd($visites);
+
+       $rapportVisite = RapportsVisites::where([['id_visites','=',@$visites->id_visites]])->get();
 
         $banques = Banque::where([['flag_banque','=',true]])->get();
         $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
@@ -226,8 +234,11 @@ class TraitementDemandeHabilitationController extends Controller
                     'id','idetape','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
-                    'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList'));
+                    'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList',
+                    'visites','rapportVisite'));
     }
+
+
 
     public function fetchEvents(Request $request)
     {
@@ -272,7 +283,9 @@ class TraitementDemandeHabilitationController extends Controller
                     'start' => $event->date_visite,
                     'datevisite' => $event->date_visite,
                     'end' => $event->date_fin_visite,
-                    'time' => $event->heure_visite,
+                    'timestart' => $event->heure_visite,
+                    'timeend' => $event->heure_visite_fin,
+                    'timeendr' => $event->heure_visite_fin_reel,
                     'eventdescriptioneditor' => $event->description_lieu,
                     'selectlabel' => $event->statut,
                     'backgroundColor' => $eventColor['background'], // Couleur de fond
@@ -281,6 +294,44 @@ class TraitementDemandeHabilitationController extends Controller
             }
 
             return response()->json($calendarEvents);
+    }
+
+    public function fetchEventsID(Request $request, $id)
+    {
+
+
+			// Récupérer l'événement spécifique
+			$event = Visites::where('id_visites', '=', $id)->first();
+
+			// Vérifier si l'événement existe
+			if (!$event) {
+				return response()->json(['error' => 'Événement non trouvé'], 404);
+			}
+
+            $cryptedDemandeId = Crypt::UrlCrypt($event->id_demande_habilitation);
+            $cryptedFixedValue = Crypt::UrlCrypt(9);
+
+            $url = route('traitementdemandehabilitation.edit', [$cryptedDemandeId, $cryptedFixedValue]);
+
+
+			// Structurer l'événement pour l'API JSON
+			$calendarEvent = [
+				'id' => $event->id_visites,
+				'iddemandehabilitation' => $event->id_demande_habilitation,
+				'title' => $event->demandeHabilitation->entreprise->sigl_entreprises,
+				'start' => $event->date_visite,
+				'datevisite' => $event->date_visite,
+				'end' => $event->date_fin_visite,
+				'timestart' => $event->heure_visite,
+				'timeend' => $event->heure_visite_fin,
+				'timeendr' => $event->heure_visite_fin_reel,
+				'eventdescriptioneditor' => $event->description_lieu,
+				'selectlabel' => $event->statut,
+				'url' => $url,
+			];
+
+			// Retourner la réponse en JSON
+			return response()->json($calendarEvent);
     }
 
     /**
@@ -341,6 +392,41 @@ class TraitementDemandeHabilitationController extends Controller
         return response()->json(['status' => 'Evenement ajouter avec success'], 200);
     } */
 
+    public function rapportvisite(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+            // Validation des données
+            $request->validate([
+                'etat_locaux_rapport' => 'required',
+                'equipement_rapport' => 'required',
+                'salubrite_rapport' => 'required',
+                'avis_comite_technique' => 'required',
+                //'id_demande_habilitation' => 'required',
+            ], [
+                'etat_locaux_rapport.required' => 'Veuillez ajouter un commentaire pour les locaux.',
+                'equipement_rapport.required' => 'Veuillez ajouter un commentaire pour les equipement.',
+                'salubrite_rapport.required' => 'Veuillez ajouter un commentaire pour la salubrite / securité.',
+                'avis_comite_technique.required' => 'Veuillez ajouter un avis pour le comite technique.',
+                //'id_demande_habilitation.required' => 'La demande est requise.',
+            ]);
+
+          //  dd($request->all());
+            //dd($id);
+
+            // Vérification si une visite existe déjà
+            $visite = Visites::where([['id_demande_habilitation','=',$id]])->first();
+
+            $input = $request->all();
+            $input['id_visites'] = $visite->id_visites;
+
+            $rap = RapportsVisites::create($input);
+
+            return response()->json(['status' => 'Rapport ajouté avec succès'], 200);
+        }
+
+        return response()->json(['status' => 'Méthode non autorisée'], 405);
+    }
+
     public function storevisite(Request $request, $id)
     {
         if ($request->isMethod('post')) {
@@ -350,12 +436,14 @@ class TraitementDemandeHabilitationController extends Controller
                 'start' => 'required|date',
                 'selectlabel' => 'required',
                 'end' => 'required',
+                'endfin' => 'required',
                 'eventdescriptioneditor' => 'required',
             ], [
                 //'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
                 'start.required' => 'Veuillez ajouter une date de début.',
                 'selectlabel.required' => 'Veuillez ajouter un statut.',
-                'end.required' => 'Veuillez ajouter une heure.',
+                'end.required' => 'Veuillez ajouter une heure de debut provisoire.',
+                'endfin.required' => 'Veuillez ajouter une heure de fin provisoire.',
                 'eventdescriptioneditor.required' => 'Veuillez ajouter une description.',
             ]);
 
@@ -371,8 +459,10 @@ class TraitementDemandeHabilitationController extends Controller
             }
 
             $dateDebut = $request->start;
+            $dateFin = $request->start;
 
             $heureDebut = $request->end;
+            $heureFin = $request->endfin;
 
             if (strpos($heureDebut, ':') === strrpos($heureDebut, ':')) {
                 // Format sans secondes
@@ -382,16 +472,55 @@ class TraitementDemandeHabilitationController extends Controller
                 $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i:s', $dateDebut . ' ' . $heureDebut);
             }
 
+            if (strpos($heureFin, ':') === strrpos($heureFin, ':')) {
+                // Format sans secondes
+                $dateEtHeureFin = Carbon::createFromFormat('Y-m-d H:i', $dateFin . ' ' . $heureFin);
+            } else {
+                // Format avec secondes
+                $dateEtHeureFin = Carbon::createFromFormat('Y-m-d H:i:s', $dateFin . ' ' . $heureFin);
+            }
+
             // Création d'une nouvelle visite
             $visite = Visites::create([
                 'id_demande_habilitation' => $id,
                 'date_visite' => $dateEtHeureDebut,
-                'date_fin_visite' => Carbon::parse($request->start)->format('Y-m-d') . ' 23:59:59',
+                'date_fin_visite' => $dateEtHeureFin,
                 'statut' => $request->selectlabel,
                 'heure_visite' => $request->end,
+                'heure_visite_fin' => $request->endfin,
                 'description_lieu' => $request->eventdescriptioneditor,
                 'id_charger_habilitation_visite' => Auth::user()->id,
             ]);
+
+            $logo = Menu::get_logo();
+            $demandehabilitation = DemandeHabilitation::find($id);
+            $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+            if (isset($demandehabilitation->email_responsable_habilitation)) {
+                $sujet = "Demande de prise de rendez-vous pour la demande habilitation sur e-FDFP";
+                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                $messageMail = "<b>Cher,  ".$infoentreprise->sigl_entreprises." ,</b>
+                                <br><br>Nous avons le plaisir de vous notifie la demande de prise de rendez-vous pour la visite de votre locaux :
+
+                                <br><b>Date de prise de rendez-vous  : </b> ".@$dateEtHeureDebut."
+                                <br><b>Heure : </b> ".@$request->end."
+                                <br><br>
+                                <br><br>Pour plus d'information veuillez contactez votre charger habilitation par mail au : ".$visite->userchargerhabilitationvisite->email.".
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                <br><br><br>
+                                -----
+                                Ceci est un mail automatique, Merci de ne pas y répondre.
+                                -----
+                                ";
+                $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+            }
+
+                            //Envoi SMS Validé
+                            if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                                $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
+                                SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                            }
 
             return response()->json(['status' => 'Événement ajouté avec succès'], 200);
         }
@@ -406,16 +535,20 @@ class TraitementDemandeHabilitationController extends Controller
         if ($request->isMethod('post')) {
             // Validation des données
             $request->validate([
-                'iddemandehabilitation' => 'required',
+               // 'iddemandehabilitation' => 'required',
                 'start' => 'required|date',
                 'selectlabel' => 'required',
                 'end' => 'required',
+                'endfin' => 'required',
+                'endfinR' => 'required',
                 'eventdescriptioneditor' => 'required',
             ], [
-                'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
+                //'iddemandehabilitation.required' => 'Veuillez ajouter une demande.',
                 'start.required' => 'Veuillez ajouter une date de début.',
                 'selectlabel.required' => 'Veuillez ajouter un statut.',
-                'end.required' => 'Veuillez ajouter une heure.',
+                'end.required' => 'Veuillez ajouter une heure de debut provisoire.',
+                'endfin.required' => 'Veuillez ajouter une heure de fin provisoire.',
+                'endfinR.required' => 'Veuillez ajouter une heure de fin reel.',
                 'eventdescriptioneditor.required' => 'Veuillez ajouter une description.',
             ]);
 
@@ -426,8 +559,10 @@ class TraitementDemandeHabilitationController extends Controller
             //dd($dv);
 
             $dateDebut = $request->start;
+            $dateFin = $request->start;
 
             $heureDebut = $request->end;
+            $heureFin = $request->endfin;
 
             if (strpos($heureDebut, ':') === strrpos($heureDebut, ':')) {
                 // Format sans secondes
@@ -437,15 +572,55 @@ class TraitementDemandeHabilitationController extends Controller
                 $dateEtHeureDebut = Carbon::createFromFormat('Y-m-d H:i:s', $dateDebut . ' ' . $heureDebut);
             }
 
+            if (strpos($heureFin, ':') === strrpos($heureFin, ':')) {
+                // Format sans secondes
+                $dateEtHeureFin = Carbon::createFromFormat('Y-m-d H:i', $dateFin . ' ' . $heureFin);
+            } else {
+                // Format avec secondes
+                $dateEtHeureFin = Carbon::createFromFormat('Y-m-d H:i:s', $dateFin . ' ' . $heureFin);
+            }
+            //dd($request->all());
             $visite = $visitef->update([
-                'id_demande_habilitation' => $request->iddemandehabilitation,
+                //'id_demande_habilitation' => $request->iddemandehabilitation,
                 'date_visite' => $dateEtHeureDebut,
-                'date_fin_visite' => Carbon::parse($request->start)->format('Y-m-d') . ' 23:59:59',//Carbon::parse($request->start)->endOfDay(),
+                'date_fin_visite' => $dateEtHeureFin,//Carbon::parse($request->start)->endOfDay(),
                 'statut' => $request->selectlabel,
                 'heure_visite' => $request->end,
+                'heure_visite_fin' => $request->endfin,
+                'heure_visite_fin_reel' => $request->endfinR,
                 'description_lieu' => $request->eventdescriptioneditor,
                 'id_charger_habilitation_visite' => Auth::user()->id,
             ]);
+
+            $logo = Menu::get_logo();
+            $demandehabilitation = DemandeHabilitation::find($visitef->id_demande_habilitation);
+            $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+            if (isset($demandehabilitation->email_responsable_habilitation)) {
+                $sujet = "Demande de prise de rendez-vous pour la demande habilitation sur e-FDFP";
+                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                $messageMail = "<b>Cher,  ".$infoentreprise->sigl_entreprises." ,</b>
+                                <br><br>Nous avons le plaisir de vous notifie la demande de prise de rendez-vous pour la visite de votre locaux :
+
+                                <br><b>Date de prise de rendez-vous  : </b> ".@$dateEtHeureDebut."
+                                <br><b>Heure : </b> ".@$request->end."
+                                <br><br>
+                                <br><br>Pour plus d'information veuillez contactez votre charger habilitation par mail au : ".$visitef->userchargerhabilitationvisite->email.".
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                <br><br><br>
+                                -----
+                                Ceci est un mail automatique, Merci de ne pas y répondre.
+                                -----
+                                ";
+                $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+            }
+
+                            //Envoi SMS Validé
+                            if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                                $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
+                                SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                            }
 
             return response()->json(['status' => 'Événement modifié avec succès'], 200);
         }
@@ -482,6 +657,18 @@ class TraitementDemandeHabilitationController extends Controller
                 $input['date_transmi_charge_habilitation'] = Carbon::now();
                 $input['flag_soumis_charge_habilitation'] = true;
                 $input['id_chef_service'] = Auth::user()->id;
+
+                $demandehabilitation->update($input);
+
+                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($etape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+
+            }
+
+            if($data['action'] === 'Soumission_demande_ct'){
+
+                $input = $request->all();
+                $input['date_soumis_comite_technique'] = Carbon::now();
+                $input['flag_soumis_comite_technique'] = true;
 
                 $demandehabilitation->update($input);
 
