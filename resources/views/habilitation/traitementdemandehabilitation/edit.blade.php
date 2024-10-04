@@ -575,57 +575,42 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
 
-                                        <table class="table table-bordered table-striped table-hover table-sm"
-                                            id=""
-                                            style="margin-top: 13px !important">
-                                            <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Domaine</th>
-                                                <th>Nom et prénom </th>
-                                                <th>Année d'experience </th>
-                                                <th>Cv  </th>
-                                                <th>Lettre d'engagement </th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php $i = 0; ?>
-                                            @foreach ($formateurs as $key => $formateur)
-                                            <?php $i += 1;?>
-                                                        <tr>
-                                                            <td>{{ $i }}</td>
-                                                            <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
-                                                            <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
-                                                            <td>{{ $formateur->annee_experience }}</td>
-                                                            <td>
-                                                                <span class="badge bg-secondary">
-                                                                    <a target="_blank"
-                                                                        onclick="NewWindow('{{ asset("/pieces/cv_formateur/". $formateur->cv_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                        Voir la pièce
-                                                                    </a>
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="badge bg-secondary">
-                                                                    <a target="_blank"
-                                                                        onclick="NewWindow('{{ asset("/pieces/le_formateur/". $formateur->le_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                        Voir la pièce
-                                                                    </a>
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
-                                                                class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
-                                                                title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                                                <?php } ?>
-                                                            </td>
-                                                        </tr>
-                                            @endforeach
+                                    <table class="table table-bordered table-striped table-hover table-sm"
+                                    id=""
+                                    style="margin-top: 13px !important">
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Domaine</th>
+                                        <th>Nom et prénom </th>
+                                        <th>Année d'experience </th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php $i = 0; ?>
+                                        @foreach ($formateurs as $key => $formateur)
+                                        <?php $i += 1;?>
+                                                    <tr>
+                                                        <td>{{ $i }}</td>
+                                                        <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
+                                                        <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
+                                                        <td>{{ @$formateur->annee_experience }}</td>
+                                                        <td>
+                                                            <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                                class=" "
+                                                                title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                                            <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                                            <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
+                                                            class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
+                                                            title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                            <?php } ?>
+                                                        </td>
+                                                    </tr>
+                                        @endforeach
 
-                                            </tbody>
-                                        </table>
+                                    </tbody>
+                                </table>
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==7 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-divers" role="tabpanel">
                                            <div class="row">

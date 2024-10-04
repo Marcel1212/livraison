@@ -58,7 +58,7 @@
                                     <div class="mb-1">
 
                                         <label>Module </label>
-                                        <select class="form-control form-control-sm" name="menus" id="menus">
+                                        <select class="select2 select2-size-sm form-select" data-allow-clear="true" name="menus" id="menus">
                                             <?php echo $menus; ?>
                                         </select>
                                     </div>

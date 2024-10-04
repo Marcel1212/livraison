@@ -781,31 +781,10 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                             @csrf
                                            @method('put')
                                            <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="row">
+
+
+
                                                     <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Nom du formateur  <strong style="color:red;">*</strong> </label>
-                                                            <input type="text" name="nom_formateur" id="nom_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('nom_formateur') }}">
-                                                        </div>
-                                                        @error('nom_formateur')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Prénom du formateur  <strong style="color:red;">*</strong> </label>
-                                                            <input type="text" name="prenom_formateur" id="prenom_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('prenom_formateur') }}">
-                                                        </div>
-                                                        @error('prenom_formateur')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12 col-12">
                                                         <label class="form-label" for="billings-country">Domaine de formation  <strong style="color:red;">*</strong></label>
                                                         <select class="select2 form-select-sm input-group @error('id_domaine_demande_habilitation')
                                                             error
@@ -817,82 +796,19 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                         <div class=""><label class="error">{{ $message }}</label></div>
                                                         @enderror
                                                     </div>
-                                                </div>
-                                                <div class="row">
+
                                                     <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Date de début d'experience  <strong style="color:red;">*</strong> </label>
-                                                            <input type="date" name="date_debut_formateur" id="date_debut_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('date_debut_formateur') }}"
-                                                                onkeyup="FuncCalculAnneeExperience();">
-                                                        </div>
-                                                        @error('date_debut_formateur')
+                                                        <label class="form-label" for="billings-country">Mes formateurs  <strong style="color:red;">*</strong></label>
+                                                        <select class="select2 form-select-sm input-group @error('id_formateurs')
+                                                            error
+                                                            @enderror" data-allow-clear="true" name="id_formateurs">
+                                                            <?= $MesformateursList; ?>
+                                                        </select>
+                                                        @error('id_formateurs')
+                                                        <div class=""><label class="error">{{ $message }}</label></div>
                                                         <div class=""><label class="error">{{ $message }}</label></div>
                                                         @enderror
                                                     </div>
-
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Année d'experience  </label>
-                                                            <input type="text" name="annee_experience1" id="annee_experience1"
-                                                                class="form-control form-control-sm" disabled="disabled">
-                                                            <input type="hidden" name="annee_experience" id="annee_experience"/>
-                                                        </div>
-                                                        @error('annee_experience')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Cv du formation <strong
-                                                                style="color:red;">*</strong></label>
-                                                        <input type="file" name="cv_formateur"
-                                                               class="form-control form-control-sm  @error('cv_formateur')
-                                                               error
-                                                                @enderror" placeholder=""
-
-                                                               value="{{ old('cv_formateur') }}"/>
-                                                        @error('cv_formateur')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text ">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Lettre d'engagement du formation <strong
-                                                                style="color:red;">*</strong></label>
-                                                        <input type="file" name="le_formateur"
-                                                               class="form-control form-control-sm  @error('le_formateur')
-                                                               error
-                                                                @enderror" placeholder=""
-
-                                                               value="{{ old('le_formateur') }}"/>
-                                                        @error('le_formateur')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text ">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                                <div class="col-md-6 col-12">
-                                                    <div class="mb-1">
-                                                        <label>Experience  </label>
-                                                                <input class="form-control @error('experience_formateur') error @enderror" type="text" id="experience_formateur_val" name="experience_formateur"/>
-                                                                <div id="experience_formateur" class="rounded-1">{{ old('experience_formateur') }}</div>
-                                                    </div>
-                                                    @error('experience_formateur')
-                                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                                    @enderror
-                                                </div>
-
 
 
                                                <div class="col-12" align="right">
@@ -927,8 +843,6 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 <th>Domaine</th>
                                                 <th>Nom et prénom </th>
                                                 <th>Année d'experience </th>
-                                                <th>Cv  </th>
-                                                <th>Lettre d'engagement </th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -939,25 +853,12 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                             <tr>
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
-                                                                <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
-                                                                <td>{{ $formateur->annee_experience }}</td>
+                                                                <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
+                                                                <td>{{ @$formateur->annee_experience }}</td>
                                                                 <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/cv_formateur/". $formateur->cv_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/le_formateur/". $formateur->le_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
+                                                                    <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                                        class=" "
+                                                                        title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                                     <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
