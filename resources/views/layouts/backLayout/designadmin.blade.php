@@ -50,7 +50,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
     {{-- <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-calendar.css"> --}}
      <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap-extended.css')}}"> --}}
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap-extended.css')}}">
 
 
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/quill/snow.css')}}"/>

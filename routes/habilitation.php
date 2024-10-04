@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
+use App\Http\Controllers\Habilitation\FormateursController;
 use App\Http\Controllers\Habilitation\HabilitationRendezVousController;
 use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationController;
 use Illuminate\Support\Facades\Route;
@@ -26,8 +27,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('habilitationrendezvous/calendar-events', [HabilitationRendezVousController::class, 'fetchEvents'])->name('habilitationrendezvous.calendarevents');
         Route::post('habilitationrendezvous/{id}/update/visite', [HabilitationRendezVousController::class, 'updatevisite'])->name('habilitationrendezvous.updatevisite');
         Route::get('habilitationrendezvous/calendar-events/get-event-data/{id}', [HabilitationRendezVousController::class, 'fetchEventsID'])->name('habilitationrendezvous.calendarevents');
-
-
     });
     Route::group(['middleware' => ['can:traitementdemandehabilitation-index']], function () {
 /*         Route::resources([
@@ -56,5 +55,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('traitementdemandehabilitation/{id}/update/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformation'])->name('traitementdemandehabilitation.action.formation');
     Route::post('traitementdemandehabilitation/{id}/update/beneficiaire/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformationbenefiaire'])->name('traitementdemandehabilitation.beneficiaire.action.formation');
 
+    Route::group(['middleware' => ['can:formateurs-index']], function () {
+        Route::get('formateurs', [FormateursController::class, 'index'])->name('formateurs');
+        Route::get('formateurs/index', [FormateursController::class, 'index'])->name('formateurs.index');
+        Route::get('formateurs/create', [FormateursController::class, 'create'])->name('formateurs.create');
+        Route::post('formateurs/store', [FormateursController::class, 'store'])->name('formateurs.store');
+        Route::get('formateurs/{id}/{id1}/edit', [FormateursController::class, 'edit'])->name('formateurs.edit');
+        Route::put('formateurs/{id}/{id1}/update', [FormateursController::class, 'update'])->name('formateurs.update');
+        Route::get('formateurs/{id}/delete', [FormateursController::class, 'delete'])->name('formateurs.delete');
+    });
 
 });

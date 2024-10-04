@@ -143,7 +143,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <div class="tab-content">
                             <div class="tab-pane fade show active" id="navs-top-planformation" role="tabpanel">
 
-                                <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                                <form method="POST" class="form" action="{{ route($lien.'.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-4 col-12">

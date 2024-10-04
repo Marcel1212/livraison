@@ -15,6 +15,7 @@ use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormation;
 use App\Models\Entreprises;
 use App\Models\FormateurDomaineDemandeHabilitation;
+use App\Models\Formateurs;
 use App\Models\InterventionHorsCi;
 use App\Models\MoyenPermanente;
 use App\Models\OrganisationFormation;
@@ -101,11 +102,11 @@ class DemandeHabilitationController extends Controller
 
             'code_piece'=>'',
 
-            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
 
             'etat'=>'Succès',
 
-            'objet'=>'PLAN DE FORMATION'
+            'objet'=>'HABILITATIONN'
 
         ]);
 
@@ -130,7 +131,7 @@ class DemandeHabilitationController extends Controller
 
             $input = $request->all();
 
-            if ($autorisation == true) {
+            if ($autorisation == 'true') {
 
                 $this->validate($request, [
                     'nom_responsable_demande_habilitation' => 'required',
@@ -148,13 +149,13 @@ class DemandeHabilitationController extends Controller
                     'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
                     'id_banque.unique' => 'Veuillez selectionnez une banque ',
                     'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
-                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter une piéce DFE',
-                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter une piéce DFE',
-                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
                     'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
-                    'autorisation_ouverture_ecole.required' => 'Veuillez ajouter une piéce DFE',
-                    'autorisation_ouverture_ecole.uploaded' => 'Veuillez ajouter une piéce DFE',
-                    'autorisation_ouverture_ecole.mimes' => 'Les formats requis pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'autorisation_ouverture_ecole.required' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                    'autorisation_ouverture_ecole.uploaded' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                    'autorisation_ouverture_ecole.mimes' => 'Les formats requis pour la pièce de l\' autorisation d\'ouverture du ministere de tutelle est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
                     'autorisation_ouverture_ecole.max' => 'la taille maximale doit être de 5 MégaOctets',
                 ]);
 
@@ -210,7 +211,7 @@ class DemandeHabilitationController extends Controller
                 $insertedId = $habilitation->id_demande_habilitation;
             }
 
-            if ($autorisation == false) {
+            if ($autorisation == 'false') {
 
 
                 $this->validate($request, [
@@ -228,9 +229,9 @@ class DemandeHabilitationController extends Controller
                     'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
                     'id_banque.unique' => 'Veuillez selectionnez une banque ',
                     'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
-                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter une piéce DFE',
-                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter une piéce DFE',
-                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
                     'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
                 ]);
 
@@ -316,9 +317,9 @@ class DemandeHabilitationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
     }
 
     /**
@@ -388,6 +389,12 @@ class DemandeHabilitationController extends Controller
             $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
         }
 
+        $Mesformateurs = Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire]])->get();
+        $MesformateursList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($Mesformateurs as $comp) {
+            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." </option>";
+        }
+
         $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
 
         $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
@@ -400,6 +407,7 @@ class DemandeHabilitationController extends Controller
                                                           ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
                                                           ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
                                                           ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get();
 
@@ -429,7 +437,8 @@ class DemandeHabilitationController extends Controller
         return view('habilitation.demande.edit', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList'));
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList',
+                    'MesformateursList'));
     }
 
     /**
@@ -766,60 +775,14 @@ class DemandeHabilitationController extends Controller
 
                 $this->validate($request, [
                     'id_domaine_demande_habilitation' => 'required',
-                    'nom_formateur' => 'required',
-                    'prenom_formateur' => 'required',
-                    'date_debut_formateur' => 'required',
-                    'le_formateur' => 'required',
-                    'experience_formateur' => 'required',
+                    'id_formateurs' => 'required',
                 ],[
                     'id_domaine_demande_habilitation.required' => 'Veuillez selectionner le doamien de formation.',
-                    'nom_formateur.required' => 'Veuillez ajouter le nom du formateur.',
-                    'prenom_formateur.required' => 'Veuillez ajouter le prenom du formateur.',
-                    'date_debut_formateur.required' => 'Veuillez ajouter la date de debut d\'experience du formateur.',
-                    'cv_formateur.required' => 'Veuillez ajouter le CV.',
-                    'le_formateur.required' => 'Veuillez ajouter la lettre d\'engagement.',
-                    'experience_formateur.required' => 'Veuillez ajouter l\'experience.',
+                    'id_formateurs.required' => 'Veuillez selectionner un formateur.',
                 ]);
 
                 $input = $request->all();
 
-
-                if (isset($input['cv_formateur'])){
-
-                    $filefront = $input['cv_formateur'];
-
-
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-
-                        $fileName1 = 'cv_formateur'. '_' . rand(111,99999) . '_' . $input['nom_formateur'] .'_'. $input['prenom_formateur'] . '_' . time() . '.' . $filefront->extension();
-
-                        $filefront->move(public_path('pieces/cv_formateur/'), $fileName1);
-
-                        $input['cv_formateur'] = $fileName1;
-                    }
-
-                }
-
-                if (isset($input['le_formateur'])){
-
-                    $filefront = $input['le_formateur'];
-
-                    //dd($filefront->extension());
-
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-
-                        $fileName1 = 'le_formateur'. '_' . rand(111,99999) . '_' . $input['nom_formateur'] .'_'. $input['prenom_formateur'] . '_' . time() . '.' . $filefront->extension();
-
-                        $filefront->move(public_path('pieces/le_formateur/'), $fileName1);
-
-                        $input['le_formateur'] = $fileName1;
-                    }
-
-                }
 
                 FormateurDomaineDemandeHabilitation::create($input);
 
