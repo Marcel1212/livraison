@@ -162,4 +162,5 @@ class DemandeHabilitation extends Model
     {
         return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
+
 }

@@ -23,21 +23,21 @@ class DomaineDemandeHabilitation extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'domaine_demande_habilitation';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_domaine_demande_habilitation';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -85,5 +85,10 @@ class DomaineDemandeHabilitation extends Model
     public function typeDomaineDemandeHabilitation()
     {
         return $this->belongsTo('App\Models\TypeDomaineDemandeHabilitation', 'id_type_domaine_demande_habilitation', 'id_type_domaine_demande_habilitation');
+    }
+
+    public function domaineSuppressionDemandeHabilitation()
+    {
+        return $this->belongsTo('App\Models\DomaineDemandeSuppressionHabilitation', 'id_domaine_demande_habilitation','id_domaine_demande_habilitation');
     }
 }

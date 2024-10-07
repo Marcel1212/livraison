@@ -400,4 +400,34 @@ class TraitementDemandeHabilitationController extends Controller
     {
         //
     }
+
+
+
+
+    public function indexyancho()
+    {
+        $numAgce = Auth::user()->num_agce;
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        if($codeRoles == 'CHEFSERVICE'){
+            $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
+        }else{
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+        }
+        //dd($habilitations);
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'HABILITATION (Traitement)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
+
+        return view('habilitation.traitementdemandehabilitation.indexyancho',compact('habilitations'));
+    }
 }
