@@ -22,6 +22,7 @@ use App\Models\PiecesFormateur;
 use App\Models\PrincipaleQualification;
 use App\Models\TypeEmploie;
 use App\Models\TypeLieu;
+use Carbon\Carbon;
 
 class FormateursController extends Controller
 {
@@ -165,9 +166,38 @@ class FormateursController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
+        $id =  Crypt::UrldeCrypt($id);
 
+        $formateur = Formateurs::find($id);
+
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+
+        Audit::logSave([
+
+            'action'=>'Voir',
+
+            'code_piece'=>$id,
+
+            'menu'=>'FORMATEUR (CREATION DE FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Voir le cv'
+
+        ]);
+
+        return view('habilitation.formateurs.show', compact('id','formateur','qualification',
+                        'formations','experiences','languesformateurs','competences'));
     }
 
     /**
@@ -184,7 +214,7 @@ class FormateursController extends Controller
 
         $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
 
-        $experiences = Experiences::where([['id_formateurs','=',$id]])->get();
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
 
         $competences = Competences::where([['id_formateurs','=',$id]])->get();
 
@@ -393,7 +423,7 @@ class FormateursController extends Controller
                     'ecole_formation_educ' => 'required',
                     'diplome_formation_educ' => 'required',
                     'domaine_formation_educ' => 'required',
-                    'resultat_formation_educ' => 'required',
+                    //'resultat_formation_educ' => 'required',
                     'description_formations_educ' => 'required',
                     'date_de_debut_formations_educ' => 'required|date|before:today',
                     'date_de_fin_formations_educ' => 'required|date|before:today',
@@ -401,7 +431,7 @@ class FormateursController extends Controller
                     'ecole_formation_educ.required' => 'Veuillez ajouter un etablissemnt.',
                     'diplome_formation_educ.required' => 'Veuillez ajouter le diplome obtenu.',
                     'domaine_formation_educ.required' => 'Veuillez ajouter le domaine lié a la formation.',
-                    'resultat_formation_educ.required' => 'Veuillez ajouter le resultat obtenu.',
+                    //'resultat_formation_educ.required' => 'Veuillez ajouter le resultat obtenu.',
                     'description_formations_educ.required' => 'Veuillez ajouter une description de la formation.',
                     'date_de_debut_formations_educ.required' => 'Veuillez ajouter la date de debut de la formation.',
                     'date_de_debut_formations_educ.date' => 'Veuillez ajouter une date de debut valide.',
@@ -414,6 +444,10 @@ class FormateursController extends Controller
                 $input = $request->all();
 
                 $input['id_formateurs'] = $id;
+
+                $input['date_de_debut_formations_educ'] = Carbon::parse($input['date_de_debut_formations_educ'])->format('01/m/Y');
+                $input['date_de_fin_formations_educ'] = Carbon::parse($input['date_de_fin_formations_educ'])->format('01/m/Y');
+
 
                 $formations = FormationsEduc::create($input);
 
@@ -461,6 +495,12 @@ class FormateursController extends Controller
                 $input = $request->all();
 
                 $input['id_formateurs'] = $id;
+
+                $input['date_de_debut'] = Carbon::parse($input['date_de_debut'])->format('01/m/Y');
+                if (isset($input['date_de_fin'])) {
+                    $input['date_de_fin'] = Carbon::parse($input['date_de_fin'])->format('01/m/Y');
+                }
+
 
                 $experience = Experiences::create($input);
 
@@ -637,5 +677,140 @@ class FormateursController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function deleteformation($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $formation = FormationsEduc::find($id);
+
+        $idFormateur = $formation->id_formateurs;
+
+        $formation->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idFormateur,
+
+            'menu'=>'FORMATEUR (Mise a jour FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'FORMATEUR suppression de formation'
+
+        ]);
+
+        return redirect('formateurs/'.Crypt::UrlCrypt($idFormateur).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteexperience($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $experience = Experiences::find($id);
+
+        $idFormateur = $experience->id_formateurs;
+
+        $experience->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idFormateur,
+
+            'menu'=>'FORMATEUR (Mise a jour FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'FORMATEUR suppression de experience'
+
+        ]);
+
+        return redirect('formateurs/'.Crypt::UrlCrypt($idFormateur).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deletecompetence($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $competence = Competences::find($id);
+
+        $idFormateur = $competence->id_formateurs;
+
+        $competence->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idFormateur,
+
+            'menu'=>'FORMATEUR (Mise a jour FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'FORMATEUR suppression de competence'
+
+        ]);
+
+        return redirect('formateurs/'.Crypt::UrlCrypt($idFormateur).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deletelangue($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $langue = LanguesFormateurs::find($id);
+
+        $idFormateur = $langue->id_formateurs;
+
+        $langue->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idFormateur,
+
+            'menu'=>'FORMATEUR (Mise a jour FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'FORMATEUR suppression de langue'
+
+        ]);
+
+        return redirect('formateurs/'.Crypt::UrlCrypt($idFormateur).'/'.Crypt::UrlCrypt(6).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deletepieceformateur($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $pieceformateur = PiecesFormateur::find($id);
+
+        $idFormateur = $pieceformateur->id_formateurs;
+
+        $pieceformateur->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idFormateur,
+
+            'menu'=>'FORMATEUR (Mise a jour FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'FORMATEUR suppression de piece'
+
+        ]);
+
+        return redirect('formateurs/'.Crypt::UrlCrypt($idFormateur).'/'.Crypt::UrlCrypt(7).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
     }
 }

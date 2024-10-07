@@ -6,6 +6,7 @@ use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
 use App\Helpers\ListeDemandeHabilitationSoumis;
+use App\Helpers\Fonction;
 
 
 ?>
@@ -14,6 +15,34 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
 
 @extends('layouts.backLayout.designadmin')
+<style>
+    .tooltip {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 1000PX;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
 
 @section('content')
 
@@ -234,12 +263,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                            <div class="col-12" align="right">
                                                <hr>
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                    <button type="submit" name="action" value="Modifier"
                                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                            Modifier
                                                    </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -276,7 +305,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(1)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                     @if(!isset($qualification))
                                                         <button type="submit" name="action" value="AjouterQualification"
                                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
@@ -288,7 +317,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                                 Mise a jour
                                                         </button>
                                                     @endif
-                                               <?php } ?>
+                                               <?php //} ?>
 
                                                @if(isset($qualification))
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -302,13 +331,13 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                 </div>
 
                                 <div class="tab-pane fade <?php if($idetape==3 and isset($qualification)){ echo "show active";} ?>" id="navs-top-education" role="tabpanel">
-									<?php if ($formateur->flag_attestation_formateurs != true){ ?>
+									<?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                     <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
                                         @csrf
                                        @method('put')
                                        <div class="row">
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
                                                    <label>Ecole de formation <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="ecole_formation_educ" id="ecole_formation_educ"
@@ -316,47 +345,47 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
-                                                   <label>Diplome de la formation <strong style="color:red;">*</strong></label>
+                                                   <label>Diplome  <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="diplome_formation_educ" id="diplome_formation_educ"
                                                        class="form-control form-control-sm" value="{{ old('diplome_formation_educ') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
-                                                   <label>Domaine de formation <strong style="color:red;">*</strong></label>
+                                                   <label>Domaine d'etude <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="domaine_formation_educ" id="domaine_formation_educ"
                                                        class="form-control form-control-sm" value="{{ old('domaine_formation_educ') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
-                                                   <input type="date" name="date_de_debut_formations_educ" id="date_de_debut_formations_educ"
+                                                   <input type="month" name="date_de_debut_formations_educ" id="date_de_debut_formations_educ"
                                                        class="form-control form-control-sm" value="{{ old('date_de_debut_formations_educ') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
                                                    <label>Date de fin <strong style="color:red;">*</strong></label>
-                                                   <input type="date" name="date_de_fin_formations_educ" id="date_de_fin_formations_educ"
+                                                   <input type="month" name="date_de_fin_formations_educ" id="date_de_fin_formations_educ"
                                                        class="form-control form-control-sm"  value="{{ old('date_de_fin_formations_educ') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-4 col-12">
                                                <div class="mb-1">
-                                                   <label>Resultat de la formation <strong style="color:red;">*</strong></label>
+                                                   <label>Résultat obtenu </label>
                                                    <input type="text" name="resultat_formation_educ" id="resultat_formation_educ"
                                                        class="form-control form-control-sm" value="{{ old('resultat_formation_educ') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-6 col-12">
                                                <div class="mb-1">
                                                    <label>Description de la formation: <strong style="color:red;">*</strong></label>
                                                    <textarea class="form-control" id="description_formations_educ" name="description_formations_educ" rows="4" cols="3">{{ old('description_formations_educ') }}</textarea>
@@ -364,7 +393,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
-                                           <div class="col-md-3 col-12">
+                                           <div class="col-md-6 col-12">
                                                <div class="mb-1">
                                                    <label>Activité/Association: </label>
                                                    <textarea class="form-control" id="activite_asso_formations_educ" name="activite_asso_formations_educ" rows="4" cols="3">{{ old('activite_asso_formations_educ') }}</textarea>
@@ -380,12 +409,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                        <button type="submit" name="action" value="AjouterFormationEduc"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                                Ajouter
                                                        </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
                                                 @if(count($formations)>0)
                                                     <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -396,7 +425,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                            </div>
                                        </div>
                                    </form>
-                                   <?php } ?>
+                                   <?php //} ?>
                                    <hr>
                                    <table class="table table-bordered table-striped table-hover table-sm"
                                        id=""
@@ -422,15 +451,19 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                            <td>{{ $formation->ecole_formation_educ }}</td>
                                                            <td>{{ $formation->diplome_formation_educ }}</td>
                                                            <td>{{ $formation->domaine_formation_educ }}</td>
-                                                           <td>{{ $formation->date_de_debut_formations_educ }} - {{ $formation->date_de_fin_formations_educ }}</td>
+                                                           <td> {{ Carbon::parse($formation->date_de_debut_formations_educ)->format('d/m/Y') }} - {{ Carbon::parse($formation->date_de_fin_formations_educ)->format('d/m/Y') }}</td>
                                                            <td>{{ $formation->resultat_formation_educ }}</td>
-                                                           <td>{{ $formation->description_formations_educ }}</td>
                                                            <td>
-                                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
-                                                                   <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formation->id_formations_educ)) }}"
+                                                            <span data-bs-toggle="tooltip" title="{{ $formation->description_formations_educ }}">
+                                                                {{ Str::words($formation->description_formations_educ, 15, '...') }}
+                                                            </span>
+                                                           </td>
+                                                           <td>
+
+                                                                   <a href="{{ route($lien.'.deleteformation',\App\Helpers\Crypt::UrlCrypt($formation->id_formations_educ)) }}"
                                                                    class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                                               <?php } ?>
+
                                                            </td>
                                                        </tr>
                                            @endforeach
@@ -440,13 +473,13 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                 </div>
 
                                 <div class="tab-pane fade <?php if($idetape==4 and count($formations)>0){ echo "show active";} ?>" id="navs-top-experiences" role="tabpanel">
-                                    <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                    <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                     <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
                                         @csrf
                                        @method('put')
                                        <div class="row">
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>intitulé du poste <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="intitule_de_poste" id="intitule_de_poste"
@@ -454,16 +487,16 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
-                                                   <label>Type emploie <strong style="color:red;">*</strong></label>
+                                                   <label>Type emploi <strong style="color:red;">*</strong></label>
                                                    <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_type_emploie" id="id_type_emploie" >
                                                        <?= $typeEmplois; ?>
                                                    </select>
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>Lieu <strong style="color:red;">*</strong></label>
                                                    <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_type_lieu" id="id_type_lieu" >
@@ -472,7 +505,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>Nom de l'entreprise <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="nom_entreprise" id="nom_entreprise"
@@ -480,7 +513,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>Lieu entreprise <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="lieu_entreprise" id="lieu_entreprise"
@@ -488,37 +521,38 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                </div>
                                            </div>
 
+                                           <div class="col-md-3 col-12">
+                                            <div class="mb-1">
+                                                <label>C'est votre poste actuel: <strong style="color:red;">*</strong></label><br>
+                                                <input type="checkbox" class="form-check-input" name="flag_occuppe_poste_actuel" id="colorCheck1" onclick="myFunctionMAJ()">
+                                            </div>
+                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
-                                                   <input type="date" name="date_de_debut" id="date_de_debut"
+                                                   <input type="month" name="date_de_debut" id="date_de_debut"
                                                        class="form-control form-control-sm" value="{{ old('date_de_debut') }}" />
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-3 col-12" id="date_de_fin">
                                                <div class="mb-1">
                                                    <label>Date de fin </label>
-                                                   <input type="date" name="date_de_fin" id="date_de_fin"
+                                                   <input type="month" name="date_de_fin" id="date_de_fin"
                                                        class="form-control form-control-sm"  value="{{ old('date_de_fin') }}" />
                                                </div>
                                            </div>
 
 
-                                           <div class="col-md-4 col-12">
+                                           <div class="col-md-12 col-12">
                                                <div class="mb-1">
                                                    <label>Description votre experience: <strong style="color:red;">*</strong></label>
                                                    <textarea class="form-control" id="description_experience" name="description_experience" rows="4" cols="3">{{ old('description_formations_educ') }}</textarea>
                                                </div>
                                            </div>
 
-                                           <div class="col-md-4 col-12">
-                                               <div class="mb-1">
-                                                   <label>C'est votre poste actuel: <strong style="color:red;">*</strong></label>
-                                                   <input type="checkbox" class="form-check-input" name="flag_occuppe_poste_actuel" id="colorCheck1">
-                                               </div>
-                                           </div>
+
 
 
 
@@ -529,12 +563,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                        <button type="submit" name="action" value="AjouterExperience"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                                Ajouter
                                                        </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
                                                @if(count($experiences)>0)
                                                     <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -545,7 +579,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                            </div>
                                        </div>
                                    </form>
-                                   <?php } ?>
+                                   <?php //} ?>
                                    <hr>
                                    <table class="table table-bordered table-striped table-hover table-sm"
                                        id=""
@@ -565,23 +599,39 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                        </thead>
                                        <tbody>
                                        @foreach ($experiences as $experience)
-                                           <tr @if($experience->flag_occuppe_poste_actuel == 'true') style="background-color: green; color: #ffffff;" @endif>
+                                           <tr @if($experience->flag_occuppe_poste_actuel == 'true') style="" @endif>
                                                <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
                                                <td>{{ $experience->intitule_de_poste }}</td>
                                                <td>{{ $experience->typeEmploie->libelle_type_emploie }}</td>
                                                <td>{{ $experience->typeLieu->libelle_type_lieu }}</td>
                                                <td>{{ $experience->nom_entreprise }}</td>
                                                <td>{{ $experience->lieu_entreprise }}</td>
-                                               <td>{{ $experience->date_de_debut }} - {{ $experience->date_de_fin }}</td>
-                                               <td>{{ $experience->description_experience }}</td>
                                                <td>
-                                                   @if ($formateur->flag_attestation_formateurs != true ) <!-- Vérification de flag avec Blade -->
-                                                       <a href="{{ route($lien.'.delete', \App\Helpers\Crypt::UrlCrypt($experience->id_experiences)) }}"
+                                                    {{ Carbon::parse($experience->date_de_debut)->format('d/m/Y') }} - @if(isset($experience->date_de_fin)) {{ Carbon::parse($experience->date_de_fin)->format('d/m/Y') }} @else Aujourd'hui @endif
+
+                                                    <?php $res = Fonction::calculerDureeExperience($experience->date_de_debut,$experience->date_de_fin);?>
+                                                    <br/>
+                                                    (@if ($res->y > 0)
+                                                        {{ $res->y }} ans
+                                                    @endif
+                                                    @if ($res->m > 0)
+                                                        {{ $res->m }} mois
+                                                    @endif)
+
+                                               </td>
+                                               <td>
+                                                    <span data-bs-toggle="tooltip" title="{{ $experience->description_experience }}">
+                                                        {{ Str::words($experience->description_experience, 15, '...') }}
+                                                    </span>
+                                               </td>
+                                               <td>
+                                                  <!-- Vérification de flag avec Blade -->
+                                                       <a href="{{ route($lien.'.deleteexperience', \App\Helpers\Crypt::UrlCrypt($experience->id_experiences)) }}"
                                                           onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
                                                           title="Supprimer">
                                                           <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
                                                        </a>
-                                                   @endif
+
                                                </td>
                                            </tr>
                                        @endforeach
@@ -592,7 +642,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                 </div>
 
                                 <div class="tab-pane fade <?php if($idetape==5 and count($experiences)>0 ){ echo "show active";} ?>" id="navs-top-competences" role="tabpanel">
-									<?php if ($formateur->flag_attestation_formateurs != true){ ?>
+									<?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                     <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
                                         @csrf
                                        @method('put')
@@ -614,12 +664,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                        <button type="submit" name="action" value="AjouterCompetences"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                                Ajouter
                                                        </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
                                                @if(count($competences)>0)
                                                     <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -629,7 +679,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                    Retour</a>
                                            </div>
                                        </div>
-                                       <?php } ?>
+                                       <?php //} ?>
                                    </form>
 
                                    <hr>
@@ -649,13 +699,13 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
                                                <td>{{ $comptence->competences_libelle }}</td>
                                                <td>
-                                                   @if ($formateur->flag_attestation_formateurs != true )
-                                                       <a href="{{ route($lien.'.delete', \App\Helpers\Crypt::UrlCrypt($comptence->id_competences)) }}"
+
+                                                       <a href="{{ route($lien.'.deletecompetence', \App\Helpers\Crypt::UrlCrypt($comptence->id_competences)) }}"
                                                           onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
                                                           title="Supprimer">
                                                           <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
                                                        </a>
-                                                   @endif
+
                                                </td>
                                            </tr>
                                        @endforeach
@@ -666,7 +716,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                 </div>
 
                                 <div class="tab-pane fade <?php if($idetape==6 and count($competences)>0 ){ echo "show active";} ?>" id="navs-top-langues" role="tabpanel">
-									<?php if ($formateur->flag_attestation_formateurs != true){ ?>
+									<?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                     <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
                                         @csrf
                                        @method('put')
@@ -706,12 +756,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                        <button type="submit" name="action" value="AjouterLangues"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                                Ajouter
                                                        </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
                                                @if(count($languesformateurs)>0)
                                                     <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
@@ -723,7 +773,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                            </div>
                                        </div>
                                    </form>
-                                   <?php } ?>
+                                   <?php //} ?>
                                    <hr>
                                    <table class="table table-bordered table-striped table-hover table-sm"
                                        id=""
@@ -745,13 +795,13 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                                <td>{{ $languesformateur->aptitude->libelle_aptitude }}</td>
                                                <td>{{ $languesformateur->mention->libelle_mention }}</td>
                                                <td>
-                                                   @if ($formateur->flag_attestation_formateurs != true )
-                                                       <a href="{{ route($lien.'.delete', \App\Helpers\Crypt::UrlCrypt($languesformateur->id_langues_formateurs)) }}"
+
+                                                       <a href="{{ route($lien.'.deletelangue', \App\Helpers\Crypt::UrlCrypt($languesformateur->id_langues_formateurs)) }}"
                                                           onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
                                                           title="Supprimer">
                                                           <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
                                                        </a>
-                                                   @endif
+
                                                </td>
                                            </tr>
                                        @endforeach
@@ -762,18 +812,26 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                 </div>
 
                                 <div class="tab-pane fade <?php if($idetape==7 and count($languesformateurs)>0 ){ echo "show active";} ?>" id="navs-top-autre-fin" role="tabpanel">
-                                    <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                    <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                         <div class="col-12" align="right">
 
                                             <?php if (count($piecesFormateursVerifi)==2){ ?>
-                                                <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
-                                                    @csrf
-                                                   @method('put')
-                                                    <button type="submit" name="action" value="Terminer"  onclick='javascript:if (!confirm("Voulez-vous valider ce formateur ?")) return false;'
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                            Terminer
-                                                    </button>
-                                                </form>
+                                                <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt($idetape)]) }}" enctype="multipart/form-data">
+                                                        @csrf
+                                                    @method('put')
+                                                        <button type="submit" name="action" value="Terminer"  onclick='javascript:if (!confirm("Voulez-vous valider ce formateur ?")) return false;'
+                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                Terminer
+                                                        </button>
+                                                    </form>
+                                                <?php }else { ?>
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank" onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" >
+                                                            Voir le cv
+                                                        </a>
+                                                    </span>
+                                                <?php } ?>
                                             <?php } ?>
 
                                         </div>
@@ -815,12 +873,12 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 
                                                <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
-                                               <?php if ($formateur->flag_attestation_formateurs != true){ ?>
+                                               <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
                                                        <button type="submit" name="action" value="AjouterPieces"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
                                                                Ajouter
                                                        </button>
-                                               <?php } ?>
+                                               <?php //} ?>
 
 
 
@@ -830,7 +888,7 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
                                            </div>
                                        </div>
                                    </form>
-                                   <?php } ?>
+                                   <?php //} ?>
 
                                    <hr>
                                     <table class="table table-bordered table-striped table-hover table-sm"
@@ -860,13 +918,13 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 													@endif
 												</td>
 												<td>
-													@if ($formateur->flag_attestation_formateurs != true )
-														<a href="{{ route($lien.'.delete', \App\Helpers\Crypt::UrlCrypt($piecesFormateur->id_pieces_formateur)) }}"
+
+														<a href="{{ route($lien.'.deletepieceformateur', \App\Helpers\Crypt::UrlCrypt($piecesFormateur->id_pieces_formateur)) }}"
 														   onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
 														   title="Supprimer">
 														   <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
 														</a>
-													@endif
+
 												</td>
 											</tr>
 										@endforeach
@@ -889,6 +947,29 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
         @endsection
 
         @section('js_perso')
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
+
+            var idactivesmoussion = $('#colorCheck1').prop('checked', false);
+
+
+            function myFunctionMAJ() {
+                // Get the checkbox
+                var checkBox = document.getElementById("colorCheck1");
+
+                // If the checkbox is checked, display the output text
+                if (checkBox.checked == true){
+                    $("#date_de_fin").hide();
+                } else {
+                   $("#date_de_fin").show();
+                }
+            }
+        </script>
+
 
         @endsection
 
