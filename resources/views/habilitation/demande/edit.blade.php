@@ -6,6 +6,7 @@ use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
 use App\Helpers\ListeDemandeHabilitationSoumis;
+use App\Helpers\Fonction;
 
 
 $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
@@ -157,6 +158,21 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                 Intervention hors du pays et Soumission
                                 </button>
                             </li>
+                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                <li class="nav-item">
+                                    <button
+                                    type="button"
+                                    class="nav-link"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-rejet"
+                                    aria-controls="navs-top-rejet"
+                                    aria-selected="false">
+                                    Motif du rejet
+                                    </button>
+                                </li>
+                            @endif
+
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
@@ -315,7 +331,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                     <input type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
@@ -326,7 +342,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
                                                 @if (isset($demandehabilitation->titre_propriete_contrat_bail))
                                                     <span class="badge bg-secondary">
@@ -343,7 +359,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
 
                                             </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                     <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -354,7 +370,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('id_banque')
                                                     error
@@ -366,7 +382,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
                                                     error
@@ -380,7 +396,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12" id="autorisation_ouverture_ecole_div">
+                                            <div class="col-md-4 col-12" id="autorisation_ouverture_ecole_div">
                                                 <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
                                                 @if (isset($demandehabilitation->autorisation_ouverture_ecole))
                                                     <span class="badge bg-secondary">
@@ -474,9 +490,9 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                    </button>
                                                <?php } ?>
 
-
-                                               <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                @if (count($moyenpermanentes)>0)
+                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                @endif
 
                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                    Retour</a>
@@ -508,7 +524,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                             <td>{{ $moyenpermanente->capitale_moyen_permanente }}</td>
                                                             <td>
                                                             <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                            <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($moyenpermanente->id_moyen_permanente)) }}"
+                                                            <a href="{{ route($lien.'.deletemoyenpermanente',\App\Helpers\Crypt::UrlCrypt($moyenpermanente->id_moyen_permanente)) }}"
                                                             class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                             title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                             <?php } ?>
@@ -551,9 +567,9 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($interventions)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -581,7 +597,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                                 <td>{{ $intervention->typeIntervention->libelle_type_intervention }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($intervention->id_demande_intervention)) }}"
+                                                                    <a href="{{ route($lien.'.deleteinterventions',\App\Helpers\Crypt::UrlCrypt($intervention->id_demande_intervention)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -624,9 +640,9 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                        </button>
                                                    <?php } ?>
 
-
+                                                   @if (count($organisations)>0)
                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -654,7 +670,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                                 <td>{{ $organisation->typeOrganisationFormation->libelle_type_organisation_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($organisation->id_organisation_formation)) }}"
+                                                                    <a href="{{ route($lien.'.deleteorganisations',\App\Helpers\Crypt::UrlCrypt($organisation->id_organisation_formation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -721,9 +737,9 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($domaineDemandeHabilitations)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -755,7 +771,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                                 <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
+                                                                    <a href="{{ route($lien.'.deletedomaineDemandeHabilitations',\App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -769,7 +785,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                 <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                         @if(count($nbresollicite) != count($nbresolliciteFormateur))
-                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                 <div class="alert-body" style="text-align: center">
                                                     Vous devez avoir au moins un formateur par domaine de formation
                                                 </div>
@@ -823,9 +839,9 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($formateurs)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -854,13 +870,13 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
                                                                 <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
-                                                                <td>{{ @$formateur->annee_experience }}</td>
+                                                                <td>{{   Fonction::calculerAnneesExperience($formateur->id_formateurs)  }}</td>
                                                                 <td>
                                                                     <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                         class=" "
                                                                         title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
+                                                                    <a href="{{ route($lien.'.deleteformateurs',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -985,7 +1001,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                        <button type="submit" name="action" value="AjouterDivers"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                               Mise a jour
+                                                               Ajouter
                                                        </button>
                                                    <?php } ?>
 
@@ -1013,6 +1029,13 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                     Soumettre la demande d'habilitation
                                                 </button>
                                             </div>
+                                        @else
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
                                         @endif
 
                                       <br/>
@@ -1131,6 +1154,22 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                        </table>
 
                                 </div>
+
+                                @if ($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                    <div class="tab-pane fade" id="navs-top-rejet" role="tabpanel">
+
+
+
+
+                                        <div class="col-md-12 col-12">
+                                            <div class="mb-1">
+                                                <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

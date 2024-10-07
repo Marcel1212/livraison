@@ -10,16 +10,21 @@ use App\Helpers\Crypt;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Audit;
 use App\Models\Banque;
+use App\Models\Competences;
 use App\Models\DemandeIntervention;
 use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormation;
 use App\Models\Entreprises;
+use App\Models\Experiences;
 use App\Models\FormateurDomaineDemandeHabilitation;
 use App\Models\Formateurs;
+use App\Models\FormationsEduc;
 use App\Models\InterventionHorsCi;
+use App\Models\LanguesFormateurs;
 use App\Models\MoyenPermanente;
 use App\Models\OrganisationFormation;
 use App\Models\Pays;
+use App\Models\PrincipaleQualification;
 use App\Models\TypeDomaineDemandeHabilitation;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeIntervention;
@@ -319,7 +324,36 @@ class DemandeHabilitationController extends Controller
      */
     public function show($id)
     {
+        $id =  Crypt::UrldeCrypt($id);
 
+        $formateur = Formateurs::find($id);
+
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+
+        Audit::logSave([
+
+            'action'=>'Voir',
+
+            'code_piece'=>$id,
+
+            'menu'=>'FORMATEUR (CREATION DE FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Voir le cv'
+
+        ]);
+
+        return view('habilitation.demande.show', compact('id','formateur','qualification',
+                        'formations','experiences','languesformateurs','competences'));
     }
 
     /**
@@ -932,5 +966,145 @@ class DemandeHabilitationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function deletemoyenpermanente($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $moyenpermanente = MoyenPermanente::find($id);
+
+        $idHabilitation = $moyenpermanente->id_demande_habilitation;
+
+        $moyenpermanente->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de moyen permanente'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteinterventions($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $interventions = DemandeIntervention::find($id);
+
+        $idHabilitation = $interventions->id_demande_habilitation;
+
+        $interventions->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de demande intervention'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteorganisations($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $organisations = OrganisationFormation::find($id);
+
+        $idHabilitation = $organisations->id_demande_habilitation;
+
+        $organisations->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de organisation de la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deletedomaineDemandeHabilitations($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::find($id);
+
+        $idHabilitation = $domaineDemandeHabilitations->id_demande_habilitation;
+
+        $domaineDemandeHabilitations->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de domaine la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteformateurs($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $formateurs = FormateurDomaineDemandeHabilitation::find($id);
+
+        $idHabilitation = $formateurs->domaineDemandeHabilitation->id_demande_habilitation;
+
+        $formateurs->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de formateur pour la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
     }
 }

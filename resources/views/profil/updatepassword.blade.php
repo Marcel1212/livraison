@@ -398,7 +398,7 @@
                                                                             <div class="col-md-5 col-12">
                                                                                 <label class="form-label">Liste des types de composition de capitale </label>
 
-                                                                                <select class="select21 form-select"
+                                                                                <select class="select2 form-select-sm"
                                                                                         data-allow-clear="true" name="id_type_composition_capitale"
                                                                                         required="required">
                                                                                     <?= $typeCompoCapitMAJList; ?>
@@ -448,7 +448,7 @@
                                                                                 </tr>
                                                                             @endforeach
                                                                         </tbody>
-                                                                    </table>
+                                                                    </table><br/><br/><br/><br/><br/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -468,7 +468,7 @@
                                                                             <div class="col-md-8 col-12">
                                                                                 <label class="form-label">Liste des activités de liée à l'entreprise </label>
 
-                                                                                <select class="select21 form-select"
+                                                                                <select class="select2 form-select"
                                                                                         data-allow-clear="true" name="id_activites"
                                                                                         >
                                                                                     <?= $activite; ?>
@@ -517,7 +517,7 @@
                                                                                 </tr>
                                                                             @endforeach
                                                                         </tbody>
-                                                                    </table>
+                                                                    </table><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                                                 </div>
                                                             </div>
                                                         </div>

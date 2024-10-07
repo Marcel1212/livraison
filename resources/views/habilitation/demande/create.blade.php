@@ -296,7 +296,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-2 col-12">
+                                        <div class="col-md-4 col-12">
                                             <div class="mb-1">
                                                 <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                 <input type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
@@ -307,7 +307,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-2 col-12">
+                                        <div class="col-md-4 col-12">
                                             <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
 
                                             <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
@@ -317,7 +317,7 @@ use App\Helpers\PartEntreprisesHelper;
 
                                         </div>
 
-                                        <div class="col-md-2 col-12">
+                                        <div class="col-md-4 col-12">
                                             <div class="mb-1">
                                                 <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                 <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -328,7 +328,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4 col-12">
                                             <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                             <select class="select2 form-select-sm input-group @error('id_banque')
                                                 error
@@ -340,7 +340,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-4 col-12">
                                             <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
                                             <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
                                                 error
@@ -354,7 +354,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-2 col-12" id="autorisation_ouverture_ecole_div">
+                                        <div class="col-md-4 col-12" id="autorisation_ouverture_ecole_div">
                                             <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
 
                                             <input type="file" name="autorisation_ouverture_ecole" value="{{ old('autorisation_ouverture_ecole') }}" id="autorisation_ouverture_ecole" class="form-control form-control-sm"/>

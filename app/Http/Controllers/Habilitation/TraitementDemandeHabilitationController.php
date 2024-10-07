@@ -31,6 +31,12 @@ use App\Models\Motif;
 use App\Helpers\SmsPerso;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Email;
+use App\Models\Competences;
+use App\Models\Experiences;
+use App\Models\Formateurs;
+use App\Models\FormationsEduc;
+use App\Models\LanguesFormateurs;
+use App\Models\PrincipaleQualification;
 use App\Models\RapportsVisites;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
 
@@ -85,9 +91,38 @@ class TraitementDemandeHabilitationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $id =  Crypt::UrldeCrypt($id);
+
+        $formateur = Formateurs::find($id);
+
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+
+        Audit::logSave([
+
+            'action'=>'Voir',
+
+            'code_piece'=>$id,
+
+            'menu'=>'FORMATEUR (CREATION DE FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Voir le cv'
+
+        ]);
+
+        return view('habilitation.traitementdemandehabilitation.show', compact('id','formateur','qualification',
+                        'formations','experiences','languesformateurs','competences'));
     }
 
     /**
@@ -108,6 +143,7 @@ class TraitementDemandeHabilitationController extends Controller
        // dd($visites);
 
        $rapportVisite = RapportsVisites::where([['id_visites','=',@$visites->id_visites]])->get();
+      // $rapportVisitef = RapportsVisites::where([['id_demande_habilitation','=',@$demandehabilitation->id_demande_habilitation]])->first();
 
         $banques = Banque::where([['flag_banque','=',true]])->get();
         $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
@@ -683,10 +719,12 @@ class TraitementDemandeHabilitationController extends Controller
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
                 $input['flag_reception_demande_habilitation'] = true;
-                $input['code_demande_habilitation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                if(!isset($demandehabilitation->code_demande_habilitation)){
+                    $input['code_demande_habilitation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                }
                 $input['date_reception_demande_habilitation'] = Carbon::now();
 
-                $demandehabilitation = DemandeHabilitation::find($id);
+                //$demandehabilitation = DemandeHabilitation::find($id);
                 $demandehabilitation->update($input);
 
                 $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
@@ -744,9 +782,12 @@ class TraitementDemandeHabilitationController extends Controller
 
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
-                $input['flag_reception_demande_habilitation'] = true;
+                $input['flag_reception_demande_habilitation'] = false;
                 $input['flag_rejet_demande_habilitation'] = true;
-                $input['code_demande_habilitation'] = substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                $input['flag_soumis_demande_habilitation'] = false;
+                if(!isset($demandehabilitation->code_demande_habilitation)){
+                    $input['code_demande_habilitation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
+                }
                 $input['date_reception_demande_habilitation'] = Carbon::now();
                 $input['date_rejet_demande_habilitation'] = Carbon::now();
 
@@ -782,12 +823,7 @@ class TraitementDemandeHabilitationController extends Controller
 
                 //Envoi SMS Rejeté
                 if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                    $content = "Cher ".$infoentreprise->raison_social_entreprises."<br>, Nous avons examiné votre demande d'activation de compte sur Nom de la plateforme, et
-                        malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif."
-                        <br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                        fournir, n'hésitez pas à nous contacter à mailsupport... pour obtenir de l'aide.
-                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                        soumettre une nouvelle demande lorsque les problèmes seront résolus.<br>
+                    $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif." Veuillez mettre a jour le dossier .
                         Cordialement,
                         L'équipe e-FDFP";
                     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
@@ -811,6 +847,47 @@ class TraitementDemandeHabilitationController extends Controller
 
             }
 
+
+            if($data['action'] === 'Rapport'){
+                $request->validate([
+                    'etat_locaux_rapport' => 'required',
+                    'equipement_rapport' => 'required',
+                    'salubrite_rapport' => 'required',
+                ], [
+                    'etat_locaux_rapport.required' => 'Veuillez ajouter un commentaire pour les locaux.',
+                    'equipement_rapport.required' => 'Veuillez ajouter un commentaire pour les equipement.',
+                    'salubrite_rapport.required' => 'Veuillez ajouter un commentaire pour la salubrite / securité.',
+                ]);
+
+                            // Vérification si une visite existe déjà
+                $visite = Visites::where([['id_demande_habilitation','=',$id]])->first();
+
+                $input = $request->all();
+                $input['id_visites'] = $visite->id_visites;
+                $input['id_demande_habilitation'] = $id;
+
+
+                $verifierapport = RapportsVisites::where([['id_demande_habilitation','=',$id],['id_visites','=',$visite->id_visites]])->first();
+
+                if(isset($verifierapport)){
+                    $rapp = RapportsVisites::find($verifierapport->id_rapports_visites);
+                    $rapp->update([
+                        'etat_locaux_rapport' => $input['etat_locaux_rapport'],
+                        'equipement_rapport' => $input['equipement_rapport'],
+                        'salubrite_rapport' => $input['salubrite_rapport'],
+                        'contenu' => $input['contenu']
+                    ]);
+                }else{
+                    $rap = RapportsVisites::create($input);
+                }
+
+
+
+                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($etape).'/edit')->with('success', 'Succes : Rapport effectué avec succès. ');
+
+
+            }
+
         }
     }
 
@@ -820,5 +897,24 @@ class TraitementDemandeHabilitationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function rapport($id)  {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $demandehabilitation = DemandeHabilitation::find($id);
+
+        $visite = Visites::where([['id_demande_habilitation','=',$id]])->first();
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+
+        $formateurs = DB::table('vue_formateur_rapport')->where([['id_demande_habilitation','=',$id]])->get();
+
+        $rapport = RapportsVisites::where([['id_demande_habilitation','=',$id]])->first();
+
+        return view('habilitation.traitementdemandehabilitation.rapport',compact('id','infoentreprise',
+                        'demandehabilitation','visite','formateurs','rapport'));
     }
 }

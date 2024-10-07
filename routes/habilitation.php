@@ -18,6 +18,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('demandehabilitation/store', [DemandeHabilitationController::class, 'store'])->name('demandehabilitation.store');
         Route::get('demandehabilitation/{id}/show', [DemandeHabilitationController::class, 'show'])->name('demandehabilitation.show');
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
+        Route::get('demandehabilitation/{id}/deletemoyenpermanente', [DemandeHabilitationController::class, 'deletemoyenpermanente'])->name('demandehabilitation.deletemoyenpermanente');
+        Route::get('demandehabilitation/{id}/deleteinterventions', [DemandeHabilitationController::class, 'deleteinterventions'])->name('demandehabilitation.deleteinterventions');
+        Route::get('demandehabilitation/{id}/deleteorganisations', [DemandeHabilitationController::class, 'deleteorganisations'])->name('demandehabilitation.deleteorganisations');
+        Route::get('demandehabilitation/{id}/deletedomaineDemandeHabilitations', [DemandeHabilitationController::class, 'deletedomaineDemandeHabilitations'])->name('demandehabilitation.deletedomaineDemandeHabilitations');
+        Route::get('demandehabilitation/{id}/deleteformateurs', [DemandeHabilitationController::class, 'deleteformateurs'])->name('demandehabilitation.deleteformateurs');
         Route::get('demandehabilitation/{id}/deleteapf', [DemandeHabilitationController::class, 'deleteadh'])->name('demandehabilitation.deleteadh');
 	});
 
@@ -46,6 +51,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('traitementdemandehabilitation/{id}/store/visite', [TraitementDemandeHabilitationController::class, 'storevisite'])->name('traitementdemandehabilitation.storevisite');
         Route::post('traitementdemandehabilitation/{id}/rapport/visite', [TraitementDemandeHabilitationController::class, 'rapportvisite'])->name('traitementdemandehabilitation.rapportvisite');
         Route::get('traitementdemandehabilitation/{id}/show', [TraitementDemandeHabilitationController::class, 'show'])->name('traitementdemandehabilitation.show');
+        Route::get('traitementdemandehabilitation/{id}/rapport', [TraitementDemandeHabilitationController::class, 'rapport'])->name('traitementdemandehabilitation.rapport');
         Route::get('traitementdemandehabilitation/{id}/delete', [TraitementDemandeHabilitationController::class, 'delete'])->name('traitementdemandehabilitation.delete');
         Route::get('traitementdemandehabilitation/{id}/deleteapf', [TraitementDemandeHabilitationController::class, 'deleteadh'])->name('traitementdemandehabilitation.deleteadh');
     });
@@ -63,6 +69,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('formateurs/{id}/{id1}/edit', [FormateursController::class, 'edit'])->name('formateurs.edit');
         Route::put('formateurs/{id}/{id1}/update', [FormateursController::class, 'update'])->name('formateurs.update');
         Route::get('formateurs/{id}/delete', [FormateursController::class, 'delete'])->name('formateurs.delete');
+        Route::get('formateurs/{id}/deleteformation', [FormateursController::class, 'deleteformation'])->name('formateurs.deleteformation');
+        Route::get('formateurs/{id}/deleteexperience', [FormateursController::class, 'deleteexperience'])->name('formateurs.deleteexperience');
+        Route::get('formateurs/{id}/deletecompetence', [FormateursController::class, 'deletecompetence'])->name('formateurs.deletecompetence');
+        Route::get('formateurs/{id}/deletelangue', [FormateursController::class, 'deletelangue'])->name('formateurs.deletelangue');
+        Route::get('formateurs/{id}/deletepieceformateur', [FormateursController::class, 'deletepieceformateur'])->name('formateurs.deletepieceformateur');
+        Route::get('formateurs/{id}/show', [FormateursController::class, 'show'])->name('formateurs.show');
+
     });
 
 });

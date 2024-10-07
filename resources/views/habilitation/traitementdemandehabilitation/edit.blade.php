@@ -4,6 +4,7 @@ use App\Helpers\AnneeExercice;
 use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
+use App\Helpers\Fonction;
 use App\Helpers\Menu;
 
 $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
@@ -201,6 +202,20 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 <?php } ?>
                             @endif
 
+                            @if(@$visites->statut == "terminer")
+                                <li class="nav-item">
+                                    <button
+                                    type="button"
+                                    class="nav-link <?php if($idetape==10 and @$visites->statut == "terminer"){ echo "active";} ?>"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-Rpport-visite"
+                                    aria-controls="navs-top-Rpport-visite"
+                                    aria-selected="false">
+                                        Rapport de visite
+                                    </button>
+                                </li>
+                            @endif
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
@@ -359,7 +374,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                     <input type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
@@ -370,20 +385,9 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12">
-                                                <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
-                                                @if (isset($demandehabilitation->titre_propriete_contrat_bail))
-                                                    <span class="badge bg-secondary">
-                                                        <a target="_blank"
-                                                            onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $demandehabilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                            Voir la pièce
-                                                        </a>
-                                                    </span>
-                                                @endif
 
-                                            </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                     <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -394,7 +398,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('id_banque')
                                                     error
@@ -406,7 +410,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
                                                     error
@@ -420,7 +424,20 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-2 col-12" id="autorisation_ouverture_ecole_div">
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label><br/>
+                                                @if (isset($demandehabilitation->titre_propriete_contrat_bail))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $demandehabilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+
+                                            </div>
+
+                                            <div class="col-md-4 col-12" id="autorisation_ouverture_ecole_div">
                                                 <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
                                                 @if (isset($demandehabilitation->autorisation_ouverture_ecole))
                                                     <span class="badge bg-secondary">
@@ -595,7 +612,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                         <td>{{ $i }}</td>
                                                         <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
                                                         <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
-                                                        <td>{{ @$formateur->annee_experience }}</td>
+                                                        <td>{{ Fonction::calculerAnneesExperience($formateur->id_formateurs) }}</td>
                                                         <td>
                                                             <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                 class=" "
@@ -896,28 +913,14 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                         <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
                                             <!-- Full calendar start -->
                                                 <?php //dd($demandehabilitation->visites->statut); ?>
-                                                <div class="row">
+										        <div class="row">
                                                     <div class="col-8">
 
                                                     </div>
                                                     <div class="col-4" align="right">
-                                                        @if (@$visites->statut == "terminer" and @$demandehabilitation->flag_soumis_comite_technique == false)
-                                                            @if (count(@$rapportVisite)>0)
-                                                                <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
-                                                                    @csrf
-                                                                    @method('put')
-                                                                    <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
-                                                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                                    Soumettre pour le comite
-                                                                    </button>
-                                                                </form>
-                                                            @else
-                                                                <button   class="btn btn-sm btn-primary ActiveRapport"
-                                                                     data-bs-toggle="modal" data-bs-target="#ActiveRapport">
-                                                                        Rapport de visite
-                                                                </button>
-                                                            @endif
-                                                        @endif
+													@if (@$visites->statut == "terminer")
+														<a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(10)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Editer le rapport</a>
+													@endif
                                                     </div>
 
                                                     <br/>
@@ -934,7 +937,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                     @if (count(@$rapportVisite)<1)
                                                                         <div class="card-body d-flex justify-content-center">
                                                                             <button class="btn btn-primary btn-toggle-sidebar w-100" data-bs-toggle="modal" data-bs-target="#add-new-sidebar">
-                                                                                <span class="align-middle">Ajouter un evenement</span>
+                                                                                <span class="align-middle">Prise de rendez-vous</span>
                                                                             </button>
                                                                         </div>
                                                                     @endif
@@ -973,7 +976,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                             <div class="modal-content p-0">
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                                                                 <div class="modal-header mb-1">
-                                                                    <h5 class="modal-title">Ajouter un evenement</h5>
+                                                                    <h5 class="modal-title">Prise de rendez-vous</h5>
                                                                 </div>
                                                                 <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                                                                     <div id="error_text"></div>
@@ -1050,59 +1053,86 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 @endif
 
 
-                                <div class="modal fade" id="ActiveRapport" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl modal-simple modal-edit-user">
-                                        <div class="modal-content p-3 p-md-5">
-                                            <div class="modal-body">
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                <div class="text-center mb-4">
-                                                    <h3 class="mb-2">Rapport apres la visite</h3>
-                                                    <p class="text-muted"></p>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div id="error_text_rapport"></div>
-                                                    <div class="row">
-                                                        <form class="rapport-form needs-validation" id="rapport-form" data-ajax="false" novalidate>
-                                                            <div class="col-md-3">
-                                                                <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
-                                                                <label class="form-label" for="etat_locaux_rapport">Etat des locaux
-                                                                    <strong style="color:red;">*</strong></label>
-                                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport"></textarea>
-                                                            </div>
+                                <div class="tab-pane fade <?php if($idetape==10 and @$visites->statut == "terminer"){ echo "show active";} ?>" id="navs-top-Rpport-visite" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-8">
+
+                                        </div>
+                                        <div class="col-4" align="right">
+                                                @if ($demandehabilitation->flag_soumis_comite_technique == false)
+                                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                        @csrf
+                                                        @method('put')
+                                                        <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
+                                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                        Soumettre pour le comite
+                                                        </button>
+                                                    </form>
+                                                @else
+
+                                                         <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
+                                                            title="Modifier">Fiche d'analyse</a>
+
+                                                @endif
+                                        </div>
+
+                                        <br/>
+                                        <br/>
+                                    </div>
+                                    <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(10)]) }}" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('put')
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="etat_locaux_rapport">Etat des locaux
+                                                    <strong style="color:red;">*</strong></label>
+                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport">{{ @$rapportVisite[0]->etat_locaux_rapport }}</textarea>
+                                            </div>
 
 
 
-                                                            <div class="col-md-3">
-                                                                <label class="form-label" for="equipement_rapport">Equipements
-                                                                    <strong style="color:red;">*</strong></label>
-                                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport"></textarea>
-                                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="equipement_rapport">Equipements
+                                                    <strong style="color:red;">*</strong></label>
+                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport">{{ @$rapportVisite[0]->equipement_rapport }}</textarea>
+                                            </div>
 
-                                                            <div class="col-md-3">
-                                                                <label class="form-label" for="salubrite_rapport">Salubrité/Securité
-                                                                    <strong style="color:red;">*</strong></label>
-                                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport"></textarea>
-                                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="salubrite_rapport">Salubrité/Securité
+                                                    <strong style="color:red;">*</strong></label>
+                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport">{{ @$rapportVisite[0]->salubrite_rapport }}</textarea>
+                                            </div>
 
-                                                            <div class="col-md-3">
-                                                                <label class="form-label" for="contenu">Autres</label>
-                                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu"></textarea>
-                                                            </div>
-
-                                                            <div class="col-md-12">
-                                                                <label class="form-label" for="avis_comite_technique">Avis de la commission technique <strong style="color:red;">*</strong></label>
-                                                                    <textarea class="form-control form-control-sm" name="avis_comite_technique" id="avis_comite_technique"></textarea>
-                                                            </div>
-
-                                                            <button type="submit" class="btn btn-primary add-rapport-btn me-1">Ajouter</button>
-                                                            <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label" for="contenu">Autres</label>
+                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu">{{ @$rapportVisite[0]->contenu }}</textarea>
                                             </div>
                                         </div>
-                                    </div>
+                                        {{-- <div class="col-md-12">
+                                            <label class="form-label" for="avis_comite_technique">Avis de la commission technique <strong style="color:red;">*</strong></label>
+                                                <textarea class="form-control form-control-sm" name="avis_comite_technique" id="avis_comite_technique"></textarea>
+                                        </div> --}}
+
+                                        <div class="col-12" align="right">
+                                            <hr>
+
+
+
+                                                     <button type="submit" name="action" value="Rapport"
+                                                             class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                             Rapport
+                                                     </button>
+
+                                        </div>
+
+
+                                    </form>
+
                                 </div>
+
+
 
 
                             </div>
@@ -1218,7 +1248,7 @@ var calendarEl = document.getElementById('calendar');
                        if (info.event.extendedProps.selectlabel === "terminer") {
                             $('.add-event-btn').addClass('d-none');
                             $('.update-event-btn').addClass('d-none');
-                            $('.update-lien-event-btn').addClass('d-none'); // Affiche un bouton spécifique pour les événements terminés
+                            $('.update-lien-event-btn').removeClass('d-none'); // Affiche un bouton spécifique pour les événements terminés
                         } else {
                             $('.add-event-btn').addClass('d-none');
                             $('.update-lien-event-btn').addClass('d-none');
