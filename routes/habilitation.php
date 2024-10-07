@@ -9,10 +9,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['middleware' => ['can:demandehabilitation-index']], function () {
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
         Route::get('demandehabilitation/{id}/{id1}/edit', [DemandeHabilitationController::class, 'edit'])->name('demandehabilitation.edit');
+        Route::get('demandehabilitation/{id}/{id1}/editpu', [DemandeHabilitationController::class, 'editpu'])->name('demandehabilitation.editpu');
         Route::put('demandehabilitation/{id}/{id1}/update', [DemandeHabilitationController::class, 'update'])->name('demandehabilitation.update');
         Route::get('demandehabilitation/index', [DemandeHabilitationController::class, 'index'])->name('demandehabilitation.index');
         Route::get('demandehabilitation', [DemandeHabilitationController::class, 'index'])->name('demandehabilitation');
         Route::get('demandehabilitation/create', [DemandeHabilitationController::class, 'create'])->name('demandehabilitation.create');
+        Route::get('demandehabilitation/createpu', [DemandeHabilitationController::class, 'createpu'])->name('demandehabilitation.createpu');
         Route::post('demandehabilitation/store', [DemandeHabilitationController::class, 'store'])->name('demandehabilitation.store');
         Route::get('demandehabilitation/{id}/show', [DemandeHabilitationController::class, 'show'])->name('demandehabilitation.show');
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
