@@ -71,41 +71,52 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <td>{{ @$habilitation->date_soumis_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->date_agrement_demande_habilitation }}</td>
                                     <td align="center">
-                                        <?php if ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == true
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false){ ?>
-                                                <span class="badge bg-success">Valider</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false){ ?>
-                                            <span class="badge bg-warning">En cours de traitement</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == true){ ?>
-                                            <span class="badge bg-success">Agrée</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == false and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == false and
-                                            $habilitation->flag_reception_demande_habilitation == false and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-primary">Non Soumis</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == true and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-danger">Non recevable</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and $habilitation->flag_annulation_plan == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                        <span class="badge bg-danger">Annulé</span>
-                                        <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
-                                            $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_annulation_plan == true
-                                            and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                        <span class="badge bg-danger">Annulé</span>
-                                        <?php }else { ?>
-                                        <span class="badge bg-danger"> </span>
-                                        <?php } ?>
+                                        <?php
+                                            $flags = [
+                                                'soumis' => $habilitation->flag_soumis_demande_habilitation,
+                                                'reception' => $habilitation->flag_reception_demande_habilitation,
+                                                'valide' => $habilitation->flag_valide_demande_habilitation,
+                                                'rejet' => $habilitation->flag_rejet_demande_habilitation,
+                                                'agrement' => $habilitation->flag_agrement_demande_habilitaion,
+                                                'annulation' => $habilitation->flag_annulation_plan,
+                                            ];
+
+                                            // Déterminer le badge à afficher
+                                            if ($flags['soumis'] === true && $flags['reception'] === true) {
+                                                if ($flags['valide']) {
+                                                    $badge = '<span class="badge bg-success">Valider</span>';
+                                                } elseif ($flags['agrement']) {
+                                                    $badge = '<span class="badge bg-success">Agrée</span>';
+                                                } else{
+                                                    $badge = '<span class="badge bg-warning">En cours de traitement</span>';
+                                                }
+                                            } elseif ($flags['soumis'] === true && $flags['reception'] === false)  {
+                                                if ($flags['valide']) {
+                                                    $badge = '<span class="badge bg-success">Valider</span>';
+                                                } elseif ($flags['agrement']) {
+                                                    $badge = '<span class="badge bg-success">Agrée</span>';
+                                                } elseif ($flags['rejet']) {
+                                                    $badge = '<span class="badge bg-secondary">Soumis</span>';
+                                                } elseif ($flags['annulation']) {
+                                                    $badge = '<span class="badge bg-danger">Annulé</span>';
+                                                } else {
+                                                    $badge = '<span class="badge bg-warning">En cours de traitement</span>';
+                                                }
+                                            } elseif ($flags['soumis'] === false) {
+                                                if ($flags['reception'] === false) {
+                                                    $badge = '<span class="badge bg-primary">Non Soumis</span>';
+                                                } elseif ($flags['rejet']) {
+                                                    $badge = '<span class="badge bg-danger">Non recevable</span>';
+                                                } else {
+                                                    $badge = '<span class="badge bg-secondary">Soumis</span>';
+                                                }
+                                            } else {
+                                                $badge = '<span class="badge bg-danger">Non recevable</span>';
+                                            }
+
+                                            echo $badge;
+                                            ?>
+
                                     </td>
                                     <td align="center">
                                         @can($lien.'-edit')

@@ -39,8 +39,18 @@ class ListeDemandeHabilitationSoumis
         return (isset($demandehabilitations) ? $demandehabilitations : '');
     }
 
+    public static function get_vue_nombre_de_domaine_sollicite_formateur($IdDemande)
+    {
+        $demandehabilitations = DB::table('vue_nombre_de_domaine_sollicite_formateur')->where([['id_demande_habilitation','=',$IdDemande]])->get();
 
+        return (isset($demandehabilitations) ? $demandehabilitations : '');
+    }
 
+    public static function get_vue_nombre_de_domaine_sollicite($IdDemande)
+    {
+        $demandehabilitations = DB::table('vue_nombre_de_domaine_sollicite')->where([['id_demande_habilitation','=',$IdDemande]])->get();
 
+        return (isset($demandehabilitations) ? $demandehabilitations : '');
+    }
 
 }

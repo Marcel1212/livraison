@@ -1,14 +1,22 @@
 <?php
 
+use Carbon\Carbon;
 use App\Helpers\AnneeExercice;
 use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
+use App\Helpers\ListeDemandeHabilitationSoumis;
+use App\Helpers\Fonction;
+
+
+$nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
+$nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite_formateur($demandehabilitation->id_demande_habilitation);
 
 
 ?>
 
 @if(auth()->user()->can('demandehabilitation-edit'))
+
 
 @extends('layouts.backLayout.designadmin')
 
@@ -150,11 +158,26 @@ use App\Helpers\PartEntreprisesHelper;
                                 Intervention hors du pays et Soumission
                                 </button>
                             </li>
+                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                <li class="nav-item">
+                                    <button
+                                    type="button"
+                                    class="nav-link"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-top-rejet"
+                                    aria-controls="navs-top-rejet"
+                                    aria-selected="false">
+                                    Motif du rejet
+                                    </button>
+                                </li>
+                            @endif
+
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
 
-                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}">
+                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}" enctype="multipart/form-data">
                                          @csrf
                                         @method('put')
                                         <div class="row">
@@ -320,6 +343,23 @@ use App\Helpers\PartEntreprisesHelper;
                                             </div>
 
                                             <div class="col-md-4 col-12">
+                                                <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+                                                @if (isset($demandehabilitation->titre_propriete_contrat_bail))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $demandehabilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+                                                <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
+                                                @error('titre_propriete_contrat_bail')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+
+                                            </div>
+
+                                            <div class="col-md-4 col-12">
                                                 <div class="mb-1">
                                                     <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                     <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -330,7 +370,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                 @enderror
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                                 <select class="select2 form-select-sm input-group @error('id_banque')
                                                     error
@@ -341,6 +381,38 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
                                             </div>
+
+                                            <div class="col-md-4 col-12">
+                                                <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
+                                                    error
+                                                    @enderror" data-allow-clear="true" name="flag_ecole_autre_entreprise" id="flag_ecole_autre_entreprise">
+                                                    <option value="">---Choix du type entreprise--</option>
+                                                    <option value="true" @if($demandehabilitation->flag_ecole_autre_entreprise == true ) selected @endif>Ecoles</option>
+                                                    <option value="false" @if($demandehabilitation->flag_ecole_autre_entreprise == false ) selected @endif>Autres</option>
+                                                </select>
+                                                @error('flag_ecole_autre_entreprise')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+                                            <div class="col-md-4 col-12" id="autorisation_ouverture_ecole_div">
+                                                <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
+                                                @if (isset($demandehabilitation->autorisation_ouverture_ecole))
+                                                    <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                            onclick="NewWindow('{{ asset("/pieces/autorisation_ouverture_ecole/". $demandehabilitation->autorisation_ouverture_ecole)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                                @endif
+                                                <input type="file" name="autorisation_ouverture_ecole" value="{{ old('autorisation_ouverture_ecole') }}" id="autorisation_ouverture_ecole" class="form-control form-control-sm"/>
+                                                @error('autorisation_ouverture_ecole')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+
 
 
 
@@ -418,9 +490,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                    </button>
                                                <?php } ?>
 
-
-                                               <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                @if (count($moyenpermanentes)>0)
+                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(3)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                @endif
 
                                                <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                    Retour</a>
@@ -452,7 +524,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <td>{{ $moyenpermanente->capitale_moyen_permanente }}</td>
                                                             <td>
                                                             <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                            <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($moyenpermanente->id_moyen_permanente)) }}"
+                                                            <a href="{{ route($lien.'.deletemoyenpermanente',\App\Helpers\Crypt::UrlCrypt($moyenpermanente->id_moyen_permanente)) }}"
                                                             class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                             title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                             <?php } ?>
@@ -495,9 +567,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($interventions)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -525,7 +597,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                                 <td>{{ $intervention->typeIntervention->libelle_type_intervention }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($intervention->id_demande_intervention)) }}"
+                                                                    <a href="{{ route($lien.'.deleteinterventions',\App\Helpers\Crypt::UrlCrypt($intervention->id_demande_intervention)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -568,9 +640,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                        </button>
                                                    <?php } ?>
 
-
+                                                   @if (count($organisations)>0)
                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -598,7 +670,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                                 <td>{{ $organisation->typeOrganisationFormation->libelle_type_organisation_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($organisation->id_organisation_formation)) }}"
+                                                                    <a href="{{ route($lien.'.deleteorganisations',\App\Helpers\Crypt::UrlCrypt($organisation->id_organisation_formation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -665,9 +737,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($domaineDemandeHabilitations)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -699,7 +771,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                                 <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
                                                                 <td>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
+                                                                    <a href="{{ route($lien.'.deletedomaineDemandeHabilitations',\App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -712,35 +784,23 @@ use App\Helpers\PartEntreprisesHelper;
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                        @if(count($nbresollicite) != count($nbresolliciteFormateur))
+                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                <div class="alert-body" style="text-align: center">
+                                                    Vous devez avoir au moins un formateur par domaine de formation
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        @endif
+
                                         <form method="POST" enctype="multipart/form-data" id="formformateur" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}">
                                             @csrf
                                            @method('put')
                                            <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="row">
+
+
+
                                                     <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Nom du formateur  <strong style="color:red;">*</strong> </label>
-                                                            <input type="text" name="nom_formateur" id="nom_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('nom_formateur') }}">
-                                                        </div>
-                                                        @error('nom_formateur')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Prénom du formateur  <strong style="color:red;">*</strong> </label>
-                                                            <input type="text" name="prenom_formateur" id="prenom_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('prenom_formateur') }}">
-                                                        </div>
-                                                        @error('prenom_formateur')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12 col-12">
                                                         <label class="form-label" for="billings-country">Domaine de formation  <strong style="color:red;">*</strong></label>
                                                         <select class="select2 form-select-sm input-group @error('id_domaine_demande_habilitation')
                                                             error
@@ -752,80 +812,19 @@ use App\Helpers\PartEntreprisesHelper;
                                                         <div class=""><label class="error">{{ $message }}</label></div>
                                                         @enderror
                                                     </div>
-                                                </div>
-                                                <div class="row">
+
                                                     <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Date de début d'experience  <strong style="color:red;">*</strong> </label>
-                                                            <input type="date" name="date_debut_formateur" id="date_debut_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('date_debut_formateur') }}">
-                                                        </div>
-                                                        @error('date_debut_formateur')
+                                                        <label class="form-label" for="billings-country">Mes formateurs  <strong style="color:red;">*</strong></label>
+                                                        <select class="select2 form-select-sm input-group @error('id_formateurs')
+                                                            error
+                                                            @enderror" data-allow-clear="true" name="id_formateurs">
+                                                            <?= $MesformateursList; ?>
+                                                        </select>
+                                                        @error('id_formateurs')
+                                                        <div class=""><label class="error">{{ $message }}</label></div>
                                                         <div class=""><label class="error">{{ $message }}</label></div>
                                                         @enderror
                                                     </div>
-
-                                                    <div class="col-md-6 col-12">
-                                                        <div class="mb-1">
-                                                            <label>Date de fin d'experience  </label>
-                                                            <input type="date" name="date_fin_formateur" id="date_fin_formateur"
-                                                                class="form-control form-control-sm"  value="{{ old('date_fin_formateur') }}">
-                                                        </div>
-                                                        @error('date_fin_formateur')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Cv du formation <strong
-                                                                style="color:red;">*</strong></label>
-                                                        <input type="file" name="cv_formateur"
-                                                               class="form-control form-control-sm  @error('cv_formateur')
-                                                               error
-                                                                @enderror" placeholder=""
-
-                                                               value="{{ old('cv_formateur') }}"/>
-                                                        @error('cv_formateur')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text ">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <label class="form-label">Lettre d'engagement du formation <strong
-                                                                style="color:red;">*</strong></label>
-                                                        <input type="file" name="le_formateur"
-                                                               class="form-control form-control-sm  @error('le_formateur')
-                                                               error
-                                                                @enderror" placeholder=""
-
-                                                               value="{{ old('le_formateur') }}"/>
-                                                        @error('le_formateur')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text ">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                                <div class="col-md-6 col-12">
-                                                    <div class="mb-1">
-                                                        <label>Experience  </label>
-                                                                <input class="form-control @error('experience_formateur') error @enderror" type="text" id="experience_formateur_val" name="experience_formateur"/>
-                                                                <div id="experience_formateur" class="rounded-1">{{ old('experience_formateur') }}</div>
-                                                    </div>
-                                                    @error('experience_formateur')
-                                                    <div class=""><label class="error">{{ $message }}</label></div>
-                                                    @enderror
-                                                </div>
-
 
 
                                                <div class="col-12" align="right">
@@ -840,9 +839,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                        </button>
                                                    <?php } ?>
 
-
-                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
-
+                                                   @if (count($formateurs)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                   @endif
 
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
@@ -857,10 +856,9 @@ use App\Helpers\PartEntreprisesHelper;
                                             <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Domaine</th>
                                                 <th>Nom et prénom </th>
                                                 <th>Année d'experience </th>
-                                                <th>Cv  </th>
-                                                <th>Lettre d'engagement </th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -870,43 +868,15 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <?php $i += 1;?>
                                                             <tr>
                                                                 <td>{{ $i }}</td>
-                                                                <td>{{ $formateur->nom_formateur }} {{ $formateur->prenom_formateur }}</td>
+                                                                <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
+                                                                <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
+                                                                <td>{{   Fonction::calculerAnneesExperience($formateur->id_formateurs)  }}</td>
                                                                 <td>
-                                                                    <?php
-                                                                        if(isset($formateur->date_fin_formateur)){
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::parse($formateur->date_fin_formateur);
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }else {
-                                                                            $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
-                                                                            $datefin = \Carbon\Carbon::now();
-
-                                                                            $anneexperience = $datedebut->diffInYears($datefin);
-                                                                        }
-
-                                                                        echo $anneexperience;
-                                                                    ?>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/cv_formateur/". $formateur->cv_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
-                                                                    <span class="badge bg-secondary">
-                                                                        <a target="_blank"
-                                                                            onclick="NewWindow('{{ asset("/pieces/le_formateur/". $formateur->le_formateur)}}','',screen.width/2,screen.height,'yes','center',1);">
-                                                                            Voir la pièce
-                                                                        </a>
-                                                                    </span>
-                                                                </td>
-                                                                <td>
+                                                                    <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                                        class=" "
+                                                                        title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                                    <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
+                                                                    <a href="{{ route($lien.'.deleteformateurs',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
                                                                     <?php } ?>
@@ -931,7 +901,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <select class="select2 form-select-sm input-group @error('information_catalogue_demande_habilitation')
                                                                 error
                                                                 @enderror" data-allow-clear="true" id="information_catalogue_demande_habilitation" name="information_catalogue_demande_habilitation">
-                                                                <option value=""></option>
+
                                                                 <option value="false" @if($demandehabilitation->information_catalogue_demande_habilitation == false ) selected @endif>NON</option>
                                                                 <option value="true" @if($demandehabilitation->information_catalogue_demande_habilitation == true ) selected @endif>OUI</option>
                                                             </select>
@@ -947,9 +917,9 @@ use App\Helpers\PartEntreprisesHelper;
                                                             <select class="select2 form-select-sm input-group @error('information_seul_activite_demande_habilitation')
                                                                 error
                                                                 @enderror" data-allow-clear="true"  id="information_seul_activite_demande_habilitation" name="information_seul_activite_demande_habilitation">
-                                                                <option value=""></option>
-                                                                <option value="false" @if($demandehabilitation->information_seul_activite_demande_habilitation == false ) selected @endif>NON</option>
+
                                                                 <option value="true" @if($demandehabilitation->information_seul_activite_demande_habilitation == true ) selected @endif>OUI</option>
+                                                                <option value="false" @if($demandehabilitation->information_seul_activite_demande_habilitation == false ) selected @endif>NON</option>
                                                             </select>
                                                             @error('information_seul_activite_demande_habilitation')
                                                                 <div class=""><label class="error">{{ $message }}</label></div>
@@ -1031,7 +1001,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                        <button type="submit" name="action" value="AjouterDivers"
                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                               Mise a jour
+                                                               Ajouter
                                                        </button>
                                                    <?php } ?>
 
@@ -1049,15 +1019,25 @@ use App\Helpers\PartEntreprisesHelper;
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <div class="col-md-12" align="right">
-                                        <button
-                                        type="button"
-                                        class="btn btn-outline-success"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#SoummissiondemandehabilitationApprouve1">
-                                        Soumettre la demande d'habilitation
-                                      </button>
-                                        </div>
+                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
+                                            <div class="col-md-12" align="right">
+                                                <button
+                                                type="button"
+                                                class="btn btn-outline-success"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#SoummissiondemandehabilitationApprouve1">
+                                                    Soumettre la demande d'habilitation
+                                                </button>
+                                            </div>
+                                        @else
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
+                                        @endif
+
                                       <br/>
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -1174,6 +1154,22 @@ use App\Helpers\PartEntreprisesHelper;
                                        </table>
 
                                 </div>
+
+                                @if ($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                    <div class="tab-pane fade" id="navs-top-rejet" role="tabpanel">
+
+
+
+
+                                        <div class="col-md-12 col-12">
+                                            <div class="mb-1">
+                                                <label>Commentaire Recevabilité <strong style="color:red;">(Obligatoire si non recevable)*</strong>: </label>
+                                                <textarea class="form-control form-control-sm"  name="commentaire_recevabilite" id="commentaire_recevabilite" rows="6">{{@$demandehabilitation->commentaire_recevabilite}}</textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -1227,9 +1223,42 @@ use App\Helpers\PartEntreprisesHelper;
         @section('js_perso')
 
             <script>
-                                        $("#dernier_catalogue_demande_habilitation_div").hide();
 
-                                        $("#autre_activite_demande_habilitation_div").hide();
+                $("#flag_ecole_autre_entreprise").select2().val({{old('flag_ecole_autre_entreprise')}});
+
+                var typentre = $('#flag_ecole_autre_entreprise').val();
+
+                if (typentre == true) {
+                    $("#autorisation_ouverture_ecole_div").show();
+                }else{
+                    $("#autorisation_ouverture_ecole_div").hide();
+                }
+
+                $('#flag_ecole_autre_entreprise').on('change', function (e) {
+                    if(e.target.value=='true'){
+                        $("#autorisation_ouverture_ecole_div").show();
+                    }
+                    if(e.target.value=='false'){
+                        $("#autorisation_ouverture_ecole_div").hide();
+                    }
+                });
+
+
+               var val =  $('#information_seul_activite_demande_habilitation').val();
+               var val1 =  $('#information_catalogue_demande_habilitation').val();
+
+               //alert($val);
+               if (val == true) {
+                    $("#dernier_catalogue_demande_habilitation_div").show();
+               }else{
+                    $("#dernier_catalogue_demande_habilitation_div").hide();
+               }
+
+               if (val1 == true) {
+                    $("#autre_activite_demande_habilitation_div").show();
+               }else{
+                    $("#autre_activite_demande_habilitation_div").hide();
+               }
 
                 $('#information_catalogue_demande_habilitation').on('change', function (e) {
                     if(e.target.value=='true'){
@@ -1323,6 +1352,47 @@ use App\Helpers\PartEntreprisesHelper;
 
 
             </script>
+
+            <script type="text/javascript">
+                function FuncCalculAnneeExperience() {
+                    // Récupérer la date de début à partir du champ de saisie
+                    var dateDebut = document.getElementById("date_debut_formateur").value.trim();
+
+                    // Vérifier si la date de début est valide
+/*                     if (dateDebut === "") {
+                        alert("Veuillez saisir une date de début.");
+                        return;
+                    } */
+
+                    // Convertir la date de début en objet Date
+                    var dateDebutObj = new Date(dateDebut);
+/*                     if (isNaN(dateDebutObj.getTime())) {
+                        alert("Date de début invalide.");
+                        return;
+                    } */
+
+                    // Obtenir la date actuelle
+                    var dateActuel = new Date();
+
+                    // Calculer la différence en mois entre la date actuelle et la date de début
+                    var diffAnnee = dateActuel.getFullYear() - dateDebutObj.getFullYear();
+                    var diffMois = dateActuel.getMonth() - dateDebutObj.getMonth();
+
+                    // Ajuster si le mois actuel est avant le mois de début
+                    if (diffMois < 0) {
+                        diffAnnee--;
+                    }
+
+                    // Afficher le résultat
+                    //alert("Expérience : " + diffAnnee + " années");
+
+                    // Mettre à jour le champ 'annee_experience' avec le résultat sans virgule
+                    document.getElementById('annee_experience').value = diffAnnee;
+                    document.getElementById('annee_experience1').value = diffAnnee;
+                }
+            </script>
+
+
 
 
         @endsection
