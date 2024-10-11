@@ -9,6 +9,9 @@ use App\Helpers\ListeDemandeHabilitationSoumis;
 use App\Helpers\Fonction;
 
 
+$response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
+
+
 ?>
 
 @if(auth()->user()->can('demandehabilitation-edit'))
@@ -291,7 +294,7 @@ use App\Helpers\Fonction;
 
                                            <div class="col-md-12 col-12">
                                                <div class="mb-1">
-                                                   <label>Principaes qualifications: <strong style="color:red;">*</strong></label>
+                                                   <label>Principales qualifications: <strong style="color:red;">*</strong></label>
                                                    <textarea class="form-control" id="principale_qualification_libelle" name="principale_qualification_libelle" rows="4" cols="3">{{ @$qualification->principale_qualification_libelle }}</textarea>
 
                                                </div>
@@ -455,7 +458,9 @@ use App\Helpers\Fonction;
                                                            <td>{{ $formation->resultat_formation_educ }}</td>
                                                            <td>
                                                             <span data-bs-toggle="tooltip" title="{{ $formation->description_formations_educ }}">
-                                                                {{ Str::words($formation->description_formations_educ, 15, '...') }}
+
+                                                                    {{ Str::words($formation->description_formations_educ, 15, '...') }}
+
                                                             </span>
                                                            </td>
                                                            <td>
@@ -515,7 +520,7 @@ use App\Helpers\Fonction;
 
                                            <div class="col-md-3 col-12">
                                                <div class="mb-1">
-                                                   <label>Lieu entreprise <strong style="color:red;">*</strong></label>
+                                                   <label>Localité entreprise <strong style="color:red;">*</strong></label>
                                                    <input type="text" name="lieu_entreprise" id="lieu_entreprise"
                                                        class="form-control form-control-sm"  value="{{ old('lieu_entreprise') }}" />
                                                </div>
@@ -581,6 +586,25 @@ use App\Helpers\Fonction;
                                    </form>
                                    <?php //} ?>
                                    <hr>
+
+                                   @if ($response == 120)
+                                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Ce formateur n'est pas éligible à une demande d'habilitation. <br/>
+                                                Cinq (5) années minimum d'expérience sont nécessaires.
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                   @else
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Ce formateur est éligible à une demande d'habilitation.
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                   @endif
+
+
                                    <table class="table table-bordered table-striped table-hover table-sm"
                                        id=""
                                        style="margin-top: 13px !important">
@@ -588,7 +612,7 @@ use App\Helpers\Fonction;
                                        <tr>
                                            <th>No</th>
                                            <th>Intitulé du poste </th>
-                                           <th>Type emploie</th>
+                                           <th>Type emploi</th>
                                            <th>Lieu</th>
                                            <th>Entreprise</th>
                                            <th>Lieu entreprise</th>
@@ -611,13 +635,14 @@ use App\Helpers\Fonction;
 
                                                     <?php $res = Fonction::calculerDureeExperience($experience->date_de_debut,$experience->date_de_fin);?>
                                                     <br/>
-                                                    (@if ($res->y > 0)
-                                                        {{ $res->y }} ans
-                                                    @endif
-                                                    @if ($res->m > 0)
-                                                        {{ $res->m }} mois
-                                                    @endif)
-
+                                                    <span></i><font size="4" color="blue">
+                                                        (@if ($res->y > 0)
+                                                            {{ $res->y }} ans
+                                                        @endif
+                                                        @if ($res->m > 0)
+                                                            {{ $res->m }} mois
+                                                        @endif)</font>
+                                                    </i></span>
                                                </td>
                                                <td>
                                                     <span data-bs-toggle="tooltip" title="{{ $experience->description_experience }}">
@@ -813,6 +838,14 @@ use App\Helpers\Fonction;
 
                                 <div class="tab-pane fade <?php if($idetape==7 and count($languesformateurs)>0 ){ echo "show active";} ?>" id="navs-top-autre-fin" role="tabpanel">
                                     <?php //if ($formateur->flag_attestation_formateurs != true){ ?>
+
+                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                <div class="alert-body" style="text-align: center">
+                                                    Le CV et la lettre d'engagment sont obligatoire
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+
                                         <div class="col-12" align="right">
 
                                             <?php if (count($piecesFormateursVerifi)==2){ ?>

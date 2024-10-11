@@ -1,3 +1,7 @@
+<?php
+ use App\Helpers\Fonction;
+ ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -76,12 +80,13 @@
                     <h3>{{ $experience->intitule_de_poste }} - {{ $experience->nom_entreprise }}</h3>
                     <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($experience->date_de_debut)->format('d/m/Y') }} - {{ $experience->date_de_fin ? \Carbon\Carbon::parse($experience->date_de_fin)->format('d/m/Y') : 'Présent' }}</p>
                     <p><strong>Durée :</strong>
-                        @php
-                            $date_de_debut = \Carbon\Carbon::parse($experience->date_de_debut);
-                            $date_de_fin = $experience->date_de_fin ? \Carbon\Carbon::parse($experience->date_de_fin) : \Carbon\Carbon::now();
-                            $duree = $date_de_debut->diffInYears($date_de_fin);
-                        @endphp
-                        {{ $duree }} ans
+                        <?php $res = Fonction::calculerDureeExperience($experience->date_de_debut,@$experience->date_de_fin);?>
+                        @if ($res->y > 0)
+                            {{ $res->y }} ans
+                        @endif
+                        @if ($res->m > 0)
+                            {{ $res->m }} mois
+                        @endif
                     </p>
                     <p>{{ $experience->description_experience }}</p>
                 </div>

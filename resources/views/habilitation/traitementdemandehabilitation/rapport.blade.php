@@ -78,26 +78,30 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
     <tr>
         <td colspan="6" class="header section">DOMAINES D'INTERVENTION</td>
     </tr>
-    <tr>
+
         @foreach ($nbresollicite as $domaine)
-            <td colspan="3">{{ $loop->iteration }}. {{ $domaine->libelle_domaine_formation }}</td>
+        <tr>
+            <td colspan="6">{{ $loop->iteration }}. {{ $domaine->libelle_domaine_formation }}</td>
+        </tr>
         @endforeach
 
-    </tr>
+
     <tr>
         <td colspan="6" class="header section">FORMATEURS</td>
     </tr>
-    <tr>
+
         @foreach ($formateurs as $formateur)
-            <td colspan="3">{{ $formateur->nom_formateurs }} {{ $formateur->nom_formateurs }}</td>
-        @endforeach
-    </tr>
-    <tr>
-        @foreach ($formateurs as $formateur)
-            <td colspan="3">{{ $formateur->fonction_formateurs }} / {{ Fonction::calculerAnneesExperience($formateur->id_formateurs) }} ans d’expérience</td>
+        <tr>
+            <td colspan="6">{{ $loop->iteration }}. {{ $formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }} / {{ $formateur->fonction_formateurs }} / {{ Fonction::calculerAnneesExperience($formateur->id_formateurs) }} ans d’expérience</td>
+        </tr>
         @endforeach
 
-    </tr>
+    {{-- <tr>
+        @foreach ($formateurs as $formateur)
+            <td colspan="3"></td>
+        @endforeach
+
+    </tr> --}}
     <tr>
         <td colspan="6" class="header section">SITUATION DU DOSSIER</td>
     </tr>
