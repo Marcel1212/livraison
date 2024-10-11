@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_rejet_demande_habilitation
  * @property string $date_valide_demande_habilitation
  * @property boolean $flag_valide_demande_habilitation
+ * @property boolean $flag_soumis_comite_technique
  * @property string $materiel_didactique_demande_habilitation
  * @property boolean $information_catalogue_demande_habilitation
  * @property string $dernier_catalogue_demande_habilitation
@@ -42,6 +43,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $code_demande_habilitation
  * @property boolean $flag_agrement_demande_habilitaion
  * @property string $date_agrement_demande_habilitation
+ * @property string $date_soumis_comite_technique
  * @property string $email_responsable_habilitation
  * @property string $contact_responsable_habilitation
  * @property string $type_demande
@@ -49,15 +51,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $date_transmi_charge_habilitation
  * @property boolean $flag_soumis_charge_habilitation
  * @property string $commentaire_recevabilite
- * @property DomaineDemandeHabilitation[] $domaineDemandeHabilitations
- * @property InterventionHorsCi[] $interventionHorsCis
+ * @property string $titre_propriete_contrat_bail
+ * @property string $autorisation_ouverture_ecole
+ * @property boolean $flag_ecole_autre_entreprise
  * @property OrganisationFormation[] $organisationFormations
  * @property DemandeIntervention[] $demandeInterventions
- * @property MoyenPermanente[] $moyenPermanentes
+ * @property Visites[] $visites
+ * @property Motif $motif
  * @property User $userchefservice
- * @property User $userchergerhabilitation
+ * @property User $userchargerhabilitation
  * @property Banque $banque
  * @property Entreprises $entreprise
+ * @property MoyenPermanente[] $moyenPermanentes
+ * @property InterventionHorsCi[] $interventionHorsCis
+ * @property DomaineDemandeHabilitation[] $domaineDemandeHabilitations
  */
 class DemandeHabilitation extends Model
 {
@@ -103,6 +110,7 @@ class DemandeHabilitation extends Model
         return $this->hasMany('App\Models\InterventionHorsCi', 'id_demande_habilitation', 'id_demande_habilitation');
     }
 
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -122,9 +130,17 @@ class DemandeHabilitation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function moyenPermanentes()
+    public function visites()
     {
-        return $this->hasMany('App\Models\MoyenPermanente', 'id_demande_habilitation', 'id_demande_habilitation');
+        return $this->hasMany('App\Models\Visites', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function motif()
+    {
+        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
     }
 
     /**
@@ -138,7 +154,7 @@ class DemandeHabilitation extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function userchergerhabilitation()
+    public function userchargerhabilitation()
     {
         return $this->belongsTo('App\Models\User', 'id_charge_habilitation');
     }
@@ -160,10 +176,26 @@ class DemandeHabilitation extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function motif()
+    public function moyenPermanentes()
     {
-        return $this->belongsTo('App\Models\Motif', 'id_motif_recevable', 'id_motif');
+        return $this->hasMany('App\Models\MoyenPermanente', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interventionHorsCis()
+    {
+        return $this->hasMany('App\Models\InterventionHorsCi', 'id_demande_habilitation', 'id_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function domaineDemandeHabilitations()
+    {
+        return $this->hasMany('App\Models\DomaineDemandeHabilitation', 'id_demande_habilitation', 'id_demande_habilitation');
     }
 }

@@ -143,7 +143,7 @@ use App\Helpers\PartEntreprisesHelper;
                             <div class="tab-content">
                             <div class="tab-pane fade show active" id="navs-top-planformation" role="tabpanel">
 
-                                <form method="POST" class="form" action="{{ route($lien.'.store') }}">
+                                <form method="POST" class="form" action="{{ route($lien.'.store') }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-4 col-12">
@@ -308,6 +308,16 @@ use App\Helpers\PartEntreprisesHelper;
                                         </div>
 
                                         <div class="col-md-4 col-12">
+                                            <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+
+                                            <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
+                                            @error('titre_propriete_contrat_bail')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                            @enderror
+
+                                        </div>
+
+                                        <div class="col-md-4 col-12">
                                             <div class="mb-1">
                                                 <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                 <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
@@ -318,7 +328,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             @enderror
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 col-12">
                                             <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
                                             <select class="select2 form-select-sm input-group @error('id_banque')
                                                 error
@@ -326,6 +336,29 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <?= $banque; ?>
                                             </select>
                                             @error('id_banque')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
+                                            <select class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
+                                                error
+                                                @enderror" data-allow-clear="true" name="flag_ecole_autre_entreprise" id="flag_ecole_autre_entreprise">
+                                                <option value="">---Choix du type entreprise--</option>
+                                                <option value="true">Ecoles</option>
+                                                <option value="false" >Autres</option>
+                                            </select>
+                                            @error('flag_ecole_autre_entreprise')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-md-4 col-12" id="autorisation_ouverture_ecole_div">
+                                            <label class="form-label" for="billings-country">Autorisation d'ouverture <strong style="color:red;">(*)</strong></label>
+
+                                            <input type="file" name="autorisation_ouverture_ecole" value="{{ old('autorisation_ouverture_ecole') }}" id="autorisation_ouverture_ecole" class="form-control form-control-sm"/>
+                                            @error('autorisation_ouverture_ecole')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
                                         </div>
@@ -369,6 +402,24 @@ use App\Helpers\PartEntreprisesHelper;
 
             <script>
                 //Select2 banque
+                $("#flag_ecole_autre_entreprise").select2().val({{old('flag_ecole_autre_entreprise')}});
+
+                var typentre = $('#flag_ecole_autre_entreprise').val();
+
+                if (typentre == true) {
+                    $("#autorisation_ouverture_ecole_div").show();
+                }else{
+                    $("#autorisation_ouverture_ecole_div").hide();
+                }
+
+                $('#flag_ecole_autre_entreprise').on('change', function (e) {
+                    if(e.target.value=='true'){
+                        $("#autorisation_ouverture_ecole_div").show();
+                    }
+                    if(e.target.value=='false'){
+                        $("#autorisation_ouverture_ecole_div").hide();
+                    }
+                });
                 $("#id_banque").select2().val({{old('id_banque')}});
             </script>
 

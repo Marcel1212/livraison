@@ -47,7 +47,7 @@
             @endif
             <div class="row">
                 <!-- User Sidebar -->
-                <div class="col-xl-4 col-lg-5 col-md-5 order-1 order-md-0">
+                <div class="col-xl-3 col-lg-4 col-md-5 order-1 order-md-0">
                     <!-- User Card -->
                     <div class="card">
                         <div class="card-body">
@@ -120,7 +120,7 @@
                 <!--/ User Sidebar -->
 
                 <!-- User Content -->
-                <div class="col-xl-8 col-lg-7 col-md-7 order-0 order-md-1">
+                <div class="col-xl-9 col-lg-8 col-md-7 order-0 order-md-1">
                     <!-- User Pills -->
                     <ul class="nav nav-pills mb-2">
                         <li class="nav-item">
@@ -398,7 +398,7 @@
                                                                             <div class="col-md-5 col-12">
                                                                                 <label class="form-label">Liste des types de composition de capitale </label>
 
-                                                                                <select class="select21 form-select"
+                                                                                <select class="select2 form-select-sm"
                                                                                         data-allow-clear="true" name="id_type_composition_capitale"
                                                                                         required="required">
                                                                                     <?= $typeCompoCapitMAJList; ?>
@@ -448,7 +448,7 @@
                                                                                 </tr>
                                                                             @endforeach
                                                                         </tbody>
-                                                                    </table>
+                                                                    </table><br/><br/><br/><br/><br/>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -468,7 +468,7 @@
                                                                             <div class="col-md-8 col-12">
                                                                                 <label class="form-label">Liste des activités de liée à l'entreprise </label>
 
-                                                                                <select class="select21 form-select"
+                                                                                <select class="select2 form-select"
                                                                                         data-allow-clear="true" name="id_activites"
                                                                                         >
                                                                                     <?= $activite; ?>
@@ -517,7 +517,7 @@
                                                                                 </tr>
                                                                             @endforeach
                                                                         </tbody>
-                                                                    </table>
+                                                                    </table><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                                                 </div>
                                                             </div>
                                                         </div>

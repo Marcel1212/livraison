@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_type_domaine_demande_habilitation
  * @property float $id_demande_habilitation
  * @property float $id_domaine_formation
+ * @property float $id_type_domaine_demande_habilitation_public
  * @property boolean $flag_organisation_formation
  * @property string $created_at
  * @property string $updated_at
  * @property FormateurDomaineDemandeHabilitation[] $formateurDomaineDemandeHabilitations
+ * @property TypeDomaineDemandeHabilitationPublic $typeDomaineDemandeHabilitationPublic
  * @property DemandeHabilitation $demandeHabilitation
  * @property DomaineFormation $domaineFormation
  * @property TypeDomaineDemandeHabilitation $typeDomaineDemandeHabilitation
@@ -43,7 +45,7 @@ class DomaineDemandeHabilitation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_domaine_demande_habilitation', 'id_demande_habilitation', 'id_domaine_formation', 'flag_organisation_formation', 'created_at', 'updated_at'];
+    protected $fillable = ['id_type_domaine_demande_habilitation', 'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -51,6 +53,14 @@ class DomaineDemandeHabilitation extends Model
     public function formateurDomaineDemandeHabilitations()
     {
         return $this->hasMany('App\Models\FormateurDomaineDemandeHabilitation', 'id_domaine_demande_habilitation', 'id_domaine_demande_habilitation');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function typeDomaineDemandeHabilitationPublic()
+    {
+        return $this->belongsTo('App\Models\TypeDomaineDemandeHabilitationPublic', 'id_type_domaine_demande_habilitation_public', 'id_type_domaine_demande_habilitation_public');
     }
 
     /**

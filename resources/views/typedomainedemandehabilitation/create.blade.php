@@ -1,4 +1,4 @@
-@if(auth()->user()->can('typecompositioncapitale-create'))
+@if(auth()->user()->can('typedomainedemandehabilitation-create'))
 @extends('layouts.backLayout.designadmin')
 
 @section('content')

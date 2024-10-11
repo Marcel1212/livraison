@@ -794,6 +794,8 @@ class EnrolementController extends Controller
                     'id_demande_enrolement' => $demandeenrole1->id_demande_enrolement,
                     'numero_fdfp_entreprises' => $numfdfp,
                     'ncc_entreprises' => $demandeenrole1->ncc_demande_enrolement,
+                    'rccm_entreprises' => $demandeenrole1->rccm_demande_enrolement,
+                    'email_entreprises' => $demandeenrole1->email_demande_enrolement,
                     'raison_social_entreprises' => $demandeenrole1->raison_sociale_demande_enroleme,
                     'tel_entreprises' => $demandeenrole1->tel_demande_enrolement,
                     'indicatif_entreprises' => $demandeenrole1->indicatif_demande_enrolement,

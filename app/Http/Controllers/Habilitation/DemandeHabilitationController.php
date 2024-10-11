@@ -11,16 +11,23 @@ use App\Helpers\InfosEntreprise;
 use App\Helpers\Audit;
 use App\Models\Banque;
 use App\Models\FormeJuridique;
+use App\Models\Competences;
 use App\Models\DemandeIntervention;
 use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormation;
 use App\Models\Entreprises;
+use App\Models\Experiences;
 use App\Models\FormateurDomaineDemandeHabilitation;
+use App\Models\Formateurs;
+use App\Models\FormationsEduc;
 use App\Models\InterventionHorsCi;
+use App\Models\LanguesFormateurs;
 use App\Models\MoyenPermanente;
 use App\Models\OrganisationFormation;
 use App\Models\Pays;
+use App\Models\PrincipaleQualification;
 use App\Models\TypeDomaineDemandeHabilitation;
+use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeIntervention;
 use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
@@ -101,11 +108,11 @@ class DemandeHabilitationController extends Controller
 
             'code_piece'=>'',
 
-            'menu'=>'PLAN DE FORMATION (Soumission de plan de formation)',
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
 
             'etat'=>'Succès',
 
-            'objet'=>'PLAN DE FORMATION'
+            'objet'=>'HABILITATIONN'
 
         ]);
 
@@ -241,23 +248,164 @@ class DemandeHabilitationController extends Controller
                 'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
                 'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
                 'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                'flag_ecole_autre_entreprise' => 'required',
+            ], [
+                'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
             ]);
 
-            $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+            $autorisation =  $request->input('flag_ecole_autre_entreprise');
 
             $input = $request->all();
 
             //dd( $request->all()); exit();
+            $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
             $input['date_creer_demande_habilitation'] = Carbon::now();
             $input['id_entreprises'] = $infoentreprise->id_entreprises;
             $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
             $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
             $input['type_demande'] = 'NOUVELLE DEMANDE';
             $input['type_entreprise'] = 'PR';
+            if ($autorisation == 'true') {
 
-            $habilitation = DemandeHabilitation::create($input);
+                $this->validate($request, [
+                    'nom_responsable_demande_habilitation' => 'required',
+                    'fonction_demande_habilitation' => 'required',
+                    'email_responsable_habilitation' => 'required',
+                    'contact_responsable_habilitation' => 'required',
+                    'id_banque' => 'required',
+                    'flag_ecole_autre_entreprise' => 'required',
+                    'titre_propriete_contrat_bail' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                    'autorisation_ouverture_ecole' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                ],[
+                    'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
+                    'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
+                    'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
+                    'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
+                    'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                    'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
+                    'autorisation_ouverture_ecole.required' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                    'autorisation_ouverture_ecole.uploaded' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                    'autorisation_ouverture_ecole.mimes' => 'Les formats requis pour la pièce de l\' autorisation d\'ouverture du ministere de tutelle est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'autorisation_ouverture_ecole.max' => 'la taille maximale doit être de 5 MégaOctets',
+                ]);
 
-            $insertedId = $habilitation->id_demande_habilitation;
+                $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+                $input = $request->all();
+
+                $input['date_creer_demande_habilitation'] = Carbon::now();
+                $input['id_entreprises'] = $infoentreprise->id_entreprises;
+                $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
+                $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
+                $input['type_demande'] = 'NOUVELLE DEMANDE';
+                $input['type_entreprise'] = 'PR';
+
+                if (isset($input['titre_propriete_contrat_bail'])){
+
+                    $filefront = $input['titre_propriete_contrat_bail'];
+
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'titre_propriete_contrat_bail'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/titre_propriete_contrat_bail/'), $fileName1);
+
+                        $input['titre_propriete_contrat_bail'] = $fileName1;
+                    }
+
+                }
+
+                if (isset($input['autorisation_ouverture_ecole'])){
+
+                    $filefront = $input['autorisation_ouverture_ecole'];
+
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'autorisation_ouverture_ecole'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/autorisation_ouverture_ecole/'), $fileName1);
+
+                        $input['autorisation_ouverture_ecole'] = $fileName1;
+                    }
+
+                }
+
+                $habilitation = DemandeHabilitation::create($input);
+
+                $insertedId = $habilitation->id_demande_habilitation;
+            }
+
+            if ($autorisation == 'false') {
+
+
+                $this->validate($request, [
+                    'nom_responsable_demande_habilitation' => 'required',
+                    'fonction_demande_habilitation' => 'required',
+                    'email_responsable_habilitation' => 'required',
+                    'contact_responsable_habilitation' => 'required',
+                    'id_banque' => 'required',
+                    'flag_ecole_autre_entreprise' => 'required',
+                    'titre_propriete_contrat_bail' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                ],[
+                    'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
+                    'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
+                    'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
+                    'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
+                    'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                    'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                    'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                    'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                    'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
+                ]);
+
+                $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+                $input = $request->all();
+
+                $input['date_creer_demande_habilitation'] = Carbon::now();
+                $input['id_entreprises'] = $infoentreprise->id_entreprises;
+                $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
+                $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
+                $input['type_demande'] = 'NOUVELLE DEMANDE';
+                $input['type_entreprise'] = 'PR';
+
+                if (isset($input['titre_propriete_contrat_bail'])){
+
+                    $filefront = $input['titre_propriete_contrat_bail'];
+
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'titre_propriete_contrat_bail'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/titre_propriete_contrat_bail/'), $fileName1);
+
+                        $input['titre_propriete_contrat_bail'] = $fileName1;
+                    }
+
+                }
+
+                $habilitation = DemandeHabilitation::create($input);
+
+                $insertedId = $habilitation->id_demande_habilitation;
+
+
+            }
+
+
 
             if ($input['action'] == 'Enregister'){
 
@@ -304,9 +452,38 @@ class DemandeHabilitationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $id =  Crypt::UrldeCrypt($id);
+
+        $formateur = Formateurs::find($id);
+
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+
+        Audit::logSave([
+
+            'action'=>'Voir',
+
+            'code_piece'=>$id,
+
+            'menu'=>'FORMATEUR (CREATION DE FORMATEUR)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Voir le cv'
+
+        ]);
+
+        return view('habilitation.demande.show', compact('id','formateur','qualification',
+                        'formations','experiences','languesformateurs','competences'));
     }
 
     /**
@@ -376,19 +553,36 @@ class DemandeHabilitationController extends Controller
             $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
         }
 
+        $Mesformateurs = Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire]])->get();
+        $MesformateursList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($Mesformateurs as $comp) {
+            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." </option>";
+        }
+
         $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
 
         $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
         $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
         foreach ($domainedemandes as $comp) {
-            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .' - '.mb_strtoupper($comp->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public).' - '. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
         }
 
         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                                          ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+                                                          ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+                                                          ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get();
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
+
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
 
         Audit::logSave([
 
@@ -407,7 +601,8 @@ class DemandeHabilitationController extends Controller
         return view('habilitation.demande.edit', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList',
+                    'MesformateursList'));
     }
 
 
@@ -539,28 +734,150 @@ class DemandeHabilitationController extends Controller
             if ($data['action'] == 'Modifier'){
 
                 $this->validate($request, [
-                    'nom_responsable_demande_habilitation' => 'required',
-                    'fonction_demande_habilitation' => 'required',
-                    'email_responsable_habilitation' => 'required',
-                    'contact_responsable_habilitation' => 'required',
-                    'id_banque' => 'required',
-                ],[
-                    'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
-                    'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
-                    'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
-                    'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
-                    'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                    'flag_ecole_autre_entreprise' => 'required',
+                ], [
+                    'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
                 ]);
 
-                $input = $request->all();
+                $autorisation =  $request->input('flag_ecole_autre_entreprise');
+                //dd($autorisation);
+                //$input = $request->all();
 
-                $input['id_entreprises'] = $infoentreprise->id_entreprises;
-                $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
-                $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
-                $input['type_demande'] = 'NOUVELLE DEMANDE';
-                $input['type_entreprise'] = 'PR';
+                if ($autorisation == 'true') {
+                    dd($autorisation);
+                    $this->validate($request, [
+                        'nom_responsable_demande_habilitation' => 'required',
+                        'fonction_demande_habilitation' => 'required',
+                        'email_responsable_habilitation' => 'required',
+                        'contact_responsable_habilitation' => 'required',
+                        'id_banque' => 'required',
+                        'flag_ecole_autre_entreprise' => 'required',
+                        'titre_propriete_contrat_bail' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                        'autorisation_ouverture_ecole' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                    ],[
+                        'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
+                        'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
+                        'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
+                        'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
+                        'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                        'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                        'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                        'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                        'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                        'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
+                        'autorisation_ouverture_ecole.required' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                        'autorisation_ouverture_ecole.uploaded' => 'Veuillez ajouter une autorisation d\'ouverture du ministere de tutelle',
+                        'autorisation_ouverture_ecole.mimes' => 'Les formats requis pour la pièce de l\' autorisation d\'ouverture du ministere de tutelle est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                        'autorisation_ouverture_ecole.max' => 'la taille maximale doit être de 5 MégaOctets',
+                    ]);
 
-                $demandehabilitation->update($input);
+                    $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+                    $input = $request->all();
+
+                    $input['date_creer_demande_habilitation'] = Carbon::now();
+                    $input['id_entreprises'] = $infoentreprise->id_entreprises;
+                    $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
+                    $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
+                    $input['type_demande'] = 'NOUVELLE DEMANDE';
+                    $input['type_entreprise'] = 'PR';
+
+                    if (isset($input['titre_propriete_contrat_bail'])){
+
+                        $filefront = $input['titre_propriete_contrat_bail'];
+
+
+                        if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                            $fileName1 = 'titre_propriete_contrat_bail'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                            $filefront->move(public_path('pieces/titre_propriete_contrat_bail/'), $fileName1);
+
+                            $input['titre_propriete_contrat_bail'] = $fileName1;
+                        }
+
+                    }
+
+                    if (isset($input['autorisation_ouverture_ecole'])){
+
+                        $filefront = $input['autorisation_ouverture_ecole'];
+
+
+                        if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                            $fileName1 = 'autorisation_ouverture_ecole'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                            $filefront->move(public_path('pieces/autorisation_ouverture_ecole/'), $fileName1);
+
+                            $input['autorisation_ouverture_ecole'] = $fileName1;
+                        }
+
+                    }
+
+                    $demandehabilitation->update($input);
+                }
+
+                if ($autorisation == 'false') {
+
+
+                    $this->validate($request, [
+                        'nom_responsable_demande_habilitation' => 'required',
+                        'fonction_demande_habilitation' => 'required',
+                        'email_responsable_habilitation' => 'required',
+                        'contact_responsable_habilitation' => 'required',
+                        'id_banque' => 'required',
+                        'flag_ecole_autre_entreprise' => 'required',
+                        'titre_propriete_contrat_bail' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
+                    ],[
+                        'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
+                        'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
+                        'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
+                        'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
+                        'id_banque.unique' => 'Veuillez selectionnez une banque ',
+                        'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                        'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                        'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
+                        'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
+                        'titre_propriete_contrat_bail.max' => 'la taille maximale doit être de 5 MégaOctets',
+                    ]);
+
+                    $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
+
+                    $input = $request->all();
+
+                    $input['date_creer_demande_habilitation'] = Carbon::now();
+                    $input['id_entreprises'] = $infoentreprise->id_entreprises;
+                    $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
+                    $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
+                    $input['type_demande'] = 'NOUVELLE DEMANDE';
+                    $input['type_entreprise'] = 'PR';
+
+                    if (isset($input['titre_propriete_contrat_bail'])){
+
+                        $filefront = $input['titre_propriete_contrat_bail'];
+
+
+                        if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                            $fileName1 = 'titre_propriete_contrat_bail'. '_' . rand(111,99999) . '_' . $infoentreprise->ncc_entreprises .'_'. $infoentreprise->sigl_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                            $filefront->move(public_path('pieces/titre_propriete_contrat_bail/'), $fileName1);
+
+                            $input['titre_propriete_contrat_bail'] = $fileName1;
+                        }
+
+                    }
+
+                    $demandehabilitation->update($input);
+
+
+                }
 
                 Audit::logSave([
 
@@ -855,60 +1172,14 @@ class DemandeHabilitationController extends Controller
 
                 $this->validate($request, [
                     'id_domaine_demande_habilitation' => 'required',
-                    'nom_formateur' => 'required',
-                    'prenom_formateur' => 'required',
-                    'date_debut_formateur' => 'required',
-                    'le_formateur' => 'required',
-                    'experience_formateur' => 'required',
+                    'id_formateurs' => 'required',
                 ],[
                     'id_domaine_demande_habilitation.required' => 'Veuillez selectionner le doamien de formation.',
-                    'nom_formateur.required' => 'Veuillez ajouter le nom du formateur.',
-                    'prenom_formateur.required' => 'Veuillez ajouter le prenom du formateur.',
-                    'date_debut_formateur.required' => 'Veuillez ajouter la date de debut d\'experience du formateur.',
-                    'cv_formateur.required' => 'Veuillez ajouter le CV.',
-                    'le_formateur.required' => 'Veuillez ajouter la lettre d\'engagement.',
-                    'experience_formateur.required' => 'Veuillez ajouter l\'experience.',
+                    'id_formateurs.required' => 'Veuillez selectionner un formateur.',
                 ]);
 
                 $input = $request->all();
 
-
-                if (isset($input['cv_formateur'])){
-
-                    $filefront = $input['cv_formateur'];
-
-
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-
-                        $fileName1 = 'cv_formateur'. '_' . rand(111,99999) . '_' . $input['nom_formateur'] .'_'. $input['prenom_formateur'] . '_' . time() . '.' . $filefront->extension();
-
-                        $filefront->move(public_path('pieces/cv_formateur/'), $fileName1);
-
-                        $input['cv_formateur'] = $fileName1;
-                    }
-
-                }
-
-                if (isset($input['le_formateur'])){
-
-                    $filefront = $input['le_formateur'];
-
-                    //dd($filefront->extension());
-
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-
-                        $fileName1 = 'le_formateur'. '_' . rand(111,99999) . '_' . $input['nom_formateur'] .'_'. $input['prenom_formateur'] . '_' . time() . '.' . $filefront->extension();
-
-                        $filefront->move(public_path('pieces/le_formateur/'), $fileName1);
-
-                        $input['le_formateur'] = $fileName1;
-                    }
-
-                }
 
                 FormateurDomaineDemandeHabilitation::create($input);
 
@@ -1263,5 +1534,145 @@ class DemandeHabilitationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function deletemoyenpermanente($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $moyenpermanente = MoyenPermanente::find($id);
+
+        $idHabilitation = $moyenpermanente->id_demande_habilitation;
+
+        $moyenpermanente->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de moyen permanente'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteinterventions($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $interventions = DemandeIntervention::find($id);
+
+        $idHabilitation = $interventions->id_demande_habilitation;
+
+        $interventions->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de demande intervention'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteorganisations($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $organisations = OrganisationFormation::find($id);
+
+        $idHabilitation = $organisations->id_demande_habilitation;
+
+        $organisations->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de organisation de la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(4).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deletedomaineDemandeHabilitations($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::find($id);
+
+        $idHabilitation = $domaineDemandeHabilitations->id_demande_habilitation;
+
+        $domaineDemandeHabilitations->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de domaine la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteformateurs($id){
+
+        $id = Crypt::UrldeCrypt($id);
+
+        $formateurs = FormateurDomaineDemandeHabilitation::find($id);
+
+        $idHabilitation = $formateurs->domaineDemandeHabilitation->id_demande_habilitation;
+
+        $formateurs->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idHabilitation,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de formateur pour la formation'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
     }
 }
