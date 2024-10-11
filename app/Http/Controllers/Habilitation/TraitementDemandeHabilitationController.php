@@ -31,6 +31,7 @@ use App\Models\Motif;
 use App\Helpers\SmsPerso;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Email;
+use App\Models\CommentaireNonRecevableDemande;
 use App\Models\Competences;
 use App\Models\Experiences;
 use App\Models\Formateurs;
@@ -230,6 +231,9 @@ class TraitementDemandeHabilitationController extends Controller
 
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','HAB']])->get();
+
        // dd($codeRoles);
         if($codeRoles == 'CHEFSERVICE'){
             //dd(Auth::user()->id_service);
@@ -272,7 +276,7 @@ class TraitementDemandeHabilitationController extends Controller
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
                     'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList',
-                    'visites','rapportVisite'));
+                    'visites','rapportVisite','commentairenonrecevables'));
     }
 
 
@@ -775,9 +779,11 @@ class TraitementDemandeHabilitationController extends Controller
             if($data['action'] === 'NonRecevable'){
 
                 $this->validate($request, [
-                    'id_motif_recevable' => 'required'
+                    'id_motif_recevable' => 'required',
+                    'commentaire_recevabilite' => 'required',
                 ],[
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                    'commentaire_recevabilite.required' => 'Veuillez ajouter le commentaire de la non recevaibilité.',
                 ]);
 
                 $input = $request->all();
@@ -790,6 +796,13 @@ class TraitementDemandeHabilitationController extends Controller
                 }
                 $input['date_reception_demande_habilitation'] = Carbon::now();
                 $input['date_rejet_demande_habilitation'] = Carbon::now();
+
+                $commentaire = CommentaireNonRecevableDemande::create([
+                    'commentaire_commentaire_non_recevable_demande' => $input['commentaire_recevabilite'],
+                    'id_demande' => $id,
+                    'id_motif_recevable' => $input['id_motif_recevable'],
+                    'code_demande' => 'HAB'
+                ]);
 
                 $demandehabilitation = DemandeHabilitation::find($id);
                 $demandehabilitation->update($input);
@@ -804,12 +817,12 @@ class TraitementDemandeHabilitationController extends Controller
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
                                     <br><b>Motif de rejet  : </b> ".@$demandehabilitation->motif->libelle_motif."
-                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevable_plan_formation."
+                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevabilite."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                        fournir, n'hésitez pas à contactez votre chargé habilitation : ".@$demandehabilitation->userchargerhabilitation->email." pour obtenir de l'aide.
                                         Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                        soumettre la demande lorsque les problèmes seront résolus.
                                         Cordialement,
                                         L'équipe e-FDFP
                                     <br><br><br>
