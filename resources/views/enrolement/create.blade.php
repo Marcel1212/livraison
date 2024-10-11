@@ -531,7 +531,7 @@ $reseaux = Menu::get_info_reseaux();
                                                 </div>
 
                                                 <br/>
-                                                <hr>
+                                                {{-- <hr>
 
                                                 <h5 class="my-4">3. Vérificateur de sécurité</h5>
 
@@ -548,7 +548,7 @@ $reseaux = Menu::get_info_reseaux();
                                                     </div>
                                                 </div>
                                                 <br/>
-                                                <hr>
+                                                <hr> --}}
                                                 <div class="row">
                                                     <div class="col-sm-12 col-4 text-end mt-0">
                                                         <button class="btn btn-primary" type="submit" name="submit">Enregistrer</button>

@@ -51,6 +51,7 @@ class Menu
             ->join('roles', 'model_has_roles.role_id', 'roles.id')
             ->where([['users.id', '=', $idutil]])
             ->first();
+            //dd($idutil); exit();
         $naroles = $roles->name;
         return (isset($naroles) ? $naroles : '');
     }

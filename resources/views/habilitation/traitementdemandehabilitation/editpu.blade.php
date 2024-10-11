@@ -7,15 +7,15 @@ use App\Helpers\PartEntreprisesHelper;
 
 ?>
 
-@if (auth()->user()->can('demandehabilitation-edit'))
+@if (auth()->user()->can('traitementdemandehabilitation-editpu'))
 
     @extends('layouts.backLayout.designadmin')
 
     @section('content')
         @php($Module = 'Habilitation')
         @php($titre = 'Liste des demandes habilitation')
-        @php($soustitre = 'Demande d\'habilitation')
-        @php($lien = 'demandehabilitation')
+        @php($soustitre = 'Traitement demande d\'habilitation')
+        @php($lien = 'traitementdemandehabilitation')
 
         <!-- BEGIN: Content-->
 
@@ -47,6 +47,32 @@ use App\Helpers\PartEntreprisesHelper;
                     </div>
                 @endforeach
             @endif
+
+            <style>
+                .header,
+                .footer {
+                    text-align: right;
+                }
+
+                .main {
+                    text-align: left;
+                }
+
+                .subject {
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .signature {
+                    text-align: right;
+                    margin-top: 50px;
+                }
+
+                ul {
+                    list-style-type: none;
+                    padding-left: 0;
+                }
+            </style>
 
 
             <div class="col-xl-12">
@@ -90,6 +116,17 @@ use App\Helpers\PartEntreprisesHelper;
                                 Pieces jointes
                             </button>
                         </li>
+                        <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true ){ ?>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link <?php if ($idetape == 9) {
+                                echo 'active';
+                            } ?>" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-top-DossierEnreg" aria-controls="navs-top-DossierEnreg"
+                                aria-selected="false">
+                                Dossier d'enregistrement
+                            </button>
+                        </li>
+                        <?php } ?>
 
                     </ul>
                     <div class="tab-content">
@@ -281,6 +318,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             <input type="text" name="nom_responsable_demande_habilitation"
                                                 id="nom_responsable_demande_habilitation"
                                                 class="form-control form-control-sm" required="required"
+                                                disabled="disabled"
                                                 value="{{ $demandehabilitation->nom_responsable_demande_habilitation }}">
                                         </div>
                                         @error('nom_responsable_demande_habilitation')
@@ -293,7 +331,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             <label>Fonction du responsable <strong style="color:red;">*</strong> </label>
                                             <input type="text" name="fonction_demande_habilitation"
                                                 id="fonction_demande_habilitation" class="form-control form-control-sm"
-                                                required="required"
+                                                disabled="disabled" required="required"
                                                 value="{{ $demandehabilitation->fonction_demande_habilitation }}">
                                         </div>
                                         @error('fonction_demande_habilitation')
@@ -321,7 +359,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             <label>Contact du responsable <strong style="color:red;">*</strong> </label>
                                             <input type="text" name="contact_responsable_habilitation"
                                                 id="contact_responsable_habilitation" class="form-control form-control-sm"
-                                                required="required"
+                                                disabled="disabled" required="required"
                                                 value="{{ $demandehabilitation->contact_responsable_habilitation }}">
                                         </div>
                                         @error('contact_responsable_habilitation')
@@ -336,6 +374,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             </label>
                                             <input type="text" name="email_responsable_habilitation"
                                                 id="email_responsable_habilitation" class="form-control form-control-sm"
+                                                disabled="disabled"
                                                 value="{{ $demandehabilitation->email_responsable_habilitation }}">
                                         </div>
                                         @error('email_responsable_habilitation')
@@ -364,6 +403,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                     lieu)</strong> </label>
                                             <input type="text" name="maison_mere_demande_habilitation"
                                                 id="maison_mere_demande_habilitation" class="form-control form-control-sm"
+                                                disabled="disabled" disabled="disabled"
                                                 value="{{ $demandehabilitation->maison_mere_demande_habilitation }}" />
                                         </div>
                                         @error('maison_mere_demande_habilitation')
@@ -417,7 +457,7 @@ use App\Helpers\PartEntreprisesHelper;
                                             class="select2 form-select-sm input-group @error('id_banque')
                                                 error
                                                 @enderror"
-                                            data-allow-clear="true" name="id_banque" required>
+                                            data-allow-clear="true" disabled="disabled" name="id_banque" required>
                                             <?= $banque ?>
                                         </select>
                                         @error('id_banque')
@@ -427,16 +467,7 @@ use App\Helpers\PartEntreprisesHelper;
 
                                     <div class="col-12" align="right">
                                         <hr>
-                                        <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <button type="submit" name="action" value="ModifierPU"
-                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Modifier
-                                        </button>
-                                        <?php } ?>
 
-
-                                        <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                            class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
 
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -924,15 +955,15 @@ use App\Helpers\PartEntreprisesHelper;
                                                 if (isset($formateur->date_fin_formateur)) {
                                                     $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
                                                     $datefin = \Carbon\Carbon::parse($formateur->date_fin_formateur);
-
+                                                
                                                     $anneexperience = $datedebut->diffInYears($datefin);
                                                 } else {
                                                     $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
                                                     $datefin = \Carbon\Carbon::now();
-
+                                                
                                                     $anneexperience = $datedebut->diffInYears($datefin);
                                                 }
-
+                                                
                                                 echo $anneexperience;
                                                 ?>
                                             </td>
@@ -1298,32 +1329,6 @@ use App\Helpers\PartEntreprisesHelper;
                                     <div class="col-12" align="right">
                                         <hr>
 
-                                        <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
-                                            class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-
-                                        <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <button type="submit" name="action" value="AjouterDiversPU"
-                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Mise a jour
-                                        </button>
-
-
-                                        <?php } ?>
-                                        <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
-                                            class="btn btn-sm btn-secondary me-sm-3 me-1">Suivant</a>
-
-
-                                        {{-- <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
-                                           <button type="submit" name="action" value="AjouterDiversPU"
-                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                            Soumettre la demande
-                                        </button> --}}
-
-                                        </a>
-
-
-
-
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
                                             href="/{{ $lien }}">
                                             Retour</a>
@@ -1354,6 +1359,39 @@ use App\Helpers\PartEntreprisesHelper;
                                     aria-label="Close"></button>
                             </div>
                             <?php } ?>
+
+                            <div class="col-md-12" align="right">
+                                <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == null && $role =='CHARGEHABIL'){ ?>
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                    data-bs-target="#Recevabilite">
+                                    Effectuer la recevabilité
+                                </button>
+                                <?php } ?>
+                            </div>
+
+                            {{-- <div class="row">
+                                <div class="col-md-12" align="right">
+                                    <?php //if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true && $role =='CHARGEHABIL'){
+                                    ?>
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#LettreEngagement">
+                                        Valider la lettre d'enregistrement
+                                    </button>
+                                    <?php //}
+                                    ?>
+                                </div>
+                                <br>
+                                <div class="col-md-12" align="right">
+                                    <?php //if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true && $role =='CHARGEHABIL'){
+                                    ?>
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#NoteTechnique">
+                                        Valider la note technique
+                                    </button>
+                                    <?php //}
+                                    ?>
+                                </div>
+                            </div> --}}
                             <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi"
                                 class="form"
                                 action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}">
@@ -1413,7 +1451,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                     <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                         maxi : 5Mo</em>
                                                 </div>
-                         ""                       <?php } ?> <br>
+                                                <?php } ?> <br>
                                                 @if ($demandehabilitation->decret_nomination_directeur != null)
                                                     <td>
                                                         <span class="badge bg-secondary">
@@ -1438,14 +1476,207 @@ use App\Helpers\PartEntreprisesHelper;
                                     <div class="col-12" align="right">
                                         <hr>
 
-                                        <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(7)]) }}"
-                                            class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+                                        {{-- <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(7)]) }}"
+                                            class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a> --}}
 
-                                        <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <button type="submit" name="action" value="AjouterPiecesHabilitation_PU"
-                                            class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Enregistrer
+                                        <?php if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
+                                        <button type="submit" name="action" value="FaireAttributionPU"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Affecter au chargé d'habillitation
                                         </button>
+                                        <?php } ?>
+
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                            href="/{{ $lien }}">
+                                            Retour</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <?php //}
+                            ?>
+                            <hr>
+
+
+                        </div>
+                        <div class="tab-pane fade <?php if ($idetape == 9) {
+                            echo 'show active';
+                        } ?>" id="navs-top-DossierEnreg" role="tabpanel">
+                            <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                            <div class="col-md-12" align="right">
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                    data-bs-target="#SoummissiondemandehabilitationApprouve1">
+                                    Soumettre la demande d'habilitation
+                                </button>
+                            </div>
+
+                            <br />
+                            <br />
+                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                <div class="alert-body" style="text-align: center">
+                                    Veuillez joindre les fichiers afin de valider votre demande d'habilitation
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                            <?php } ?>
+
+                            <div class="col-md-12" align="right">
+                                <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == null && $role =='CHARGEHABIL'){ ?>
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                    data-bs-target="#Recevabilite">
+                                    Effectuer la recevabilité
+                                </button>
+                                <?php } ?>
+                            </div>
+
+                            {{-- <div class="row">
+                                <div class="col-md-12" align="right">
+                                    <?php //if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true && $role =='CHARGEHABIL'){
+                                    ?>
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#LettreEngagement">
+                                        Valider la lettre d'enregistrement
+                                    </button>
+                                    <?php //}
+                                    ?>
+                                </div>
+                                <br>
+                                <div class="col-md-12" align="right">
+                                    <?php //if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true && $role =='CHARGEHABIL'){
+                                    ?>
+                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#NoteTechnique">
+                                        Valider la note technique
+                                    </button>
+                                    <?php //}
+                                    ?>
+                                </div>
+                            </div> --}}
+                            <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi"
+                                class="form"
+                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                @csrf
+                                @method('put')
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Lettre d'enregistrement
+                                                </label>
+                                                <div class="col-md-12">
+                                                    <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_lettre_enregistrement == null && $role =='CHARGEHABIL'){
+                                                    ?>
+                                                    <button type="button" class="btn btn-outline-success"
+                                                        data-bs-toggle="modal" data-bs-target="#LettreEngagement">
+                                                        Valider la lettre d'enregistrement
+                                                    </button>
+                                                    <?php }
+                                                    ?>
+                                                </div>
+                                                @if ($demandehabilitation->flag_lettre_enregistrement != null)
+                                                    <td>
+
+                                                        {{-- <a target="_blank"
+                                                                onclick="NewWindow('{{ asset('/pieces/lettre_enregistrement/' . $demandehabilitation->lettre_enregistrement) }}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                        ">
+                                                                Voir la pièce
+                                                            </a> --}}
+                                                        <button type="button" class="btn btn-outline-secondary"
+                                                            data-bs-toggle="modal" data-bs-target="#LettreEngagement">
+                                                            Voir la lettre d'enregistrement
+                                                        </button>
+
+
+                                                    </td>
+                                                @endif
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-label">Note technique </label>
+                                                <div class="col-md-12">
+                                                    <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_note_technique == null && $role =='CHARGEHABIL'){
+                                                    ?>
+                                                    <button type="button" class="btn btn-outline-success"
+                                                        data-bs-toggle="modal" data-bs-target="#NoteTechnique">
+                                                        Valider la note technique
+                                                    </button>
+                                                    <?php }
+                                                    ?>
+                                                </div>
+                                                @if ($demandehabilitation->flag_note_technique != null)
+                                                    <td>
+
+                                                        {{-- <a target="_blank"
+                                                                onclick="NewWindow('{{ asset('/pieces/note_technique/' . $demandehabilitation->note_technique) }}','',screen.width/2,screen.height,'yes','center',1);
+                                                                                    ">
+                                                                Voir la pièce
+                                                            </a> --}}
+                                                        <button type="button" class="btn btn-outline-secondary"
+                                                            data-bs-toggle="modal" data-bs-target="#NoteTechnique">
+                                                            Voir la note technique
+                                                        </button>
+
+
+                                                    </td>
+                                                @endif
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12" align="right">
+                                        <hr>
+
+                                        {{-- <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(7)]) }}"
+                                            class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a> --}}
+
+                                        <?php if ($demandehabilitation->flag_soumis_charge_habilitation != true){ ?>
+                                        <button type="submit" name="action" value="FaireAttributionPU"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Affecter au chargé d'habillitation
+                                        </button>
+                                        <?php } ?>
+
+                                        <?php if ($demandehabilitation->flag_reception_chef_departement == null && $role ==  'CHEFSERVICE'){ ?>
+                                        <button type="submit" name="action" value="AttributionChefDepartement"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Affecter au chef de departement
+                                        </button>
+                                        <?php } ?>
+
+                                        <?php if ($demandehabilitation->flag_reception_chef_departement == true && $demandehabilitation->flag_reception_directerur == null  && $role ==  'CHEFDEPART' ){ ?>
+                                        <button type="submit" name="action" value="AttributionDirecteur"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Affecter au directeur
+                                        </button>
+                                        <?php } ?>
+
+                                        <?php if ($demandehabilitation->flag_reception_chef_departement == true && $demandehabilitation->flag_reception_directerur == true && $demandehabilitation->flag_reception_secretaiaire == null  && $role ==  'DR'  ){ ?>
+                                        <button type="submit" name="action" value="AttributionSecretaire"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Affecter au secretaire
+                                        </button>
+                                        <?php } ?>
+
+                                        <?php if ($demandehabilitation->flag_reception_chef_departement == true && $demandehabilitation->flag_reception_directerur == true && $demandehabilitation->flag_reception_secretaiaire == true  && $demandehabilitation->flag_agrement_demande_habilitaion == false  &&  $role ==  'SG'  ){ ?>
+                                        <button type="submit" name="action" value="GenererAgrement"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Generer l'agrement
+                                        </button>
+                                        <?php } ?>
+
+                                        <?php if ( $demandehabilitation->flag_agrement_demande_habilitaion == true  ){ ?>
+                                        <button type="submit" name="action" value="GenererAgrement"
+                                            class="btn btn-sm btn-info me-1 waves-effect waves-float waves-light"
+                                            onclick="NewWindow('{{ route('traitementdemandehabilitation.show', \App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);">
+                                            Voir l'agrement
+                                        </button>
+
                                         <?php } ?>
 
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
@@ -1487,10 +1718,10 @@ use App\Helpers\PartEntreprisesHelper;
                                     "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, " .
                                     @$demandehabilitation->fonction_demande_habilitation .
                                     ", atteste l'exactitude des informations contenue dans ce document.
-
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                
+                                
+                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                 ?>
                                 <?php echo wordwrap($message, 144, "<br>\n"); ?>
 
@@ -1509,6 +1740,346 @@ use App\Helpers\PartEntreprisesHelper;
                                 value="Enregistrer_soumettre_demande_habilitation_PU"
                                 id="Enregistrer_soumettre_demande_habilitation_PU" disabled>Valider la demande
                                 d'habilitation</button>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="LettreEngagement" tabindex="-1" aria-labelledby="LettreEngagement"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl modal-simple modal-pricing">
+                <div class="modal-content">
+                    <form method="POST" class="form"
+                        action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="LettreEngagement">VALIDATION</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h6 class="modal-title" align="center"> <strong>LETTRE D'ENREGISTREMENT</strong></h6>
+                            <br>
+                            <p> <br>
+                            <div class="header">
+                                <p>Abidjan, le 27 octobre 2023</p>
+                            </div>
+                            <div class="main">
+                                <p>LE SECRETAIRE GENERAL</p>
+
+                                <p>A</p>
+                                <p>Monsieur le Président<br>
+                                    Université de San Pedro<br>
+                                    01 BP 1800<br>
+                                    SAN PEDRO</p>
+
+                                <br>
+
+                                <p><strong>N/Réf. :</strong> FDFP-SG/D2EQPC/N<sup>o</sup><s>180</s>-2023/NKP/AD/fcd</p>
+                                <p><strong>Objet :</strong> V/Demande d’habilitation</p>
+
+                                <br>
+
+                                <p>Monsieur le Président,</p>
+                                <p>Par courrier en date du 19 octobre 2023, vous avez bien voulu solliciter
+                                    l’habilitation du Fonds de Développement de la Formation Professionnelle (FDFP) pour
+                                    mener des actions de formation continue auprès des entreprises.</p>
+
+                                <p>Par la présente, j’ai l’honneur de vous faire connaître qu’au regard du décret
+                                    N°2021-278 du 09 juin 2021 portant création, attributions, organisation et
+                                    fonctionnement de l’Université de San Pedro, <strong>Le Centre de Formation Continue
+                                        de l’Université de San Pedro (CFC-USP)</strong> est autorisé à mener des actions
+                                    de formation continue au profit des entreprises dans les domaines d'interventions
+                                    ci-après :</p>
+
+                                <table class="table table-bordered table-striped table-hover table-sm" id=""
+                                    style="margin-top: 13px !important">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Type domaine de formation </th>
+                                            <th>Domaine de formation </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 0; ?>
+                                        @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                                            <?php $i += 1; ?>
+                                            <tr>
+                                                <td>{{ $i }}</td>
+                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                                                </td>
+                                                <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                                <br>
+
+                                <p>Je vous prie d’agréer, Monsieur le Président, l’expression de ma considération
+                                    distinguée.</p>
+
+                            </div>
+                            </p>
+                            <br>
+                            <br>
+
+
+
+                        </div>
+                        @if ($demandehabilitation->flag_lettre_enregistrement == null)
+                            <div class="modal-footer">
+
+                                <div class="col-md-12" align="right">
+                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                        value="ValideLettre" id="ValideLettre">Valider la lettre d'enregistrement</button>
+                                </div>
+
+                            </div>
+                        @endif
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="NoteTechnique" tabindex="-1" aria-labelledby="NoteTechnique" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl modal-simple modal-pricing">
+                <div class="modal-content">
+                    <form method="POST" class="form"
+                        action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="NoteTechnique">VALIDATION NOTE TECHNIQUE</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h6 class="modal-title" align="center"> <strong>NOTE TECHNIQUE</strong></h6>
+                            <br>
+                            <p> <br>
+
+                            <div class="header">
+                                <p>Abidjan, le 27 octobre 2023</p>
+                            </div>
+
+                            <div class="main">
+                                <p><strong>Direction des Etudes, de l’Evaluation,</strong><br>
+                                    <strong>de la Qualité, de la Prospective et de la Communication</strong><br>
+                                    --------------<br>
+                                    <strong>Département Habilitation, Contrôle-Liquidation et du Suivi-Evaluation</strong>
+                                </p>
+
+                                <br><br>
+
+                                <p class="subject">NOTE TECHNIQUE</p>
+
+                                <p><strong>Objet :</strong> Demande d’habilitation du Centre de Formation Continue de
+                                    l’Université de San Pedro (CFC-USP)</p>
+
+                                <p>Le Département chargé de l’Habilitation, du Contrôle-Liquidation et du Suivi-Evaluation a
+                                    reçu la demande d’habilitation du <strong>Centre de Formation Continue de l’Université
+                                        de San Pedro (CFC-USP)</strong>.</p>
+
+                                <p>Les établissements publics n’étant pas assujetti à la procédure d’habilitation, nous
+                                    sollicitons par la présente note, votre accord pour son enregistrement dans la base de
+                                    données du FDFP comme organisme public de formation autorisé à mener des actions de
+                                    formation continue au profit des entreprises dans les domaines de compétences conférés à
+                                    l’Université de San Pedro par son décret de création.</p>
+                                <br>
+                                <h5> Domaines d'interventions</h5>
+
+                                <table class="table table-bordered table-striped table-hover table-sm" id=""
+                                    style="margin-top: 13px !important">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Type domaine de formation </th>
+                                            <th>Domaine de formation </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $i = 0; ?>
+                                        @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                                            <?php $i += 1; ?>
+                                            <tr>
+                                                <td>{{ $i }}</td>
+                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                                                </td>
+                                                <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                                </td>
+
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+
+                                <p class="signature">Le Chef de Département</p>
+
+                                {{-- <table class="table">
+                                    <tr>
+                                        <th>AVIS DE LA DIRECTRICE</th>
+                                        <th>DECISION DU SECRETAIRE GENERAL</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="height: 100px;"></td>
+                                        <td></td>
+                                    </tr>
+                                </table> --}}
+
+                                {{-- <p>PJ : Domaines de formation du CFC-USP</p> --}}
+
+                            </div>
+
+
+                            </p>
+                            <br>
+                            <br>
+
+
+
+                        </div>
+                        @if ($demandehabilitation->flag_note_technique == null)
+                            <div class="modal-footer">
+
+                                <div class="col-md-12" align="right">
+                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                        value="ValideNote" id="ValideNote">Valider la note technique</button>
+                                </div>
+
+                            </div>
+                        @endif
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="Recevabilite" tabindex="-1" aria-labelledby="Recevabilite" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <form method="POST" class="form"
+                        action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('put')
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="Recevabilite">Traitement de la recevabilité
+                                d'habiliation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h6 class="modal-title" align="center"> <strong>CAS D'APPROBATION</strong></h5>
+                                <br>
+                                <p>
+                                    <?php
+                                    $message = "La demande de Mr/Mlle/Mde  <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, " . @$demandehabilitation->fonction_demande_habilitation . ', a correctement renseigner les informations liée a sa demande et que nous approuvons sa demande pour la validation car celle ci est conforme.';
+                                    ?>
+                                    <?php echo wordwrap($message, 120, "<br>\n"); ?>
+                                    <br>
+                                    {{-- <input type="checkbox" class="form-check-input" name="is_valide" id="colorCheck1"
+                                        onclick="myFunctionMAJV()">
+                                    <label>Lu et approuvé </label> <br> <br> --}}
+
+
+                                    {{-- <div class="mb-1">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Note technique <strong style="color:red;">*</strong>
+                                            </label>
+                                            <input type="text" name="note_technique_demande_habilitation"
+                                                id="note_technique_demande_habilitation"
+                                                class="form-control form-control-sm" required="required"
+                                                value="{{ old('note_technique_demande_habilitation') }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Lettre d'enregistrement<strong
+                                                    style="color:red;">*</strong></label>
+                                            <input type="file" name="lettre_engagement"
+                                                class="form-control form-control-sm  @error('lettre_engagement')
+                                                               error
+                                                                @enderror"
+                                                placeholder="" value="{{ old('lettre_engagement') }}" />
+                                            @error('lettre_engagement')
+                                                <div class=""><label class="error">{{ $message }}</label>
+                                                </div>
+                                            @enderror
+                                            <div id="defaultFormControlHelp" class="form-text ">
+                                                <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                    maxi : 5Mo</em>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                    <br>
+                                <div class="col-md-12" align="right">
+                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                        value="Recevable_PUV" id="Recevable_PUV">Valider la demande
+                                        d'habilitation</button>
+                                </div>
+                                </p>
+                                <br>
+
+                                <h6 class="modal-title" align="center"> <strong>CAS DE REJET</strong></h5>
+                                    <br>
+                                    <p>
+                                        <?php
+                                        $message = "La demande de Mr/Mlle/Mde <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, " . @$demandehabilitation->fonction_demande_habilitation . ", n'a pas correctement renseigner les informations liée a sa demande et que nous rejetons sa demande pour la validation.";
+                                        ?>
+                                        <?php echo wordwrap($message, 100, "<br>\n"); ?>
+                                        <br> <br>
+
+                                        {{-- <input type="checkbox" class="form-check-input" name="is_valide"
+                                            id="colorCheck1" onclick="myFunctionMAJR()">
+                                        <label>Lu et approuvé </label> <br> --}}
+
+                                    <div>
+                                        <div class="mb-1">
+                                            <div class="row">
+                                                <div class="col-md-6">
+
+                                                    <div class="mb-1">
+                                                        <label>Commentaire de non-recevabilité <strong
+                                                                style="color:red;">(Obligatoire si non
+                                                                recevable)*</strong>: </label>
+                                                        <textarea class="form-control form-control-sm" name="commentaire_recevabilite" id="commentaire_recevabilite"
+                                                            rows="8">{{ @$demandehabilitation->commentaire_recevabilite }}</textarea>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12" align="right">
+                                        <button class="btn btn-danger me-sm-3 me-1 btn-submit" type="submit"
+                                            name="action" value="NonRecevable_PUV" id="NonRecevable_PUV">Rejeter la
+                                            demande
+                                            d'habilitation</button>
+                                    </div>
+                                    </p>
+
+                        </div>
+                        <div class="modal-footer">
+
+
+
+                            {{-- <input type="checkbox" class="form-check-input" name="is_valide" id="colorCheck1"
+                                onclick="myFunctionMAJ()">
+                            <label>Lu et approuvé </label>
+                            <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                value="Enregistrer_soumettre_demande_habilitation_PU"
+                                id="Enregistrer_soumettre_demande_habilitation_PU" disabled>Valider la demande
+                                d'habilitation</button> --}}
 
                         </div>
                     </form>
@@ -1612,6 +2183,30 @@ use App\Helpers\PartEntreprisesHelper;
                     $("#Enregistrer_soumettre_demande_habilitation_PU").prop("disabled", false);
                 } else {
                     $("#Enregistrer_soumettre_demande_habilitation_PU").prop("disabled", true);
+                }
+            }
+
+            function myFunctionMAJV() {
+                // Get the checkbox
+                var checkBox = document.getElementById("colorCheck1");
+
+                // If the checkbox is checked, display the output text
+                if (checkBox.checked == true) {
+                    $("#Enregistrer_soumettre_demande_habilitation_PUV").prop("disabled", false);
+                } else {
+                    $("#Enregistrer_soumettre_demande_habilitation_PUV").prop("disabled", true);
+                }
+            }
+
+            function myFunctionMAJR() {
+                // Get the checkbox
+                var checkBox = document.getElementById("colorCheck1");
+
+                // If the checkbox is checked, display the output text
+                if (checkBox.checked == true) {
+                    $("#Enregistrer_soumettre_demande_habilitation_PUR").prop("disabled", false);
+                } else {
+                    $("#Enregistrer_soumettre_demande_habilitation_PUR").prop("disabled", true);
                 }
             }
         </script>

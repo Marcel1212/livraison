@@ -420,7 +420,7 @@ class DemandeHabilitationController extends Controller
         $demandehabilitation = DemandeHabilitation::find($id);
 
         $statutjuridique = FormeJuridique::all();
-        //dd($statutjuridique); exit();
+        //dd($demandehabilitation->decret_structure_public); exit();
 
         // $statjur = "<option value=''> Selectionnez le statut juridique </option>";
         // foreach ($statutjuridique as $comp) {
@@ -428,7 +428,7 @@ class DemandeHabilitationController extends Controller
         // }
         //dd($demandehabilitation);
         $idetape =  Crypt::UrldeCrypt($id1);
-        //dd($idetape); exit();
+        //dd($decret_structure_public); exit();
 
         $banques = Banque::where([['flag_banque','=',true]])->get();
         $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
