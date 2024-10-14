@@ -60,6 +60,15 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 
                         <div class="col-xl-12">
+                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                <div align="right">
+                                    <button type="button"
+                                            class="btn rounded-pill btn-outline-success btn-sm waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#modalToggleCommentaireplan">
+                                        Voir les commentaire de la non recevabilité
+                                    </button>
+                                </div>
+                            @endif
                         <h6 class="text-muted"></h6>
                         <div class="nav-align-top nav-tabs-shadow mb-4">
                             <ul class="nav nav-tabs" role="tablist">
@@ -1059,21 +1068,23 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                         </div>
                                         <div class="col-4" align="right">
-                                                @if ($demandehabilitation->flag_soumis_comite_technique == false)
-                                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
-                                                        @csrf
-                                                        @method('put')
-                                                        <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
-                                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                        Soumettre pour le comite
-                                                        </button>
-                                                    </form>
-                                                @else
+                                                @if ( count($rapportVisite)>0)
+                                                    @if ($demandehabilitation->flag_soumis_comite_technique == false)
+                                                        <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                            @csrf
+                                                            @method('put')
+                                                            <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
+                                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                            Soumettre pour le comite
+                                                            </button>
+                                                        </form>
+                                                    @else
 
-                                                         <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
-                                                            title="Modifier">Fiche d'analyse</a>
+                                                            <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
+                                                                title="Modifier">Fiche d'analyse</a>
 
+                                                    @endif
                                                 @endif
                                         </div>
 
@@ -1088,7 +1099,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="col-md-6">
                                                 <label class="form-label" for="etat_locaux_rapport">Etat des locaux
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport">{{ @$rapportVisite[0]->etat_locaux_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport" rows="6">{{ @$rapportVisite[0]->etat_locaux_rapport }}</textarea>
                                             </div>
 
 
@@ -1096,18 +1107,18 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="col-md-6">
                                                 <label class="form-label" for="equipement_rapport">Equipements
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport">{{ @$rapportVisite[0]->equipement_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport" rows="6">{{ @$rapportVisite[0]->equipement_rapport }}</textarea>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="form-label" for="salubrite_rapport">Salubrité/Securité
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport">{{ @$rapportVisite[0]->salubrite_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport" rows="6">{{ @$rapportVisite[0]->salubrite_rapport }}</textarea>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="form-label" for="contenu">Autres</label>
-                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu">{{ @$rapportVisite[0]->contenu }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu" rows="6">{{ @$rapportVisite[0]->contenu }}</textarea>
                                             </div>
                                         </div>
                                         {{-- <div class="col-md-12">
@@ -1140,6 +1151,56 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                     </div>
 
                 </div>
+
+                <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggleCommentaireplan"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Commentaire </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Commentaire des non recevabilités</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+
+                                                    <li class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+													@foreach($commentairenonrecevables as $com)
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0"></h6>
+                                                                <span class="text-muted"><strong>{{ $com->motif->libelle_motif}}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation :   <?php echo $com->commentaire_commentaire_non_recevable_demande; ?></span>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+														@endforeach
+                                                    </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
 
                 <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
                 <input name="id_visite" class="id_visite"  type="hidden" id="id_visite"/>

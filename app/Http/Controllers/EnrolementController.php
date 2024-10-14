@@ -840,7 +840,7 @@ class EnrolementController extends Controller
                 $roles = Role::where([['code_roles', '=', 'ENTREPRISE']])->first();
 
                 $name = $entreprise->sigl_entreprises;
-                $prenom_users = $entreprise->rccm_entreprises;
+                $prenom_users = $entreprise->raison_social_entreprises;
                 $emailcli = $demandeenrole1->email_demande_enrolement;
                 $id_partenaire = $entreprise->id_entreprises;
                 $cel_users = $entreprise->tel_entreprises;

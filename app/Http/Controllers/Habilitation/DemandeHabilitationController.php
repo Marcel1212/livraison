@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Habilitation;
 
+use App\Helpers\Fonction;
 use App\Helpers\GenerateCode as Gencode;
 use App\Http\Controllers\Controller;
 use App\Models\DemandeHabilitation;
@@ -26,6 +27,7 @@ use App\Models\FormationsEduc;
 use App\Models\InterventionHorsCi;
 use App\Models\LanguesFormateurs;
 use App\Models\MoyenPermanente;
+use App\Models\NombreDomaineHabilitation;
 use App\Models\OrganisationFormation;
 use App\Models\Pays;
 use App\Models\PrincipaleQualification;
@@ -35,6 +37,9 @@ use App\Models\TypeIntervention;
 use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Helpers\ListeDemandeHabilitationSoumis;
+use App\Models\CommentaireNonRecevableDemande;
 
 class DemandeHabilitationController extends Controller
 {
@@ -398,7 +403,18 @@ class DemandeHabilitationController extends Controller
 
         $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id]])->get();
 
-        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+        $typeinterventions = DB::table('type_intervention')->whereNotExists(function ($query) use ($id){
+                            $query->select('*')
+                            ->from('demande_intervention')
+                            ->whereColumn('demande_intervention.id_type_intervention','=','type_intervention.id_type_intervention')
+                            ->where('demande_intervention.id_demande_habilitation',$id);
+                            })
+                            ->where([
+                                ['type_intervention.flag_type_intervention','=', true],
+                            ])->get();
+
+        //TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+
         $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
         foreach ($typeinterventions as $comp) {
             $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
@@ -407,7 +423,17 @@ class DemandeHabilitationController extends Controller
         $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id]])->get();
         //dd($idetape);
 
-        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
+        $organisationFormations = DB::table('type_organisation_formation')->whereNotExists(function ($query) use ($id){
+                                $query->select('*')
+                                ->from('organisation_formation')
+                                ->whereColumn('organisation_formation.id_type_organisation_formation','=','type_organisation_formation.id_type_organisation_formation')
+                                ->where('organisation_formation.id_demande_habilitation',$id);
+                                })
+                                ->where([
+                                    ['type_organisation_formation.flag_type_organisation_formation','=', true],
+                                ])->get();
+
+        //TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
         $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
         foreach ($organisationFormations as $comp) {
             $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
@@ -427,10 +453,11 @@ class DemandeHabilitationController extends Controller
             $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
         }
 
-        $Mesformateurs = Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire]])->get();
+        $Mesformateurs = Fonction::listedesformateurayant5ansExp(Auth::user()->id_partenaire);
+        //Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire],['flag_attestation_formateurs','=',true]])->get();
         $MesformateursList = "<option value=''> Selectionnez le domaine de formation </option>";
         foreach ($Mesformateurs as $comp) {
-            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." </option>";
+            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." / ".mb_strtoupper($comp->fonction_formateurs)." </option>";
         }
 
         $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
@@ -458,6 +485,9 @@ class DemandeHabilitationController extends Controller
             $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
         }
 
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','HAB']])->get();
+
         Audit::logSave([
 
             'action'=>'MODIFIER',
@@ -476,7 +506,7 @@ class DemandeHabilitationController extends Controller
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList',
-                    'MesformateursList'));
+                    'MesformateursList','commentairenonrecevables'));
     }
 
     /**
@@ -789,7 +819,20 @@ class DemandeHabilitationController extends Controller
 
                 $input['id_demande_habilitation'] = $id;
 
-                DomaineDemandeHabilitation::create($input);
+                $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_habilitation','=',true]])->first();
+
+                $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
+
+                $domainedejaenregistrer = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+                if (count($nbresollicite) == $nombredomainedroit->libelle_nombre_domaine_habilitation
+                && !in_array($input['id_domaine_formation'], $domainedejaenregistrer->pluck('id_domaine_formation')->toArray())) {
+
+                    return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')
+                       ->with('error', 'Echec : Cinq (5) domaines de formations sont autorisés pour une nouvelle demande d\'habilitation');
+                } else {
+                    DomaineDemandeHabilitation::create($input);
+                }
+
 
                 Audit::logSave([
 
