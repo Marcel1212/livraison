@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('demandehabilitation/{id}/deletedomaineDemandeHabilitations', [DemandeHabilitationController::class, 'deletedomaineDemandeHabilitations'])->name('demandehabilitation.deletedomaineDemandeHabilitations');
         Route::get('demandehabilitation/{id}/deleteformateurs', [DemandeHabilitationController::class, 'deleteformateurs'])->name('demandehabilitation.deleteformateurs');
         Route::get('demandehabilitation/{id}/deleteapf', [DemandeHabilitationController::class, 'deleteadh'])->name('demandehabilitation.deleteadh');
+        Route::get('demandehabilitation/{id}/deletepieceDemande', [DemandeHabilitationController::class, 'deletepieceDemande'])->name('demandehabilitation.deletepieceDemande');
 	});
 
     Route::group(['middleware' => ['can:habilitationrendezvous-index']], function () {
@@ -60,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('traitementdemandehabilitation/{id}/informationbeneficiaireaction', [TraitementDemandeHabilitationController::class, 'informationbeneficiaireformation'])->name('traitementdemandehabilitation.informationbeneficiaireaction');
     Route::post('traitementdemandehabilitation/{id}/update/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformation'])->name('traitementdemandehabilitation.action.formation');
     Route::post('traitementdemandehabilitation/{id}/update/beneficiaire/action/formation', [TraitementDemandeHabilitationController::class, 'traitementactionformationbenefiaire'])->name('traitementdemandehabilitation.beneficiaire.action.formation');
+
 
     Route::group(['middleware' => ['can:formateurs-index']], function () {
         Route::get('formateurs', [FormateursController::class, 'index'])->name('formateurs');

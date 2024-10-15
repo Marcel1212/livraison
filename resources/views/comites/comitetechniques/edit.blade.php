@@ -253,7 +253,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 <?php //}
                                 ?>
 
-                                <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
+                                <table class="table table-bordered table-striped table-hover table-sm allcbtable" id="exampleData"
                                     style="margin-top: 13px !important">
                                     <thead>
                                         <tr>
@@ -289,6 +289,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     @endif
                                                     @if ($demande->code_processus == 'PRF')
                                                         PROJET DE FORMATION
+                                                    @endif
+                                                    @if ($demande->code_processus == 'HAB')
+                                                        HABILITATION
                                                     @endif
                                                 </td>
                                                 <td>{{ @$demande->raison_sociale }}</td>
@@ -427,13 +430,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         <div class="tab-pane fade<?php if ($idetape == 4) {
                             echo 'show active';
                         } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
-
-                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
                             <form method="POST" class="form"
-                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
-                                enctype="multipart/form-data">
+                            action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
+                            enctype="multipart/form-data">
+
                                 @csrf
                                 @method('put')
+                                <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
                                 <div class="row">
                                     <div class="col-12 col-md-10">
                                     </div>
@@ -446,14 +449,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     </div>
 
                                 </div>
-
-                            </form>
                             <?php } ?>
-                            <table class="table table-bordered table-striped table-hover table-sm" id="exampleData"
+                            <table class="table table-bordered table-striped table-hover table-sm allcttable" id="exampleData"
                                 style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th>N°</th>
+                                        <th><label>Cocher tout</label><br /><input type="checkbox" id="allct" name="allct" /></th>
                                         <th>Type processus </th>
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
@@ -471,7 +472,12 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     $i = 0; ?>
                                     @foreach ($listedemandesss as $key => $demande)
                                         <tr>
-                                            <td> {{ ++$i }}</td>
+                                            <td>
+                                                <input type="checkbox"
+                                                    value="<?php echo $demande->id_demande; ?>/<?php echo $demande->code_processus; ?>"
+                                                    name="demandect[<?php echo $demande->id_demande; ?>]"
+                                                    id="demandect<?php echo $demande->id_demande; ?>" />
+                                            </td>
                                             <td>
                                                 @if ($demande->code_processus == 'PF')
                                                     PLAN DE FORMATION
@@ -481,6 +487,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @endif
                                                 @if ($demande->code_processus == 'PRF')
                                                     PROJET DE FORMATION
+                                                @endif
+                                                @if ($demande->code_processus == 'HAB')
+                                                    HABILITATION
                                                 @endif
                                             </td>
                                             <td>{{ @$demande->raison_sociale }}</td>
@@ -504,6 +513,13 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                             class=" " title="Modifier"><img
                                                                 src='/assets/img/editing.png'></a>
                                                     @endif
+                                                    @if($demande->code_processus =='HAB')
+                                                        <a onclick="NewWindow('{{ route($lien.".show.ficheanalyse",[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                            class=" "
+                                                            title="Voir la fiche analyse"><img src='/assets/img/eye-solid.png'></a>
+                                                        <a href="{{ route($lien.'.edit.habilitation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                            class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                                    @endif
                                                     @if ($demande->code_processus == 'PE')
                                                         <a href="{{ route($lien . '.edit.projetetude', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                             class=" " title="Modifier"><img
@@ -520,6 +536,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     @endforeach
                                 </tbody>
                             </table>
+                        </form>
 
                             <div class="col-12" align="right">
 
@@ -549,16 +566,32 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
     @section('js_perso')
         <script type="text/javascript">
             $('#allcb').change(function() {
+                //alert('testdem')
                 if ($(this).prop('checked')) {
-                    $('tbody tr td input[type="checkbox"]').each(function() {
+                    $('.allcbtable > tbody > tr > td > input[type="checkbox"]').each(function() {
                         $(this).prop('checked', true);
                     });
                 } else {
-                    $('tbody tr td input[type="checkbox"]').each(function() {
+                    $('.allcbtable > tbody >  tr > td > input[type="checkbox"]').each(function() {
                         $(this).prop('checked', false);
                     });
                 }
             });
+        </script>
+
+        <script type="text/javascript">
+        $('#allct').change(function() {
+            //alert('testct')
+            if ($(this).prop('checked')) {
+                $('.allcttable > tbody > tr > td > input[type="checkbox"]').each(function() {
+                    $(this).prop('checked', true);
+                });
+            } else {
+                $('.allcttable > tbody > tr > td > input[type="checkbox"]').each(function() {
+                    $(this).prop('checked', false);
+                });
+            }
+        });
         </script>
     @endsection
 @else

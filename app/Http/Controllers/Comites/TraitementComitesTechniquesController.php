@@ -25,8 +25,10 @@ use App\Helpers\GenerateCode as Gencode;
 use Carbon\Carbon;
 use App\Helpers\Email;
 use App\Helpers\Audit;
+use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Models\ActionFormationPlan;
+use App\Models\Banque;
 use App\Models\BeneficiairesFormation;
 use App\Models\PiecesProjetFormation;
 use App\Models\ButFormation;
@@ -36,19 +38,35 @@ use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
 use App\Models\TraitementParCritereCommentairePrf;
 use App\Models\ComiteParticipant;
+use App\Models\CommentaireNonRecevableDemande;
 use App\Models\CritereEvaluation;
+use App\Models\DemandeHabilitation;
+use App\Models\DemandeIntervention;
+use App\Models\DomaineDemandeHabilitation;
 use App\Models\Entreprises;
 use App\Models\FicheADemandeAgrement;
 use App\Models\FicheAgrementButFormation;
+use App\Models\FormateurDomaineDemandeHabilitation;
+use App\Models\InterventionHorsCi;
 use App\Models\Motif;
+use App\Models\MoyenPermanente;
+use App\Models\OrganisationFormation;
 use App\Models\Pays;
+use App\Models\PiecesDemandeHabilitation;
 use App\Models\PlanFormation;
 use App\Models\ProcessusComiteLieComite;
+use App\Models\RapportsVisites;
 use App\Models\SecteurActivite;
 use App\Models\TraitementParCritere;
 use App\Models\TraitementParCritereCommentaire;
+use App\Models\TypeDomaineDemandeHabilitation;
+use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
+use App\Models\TypeIntervention;
+use App\Models\TypeMoyenPermanent;
+use App\Models\TypeOrganisationFormation;
+use App\Models\Visites;
 use Illuminate\Http\JsonResponse;
 
     @ini_set('max_execution_time',0);
@@ -310,6 +328,314 @@ class TraitementComitesTechniquesController extends Controller
             'idcomite','criteres','secteuractivites','typeformationss','butformations'
         ));
 
+    }
+
+    public function edithabilitation($id,$id1,$id2) {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+
+
+        $demandehabilitation = DemandeHabilitation::find($id1);
+
+        $visites = Visites::where([['id_demande_habilitation','=',$demandehabilitation->id_demande_habilitation]])->first();
+       // dd($demandehabilitation->visites->statut);
+       // dd($visites);
+
+       $rapportVisite = RapportsVisites::where([['id_visites','=',@$visites->id_visites]])->get();
+      // $rapportVisitef = RapportsVisites::where([['id_demande_habilitation','=',@$demandehabilitation->id_demande_habilitation]])->first();
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+       // dd($infoentreprise->pay->id_pays);
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        //dd($pay);
+        $payList = "<option value=''> Selectionnez un pays</option>";
+        foreach ($pays as $comp) {
+            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
+        }
+
+        $typemoyenpermanentes = TypeMoyenPermanent::where([['flag_type_moyen_permanent','=',true]])->get();
+        $typemoyenpermanenteList = "<option value=''> Selectionnez la type de moyen </option>";
+        foreach ($typemoyenpermanentes as $comp) {
+            $typemoyenpermanenteList .= "<option value='" . $comp->id_type_moyen_permanent  . "'>" . mb_strtoupper($comp->libelle_type_moyen_permanent) ." </option>";
+        }
+
+        $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+        $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
+        foreach ($typeinterventions as $comp) {
+            $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
+        }
+
+        $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id1]])->get();
+        //dd($idetape);
+
+        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
+        $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
+        foreach ($organisationFormations as $comp) {
+            $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
+        }
+
+        $organisations = OrganisationFormation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
+        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la finalité </option>";
+        foreach ($typeDomaineDemandeHabilitation as $comp) {
+            $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
+        }
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
+
+        $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
+        $domainesList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($domaines as $comp) {
+            $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
+        }
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+        $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
+        foreach ($domainedemandes as $comp) {
+            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+        }
+
+/*         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                                          ->where([['id_demande_habilitation','=',$id]])
+                                                          ->get(); */
+
+                                                          $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                                          ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+                                                          ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+                                                          ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+                                                          ->where([['id_demande_habilitation','=',$id1]])
+                                                          ->get();
+
+
+        $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id1]])->get();
+
+
+
+        $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','HAB']])
+                                    ->get();
+
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $traitement = TraitementParCritere::Join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+                ->where([['traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','=',Auth::user()->id],['traitement_par_critere.id_demande','=',$id1]])->get();
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'TENUE DE COMITES TECHNIQUES (HABILITATION)'
+
+        ]);
+
+        return view('comites.traitementcomitetechniques.edithabilitation', compact('demandehabilitation','infoentreprise','banque','pay',
+                    'id','id1','idetape','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
+                    'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
+                    'typeDomaineDemandeHabilitationPublicList','criteres','traitement',
+                    'visites','rapportVisite','piecesDemandeHabilitations'));
+
+        //exit('test45');
+    }
+
+    public function edithabilitationupdate(Request $request,$id,$id1,$id2){
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+
+        if ($request->isMethod('put')) {
+
+            $data = $request->all();
+
+            //dd($data);
+                    // Validation des données
+                $criteres = $request->input('id_critere_evaluation');
+                foreach ($criteres as $id_critere) {
+                    $status = $request->input("flag_traitement_par_critere_commentaire.$id_critere");
+                    $commentaire = $request->input("commentaire_critere.$id_critere");
+
+                    if ($status == 'false' && empty($commentaire)) {
+                        return back()->withErrors(['commentaire_critere_'.$id_critere => 'Un commentaire est obligatoire pour les critères avec "Pas d\'accord".']);
+                    }
+
+                                // Enregistrer le traitement par critère
+                    $traitementcritere = TraitementParCritere::create([
+                        'id_user_traitement_par_critere' => Auth::user()->id,
+                        'id_demande' => $id1,
+                        'id_critere_evaluation' => $id_critere,
+                        'flag_critere_evaluation' =>  true,
+                    ]);
+
+                    // Enregistrer le commentaire associé au traitement par critère
+                    $traitementcommentaire = TraitementParCritereCommentaire::create([
+                        'id_user_traitement_par_critere_commentaire' => Auth::user()->id,
+                        'id_traitement_par_critere' => $traitementcritere->id_traitement_par_critere,
+                        'flag_traitement_par_critere_commentaire' => $status,
+                        'commentaire_critere' => $commentaire,
+                    ]);
+                }
+
+
+
+                return redirect('traitementcomitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id1).'/'.Crypt::UrlCrypt($idetape).'/edit/habilitation')->with('success', 'Succes : Votre évaluation pour cette demande a été effectuée ');
+
+
+        }
+    }
+
+    public function comitetechniqueupdatehabilitation(Request $request, $id, $id1, $id2){
+        $id =  Crypt::UrldeCrypt($id);
+        $iddemande =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+
+        if ($request->isMethod('put')) {
+
+            $data = $request->all();
+
+            if ($data['action'] === 'Traiter_action_formation_valider_reponse') {
+
+                $data = $request->all();
+
+                // Valider si le statut est "false" et que le commentaire est nécessaire
+                if ($data['flag_traitement_par_critere_commentaire_traiter'] === "false") {
+                    $this->validate($request, [
+                        'commentaire_reponse' => 'required',
+                    ], [
+                        'commentaire_reponse.required' => 'Veuillez ajouter un commentaire.',
+                    ]);
+                }
+
+                // Mise à jour des informations communes
+                $infoscriterecommentaire = TraitementParCritereCommentaire::find($data['id_traitement_par_critere_commentaire']);
+                $inputIn = [
+                    'commentaire_reponse' => $data['commentaire_reponse'],
+                    'flag_traitement_par_critere_commentaire_traiter' => $data['flag_traitement_par_critere_commentaire_traiter'],
+                    'flag_traite_par_user_conserne' => true
+                ];
+
+                // Mettre à jour les informations
+                $infoscriterecommentaire->update($inputIn);
+
+                return redirect('traitementcomitetechniques/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($iddemande) . '/' . Crypt::UrlCrypt($idetape) . '/edit/habilitation')
+                    ->with('success', 'Succès : Mise à jour réussie');
+            }
+
+            // Si aucune option valide n'est sélectionnée
+            return redirect('traitementcomitetechniques/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($iddemande) . '/' . Crypt::UrlCrypt($idetape) . '/edit/habilitation')
+                ->with('error', 'Erreur : Veuillez sélectionner le Statut pour le traitement des remarques');
+
+
+        }
+    }
+
+    public function commentairetoutuserhabilitation($id)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','traitement_par_critere_commentaire.created_at as datej','critere_evaluation.*','users.name as name','users.prenom_users as prenom_users','roles.name as profil')
+                        ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                        ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                        ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+                        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+                        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+                        ->where([['flag_demission_users', '=', false],
+                                ['flag_admin_users', '=', false],
+                                ['roles.id', '!=', 15]])
+                        ->where([['traitement_par_critere.id_demande','=',$id]])->get();
+
+        return response()->json(['information'=>$traitement]);
+
+    }
+
+    public function CommentaireComitetechnique($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $iddemande =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $commentaires = $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','traitement_par_critere_commentaire.created_at as datej','critere_evaluation.*','users.name as name','users.prenom_users as prenom_users','roles.name as profil')
+        ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+        ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+        ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+        ->where([['flag_demission_users', '=', false],
+                ['flag_admin_users', '=', false],
+                ['roles.id', '!=', 15]])
+        ->where([['traitement_par_critere.id_demande','=',$iddemande]])->get();
+
+        return view('comites.traitementcomitetechniques.commentaire', compact('commentaires','id','iddemande','idetape'));
+    }
+    public function CommentaireComitetechniqueall($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $iddemande =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $commentaires = $traitement = TraitementParCritere::select('traitement_par_critere_commentaire.*','traitement_par_critere_commentaire.created_at as datej','critere_evaluation.*','users.name as name','users.prenom_users as prenom_users','roles.name as profil')
+        ->join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+        ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+        ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+        ->join('model_has_roles', 'users.id', 'model_has_roles.model_id')
+        ->join('roles', 'model_has_roles.role_id', 'roles.id')
+        ->where([['flag_demission_users', '=', false],
+                ['flag_admin_users', '=', false],
+                ['roles.id', '!=', 15]])
+        ->where([['traitement_par_critere.id_demande','=',$iddemande]])->get();
+
+        return view('comites.traitementcomitetechniques.commentaireall', compact('commentaires','id','iddemande','idetape'));
+    }
+    public function showficheanalysehabilitation($id,$id1,$id2) {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+
+        $demandehabilitation = DemandeHabilitation::find($id1);
+
+        $visite = Visites::where([['id_demande_habilitation','=',$id1]])->first();
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+
+        $formateurs = DB::table('vue_formateur_rapport')->where([['id_demande_habilitation','=',$id1]])->get();
+
+        $rapport = RapportsVisites::where([['id_demande_habilitation','=',$id1]])->first();
+
+        $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        return view('comites.traitementcomitetechniques.showficheanalysehabilitation',compact('id','infoentreprise',
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
     }
 
     public function editprojetformation($id,$id1,$id2)
