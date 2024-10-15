@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_charge_habilitation
  * @property float $id_chef_service
  * @property float $id_motif_recevable
+ * @property float $id_processus
  * @property string $nom_responsable_demande_habilitation
  * @property string $fonction_demande_habilitation
  * @property string $maison_mere_demande_habilitation
@@ -93,7 +94,7 @@ class DemandeHabilitation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'id_motif_recevable',
+    protected $fillable = ['id_banque', 'id_entreprises', 'id_charge_habilitation', 'id_chef_service', 'id_motif_recevable','id_processus',
                             'nom_responsable_demande_habilitation', 'fonction_demande_habilitation', 'maison_mere_demande_habilitation',
                             'agence_domiciliation_demande_habilitation', 'type_entreprise', 'flag_demande_habilitation', 'date_creer_demande_habilitation',
                             'flag_creer_demande_habilitation', 'date_soumis_demande_habilitation', 'flag_soumis_demande_habilitation',

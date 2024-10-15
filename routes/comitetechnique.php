@@ -50,9 +50,15 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+    Route::get('/avisglobalcomitetechniquehabilitation/{id}/{id1}/{id2}', [ComitesTechniquesController::class, 'avisglobalcomitetechniquehabilitation']);
+    Route::get('/comitetechniques/{id}/rapport', [ComitesTechniquesController::class, 'rapportcomitetechnique'])->name('comitetechniques.rapport');
+    Route::put('/avisglobalcomitetechnique/{id}/{id1}/{id2}/update', [ComitesTechniquesController::class, 'avisglobalcomitetechnique']);
+
     Route::get('/page-commentaire-comite-technique/{id}/{id1}/{id2}', [TraitementComitesTechniquesController::class, 'CommentaireComitetechnique']);
     Route::get('/page-commentaire-all-comite-technique/{id}/{id1}/{id2}', [TraitementComitesTechniquesController::class, 'CommentaireComitetechniqueall']);
     Route::post('traitementcomitetechniques/{id}/commentairetoutuserhabilitation', [TraitementComitesTechniquesController::class, 'commentairetoutuserhabilitation'])->name('traitementcomitetechniques.commentairetoutuserhabilitation');
+
+
 
 
     Route::get('traitementcomitetechniques/{id}/{id1}/informationaction', [TraitementComitesTechniquesController::class, 'informationaction'])->name('traitementcomitetechniques.informationaction');

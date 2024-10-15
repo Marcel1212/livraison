@@ -54,7 +54,7 @@ class TraitementDemandeHabilitationController extends Controller
         if($codeRoles == 'CHEFSERVICE'){
             $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
         }else{
-            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
         }
         //dd($habilitations);
         Audit::logSave([
