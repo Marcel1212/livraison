@@ -17,6 +17,7 @@ use App\Helpers\GenerateCode as Gencode;
 use Carbon\Carbon;
 use App\Helpers\Email;
 use App\Helpers\Audit;
+use App\Helpers\InfosEntreprise;
 use App\Models\CahierComite;
 use App\Models\CategorieComite;
 use App\Models\Comite;
@@ -27,19 +28,38 @@ use App\Models\ProcessusComiteLieComite;
 use App\Models\User;
 use App\Helpers\Menu;
 use App\Models\ActionFormationPlan;
+use App\Models\Banque;
 use App\Models\ButFormation;
 use App\Models\CategoriePlan;
 use App\Models\CategorieProfessionelle;
+use App\Models\ComiteRejeter;
 use App\Models\CritereEvaluation;
+use App\Models\DemandeHabilitation;
+use App\Models\DemandeIntervention;
+use App\Models\DomaineDemandeHabilitation;
 use App\Models\Entreprises;
+use App\Models\FormateurDomaineDemandeHabilitation;
+use App\Models\InterventionHorsCi;
 use App\Models\Motif;
+use App\Models\MoyenPermanente;
+use App\Models\OrganisationFormation;
 use App\Models\Pays;
+use App\Models\PiecesDemandeHabilitation;
 use App\Models\PlanFormation;
 use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
+use App\Models\RapportsVisites;
 use App\Models\SecteurActivite;
+use App\Models\TraitementParCritere;
+use App\Models\TypeDomaineDemandeHabilitation;
+use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeEntreprise;
 use App\Models\TypeFormation;
+use App\Models\TypeIntervention;
+use App\Models\TypeMoyenPermanent;
+use App\Models\TypeOrganisationFormation;
+use App\Models\Visites;
+use Hamcrest\Arrays\IsArray;
 
 class ComitesTechniquesController extends Controller
 {
@@ -448,6 +468,16 @@ class ComitesTechniquesController extends Controller
 
                         }
 
+                        if($codeprocessus =='HAB'){
+
+                            $plan = DemandeHabilitation::find($iddemande);
+                            $plan->update([
+                                'flag_passer_comite_technique' => true,
+                                'date_flag_passer_comite_technique' => Carbon::now()
+                            ]);
+
+                        }
+
                         if($codeprocessus =='PE'){
 
                             if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
@@ -718,80 +748,416 @@ class ComitesTechniquesController extends Controller
             }
 
             if ($data['action'] == 'valider_comite_technique'){
-                $comite = Comite::find($id);
-                //dd($comite->id_categorie_comite);
 
-                $listedemandesss = DB::table('vue_plans_projets_formation_traiter')
-                ->join('cahier_comite','vue_plans_projets_formation_traiter.id_demande','cahier_comite.id_demande')
-                ->where([['cahier_comite.id_comite','=',$id]])
-                ->get();
+                $input = $request->all();
 
-                foreach ($listedemandesss as $demande) {
+                //dd($input);
 
-                    if($demande->code_processus =='PF'){
+                $idcategoriecomite = $comitep->id_categorie_comite ; // 2 pour la coordination
 
-                        $plan = PlanFormation::find($demande->id_demande);
-                        $plan->update([
-                            'id_processus' => 1,
-                            'flag_valide_action_des_plan_formation' => true,
-                            'flag_plan_formation_valider_par_comite_pleniere' => true
+                if (isset($input['demandect'])) {
+
+                    $verifnombre = count($input['demandect']);
+                    if($verifnombre < 1){
+
+                        Audit::logSave([
+
+                            'action'=>'MISE A JOUR',
+
+                            'code_piece'=>$id,
+
+                            'menu'=>'COMITES (Cahier du '.@$comitep->categorieComite->libelle_categorie_comite.' : Vous devez sélectionner au moins un plan/projet afin de validé le comite  '.@$processuscomite->processusComite->libelle_processus_comite.'.)',
+
+                            'etat'=>'Echec',
+
+                            'objet'=>'COMITES TECHNIQUES'
+
+                            ]);
+
+                            return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins un plan/projet pour validé le comité '.@$processuscomite->processusComite->libelle_processus_comite.'. ');
+
+                    }
+
+                    $tab = $input['demandect'];
+
+                    // Récupération des demandes liées au comité
+                    $listedemandesss = DB::table('vue_plans_projets_formation_traiter')
+                        ->join('cahier_comite', 'vue_plans_projets_formation_traiter.id_demande', '=', 'cahier_comite.id_demande')
+                        ->where('cahier_comite.id_comite', $id)
+                        ->get()
+                        ->pluck('id_demande')
+                        ->toArray();
+                   // dd($listedemandesss);
+                    // Initialisation des deux listes
+                    $elementsSelectionnes = [];
+                    $elementsNonSelectionnes = [];
+
+                    // Créer une liste associant les id_demande et code_processus depuis $tab
+                    $demandesSelectionnees = array_map(function($value) {
+                        $recuperationvaleur = explode('/', $value); // Extraire l'ID de la demande et le code_processus
+                        return [
+                            'id_demande' => $recuperationvaleur[0],
+                            'code_processus' => $recuperationvaleur[1]
+                        ];
+                    }, $tab);
+
+                    // Comparaison avec la liste des demandes récupérées
+                    // foreach ($listedemandesss as $iddemande) {
+                    //     if (in_array($iddemande, $demandesSelectionnees)) {
+                    //         // Ajouter à la liste des éléments sélectionnés
+                    //         $elementsSelectionnes[] = $iddemande;
+                    //     } else {
+                    //         // Ajouter à la liste des éléments non sélectionnés
+                    //         $elementsNonSelectionnes[] = $iddemande;
+                    //     }
+                    // }
+
+                    // Comparaison avec la liste des demandes récupérées
+                    // foreach ($listedemandesss as $iddemande) {
+                    //     if (in_array($iddemande, $demandesSelectionnees)) {
+                    //         // Ajouter à la liste des éléments sélectionnés
+                    //         $elementsSelectionnes[] = $iddemande;
+                    //     } else {
+                    //         // Ajouter à la liste des éléments non sélectionnés
+                    //         $elementsNonSelectionnes[] = $iddemande;
+                    //     }
+
+
+                        // Vérification si la demande fait partie de la liste
+                        // if (in_array($iddemande, $listedemandesss)) {
+
+                        //     // Traitement pour le processus 'PF' (Plan de formation)
+                        //     if ($codeprocessus === 'PF') {
+                        //         $plan = PlanFormation::find($iddemande);
+                        //         $plan->update([
+                        //             'id_processus' => 1,
+                        //             'flag_valide_action_des_plan_formation' => true,
+                        //             'flag_valider_comite_technique' => true,
+                        //             'flag_plan_formation_valider_par_comite_pleniere' => true,
+                        //         ]);
+                        //     }
+
+                        //     if ($codeprocessus === 'HAB') {
+                        //         $demh = DemandeHabilitation::find($iddemande);
+                        //         $demh->update([
+                        //             'id_processus' => 7,
+                        //             'flag_valider_comite_technique' => true,
+                        //             'date_flag_valider_comite_technique' => now(),
+                        //         ]);
+                        //     }
+
+                        //     // Traitement pour le processus 'PE' (Projet d'étude)
+                        //     if ($codeprocessus === 'PE') {
+                        //         $projet_etude = ProjetEtude::find($iddemande);
+
+                        //         if ($comitep->categorieComite->type_code_categorie_comite === 'CT') {
+                        //             $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
+                        //             $projet_etude->date_valider_ct_pleniere_projet_etude = now();
+                        //         } elseif ($comitep->categorieComite->type_code_categorie_comite === 'CC') {
+                        //             $projet_etude->flag_valider_cc_projet_etude = true;
+                        //             $projet_etude->date_valider_cc_projet_etude = now();
+                        //         }
+
+                        //         $projet_etude->update();
+                        //     }
+
+                        //     // Traitement pour le processus 'PRF' (Projet de formation)
+                        //     if ($codeprocessus === 'PRF') {
+                        //         $projetformation = ProjetFormation::find($iddemande);
+
+                        //         if ($comitep->id_categorie_comite == 2) {
+                        //             $projetformation->flag_valider_cc_projet_formation = true;
+                        //         } else {
+                        //             $projetformation->flag_comite_pleiniere = true;
+                        //             $projetformation->code_comite_pleiniere = $comitep->code_comite;
+                        //             $projetformation->id_processus = 10; // Processus 10
+                        //             $projetformation->id_comite_pleiniere = $id;
+                        //         }
+
+                        //         $projetformation->update();
+                        //     }
+
+                        // } else {
+
+                        //     // Cas où la demande n'est pas dans la liste
+                        //     if ($codeprocessus === 'PF') {
+                        //         $plan = PlanFormation::find($iddemande);
+                        //         $plan->update([
+                        //             'flag_soumis_ct_plan_formation' => false,
+                        //             'flag_passer_comite_technique' => false,
+                        //         ]);
+                        //     }
+
+                        //     if ($codeprocessus === 'HAB') {
+                        //         $demh = DemandeHabilitation::find($iddemande);
+                        //         $demh->update([
+                        //             'flag_passer_comite_technique' => false,
+                        //             'flag_soumis_comite_technique' => false,
+                        //         ]);
+                        //     }
+
+                        //     if ($codeprocessus === 'PE') {
+                        //         $projet_etude = ProjetEtude::find($iddemande);
+
+                        //         if ($comitep->categorieComite->type_code_categorie_comite === 'CT' || $comitep->categorieComite->type_code_categorie_comite === 'CC') {
+                        //             $projet_etude->flag_soumis_ct_pleniere = false;
+                        //             $projet_etude->flag_passer_comite_technique = false;
+                        //         }
+
+                        //         $projet_etude->update();
+                        //     }
+
+                        //     if ($codeprocessus === 'PRF') {
+                        //         $projetformation = ProjetFormation::find($iddemande);
+                        //         if ($comitep->categorieComite->type_code_categorie_comite === 'CT' || $comitep->categorieComite->type_code_categorie_comite === 'CC') {
+                        //             $projetformation->update([
+                        //                 'flag_statut_instruction' => false,
+                        //                 'flag_passer_comite_technique' => false,
+                        //             ]);
+                        //         }
+                        //     }
+
+                        //     // Enregistrement de la demande rejetée
+                        //     ComiteRejeter::create([
+                        //         'id_demande' => $iddemande,
+                        //         'id_comite' => $comitep->id_comite,
+                        //         'code_processus' => $codeprocessus,
+                        //     ]);
+                        // }
+                    //}
+
+                    foreach ($listedemandesss as $iddemande) {
+                        // Rechercher si la demande est dans les demandes sélectionnées
+                        $found = false;
+                        foreach ($demandesSelectionnees as $demande) {
+                            if ($demande['id_demande'] == $iddemande) {
+                                // Si trouvé, ajouter à la liste des éléments sélectionnés avec le code_processus
+                                $elementsSelectionnes[] = [
+                                    'id_demande' => $iddemande,
+                                    'code_processus' => $demande['code_processus']
+                                ];
+                                $found = true;
+                                break;
+                            }
+                        }
+
+                        // Si non trouvé, ajouter à la liste des éléments non sélectionnés
+                        if (!$found) {
+                            // Comme le code_processus n'existe pas dans $tab pour les éléments non sélectionnés, tu peux lui attribuer une valeur par défaut si nécessaire
+                            $elementsNonSelectionnes[] = [
+                                'id_demande' => $iddemande,
+                                'code_processus' => @$comitep->processusComiteLieComites[0]->code_pieces
+                            ];
+                        }
+                    }
+
+                    dd($elementsSelectionnes,$elementsNonSelectionnes, $comitep->processusComiteLieComites[0]->code_pieces);
+                    // Mise à jour du statut du comité
+                    // $comitep->update([
+                    //     'flag_statut_comite' => true,
+                    //     'date_fin_comite' => Carbon::now(),
+                    // ]);
+
+
+                    Audit::logSave([
+
+                        'action'=>'MISE A JOUR',
+
+                        'code_piece'=>$id,
+
+                        'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' pour le '.@$processuscomite->processusComite->libelle_processus_comite.' )',
+
+                        'etat'=>'Succès',
+
+                        'objet'=>'COMITES TECHNIQUES'
+
                         ]);
 
-                    }
-
-                    if($demande->code_processus =='PE'){
-                        //Comité technique
-                        if(@$comitep->categorieComite->type_code_categorie_comite=='CT'){
-                                $projet_etude = ProjetEtude::find($demande->id_demande);
-                                $projet_etude->flag_valider_ct_pleniere_projet_etude = true;
-                                $projet_etude->date_valider_ct_pleniere_projet_etude = now();
-                                $projet_etude->update();
-                        }
-
-                        //Comité de coordination
-                        if(@$comitep->categorieComite->type_code_categorie_comite=='CC'){
-                                $projet_etude = ProjetEtude::find($demande->id_demande);
-                                $projet_etude->flag_valider_cc_projet_etude = true;
-                                $projet_etude->date_valider_cc_projet_etude = now();
-                                $projet_etude->update();
-                        }
-                    }
-
-                    if($demande->code_demande =='PRF'){
-                        //dd($comite->id_categorie_comite);
-                        if($comite->id_categorie_comite == 2){
-                            $projetformation = ProjetFormation::find($demande->id_demande);
-                            //dd($projetformation);
-                            // Modification du projet de formation -- flag et ajout du code
-                            $projetformation->flag_valider_cc_projet_formation = true;
-                            $projetformation->update();
-                        }else{
-
-                        // Recuperation du Projet de formation
-                        $projetformation = ProjetFormation::find($demande->id_demande);
-                        //dd($data);
-                        // Modification du projet de formation -- flag et ajout du code
-                        $projetformation->flag_comite_pleiniere = true;
-                        $projetformation->code_comite_pleiniere = $comitep->code_comite ;
-                        $projetformation->id_processus = 10 ; // Processus 10
-                        $projetformation->id_comite_pleiniere = $id ;
-                        $projetformation->update();
-                        }
+                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
 
 
-                    }
+                }else{
 
-                }
+                    Audit::logSave([
 
-                $majcomite = $comitep->update([
-                    'flag_statut_comite' => true,
-                    'date_fin_comite' => Carbon::now()
-                ]);
+                        'action'=>'MISE A JOUR',
 
+                        'code_piece'=>$id,
 
-                return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succés : Information mise à jour  ');
+                        'menu'=>'COMITES (Cahier de '.@$comitep->categorieComite->libelle_categorie_comite.' : Vous devez sélectionner au moins un plan/projet pour le comité '.@$processuscomite->processusComite->libelle_processus_comite.'.)',
+
+                        'etat'=>'Echec',
+
+                        'objet'=>'COMITES TECHNIQUES'
+
+                        ]);
+
+                    return redirect('comitetechniques/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('error', 'Echec : Vous devez sélectionner au moins un plan/projet pour le comité '.@$processuscomite->processusComite->libelle_processus_comite.'. ');
+
+            }
+
             }
         }
+    }
+
+     public function edithabilitation($id,$id1,$id2)  {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $idcomite =  $id;
+
+        $demandehabilitation = DemandeHabilitation::find($id1);
+
+        $visites = Visites::where([['id_demande_habilitation','=',$demandehabilitation->id_demande_habilitation]])->first();
+       // dd($demandehabilitation->visites->statut);
+       // dd($visites);
+
+       $rapportVisite = RapportsVisites::where([['id_visites','=',@$visites->id_visites]])->get();
+      // $rapportVisitef = RapportsVisites::where([['id_demande_habilitation','=',@$demandehabilitation->id_demande_habilitation]])->first();
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+       // dd($infoentreprise->pay->id_pays);
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        //dd($pay);
+        $payList = "<option value=''> Selectionnez un pays</option>";
+        foreach ($pays as $comp) {
+            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
+        }
+
+        $typemoyenpermanentes = TypeMoyenPermanent::where([['flag_type_moyen_permanent','=',true]])->get();
+        $typemoyenpermanenteList = "<option value=''> Selectionnez la type de moyen </option>";
+        foreach ($typemoyenpermanentes as $comp) {
+            $typemoyenpermanenteList .= "<option value='" . $comp->id_type_moyen_permanent  . "'>" . mb_strtoupper($comp->libelle_type_moyen_permanent) ." </option>";
+        }
+
+        $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+        $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
+        foreach ($typeinterventions as $comp) {
+            $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
+        }
+
+        $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id1]])->get();
+        //dd($idetape);
+
+        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
+        $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
+        foreach ($organisationFormations as $comp) {
+            $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
+        }
+
+        $organisations = OrganisationFormation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
+        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la finalité </option>";
+        foreach ($typeDomaineDemandeHabilitation as $comp) {
+            $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
+        }
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
+
+        $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
+        $domainesList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($domaines as $comp) {
+            $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
+        }
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+        $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
+        foreach ($domainedemandes as $comp) {
+            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+        }
+
+/*         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                                          ->where([['id_demande_habilitation','=',$id]])
+                                                          ->get(); */
+
+                                                          $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                                          ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+                                                          ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+                                                          ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+                                                          ->where([['id_demande_habilitation','=',$id1]])
+                                                          ->get();
+
+
+        $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id1]])->get();
+
+
+
+        $criteres = CritereEvaluation::Join('categorie_comite','critere_evaluation.id_categorie_comite','categorie_comite.id_categorie_comite')
+                                    ->join('processus_comite','critere_evaluation.id_processus_comite','processus_comite.id_processus_comite')
+                                    ->where([['critere_evaluation.flag_critere_evaluation','=',true],
+                                            ['categorie_comite.code_categorie_comite','=','CT'],
+                                            ['processus_comite.code_processus_comite','=','HAB']])
+                                    ->get();
+
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        $traitement = TraitementParCritere::Join('traitement_par_critere_commentaire','traitement_par_critere.id_traitement_par_critere','traitement_par_critere_commentaire.id_traitement_par_critere')
+                ->join('critere_evaluation','traitement_par_critere.id_critere_evaluation','critere_evaluation.id_critere_evaluation')
+                ->join('users','traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','users.id')
+                ->where([['traitement_par_critere_commentaire.id_user_traitement_par_critere_commentaire','=',Auth::user()->id],['traitement_par_critere.id_demande','=',$id1]])->get();
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'COMITES',
+
+            'etat'=>'Succès',
+
+            'objet'=>'TENUE DE COMITES TECHNIQUES (HABILITATION)'
+
+        ]);
+
+        return view('comites.comitetechniques.edithabilitation', compact('demandehabilitation','infoentreprise','banque','pay',
+                    'id','id1','idetape','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
+                    'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
+                    'typeDomaineDemandeHabilitationPublicList','criteres','traitement',
+                    'visites','rapportVisite','piecesDemandeHabilitations'));
+    }
+
+    public function showficheanalysehabilitation($id,$id1,$id2) {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+
+        $demandehabilitation = DemandeHabilitation::find($id1);
+
+        $visite = Visites::where([['id_demande_habilitation','=',$id1]])->first();
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+
+        $formateurs = DB::table('vue_formateur_rapport')->where([['id_demande_habilitation','=',$id1]])->get();
+
+        $rapport = RapportsVisites::where([['id_demande_habilitation','=',$id1]])->first();
+
+        $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+
+        return view('comites.comitetechniques.showficheanalysehabilitation',compact('id','infoentreprise',
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
     }
 
     public function editplanformation($id,$id1,$id2)

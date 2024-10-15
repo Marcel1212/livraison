@@ -177,23 +177,23 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                 data-bs-target="#navs-top-Soumettre"
                                 aria-controls="navs-top-Soumettre"
                                 aria-selected="false">
-                                Intervention hors du pays et Soumission
+                                Intervention hors du pays
                                 </button>
                             </li>
-                            {{-- @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+
                                 <li class="nav-item">
                                     <button
                                     type="button"
-                                    class="nav-link"
+                                    class="nav-link <?php if($idetape==9 and count($formateurs)>0){ echo "active";} ?>"
                                     role="tab"
                                     data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-rejet"
-                                    aria-controls="navs-top-rejet"
+                                    data-bs-target="#navs-top-soumission"
+                                    aria-controls="navs-top-soumission"
                                     aria-selected="false">
-                                    Motif du rejet
+                                    Soumisson
                                     </button>
                                 </li>
-                            @endif --}}
+
 
                             </ul>
                             <div class="tab-content">
@@ -1064,24 +1064,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
-                                            <div class="col-md-12" align="right">
-                                                <button
-                                                type="button"
-                                                class="btn btn-outline-success"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#SoummissiondemandehabilitationApprouve1">
-                                                    Soumettre la demande d'habilitation
-                                                </button>
-                                            </div>
-                                        @else
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <div class="alert-body" style="text-align: center">
-                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                          </div>
-                                        @endif
+
 
                                       <br/>
                                       <br/>
@@ -1091,7 +1074,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
-                                        <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(8)]) }}">
+                                            <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(8)]) }}">
                                             @csrf
                                            @method('put')
                                            <div class="row">
@@ -1155,6 +1138,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                        </button>
                                                    <?php } ?>
 
+                                                   @if (count($formateurs)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                    @endif
+
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
                                                </div>
@@ -1194,6 +1181,129 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                                </td>
                                                            </tr>
                                                @endforeach
+
+                                           </tbody>
+                                       </table>
+
+                                </div>
+                                <div class="tab-pane fade <?php if($idetape==9 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-soumission" role="tabpanel">
+                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
+                                            @if (count($piecesDemandeHabilitations)>=3)
+                                                <div class="col-md-12" align="right">
+                                                    <button
+                                                    type="button"
+                                                    class="btn btn-outline-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#SoummissiondemandehabilitationApprouve1">
+                                                        Soumettre la demande d'habilitation
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        @else
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
+                                        @endif
+
+                                      <br/>
+                                      <br/>
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Toutes les pieces sont obligatoire
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
+                                            <form method="POST" enctype="multipart/form-data" id="formAjouterPieces" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                            @csrf
+                                           @method('put')
+                                           <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="mb-1">
+                                                                <label>Type de pieces <strong style="color:red;">*</strong></label>
+                                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_types_pieces" id="id_types_pieces" >
+                                                                    <?= $TypesPiecesListe; ?>
+                                                                </select>
+                                                                @error('id_types_pieces')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="mb-1">
+                                                                <label>Pieces jointes <strong style="color:red;">*</strong></label>
+                                                                <input type="file" name="pieces_demande_habilitation" value="{{ old('pieces_demande_habilitation') }}" id="pieces_demande_habilitation" class="form-control form-control-sm" />
+                                                                @error('pieces_demande_habilitation')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                               <div class="col-12" align="right">
+                                                   <hr>
+
+                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+
+                                                   <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                                       <button type="submit" name="action" value="AjouterPieces"
+                                                               class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                               Ajouter
+                                                       </button>
+                                                   <?php } ?>
+
+                                                   <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                       Retour</a>
+                                               </div>
+                                           </div>
+                                       </form>
+                                       <?php } ?>
+                                       <hr>
+                                       <table class="table table-bordered table-striped table-hover table-sm"
+                                           id=""
+                                           style="margin-top: 13px !important">
+                                           <thead>
+                                           <tr>
+                                                <th>No</th>
+                                                <th>Types de pieces </th>
+                                                <th>Pieces </th>
+                                                <th>Action</th>
+                                           </tr>
+                                           </thead>
+                                           <tbody>
+                                                @foreach ($piecesDemandeHabilitations as $piecesDemandeHabilitation)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
+                                                        <td>{{ $piecesDemandeHabilitation->typesPiece->libelle_types_pieces }}</td>
+                                                        <td>
+                                                            @if (isset($piecesDemandeHabilitation->pieces_demande_habilitation))
+                                                                <span class="badge bg-secondary">
+                                                                    <a target="_blank"
+                                                                        onclick="NewWindow('{{ asset("/pieces/pieces_demande_habilitation/".$demandehabilitation->entreprise->ncc_entreprises."/". $piecesDemandeHabilitation->pieces_demande_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                        Voir la pièce
+                                                                    </a>
+                                                                </span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+
+                                                                <a href="{{ route($lien.'.deletepieceDemande', \App\Helpers\Crypt::UrlCrypt($piecesDemandeHabilitation->id_pieces_demande_habilitation)) }}"
+                                                                onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
+                                                                title="Supprimer">
+                                                                <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
+                                                                </a>
+
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
 
                                            </tbody>
                                        </table>

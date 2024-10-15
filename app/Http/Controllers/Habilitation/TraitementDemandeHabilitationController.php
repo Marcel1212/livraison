@@ -37,6 +37,7 @@ use App\Models\Experiences;
 use App\Models\Formateurs;
 use App\Models\FormationsEduc;
 use App\Models\LanguesFormateurs;
+use App\Models\PiecesDemandeHabilitation;
 use App\Models\PrincipaleQualification;
 use App\Models\RapportsVisites;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
@@ -256,6 +257,8 @@ class TraitementDemandeHabilitationController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
         Audit::logSave([
 
             'action'=>'MODIFIER',
@@ -276,7 +279,7 @@ class TraitementDemandeHabilitationController extends Controller
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
                     'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList',
-                    'visites','rapportVisite','commentairenonrecevables'));
+                    'visites','rapportVisite','commentairenonrecevables','piecesDemandeHabilitations'));
     }
 
 
@@ -636,11 +639,28 @@ class TraitementDemandeHabilitationController extends Controller
             $logo = Menu::get_logo();
             $demandehabilitation = DemandeHabilitation::find($visitef->id_demande_habilitation);
             $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+            if ($visitef->statut == 'planifier') {
+                $MsgStat = 'la planification';
+            }
+            if ($visitef->statut == 'commencer') {
+                $MsgStat = 'le debut';
+            }
+            if ($visitef->statut == 'terminer') {
+                $MsgStat = 'la fin';
+            }
+            if ($visitef->statut == 'annuler') {
+                $MsgStat = 'l\'annulation';
+            }
+            if ($visitef->statut == 'reporter') {
+                $MsgStat = 'le report';
+            }
+
             if (isset($demandehabilitation->email_responsable_habilitation)) {
                 $sujet = "Demande de prise de rendez-vous pour la demande habilitation sur e-FDFP";
                 $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                 $messageMail = "<b>Cher,  ".$infoentreprise->sigl_entreprises." ,</b>
-                                <br><br>Nous avons le plaisir de vous notifie la demande de prise de rendez-vous pour la visite de votre locaux :
+                                <br><br>Nous avons le plaisir de vous notifie ".$MsgStat." de prise de rendez-vous pour la visite de votre locaux :
 
                                 <br><b>Date de prise de rendez-vous  : </b> ".@$dateEtHeureDebut."
                                 <br><b>Heure : </b> ".@$request->end."
@@ -866,9 +886,13 @@ class TraitementDemandeHabilitationController extends Controller
                     'etat_locaux_rapport' => 'required',
                     'equipement_rapport' => 'required',
                     'salubrite_rapport' => 'required',
+                    'flag_materiel_pedagogique' => 'required',
+                    'flag_salle_formation' => 'required',
                 ], [
                     'etat_locaux_rapport.required' => 'Veuillez ajouter un commentaire pour les locaux.',
                     'equipement_rapport.required' => 'Veuillez ajouter un commentaire pour les equipement.',
+                    'flag_materiel_pedagogique.required' => 'Veuillez ajouter le status des materiels pedagogiques.',
+                    'flag_salle_formation.required' => 'Veuillez ajouter le status des salles de formation.',
                     'salubrite_rapport.required' => 'Veuillez ajouter un commentaire pour la salubrite / securité.',
                 ]);
 
@@ -888,7 +912,9 @@ class TraitementDemandeHabilitationController extends Controller
                         'etat_locaux_rapport' => $input['etat_locaux_rapport'],
                         'equipement_rapport' => $input['equipement_rapport'],
                         'salubrite_rapport' => $input['salubrite_rapport'],
-                        'contenu' => $input['contenu']
+                        'contenu' => $input['contenu'],
+                        'flag_materiel_pedagogique' => $input['flag_materiel_pedagogique'],
+                        'flag_salle_formation' => $input['flag_salle_formation'],
                     ]);
                 }else{
                     $rap = RapportsVisites::create($input);
@@ -927,7 +953,9 @@ class TraitementDemandeHabilitationController extends Controller
 
         $rapport = RapportsVisites::where([['id_demande_habilitation','=',$id]])->first();
 
+        $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
         return view('habilitation.traitementdemandehabilitation.rapport',compact('id','infoentreprise',
-                        'demandehabilitation','visite','formateurs','rapport'));
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
     }
 }
