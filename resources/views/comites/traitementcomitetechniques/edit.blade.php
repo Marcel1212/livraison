@@ -151,6 +151,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             @if ($demande->code_processus =='PRF')
                                                 PROJET DE FORMATION
                                             @endif
+                                            @if ($demande->code_processus == 'HAB')
+                                                HABILITATION
+                                            @endif
                                         </td>
                                         <td>{{ @$demande->raison_sociale  }}</td>
                                         <td>{{ @$demande->nom_conseiller }}</td>
@@ -169,6 +172,13 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             @can($lien.'-edit')
                                             @if($demande->code_processus =='PF')
                                                 <a href="{{ route($lien.'.edit.planformation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                    class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                            @endif
+                                            @if($demande->code_processus =='HAB')
+                                                <a onclick="NewWindow('{{ route($lien.".show.ficheanalyse",[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                    class=" "
+                                                    title="Voir la fiche analyse"><img src='/assets/img/eye-solid.png'></a>
+                                                <a href="{{ route($lien.'.edit.habilitation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                     class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                             @endif
                                             @if($demande->code_processus =='PE')

@@ -40,6 +40,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\ListeDemandeHabilitationSoumis;
 use App\Models\CommentaireNonRecevableDemande;
+use App\Models\PiecesDemandeHabilitation;
+use App\Models\TypesPieces;
 
 class DemandeHabilitationController extends Controller
 {
@@ -468,6 +470,23 @@ class DemandeHabilitationController extends Controller
             $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .' - '.mb_strtoupper($comp->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public).' - '. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
         }
 
+        $TypesPieces =  DB::table('types_pieces')->whereNotExists(function ($query) use ($id){
+                            $query->select('*')
+                            ->from('pieces_demande_habilitation')
+                            ->whereColumn('pieces_demande_habilitation.id_types_pieces','=','types_pieces.id_types_pieces')
+                            ->where('pieces_demande_habilitation.id_demande_habilitation',$id);
+                            })
+                            ->where([
+                                ['types_pieces.flag_types_pieces','=', true],
+                                ['types_pieces.code_types_pieces','=', 'DEMHAB'],
+                            ])->get();
+
+        //TypesPieces::where([['flag_types_pieces','=',true],['code_types_pieces','=','DEMHAB']])->get();
+        $TypesPiecesListe = "<option value=''> Selectionnez la mention </option>";
+        foreach ($TypesPieces as $comp) {
+            $TypesPiecesListe .= "<option value='" . $comp->id_types_pieces  . "'>" . $comp->libelle_types_pieces ." </option>";
+        }
+
         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
                                                           ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
                                                           ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
@@ -485,6 +504,7 @@ class DemandeHabilitationController extends Controller
             $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
         }
 
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
 
         $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','HAB']])->get();
 
@@ -506,7 +526,7 @@ class DemandeHabilitationController extends Controller
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList',
-                    'MesformateursList','commentairenonrecevables'));
+                    'MesformateursList','commentairenonrecevables','TypesPiecesListe','piecesDemandeHabilitations'));
     }
 
     /**
@@ -976,6 +996,59 @@ class DemandeHabilitationController extends Controller
                 ]);
 
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Organisation formation ajouter avec success ');
+
+            }
+
+            if ($data['action'] == 'AjouterPieces'){
+                $this->validate($request, [
+                    'id_types_pieces' => 'required',
+                ], [
+                    'id_types_pieces.required' => 'Veuillez ajouter le type de la piéce.',
+                ]);
+
+                $input = $request->all();
+
+                $input['id_demande_habilitation'] = $id;
+
+                $TypeP = TypesPieces::find($input['id_types_pieces']);
+
+
+
+                if (isset($input['pieces_demande_habilitation'])){
+
+                    $filefront = $input['pieces_demande_habilitation'];
+
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'PDH_'.$TypeP->code_types_pieces. '_' . rand(111,99999) . '_' . $demandehabilitation->entreprise->ncc_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/pieces_demande_habilitation/'.$demandehabilitation->entreprise->ncc_entreprises.'/'), $fileName1);
+
+                        $input['pieces_demande_habilitation'] = $fileName1;
+                    }
+
+                }
+
+                $piecesdemande = PiecesDemandeHabilitation::create($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'Habilitation ajouter piece Habilitation'
+
+                ]);
+
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -1586,6 +1659,34 @@ class DemandeHabilitationController extends Controller
         ]);
 
         return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+
+    public function deletepieceDemande($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $pieceformateur = PiecesDemandeHabilitation::find($id);
+
+        $idDemande = $pieceformateur->id_demande_habilitation;
+
+        $pieceformateur->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idDemande,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de piece'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idDemande).'/'.Crypt::UrlCrypt(9).'/edit')->with('success', 'Succes : Information mise a jour  ');
 
     }
 }
