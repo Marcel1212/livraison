@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Habilitation\CtDemandeHabilitationController;
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
 use App\Http\Controllers\Habilitation\FormateursController;
 use App\Http\Controllers\Habilitation\HabilitationRendezVousController;
 use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationController;
+use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationRejeteController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -77,6 +79,25 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('formateurs/{id}/deletelangue', [FormateursController::class, 'deletelangue'])->name('formateurs.deletelangue');
         Route::get('formateurs/{id}/deletepieceformateur', [FormateursController::class, 'deletepieceformateur'])->name('formateurs.deletepieceformateur');
         Route::get('formateurs/{id}/show', [FormateursController::class, 'show'])->name('formateurs.show');
+
+    });
+
+    Route::group(['middleware' => ['can:ctdemandehabilitation-index']], function () {
+        Route::resources([
+            'ctdemandehabilitation' => CtDemandeHabilitationController::class,
+        ]);
+
+        Route::get('ctdemandehabilitation/{id}/{id2}/edit', [CtDemandeHabilitationController::class, 'edit'])->name('ctdemandehabilitation.editer');
+    });
+
+    Route::get('ctdemandehabilitation/{id}/ficheanalyse', [CtDemandeHabilitationController::class, 'ficheanalyse'])->name('ctdemandehabilitation.ficheanalyse');
+
+    Route::group(['middleware' => ['can:traitementhabilitationrejete-index']], function () {
+        Route::resources([
+            'traitementhabilitationrejete' => TraitementDemandeHabilitationRejeteController::class,
+        ]);
+
+        Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationController::class, 'edit'])->name('traitementhabilitationrejete.edit');
 
     });
 

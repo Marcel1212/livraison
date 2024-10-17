@@ -278,6 +278,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                     @if ($demande->code_pieces_cahier_plans_projets == 'PF')
                                                         PLAN DE FORMATION
                                                     @endif
+                                                    @if ($demande->code_pieces_cahier_plans_projets == 'HAB')
+                                                        HABILITATION
+                                                    @endif
                                                     @if ($demande->code_pieces_cahier_plans_projets == 'PE')
                                                         PROJET ETUDE
                                                     @endif
@@ -424,7 +427,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
 
 
-                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1 and count($comiteparticipants)>=1){ ?>
+                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1 and count($comiteparticipants)>=1 ){ ?>
                             <form method="POST" class="form"
                                 action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                                 enctype="multipart/form-data">
@@ -468,6 +471,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             <td>
                                                 @if ($demande->code_pieces_cahier_plans_projets == 'PF')
                                                     PLAN DE FORMATION
+                                                @endif
+                                                @if ($demande->code_pieces_cahier_plans_projets == 'HAB')
+                                                    HABILITATION
                                                 @endif
                                                 @if ($demande->code_pieces_cahier_plans_projets == 'PE')
                                                     PROJET ETUDE

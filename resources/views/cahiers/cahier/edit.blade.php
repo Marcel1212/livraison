@@ -262,6 +262,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                             @if ($demande->code_processus =='PF')
                                                 PLAN DE FORMATION
                                             @endif
+                                            @if ($demande->code_processus =='HAB')
+                                                HABILITATION
+                                            @endif
                                             @if ($demande->code_processus =='PE')
                                                 PROJET ETUDE
                                             @endif
@@ -317,6 +320,11 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     <a onclick="NewWindow('{{ route($lien.".etatpf",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
 
                                     @endif
+                                    @if ($cahier->processusComite->code_processus_comite =='HAB')
+
+                                    <a onclick="NewWindow('{{ route($lien.".etathab",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+
+                                    @endif
                                     @if ($cahier->processusComite->code_processus_comite =='PE')
 
                                     <a onclick="NewWindow('{{ route($lien.".etatpe",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
@@ -355,6 +363,9 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>
                                             @if ($demande->code_processus =='PF')
                                                 PLAN DE FORMATION
+                                            @endif
+                                            @if ($demande->code_processus =='HAB')
+                                                HABILITATION
                                             @endif
                                             @if ($demande->code_processus =='PE')
                                                 PROJET ETUDE
