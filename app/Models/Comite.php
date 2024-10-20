@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_user_comite
  * @property float $id_departement
  * @property float $id_categorie_comite
+ * @property float $id_periode_exercice
  * @property string $date_debut_comite
  * @property string $date_fin_comite
  * @property string $commentaire_comite
@@ -30,21 +31,21 @@ class Comite extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'comite';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_comite';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -52,7 +53,7 @@ class Comite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user_comite', 'id_departement', 'id_categorie_comite', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite'];
+    protected $fillable = ['id_user_comite', 'id_departement', 'id_categorie_comite', 'date_debut_comite', 'date_fin_comite', 'commentaire_comite', 'code_comite', 'code_pieces', 'flag_comite', 'flag_statut_comite', 'created_at', 'updated_at', 'objet_comite','id_periode_exercice'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

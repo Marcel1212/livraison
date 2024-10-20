@@ -60,6 +60,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $titre_propriete_contrat_bail
  * @property string $autorisation_ouverture_ecole
  * @property string $releve_identite_bancaire
+ * @property string $reference_agrement
  * @property boolean $flag_ecole_autre_entreprise
  * @property boolean $flag_demande_habilitation_valider_par_processus
  * @property boolean $flag_demande_habilitation_valider_cahier

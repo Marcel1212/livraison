@@ -121,9 +121,12 @@ class ComitesController extends Controller
                 'commentaire_comite.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
+            $anneeExercice = AnneeExercice::get_annee_exercice();
+
             $input = $request->all();
             $dateanneeencours = Carbon::now()->format('Y');
             $input['id_user_comite'] = Auth::user()->id;
+            $input['id_periode_exercice'] = $anneeExercice->id_periode_exercice;
             $infostypecomite = CategorieComite::find($input['id_categorie_comite']);
             $input['code_comite'] = $infostypecomite->code_categorie_comite.'-'. Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
 
@@ -266,6 +269,16 @@ class ComitesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comitep = Comite::find($id);
+
+        $anneeExercice = AnneeExercice::get_annee_exercice();
+
+        $nombredecomiteencours = DB::table('comite as c')
+                                    ->join('periode_exercice as pe', function ($join) {
+                                        $join->on('c.date_debut_comite', '>=', 'pe.date_debut_periode_exercice')
+                                            ->on('c.date_debut_comite', '<=', 'pe.date_fin_periode_exercice');
+                                    })
+                                    ->select('c.*')
+                                    ->get();
 
         if ($request->isMethod('put')) {
 
@@ -669,14 +682,19 @@ class ComitesController extends Controller
                             $entreprise = Entreprises::where('id_entreprises',$demh->id_entreprises)->first();
                             $rais = $entreprise->raison_social_entreprises;
 
+                            $nombreactueComite = str_pad(count($nombredecomiteencours)+1, 3, '0', STR_PAD_LEFT);
+
+                            $coderef = 'FDFP/SG-D2EQPC/N°'.$nombreactueComite.'-'.$anneeExercice->annee.'/'.substr($demh->userchefservice->name,0,1).''.substr($demh->userchefservice->prenom_users,0,1).'/'.substr($demh->userchargerhabilitation->name,0,1).''.substr($demh->userchargerhabilitation->prenom_users,0,1);
+
                             FicheAgrement::create([
                                 'id_demande' => $demh->id_demande_habilitation,
                                 'id_comite_permanente' => $id,
                                 'id_user_fiche_agrement' => Auth::user()->id,
                                 'flag_fiche_agrement'=> true,
+                                'reference_agrement'=> $coderef,
                                 'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
                             ]);
-                            $anneeExercice = AnneeExercice::get_annee_exercice();
+
                             $dateDebut = new DateTime($anneeExercice->date_debut_periode_exercice); // Crée un objet DateTime
                             $dateDebut->modify('+2 years'); // Ajoute 2 ans à la date de début
                             $dateDebut->setDate($dateDebut->format('Y'), 12, 31); // Modifie la date pour être le 31 décembre de l'année modifiée
@@ -687,6 +705,7 @@ class ComitesController extends Controller
 
                             $demh->update([
                                 'flag_agrement_demande_habilitaion' => true,
+                                'reference_agrement' => $coderef,
                                 'date_agrement_demande_habilitation' => Carbon::now(),
                                 'date_debut_validite' => Carbon::now(),
                                 'date_fin_validite' => $datefin

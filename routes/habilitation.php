@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Habilitation\AgreementHabilitationController;
 use App\Http\Controllers\Habilitation\CtDemandeHabilitationController;
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
 use App\Http\Controllers\Habilitation\FormateursController;
@@ -100,5 +101,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationController::class, 'edit'])->name('traitementhabilitationrejete.edit');
 
     });
+
+    Route::get('agrementhabilitation', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation');
+    Route::get('agrementhabilitation/index', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation.index');
+    Route::get('agrementhabilitation/{id}/show', [AgreementHabilitationController::class, 'show'])->name('agrementhabilitation.show');
 
 });
