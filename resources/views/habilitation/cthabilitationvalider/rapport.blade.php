@@ -167,20 +167,16 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
             <b>Suite équipements:</b>{{  @$rapport->contenu }}
         </td>
     </tr>
-    @if(isset($avis))
-    <tr>
+     <tr>
         <td colspan="6" class="header">AVIS DE LA COMMISSION TECHNIQUE:</td>
     </tr>
     <tr>
         <td colspan="6">
             @if ($avis->statutOperation->libelle_statut_operation == "Favorable")
                 Le cabinet ({{ $infoentreprise->sigl_entreprises }}) est proposé à l'habilitation dans le(s) domaine(s) de formation identifié(s) ci-dessus.
-            @else
-                Le cabinet ({{ $infoentreprise->sigl_entreprises }}) n'est pas proposé à l'habilitation dans le(s) domaine(s) de formation identifié(s) ci-dessus.
             @endif
         </td>
     </tr>
-    @endif
 </table>
 
 </body>

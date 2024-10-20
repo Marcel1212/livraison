@@ -46,6 +46,11 @@ Route::group(['middleware' => ['auth']], function () {
         //Route::get('traitementcomite/{id}/{id1}/{id2}/edit/projetformation', [TraitementComitesController::class, 'edit'])->name('traitementcomite.edit.projetformation');
         Route::get('traitementcomite/{id}/delete', [TraitementComitesController::class, 'delete'])->name('traitementcomite.delete');
 
+        Route::get('traitementcomite/{id}/{id1}/{id2}/edit/habilitation', [TraitementComitesController::class, 'edithabilitation'])->name('traitementcomite.edit.habilitation');
+        Route::get('traitementcomite/{id}/{id1}/{id2}/{id3}/editer/demandehabilitation', [TraitementComitesController::class, 'editerhabilitation'])->name('traitementcomite.editer.demandehabilitation');
+        Route::get('traitementcomite/{id}/{id1}/{id2}/show/habilitation', [TraitementComitesController::class, 'showficheanalysehabilitation'])->name('traitementcomite.show.ficheanalyse');
+        Route::get('traitementcomite/{id}/show/cvformateur', [TraitementComitesController::class, 'cvformateur'])->name('traitementcomite.show.cvformateur');
+
     });
 
 });

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_demande
  * @property boolean $flag_fiche_agrement
  * @property string $commentaire_fiche_agrement
+ * @property string $reference_agrement
  * @property string $created_at
  * @property string $updated_at
  * @property ComiteGestion $comiteGestion
@@ -44,7 +45,7 @@ class FicheAgrement extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_comite_gestion', 'id_comite_permanente', 'id_user_fiche_agrement', 'id_demande', 'flag_fiche_agrement', 'commentaire_fiche_agrement', 'created_at', 'updated_at', 'code_fiche_agrement'];
+    protected $fillable = ['id_comite_gestion', 'id_comite_permanente', 'id_user_fiche_agrement', 'id_demande', 'flag_fiche_agrement', 'commentaire_fiche_agrement', 'created_at', 'updated_at', 'code_fiche_agrement','reference_agrement'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

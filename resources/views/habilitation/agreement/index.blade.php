@@ -6,15 +6,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
 
-@if(auth()->user()->can('demandehabilitation-index'))
+@if(auth()->user()->can('agrementhabilitation-index'))
 
     @extends('layouts.backLayout.designadmin')
 
     @section('content')
 
-        @php($Module='Habilitation')
+        @php($Module='Agrement')
         @php($titre='Liste des demandes habilitation')
-        @php($lien='demandehabilitation')
+        @php($lien='agrementhabilitation')
 
         <!-- BEGIN: Content-->
 
@@ -40,16 +40,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">{{$titre}}</h5>
                         <small class="text-muted float-end">
-                            @can($lien.'-create')
-{{--                                 <a href="#"
-                                class="btn btn-sm btn-primary waves-effect waves-light">
-                                    <i class="menu-icon tf-icons ti ti-plus"></i> Creer </a> --}}
-                                    @if($formejuridique == 'PR')
-                                        <a href="{{ route($lien.'.create') }}"  class="btn btn-sm btn-info me-1 mt-1"> <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle demande</a>
-                                    @else
-                                        <a href="#"  class="btn btn-sm btn-info me-1 mt-1"> <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle demande</a>
-                                    @endif
-                            @endcan
+
                         </small>
                     </div>
                     <div class="card-body">
@@ -130,10 +121,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </td>
                                     <td align="center">
                                         @can($lien.'-edit')
-                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                             class=" "
-                                            title="Modifier"><img
-                                                    src='/assets/img/editing.png'></a>
+                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                         @endcan
                                     </td>
                                 </tr>
@@ -142,34 +132,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         </table>
                         <!--end: Datatable-->
                     </div>
-                    <!-- add new card modal  -->
-                    <div class="modal fade" id="addNewhabilitation" tabindex="-1" aria-labelledby="addNewhabilitationTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header bg-transparent">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body px-sm-5 mx-50">
-                                    @if($formejuridique == 'PR')
-                                        @if(count($habilitations)<1 )
-                                            <a href="{{ route($lien.'.create') }}"  class="btn btn-sm btn-info me-1 mt-1">Nouvelle demande</a>
-                                        @else
-                                            <a href="#"  class="btn btn-sm btn-success me-1 mt-1">Demande d'extension </a>
-                                            <a href="#"  class="btn btn-sm btn-secondary me-1 mt-1">Demande de renouvellement </a>
-                                            <a href="#"  class="btn btn-sm btn-primary me-1 mt-1">Demande de subtitution </a>
-                                            <a href="#"  class="btn btn-sm btn-danger me-1 mt-1">Demande de suppression </a>
-                                        @endif
-                                        {{-- <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button> --}}
-                                    @else
-                                        <a href="#"  class="btn btn-sm btn-info me-1 mt-1">Nouvelle demande</a>
-                                        {{-- <button type="reset" class="btn btn-sm btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">Annuler</button> --}}
-                                    @endif
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/ add new card modal  -->
                 </div>
             </div>
         </div>

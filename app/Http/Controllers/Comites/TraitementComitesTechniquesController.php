@@ -28,6 +28,7 @@ use App\Helpers\Audit;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
 use App\Models\ActionFormationPlan;
+use App\Models\AvisGlobaleComiteTechnique;
 use App\Models\Banque;
 use App\Models\BeneficiairesFormation;
 use App\Models\PiecesProjetFormation;
@@ -634,8 +635,13 @@ class TraitementComitesTechniquesController extends Controller
 
         $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
 
+        $avis = AvisGlobaleComiteTechnique::where([
+            ['id_demande', '=', $id1],
+            ['code_processus', '=', 'HAB']
+        ])->latest('id_avis_globale_comite_technique')->first();
+
         return view('comites.traitementcomitetechniques.showficheanalysehabilitation',compact('id','infoentreprise',
-                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes','avis'));
     }
 
     public function editprojetformation($id,$id1,$id2)

@@ -169,7 +169,7 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
     </tr>
     @if(isset($avis))
     <tr>
-        <td colspan="6" class="header">AVIS DE LA COMMISSION TECHNIQUE:</td>
+        <td colspan="6" class="header">AVIS DE LA COMMISSION TECHNIQUE: </td>
     </tr>
     <tr>
         <td colspan="6">

@@ -137,6 +137,9 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @if ($demande->code_pieces_cahier_plans_projets == 'PF')
                                                     PLAN DE FORMATION
                                                 @endif
+                                                @if ($demande->code_pieces_cahier_plans_projets == 'HAB')
+                                                    HABILITATION
+                                                @endif
                                                 @if ($demande->code_pieces_cahier_plans_projets == 'PE')
                                                     PROJET ETUDE
                                                 @endif
@@ -159,6 +162,11 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @can($lien . '-edit')
                                                     @if ($demande->code_pieces_cahier_plans_projets == 'PF')
                                                         <a href="{{ route($lien . '.edit.planformation', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_cahier_plans_projets), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endif
+                                                    @if ($demande->code_pieces_cahier_plans_projets == 'HAB')
+                                                        <a href="{{ route($lien . '.edit.habilitation', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_cahier_plans_projets), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                             class=" " title="Modifier"><img
                                                                 src='/assets/img/editing.png'></a>
                                                     @endif

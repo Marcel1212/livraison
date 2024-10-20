@@ -1276,8 +1276,13 @@ class ComitesTechniquesController extends Controller
 
         $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
 
+        $avis = AvisGlobaleComiteTechnique::where([
+            ['id_demande', '=', $id1],
+            ['code_processus', '=', 'HAB']
+        ])->latest('id_avis_globale_comite_technique')->first();
+
         return view('comites.comitetechniques.showficheanalysehabilitation',compact('id','infoentreprise',
-                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes','avis'));
     }
 
     public function editplanformation($id,$id1,$id2)
