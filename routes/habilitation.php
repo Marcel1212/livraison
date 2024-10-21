@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('demandehabilitation/create', [DemandeHabilitationController::class, 'create'])->name('demandehabilitation.create');
         Route::post('demandehabilitation/store', [DemandeHabilitationController::class, 'store'])->name('demandehabilitation.store');
         Route::get('demandehabilitation/{id}/show', [DemandeHabilitationController::class, 'show'])->name('demandehabilitation.show');
+        Route::get('demandehabilitation/{id}/showle', [DemandeHabilitationController::class, 'showle'])->name('demandehabilitation.showle');
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
         Route::get('demandehabilitation/{id}/deletemoyenpermanente', [DemandeHabilitationController::class, 'deletemoyenpermanente'])->name('demandehabilitation.deletemoyenpermanente');
         Route::get('demandehabilitation/{id}/deleteinterventions', [DemandeHabilitationController::class, 'deleteinterventions'])->name('demandehabilitation.deleteinterventions');
@@ -92,13 +93,14 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('ctdemandehabilitation/{id}/ficheanalyse', [CtDemandeHabilitationController::class, 'ficheanalyse'])->name('ctdemandehabilitation.ficheanalyse');
+    Route::get('traitementhabilitationrejete/{id}/ficheanalyse', [TraitementDemandeHabilitationRejeteController::class, 'ficheanalyse'])->name('traitementhabilitationrejete.ficheanalyse');
 
     Route::group(['middleware' => ['can:traitementhabilitationrejete-index']], function () {
         Route::resources([
             'traitementhabilitationrejete' => TraitementDemandeHabilitationRejeteController::class,
         ]);
 
-        Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationController::class, 'edit'])->name('traitementhabilitationrejete.edit');
+        Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationRejeteController::class, 'edit'])->name('traitementhabilitationrejete.edit');
 
     });
 

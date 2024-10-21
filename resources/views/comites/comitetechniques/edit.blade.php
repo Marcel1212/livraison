@@ -242,7 +242,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
+                                <?php if ($comite->flag_statut_comite != true){ ?>
                                 <div class="col-12" align="right">
                                     <button type="submit" name="action" value="creer_cahier_plans_projets"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
@@ -329,7 +329,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             echo 'show active';
                         } ?>" id="navs-top-actionformation" role="tabpanel">
 
-                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
+                            <?php if ($comite->flag_statut_comite != true ){ ?>
                             <form method="POST" class="form"
                                 action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                 enctype="multipart/form-data">

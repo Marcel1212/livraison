@@ -322,7 +322,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                     @endif
                                     @if ($cahier->processusComite->code_processus_comite =='HAB')
 
-                                    <a onclick="NewWindow('{{ route($lien.".etathab",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                    <a onclick="NewWindow('{{ route($lien.".etathab",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_plans_projets)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><span class="btn btn-sm btn-success"> le cahier d'habilitation</span></a>
 
                                     @endif
                                     @if ($cahier->processusComite->code_processus_comite =='PE')

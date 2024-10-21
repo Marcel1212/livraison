@@ -13,7 +13,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
     @section('content')
 
         @php($Module='Habilitation')
-        @php($titre='Liste des demandes d\'habilitation')
+        @php($titre='Liste des demandes d\'habilitation rejeté')
         @php($lien='traitementhabilitationrejete')
 
         <!-- BEGIN: Content-->
