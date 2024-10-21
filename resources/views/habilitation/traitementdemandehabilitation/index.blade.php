@@ -78,7 +78,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 'valide' => $habilitation->flag_valide_demande_habilitation,
                                                 'rejet' => $habilitation->flag_rejet_demande_habilitation,
                                                 'agrement' => $habilitation->flag_agrement_demande_habilitaion,
-                                                'annulation' => $habilitation->flag_annulation_plan,
                                             ];
 
                                             // Déterminer le badge à afficher
@@ -97,8 +96,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     $badge = '<span class="badge bg-success">Agrée</span>';
                                                 } elseif ($flags['rejet']) {
                                                     $badge = '<span class="badge bg-secondary">Soumis</span>';
-                                                } elseif ($flags['annulation']) {
-                                                    $badge = '<span class="badge bg-danger">Annulé</span>';
                                                 } else {
                                                     $badge = '<span class="badge bg-warning">En cours de traitement</span>';
                                                 }

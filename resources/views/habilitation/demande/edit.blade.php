@@ -920,6 +920,9 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                                     <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                         class=" "
                                                                         title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                                                    <a onclick="NewWindow('{{ asset("/pieces/pieces_formateur/".$demandehabilitation->entreprise->ncc_entreprises."_".$formateur->nom_formateurs."_".$formateur->prenom_formateurs."/".$formateur->pieces_formateur)}}','',screen.width/2,screen.height,'yes','center',1);" target="_blank"
+                                                                        class=" "
+                                                                        title="Modifier"><img src='/assets/img/display.png'></a>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                                     <a href="{{ route($lien.'.deleteformateurs',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
