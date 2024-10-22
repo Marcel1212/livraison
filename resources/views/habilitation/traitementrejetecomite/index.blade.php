@@ -6,15 +6,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
 
-@if(auth()->user()->can('traitementdemandehabilitation-index'))
+@if(auth()->user()->can('traitementhabilitationrejete-index'))
 
     @extends('layouts.backLayout.designadmin')
 
     @section('content')
 
         @php($Module='Habilitation')
-        @php($titre='Liste des demandes d\'habilitation')
-        @php($lien='traitementdemandehabilitation')
+        @php($titre='Liste des demandes d\'habilitation rejeté')
+        @php($lien='traitementhabilitationrejete')
 
         <!-- BEGIN: Content-->
 
@@ -66,7 +66,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <td>{{ ++$i }}</td>
                                     <td>{{ @$habilitation->nom_responsable_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->code_demande_habilitation }}</td>
-                                    <td>{{  @$habilitation->userchargerhabilitation->name }} {{  @$habilitation->userchargerhabilitation->prenom_users }}</td>
+                                    <td>{{  @$habilitation->name }} {{  @$habilitation->prenom_users }}</td>
                                     <td>{{ @$habilitation->date_creer_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->date_soumis_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->date_agrement_demande_habilitation }}</td>
@@ -78,6 +78,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 'valide' => $habilitation->flag_valide_demande_habilitation,
                                                 'rejet' => $habilitation->flag_rejet_demande_habilitation,
                                                 'agrement' => $habilitation->flag_agrement_demande_habilitaion,
+                                                'annulation' => $habilitation->flag_annulation_plan,
                                             ];
 
                                             // Déterminer le badge à afficher
@@ -96,6 +97,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     $badge = '<span class="badge bg-success">Agrée</span>';
                                                 } elseif ($flags['rejet']) {
                                                     $badge = '<span class="badge bg-secondary">Soumis</span>';
+                                                } elseif ($flags['annulation']) {
+                                                    $badge = '<span class="badge bg-danger">Annulé</span>';
                                                 } else {
                                                     $badge = '<span class="badge bg-warning">En cours de traitement</span>';
                                                 }

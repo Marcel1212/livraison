@@ -54,7 +54,7 @@ class TraitementDemandeHabilitationController extends Controller
         if($codeRoles == 'CHEFSERVICE'){
             $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
         }else{
-            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
         }
         //dd($habilitations);
         Audit::logSave([
@@ -222,13 +222,14 @@ class TraitementDemandeHabilitationController extends Controller
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get(); */
 
-                                                          $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
-                                                          ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-                                                          ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
-                                                          ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
-                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
-                                                          ->where([['id_demande_habilitation','=',$id]])
-                                                          ->get();
+             $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+                                    ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+                                    ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                    ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+                                    ->join('pieces_formateur','formateurs.id_formateurs','pieces_formateur.id_formateurs')
+                                    ->where([['id_demande_habilitation','=',$id],['id_types_pieces','=',2]])
+                                    ->get();
 
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();

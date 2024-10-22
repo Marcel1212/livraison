@@ -242,16 +242,14 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <?php //if(count($cahiers)>0){
-                                ?>
+                                <?php if ($comite->flag_statut_comite != true){ ?>
                                 <div class="col-12" align="right">
                                     <button type="submit" name="action" value="creer_cahier_plans_projets"
                                         class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
                                         Ajouter au cahier
                                     </button>
                                 </div>
-                                <?php //}
-                                ?>
+                                <?php } ?>
 
                                 <table class="table table-bordered table-striped table-hover table-sm allcbtable" id="exampleData"
                                     style="margin-top: 13px !important">
@@ -331,7 +329,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                             echo 'show active';
                         } ?>" id="navs-top-actionformation" role="tabpanel">
 
-                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
+                            <?php if ($comite->flag_statut_comite != true ){ ?>
                             <form method="POST" class="form"
                                 action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                 enctype="multipart/form-data">
@@ -430,26 +428,30 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         <div class="tab-pane fade<?php if ($idetape == 4) {
                             echo 'show active';
                         } //if(count($ficheagrements)>=1 and count($comitegestionparticipant)>=1){ echo "active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
+                            <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
                             <form method="POST" class="form"
                             action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt(4)]) }}"
                             enctype="multipart/form-data">
 
                                 @csrf
                                 @method('put')
-                                <?php if ($comite->flag_statut_comite != true and count($cahiers)>=1){ ?>
-                                <div class="row">
-                                    <div class="col-12 col-md-10">
-                                    </div>
-                                    <div class="col-12 col-md-2" align="right"> <br>
-                                        <button type="submit" name="action" value="valider_comite_technique"
-                                            class="btn btn-sm btn-success"
-                                            onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider
-                                            le comité</button>
 
-                                    </div>
+                                    @if(count($listedemandesss) == count($listeavisgoblals))
+                                        <div class="row">
+                                            <div class="col-12 col-md-10">
+                                            </div>
+                                            <div class="col-12 col-md-2" align="right"> <br>
+                                                <button type="submit" name="action" value="valider_comite_technique"
+                                                    class="btn btn-sm btn-success"
+                                                    onclick='javascript:if (!confirm("Voulez-vous valider le comité ?")) return false;'>Valider
+                                                    le comité</button>
 
-                                </div>
-                            <?php } ?>
+                                            </div>
+
+                                        </div>
+                                    @endif
+
+
                             <table class="table table-bordered table-striped table-hover table-sm allcttable" id="exampleData"
                                 style="margin-top: 13px !important">
                                 <thead>
@@ -463,6 +465,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                         <th>Date fin instruction</th>
                                         <th>Coût accordé</th>
                                         <th>Statut</th>
+                                        <th>Avis</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -507,6 +510,17 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                 @endif
                                             </td>
                                             <td align="center" nowrap="nowrap">
+                                                @if (isset($demande->libelle_statut_operation))
+                                                    @if ($demande->libelle_statut_operation == "Favorable")
+                                                        <span class="badge bg-info">{{ $demande->libelle_statut_operation }}</span>
+                                                    @else
+                                                        <span class="badge bg-danger">{{ $demande->libelle_statut_operation }}</span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge bg-warning">Non traité</span>
+                                                @endif
+                                            </td>
+                                            <td align="center" nowrap="nowrap">
                                                 @can($lien . '-edit')
                                                     @if ($demande->code_processus == 'PF')
                                                         <a href="{{ route($lien . '.edit.planformation', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
@@ -519,6 +533,15 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                                             title="Voir la fiche analyse"><img src='/assets/img/eye-solid.png'></a>
                                                         <a href="{{ route($lien.'.edit.habilitation',[\App\Helpers\Crypt::UrlCrypt($comite->id_comite),\App\Helpers\Crypt::UrlCrypt($demande->id_demande),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                             class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
+                                                        <a type="button" class=" aviscomiteHabilitation"
+                                                            data-bs-toggle="modal"
+                                                            data-id="{{\App\Helpers\Crypt::UrlCrypt($comite->id_comite)}}"
+                                                            data-id1="{{\App\Helpers\Crypt::UrlCrypt($demande->id_demande)}}"
+                                                            data-id2="{{\App\Helpers\Crypt::UrlCrypt(4)}}"
+                                                            href="#"
+                                                            title="Avis du comite">
+                                                                <img src='/assets/img/pen-to-square-solid.png'>
+                                                        </a>
                                                     @endif
                                                     @if ($demande->code_processus == 'PE')
                                                         <a href="{{ route($lien . '.edit.projetetude', [\App\Helpers\Crypt::UrlCrypt($comite->id_comite), \App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
@@ -534,9 +557,95 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                             </td>
                                         </tr>
                                     @endforeach
+
                                 </tbody>
                             </table>
                         </form>
+                        <?php }else{ ?>
+
+                            <div class="row">
+                                <div class="col-12 col-md-8">
+                                </div>
+                                <div class="col-12 col-md-4" align="right"> <br>
+                                    <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($comite->id_comite)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                        class="btn btn-sm btn-success"
+                                        title="Rapport validé">Raport du comite pour valider</a>
+                                    {{-- <a onclick="NewWindow('','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                        class="btn btn-sm btn-danger"
+                                        title="Rapport rejeter">Raport du comite pour rejet</a> --}}
+
+                                </div>
+                            </div>
+                            <table class="table table-bordered table-striped table-hover table-sm allcttable" id="exampleData"
+                            style="margin-top: 13px !important">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Type processus </th>
+                                    <th>Entreprise </th>
+                                    <th>Conseiller </th>
+                                    <th>Code </th>
+                                    <th>Date soumise au FDFP</th>
+                                    <th>Date fin instruction</th>
+                                    <th>Coût accordé</th>
+                                    <th>Statut</th>
+                                    <th>Avis</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($listedemandetraiter as $key => $demande)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            @if ($demande->code_processus == 'PF')
+                                                PLAN DE FORMATION
+                                            @endif
+                                            @if ($demande->code_processus == 'PE')
+                                                PROJET ETUDE
+                                            @endif
+                                            @if ($demande->code_processus == 'PRF')
+                                                PROJET DE FORMATION
+                                            @endif
+                                            @if ($demande->code_processus == 'HAB')
+                                                HABILITATION
+                                            @endif
+                                        </td>
+                                        <td>{{ @$demande->raison_sociale }}</td>
+                                        <td>{{ @$demande->nom_conseiller }}</td>
+                                        <td>{{ @$demande->code }}</td>
+                                        <td>{{ $demande->date_demande }}</td>
+                                        <td>{{ $demande->date_soumis }}</td>
+                                        <td align="rigth">{{ number_format($demande->montant_total, 0, ',', ' ') }}
+                                        </td>
+                                        <td align="center" nowrap="nowrap">
+                                            @if ($comite->flag_statut_comite == true)
+                                                <span class="badge bg-success">Traité</span>
+                                            @else
+                                                <span class="badge bg-warning">En cours</span>
+                                            @endif
+                                        </td>
+                                        <td align="center" nowrap="nowrap">
+                                            @if (isset($demande->libelle_statut_operation))
+                                                @if ($demande->libelle_statut_operation == "Favorable")
+                                                    <span class="badge bg-info">{{ $demande->libelle_statut_operation }}</span>
+                                                @else
+                                                    <span class="badge bg-danger">{{ $demande->libelle_statut_operation }}</span>
+                                                @endif
+                                            @else
+                                                <span class="badge bg-warning">Non traité</span>
+                                            @endif
+                                        </td>
+                                        <td align="center" nowrap="nowrap">
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                        <?php } ?>
 
                             <div class="col-12" align="right">
 
@@ -559,6 +668,45 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                         </div>
                     </div>
                 </div>
+            </div>
+
+
+
+            {{-- <div class="modal fade" id="avisGlobalModal" tabindex="-1" role="dialog" aria-labelledby="avisGlobalModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="avisGlobalModalLabel">Avis du Comité</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" id="avisgobalehabilitation">
+                      <!-- Les données seront insérées ici -->
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    </div>
+                  </div>
+                </div>
+              </div> --}}
+
+        </div>
+
+        <div class="modal fade" id="avisGlobalModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-simple modal-edit-user">
+            <div class="modal-content p-3 p-md-5">
+                <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2">Avis du Comité</h3>
+                    <p class="text-muted"></p>
+                </div>
+                <div class="modal-body" id="avisgobalehabilitation">
+                    <!-- Les données seront insérées ici -->
+                  </div>
+                </div>
+            </div>
             </div>
         </div>
     @endsection
@@ -592,7 +740,21 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                 });
             }
         });
+
+
+        $(document).on('click', '.aviscomiteHabilitation', function () {
+                //alert('alluser')
+                var id = $(this).data('id');      // Récupère data-id
+                var id1 = $(this).data('id1');    // Récupère data-id1
+                var id2 = $(this).data('id2');    // Récupère data-id2
+                $.get("{{ url('/') }}/avisglobalcomitetechniquehabilitation/" + id +"/"+ id1 +"/"+ id2, function (data) {
+                    $('#avisgobalehabilitation').html(data); // Insère les données dans le corps de la modale
+                    $('#avisGlobalModal').modal('show');
+                });
+            });
+
         </script>
+
     @endsection
 @else
     <script type="text/javascript">

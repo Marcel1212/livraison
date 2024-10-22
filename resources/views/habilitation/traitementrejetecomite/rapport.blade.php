@@ -167,8 +167,7 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
             <b>Suite équipements:</b>{{  @$rapport->contenu }}
         </td>
     </tr>
-    @if(isset($avis))
-    <tr>
+     <tr>
         <td colspan="6" class="header">AVIS DE LA COMMISSION TECHNIQUE:</td>
     </tr>
     <tr>
@@ -180,7 +179,6 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
             @endif
         </td>
     </tr>
-    @endif
 </table>
 
 </body>

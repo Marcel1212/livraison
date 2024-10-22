@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Habilitation\AgreementHabilitationController;
+use App\Http\Controllers\Habilitation\CtDemandeHabilitationController;
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
 use App\Http\Controllers\Habilitation\FormateursController;
 use App\Http\Controllers\Habilitation\HabilitationRendezVousController;
 use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationController;
 use App\Http\Controllers\Habilitation\TraitementSuppressionDomaineHabilitationController;
+use App\Http\Controllers\Habilitation\TraitementDemandeHabilitationRejeteController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function () {
@@ -18,6 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('demandehabilitation/create', [DemandeHabilitationController::class, 'create'])->name('demandehabilitation.create');
         Route::post('demandehabilitation/store', [DemandeHabilitationController::class, 'store'])->name('demandehabilitation.store');
         Route::get('demandehabilitation/{id}/show', [DemandeHabilitationController::class, 'show'])->name('demandehabilitation.show');
+        Route::get('demandehabilitation/{id}/showle', [DemandeHabilitationController::class, 'showle'])->name('demandehabilitation.showle');
         Route::get('demandehabilitation/{id}/delete', [DemandeHabilitationController::class, 'delete'])->name('demandehabilitation.delete');
         Route::get('demandehabilitation/{id}/deletemoyenpermanente', [DemandeHabilitationController::class, 'deletemoyenpermanente'])->name('demandehabilitation.deletemoyenpermanente');
         Route::get('demandehabilitation/{id}/deleteinterventions', [DemandeHabilitationController::class, 'deleteinterventions'])->name('demandehabilitation.deleteinterventions');
@@ -125,5 +129,29 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('formateurs/{id}/show', [FormateursController::class, 'show'])->name('formateurs.show');
 
     });
+
+    Route::group(['middleware' => ['can:ctdemandehabilitation-index']], function () {
+        Route::resources([
+            'ctdemandehabilitation' => CtDemandeHabilitationController::class,
+        ]);
+
+        Route::get('ctdemandehabilitation/{id}/{id2}/edit', [CtDemandeHabilitationController::class, 'edit'])->name('ctdemandehabilitation.editer');
+    });
+
+    Route::get('ctdemandehabilitation/{id}/ficheanalyse', [CtDemandeHabilitationController::class, 'ficheanalyse'])->name('ctdemandehabilitation.ficheanalyse');
+    Route::get('traitementhabilitationrejete/{id}/ficheanalyse', [TraitementDemandeHabilitationRejeteController::class, 'ficheanalyse'])->name('traitementhabilitationrejete.ficheanalyse');
+
+    Route::group(['middleware' => ['can:traitementhabilitationrejete-index']], function () {
+        Route::resources([
+            'traitementhabilitationrejete' => TraitementDemandeHabilitationRejeteController::class,
+        ]);
+
+        Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationRejeteController::class, 'edit'])->name('traitementhabilitationrejete.edit');
+
+    });
+
+    Route::get('agrementhabilitation', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation');
+    Route::get('agrementhabilitation/index', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation.index');
+    Route::get('agrementhabilitation/{id}/show', [AgreementHabilitationController::class, 'show'])->name('agrementhabilitation.show');
 
 });

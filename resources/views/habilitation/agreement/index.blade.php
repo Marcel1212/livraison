@@ -6,15 +6,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
 ?>
 
-@if(auth()->user()->can('traitementdemandehabilitation-index'))
+@if(auth()->user()->can('agrementhabilitation-index'))
 
     @extends('layouts.backLayout.designadmin')
 
     @section('content')
 
-        @php($Module='Habilitation')
-        @php($titre='Liste des demandes d\'habilitation')
-        @php($lien='traitementdemandehabilitation')
+        @php($Module='Agrement')
+        @php($titre='Liste des demandes habilitation')
+        @php($lien='agrementhabilitation')
 
         <!-- BEGIN: Content-->
 
@@ -39,7 +39,9 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">{{$titre}}</h5>
+                        <small class="text-muted float-end">
 
+                        </small>
                     </div>
                     <div class="card-body">
                         <!--begin: Datatable-->
@@ -78,6 +80,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 'valide' => $habilitation->flag_valide_demande_habilitation,
                                                 'rejet' => $habilitation->flag_rejet_demande_habilitation,
                                                 'agrement' => $habilitation->flag_agrement_demande_habilitaion,
+                                                'annulation' => $habilitation->flag_annulation_plan,
                                             ];
 
                                             // Déterminer le badge à afficher
@@ -86,7 +89,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     $badge = '<span class="badge bg-success">Valider</span>';
                                                 } elseif ($flags['agrement']) {
                                                     $badge = '<span class="badge bg-success">Agrée</span>';
-                                                } else{
+                                                } else {
                                                     $badge = '<span class="badge bg-warning">En cours de traitement</span>';
                                                 }
                                             } elseif ($flags['soumis'] === true && $flags['reception'] === false)  {
@@ -96,6 +99,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     $badge = '<span class="badge bg-success">Agrée</span>';
                                                 } elseif ($flags['rejet']) {
                                                     $badge = '<span class="badge bg-secondary">Soumis</span>';
+                                                } elseif ($flags['annulation']) {
+                                                    $badge = '<span class="badge bg-danger">Annulé</span>';
                                                 } else {
                                                     $badge = '<span class="badge bg-warning">En cours de traitement</span>';
                                                 }
@@ -113,14 +118,12 @@ $anneexercice = AnneeExercice::get_annee_exercice();
 
                                             echo $badge;
                                             ?>
-
                                     </td>
                                     <td align="center">
                                         @can($lien.'-edit')
-                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}"
+                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                             class=" "
-                                            title="Modifier"><img
-                                                    src='/assets/img/editing.png'></a>
+                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                         @endcan
                                     </td>
                                 </tr>

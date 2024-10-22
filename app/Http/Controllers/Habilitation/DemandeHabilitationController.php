@@ -464,7 +464,15 @@ class DemandeHabilitationController extends Controller
 
         $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
 
-        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+        $domainedemandes = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
+                                $query->select('*')
+                                    ->from('formateur_domaine_demande_habilitation')
+                                    ->whereColumn('formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_habilitation.id_domaine_demande_habilitation');
+                                })
+                                ->where('domaine_demande_habilitation.id_demande_habilitation',$id)
+                                ->get();
+
+        //DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
         $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
         foreach ($domainedemandes as $comp) {
             $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .' - '.mb_strtoupper($comp->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public).' - '. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
@@ -492,7 +500,8 @@ class DemandeHabilitationController extends Controller
                                                           ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
                                                           ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
                                                           ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
-                                                          ->where([['id_demande_habilitation','=',$id]])
+                                                          ->join('pieces_formateur','formateurs.id_formateurs','pieces_formateur.id_formateurs')
+                                                          ->where([['id_demande_habilitation','=',$id],['id_types_pieces','=',2]])
                                                           ->get();
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();

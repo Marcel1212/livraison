@@ -77,7 +77,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     <td>{{ ++$i }}</td>
                                     <td>{{ @$habilitation->nom_responsable_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->code_demande_habilitation }}</td>
-                                    <td>{{  @$habilitation->userchargehabilitation->name }} {{  @$habilitation->userchargehabilitation->prenom_users }}</td>
+                                    <td>{{  @$habilitation->userchargerhabilitation->name }} {{  @$habilitation->userchargerhabilitation->prenom_users }}</td>
                                     <td>{{ @$habilitation->date_creer_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->date_soumis_demande_habilitation }}</td>
                                     <td>{{ @$habilitation->date_agrement_demande_habilitation }}</td>
