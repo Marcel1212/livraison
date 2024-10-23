@@ -7,8 +7,11 @@ use App\Helpers\Crypt;
 use App\Helpers\Email;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\Menu;
+use App\Helpers\SmsPerso;
 use App\Http\Controllers\Controller;
 use App\Models\Banque;
+use App\Models\CommentaireNonRecevableDemande;
+use App\Models\Competences;
 use App\Models\DemandeHabilitation;
 use App\Models\DemandeIntervention;
 use App\Models\DemandeSuppressionHabilitation;
@@ -18,13 +21,18 @@ use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineDemandeSuppressionHabilitation;
 use App\Models\DomaineFormation;
 use App\Models\Entreprises;
+use App\Models\Experiences;
 use App\Models\FormateurDomaineDemandeHabilitation;
+use App\Models\Formateurs;
+use App\Models\FormationsEduc;
 use App\Models\InterventionHorsCi;
+use App\Models\LanguesFormateurs;
 use App\Models\Motif;
 use App\Models\MoyenPermanente;
 use App\Models\OrganisationFormation;
 use App\Models\Parcours;
 use App\Models\Pays;
+use App\Models\PrincipaleQualification;
 use App\Models\TypeDomaineDemandeHabilitation;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
 use App\Models\TypeIntervention;
@@ -48,22 +56,13 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             ->where('id_roles', '=', $id_roles)
             ->get();
         $demandesuppressiondomaines = DemandeSuppressionHabilitation::
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
         join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
             'demande_suppression_habilitation.id_demande_habilitation')
             ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
             ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
             ->join('agence','agence.num_agce','agence_localite.id_agence')
             ->where('demande_suppression_habilitation.flag_soumis_demande_suppression_habilitation','=',true)
-
             ->join('localite','agence_localite.id_localite','localite.id_localite')
-//                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
             ->where('id_agence','=',@$user->num_agce)
             ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
 
@@ -75,41 +74,15 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
                     if($codeRoles == 'CHARGEHABIL'){
                         $resultat[$key] = DB::table('vue_processus_liste as v')
                             ->join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
-
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
-//                                    join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
-//                                        'demande_suppression_habilitation.id_demande_habilitation')
-//                                        ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
-//                                        ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
-//                                        ->join('agence','agence.num_agce','agence_localite.id_agence')
-//                                        ->join('localite','agence_localite.id_localite','localite.id_localite')
-////                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-//                                        ->where('id_agence','=',@$user->num_agce)
-//                                        ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
-
                             ->Join('demande_suppression_habilitation',
                                 'p.id_demande',
                                 'demande_suppression_habilitation.id_demande_suppression_habilitation')
-//                    ->Join('domaine_demande_suppression_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                        'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-//
-//                    join('domaine_demande_habilitation',
-//                        'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')
                             ->join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
                                 'demande_suppression_habilitation.id_demande_habilitation')
                             ->join('entreprises', 'entreprises.id_entreprises', 'demande_habilitation.id_entreprises')
                             ->join('agence_localite', 'entreprises.id_localite_entreprises', 'agence_localite.id_localite')
                             ->join('agence', 'agence.num_agce', 'agence_localite.id_agence')
                             ->join('localite', 'agence_localite.id_localite', 'localite.id_localite')
-//                    ->join('domaine_formation', 'domaine_demande_habilitation.id_domaine_formation', 'domaine_formation.id_domaine_formation')
                             ->join('users', 'demande_suppression_habilitation.id_charge_habilitation', 'users.id')
                             ->where('demande_suppression_habilitation.id_charge_habilitation', $user->id)
                             ->where([
@@ -124,40 +97,15 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
                         $resultat[$key] = DB::table('vue_processus_liste as v')
                             ->join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
 
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
-//                                    join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
-//                                        'demande_suppression_habilitation.id_demande_habilitation')
-//                                        ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
-//                                        ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
-//                                        ->join('agence','agence.num_agce','agence_localite.id_agence')
-//                                        ->join('localite','agence_localite.id_localite','localite.id_localite')
-////                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-//                                        ->where('id_agence','=',@$user->num_agce)
-//                                        ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
-
                             ->Join('demande_suppression_habilitation',
                                 'p.id_demande',
                                 'demande_suppression_habilitation.id_demande_suppression_habilitation')
-//                    ->Join('domaine_demande_suppression_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                        'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-//
-//                    join('domaine_demande_habilitation',
-//                        'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')
                             ->join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
                                 'demande_suppression_habilitation.id_demande_habilitation')
                             ->join('entreprises', 'entreprises.id_entreprises', 'demande_habilitation.id_entreprises')
                             ->join('agence_localite', 'entreprises.id_localite_entreprises', 'agence_localite.id_localite')
                             ->join('agence', 'agence.num_agce', 'agence_localite.id_agence')
                             ->join('localite', 'agence_localite.id_localite', 'localite.id_localite')
-//                    ->join('domaine_formation', 'domaine_demande_habilitation.id_domaine_formation', 'domaine_formation.id_domaine_formation')
                             ->join('users', 'demande_suppression_habilitation.id_charge_habilitation', 'users.id')
                             ->where([
                                 ['v.mini', '=', $r->priorite_combi_proc],
@@ -168,30 +116,9 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
                             ])
                             ->get();
                     }
-
-
-
                 }
-
-
                 return view('habilitation.traitementsuppressiondomaine.index',compact('resultat','demandesuppressiondomaines'));
-
-
-//            }
-            //Appelé le workfklow de validation ici
-//            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
             }
-
-//        //Log A revoir
-//        Audit::logSave([
-//            'action'=>'INDEX',
-//            'code_piece'=>'',
-//            'menu'=>'HABILITATION (Traitement)',
-//            'etat'=>'Succès',
-//            'objet'=>'HABILITATION'
-//        ]);
-//
-//        return view('habilitation.traitementsuppressiondomaine.index',compact('demandesuppressiondomaines'));
     }
 
     public function affectation()
@@ -205,20 +132,12 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             ->where('id_roles', '=', $id_roles)
             ->get();
         $demandesuppressiondomaines = DemandeSuppressionHabilitation::
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
         join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
             'demande_suppression_habilitation.id_demande_habilitation')
             ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
             ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
             ->join('agence','agence.num_agce','agence_localite.id_agence')
             ->join('localite','agence_localite.id_localite','localite.id_localite')
-//                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
             ->where('id_agence','=',@$user->num_agce)
             ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
         $resultat = null;
@@ -228,40 +147,15 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
                 $resultat[$key] = DB::table('vue_processus_liste as v')
                     ->join('vue_processus_min_encours as p', 'p.id_demande', '=', 'v.id_demande')
 
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
-//                                    join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
-//                                        'demande_suppression_habilitation.id_demande_habilitation')
-//                                        ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
-//                                        ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
-//                                        ->join('agence','agence.num_agce','agence_localite.id_agence')
-//                                        ->join('localite','agence_localite.id_localite','localite.id_localite')
-////                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-//                                        ->where('id_agence','=',@$user->num_agce)
-//                                        ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
-
                     ->Join('demande_suppression_habilitation',
                         'p.id_demande',
                         'demande_suppression_habilitation.id_demande_suppression_habilitation')
-//                    ->Join('domaine_demande_suppression_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                        'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-//
-//                    join('domaine_demande_habilitation',
-//                        'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                        'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')
                     ->join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
                         'demande_suppression_habilitation.id_demande_habilitation')
                     ->join('entreprises', 'entreprises.id_entreprises', 'demande_habilitation.id_entreprises')
                     ->join('agence_localite', 'entreprises.id_localite_entreprises', 'agence_localite.id_localite')
                     ->join('agence', 'agence.num_agce', 'agence_localite.id_agence')
                     ->join('localite', 'agence_localite.id_localite', 'localite.id_localite')
-//                    ->join('domaine_formation', 'domaine_demande_habilitation.id_domaine_formation', 'domaine_formation.id_domaine_formation')
                     ->join('users', 'demande_suppression_habilitation.id_charge_habilitation', 'users.id')
                     ->where([
                         ['v.mini', '=', $r->priorite_combi_proc],
@@ -276,26 +170,15 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         }
             if($codeRoles == 'CHEFSERVICE'){
                 $demandesuppressiondomaines = DemandeSuppressionHabilitation::
-//                Join('domaine_demande_suppression_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_demande_suppression_habilitation',
-//                    'demande_suppression_habilitation.id_demande_suppression_habilitation')->
-
-//                join('domaine_demande_habilitation',
-//                    'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                    'domaine_demande_suppression_habilitation.id_domaine_demande_habilitation')->
                 join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
                     'demande_suppression_habilitation.id_demande_habilitation')
                     ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
                     ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
                     ->join('agence','agence.num_agce','agence_localite.id_agence')
                     ->join('localite','agence_localite.id_localite','localite.id_localite')
-//                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
                     ->where('id_agence','=',@$user->num_agce)
                     ->where('demande_suppression_habilitation.flag_soumis_demande_suppression_habilitation','=',true)
                     ->whereNull('demande_suppression_habilitation.id_chef_service')->get();
-
-
-
             return view('habilitation.traitementsuppressiondomaine.affectation',compact('resultat','demandesuppressiondomaines'));
         }else{
             return view('habilitation.traitementsuppressiondomaine.affectation',compact('demandesuppressiondomaines'));
@@ -309,7 +192,6 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
-        //dd($id);
         $domainedemandesuppression = DemandeSuppressionHabilitation::find($id);
         $demandehabilitation = @$domainedemandesuppression->domaineDemandeSuppressionHabilitation->domaineDemandeHabilitation->demandeHabilitation;
         $domaineH = @$domainedemandesuppression->domaineDemandeSuppressionHabilitation->domaineDemandeHabilitation;
@@ -337,7 +219,6 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
 
-        //dd($pay);
         $payList = "<option value=''> Selectionnez un pays</option>";
         foreach ($pays as $comp) {
             $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
@@ -358,7 +239,6 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         }
 
         $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id]])->get();
-        //dd($idetape);
 
         $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
         $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
@@ -412,6 +292,7 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         foreach ($motifs as $comp) {
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
+
         $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
 
         Audit::logSave([
@@ -436,6 +317,99 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             'motif','motifs','typeDomaineDemandeHabilitationPublicList'));
     }
 
+    public function editaffectationExtension($id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        $demande_extension = DemandeSuppressionHabilitation::find($id);
+        $demandehabilitation = @$demande_extension->demandeHabilitation;
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
+
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+
+        if($codeRoles == 'CHEFSERVICE' && $demande_extension->flag_soumis_cs==false){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            $chargerHabilitationsList =  "<option value=''> Selectionnez le charge d\'habilitation </option>";
+            foreach ($chargerHabilitations as $comp) {
+                $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+            }
+
+        }else{
+            $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+        }
+        if($codeRoles == 'CHEFSERVICE'){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            if(isset($demande_extension->chargehabilitation->id)){
+                $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+
+            }else{
+                $chargerHabilitationsList = "<option value=''> Selectionnez le domaine de formation </option>";
+                foreach ($chargerHabilitations as $comp) {
+                    $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+                }
+            }
+            $NombreDemandeHabilitation = DB::table('vue_nombre_traitement_demande_habilitation')->where([['id_service','=',Auth::user()->id_service]])->orderBy('nbre_dossier_en_cours','asc')->get();
+        }else{
+            $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+            $NombreDemandeHabilitation = [];
+        }
+
+            $motif = "<option value='".@$demande_extension->motif->id_motif."'> " . $demande_extension->motif->libelle_motif. "</option>";
+
+
+                $domaine_list_demandes = DomaineDemandeHabilitation::
+                where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+                    ->where('id_autre_demande','=',$id)
+                    ->where('flag_agree_domaine_demande_habilitation',false)
+                    ->where('flag_extension_domaine_demande_habilitation',true)->get();
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+            ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+            ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+            ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+            ->where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+            ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
+            ->get();
+
+        return view('habilitation.traitementsuppressiondomaine.editaffectationextension', compact('demandehabilitation','infoentreprise',
+            'banque','demande_extension',
+            'pay','motif',
+            'id','idetape',
+        'domaine_list_demandes',
+        'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
+        ));
+    }
+
+    public function show($id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $formateur = Formateurs::find($id);
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+        return view('habilitation.traitementsuppressiondomaine.show', compact('id','formateur','qualification',
+            'formations','experiences','languesformateurs','competences'));
+    }
+
     public function edit($id, $id1)
     {
         $id =  Crypt::UrldeCrypt($id);
@@ -443,7 +417,6 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         $id_combi_proc = Crypt::UrldeCrypt($id1);
 
         $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
-        //dd($id);
         $domainedemandesuppression = DemandeSuppressionHabilitation::find($id);
         $demandehabilitation = @$domainedemandesuppression->domaineDemandeSuppressionHabilitation->domaineDemandeHabilitation->demandeHabilitation;
         $domaineH = @$domainedemandesuppression->domaineDemandeSuppressionHabilitation->domaineDemandeHabilitation;
@@ -469,8 +442,6 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
         foreach ($pays as $comp) {
             $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
         }
-
-        //dd($pay);
         $payList = "<option value=''> Selectionnez un pays</option>";
         foreach ($pays as $comp) {
             $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
@@ -597,9 +568,23 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             ]);
             return redirect('traitementsuppressiondomaine/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editaffectation')->with('success', 'Succes : Demande de suppression imputé avec succès');
         }
+    }
 
+    public function updateaffectationExtension(Request $request,$id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $input = $request->all();
 
-
+        if($input['action']=="imputer"){
+            DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                'id_charge_habilitation' => $input['id_charge_habilitation'],
+                'commentaire_cs' => $input['commentaire_cs'],
+                'date_soumis_cs_demande_suppression_habilitation' => Carbon::now(),
+                'id_chef_service' => Auth::user()->id,
+                'flag_soumis_cs' => true
+            ]);
+            return redirect('traitementsuppressiondomaine/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/editaffectationExtension')->with('success', 'Succes : Demande de suppression imputé avec succès');
+        }
     }
 
     public function update(Request $request,$id)
@@ -809,4 +794,231 @@ class TraitementSuppressionDomaineHabilitationController extends Controller
             }
         }
     }
+
+
+    public function extensiondomaine()
+    {
+        $user = Auth::user();
+
+        $demandesuppressiondomaines = DemandeSuppressionHabilitation::
+        join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
+            'demande_suppression_habilitation.id_demande_habilitation')
+            ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
+            ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
+            ->join('agence','agence.num_agce','agence_localite.id_agence')
+            ->where('demande_suppression_habilitation.flag_soumis_demande_suppression_habilitation','=',true)
+            ->join('localite','agence_localite.id_localite','localite.id_localite')
+            ->where('id_agence','=',@$user->num_agce)
+            ->where('demande_suppression_habilitation.type_autre_demande','=','demande_extension')
+            ->where('demande_suppression_habilitation.id_charge_habilitation',$user->id)
+            ->where('demande_suppression_habilitation.flag_instruction',false)
+            ->get();
+
+            return view('habilitation.traitementsuppressiondomaine.traitementextensiondomaine',compact('demandesuppressiondomaines'));
+    }
+
+    public function extensiondomaineEdit($id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        $demande_extension = DemandeSuppressionHabilitation::
+        where('id_demande_suppression_habilitation',$id)
+        ->where('flag_instruction',false)->first();
+        $demandehabilitation = @$demande_extension->demandeHabilitation;
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($demandehabilitation->entreprise->ncc_entreprises);
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
+
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+
+        if($codeRoles == 'CHEFSERVICE' && $demande_extension->flag_soumis_cs==false){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            $chargerHabilitationsList =  "<option value=''> Selectionnez le charge d\'habilitation </option>";
+            foreach ($chargerHabilitations as $comp) {
+                $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+            }
+
+        }else{
+            $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+        }
+        if($codeRoles == 'CHEFSERVICE'){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            if(isset($demande_extension->chargehabilitation->id)){
+                $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+
+            }else{
+                $chargerHabilitationsList = "<option value=''> Selectionnez le domaine de formation </option>";
+                foreach ($chargerHabilitations as $comp) {
+                    $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+                }
+            }
+            $NombreDemandeHabilitation = DB::table('vue_nombre_traitement_demande_habilitation')->where([['id_service','=',Auth::user()->id_service]])->orderBy('nbre_dossier_en_cours','asc')->get();
+        }else{
+            $chargerHabilitationsList = "<option value='".$demande_extension->chargehabilitation->id."'> " . @$demande_extension->chargehabilitation->name.' '. mb_strtoupper(@$demande_extension->chargehabilitation->prenom_users) . "</option>";
+            $NombreDemandeHabilitation = [];
+        }
+
+        $motif = "<option value='".@$demande_extension->motif->id_motif."'> " . $demande_extension->motif->libelle_motif. "</option>";
+
+        $motifs = Motif::where([['code_motif','=','RDE']])->get();
+        $motif_recevabilite = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif_recevabilite .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','RDE']])->get();
+
+
+        $domaine_list_demandes = DomaineDemandeHabilitation::
+        where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+            ->where('id_autre_demande','=',$id)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_extension_domaine_demande_habilitation',true)->get();
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+            ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+            ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+            ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+            ->where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+            ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
+            ->get();
+
+        return view('habilitation.traitementsuppressiondomaine.extensiondomaineEdit', compact('demandehabilitation','infoentreprise',
+            'banque','demande_extension',
+            'pay','motif','commentairenonrecevables',
+            'id','idetape','motif_recevabilite',
+            'domaine_list_demandes',
+            'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
+        ));
+    }
+
+    public function extensiondomaineUpdate(Request $request,$id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $input = $request->all();
+
+        if($input['action']=="Recevable"){
+            DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                'commentaire_recevabilite' => $input['commentaire_recevabilite'],
+                'flag_recevabilite' => true,
+                'date_recevabilite' => Carbon::now()
+            ]);
+            return redirect('traitementextensiondomaine/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Recevabilité effectuée avec succès');
+        }
+
+        if(['action']==""){
+
+            return redirect('traitementextensiondomaine/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Recevabilité effectuée avec succès');
+        }
+
+        if($input['action'] === 'NonRecevable'){
+
+            $this->validate($request, [
+                'id_motif_recevable' => 'required',
+                'commentaire_recevabilite' => 'required',
+            ],[
+                'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                'commentaire_recevabilite.required' => 'Veuillez ajouter le commentaire de la non recevaibilité.',
+            ]);
+
+            $input = $request->all();
+
+            $commentaire = CommentaireNonRecevableDemande::create([
+                'commentaire_commentaire_non_recevable_demande' => $input['commentaire_recevabilite'],
+                'id_demande' => $id,
+                'id_motif_recevable' => $input['id_motif_recevable'],
+                'code_demande' => 'RDE'
+            ]);
+
+
+            DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                'commentaire_recevabilite' => $input['commentaire_recevabilite'],
+                'flag_recevabilite' => false,
+                'flag_rejeter_recevabilit_suppression_habilitation'=>true,
+                'flag_soumis_demande_suppression_habilitation'=>false,
+                'date_rejeter_demande_suppression_habilitation' => Carbon::now()
+            ]);
+
+            $demande  = DemandeSuppressionHabilitation::find($id);
+
+            $demandehabilitation = DemandeHabilitation::find($demande->id_demande_habilitation);
+
+            $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+            $logo = Menu::get_logo();
+
+            if (isset($demandehabilitation->email_responsable_habilitation)) {
+                $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+
+                                    <br><br>Nous avons examiné votre demande d'extension de domaine sur e-FDFP, et
+                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
+
+                                    <br><b>Motif de rejet  : </b> ".@$demandehabilitation->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevabilite."
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                        fournir, n'hésitez pas à contactez votre chargé habilitation : ".@$demandehabilitation->userchargerhabilitation->email." pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                        soumettre la demande lorsque les problèmes seront résolus.
+                                        Cordialement,
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+            }
+
+            //Envoi SMS Rejeté
+            if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif." Veuillez mettre a jour le dossier .
+                        Cordialement,
+                        L'équipe e-FDFP";
+                SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+            }
+
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'HABILITATION (Instruction: La non-recevabilité a été effectué avec succès.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+
+            return redirect()->route('traitementextensiondomaine.index')->with('success', 'Recevabilité effectué avec succès.');
+
+        }
+
+        if($input['action']=="instruction"){
+            DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                'observation_instruction' => $input['observation_instruction'],
+                'flag_instruction' => true,
+                'date_instruction' => Carbon::now()
+            ]);
+            return redirect('traitementextensiondomaine')->with('success', 'Succes : Instruction effectuée avec succès');
+        }
+    }
+
 }

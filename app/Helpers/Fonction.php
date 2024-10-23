@@ -110,7 +110,7 @@ class Fonction
 
         $nombreexper = NombreAnneeExperience::where([['flag_nombre_annee_experience','=',true]])->first();
 
-        $nbre = $nombreexper->libelle_nombre_annee_experience;
+        $nbre = @$nombreexper->libelle_nombre_annee_experience;
 
         if ($anneesExperience < $nbre ) {
             $reponse = 120;
@@ -131,7 +131,7 @@ class Fonction
             ->get();
 
         $nombreexper = NombreAnneeExperience::where('flag_nombre_annee_experience', true)->first();
-        $nbre = $nombreexper->libelle_nombre_annee_experience;
+        $nbre = @$nombreexper->libelle_nombre_annee_experience;
 
         $reponse = [];
         foreach ($experiences as $experience) {

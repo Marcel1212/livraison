@@ -68,19 +68,21 @@ use App\Helpers\PartEntreprisesHelper;
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="navs-top-substitution" role="tabpanel">
-                                <div class="btn-group float-end mb-2">
-                                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Nouvelle demande
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="javascript:void(0);">Substitution domaine de formation</a></li>
-                                        <li><a class="dropdown-item" href="javascript:void(0);">Extension domaine de formation</a></li>
-                                        <li><a class="dropdown-item" href="{{route('demandehabilitation.suppressiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)])}}">Suppression domaine de formation</a></li>
-                                    </ul>
+                                <div class="d-flex align-items-end justify-content-end">
+                                    <div class="btn-group float-end mb-2">
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Nouvelle demande
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="javascript:void(0);">Substitution domaine de formation</a></li>
+                                            <li><a class="dropdown-item" href="{{route('demandehabilitation.extensiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)])}}">Extension domaine de formation</a></li>
+                                            <li><a class="dropdown-item" href="{{route('demandehabilitation.suppressiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)])}}">Suppression domaine de formation</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <div class="">
                                     <table class="table table-bordered table-striped table-hover table-sm"
-                                           id=""
+                                           id="exampleData"
                                            style="margin-top: 13px !important">
                                         <thead>
                                         <tr>
@@ -102,7 +104,15 @@ use App\Helpers\PartEntreprisesHelper;
                                                 <tr>
                                                     <td>{{ $i }}</td>
                                                     <td>{{@$demandeSuppressionHabilitation->code_demande_suppression_habilitation}}</td>
-                                                    <td>Demande de suppression</td>
+                                                    <td>
+                                                        @if(@$demandeSuppressionHabilitation->type_autre_demande=='demande_suppression')
+                                                            Demande de suppression
+                                                        @elseif(@$demandeSuppressionHabilitation->type_autre_demande=='demande_extension')
+                                                            Demande d'extension
+                                                        @endif
+
+
+                                                        </td>
                                                     <td>
                                                         @if(@$demandeSuppressionHabilitation->motif)
                                                             {{ $demandeSuppressionHabilitation->motif->libelle_motif }}
@@ -116,7 +126,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                     <td>
                                                         @isset($demandeSuppressionHabilitation->piece_demande_suppression_habilitation)
                                                             <span class="badge bg-secondary mt-2">
-                                                                <a target="_blank"
+                                                                <a target="_blank" class="text-white"
                                                                    onclick="NewWindow('{{ asset("pieces/demande_suppression_domaine/". $demandeSuppressionHabilitation->piece_demande_suppression_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                                     Voir la pièce
                                                                 </a>
@@ -125,7 +135,8 @@ use App\Helpers\PartEntreprisesHelper;
                                                     </td>
                                                     <td>
                                                         @if($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==false && !isset($demandeSuppressionHabilitation->id_charge_habilitation)
+$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==false && (!isset($demandeSuppressionHabilitation->id_charge_habilitation) or $demandeSuppressionHabilitation->flag_recevabilite==false)
+
 && $demandeSuppressionHabilitation->flag_validation_domaine_demande_suppression_habilitation==false && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==false
 
 )
@@ -156,11 +167,20 @@ $demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==t
                                                     </td>
                                                     <td align="center">
                                                         @can($lien.'-edit')
+
+                                                            @if($demandeSuppressionHabilitation->type_autre_demande=='demande_suppression')
                                                             <a href="{{ route($lien.'.suppressiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_suppression_habilitation),\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                                class=" "
                                                                title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
-                                                        @endcan
+                                                            @elseif(@$demandeSuppressionHabilitation->type_autre_demande=='demande_extension')
+                                                                    <a href="{{ route($lien.'.extensiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_suppression_habilitation),\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                                       class=" "
+                                                                       title="Modifier"><img
+                                                                            src='/assets/img/editing.png'></a>
+                                                            @endif
+
+                                                                @endcan
                                                     </td>
 
                                                 </tr>
@@ -817,6 +837,10 @@ $demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==t
                                     <?php $i = 0; ?>
                                 @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
                                         <?php $i += 1;?>
+                                    @if($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==true or
+$domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
+
+
                                     <tr>
                                         <td>{{ $i }}</td>
                                         <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}</td>
@@ -825,11 +849,15 @@ $demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==t
                                         <td>
                                             @if($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==true)
                                                 <span class="badge bg-success">Valide</span>
-                                            @else
-                                                <span class="badge bg-danger">Supprimé</span>
+
+                                            @elseif($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==false &&
+                                           $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
+                                                <span class="badge bg-danger">Suprimée</span>
                                             @endif
                                         </td>
                                     </tr>
+                                    @endif
+
                                 @endforeach
 
                                 </tbody>
@@ -873,7 +901,6 @@ $demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==t
                                                         <?= $domainedemandeList; ?>
                                                 </select>
                                                 @error('id_domaine_demande_habilitation')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
                                             </div>

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Habilitation\AgreementHabilitationController;
 use App\Http\Controllers\Habilitation\CtDemandeHabilitationController;
+use App\Http\Controllers\Cahiers\CahierAutreDemandeHabilitationController;
+use App\Http\Controllers\Cahiers\TraitementCahierAutreDemandeHabilitationController;
 use App\Http\Controllers\Habilitation\DemandeHabilitationController;
 use App\Http\Controllers\Habilitation\FormateursController;
 use App\Http\Controllers\Habilitation\HabilitationRendezVousController;
@@ -43,16 +45,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('demandehabilitation/{id}/{id1}/deletedomainestore', [DemandeHabilitationController::class, 'deletedomainestore'])->name('demandehabilitation.deletedomainestore');
 
 
-        Route::get('demandehabilitation/{id}/suppressiondomaineformation', [DemandeHabilitationController::class, 'suppressiondomaineformation'])->name('demandehabilitation.suppressiondomaineformation');
-        Route::post('demandehabilitation/{id}/{id1}/suppressiondomaineformationstore', [DemandeHabilitationController::class, 'suppressiondomaineformationstore'])->name('demandehabilitation.suppressiondomaineformationstore');
-        Route::get('demandehabilitation/{id}/{id1}/{id2}/suppressiondomaineformationedit', [DemandeHabilitationController::class, 'suppressiondomaineformationedit'])->name('demandehabilitation.suppressiondomaineformationedit');
-        Route::post('demandehabilitation/{id}/{id1}/{id2}/suppressiondomaineformationupdate', [DemandeHabilitationController::class, 'suppressiondomaineformationupdate'])->name('demandehabilitation.suppressiondomaineformationupdate');
-
 
 
 
         Route::get('demandehabilitation/{id}/deletepieceDemande', [DemandeHabilitationController::class, 'deletepieceDemande'])->name('demandehabilitation.deletepieceDemande');
-	});
+    });
 
 
     Route::group(['middleware' => ['can:traitementsuppressiondomaine-index']], function () {
@@ -61,9 +58,23 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('traitementsuppressiondomaine/{id}/{id1}/edit', [TraitementSuppressionDomaineHabilitationController::class, 'edit'])->name('traitementsuppressiondomaine.edit');
         Route::put('traitementsuppressiondomaine/{id}/update', [TraitementSuppressionDomaineHabilitationController::class, 'update'])->name('traitementsuppressiondomaine.update');
 
+        Route::get('traitementsuppressiondomaine/{id}/{id1}/editExtension', [TraitementSuppressionDomaineHabilitationController::class, 'editExtension'])->name('traitementsuppressiondomaine.editExtension');
+        Route::get('traitementsuppressiondomaine/{id}/{id1}/updateExtension', [TraitementSuppressionDomaineHabilitationController::class, 'updateExtension'])->name('traitementsuppressiondomaine.updateExtension');
+
+
         Route::get('traitementsuppressiondomaine/affectation', [TraitementSuppressionDomaineHabilitationController::class, 'affectation'])->name('traitementdemandehabilitation.affectation');
         Route::get('traitementsuppressiondomaine/{id}/{id1}/editaffectation', [TraitementSuppressionDomaineHabilitationController::class, 'editaffectation'])->name('traitementsuppressiondomaine.editaffectation');
         Route::put('traitementsuppressiondomaine/{id}/updateaffectation', [TraitementSuppressionDomaineHabilitationController::class, 'updateaffectation'])->name('traitementsuppressiondomaine.updateaffectation');
+        Route::get('traitementsuppressiondomaine/{id}/show', [TraitementSuppressionDomaineHabilitationController::class, 'show'])->name('traitementsuppressiondomaine.show');
+
+
+        Route::get('traitementsuppressiondomaine/{id}/{id1}/editaffectationExtension', [TraitementSuppressionDomaineHabilitationController::class, 'editaffectationExtension'])->name('traitementsuppressiondomaine.editaffectationExtension');
+        Route::put('traitementsuppressiondomaine/{id}/updateaffectationExtension', [TraitementSuppressionDomaineHabilitationController::class, 'updateaffectationExtension'])->name('traitementsuppressiondomaine.updateaffectationExtension');
+
+        Route::get('traitementextensiondomaine/index', [TraitementSuppressionDomaineHabilitationController::class, 'extensiondomaine'])->name('traitementextensiondomaine.index');
+        Route::get('traitementextensiondomaine', [TraitementSuppressionDomaineHabilitationController::class, 'extensiondomaine'])->name('traitementextensiondomaine');
+        Route::get('traitementextensiondomaine/{id}/{id1}/edit', [TraitementSuppressionDomaineHabilitationController::class, 'extensiondomaineEdit'])->name('traitementextensiondomaine.edit');
+        Route::put('traitementextensiondomaine/{id}/update', [TraitementSuppressionDomaineHabilitationController::class, 'extensiondomaineUpdate'])->name('traitementextensiondomaine.update');
 
 
 //
@@ -130,6 +141,26 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+
+
+    //cahier pour demande extension
+    Route::get('cahierautredemandehabilitations', [CahierAutreDemandeHabilitationController::class, 'index'])->name('cahierautredemandehabilitations.index');
+    Route::get('cahierautredemandehabilitations/index', [CahierAutreDemandeHabilitationController::class, 'index'])->name('cahierautredemandehabilitations.index');
+    Route::get('cahierautredemandehabilitations/create', [CahierAutreDemandeHabilitationController::class, 'create'])->name('cahierautredemandehabilitations.create');
+    Route::post('cahierautredemandehabilitations/store', [CahierAutreDemandeHabilitationController::class, 'store'])->name('cahierautredemandehabilitations.store');
+    Route::get('cahierautredemandehabilitations/{id}/{id1}/edit', [CahierAutreDemandeHabilitationController::class, 'edit'])->name('cahierautredemandehabilitations.edit');
+    Route::put('cahierautredemandehabilitations/{id}/{id1}/update', [CahierAutreDemandeHabilitationController::class, 'update'])->name('cahierautredemandehabilitations.update');
+    Route::get('cahierautredemandehabilitations/{id}/notetechnique', [CahierAutreDemandeHabilitationController::class, 'notetechnique'])->name('cahierautredemandehabilitations.notetechnique');
+    Route::get('cahierautredemandehabilitations/{id}/{id1}/show', [CahierAutreDemandeHabilitationController::class, 'show'])->name('cahierautredemandehabilitations.show');
+
+
+
+    Route::get('traitementcahierautredemandehabilitations', [TraitementCahierAutreDemandeHabilitationController::class, 'index'])->name('traitementcahierautredemandehabilitations.index');
+    Route::get('traitementcahierautredemandehabilitations/index', [TraitementCahierAutreDemandeHabilitationController::class, 'index'])->name('traitementcahierautredemandehabilitations.index');
+    Route::get('traitementcahierautredemandehabilitations/{id}/{id1}/{id2}/edit', [TraitementCahierAutreDemandeHabilitationController::class, 'edit'])->name('traitementcahierautredemandehabilitations.edit');
+    Route::put('traitementcahierautredemandehabilitations/{id}/update', [TraitementCahierAutreDemandeHabilitationController::class, 'update'])->name('traitementcahierautredemandehabilitations.update');
+//    Route::get('traitementcahierautredemandehabilitations/{id}/show', [TraitementSuppressionDomaineHabilitationController::class, 'show'])->name('traitementsuppressiondomaine.show');
+
     Route::group(['middleware' => ['can:ctdemandehabilitation-index']], function () {
         Route::resources([
             'ctdemandehabilitation' => CtDemandeHabilitationController::class,
@@ -150,8 +181,34 @@ Route::group(['middleware' => ['auth']], function () {
 
     });
 
+
+
+    Route::group(['middleware' => ['can:agrementhabilitation-index']], function () {
+        Route::get('agrementhabilitation/{id}/{id1}/edit', [AgreementHabilitationController::class, 'edit'])->name('agrementhabilitation.edit');
+
+        Route::get('agrementhabilitation/{id}/extensiondomaineformation', [AgreementHabilitationController::class, 'extensiondomaineformation'])->name('agrementhabilitation.extensiondomaineformation');
+        Route::post('agrementhabilitation/{id}/{id1}/extensiondomaineformationstore', [AgreementHabilitationController::class, 'extensiondomaineformationstore'])->name('agrementhabilitation.extensiondomaineformationstore');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/extensiondomaineformationedit', [AgreementHabilitationController::class, 'extensiondomaineformationedit'])->name('agrementhabilitation.extensiondomaineformationedit');
+        Route::post('agrementhabilitation/{id}/{id1}/{id2}/extensiondomaineformationupdate', [AgreementHabilitationController::class, 'extensiondomaineformationupdate'])->name('agrementhabilitation.extensiondomaineformationupdate');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deletedomaineDemandeExtension', [AgreementHabilitationController::class, 'deletedomaineDemandeExtension'])->name('agrementhabilitation.deletedomaineDemandeExtension');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deleteformateursDemandeExtension', [DemandeHabilitationController::class, 'deleteformateursDemandeExtension'])->name('agrementhabilitation.deleteformateursDemandeExtension');
+
+        Route::get('agrementhabilitation/{id}/suppressiondomaineformation', [AgreementHabilitationController::class, 'suppressiondomaineformation'])->name('agrementhabilitation.suppressiondomaineformation');
+        Route::post('agrementhabilitation/{id}/{id1}/suppressiondomaineformationstore', [AgreementHabilitationController::class, 'suppressiondomaineformationstore'])->name('agrementhabilitation.suppressiondomaineformationstore');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/suppressiondomaineformationedit', [AgreementHabilitationController::class, 'suppressiondomaineformationedit'])->name('agrementhabilitation.suppressiondomaineformationedit');
+        Route::post('agrementhabilitation/{id}/{id1}/{id2}/suppressiondomaineformationupdate', [AgreementHabilitationController::class, 'suppressiondomaineformationupdate'])->name('agrementhabilitation.suppressiondomaineformationupdate');
+
+        Route::get('agrementhabilitation/{id}/showformateur', [AgreementHabilitationController::class, 'showformateur'])->name('agrementhabilitation.showformateur');
+
+
+
+
+    });
     Route::get('agrementhabilitation', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation');
     Route::get('agrementhabilitation/index', [AgreementHabilitationController::class, 'index'])->name('agrementhabilitation.index');
     Route::get('agrementhabilitation/{id}/show', [AgreementHabilitationController::class, 'show'])->name('agrementhabilitation.show');
+
+
+
 
 });

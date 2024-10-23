@@ -36,46 +36,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
         <div class="row">
             <!-- Basic Layout -->
             <div class="col-xxl">
-                @if(App\Helpers\Menu::get_code_menu_profil(Auth::user()->id) == 'CHEFSERVICE')
-                <div class="row g-6 mb-2">
-                    <div class="col-sm-6 col-xl-2">
-                            <div class="card border bg-warning">
-
-                            <a href="{{route('traitementsuppressiondomaine')}}" class="card-body text-white">
-                                <div class="d-flex align-items-start justify-content-between">
-                                    <div class="content-left">
-                                        <span class=" text-white">Demandes en attente de validation</span>
-                                        <span class="bg-danger badge">
-                                            <?php $j=0; ?>
-                                            @foreach ($resultat as $demandesuppressiondomais)
-                                                @foreach ($demandesuppressiondomais as  $key => $demandesuppressiondomaine)
-                                                        <?php $j = $j+1; ?>
-                                                @endforeach
-                                            @endforeach
-                                            {{@$j}}
-                                        </span>
-
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-2">
-                        <div class="card border border-warning">
-                            <a href="{{route('traitementdemandehabilitation.affectation')}}" class="card-body text-heading">
-                                <div class="d-flex align-items-start justify-content-between">
-                                    <div class="content-left">
-                                        <span class=" fw-bold text-heading">Demandes en attente d'affectation
-                                         </span>
-                                        <span class="bg-danger badge">{{$demandesuppressiondomaines->count()}}</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-                @endif
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="mb-0">{{$titre}}</h5>
@@ -101,8 +61,6 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             </thead>
                             <tbody>
                             <?php $i=0; ?>
-
-                            @foreach ($resultat as $demandesuppressiondomaines)
                                 @foreach ($demandesuppressiondomaines as  $key => $demandesuppressiondomaine)
                                     <tr>
                                         <td>{{ $key+1}}</td>
@@ -118,19 +76,18 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <td>{{ @$demandesuppressiondomaine->nom_responsable_demande_habilitation }}</td>
                                         <td>{{ @$demandesuppressiondomaine->date_creer_demande_habilitation }}</td>
                                         <td>{{ @$demandesuppressiondomaine->date_soumis_demande_habilitation }}</td>
-                                        <td align="center">
+                                        <td>
                                                 <span class="badge bg-warning">En Attente de traitement</span>
                                         </td>
                                         <td align="center">
-                                                <a href="{{ route($lien . '.edit',[\App\Helpers\Crypt::UrlCrypt($demandesuppressiondomaine->id_demande_suppression_habilitation),
-                                                                        \App\Helpers\Crypt::UrlCrypt($demandesuppressiondomaine->id_combi_proc)] ) }}"
+                                                <a href="{{ route('traitementextensiondomaine' . '.edit',[\App\Helpers\Crypt::UrlCrypt($demandesuppressiondomaine->id_demande_suppression_habilitation),\App\Helpers\Crypt::UrlCrypt(5)],
+                                                                         ) }}"
                                                    class=" " title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
                                         </td>
                                     </tr>
 
                                 @endforeach
-                            @endforeach
                             </tbody>
                         </table>
                         <!--end: Datatable-->

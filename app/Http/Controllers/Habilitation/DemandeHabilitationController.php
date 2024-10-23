@@ -1098,439 +1098,6 @@ class DemandeHabilitationController extends Controller
     }
 
 
-
-
-
-    public function edityancho($id, $id1)
-    {
-        $id =  Crypt::UrldeCrypt($id);
-
-        $demandeSuppressionHabilitations = DemandeSuppressionHabilitation::where('id_demande_habilitation',$id)
-        ->get();
-
-        $demandehabilitation = DemandeHabilitation::find($id);
-        // dd($demandehabilitation);
-        $idetape =  Crypt::UrldeCrypt($id1);
-
-        $banques = Banque::where([['flag_banque','=',true]])->get();
-        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
-        foreach ($banques as $comp) {
-            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
-        }
-
-        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
-
-        $pays = Pays::all();
-        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
-        foreach ($pays as $comp) {
-            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
-        }
-
-        $payList = "<option value=''> Selectionnez un pays</option>";
-        foreach ($pays as $comp) {
-            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
-        }
-
-        $typemoyenpermanentes = TypeMoyenPermanent::where([['flag_type_moyen_permanent','=',true]])->get();
-        $typemoyenpermanenteList = "<option value=''> Selectionnez la type de moyen </option>";
-        foreach ($typemoyenpermanentes as $comp) {
-            $typemoyenpermanenteList .= "<option value='" . $comp->id_type_moyen_permanent  . "'>" . mb_strtoupper($comp->libelle_type_moyen_permanent) ." </option>";
-        }
-
-        $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id]])->get();
-
-        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
-        $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
-        foreach ($typeinterventions as $comp) {
-            $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
-        }
-
-        $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id]])->get();
-        //dd($idetape);
-
-        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
-        $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
-        foreach ($organisationFormations as $comp) {
-            $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
-        }
-
-        $organisations = OrganisationFormation::where([['id_demande_habilitation','=',$id]])->get();
-
-        $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
-        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la type de domaine de formation </option>";
-        foreach ($typeDomaineDemandeHabilitation as $comp) {
-            $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
-        }
-
-        $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
-        $domainesList = "<option value=''> Selectionnez le domaine de formation </option>";
-        foreach ($domaines as $comp) {
-            $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
-        }
-
-        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
-
-        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
-        $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
-        foreach ($domainedemandes as $comp) {
-            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
-        }
-
-        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
-            ->where([['id_demande_habilitation','=',$id]])
-            ->get();
-
-        $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
-
-        Audit::logSave([
-
-            'action'=>'MODIFIER',
-
-            'code_piece'=>$id,
-
-            'menu'=>'HABILITATION (Soumission de HABILITATION)',
-
-            'etat'=>'Succès',
-
-            'objet'=>'HABILITATION'
-
-        ]);
-
-        return view('habilitation.demande.edityancho', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
-            'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
-            'demandeSuppressionHabilitations',
-            'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-            'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
-    }
-    public function editdomaine($id, $id1)
-    {
-
-        $id =  Crypt::UrldeCrypt($id);
-        $idetape =  Crypt::UrldeCrypt($id1);
-        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
-        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
-        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
-        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
-        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
-        $domaineSuppressionHabilitations = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)->get();
-        $domaineSuppressionHabilitationEnCours = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)
-            ->where('flag_rejeter_domaine_demande_suppression_habilitation',false)
-            ->where('flag_validation_domaine_demande_suppression_habilitation',false)->first();
-
-        Audit::logSave([
-            'action'=>'MODIFIER',
-            'code_piece'=>$id,
-            'menu'=>'HABILITATION (Soumission de HABILITATION)',
-            'etat'=>'Succès',
-            'objet'=>'HABILITATION'
-        ]);
-
-        return view('habilitation.demande.editdomaine', compact('domaineHabilitation',
-            'domaine','typedomaine','typedomainepublic','motifs', 'idetape',
-                        'domaineSuppressionHabilitations',
-        'domaineSuppressionHabilitationEnCours'
-        ));
-    }
-
-
-    public function deletedomainestore(Request $request,$id, $id1)
-    {
-        $id =  Crypt::UrldeCrypt($id);
-        $idetape =  Crypt::UrldeCrypt($id1);
-
-        if ($request->isMethod('post')) {
-            $this->validate($request, [
-                'commentaire_domaine_demande_suppression_habilitation' => 'required',
-                'id_motif_domaine_demande_suppression_habilitation' => 'required',
-            ],[
-                'commentaire_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
-                'id_motif_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
-            ]);
-
-            $input = $request->all();
-
-
-            if ($input['action'] == 'soumettre'){
-                $input['date_soumis_domaine_demande_suppression_habilitation'] = Carbon::now();
-                $input['flag_soumis_domaine_demande_suppression_habilitation'] = true;
-                $input['id_domaine_demande_habilitation'] = $id;
-
-                if (isset($input['piece_domaine_demande_suppression_habilitation'])){
-                    $filefront = $input['piece_domaine_demande_suppression_habilitation'];
-                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
-                        $fileName1 = 'piece_domaine_demande_suppression_habilitation'. '_' . rand(111,99999) . 'piece_domaine_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
-                        $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
-                        $input['piece_domaine_demande_suppression_habilitation'] = $fileName1;
-                    }
-
-                }else{
-                    return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
-                }
-
-                DomaineDemandeSuppressionHabilitation::create($input);
-                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('success', 'Succes : Demande de suppression effectuée avec succès');
-            }
-        }
-
-//        $id =  Crypt::UrldeCrypt($id);
-//        $idetape =  Crypt::UrldeCrypt($id1);
-//
-//        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
-//        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
-//        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
-//        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
-//        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
-
-
-    }
-
-
-    public function indexyancho()
-    {
-        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
-        if(!empty($infoentrprise)){
-
-            $habilitations = DemandeHabilitation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
-
-            $formejuridique = $infoentrprise->demandeEnrolement->formeJuridique->code_forme_juridique;
-
-            //dd($formejuridique);
-
-            Audit::logSave([
-
-                'action'=>'INDEX',
-
-                'code_piece'=>'',
-
-                'menu'=>'HABILITATION (Soumission)',
-
-                'etat'=>'Succès',
-
-                'objet'=>'HABILITATION'
-
-            ]);
-
-            return view('habilitation.demande.indexyancho', compact('habilitations','formejuridique'));
-
-        }else{
-            Audit::logSave([
-
-                'action'=>'INDEX',
-
-                'code_piece'=>'',
-
-                'menu'=>'HABILITATION',
-
-                'etat'=>'Echec',
-
-                'objet'=>'HABILITATION'
-
-            ]);
-            return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
-        }
-    }
-
-    public function suppressiondomaineformation($id)
-    {
-        $id =  Crypt::UrldeCrypt($id);
-        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
-        $domaineDemandeHabilitations = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
-            $query->select('*')
-                ->from('domaine_demande_suppression_habilitation')
-                ->where('domaine_demande_suppression_habilitation.flag_demande_suppression_habilitation',false)
-            ->whereColumn('domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_suppression_habilitation.id_domaine_demande_habilitation');
-        })->where('domaine_demande_habilitation.id_demande_habilitation',$id)->get();
-        return view('habilitation.demande.suppressiondomaineformation',compact('motifs','id','domaineDemandeHabilitations'));
-    }
-
-    public function suppressiondomaineformationedit($id,$id1,$id2)
-    {
-        $id =  Crypt::UrldeCrypt($id);
-        $id1 =  Crypt::UrldeCrypt($id1);
-        $idetape =  Crypt::UrldeCrypt($id2);
-        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
-        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
-        $demande_suppression = DemandeSuppressionHabilitation::find($id);
-        return view('habilitation.demande.suppressiondomaineformationedit',compact('motifs',
-            'domaineDemandeHabilitations','id','id1','idetape','demande_suppression'));
-//
-    }
-
-
-
-    public function suppressiondomaineformationstore(Request $request,$id,$id1)
-    {
-        $id = Crypt::UrldeCrypt($id);
-        $id1 = Crypt::UrldeCrypt($id1);
-        if ($request->isMethod('post')) {
-            $this->validate($request, [
-                'commentaire_demande_suppression_habilitation' => 'required',
-                'id_motif_demande_suppression_habilitation' => 'required',
-            ], [
-                'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
-                'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
-            ]);
-
-            $input = $request->all();
-            if ($input['action'] == 'enregistrer') {
-
-                if (count($input['id_domaine_demande_habilitation']) > 0) {
-
-                    if (isset($input['piece_demande_suppression_habilitation'])) {
-                        $filefront = $input['piece_demande_suppression_habilitation'];
-                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
-                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
-                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
-                            $input['piece_demande_suppression_habilitation'] = $fileName1;
-                        }
-
-                    } else {
-                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
-                    }
-
-                    $dateanneeencours = Carbon::now()->format('Y');
-
-                    $data_saving = DemandeSuppressionHabilitation::create([
-                        'code_demande_suppression_habilitation'=>'DSD-'.Gencode::randStrGen(4, 5).'-'. $dateanneeencours,
-                        'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
-                        'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
-                        'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
-                        'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
-                        'flag_enregistrer_demande_suppression_habilitation'=> true,
-                        'id_demande_habilitation'=> $id,
-                        'id_user'=> Auth::user()->id
-                    ]);
-                    if ($data_saving) {
-                        $demande_suppression_habilitation = DemandeSuppressionHabilitation::latest()->first();
-
-                        foreach ($input['id_domaine_demande_habilitation'] as $item) {
-                            DomaineDemandeSuppressionHabilitation::create([
-                                    'id_domaine_demande_habilitation' => $item,
-                                    'id_demande_suppression_habilitation' => $demande_suppression_habilitation->id_demande_suppression_habilitation,
-                                    'flag_demande_suppression_habilitation' => false
-                                ]
-                            );
-
-                        }
-
-                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($demande_suppression_habilitation->id_demande_suppression_habilitation) . '/'.Crypt::UrlCrypt($id).'/' . Crypt::UrlCrypt(2) . '/suppressiondomaineformationedit')->with('success', 'Succes : Demande de suppression effectuée avec succès');
-
-                    } else {
-                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Une erreur s\'est produite');
-                    }
-
-
-                } else {
-                    return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Veuillez ajouter les domaines de formations');
-                }
-            }
-
-
-        }
-    }
-
-    public function suppressiondomaineformationupdate(Request $request,$id,$id1,$id2)
-    {
-
-        $id = Crypt::UrldeCrypt($id);
-        $id1 = Crypt::UrldeCrypt($id1);
-        $id2 = Crypt::UrldeCrypt($id2);
-        if ($request->isMethod('post')) {
-            $this->validate($request, [
-                'commentaire_demande_suppression_habilitation' => 'required',
-                'id_motif_demande_suppression_habilitation' => 'required',
-            ], [
-                'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
-                'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
-            ]);
-
-            $input = $request->all();
-
-            if ($input['action'] == 'enregistrer') {
-
-                if (count($input['id_domaine_demande_habilitation']) > 0) {
-
-                    if (isset($input['piece_demande_suppression_habilitation'])) {
-                        $filefront = $input['piece_demande_suppression_habilitation'];
-                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
-                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
-                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
-                            $input['piece_demande_suppression_habilitation'] = $fileName1;
-                        }
-                        $data_saving = DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
-                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
-                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
-                            'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
-                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
-                            'flag_enregistrer_demande_suppression_habilitation'=> true,
-                            'id_demande_habilitation'=> $id1,
-                            'id_user'=> Auth::user()->id
-                        ]);
-                    }
-                    else {
-                        $data_saving = DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
-                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
-                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
-                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
-                            'flag_enregistrer_demande_suppression_habilitation'=> true,
-                            'id_demande_habilitation'=> $id1,
-                            'id_user'=> Auth::user()->id
-                        ]);
-                    }
-
-                    if ($data_saving) {
-
-                        $demande_suppression_habilitation = DemandeSuppressionHabilitation::latest()->first();
-
-                        $deleteDomaineDemandeSuppressions = DomaineDemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->get();
-                        foreach ($deleteDomaineDemandeSuppressions as $deleteDomaineDemandeSuppression) {
-                            $deleteDomaineDemandeSuppression->delete();
-                        }
-
-
-                            foreach ($input['id_domaine_demande_habilitation'] as $item) {
-
-                            DomaineDemandeSuppressionHabilitation::create([
-                                    'id_domaine_demande_habilitation' => $item,
-                                    'id_demande_suppression_habilitation' => $demande_suppression_habilitation->id_demande_suppression_habilitation,
-                                    'flag_demande_suppression_habilitation' => false
-                                ]
-                            );
-
-                        }
-
-                        return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit'
-
-                    )->with('success', 'Succes : Demande de suppression modifiée avec succès');
-
-                    } else {
-                        return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit')->with('error', 'Erreur : Une erreur s\'est produite');
-                    }
-
-                } else {
-                    return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit')->with('error', 'Erreur : Une erreur s\'est produite');
-                }
-            }
-
-            if ($input['action'] == 'soumettre') {
-
-                DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
-                    'date_soumis_demande_suppression_habilitation'=> Carbon::now(),
-                    'flag_soumis_demande_suppression_habilitation'=> true
-                ]);
-
-                return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($id1) .'/'. Crypt::UrlCrypt(2) . '/suppressiondomaineformationedit')->with('success', 'Succes : Demande de suppression effectuée avec succès');
-            }
-        }
-    }
-
-
     public function deletemoyenpermanente($id){
 
         $id = Crypt::UrldeCrypt($id);
@@ -1667,6 +1234,737 @@ class DemandeHabilitationController extends Controller
 
         ]);
 
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+
+//A ne pas Toucher
+    public function edityancho($id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+
+        $demandeSuppressionHabilitations = DemandeSuppressionHabilitation::where('id_demande_habilitation',$id)
+        ->get();
+
+        $demandehabilitation = DemandeHabilitation::find($id);
+        // dd($demandehabilitation);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$demandehabilitation->banque->id_banque."'> ".mb_strtoupper($demandehabilitation->banque->libelle_banque)." </option>";
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        $payList = "<option value=''> Selectionnez un pays</option>";
+        foreach ($pays as $comp) {
+            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
+        }
+
+        $typemoyenpermanentes = TypeMoyenPermanent::where([['flag_type_moyen_permanent','=',true]])->get();
+        $typemoyenpermanenteList = "<option value=''> Selectionnez la type de moyen </option>";
+        foreach ($typemoyenpermanentes as $comp) {
+            $typemoyenpermanenteList .= "<option value='" . $comp->id_type_moyen_permanent  . "'>" . mb_strtoupper($comp->libelle_type_moyen_permanent) ." </option>";
+        }
+
+        $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id]])->get();
+
+        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+        $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
+        foreach ($typeinterventions as $comp) {
+            $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
+        }
+
+        $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id]])->get();
+        //dd($idetape);
+
+        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
+        $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
+        foreach ($organisationFormations as $comp) {
+            $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
+        }
+
+        $organisations = OrganisationFormation::where([['id_demande_habilitation','=',$id]])->get();
+
+        $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
+        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la type de domaine de formation </option>";
+        foreach ($typeDomaineDemandeHabilitation as $comp) {
+            $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
+        }
+
+        $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
+        $domainesList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($domaines as $comp) {
+            $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
+        }
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
+        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+        $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
+        foreach ($domainedemandes as $comp) {
+            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+        }
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->where([['id_demande_habilitation','=',$id]])
+            ->get();
+
+        $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
+
+        Audit::logSave([
+
+            'action'=>'MODIFIER',
+
+            'code_piece'=>$id,
+
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
+
+        return view('habilitation.demande.edityancho', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
+            'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
+            'demandeSuppressionHabilitations',
+            'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
+            'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
+    }
+    public function editdomaine($id, $id1)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
+        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
+        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
+        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
+        $domaineSuppressionHabilitations = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)->get();
+        $domaineSuppressionHabilitationEnCours = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)
+            ->where('flag_rejeter_domaine_demande_suppression_habilitation',false)
+            ->where('flag_validation_domaine_demande_suppression_habilitation',false)->first();
+
+        Audit::logSave([
+            'action'=>'MODIFIER',
+            'code_piece'=>$id,
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
+            'etat'=>'Succès',
+            'objet'=>'HABILITATION'
+        ]);
+
+        return view('habilitation.demande.editdomaine', compact('domaineHabilitation',
+            'domaine','typedomaine','typedomainepublic','motifs', 'idetape',
+                        'domaineSuppressionHabilitations',
+        'domaineSuppressionHabilitationEnCours'
+        ));
+    }
+
+    public function deletedomainestore(Request $request,$id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'commentaire_domaine_demande_suppression_habilitation' => 'required',
+                'id_motif_domaine_demande_suppression_habilitation' => 'required',
+            ],[
+                'commentaire_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
+                'id_motif_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+            ]);
+
+            $input = $request->all();
+
+
+            if ($input['action'] == 'soumettre'){
+                $input['date_soumis_domaine_demande_suppression_habilitation'] = Carbon::now();
+                $input['flag_soumis_domaine_demande_suppression_habilitation'] = true;
+                $input['id_domaine_demande_habilitation'] = $id;
+
+                if (isset($input['piece_domaine_demande_suppression_habilitation'])){
+                    $filefront = $input['piece_domaine_demande_suppression_habilitation'];
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+                        $fileName1 = 'piece_domaine_demande_suppression_habilitation'. '_' . rand(111,99999) . 'piece_domaine_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                        $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                        $input['piece_domaine_demande_suppression_habilitation'] = $fileName1;
+                    }
+
+                }else{
+                    return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
+                }
+
+                DomaineDemandeSuppressionHabilitation::create($input);
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('success', 'Succes : Demande de suppression effectuée avec succès');
+            }
+        }
+
+//        $id =  Crypt::UrldeCrypt($id);
+//        $idetape =  Crypt::UrldeCrypt($id1);
+//
+//        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
+//        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+//        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
+//        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
+//        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
+
+
+    }
+
+
+    public function indexyancho()
+    {
+        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+        if(!empty($infoentrprise)){
+
+            $habilitations = DemandeHabilitation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+
+            $formejuridique = $infoentrprise->demandeEnrolement->formeJuridique->code_forme_juridique;
+
+            //dd($formejuridique);
+
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'HABILITATION (Soumission)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+
+            return view('habilitation.demande.indexyancho', compact('habilitations','formejuridique'));
+
+        }else{
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'HABILITATION',
+
+                'etat'=>'Echec',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+            return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
+        }
+    }
+
+    public function suppressiondomaineformation($id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
+            $query->select('*')
+                ->from('domaine_demande_suppression_habilitation')
+                ->where('domaine_demande_suppression_habilitation.flag_demande_suppression_habilitation',false)
+            ->whereColumn('domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_suppression_habilitation.id_domaine_demande_habilitation');
+        })->where('domaine_demande_habilitation.id_demande_habilitation',$id)->get();
+        return view('habilitation.demande.suppressiondomaineformation',compact('motifs','id','domaineDemandeHabilitations'));
+    }
+
+    public function suppressiondomaineformationedit($id,$id1,$id2)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id1]])->get();
+        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+        $demande_suppression = DemandeSuppressionHabilitation::find($id);
+        return view('habilitation.demande.suppressiondomaineformationedit',compact('motifs',
+            'domaineDemandeHabilitations','id','id1','idetape','demande_suppression'));
+    }
+
+    public function suppressiondomaineformationstore(Request $request,$id,$id1)
+    {
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'commentaire_demande_suppression_habilitation' => 'required',
+                'id_motif_demande_suppression_habilitation' => 'required',
+            ], [
+                'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
+                'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+            ]);
+
+            $input = $request->all();
+            if ($input['action'] == 'enregistrer') {
+
+                if (count($input['id_domaine_demande_habilitation']) > 0) {
+
+                    if (isset($input['piece_demande_suppression_habilitation'])) {
+                        $filefront = $input['piece_demande_suppression_habilitation'];
+                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
+                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                            $input['piece_demande_suppression_habilitation'] = $fileName1;
+                        }
+
+                    } else {
+                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
+                    }
+
+                    $dateanneeencours = Carbon::now()->format('Y');
+
+                    $data_saving = DemandeSuppressionHabilitation::create([
+                        'code_demande_suppression_habilitation'=>'DSD-'.Gencode::randStrGen(4, 5).'-'. $dateanneeencours,
+                        'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                        'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                        'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
+                        'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                        'flag_enregistrer_demande_suppression_habilitation'=> true,
+                        'id_demande_habilitation'=> $id,
+                        'type_autre_demande'=> 'demande_suppression',
+                        'id_user'=> Auth::user()->id
+                    ]);
+                    if ($data_saving) {
+                        $demande_suppression_habilitation = DemandeSuppressionHabilitation::latest()->first();
+
+                        foreach ($input['id_domaine_demande_habilitation'] as $item) {
+                            DomaineDemandeSuppressionHabilitation::create([
+                                    'id_domaine_demande_habilitation' => $item,
+                                    'id_demande_suppression_habilitation' => $demande_suppression_habilitation->id_demande_suppression_habilitation,
+                                    'flag_demande_suppression_habilitation' => false
+                                ]
+                            );
+
+                        }
+
+                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($demande_suppression_habilitation->id_demande_suppression_habilitation) . '/'.Crypt::UrlCrypt($id).'/' . Crypt::UrlCrypt(2) . '/suppressiondomaineformationedit')->with('success', 'Succes : Demande de suppression effectuée avec succès');
+
+                    } else {
+                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Une erreur s\'est produite');
+                    }
+
+
+                } else {
+                    return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Veuillez ajouter les domaines de formations');
+                }
+            }
+
+
+        }
+    }
+
+    public function suppressiondomaineformationupdate(Request $request,$id,$id1,$id2)
+    {
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'commentaire_demande_suppression_habilitation' => 'required',
+                'id_motif_demande_suppression_habilitation' => 'required',
+            ], [
+                'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
+                'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+            ]);
+
+            $input = $request->all();
+
+            if ($input['action'] == 'enregistrer') {
+
+                if (count($input['id_domaine_demande_habilitation']) > 0) {
+
+                    if (isset($input['piece_demande_suppression_habilitation'])) {
+                        $filefront = $input['piece_demande_suppression_habilitation'];
+                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
+                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                            $input['piece_demande_suppression_habilitation'] = $fileName1;
+                        }
+                        $data_saving = DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                            'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
+                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                            'flag_enregistrer_demande_suppression_habilitation'=> true,
+                            'id_demande_habilitation'=> $id1,
+                            'id_user'=> Auth::user()->id
+                        ]);
+                    }
+                    else {
+                        $data_saving = DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                            'flag_enregistrer_demande_suppression_habilitation'=> true,
+                            'id_demande_habilitation'=> $id1,
+                            'id_user'=> Auth::user()->id
+                        ]);
+                    }
+
+                    if ($data_saving) {
+
+                        $demande_suppression_habilitation = DemandeSuppressionHabilitation::latest()->first();
+
+                        $deleteDomaineDemandeSuppressions = DomaineDemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->get();
+                        foreach ($deleteDomaineDemandeSuppressions as $deleteDomaineDemandeSuppression) {
+                            $deleteDomaineDemandeSuppression->delete();
+                        }
+
+
+                            foreach ($input['id_domaine_demande_habilitation'] as $item) {
+
+                            DomaineDemandeSuppressionHabilitation::create([
+                                    'id_domaine_demande_habilitation' => $item,
+                                    'id_demande_suppression_habilitation' => $demande_suppression_habilitation->id_demande_suppression_habilitation,
+                                    'flag_demande_suppression_habilitation' => false
+                                ]
+                            );
+
+                        }
+
+                        return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit'
+
+                    )->with('success', 'Succes : Demande de suppression modifiée avec succès');
+
+                    } else {
+                        return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit')->with('error', 'Erreur : Une erreur s\'est produite');
+                    }
+
+                } else {
+                    return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/suppressiondomaineformationedit')->with('error', 'Erreur : Une erreur s\'est produite');
+                }
+            }
+
+            if ($input['action'] == 'soumettre') {
+
+                DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                    'date_soumis_demande_suppression_habilitation'=> Carbon::now(),
+                    'flag_soumis_demande_suppression_habilitation'=> true
+                ]);
+
+                return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($id1) .'/'. Crypt::UrlCrypt(2) . '/suppressiondomaineformationedit')->with('success', 'Succes : Demande de suppression effectuée avec succès');
+            }
+        }
+    }
+
+
+    public function extensiondomaineformation($id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $motifs = Motif::where('code_motif','EDF')->where('flag_actif_motif',true)->get();
+        return view('habilitation.demande.extensiondomaineformation',compact('motifs','id'));
+    }
+
+    public function extensiondomaineformationstore(Request $request,$id,$id1)
+    {
+        $id = Crypt::UrldeCrypt($id);
+        $idetape = Crypt::UrldeCrypt($id1);
+
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'commentaire_demande_suppression_habilitation' => 'required',
+                'id_motif_demande_suppression_habilitation' => 'required',
+            ], [
+                'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
+                'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+            ]);
+
+            $input = $request->all();
+            if ($input['action'] == 'enregistrer') {
+                    if (isset($input['piece_demande_suppression_habilitation'])) {
+                        $filefront = $input['piece_demande_suppression_habilitation'];
+                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
+                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                            $input['piece_demande_suppression_habilitation'] = $fileName1;
+                        }
+
+                    } else {
+                        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/suppressiondomaineformation')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
+                    }
+                    $dateanneeencours = Carbon::now()->format('Y');
+                    DemandeSuppressionHabilitation::create([
+                        'code_demande_suppression_habilitation'=>'DED-'.Gencode::randStrGen(4, 5).'-'. $dateanneeencours,
+                        'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                        'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                        'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
+                        'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                        'flag_enregistrer_demande_suppression_habilitation'=> true,
+                        'type_autre_demande'=> 'demande_extension',
+                        'id_demande_habilitation'=> $id,
+                        'id_user'=> Auth::user()->id
+                    ]);
+                $demande_suppression_habilitation = DemandeSuppressionHabilitation::latest()->first();
+                return redirect('demandehabilitation/' . Crypt::UrlCrypt($demande_suppression_habilitation->id_demande_suppression_habilitation) . '/'.Crypt::UrlCrypt($id).'/' . Crypt::UrlCrypt($idetape) . '/extensiondomaineformationedit')->with('success', 'Succes : Demande d\'extension effectuée avec succès');
+            }
+            return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/extensiondomaineformation')->with('error', 'Erreur : Une erreur s\'est produite');
+        }
+        return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/extensiondomaineformation')->with('error', 'Erreur : Une erreur s\'est produite');
+    }
+
+
+    public function extensiondomaineformationedit($id,$id1,$id2)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+        $idetape =  Crypt::UrldeCrypt($id2);
+        $motifs = Motif::where('code_motif','EDF')->where('flag_actif_motif',true)->get();
+        $demande_extension = DemandeSuppressionHabilitation::find($id);
+
+        $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
+        $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la type de domaine de formation </option>";
+        foreach ($typeDomaineDemandeHabilitation as $comp) {
+            $typeDomaineDemandeHabilitationList .= "<option value='" . $comp->id_type_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation) ." </option>";
+        }
+
+        $domaines = DomaineFormation::where([['flag_domaine_formation','=',true]])->get();
+        $domainesList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($domaines as $comp) {
+            $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
+        }
+
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
+
+
+
+
+
+
+        $Mesformateurs = Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire]])->get();
+        $MesformateursList = "<option value=''> Selectionnez le domaine de formation </option>";
+        foreach ($Mesformateurs as $comp) {
+            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." </option>";
+        }
+
+
+        $domainedemandes = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
+            $query->select('*')
+                ->from('formateur_domaine_demande_habilitation')
+                ->whereColumn('formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_habilitation.id_domaine_demande_habilitation');
+        })
+            ->where('id_autre_demande','=',$id)
+            ->where('domaine_demande_habilitation.id_demande_habilitation',$id1)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_extension_domaine_demande_habilitation',true)->get();
+
+        $domaine_list_demandes = DomaineDemandeHabilitation::where('id_demande_habilitation','=',$id1)
+            ->where('id_autre_demande','=',$id)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_extension_domaine_demande_habilitation',true)->get();
+
+        $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
+        foreach ($domainedemandes as $comp) {
+            $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .' - '.mb_strtoupper($comp->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public).' - '. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+        }
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','RDE']])->get();
+
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+            ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+            ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+            ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+            ->where('id_demande_habilitation','=',$id1)
+            ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
+            ->get();
+
+        return view('habilitation.demande.extensiondomaineformationedit',compact('motifs',
+            'id','id1','idetape','demande_extension','commentairenonrecevables',
+                    'typeDomaineDemandeHabilitationList',
+            'domainesList','typeDomaineDemandeHabilitationPublicList',
+            'domainedemandeList','formateurs','domaine_list_demandes',
+            'domainedemandes',
+            'MesformateursList'
+        ));
+
+
+
+//        $id =  Crypt::UrldeCrypt($id);
+//        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+//        $idetape =  Crypt::UrldeCrypt($id1);
+//        $idetape =  Crypt::UrldeCrypt($id2);
+//
+
+//
+//        $domaineDemandeHabilitations = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
+//            $query->select('*')
+//                ->from('domaine_demande_suppression_habilitation')
+//                ->where('domaine_demande_suppression_habilitation.flag_demande_suppression_habilitation',false)
+//                ->whereColumn('domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_suppression_habilitation.id_domaine_demande_habilitation');
+//        })->where('domaine_demande_habilitation.id_demande_habilitation',$id)->get();
+//        return view('habilitation.demande.extensiondomaineformationedit',compact('motifs','id',
+//            'typeDomaineDemandeHabilitationList',
+//            'domainesList','typeDomaineDemandeHabilitationPublicList',
+//            'domainedemandeList',
+//            'MesformateursList',
+//            'idetape',
+//            'domaineDemandeHabilitations'));
+    }
+
+
+    public function extensiondomaineformationupdate(Request $request,$id,$id1,$id2)
+    {
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+        if ($request->isMethod('post')) {
+            $input = $request->all();
+
+            if ($input['action'] == 'enregistrer_info_demande') {
+                $this->validate($request, [
+                    'commentaire_demande_suppression_habilitation' => 'required',
+                    'id_motif_demande_suppression_habilitation' => 'required',
+                ], [
+                    'commentaire_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande d\'extension.',
+                    'id_motif_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+                ]);
+
+                if (isset($input['piece_demande_suppression_habilitation'])) {
+                        $filefront = $input['piece_demande_suppression_habilitation'];
+                        if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                            || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                            || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
+                            $fileName1 = 'piece_demande_suppression_habilitation' . '_' . rand(111, 99999) . 'piece_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                            $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                            $input['piece_demande_suppression_habilitation'] = $fileName1;
+                        }
+                        DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                            'piece_demande_suppression_habilitation'=> $input['piece_demande_suppression_habilitation'],
+                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                            'flag_enregistrer_demande_suppression_habilitation'=> true,
+                            'id_demande_habilitation'=> $id1,
+                            'type_autre_demande'=> 'demande_extension',
+                            'id_user'=> Auth::user()->id
+                        ]);
+                    }
+                    else {
+                        DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                            'id_motif_demande_suppression_habilitation'=> $input['id_motif_demande_suppression_habilitation'],
+                            'commentaire_demande_suppression_habilitation'=> $input['commentaire_demande_suppression_habilitation'],
+                            'date_enregistrer_demande_suppression_habilitation'=> Carbon::now(),
+                            'flag_enregistrer_demande_suppression_habilitation'=> true,
+                            'id_demande_habilitation'=> $id1,
+                            'type_autre_demande'=> 'demande_extension',
+                            'id_user'=> Auth::user()->id
+                        ]);
+                    }
+                return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/extensiondomaineformationedit')->with('success', 'Succes : Demande d\'extension modifiée avec succès');
+            }
+
+            if ($input['action'] == 'enregistrer_domaine_demande') {
+                $this->validate($request, [
+                    'id_type_domaine_demande_habilitation' => 'required',
+                    'id_domaine_formation' => 'required',
+                ],[
+                    'id_type_domaine_demande_habilitation.required' => 'Veuillez selectionner le type de domaine.',
+                    'id_domaine_formation.required' => 'Veuillez selectionner le domaine de formation.',
+                ]);
+
+                $input = $request->all();
+                $input['id_demande_habilitation'] = $id1;
+                $input['flag_extension_domaine_demande_habilitation'] = true;
+                $input['flag_agree_domaine_demande_habilitation'] = false;
+                $input['id_autre_demande'] = $id;
+                DomaineDemandeHabilitation::create($input);
+
+                return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(2) . '/extensiondomaineformationedit')->with('success', 'Succes : Domaine de formation enregistrer avec succès');
+            }
+
+            if ($input['action'] == 'AjouterFormateur'){
+
+                $this->validate($request, [
+                    'id_domaine_demande_habilitation' => 'required',
+                    'id_formateurs' => 'required',
+                ],[
+                    'id_domaine_demande_habilitation.required' => 'Veuillez selectionner le domaine de formation.',
+                    'id_formateurs.required' => 'Veuillez selectionner un formateur.',
+                ]);
+
+                $input = $request->all();
+
+                FormateurDomaineDemandeHabilitation::create($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape ajouter formateur'
+
+                ]);
+                return redirect('demandehabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(3) . '/extensiondomaineformationedit')->with('success', 'Succes : Domaine de formation enregistrer avec succès');
+
+            }
+
+            if ($input['action'] == 'soumettreDemandeExtension') {
+
+                DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$id)->update([
+                    'date_soumis_demande_suppression_habilitation'=> Carbon::now(),
+                    'flag_soumis_demande_suppression_habilitation'=> true
+                ]);
+
+                return redirect('demandehabilitation/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($id1) .'/'. Crypt::UrlCrypt(2) . '/extensiondomaineformationedit')->with('success', 'Succes : Demande d\'extension effectuée avec succès');
+            }
+        }
+    }
+
+
+    public function deletedomaineDemandeExtension($id,$id1,$id2){
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::find($id2);
+        $domaineDemandeHabilitations->delete();
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id1).'/'.Crypt::UrlCrypt(2).'/extensiondomaineformationedit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteformateursDemandeExtension($id,$id1,$id2){
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+
+        $formateurs = FormateurDomaineDemandeHabilitation::find($id2);
+        $formateurs->delete();
         return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
 
     }

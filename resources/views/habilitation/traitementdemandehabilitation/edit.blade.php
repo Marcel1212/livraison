@@ -849,7 +849,6 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                                 </select>
                                                                                 @error('id_charge_habilitation')
                                                                                 <div class=""><label class="error">{{ $message }}</label></div>
-                                                                                <div class=""><label class="error">{{ $message }}</label></div>
                                                                                 @enderror
                                                                             </div>
                                                                             <div class="col-md-6 col-12">
@@ -1021,22 +1020,18 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                     <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
                                                         <div class="modal-dialog sidebar-lg">
                                                             <div class="modal-content p-0">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                                                                 <div class="modal-header mb-1">
                                                                     <h5 class="modal-title">Prise de rendez-vous</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    </button>
                                                                 </div>
+                                                                <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
+
                                                                 <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                                                                     <div id="error_text"></div>
-
-
-
                                                                     <!-- Formulaire d'événement -->
-                                                                        <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
                                                                             <!-- Champ caché pour l'ID de la demande d'habilitation -->
                                                                             <input type="hidden" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}">
-
-
-
                                                                             <!-- Sélection du statut -->
                                                                             <div class="mb-1">
                                                                                 <label for="select-label" class="form-label">Statut</label>
@@ -1077,17 +1072,18 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                                 <textarea class="form-control" id="event-description-editor" name="event-description-editor" required></textarea>
                                                                             </div>
 
-                                                                            <!-- Boutons d'action -->
-                                                                            <div class="d-flex mb-1">
-                                                                                <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
-                                                                                <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                                                                                <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
-                                                                                <a href="" class="btn btn-success update-lien-event-btn d-none me-1">Aller sur le dossier</a>
-                                                                                <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
-                                                                            </div>
-                                                                        </form>
-
                                                                 </div>
+                                                                    <!-- Boutons d'action -->
+
+                                                                    <div class="modal-footer d-flex mb-1">
+                                                                        <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
+                                                                        <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                                                                        <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
+                                                                        <a href="" class="btn btn-success update-lien-event-btn d-none me-1">Aller sur le dossier</a>
+                                                                        <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
+                                                                    </div>
+                                                                </form>
+
                                                             </div>
                                                         </div>
                                                     </div>
