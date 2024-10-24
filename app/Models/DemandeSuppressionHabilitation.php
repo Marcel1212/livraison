@@ -43,8 +43,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $flag_valider_cahier
  * @property string $date_passer_cahier
  * @property User $user
- * @property User $user
- * @property User $user
+ * @property User $chefservicehabilitaion
+ * @property User $chargehabilitation
  * @property DomaineDemandeSuppressionHabilitation[] $domaineDemandeSuppressionHabilitations
  */
 class DemandeSuppressionHabilitation extends Model

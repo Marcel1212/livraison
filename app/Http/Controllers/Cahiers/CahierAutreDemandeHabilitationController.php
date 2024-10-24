@@ -4,17 +4,27 @@ namespace App\Http\Controllers\Cahiers;
 
 use App\Helpers\Audit;
 use App\Helpers\Crypt;
+use App\Helpers\InfosEntreprise;
 use App\Http\Controllers\Controller;
+use App\Models\Banque;
 use App\Models\CahierAutreDemandeHabilitation;
 use App\Models\CommentaireNonRecevableDemande;
-use App\Models\DemandeSuppressionHabilitation;
+use App\Models\AutreDemandeHabilitationFormation;
+use App\Models\Competences;
+use App\Models\DemandeHabilitation;
 use App\Models\Direction;
 use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormation;
+use App\Models\Entreprises;
+use App\Models\Experiences;
 use App\Models\FormateurDomaineDemandeHabilitation;
 use App\Models\Formateurs;
+use App\Models\FormationsEduc;
+use App\Models\LanguesFormateurs;
 use App\Models\LigneCahierAutreDemandeHabilitation;
 use App\Models\Motif;
+use App\Models\Pays;
+use App\Models\PrincipaleQualification;
 use App\Models\ProcessusAutreDemande;
 use App\Models\TypeDomaineDemandeHabilitation;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
@@ -178,8 +188,8 @@ class CahierAutreDemandeHabilitationController extends Controller
         $cahierautredemandehabilitations = DB::table('vue_autre_demande_habilitation_disponible_pour_cahier_traiter as vppdpct')
             ->join('ligne_cahier_autre_demande_habilitations','vppdpct.id_demande','ligne_cahier_autre_demande_habilitations.id_demande')
             ->join('cahier_autre_demande_habilitations','ligne_cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations','cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations')
-            ->join('demande_suppression_habilitation','demande_suppression_habilitation.id_demande_suppression_habilitation','ligne_cahier_autre_demande_habilitations.id_demande')
-            ->join('users','demande_suppression_habilitation.id_chef_service','users.id')
+            ->join('autre_demande_habilitation_formation','autre_demande_habilitation_formation.id_autre_demande_habilitation_formation','ligne_cahier_autre_demande_habilitations.id_demande')
+            ->join('users','autre_demande_habilitation_formation.id_chef_service','users.id')
             ->join('direction','users.id_direction','direction.id_direction')
             ->join('departement','users.id_departement','departement.id_departement')
             ->where('cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations',$id)
@@ -265,7 +275,7 @@ class CahierAutreDemandeHabilitationController extends Controller
                             'id_demande'=> $value,
                         ]);
 
-                        $demande = DemandeSuppressionHabilitation::find($value);
+                        $demande = AutreDemandeHabilitationFormation::find($value);
                         $demande->flag_passer_cahier = true;
                         $demande->date_passer_cahier = Carbon::now();
                         $demande->update();
@@ -306,12 +316,12 @@ class CahierAutreDemandeHabilitationController extends Controller
                         'flag_statut_soumis_ligne_cahier_autre_demande_habilitations' => true
                     ]);
 
-                    $demande_extension = DemandeSuppressionHabilitation::where('id_demande_suppression_habilitation',$li->id_demande)->first();
-                    $demande_extension->update();
+                    $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$li->id_demande)->first();
+                    $autre_demande_habilitation_formation->update();
                 }
 
                 $cahier->update([
-                    'id_processus_cahier_autre_demande_habilitations' => 9,
+                    'id_processus_cahier_autre_demande_habilitations' => 13,
                     'flag_statut_cahier_autre_demande_habilitations' => true,
                     'date_soumis_cahier_autre_demande_habilitations' => Carbon::now()
                 ]);
@@ -330,7 +340,7 @@ class CahierAutreDemandeHabilitationController extends Controller
 
                 ]);
 
-                return redirect('cahierautredemandehabilitations/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
+                return redirect('cahierautredemandehabilitations/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Note technique générée et soumis pour validation ');
 
             }
 
@@ -345,7 +355,8 @@ class CahierAutreDemandeHabilitationController extends Controller
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  Crypt::UrldeCrypt($id1);
         $motifs = Motif::where('code_motif','EDF')->where('flag_actif_motif',true)->get();
-        $demande_extension = DemandeSuppressionHabilitation::find($id);
+        $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::find($id);
+        $habilitation = DemandeHabilitation::find($autre_demande_habilitation_formation->id_demande_habilitation);
 
         $typeDomaineDemandeHabilitation = TypeDomaineDemandeHabilitation::where([['flag_type_domaine_demande_habilitation','=',true]])->get();
         $typeDomaineDemandeHabilitationList = "<option value=''> Selectionnez la type de domaine de formation </option>";
@@ -378,14 +389,15 @@ class CahierAutreDemandeHabilitationController extends Controller
                 ->whereColumn('formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_habilitation.id_domaine_demande_habilitation');
         })
             ->where('id_autre_demande','=',$id)
-            ->where('domaine_demande_habilitation.id_demande_habilitation',$demande_extension->id_demande_habilitation)
+            ->where('domaine_demande_habilitation.id_demande_habilitation',$autre_demande_habilitation_formation->id_demande_habilitation)
             ->where('flag_agree_domaine_demande_habilitation',false)
             ->where('flag_extension_domaine_demande_habilitation',true)->get();
 
-        $domaine_list_demandes = DomaineDemandeHabilitation::where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+        $domaine_list_demandes = DomaineDemandeHabilitation::where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
             ->where('id_autre_demande','=',$id)
             ->where('flag_agree_domaine_demande_habilitation',false)
             ->where('flag_extension_domaine_demande_habilitation',true)->get();
+
 
         $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
         foreach ($domainedemandes as $comp) {
@@ -400,16 +412,37 @@ class CahierAutreDemandeHabilitationController extends Controller
             ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
             ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
             ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
-            ->where('id_demande_habilitation','=',$demande_extension->id_demande_habilitation)
+            ->where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
             ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
             ->get();
 
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$habilitation->banque->id_banque."'> ".mb_strtoupper($habilitation->banque->libelle_banque)." </option>";
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+
+        $infoentreprise = Entreprises::find($habilitation->id_entreprises);
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+        $payList = "<option value=''> Selectionnez un pays</option>";
+        foreach ($pays as $comp) {
+            $payList .= "<option value='" . $comp->id_pays  . "'>" . $comp->libelle_pays ." </option>";
+        }
+
+
         return view('cahiers.cahier_autre_demande_habilitation.show',compact('motifs',
-            'id','idetape','demande_extension','commentairenonrecevables',
+            'id','idetape','autre_demande_habilitation_formation','commentairenonrecevables',
             'typeDomaineDemandeHabilitationList',
             'domainesList','typeDomaineDemandeHabilitationPublicList',
             'domainedemandeList','formateurs','domaine_list_demandes',
-            'domainedemandes',
+            'domainedemandes','habilitation',
+            'pay','banque',
             'MesformateursList'
         ));
 
@@ -424,9 +457,9 @@ class CahierAutreDemandeHabilitationController extends Controller
 //
 //        $domaineDemandeHabilitations = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
 //            $query->select('*')
-//                ->from('domaine_demande_suppression_habilitation')
-//                ->where('domaine_demande_suppression_habilitation.flag_demande_suppression_habilitation',false)
-//                ->whereColumn('domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_suppression_habilitation.id_domaine_demande_habilitation');
+//                ->from('domaine_autre_demande_habilitation_formation')
+//                ->where('domaine_autre_demande_habilitation_formation.flag_autre_demande_habilitation_formation',false)
+//                ->whereColumn('domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_autre_demande_habilitation_formation.id_domaine_demande_habilitation');
 //        })->where('domaine_demande_habilitation.id_demande_habilitation',$id)->get();
 //        return view('habilitation.demande.extensiondomaineformationedit',compact('motifs','id',
 //            'typeDomaineDemandeHabilitationList',
@@ -435,6 +468,35 @@ class CahierAutreDemandeHabilitationController extends Controller
 //            'MesformateursList',
 //            'idetape',
 //            'domaineDemandeHabilitations'));
+    }
+
+
+    public function showformateur(string $id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+
+        $formateur = Formateurs::find($id);
+
+        $qualification = PrincipaleQualification::where([['id_formateurs','=',$id]])->first();
+
+        $formations = FormationsEduc::where([['id_formateurs','=',$id]])->get();
+
+        $experiences = Experiences::where([['id_formateurs','=',$id]])->orderBy('date_de_debut', 'DESC')->get();
+
+        $competences = Competences::where([['id_formateurs','=',$id]])->get();
+
+        $languesformateurs = LanguesFormateurs::where([['id_formateurs','=',$id]])->get();
+
+        Audit::logSave([
+            'action'=>'Voir',
+            'code_piece'=>$id,
+            'menu'=>'FORMATEUR (CREATION DE FORMATEUR)',
+            'etat'=>'Succès',
+            'objet'=>'Voir le cv'
+        ]);
+
+        return view('cahiers.cahier_autre_demande_habilitation.showformateur', compact('id','formateur','qualification',
+            'formations','experiences','languesformateurs','competences'));
     }
 
 }

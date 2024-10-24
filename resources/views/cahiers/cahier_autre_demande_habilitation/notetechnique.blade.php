@@ -312,6 +312,7 @@ $logo = Menu::get_logo();
                         {{@$cahierautredemandehabilitation->raison_sociale}}
                     </td>
                     <td style="text-align:center;font-weight:bold;width: 20%;border-top: 0pt solid windowtext;border-left: 0pt solid windowtext;border-bottom: 1pt solid windowtext;border-right: 0pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
+                        {{Menu::dateEnFrancais(@$cahierautredemandehabilitation->date_fin_validite)}}
                     </td>
                     <td style="text-align:center;font-weight:bold;width: 50%;border-top: 1pt solid windowtext;border-left: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
                         {{@$cahierautredemandehabilitation->observation_instruction}}

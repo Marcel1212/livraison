@@ -8,16 +8,16 @@ use App\Helpers\PartEntreprisesHelper;
 
 ?>
 
-@if(auth()->user()->can('demandehabilitation-create'))
+@if(auth()->user()->can('agrementhabilitation-index'))
 
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
-    @php($Module='Habilitation')
-    @php($titre='Liste des demandes habilitation')
-    @php($soustitre='Demande d\'habilitation')
-    @php($lien='demandehabilitation')
+    @php($Module='Agrement')
+    @php($titre='Liste des demandes agrée')
+    @php($soustitre='Demande de suppression de domaine de formation')
+    @php($lien='agrementhabilitation')
 
     <!-- BEGIN: Content-->
 
@@ -93,7 +93,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                     <label> Motif <strong
                                                             style="color:red;">*</strong></label>
                                                     <select
-                                                        class="select2 form-select-sm input-group" required  data-allow-clear="true" name="id_motif_demande_suppression_habilitation" id="id_motif_demande_suppression_habilitation" >
+                                                        class="select2 form-select-sm input-group" required  data-allow-clear="true" name="id_motif_autre_demande_habilitation_formation" id="id_motif_autre_demande_habilitation_formation" >
                                                         <option value="">Selectionner un motif</option>
                                                                                                     @foreach($motifs as $motif)
                                                                                                         <option value="{{$motif->id_motif}}"
@@ -105,9 +105,9 @@ use App\Helpers\PartEntreprisesHelper;
                                             <div class="col-md-6 ">
                                                 <label class="form-label">Pièce justificative <strong
                                                         style="color:red;">*</strong></label>
-                                                <div><input type="file" name="piece_demande_suppression_habilitation"
+                                                <div><input type="file" name="piece_autre_demande_habilitation_formation"
                                                             class="form-control form-control-sm" placeholder="" required
-                                                            value="{{ old('piece_domaine_demande_suppression_habilitation') }}"/>
+                                                            value="{{ old('piece_domaine_autre_demande_habilitation_formation') }}"/>
                                                 </div>
 
                                                 <div id="defaultFormControlHelp" class="form-text ">
@@ -120,8 +120,8 @@ use App\Helpers\PartEntreprisesHelper;
                                                     <label>Commentaire de la demande de suppression <strong
                                                             style="color:red;">*</strong></label>
                                                     <textarea class="form-control form-control-sm" required
-                                                              name="commentaire_demande_suppression_habilitation"
-                                                              id="commentaire_demande_suppression_habilitation" rows="7"></textarea>
+                                                              name="commentaire_autre_demande_habilitation_formation"
+                                                              id="commentaire_autre_demande_habilitation_formation" rows="7"></textarea>
                                                 </div>
                                             </div>
                                         </div>

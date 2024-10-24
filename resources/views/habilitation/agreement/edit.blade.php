@@ -99,83 +99,83 @@ use App\Helpers\Fonction;
                                     </thead>
                                     <tbody>
                                         <?php $i = 0; ?>
-                                    @isset($demandeSuppressionHabilitations)
-                                        @foreach (@$demandeSuppressionHabilitations as $key => $demandeSuppressionHabilitation)
+                                    @isset($autre_demande_habilitation_formations)
+                                        @foreach (@$autre_demande_habilitation_formations as $key => $autre_demande_habilitation_formation)
                                                 <?php $i += 1;?>
                                             <tr>
                                                 <td>{{ $i }}</td>
-                                                <td>{{@$demandeSuppressionHabilitation->code_demande_suppression_habilitation}}</td>
+                                                <td>{{@$autre_demande_habilitation_formation->code_autre_demande_habilitation_formation}}</td>
                                                 <td>
-                                                    @if(@$demandeSuppressionHabilitation->type_autre_demande=='demande_suppression')
+                                                    @if(@$autre_demande_habilitation_formation->type_autre_demande=='demande_suppression')
                                                         Demande de suppression
-                                                    @elseif(@$demandeSuppressionHabilitation->type_autre_demande=='demande_extension')
+                                                    @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                         Demande d'extension
                                                     @endif
 
 
                                                 </td>
                                                 <td>
-                                                    @if(@$demandeSuppressionHabilitation->motif)
-                                                        {{ $demandeSuppressionHabilitation->motif->libelle_motif }}
+                                                    @if(@$autre_demande_habilitation_formation->motif)
+                                                        {{ $autre_demande_habilitation_formation->motif->libelle_motif }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if(@$demandeSuppressionHabilitation->commentaire_demande_suppression_habilitation)
-                                                        {{ $demandeSuppressionHabilitation->commentaire_demande_suppression_habilitation }}
+                                                    @if(@$autre_demande_habilitation_formation->commentaire_autre_demande_habilitation_formation)
+                                                        {{ $autre_demande_habilitation_formation->commentaire_autre_demande_habilitation_formation }}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @isset($demandeSuppressionHabilitation->piece_demande_suppression_habilitation)
+                                                    @isset($autre_demande_habilitation_formation->piece_autre_demande_habilitation_formation)
                                                         <span class="badge bg-secondary mt-2">
                                                                 <a target="_blank" class="text-white"
-                                                                   onclick="NewWindow('{{ asset("pieces/demande_suppression_domaine/". $demandeSuppressionHabilitation->piece_demande_suppression_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                   onclick="NewWindow('{{ asset("pieces/demande_suppression_domaine/". $autre_demande_habilitation_formation->piece_autre_demande_habilitation_formation)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                                     Voir la pièce
                                                                 </a>
                                                             </span>
                                                     @endisset
                                                 </td>
                                                 <td>
-                                                    @if($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==false && (!isset($demandeSuppressionHabilitation->id_charge_habilitation) or $demandeSuppressionHabilitation->flag_recevabilite==false)
+                                                    @if($autre_demande_habilitation_formation->flag_enregistrer_autre_demande_habilitation_formation==true &&
+$autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation==false && (!isset($autre_demande_habilitation_formation->id_charge_habilitation) or $autre_demande_habilitation_formation->flag_recevabilite==false)
 
-&& $demandeSuppressionHabilitation->flag_validation_domaine_demande_suppression_habilitation==false && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==false
+&& $autre_demande_habilitation_formation->flag_validation_domaine_autre_demande_habilitation_formation==false && $autre_demande_habilitation_formation->flag_rejeter_autre_demande_habilitation_formation==false
 
 )
                                                         <span class="badge bg-secondary">Non soumis</span>
-                                                    @elseif($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
+                                                    @elseif($autre_demande_habilitation_formation->flag_enregistrer_autre_demande_habilitation_formation==true &&
 
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==true && !isset($demandeSuppressionHabilitation->id_charge_habilitation)
-&& $demandeSuppressionHabilitation->flag_validation_demande_suppression_habilitation==false && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==false
+$autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation==true && !isset($autre_demande_habilitation_formation->id_charge_habilitation)
+&& $autre_demande_habilitation_formation->flag_validation_autre_demande_habilitation_formation==false && $autre_demande_habilitation_formation->flag_rejeter_autre_demande_habilitation_formation==false
 )
                                                         <span class="badge bg-primary">soumis</span>
-                                                    @elseif($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
+                                                    @elseif($autre_demande_habilitation_formation->flag_enregistrer_autre_demande_habilitation_formation==true &&
 
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==true && isset($demandeSuppressionHabilitation->id_charge_habilitation)
-&& $demandeSuppressionHabilitation->flag_validation_demande_suppression_habilitation==false && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==false
+$autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation==true && isset($autre_demande_habilitation_formation->id_charge_habilitation)
+&& $autre_demande_habilitation_formation->flag_validation_autre_demande_habilitation_formation==false && $autre_demande_habilitation_formation->flag_rejeter_autre_demande_habilitation_formation==false
 )
                                                         <span class="badge bg-primary">En cours de traitement</span>
-                                                    @elseif($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
+                                                    @elseif($autre_demande_habilitation_formation->flag_enregistrer_autre_demande_habilitation_formation==true &&
 
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==true && isset($demandeSuppressionHabilitation->id_charge_habilitation)
-&& $demandeSuppressionHabilitation->flag_validation_demande_suppression_habilitation==true && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==false)
+$autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation==true && isset($autre_demande_habilitation_formation->id_charge_habilitation)
+&& $autre_demande_habilitation_formation->flag_validation_autre_demande_habilitation_formation==true && $autre_demande_habilitation_formation->flag_rejeter_autre_demande_habilitation_formation==false)
                                                         <span class="badge bg-success">Validé</span>
-                                                    @elseif($demandeSuppressionHabilitation->flag_enregistrer_demande_suppression_habilitation==true &&
+                                                    @elseif($autre_demande_habilitation_formation->flag_enregistrer_autre_demande_habilitation_formation==true &&
 
-$demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==true && isset($demandeSuppressionHabilitation->id_charge_habilitation)
-&& $demandeSuppressionHabilitation->flag_validation_demande_suppression_habilitation==false && $demandeSuppressionHabilitation->flag_rejeter_demande_suppression_habilitation==true)
+$autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation==true && isset($autre_demande_habilitation_formation->id_charge_habilitation)
+&& $autre_demande_habilitation_formation->flag_validation_autre_demande_habilitation_formation==false && $autre_demande_habilitation_formation->flag_rejeter_autre_demande_habilitation_formation==true)
                                                         <span class="badge bg-success">Rejeté</span>
                                                     @endif
                                                 </td>
                                                 <td align="center">
                                                     @can($lien.'-edit')
 
-                                                        @if($demandeSuppressionHabilitation->type_autre_demande=='demande_suppression')
-                                                            <a href="{{ route($lien.'.suppressiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_suppression_habilitation),\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                        @if($autre_demande_habilitation_formation->type_autre_demande=='demande_suppression')
+                                                            <a href="{{ route($lien.'.suppressiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                                class=" "
                                                                title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
-                                                        @elseif(@$demandeSuppressionHabilitation->type_autre_demande=='demande_extension')
-                                                            <a href="{{ route($lien.'.extensiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_suppression_habilitation),\App\Helpers\Crypt::UrlCrypt($demandeSuppressionHabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                        @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
+                                                            <a href="{{ route($lien.'.extensiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                                class=" "
                                                                title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
@@ -292,7 +292,19 @@ $demandeSuppressionHabilitation->flag_soumis_demande_suppression_habilitation==t
                                 data-bs-target="#navs-top-Soumettre"
                                 aria-controls="navs-top-Soumettre"
                                 aria-selected="false">
-                                Intervention hors du pays et Soumission
+                                Intervention hors du pays
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                type="button"
+                                class="nav-link <?php if($idetape==8 and count($formateurs)>0){ echo "active";} ?>"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-piece"
+                                aria-controls="navs-top-piece"
+                                aria-selected="false">
+                                Pièces
                             </button>
                         </li>
                     </ul>
@@ -609,7 +621,7 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
 
                                                 @elseif($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==false &&
                                                $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
-                                                    <span class="badge bg-danger">Suprimée</span>
+                                                    <span class="badge bg-danger">Supprimée</span>
                                                 @endif
                                             </td>
                                         </tr>
@@ -666,7 +678,7 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                            style="margin-top: 13px !important">
                                         <thead>
                                         <tr>
-                                            <th>No</th>
+                                            <th>#</th>
                                             <th>Editez vous un catalogue de stage</th>
                                             <th>La formation est-elle la seule activite de l'organisme ?  </th>
                                             <th>Materiel didactique </th>
@@ -675,6 +687,9 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                         </thead>
                                         <tbody>
                                             <tr>
+                                                <td>
+                                                    1
+                                                </td>
                                                 <td>
                                                     @if($habilitation->information_catalogue_demande_habilitation == false )
                                                         Non
@@ -691,11 +706,11 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                                 </td>
 
                                                 <td>
-                                                    {{@$habilitation->materiel_didactique_demande_habilitation}}
+                                                    {!!@$habilitation->materiel_didactique_demande_habilitation!!}
                                                 </td>
 
                                                 <td>
-                                                    {{@$habilitation->reference_ci_demande_habilitation}}
+                                                    {!!@$habilitation->reference_ci_demande_habilitation!!}
                                                 </td>
 
                                             </tr>
@@ -706,91 +721,6 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                 </div>
                         </div>
                         <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
-                                <?php if ($habilitation->flag_soumis_demande_habilitation != true){ ?>
-                            <div class="col-md-12" align="right">
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-success"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#SoummissionagrementhabilitationApprouve1">
-                                    Soumettre la demande d'habilitation
-                                </button>
-                            </div>
-                            <br/>
-                            <br/>
-                            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                <div class="alert-body" style="text-align: center">
-                                    Cette partie n'est pas une obligatiore mais peut contribuer a solidifier votre demande
-                                </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Objet  <strong style="color:red;">*</strong> </label>
-                                                    <input type="text" name="objet_intervention_hors_ci" id="objet_intervention_hors_ci"
-                                                           class="form-control form-control-sm"  value="{{ old('objet_intervention_hors_ci') }}">
-                                                </div>
-                                                @error('objet_intervention_hors_ci')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <label class="form-label" for="billings-country">Pays <strong style="color:red;">*</strong></label>
-                                                <select class="select2 form-select-sm input-group @error('id_pays')
-                                                                error
-                                                                @enderror" data-allow-clear="true" name="id_pays">
-                                                        <?= $payList; ?>
-                                                </select>
-                                                @error('id_pays')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Année  <strong style="color:red;">*</strong> </label>
-                                                    <input type="text" maxlength="4" name="annee_intervention_hors_ci" id="annee_intervention_hors_ci"
-                                                           class="form-control form-control-sm"  value="{{ old('annee_intervention_hors_ci') }}">
-                                                </div>
-                                                @error('annee_intervention_hors_ci')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-3 col-12">
-                                                <div class="mb-1">
-                                                    <label>Experience  <strong style="color:red;">*</strong></label>
-                                                    <input class="form-control @error('quel_financement_intervention_hors_ci') error @enderror" type="text" id="quel_financement_intervention_hors_ci_val" name="quel_financement_intervention_hors_ci"/>
-                                                    <div id="quel_financement_intervention_hors_ci" class="rounded-1">{{ old('quel_financement_intervention_hors_ci') }}</div>
-                                                </div>
-                                                @error('quel_financement_intervention_hors_ci')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-12" align="right">
-                                        <hr>
-
-                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
-
-                                            <?php if ($habilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        <button type="submit" name="action" value="AjouterInterventionsHorsCis"
-                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                            Ajouter
-                                        </button>
-                                        <?php } ?>
-
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                            Retour</a>
-                                    </div>
-                                </div>
-                                <?php } ?>
-                            <hr>
                             <table class="table table-bordered table-striped table-hover table-sm"
                                    id=""
                                    style="margin-top: 13px !important">
@@ -801,7 +731,6 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                     <th>Pays </th>
                                     <th>Année  </th>
                                     <th>Sur quel financement </th>
-                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -814,19 +743,45 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
                                         <td>{{ $interventionsHorsCi->pay->libelle_pays }}</td>
                                         <td>{{ $interventionsHorsCi->annee_intervention_hors_ci }}</td>
                                         <td><?php echo $interventionsHorsCi->quel_financement_intervention_hors_ci; ?></td>
-                                        <td>
-                                                <?php if ($habilitation->flag_soumis_demande_habilitation != true){ ?>
-                                            <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($interventionsHorsCi->id_intervention_hors_ci)) }}"
-                                               class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
-                                               title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                            <?php } ?>
-                                        </td>
                                     </tr>
                                 @endforeach
 
                                 </tbody>
                             </table>
+                        </div>
 
+                        <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-piece" role="tabpanel">
+
+                        <table class="table table-bordered table-striped table-hover table-sm"
+                               id=""
+                               style="margin-top: 13px !important">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Types de pieces </th>
+                                <th>Pieces </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($piecesDemandeHabilitations as $piecesDemandeHabilitation)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
+                                    <td>{{ $piecesDemandeHabilitation->typesPiece->libelle_types_pieces }}</td>
+                                    <td>
+                                        @if (isset($piecesDemandeHabilitation->pieces_demande_habilitation))
+                                            <span class="badge bg-secondary">
+                                                                    <a target="_blank"
+                                                                       onclick="NewWindow('{{ asset("/pieces/pieces_demande_habilitation/".$habilitation->entreprise->ncc_entreprises."/". $piecesDemandeHabilitation->pieces_demande_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                        Voir la pièce
+                                                                    </a>
+                                                                </span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                 </div>

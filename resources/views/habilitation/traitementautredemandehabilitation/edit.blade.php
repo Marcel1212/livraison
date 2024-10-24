@@ -5,34 +5,27 @@ use App\Helpers\MoyenCotisation;
 use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
 use App\Helpers\Menu;
-use App\Helpers\Fonction;
 
 $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 //dd($codeRoles);
-//dd($demandehabilitation->flag_reception_demande_habilitation);
+//dd($habilitation->flag_reception_demande_habilitation);
 
 ?>
 
-@if(auth()->user()->can('traitementsuppressiondomaine-edit'))
+@if(auth()->user()->can('traitementautredemandehabilitation-edit'))
 
 @extends('layouts.backLayout.designadmin')
 
 @section('content')
 
     @php($Module='Habilitation')
-    @php($titre='Liste des demandes habilitation')
-    @php($soustitre='Demande d\'habilitation')
-    @php($lien='traitementsuppressiondomaine')
-
+    @php($titre='Liste des demandes')
+    @php($lien='traitementautredemandehabilitation')
     <!-- BEGIN: Content-->
-
     <h5 class="py-2 mb-1">
-        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}} / </span> {{$soustitre}}
+        <span class="text-muted fw-light"> <i class="ti ti-home"></i>  Accueil / {{$Module}} / {{$titre}}  </span>
     </h5>
-
-
-
 
     <div class="content-body">
         @if ($message = Session::get('success'))
@@ -57,13 +50,20 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 
                         <div class="col-xl-12">
+                            <div align="right" class="mb-2">
+                                <button type="button"
+                                        class="btn rounded-pill btn-outline-primary waves-effect waves-light"
+                                        data-bs-toggle="modal" data-bs-target="#modalToggle">
+                                    Voir le parcours de validation
+                                </button>
+                            </div>
                         <h6 class="text-muted"></h6>
                         <div class="nav-align-top nav-tabs-shadow mb-4">
                             <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
                                 <button
                                 type="button"
-                                class="nav-link <?php if($idetape==1){ echo "active";} ?>"
+                                class="nav-link"
                                 role="tab"
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-top-informationentreprise"
@@ -72,76 +72,33 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 Informations sur l'entreprise
                                 </button>
                             </li>
-                                <li class="nav-item">
-                                    <button
+                            <li class="nav-item">
+                                <button
+                                type="button"
+                                class="nav-link"
+                                role="tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#navs-top-info-demande"
+                                aria-controls="navs-top-info-demande"
+                                aria-selected="false">
+                                Information sur la demande
+                                </button>
+                            </li>
+                                    <li class="nav-item">
+                                        <button
                                         type="button"
-                                        class="nav-link <?php if($idetape==2){ echo "active";} ?>"
+                                        class="nav-link active"
                                         role="tab"
                                         data-bs-toggle="tab"
-                                        data-bs-target="#navs-top-informationdemande"
-                                        aria-controls="navs-top-informationdemande"
-                                        aria-selected="true">
-                                        Informations sur la demande
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button
-                                        type="button"
-                                        class="nav-link <?php if($idetape==3){ echo "active";} ?>"
-                                        role="tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#navs-top-domaineformationdemande"
-                                        aria-controls="navs-top-domaineformationdemande"
-                                        aria-selected="true">
-                                        Domaine de formation demandée
-                                    </button>
-                                </li>
-                                <li class="nav-item">
-                                    <button
-                                        type="button"
-                                        class="nav-link <?php if($idetape==4){ echo "active";} ?>"
-                                        role="tab"
-                                        data-bs-toggle="tab"
-                                        data-bs-target="#navs-top-formateurs"
-                                        aria-controls="navs-top-formateurs"
-                                        aria-selected="true">
-                                        Formateur associé à la demande
-                                    </button>
-                                </li>
-{{--                            <li class="nav-item">--}}
-{{--                                <button--}}
-{{--                                type="button"--}}
-{{--                                class="nav-link <?php if($idetape==5 and count($organisations)>0){ echo "active";} ?>"--}}
-{{--                                role="tab"--}}
-{{--                                data-bs-toggle="tab"--}}
-{{--                                data-bs-target="#navs-top-domaineformation"--}}
-{{--                                aria-controls="navs-top-domaineformation"--}}
-{{--                                aria-selected="false">--}}
-{{--                                Domaine de formation--}}
-{{--                                </button>--}}
-{{--                            </li>--}}
-                                @if ($codeRoles == 'CHEFSERVICE')
-                                <li class="nav-item">
-                                    <button
-                                    type="button"
-                                    class="nav-link <?php if($idetape==5){ echo "active";} ?>"
-                                    role="tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-affectation"
-                                    aria-controls="navs-top-affectation"
-                                    aria-selected="false">
-                                    Affectation
-                                    </button>
-                                </li>
-                            @endif
-
+                                        data-bs-target="#navs-top-traitement"
+                                        aria-controls="navs-top-traitement"
+                                        aria-selected="false">
+                                        Traitement
+                                        </button>
+                                    </li>
                             </ul>
                             <div class="tab-content">
-
-                                <div class="tab-pane fade <?php if($idetape==1){ echo "show active";}  ?>" id="navs-top-informationentreprise" role="tabpanel">
-
-                                    @csrf
-                                    @method('put')
+                                <div class="tab-pane fade" id="navs-top-informationentreprise" role="tabpanel">
                                     <div class="row">
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
@@ -264,7 +221,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="mb-1">
                                                 <label>Nom et prénoms du responsable <strong style="color:red;">*</strong> </label>
                                                 <input disabled type="text" name="nom_responsable_demande_habilitation" id="nom_responsable_demande_habilitation"
-                                                       class="form-control form-control-sm"  value="{{ $demandehabilitation->nom_responsable_demande_habilitation }}">
+                                                       class="form-control form-control-sm"  value="{{ $habilitation->nom_responsable_demande_habilitation }}">
                                             </div>
                                             @error('nom_responsable_demande_habilitation')
                                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -275,7 +232,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="mb-1">
                                                 <label>Fonction du responsable  <strong style="color:red;">*</strong> </label>
                                                 <input disabled type="text" name="fonction_demande_habilitation" id="fonction_demande_habilitation"
-                                                       class="form-control form-control-sm"  value="{{ $demandehabilitation->fonction_demande_habilitation }}">
+                                                       class="form-control form-control-sm"  value="{{ $habilitation->fonction_demande_habilitation }}">
                                             </div>
                                             @error('fonction_demande_habilitation')
                                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -286,7 +243,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="mb-1">
                                                 <label>Email professionnel du responsable  <strong style="color:red;">*</strong> </label>
                                                 <input disabled type="text" name="email_responsable_habilitation" id="email_responsable_habilitation"
-                                                       class="form-control form-control-sm"  value="{{ $demandehabilitation->email_responsable_habilitation }}">
+                                                       class="form-control form-control-sm"  value="{{ $habilitation->email_responsable_habilitation }}">
                                             </div>
                                             @error('email_responsable_habilitation')
                                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -297,18 +254,27 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             <div class="mb-1">
                                                 <label>Contact du responsable  <strong style="color:red;">*</strong> </label>
                                                 <input disabled type="text" name="contact_responsable_habilitation" id="contact_responsable_habilitation"
-                                                       class="form-control form-control-sm"  value="{{ $demandehabilitation->contact_responsable_habilitation }}">
+                                                       class="form-control form-control-sm"  value="{{ $habilitation->contact_responsable_habilitation }}">
                                             </div>
                                             @error('contact_responsable_habilitation')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
                                         </div>
-
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+                                            <br>
+                                            <span class="badge bg-secondary">
+                                                        <a target="_blank"
+                                                           onclick="NewWindow('{{ asset("/pieces/titre_propriete_contrat_bail/". $habilitation->titre_propriete_contrat_bail)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                            Voir la pièce
+                                                        </a>
+                                                    </span>
+                                        </div>
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
                                                 <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
                                                 <input  disabled type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
-                                                        class="form-control form-control-sm" value="{{ $demandehabilitation->maison_mere_demande_habilitation }}"/>
+                                                        class="form-control form-control-sm" value="{{ $habilitation->maison_mere_demande_habilitation }}"/>
                                             </div>
                                             @error('maison_mere_demande_habilitation')
                                             <div class=""><label class="error">{{ $message }}</label></div>
@@ -327,241 +293,215 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             @enderror
                                         </div>
 
+                                        <div class="col-md-4 col-12">
+                                            <label class="form-label" for="billings-country">Type entreprise <strong style="color:red;">*</strong></label>
+                                            <select disabled class="select2 form-select-sm input-group @error('flag_ecole_autre_entreprise')
+                                                    error
+                                                    @enderror" data-allow-clear="true" name="flag_ecole_autre_entreprise" id="flag_ecole_autre_entreprise">
+                                                <option value="">---Choix du type entreprise--</option>
+                                                <option value="true" @if($habilitation->flag_ecole_autre_entreprise == true ) selected @endif>Ecoles</option>
+                                                <option value="false" @if($habilitation->flag_ecole_autre_entreprise == false ) selected @endif>Autres</option>
+                                            </select>
+                                        </div>
+
                                     </div>
 
                                 </div>
-                                <div class="tab-pane fade <?php if($idetape==2){ echo "show active";}  ?>" id="navs-top-informationdemande" role="tabpanel">
+                                <div class="tab-pane fade " id="navs-top-info-demande" role="tabpanel">
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="mb-1">
-                                                <label> Motif <strong
-                                                        style="color:red;">*</strong></label>
-                                                <select
-                                                    class="select2 form-select-sm input-group" required  data-allow-clear="true"
-                                                        disabled
-                                                    name="id_motif_demande_suppression_habilitation" id="id_motif_demande_suppression_habilitation" >
-                                                    <?=$motif;?>
-                                                </select>
+                                                <label> Type de demande</label>
+                                                <input class="form-control" type="text" disabled
+                                                       @if(@$autre_demande_habilitation_formation->type_autre_demande=='demande_suppression')
+                                                           value=" Demande de suppression"
+                                                       @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
+                                                           value=" Demande d'extension"
+
+                                                    @endif >
                                             </div>
                                         </div>
-                                        <div class="col-md-6 ">
-                                            <label class="form-label">Pièce justificative <strong
-                                                    style="color:red;">*</strong></label>
-                                            <div>
-                                                    <div>
+                                            <div class="col-md-12">
+                                                <div class="mb-1">
+                                                    <label> Domaines de formation <strong
+                                                            style="color:red;">*</strong></label>
+                                                    <select
+                                                        class="select2 form-control form-select-sm input-group"
+                                                        disabled
+                                                        required multiple  data-allow-clear="true" name="id_domaine_demande_habilitation[]" id="id_domaine_demande_habilitation" >
+                                                        @foreach($domaineDemandeHabilitations as $domaineDemandeHabilitation)
+                                                            <option value="{{$domaineDemandeHabilitation->id_domaine_demande_habilitation}}"
+
+                                                                    @foreach($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations as $domaine)
+                                                                        @if($domaine->id_domaine_demande_habilitation == $domaineDemandeHabilitation->id_domaine_demande_habilitation)
+                                                                            selected
+                                                                @endif
+                                                                @endforeach
+                                                            >{{$domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation}} /
+                                                                {{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }} /
+                                                                {{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-1">
+                                                    <label> Motif <strong
+                                                            style="color:red;">*</strong></label>
+                                                    <select
+                                                        class="select2 form-select-sm input-group" required  data-allow-clear="true"
+                                                        disabled
+
+                                                        name="id_motif_autre_demande_habilitation_formation" id="id_motif_autre_demande_habilitation_formation" >
+                                                        <option value="">Selectionner un motif</option>
+                                                        @foreach($motifs as $motif)
+
+                                                            <option value="{{$motif->id_motif}}"
+                                                                    @if(@$autre_demande_habilitation_formation->id_motif_autre_demande_habilitation_formation==@$motif->id_motif)
+                                                                        selected
+                                                                @endif >{{$motif->libelle_motif}}</option>
+
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <label class="form-label">Pièce justificative <strong
+                                                        style="color:red;">*</strong></label>
+                                                <div>
                                                     <span class="badge bg-secondary mt-2">
                                                                 <a target="_blank"
-                                                                   onclick="NewWindow('{{ asset("pieces/demande_suppression_domaine/". $demande_extension->piece_demande_suppression_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                   onclick="NewWindow('{{ asset("pieces/demande_suppression_domaine/". $autre_demande_habilitation_formation->piece_autre_demande_habilitation_formation)}}','',screen.width/2,screen.height,'yes','center',1);">
                                                                     Voir la pièce
                                                                 </a>
                                                             </span>
-                                                    </div>
+                                                </div>
+
                                                 <div id="defaultFormControlHelp" class="form-text ">
                                                     <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                         maxi : 5Mo</em>
                                                 </div>
+
                                             </div>
-                                        </div>
-                                        <div class="col-md-12 col-12">
-                                            <div class="mb-1">
-                                                <label>Commentaire de la demande de suppression <strong
-                                                        style="color:red;">*</strong></label>
-                                                <textarea class="form-control form-control-sm" required
-                                                              disabled
-                                                          name="commentaire_demande_suppression_habilitation"
-                                                          id="commentaire_demande_suppression_habilitation" rows="7">{{@$demande_extension->commentaire_demande_suppression_habilitation}}</textarea>
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label>Commentaire de la demande de suppression <strong
+                                                            style="color:red;">*</strong></label>
+                                                    <textarea class="form-control form-control-sm" disabled required
+
+                                                              name="commentaire_autre_demande_habilitation_formation"
+                                                              id="commentaire_autre_demande_habilitation_formation" rows="7">{{@$autre_demande_habilitation_formation->commentaire_autre_demande_habilitation_formation}}</textarea>
+                                                </div>
                                             </div>
-                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="tab-pane fade <?php if($idetape==3){ echo "show active";}  ?>" id="navs-top-domaineformationdemande" role="tabpanel">
+                                <div class="tab-pane fade show active" id="navs-top-traitement" role="tabpanel">
                                     <div class="row">
-                                        <table class="table table-bordered table-striped table-hover table-sm"
-                                               id=""
-                                               style="margin-top: 13px !important">
-                                            <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Finalité </th>
-                                                <th>Public </th>
-                                                <th>Domaine de formation </th>
-                                                @if($demande_extension->flag_soumis_demande_suppression_habilitation!=true)
-
-                                                    <th>Action</th>
-                                                @endif
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $i = 0; ?>
-                                            @foreach ($domaine_list_demandes as $key => $domaineDemandeHabilitation)
-                                                    <?php $i += 1;?>
-                                                <tr>
-                                                    <td>{{ $i }}</td>
-                                                    <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}</td>
-                                                    <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}</td>
-                                                    <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}</td>
-                                                    @if($demande_extension->flag_soumis_demande_suppression_habilitation!= true)
-
-                                                        <td>
-                                                            <a href="{{ route($lien.'.deletedomaineDemandeExtension',[\App\Helpers\Crypt::UrlCrypt($id),\App\Helpers\Crypt::UrlCrypt($id1),\App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)]) }}"
-                                                               class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
-                                                               title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                                        </td>
-                                                    @endif
-
-                                                </tr>
-                                            @endforeach
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade <?php if($idetape==4){ echo "show active";}  ?>" id="navs-top-formateurs" role="tabpanel">
-                                    <div class="row">
-                                        <table class="table table-bordered table-striped table-hover table-sm"
-                                               id=""
-                                               style="margin-top: 13px !important">
-                                            <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Domaine</th>
-                                                <th>Nom et prénom </th>
-                                                <th>Année d'experience </th>
-                                                <th>Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $i = 0; ?>
-                                            @foreach ($formateurs as $key => $formateur)
-                                                    <?php $i += 1;?>
-                                                <tr>
-                                                    <td>{{ $i }}</td>
-                                                    <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
-                                                    <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
-                                                    <td>{{  Fonction::calculerAnneesExperience($formateur->id_formateurs)  }}</td>
-                                                    <td>
-                                                        <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                                           class=" "
-                                                           title="Modifier"><img src='/assets/img/eye-solid.png'></a>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                @if ($codeRoles == 'CHEFSERVICE'
-
-                                )
-
-                                            <div class="tab-pane fade <?php if($idetape==5){ echo "show active";}  ?>" id="navs-top-affectation" role="tabpanel">
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="row">
-                                                            <form method="POST" class="form" action="{{ route($lien.'.updateaffectationExtension', [\App\Helpers\Crypt::UrlCrypt($demande_extension->id_demande_suppression_habilitation)]) }}">
-                                                                @csrf
-                                                                @method('put')
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="row">
-                                                                            <div class="col-md-12 col-12">
-                                                                                <label class="form-label" for="billings-country">Charge d'habilitation <strong style="color:red;">*</strong></label>
-                                                                                <select @if($demande_extension->flag_soumis_cs==true)
-                                                                                            disabled
-                                                                                        @endif class="select2 form-select-sm input-group @error('id_charge_habilitation')
-                                                                                    error
-                                                                                    @enderror" @if($demande_extension->flag_soumis_cs==true)
-                                                                                            disabed
-                                                                                        @endif data-allow-clear="true" name="id_charge_habilitation">
-
-                                                                                        <?= $chargerHabilitationsList; ?>
-                                                                                </select>
-                                                                                @error('id_charge_habilitation')
-                                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                                                @enderror
-                                                                            </div>
-                                                                            <div class="col-md-12 col-12">
-                                                                                <div class="mb-1">
-                                                                                    <label>Commentaire  <strong style="color:red;">*</strong></label>
-                                                                                    <textarea
-
-                                                                                        @if($demande_extension->flag_soumis_cs==true)
-                                                                                            disabled
-                                                                                        @endif
-
-                                                                                        rows="3" class="form-control @error('commentaire_cs') error @enderror" name="commentaire_cs">{{@$demande_extension->commentaire_cs}}</textarea>
-                                                                                </div>
-                                                                                @error('commantaire_cs')
-                                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                                                @enderror
-                                                                            </div>
-
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                    <div class="col-12" align="right">
-                                                                        <hr>
-
-                                                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
-                                                                            Retour</a>
-
-                                                                        @if($demande_extension->flag_soumis_cs==false)
-                                                                            <button type="submit" name="action" value="imputer"
-                                                                                    onclick='javascript:if (!confirm("Voulez-vous imputer cette demande de suppression ?")) return false;'
-                                                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                                                Imputer
-                                                                            </button>
-                                                                        @endif
-
-
-
-                                                                    </div>
-                                                                </div>
-                                                                <br/>
-                                                            </form>
-
-
+                                            <div class="col-md-12">
+                                                <form  method="POST" class="form" action="{{ route($lien.'.update', \App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation)) }}" enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('put')
+                                                    <div class="row">
+                                                        <input type="hidden" name="id_combi_proc" value="{{ \App\Helpers\Crypt::UrlCrypt($id_combi_proc) }}"/>
+                                                        <div class="col-md-12 col-12">
+                                                            <div class="mb-1">
+                                                                <label>Commentaire <strong style="color:red;">(obligatoire si rejeté)*</strong>: </label>
+                                                                @if($parcoursexist->count()<1)
+                                                                    <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6"></textarea>
+                                                                @else
+                                                                    <textarea class="form-control form-control-sm"  name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12" align="right">
+                                                            <hr>
+                                                                <?php if(count($parcoursexist)<1){?>
+                                                            <button type="submit" name="action" value="Valider"
+                                                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light" >
+                                                                Valider
+                                                            </button>
+                                                            <button type="submit" name="action" value="Rejeter"
+                                                                    class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                                Rejeter
+                                                            </button>
+                                                            <?php } ?>
+                                                            <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                                               href="/{{$lien }}">
+                                                                Retour</a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <table class="table table-bordered table-striped table-hover table-sm"
-                                                               id=""
-                                                               style="margin-top: 13px !important">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Chargés habilitations </th>
-                                                                <th>Dossiers en cours</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-
-                                                                <?php $i=0; ?>
-                                                            @foreach ($NombreDemandeHabilitation as $key => $nbre)
-                                                                <tr>
-                                                                    <td>{{ ++$i }}</td>
-                                                                    <td>{{  @$nbre->name }} {{  @$nbre->prenom_users }}</td>
-                                                                    <td>{{  @$nbre->nbre_dossier_en_cours }} </td>
-                                                                </tr>
-                                                            @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                </div>
-
+                                                </form>
                                             </div>
-                                        <?php //} ?>
-
-                                @endif
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
+    <div class="col-md-4 col-12">
+        <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle"
+             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="card">
+                        <h5 class="card-header">Parcours de validation de la demande</h5>
+                        <div class="card-body pb-2">
+                            <ul class="timeline pt-3">
+                                @foreach ($ResultProssesList as $res)
+                                    <li class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+                                        <div class="timeline-event">
+                                            <div class="timeline-header border-bottom mb-3">
+                                                <h6 class="mb-0">{{ $res->priorite_combi_proc }}</h6>
+                                                <span class="text-muted"><strong>{{ $res->name }}</strong></span>
+                                            </div>
+                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    @if($res->is_valide==true)
+                                                        <div class="row ">
+                                                            <div>
+                                                                <span>Observation : {{ $res->comment_parcours }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span>Validé le  {{ $res->date_valide }}</span>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    @if($res->is_valide===false)
+                                                        <div class="row">
+                                                            <div>
+                                                                <span>Observation : {{ $res->comment_parcours }}</span>
+                                                            </div>
+                                                            <div>
+                                                                <span class="badge bg-label-danger">Validé le {{ $res->date_valide }}</span>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
         <!-- END: Content-->
