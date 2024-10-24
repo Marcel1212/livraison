@@ -27,6 +27,7 @@ use App\Models\CahierPlansProjets;
 use App\Models\CategorieComite;
 use App\Models\ComiteParticipant;
 use App\Models\DemandeHabilitation;
+use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormationCabinet;
 use App\Models\FicheAgrement;
 use App\Models\PlanFormation;
@@ -722,14 +723,27 @@ class ComitesController extends Controller
                                     ->select('df.id_domaine_formation', 'df.libelle_domaine_formation')
                                     ->get();
 
-                            foreach ($domaines as $domaine) {
 
+                            foreach ($domaines as $domaine) {
+                                // Créer l'enregistrement dans DomaineFormationCabinet
                                 DomaineFormationCabinet::create([
                                     'id_domaine_formation' => $domaine->id_domaine_formation,
                                     'id_entreprises' => $entreprise->id_entreprises,
                                     'flag_domaine_formation_cabinet' => true
                                 ]);
 
+                                // Récupérer directement l'enregistrement
+                                $domDem = DomaineDemandeHabilitation::where([
+                                    ['id_domaine_formation', '=', $domaine->id_domaine_formation],
+                                    ['id_demande_habilitation', '=', $demh->id_demande_habilitation]
+                                ])->first();
+
+                                if ($domDem) {
+                                    // Mettre à jour directement
+                                    $domDem->update([
+                                        'flag_agree_domaine_demande_habilitation' => true
+                                    ]);
+                                }
                             }
 
                             //Envoi SMS

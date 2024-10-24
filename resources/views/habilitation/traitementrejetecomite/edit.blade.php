@@ -772,7 +772,37 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                 <div class="tab-pane fade <?php if($idetape==9){ echo "show active";} ?>" id="navs-top-traitement" role="tabpanel">
                                     <div class="row">
-dgssh
+                                        <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt($comiterejet->id_comite_rejeter)]) }}" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('put')
+
+                                            <div class="row">
+
+
+                                                <div class="col-md-12">
+                                                    <label class="form-label" for="commentaire_de_rejet">Commentaire
+                                                        <strong style="color:red;">*</strong></label>
+                                                        <textarea class="form-control form-control-sm" name="commentaire_de_rejet" id="commentaire_de_rejet" rows="9" required></textarea>
+                                                </div>
+
+
+                                            </div>
+
+
+                                            <div class="col-12" align="right">
+                                                <hr>
+
+
+
+                                                         <button onclick='javascript:if (!confirm("Le cabinet recevra votre message et le dossier  . Cette action est irréversible.")) return false;' type="submit" name="action" value="CommentaireRejet"
+                                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                 Valider
+                                                         </button>
+
+                                            </div>
+
+
+                                        </form>
                                     </div>
                                 </div>
 
