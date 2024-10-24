@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
         ]);
 
         Route::get('traitementhabilitationrejete/{id}/{id1}/edit', [TraitementDemandeHabilitationRejeteController::class, 'edit'])->name('traitementhabilitationrejete.edit');
+        Route::put('traitementhabilitationrejete/{id}/{id1}/update', [TraitementDemandeHabilitationRejeteController::class, 'update'])->name('traitementhabilitationrejete.update');
 
     });
 

@@ -16,6 +16,7 @@ use App\Models\DemandeHabilitation;
 use App\Models\DemandeIntervention;
 use App\Models\DomaineDemandeHabilitation;
 use App\Models\DomaineFormation;
+use App\Models\Entreprises;
 use App\Models\Experiences;
 use App\Models\FormateurDomaineDemandeHabilitation;
 use App\Models\Formateurs;
@@ -35,8 +36,13 @@ use App\Models\TypeIntervention;
 use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
 use App\Models\Visites;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Menu;
+use App\Helpers\SmsPerso;
+use App\Helpers\GenerateCode as Gencode;
+use App\Helpers\Email;
 
 class TraitementDemandeHabilitationRejeteController extends Controller
 {
@@ -47,7 +53,7 @@ class TraitementDemandeHabilitationRejeteController extends Controller
     {
         $habilitations = ComiteRejeter::join('demande_habilitation','comite_rejeter.id_demande','demande_habilitation.id_demande_habilitation')
                                     ->join('users','demande_habilitation.id_charge_habilitation','users.id')
-                                    ->where([['code_processus','=','HAB']])
+                                    ->where([['code_processus','=','HAB'],['flag_traite_comite_rejet','=',false]])
                                     ->get();
 
        // dd($demandes);
@@ -127,10 +133,13 @@ class TraitementDemandeHabilitationRejeteController extends Controller
     public function edit($id,$id1)
     {
         $id =  Crypt::UrldeCrypt($id);
-        $idetape =  Crypt::UrldeCrypt($id1);
+        $idcomiterejet =  Crypt::UrldeCrypt($id1);
+        $idetape =  9;
 
 
         $demandehabilitation = DemandeHabilitation::find($id);
+
+        $comiterejet = ComiteRejeter::find($idcomiterejet);
 
         $visites = Visites::where([['id_demande_habilitation','=',$demandehabilitation->id_demande_habilitation]])->first();
        // dd($demandehabilitation->visites->statut);
@@ -260,16 +269,99 @@ class TraitementDemandeHabilitationRejeteController extends Controller
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
                     'motif','typeDomaineDemandeHabilitationPublicList','avisgobales',
-                    'visites','rapportVisite','commentairenonrecevables','piecesDemandeHabilitations'));
+                    'visites','rapportVisite','commentairenonrecevables','piecesDemandeHabilitations','comiterejet'));
 
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,  $id,$id1)
     {
-        //
+        $id =  Crypt::UrldeCrypt($id);
+        $id1 =  Crypt::UrldeCrypt($id1);
+
+        $logo = Menu::get_logo();
+
+        $demandehabilitation = DemandeHabilitation::find($id);
+
+        $comiterejeter = ComiteRejeter::find($id1);
+
+        if ($request->isMethod('put')) {
+            $input = $request->all();
+
+            $this->validate($request, [
+                'commentaire_de_rejet' => 'required',
+            ], [
+                'commentaire_de_rejet.required' => 'Veuillez ajouter un commentaire.'
+            ]);
+
+            $input['flag_reception_demande_habilitation'] = false;
+            $input['flag_rejet_demande_habilitation'] = true;
+            $input['flag_soumis_demande_habilitation'] = false;
+
+            $input['date_reception_demande_habilitation'] = Carbon::now();
+            $input['date_rejet_demande_habilitation'] = Carbon::now();
+
+            $avis = AvisGlobaleComiteTechnique::where([['id_demande','=',$id],['id_comite','=',$comiterejeter->id_comite],['code_processus','=','HAB']])->first();
+
+            $comiterejeter->update([
+                'flag_traite_comite_rejet' => true,
+                'commentaire_de_rejet' => $input['commentaire_de_rejet'],
+                'commentaire_rejeter' => $avis->commentaire_agct,
+                'date_traite_comite_rejet' => Carbon::now(),
+            ]);
+
+            $commentaire = CommentaireNonRecevableDemande::create([
+                'commentaire_commentaire_non_recevable_demande' => $input['commentaire_de_rejet'],
+                'id_demande' => $id,
+                'id_motif_recevable' => $avis->id_motif,
+                'code_demande' => 'HAB'
+            ]);
+
+            $demandehabilitation->update($input);
+
+            $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+            $demCommentaire = $input['commentaire_de_rejet'];
+
+                if (isset($demandehabilitation->email_responsable_habilitation)) {
+                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous avons examiné votre demande habilitation sur e-FDFP, et
+                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
+                                    <br><b>Commentaire : </b> ".@$demCommentaire."
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                        fournir, n'hésitez pas à contactez votre chargé habilitation : ".@$demandehabilitation->userchargerhabilitation->email." pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                        soumettre la demande lorsque les problèmes seront résolus.
+                                        Cordialement,
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+                }
+
+                //Envoi SMS Rejeté
+                // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                //     $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver. Veuillez mettre a jour le dossier .
+                //         Cordialement,
+                //         L'équipe e-FDFP";
+                //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                // }
+
+                return redirect()->route('traitementhabilitationrejete.index')->with('success', 'Demande traité avec succès.');
+
+
+        }
+
+
     }
 
     public function ficheanalyse($id) {
