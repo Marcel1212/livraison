@@ -456,7 +456,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                 style="margin-top: 13px !important">
                                 <thead>
                                     <tr>
-                                        <th><label>Cocher tout</label><br /><input type="checkbox" id="allct" name="allct" /></th>
+                                        <th>N°</th>
                                         <th>Type processus </th>
                                         <th>Entreprise </th>
                                         <th>Conseiller </th>
@@ -475,12 +475,7 @@ if (!empty($anneexercice->date_prolongation_periode_exercice)) {
                                     $i = 0; ?>
                                     @foreach ($listedemandesss as $key => $demande)
                                         <tr>
-                                            <td>
-                                                <input type="checkbox"
-                                                    value="<?php echo $demande->id_demande; ?>/<?php echo $demande->code_processus; ?>"
-                                                    name="demandect[<?php echo $demande->id_demande; ?>]"
-                                                    id="demandect<?php echo $demande->id_demande; ?>" />
-                                            </td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 @if ($demande->code_processus == 'PF')
                                                     PLAN DE FORMATION
