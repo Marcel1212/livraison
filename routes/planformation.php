@@ -62,7 +62,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('planformation/store', [PlanFormationController::class, 'store'])->name('planformation.store');
         Route::get('planformation/{id}/show', [PlanFormationController::class, 'show'])->name('planformation.show');
         Route::get('planformation/{id}/deleteapf', [PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
-			});
+
+            Route::get('planformation/{id}/upapf', [PlanFormationController::class, 'upapf'])->name('planformation.upapf');
+            Route::get('planformation/{id}/downapf', [PlanFormationController::class, 'downapf'])->name('planformation.downapf');
+
+        });
 
 	    /*Route::group(['middleware' => ['can:cotisation-index']], function () {
         Route::get('cotisation', [CotisationController::class, 'index'])->name('cotisation');
