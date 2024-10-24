@@ -326,7 +326,7 @@ class TraitementDemandeHabilitationRejeteController extends Controller
             $demCommentaire = $input['commentaire_de_rejet'];
 
                 if (isset($demandehabilitation->email_responsable_habilitation)) {
-                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $sujet = "Rejet de la demande habilitation sur e-FDFP";
                     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                     $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
                                     <br><br>Nous avons examiné votre demande habilitation sur e-FDFP, et
