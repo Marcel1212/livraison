@@ -458,7 +458,7 @@ use App\Helpers\PartEntreprisesHelper;
                                 @method('put')
                                 <div class="row">
 
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <label class="form-label" for="billings-country">Type de domaine <strong
                                                 style="color:red;">*</strong></label>
                                         <select
@@ -481,6 +481,52 @@ use App\Helpers\PartEntreprisesHelper;
                                             class="select2 form-select-sm input-group @error('id_domaine_formation')
                                                         error
                                                         @enderror"
+                                            data-allow-clear="true" name="id_domaine_formation">
+                                            <?= $domainesList ?>
+                                        </select>
+                                        @error('id_domaine_formation')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
+                                    </div> --}}
+
+
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="billings-country">La finalité <strong
+                                                style="color:red;">*</strong></label>
+                                        <select
+                                            class="select2 form-select-sm input-group @error('id_type_domaine_demande_habilitation')
+                                            error
+                                            @enderror"
+                                            data-allow-clear="true" name="id_type_domaine_demande_habilitation">
+                                            <?= $typeDomaineDemandeHabilitationList ?>
+                                        </select>
+                                        @error('id_type_domaine_demande_habilitation')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="billings-country">Le public <strong
+                                                style="color:red;">*</strong></label>
+                                        <select
+                                            class="select2 form-select-sm input-group @error('id_type_domaine_demande_habilitation_public')
+                                            error
+                                            @enderror"
+                                            data-allow-clear="true" name="id_type_domaine_demande_habilitation_public">
+                                            <?= $typeDomaineDemandeHabilitationPublicList ?>
+                                        </select>
+                                        @error('id_type_domaine_demande_habilitation_public')
+                                            <div class=""><label class="error">{{ $message }}</label></div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="billings-country">Domaine de formation <strong
+                                                style="color:red;">*</strong></label>
+                                        <select
+                                            class="select2 form-select-sm input-group @error('id_domaine_formation')
+                                            error
+                                            @enderror"
                                             data-allow-clear="true" name="id_domaine_formation">
                                             <?= $domainesList ?>
                                         </select>
@@ -521,6 +567,43 @@ use App\Helpers\PartEntreprisesHelper;
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Finalité </th>
+                                        <th>Public </th>
+                                        <th>Domaine de formation </th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 0; ?>
+
+                                    @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                                        <?php $i += 1; ?>
+                                        <tr>
+                                            <td>{{ $i }}</td>
+                                            <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                                            </td>
+                                            <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}
+                                            </td>
+                                            <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                            </td>
+                                            <td>
+                                                <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                                <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
+                                                    class=""
+                                                    onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
+                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                            {{-- <table class="table table-bordered table-striped table-hover table-sm" id=""
+                                style="margin-top: 13px !important">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
                                         <th>Type domaine de formation </th>
                                         <th>Domaine de formation </th>
                                         <th>Action</th>
@@ -548,7 +631,7 @@ use App\Helpers\PartEntreprisesHelper;
                                     @endforeach
 
                                 </tbody>
-                            </table>
+                            </table> --}}
                         </div>
                         <div class="tab-pane fade <?php if ($idetape == 4) {
                             echo 'show active';
@@ -924,15 +1007,15 @@ use App\Helpers\PartEntreprisesHelper;
                                                 if (isset($formateur->date_fin_formateur)) {
                                                     $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
                                                     $datefin = \Carbon\Carbon::parse($formateur->date_fin_formateur);
-
+                                                
                                                     $anneexperience = $datedebut->diffInYears($datefin);
                                                 } else {
                                                     $datedebut = \Carbon\Carbon::parse($formateur->date_debut_formateur);
                                                     $datefin = \Carbon\Carbon::now();
-
+                                                
                                                     $anneexperience = $datedebut->diffInYears($datefin);
                                                 }
-
+                                                
                                                 echo $anneexperience;
                                                 ?>
                                             </td>
@@ -1336,7 +1419,7 @@ use App\Helpers\PartEntreprisesHelper;
                         <div class="tab-pane fade <?php if ($idetape == 8) {
                             echo 'show active';
                         } ?>" id="navs-top-Soumettre" role="tabpanel">
-                            <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                            <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true && $demandehabilitation->decret_nomination_directeur != null && $demandehabilitation->decret_structure_public != null){ ?>
                             <div class="col-md-12" align="right">
                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                     data-bs-target="#SoummissiondemandehabilitationApprouve1">
@@ -1346,6 +1429,10 @@ use App\Helpers\PartEntreprisesHelper;
 
                             <br />
                             <br />
+
+                            <?php } ?>
+                            <?php if ($demandehabilitation->decret_nomination_directeur == null && $demandehabilitation->decret_structure_public == null){ ?>
+
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 <div class="alert-body" style="text-align: center">
                                     Veuillez joindre les fichiers afin de valider votre demande d'habilitation
@@ -1413,7 +1500,7 @@ use App\Helpers\PartEntreprisesHelper;
                                                     <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
                                                         maxi : 5Mo</em>
                                                 </div>
-                         ""                       <?php } ?> <br>
+                                                "" <?php } ?> <br>
                                                 @if ($demandehabilitation->decret_nomination_directeur != null)
                                                     <td>
                                                         <span class="badge bg-secondary">
@@ -1467,7 +1554,7 @@ use App\Helpers\PartEntreprisesHelper;
 
         <div class="modal fade" id="SoummissiondemandehabilitationApprouve1" tabindex="-1"
             aria-labelledby="SoummissiondemandehabilitationApprouve" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-dialog modal-dialog-centered1 modal-simple modal-add-new-cc modal-dialog-scrollable">
                 <div class="modal-content">
                     <form method="POST" class="form"
                         action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
@@ -1487,10 +1574,7 @@ use App\Helpers\PartEntreprisesHelper;
                                     "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, " .
                                     @$demandehabilitation->fonction_demande_habilitation .
                                     ", atteste l'exactitude des informations contenue dans ce document.
-
-
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                                                                                                                                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                 ?>
                                 <?php echo wordwrap($message, 144, "<br>\n"); ?>
 

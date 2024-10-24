@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('traitementdemandehabilitation/{id}/store/visite', [TraitementDemandeHabilitationController::class, 'storevisite'])->name('traitementdemandehabilitation.storevisite');
         Route::post('traitementdemandehabilitation/{id}/rapport/visite', [TraitementDemandeHabilitationController::class, 'rapportvisite'])->name('traitementdemandehabilitation.rapportvisite');
         Route::get('traitementdemandehabilitation/{id}/show', [TraitementDemandeHabilitationController::class, 'show'])->name('traitementdemandehabilitation.show');
+        Route::get('traitementdemandehabilitation/{id}/shownotetechnique', [TraitementDemandeHabilitationController::class, 'shownotetechnique'])->name('traitementdemandehabilitation.shownotetechnique');
         Route::get('traitementdemandehabilitation/{id}/rapport', [TraitementDemandeHabilitationController::class, 'rapport'])->name('traitementdemandehabilitation.rapport');
         Route::get('traitementdemandehabilitation/{id}/delete', [TraitementDemandeHabilitationController::class, 'delete'])->name('traitementdemandehabilitation.delete');
         Route::get('traitementdemandehabilitation/{id}/deleteapf', [TraitementDemandeHabilitationController::class, 'deleteadh'])->name('traitementdemandehabilitation.deleteadh');

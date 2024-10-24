@@ -205,6 +205,7 @@ class DemandeHabilitationController extends Controller
                 $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
                 $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
                 $input['type_demande'] = 'NOUVELLE DEMANDE';
+                $input['id_processus'] = 11;
                 $input['type_entreprise'] = 'PU';
 
                 $habilitation = DemandeHabilitation::create($input);
@@ -689,6 +690,13 @@ class DemandeHabilitationController extends Controller
             $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .'/'. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
         }
 
+        $typeDomaineDemandeHabilitationPublic = TypeDomaineDemandeHabilitationPublic::where([['flag_type_type_domaine_demande_habilitation_public','=',true]])->get();
+        $typeDomaineDemandeHabilitationPublicList = "<option value=''> Selectionnez le public </option>";
+        foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
+            $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
+        }
+
+
         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get();
@@ -713,7 +721,7 @@ class DemandeHabilitationController extends Controller
         return view('habilitation.demande.editpu', compact('demandehabilitation','infoentreprise','banque','pay','idetape',
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
-                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList'));
+                    'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList'));
     }
 
     /**
@@ -1139,12 +1147,15 @@ class DemandeHabilitationController extends Controller
                 $this->validate($request, [
                     'id_type_domaine_demande_habilitation' => 'required',
                     'id_domaine_formation' => 'required',
+                    'id_type_domaine_demande_habilitation_public'=> 'required',
                 ],[
                     'id_type_domaine_demande_habilitation.required' => 'Veuillez selectionner le type de domaine.',
                     'id_domaine_formation.required' => 'Veuillez selectionner le domaine de formation.',
+                    'id_type_domaine_demande_habilitation_public'=> 'Veuillez selectionner le public',
                 ]);
 
                 $input = $request->all();
+                //dd($input); exit();
 
                 $input['id_demande_habilitation'] = $id;
 

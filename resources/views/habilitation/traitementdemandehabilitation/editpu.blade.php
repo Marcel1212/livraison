@@ -116,6 +116,7 @@ use App\Helpers\PartEntreprisesHelper;
                                 Pieces jointes
                             </button>
                         </li>
+
                         <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true ){ ?>
                         <li class="nav-item">
                             <button type="button" class="nav-link <?php if ($idetape == 9) {
@@ -127,6 +128,19 @@ use App\Helpers\PartEntreprisesHelper;
                             </button>
                         </li>
                         <?php } ?>
+
+                        <?php if ($demandehabilitation->flag_soumis_charge_habilitation == true && $demandehabilitation->flag_reception_demande_habilitation == true && $role !='CHARGEHABIL' ){ ?>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link <?php if ($idetape == 10) {
+                                echo 'active';
+                            } ?>" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-top-traitement" aria-controls="navs-top-traitement"
+                                aria-selected="false">
+                                Traitement
+                            </button>
+                        </li>
+                        <?php } ?>
+
 
                     </ul>
                     <div class="tab-content">
@@ -552,29 +566,25 @@ use App\Helpers\PartEntreprisesHelper;
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Type domaine de formation </th>
+                                        <th>Finalité </th>
+                                        <th>Public </th>
                                         <th>Domaine de formation </th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $i = 0; ?>
+
                                     @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
                                         <?php $i += 1; ?>
                                         <tr>
                                             <td>{{ $i }}</td>
                                             <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
                                             </td>
+                                            <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}
+                                            </td>
                                             <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
                                             </td>
-                                            <td>
-                                                <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                <a href="{{ route($lien . '.delete', \App\Helpers\Crypt::UrlCrypt($domaineDemandeHabilitation->id_domaine_demande_habilitation)) }}"
-                                                    class=""
-                                                    onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
-                                                    title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-                                                <?php } ?>
-                                            </td>
+
                                         </tr>
                                     @endforeach
 
@@ -1472,6 +1482,82 @@ use App\Helpers\PartEntreprisesHelper;
                                         </div>
                                     </div>
 
+                                    <?php if  ( $role =='CHEFSERVICE'){ ?>
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-12 col-12">
+                                                    <label class="form-label" for="billings-country">Charge d'habilitation
+                                                        <strong style="color:red;">*</strong></label>
+                                                    <?php if ($demandehabilitation->flag_soumis_charge_habilitation != true){
+                                                    ?>
+                                                    <select class="select2 form-select-sm input-group"
+                                                        @if ($demandehabilitation->flag_soumis_charge_habilitation == true) disabled @endif
+                                                        class="select2 form-select-sm input-group"
+                                                        @if ($demandehabilitation->flag_soumis_charge_habilitation == true) disabed @endif
+                                                        data-allow-clear="true" name="id_charge_habilitation">
+
+                                                        <?= $chargerHabilitationsList ?>
+                                                    </select>
+                                                    <?php }elseif ($demandehabilitation->flag_soumis_charge_habilitation == true){
+                                                    ?>
+                                                    <div class="mb-1">
+                                                        <input type="text" name="id_charge_habilitation"
+                                                            id="id_charge_habilitation" disabled
+                                                            class="form-control form-control-sm"
+                                                            value="{{ $chargerHabilitations->name }} {{ $chargerHabilitations->prenom_users }}">
+                                                    </div>
+                                                    <?php }
+                                                    ?>
+
+
+                                                </div>
+                                                <div class="col-md-12 col-12">
+                                                    <div class="mb-1">
+                                                        <label>Commentaire <strong style="color:red;">*</strong></label>
+                                                        <textarea @if ($demandehabilitation->flag_soumis_charge_habilitation == true) disabled @endif rows="3" class="form-control"
+                                                            name="commentaire_cs">{{ @$demandehabilitation->commentaire_cs }}</textarea>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <?php if ($demandehabilitation->flag_soumis_charge_habilitation != true){
+                                                    ?>
+                                        <div class="col-md-4">
+                                            <table class="table table-bordered table-striped table-hover table-sm"
+                                                id="" style="margin-top: 13px !important">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Chargés habilitations </th>
+                                                        <th>Dossiers en cours</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $i = 0; ?>
+                                                    @foreach ($NombreDemandeHabilitation as $key => $nbre)
+                                                        <tr>
+                                                            <td>{{ ++$i }}</td>
+                                                            <td>{{ @$nbre->name }} {{ @$nbre->prenom_users }}</td>
+                                                            <td>{{ @$nbre->nbre_dossier_en_cours }} </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                        <?php } ?>
+
+
+                                    </div>
+
+                                    <?php }  ?>
+
 
                                     <div class="col-12" align="right">
                                         <hr>
@@ -1489,8 +1575,10 @@ use App\Helpers\PartEntreprisesHelper;
                                         <a class="btn btn-sm btn-outline-secondary waves-effect"
                                             href="/{{ $lien }}">
                                             Retour</a>
+
                                     </div>
                                 </div>
+
                             </form>
                             <?php //}
                             ?>
@@ -1691,6 +1779,145 @@ use App\Helpers\PartEntreprisesHelper;
 
 
                         </div>
+
+                        <div class="tab-pane fade <?php if ($idetape == 10) {
+                            echo 'show active';
+                        } ?>" id="navs-top-traitement" role="tabpanel">
+
+                            <button type="button"
+                                class="btn rounded-pill btn-outline-primary btn-sm waves-effect waves-light"
+                                data-bs-toggle="modal" data-bs-target="#modalToggle">
+                                Voir le parcours de validation
+                            </button>
+
+                            <form method="POST" class="form"
+                                action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(9)]) }}"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
+                                <div class="row">
+                                    <input type="hidden" name="id_combi_proc" value={{ $id_num_comb }} />
+                                    <div class="col-md-12 col-12">
+                                        <div class="mb-1">
+                                            <label>Commentaire : </label>
+                                            <?php if(count($parcoursexist)<1){?>
+                                            <textarea class="form-control form-control-sm" name="comment_parcours" id="comment_parcours" rows="6"></textarea>
+                                            <?php
+                                             }else{
+                                            ?>
+                                            <textarea class="form-control form-control-sm" name="comment_parcours" id="comment_parcours" rows="6">{{ $parcoursexist[0]->comment_parcours }}</textarea>
+                                            <?php }
+                                            ?>
+                                        </div>
+                                    </div>
+                                    <div class="col-12" align="right">
+                                        <hr>
+                                        <?php if(count($parcoursexist)<1){?>
+                                        <button type="submit" name="action" value="Valider"
+                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                            Valider
+                                        </button>
+                                        {{-- <button type="submit" name="action" value="Rejeter"
+                                                                  class="btn btn-sm btn-danger me-1 waves-effect waves-float waves-light" >
+                                                              Rejeter
+                                                          </button> --}}
+                                        <?php } ?>
+                                        <?php if ( $demandehabilitation->flag_agrement_demande_habilitaion == true  ){ ?>
+                                        <button type="submit" name="action" value="GenererAgrement"
+                                            class="btn btn-sm btn-info me-1 waves-effect waves-float waves-light"
+                                            onclick="NewWindow('{{ route('traitementdemandehabilitation.show', \App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);">
+                                            Voir l'agrement
+                                        </button>
+
+                                        <?php } ?>
+                                        <a class="btn btn-sm btn-outline-secondary waves-effect"
+                                            href="/{{ $lien }}">
+                                            Retour</a>
+                                    </div>
+                                    <!--<div class="col-12 col-md-2" align="right"> <br>
+                                                                                                                  <button  type="submit" name="action" value="Enregistrer_categorie_plan" class="btn btn-sm btn-primary me-sm-3 me-1">Enregistrer</button>
+                                                                                                              </div>-->
+
+                                </div>
+
+
+
+                            </form>
+
+                            <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggle"
+                                aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalToggleLabel">Etapes </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="card">
+                                            <h5 class="card-header">Parcours de la demande de validation du plan de
+                                                formation</h5>
+                                            <div class="card-body pb-2">
+                                                <ul class="timeline pt-3">
+                                                    @foreach ($ResultProssesList as $res)
+                                                        <li
+                                                            class="timeline-item pb-4 timeline-item-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?> border-left-dashed">
+                                                            <span
+                                                                class="timeline-indicator-advanced timeline-indicator-<?php if($res->is_valide == true){ ?>success<?php }else if($res->is_valide == false){ ?>primary<?php } else{ ?>danger<?php } ?>">
+                                                                <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                                            </span>
+                                                            <div class="timeline-event">
+                                                                <div class="timeline-header border-bottom mb-3">
+                                                                    <h6 class="mb-0">{{ $res->priorite_combi_proc }}
+                                                                    </h6>
+                                                                    <span
+                                                                        class="text-muted"><strong>{{ $res->name }}</strong></span>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                    <div class="d-flex align-items-center">
+                                                                        @if ($res->is_valide == true)
+                                                                            <div class="row ">
+                                                                                <div>
+                                                                                    <span>Observation :
+                                                                                        {{ $res->comment_parcours }}</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span>Validé le
+                                                                                        {{ $res->date_valide }}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                        @if ($res->is_valide === false)
+                                                                            <div class="row">
+                                                                                <div>
+                                                                                    <span>Observation :
+                                                                                        {{ $res->comment_parcours }}</span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span
+                                                                                        class="badge bg-label-danger">Validé
+                                                                                        le {{ $res->date_valide }}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1721,7 +1948,7 @@ use App\Helpers\PartEntreprisesHelper;
                                 
                                 
                                 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                 ?>
                                 <?php echo wordwrap($message, 144, "<br>\n"); ?>
 
@@ -1751,52 +1978,62 @@ use App\Helpers\PartEntreprisesHelper;
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-xl modal-simple modal-pricing">
                 <div class="modal-content">
-                    <form method="POST" class="form"
-                        action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('put')
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="LettreEngagement">VALIDATION</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h6 class="modal-title" align="center"> <strong>LETTRE D'ENREGISTREMENT</strong></h6>
-                            <br>
-                            <p> <br>
-                            <div class="header">
-                                <p>Abidjan, le 27 octobre 2023</p>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="LettreEngagement" align="center"> <strong>LETTRE
+                                D'ENREGISTREMENT</strong></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+
+                    <div class="modal-body">
+                        <button class=" btn-secondary me-1 waves-effect waves-float waves-light" align="right"
+                            onclick="NewWindow('{{ route('traitementdemandehabilitation.show', \App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);">
+                            Imprimer
+                        </button>
+                        <h6 class="modal-title" align="center"> <strong>LETTRE D'ENREGISTREMENT</strong></h6>
+                        <div style="margin-bottom: 25px;" id="">
+                            <div>
+                                <div align="right">
+
+                                    {{-- <input type="button" name="Submit" value="Imprimer"
+                                            class="ecran visuel_bouton" onclick="window.print();" /> --}}
+                                </div>
+                                <br />
                             </div>
-                            <div class="main">
-                                <p>LE SECRETAIRE GENERAL</p>
+                        </div>
 
-                                <p>A</p>
-                                <p>Monsieur le Président<br>
-                                    Université de San Pedro<br>
-                                    01 BP 1800<br>
-                                    SAN PEDRO</p>
+                        <div class="header">
+                            <p>Abidjan, le 27 octobre 2023</p>
+                        </div>
+                        <div class="main">
+                            <p>LE SECRETAIRE GENERAL</p>
 
-                                <br>
+                            <p>A</p>
+                            <p>Monsieur le Président<br>
+                                <?php echo $entreprise->nom_prenom_dirigeant; ?><br>
+                                <?php echo $entreprise->adresse_postal_entreprises; ?><br>
+                                <?php echo $entreprise->localisation_geographique_entreprise; ?></p>
+                            <br>
 
-                                <p><strong>N/Réf. :</strong> FDFP-SG/D2EQPC/N<sup>o</sup><s>180</s>-2023/NKP/AD/fcd</p>
-                                <p><strong>Objet :</strong> V/Demande d’habilitation</p>
+                            <p><strong>N/Réf. :</strong> FDFP-SG/D2EQPC/N<sup>o</sup><s>180</s>-2023/NKP/AD/fcd</p>
+                            <p><strong>Objet :</strong> V/Demande d’habilitation</p>
 
-                                <br>
+                            <br>
 
-                                <p>Monsieur le Président,</p>
-                                <p>Par courrier en date du 19 octobre 2023, vous avez bien voulu solliciter
-                                    l’habilitation du Fonds de Développement de la Formation Professionnelle (FDFP) pour
-                                    mener des actions de formation continue auprès des entreprises.</p>
+                            <p>Monsieur le Président,</p>
+                            <p>Par courrier en date du 19 octobre 2023, vous avez bien voulu solliciter
+                                l’habilitation du Fonds de Développement de la Formation Professionnelle (FDFP) pour
+                                mener des actions de formation continue auprès des entreprises.</p>
 
-                                <p>Par la présente, j’ai l’honneur de vous faire connaître qu’au regard du décret
-                                    N°2021-278 du 09 juin 2021 portant création, attributions, organisation et
-                                    fonctionnement de l’Université de San Pedro, <strong>Le Centre de Formation Continue
-                                        de l’Université de San Pedro (CFC-USP)</strong> est autorisé à mener des actions
-                                    de formation continue au profit des entreprises dans les domaines d'interventions
-                                    ci-après :</p>
+                            <p>Par la présente, j’ai l’honneur de vous faire connaître qu’au regard du décret
+                                N°2021-278 du 09 juin 2021 portant création, attributions, organisation et
+                                fonctionnement , <strong> <?php echo $entreprise->raison_social_entreprises; ?> </strong> est autorisé à mener des
+                                actions
+                                de formation continue au profit des entreprises dans les domaines d'interventions
+                                ci-après :</p>
 
-                                <table class="table table-bordered table-striped table-hover table-sm" id=""
+                            {{-- <table class="table table-bordered table-striped table-hover table-sm" id=""
                                     style="margin-top: 13px !important">
                                     <thead>
                                         <tr>
@@ -1820,113 +2057,154 @@ use App\Helpers\PartEntreprisesHelper;
                                         @endforeach
 
                                     </tbody>
-                                </table>
-                                <br>
+                                </table> --}}
 
-                                <p>Je vous prie d’agréer, Monsieur le Président, l’expression de ma considération
-                                    distinguée.</p>
+                            <table class="table table-bordered table-striped table-hover table-sm" id=""
+                                style="margin-top: 13px !important">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Finalité </th>
+                                        <th>Public </th>
+                                        <th>Domaine de formation </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 0; ?>
 
-                            </div>
-                            </p>
+                                    @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                                        <?php $i += 1; ?>
+                                        <tr>
+                                            <td>{{ $i }}</td>
+                                            <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                                            </td>
+                                            <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}
+                                            </td>
+                                            <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
                             <br>
-                            <br>
 
-
+                            <p>Je vous prie d’agréer, Monsieur le Président, l’expression de ma considération
+                                distinguée.</p>
 
                         </div>
-                        @if ($demandehabilitation->flag_lettre_enregistrement == null)
-                            <div class="modal-footer">
+                        </p>
+                        <br>
+                        <br>
 
-                                <div class="col-md-12" align="right">
-                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
-                                        value="ValideLettre" id="ValideLettre">Valider la lettre d'enregistrement</button>
-                                </div>
 
+
+                    </div>
+                    @if ($demandehabilitation->flag_lettre_enregistrement == null)
+                        <div class="modal-footer">
+
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                    value="ValideLettre" id="ValideLettre">Valider la lettre d'enregistrement</button>
                             </div>
-                        @endif
-                    </form>
+
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
 
 
-        <div class="modal fade" id="NoteTechnique" tabindex="-1" aria-labelledby="NoteTechnique" aria-hidden="true">
+        <div class="modal fade" id="NoteTechnique" tabindex="-1" aria-labelledby="NoteTechnique"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-xl modal-simple modal-pricing">
                 <div class="modal-content">
-                    <form method="POST" class="form"
-                        action="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
-                        enctype="multipart/form-data">
-                        @csrf
-                        @method('put')
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="NoteTechnique">VALIDATION NOTE TECHNIQUE</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="NoteTechnique"> NOTE TECHNIQUE</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+
+
+                    </div>
+
+
+                    <div class="modal-body">
+                        <button class=" btn-secondary me-1 waves-effect waves-float waves-light " align="right"
+                            onclick="NewWindow('{{ route('traitementdemandehabilitation.shownotetechnique', \App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);">
+                            Imprimer
+                        </button>
+                        <h6 class="modal-title" align="center"> <strong>NOTE TECHNIQUE</strong></h6>
+                        <br>
+                        <p> <br>
+
+                        <div class="header">
+                            <p>Abidjan, le 27 octobre 2023</p>
                         </div>
-                        <div class="modal-body">
-                            <h6 class="modal-title" align="center"> <strong>NOTE TECHNIQUE</strong></h6>
+
+                        <div class="main">
+                            <p><strong>Direction des Etudes, de l’Evaluation,</strong><br>
+                                <strong>de la Qualité, de la Prospective et de la Communication</strong><br>
+                                --------------<br>
+                                <strong>Département Habilitation, Contrôle-Liquidation et du Suivi-Evaluation</strong>
+                            </p>
+
+                            <br><br>
+
+                            <p class="subject">NOTE TECHNIQUE</p>
+
+                            <p><strong>Objet :</strong> Demande d’habilitation <?php echo $entreprise->raison_social_entreprises . ' (' . $entreprise->sigl_entreprises . ')'; ?> </p>
+
+                            <p>Le Département chargé de l’Habilitation, du Contrôle-Liquidation et du Suivi-Evaluation a
+                                reçu la demande d’habilitation du <strong> <?php echo $entreprise->raison_social_entreprises . ' (' . $entreprise->sigl_entreprises . ')'; ?> </strong>.</p>
+
+                            <p>Les établissements publics n’étant pas assujetti à la procédure d’habilitation, <strong>
+                                    nous
+                                    sollicitons par la présente note, votre accord pour son enregistrement dans la base
+                                    de
+                                    données du FDFP </strong> comme organisme public de formation autorisé à mener des
+                                actions de
+                                formation continue au profit des entreprises dans les domaines de compétences conférés à
+                                l’Université de San Pedro par son décret de création.</p>
                             <br>
-                            <p> <br>
+                            <p class="signature">Le Chef de Département</p>
 
-                            <div class="header">
-                                <p>Abidjan, le 27 octobre 2023</p>
-                            </div>
+                            <h5 align="center"> <strong> DOMAINES D'INTERVENTIONS</strong></h5>
 
-                            <div class="main">
-                                <p><strong>Direction des Etudes, de l’Evaluation,</strong><br>
-                                    <strong>de la Qualité, de la Prospective et de la Communication</strong><br>
-                                    --------------<br>
-                                    <strong>Département Habilitation, Contrôle-Liquidation et du Suivi-Evaluation</strong>
-                                </p>
+                            <table class="table table-bordered table-striped table-hover table-sm" id=""
+                                style="margin-top: 13px !important">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Finalité </th>
+                                        <th>Public </th>
+                                        <th>Domaine de formation </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 0; ?>
 
-                                <br><br>
-
-                                <p class="subject">NOTE TECHNIQUE</p>
-
-                                <p><strong>Objet :</strong> Demande d’habilitation du Centre de Formation Continue de
-                                    l’Université de San Pedro (CFC-USP)</p>
-
-                                <p>Le Département chargé de l’Habilitation, du Contrôle-Liquidation et du Suivi-Evaluation a
-                                    reçu la demande d’habilitation du <strong>Centre de Formation Continue de l’Université
-                                        de San Pedro (CFC-USP)</strong>.</p>
-
-                                <p>Les établissements publics n’étant pas assujetti à la procédure d’habilitation, nous
-                                    sollicitons par la présente note, votre accord pour son enregistrement dans la base de
-                                    données du FDFP comme organisme public de formation autorisé à mener des actions de
-                                    formation continue au profit des entreprises dans les domaines de compétences conférés à
-                                    l’Université de San Pedro par son décret de création.</p>
-                                <br>
-                                <h5> Domaines d'interventions</h5>
-
-                                <table class="table table-bordered table-striped table-hover table-sm" id=""
-                                    style="margin-top: 13px !important">
-                                    <thead>
+                                    @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                                        <?php $i += 1; ?>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Type domaine de formation </th>
-                                            <th>Domaine de formation </th>
+                                            <td>{{ $i }}</td>
+                                            <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                                            </td>
+                                            <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}
+                                            </td>
+                                            <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                            </td>
+
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $i = 0; ?>
-                                        @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
-                                            <?php $i += 1; ?>
-                                            <tr>
-                                                <td>{{ $i }}</td>
-                                                <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
-                                                </td>
-                                                <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
-                                                </td>
+                                    @endforeach
 
-                                            </tr>
-                                        @endforeach
+                                </tbody>
+                            </table>
 
-                                    </tbody>
-                                </table>
 
-                                <p class="signature">Le Chef de Département</p>
 
-                                {{-- <table class="table">
+                            {{-- <table class="table">
                                     <tr>
                                         <th>AVIS DE LA DIRECTRICE</th>
                                         <th>DECISION DU SECRETAIRE GENERAL</th>
@@ -1937,34 +2215,35 @@ use App\Helpers\PartEntreprisesHelper;
                                     </tr>
                                 </table> --}}
 
-                                {{-- <p>PJ : Domaines de formation du CFC-USP</p> --}}
-
-                            </div>
-
-
-                            </p>
-                            <br>
-                            <br>
-
-
+                            {{-- <p>PJ : Domaines de formation du CFC-USP</p> --}}
 
                         </div>
-                        @if ($demandehabilitation->flag_note_technique == null)
-                            <div class="modal-footer">
 
-                                <div class="col-md-12" align="right">
-                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
-                                        value="ValideNote" id="ValideNote">Valider la note technique</button>
-                                </div>
 
+                        </p>
+                        <br>
+                        <br>
+
+
+
+                    </div>
+                    @if ($demandehabilitation->flag_note_technique == null)
+                        <div class="modal-footer">
+
+                            <div class="col-md-12" align="right">
+                                <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
+                                    value="ValideNote" id="ValideNote">Valider la note technique</button>
                             </div>
-                        @endif
-                    </form>
+
+                        </div>
+                    @endif
+
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="Recevabilite" tabindex="-1" aria-labelledby="Recevabilite" aria-hidden="true">
+        <div class="modal fade" id="Recevabilite" tabindex="-1" aria-labelledby="Recevabilite"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <form method="POST" class="form"
@@ -2023,8 +2302,8 @@ use App\Helpers\PartEntreprisesHelper;
                                 </div> --}}
                                     <br>
                                 <div class="col-md-12" align="right">
-                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit" name="action"
-                                        value="Recevable_PUV" id="Recevable_PUV">Valider la demande
+                                    <button class="btn btn-success me-sm-3 me-1 btn-submit" type="submit"
+                                        name="action" value="Recevable_PUV" id="Recevable_PUV">Valider la demande
                                         d'habilitation</button>
                                 </div>
                                 </p>

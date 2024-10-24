@@ -9,6 +9,11 @@ $logo = Menu::get_logo();
 <head>
     <meta charset="utf-8">
     <title>AGREMENT D'HABILITATION</title>
+    <?php if (isset($logo->mot_cle)) {
+        echo @$logo->mot_cle;
+    } else {
+        echo 'Application de gestion du FDFP';
+    } ?>
     <link media="all" href="/assets/css/style_etat.css" type="text/css" rel="stylesheet" />
     <style>
         /*!* Ajoutez votre propre style ici *!*/
@@ -77,7 +82,7 @@ $logo = Menu::get_logo();
             <br />
         </div>
     </div>
-    <div class=" content" style="margin-top: 25px">
+    {{-- <div class=" content" style="margin-top: 25px">
         <table width="100%" cellspacing="0" cellpadding="0" class="encadre">
             <tbody>
                 <tr>
@@ -192,7 +197,88 @@ $logo = Menu::get_logo();
         </div>
 
 
-    </div>
+    </div> --}}
+
+
+    <div class="modal-body">
+        <h4 class="modal-title" align="center"> <strong> <u>AGREMENT D'HABILITATION</u></strong></h4>
+        <br>
+        <p> <br>
+        <div class="header" align="right">
+            <p>Abidjan, le <?php echo $demandehabilitation->date_valide_demande_habilitation; ?> </p>
+        </div>
+        <div class="main" align="left">
+            <p> <strong><u>LE SECRETAIRE GENERAL </u></strong></p>
+
+            <div align="right">
+                <p><strong>A</strong></p>
+                <p> <strong>Monsieur le Président<br>
+                        <?php echo $entreprise->nom_prenom_dirigeant; ?><br>
+                        <?php echo $entreprise->adresse_postal_entreprises; ?><br>
+                        <?php echo $entreprise->localisation_geographique_entreprise; ?> </strong></p>
+            </div>
+
+
+            <br>
+
+            <p><strong>N/Réf. : FDFP-SG/D2EQPC/N<sup>o</sup><s>180</s>-2023/NKP/AD/fcd</p> </strong>
+            <p><strong>Objet : V/Demande d’habilitation</p> </strong>
+
+            <br>
+
+            <strong>
+                <p>Monsieur le Président , </p>
+            </strong>
+            <p>Par courrier en date du 19 octobre 2023, vous avez bien voulu solliciter
+                l’habilitation du Fonds de Développement de la Formation Professionnelle (FDFP) pour
+                mener des actions de formation continue auprès des entreprises.</p>
+
+            <p>Par la présente, j’ai l’honneur de vous faire connaître qu’au regard du décret
+                <strong>N°2021-278 du 09 juin 2021</strong> portant création, attributions, organisation et
+                fonctionnement , <strong> <?php echo $entreprise->raison_social_entreprises . ' (' . $entreprise->sigl_entreprises . ')'; ?> </strong> est autorisé à mener des actions
+                de formation continue au profit des entreprises dans les domaines
+                ci-après :
+            </p>
+
+
+            <table class="table table-bordered table-striped table-hover table-sm" id=""
+                style="margin-top: 13px !important">
+                <thead>
+                    <tr>
+
+                        <th>Finalité </th>
+                        <th>Public </th>
+                        <th>Domaine de formation </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $i = 0; ?>
+
+                    @foreach ($domaineDemandeHabilitations as $key => $domaineDemandeHabilitation)
+                        <?php $i += 1; ?>
+                        <tr>
+
+                            <td>{{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation }}
+                            </td>
+                            <td>{{ @$domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }}
+                            </td>
+                            <td>{{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                            </td>
+
+                        </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+            <br>
+
+            <p>Je vous prie d’agréer, <strong> Monsieur le Président </strong>, l’expression de ma considération
+                distinguée.</p>
+
+        </div>
+        </p>
+        <br>
+        <br>
 
 
 </body>
