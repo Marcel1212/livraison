@@ -208,4 +208,5 @@ class DemandeHabilitation extends Model
     {
         return $this->hasMany('App\Models\DomaineDemandeHabilitation', 'id_demande_habilitation', 'id_demande_habilitation');
     }
+
 }

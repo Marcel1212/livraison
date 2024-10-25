@@ -242,7 +242,7 @@ class UserController extends Controller
         //dd($userRole);
         foreach ($Roless as $comp) {
             if ($userRole == $comp->name) {$val = 'selected="selected"'; } else { $val = '';}
-            $Roless .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."' $val  > " . $comp->name . " </option>";
+            $Roless .= "<option  value='" . $comp->id ."' $val  > " . $comp->name . " </option>";
         }
 
         $SecteursActivites = SecteurActivite::where([['flag_actif_secteur_activite', '=', true]])->get();
@@ -326,11 +326,12 @@ class UserController extends Controller
                 }
                 $user->update($input);
                 DB::table('model_has_roles')->where('model_id', $id)->delete();
-                $exploeprofil = explode("/",$request->input('roles'));
-               // dd($exploeprofil);
-                $valprofile = $exploeprofil[0];
-                $valcodeprofile = $exploeprofil[1];
-                //$user->assignRole($request->input('roles'));
+                $role_input = $request->roles;
+                $role = Role::find($role_input);
+
+                $valprofile = $role->name;
+                $valcodeprofile =$role->code_fonction;
+
                 $user->assignRole($valprofile);
                 Audit::logSave([
 

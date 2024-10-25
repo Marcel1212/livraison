@@ -23,21 +23,21 @@ class DomaineDemandeHabilitation extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'domaine_demande_habilitation';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_domaine_demande_habilitation';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
@@ -45,7 +45,9 @@ class DomaineDemandeHabilitation extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_type_domaine_demande_habilitation', 'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at'];
+    protected $fillable = ['id_type_domaine_demande_habilitation',
+        'flag_extension_domaine_demande_habilitation','id_autre_demande',
+'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -85,5 +87,10 @@ class DomaineDemandeHabilitation extends Model
     public function typeDomaineDemandeHabilitation()
     {
         return $this->belongsTo('App\Models\TypeDomaineDemandeHabilitation', 'id_type_domaine_demande_habilitation', 'id_type_domaine_demande_habilitation');
+    }
+
+    public function domaineSuppressionDemandeHabilitation()
+    {
+        return $this->belongsTo('App\Models\DomaineDemandeSuppressionHabilitation', 'id_domaine_demande_habilitation','id_domaine_demande_habilitation');
     }
 }
