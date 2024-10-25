@@ -965,7 +965,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                     </div>
                                                     <div class="col-4" align="right">
 													@if (@$visites->statut == "terminer")
-														<a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(10)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Editer le rapport</a>
+														<a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(10)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Editer le rapport de la visite</a>
 													@endif
                                                     </div>
 
