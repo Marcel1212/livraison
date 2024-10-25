@@ -306,20 +306,19 @@ use App\Helpers\PartEntreprisesHelper;
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
                                         </div>
-
                                         <div class="col-md-4 col-12">
-                                            <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
-
-                                            <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
-                                            @error('titre_propriete_contrat_bail')
+                                            <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
+                                            <select class="select2 form-select-sm input-group @error('id_banque')
+                                                error
+                                                @enderror" data-allow-clear="true" name="id_banque" required>
+                                                <?= $banque; ?>
+                                            </select>
+                                            @error('id_banque')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
-                                            <div id="defaultFormControlHelp" class="form-text ">
-                                                <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                    maxi : 5Mo</em>
-                                            </div>
-
                                         </div>
+
+
 
                                         <div class="col-md-4 col-12">
                                             <div class="mb-1">
@@ -333,15 +332,17 @@ use App\Helpers\PartEntreprisesHelper;
                                         </div>
 
                                         <div class="col-md-4 col-12">
-                                            <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
-                                            <select class="select2 form-select-sm input-group @error('id_banque')
-                                                error
-                                                @enderror" data-allow-clear="true" name="id_banque" required>
-                                                <?= $banque; ?>
-                                            </select>
-                                            @error('id_banque')
+                                            <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
+
+                                            <input type="file" name="titre_propriete_contrat_bail" value="{{ old('titre_propriete_contrat_bail') }}" id="titre_propriete_contrat_bail" class="form-control form-control-sm" />
+                                            @error('titre_propriete_contrat_bail')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
+                                            <div id="defaultFormControlHelp" class="form-text ">
+                                                <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                    maxi : 5Mo</em>
+                                            </div>
+
                                         </div>
 
                                         <div class="col-md-4 col-12">
@@ -365,6 +366,10 @@ use App\Helpers\PartEntreprisesHelper;
                                             @error('autorisation_ouverture_ecole')
                                             <div class=""><label class="error">{{ $message }}</label></div>
                                             @enderror
+                                            <div id="defaultFormControlHelp" class="form-text ">
+                                                <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                    maxi : 5Mo</em>
+                                            </div>
                                         </div>
 
 
