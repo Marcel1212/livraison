@@ -57,14 +57,19 @@ class TraitementDemandeHabilitationController extends Controller
         if($codeRoles == 'CHEFSERVICE'){
             $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
             //dd($habilitations); exit();
-        }else if ($codeRoles == 'CHARGEHABIL'){
-            // Charger d'habilitation apres validation du chef de service
-            $habilitations = DB::table('vue_demande_habilitation_soumis_generale_publique')->where([['id_agence','=',$numAgce],['id_charge_habilitation','=',Auth::user()->id]])->get(); // CHARGEHABIL
-            //dd($habilitations); exit();
+        }else{
+           // $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
+            $habilitations = DB::table('vue_demande_habilitation_soumis_generale_publique')->where([['id_charge_habilitation','=',Auth::user()->id]])->get();
         }
-        else{
-            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
-        }
+
+
+
+        // else if ($codeRoles == 'CHARGEHABIL'){
+        //     // Charger d'habilitation apres validation du chef de service
+        //     $habilitations = DB::table('vue_demande_habilitation_soumis_generale_publique')->where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get(); // CHARGEHABIL
+        //     //dd($habilitations); exit();
+        //}
+
         //dd($habilitations);
         Audit::logSave([
 
