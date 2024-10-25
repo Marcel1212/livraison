@@ -180,7 +180,17 @@ class DemandeHabilitationController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
+
+            $this->validate($request, [
+                'flag_ecole_autre_entreprise' => 'required',
+            ], [
+                'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
+            ]);
+
+            $autorisation =  $request->input('flag_ecole_autre_entreprise');
+
             $input = $request->all();
+
             if ($input['action'] == 'EnregisterPU'){
                // dd('ici'); exit();
 
@@ -246,38 +256,7 @@ class DemandeHabilitationController extends Controller
                // return redirect('demandehabilitation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             } else {
 
-               // dd('kla'); exit();
 
-            $this->validate($request, [
-                'nom_responsable_demande_habilitation' => 'required',
-                'fonction_demande_habilitation' => 'required',
-               'email_responsable_habilitation' => 'required',
-               'registre_commerce'=> 'required',
-                'contact_responsable_habilitation' => 'required',
-                'id_banque' => 'required',
-            ],[
-                'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
-                'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
-                'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
-                'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
-                'id_banque.unique' => 'Veuillez selectionnez une banque ',
-                'flag_ecole_autre_entreprise' => 'required',
-            ], [
-                'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
-            ]);
-
-            $autorisation =  $request->input('flag_ecole_autre_entreprise');
-
-            $input = $request->all();
-
-            //dd( $request->all()); exit();
-            $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
-            $input['date_creer_demande_habilitation'] = Carbon::now();
-            $input['id_entreprises'] = $infoentreprise->id_entreprises;
-            $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
-            $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
-            $input['type_demande'] = 'NOUVELLE DEMANDE';
-            $input['type_entreprise'] = 'PR';
             if ($autorisation == 'true') {
 
                 $this->validate($request, [
@@ -432,7 +411,7 @@ class DemandeHabilitationController extends Controller
 
                     'etat'=>'Succès',
 
-                    'objet'=>'HABILITATION etape information entreprise publique'
+                    'objet'=>'HABILITATION etape information entreprise'
 
                 ]);
 
@@ -457,7 +436,8 @@ class DemandeHabilitationController extends Controller
 
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
-        }
+
+            }
 
         }
     }
@@ -819,7 +799,7 @@ class DemandeHabilitationController extends Controller
                 //$input = $request->all();
 
                 if ($autorisation == 'true') {
-                    dd($autorisation);
+                    //dd($autorisation);
                     $this->validate($request, [
                         'nom_responsable_demande_habilitation' => 'required',
                         'fonction_demande_habilitation' => 'required',
