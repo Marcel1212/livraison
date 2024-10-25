@@ -1475,7 +1475,7 @@ class DemandeHabilitationController extends Controller
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(7).'/editpu')->with('success', 'Succes : Intervention ajouter avec success ');
 
 
-
+            }
 
 
             if ($data['action'] == 'AjouterDivers'){
@@ -1492,7 +1492,7 @@ class DemandeHabilitationController extends Controller
 
 
                 $input = $request->all();
-                dd($input);
+
 
                 if (isset($input['dernier_catalogue_demande_habilitation'])){
 
@@ -1735,7 +1735,7 @@ class DemandeHabilitationController extends Controller
 
             }
 
-        }
+
         }}
 
 
