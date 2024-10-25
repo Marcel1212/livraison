@@ -117,19 +117,19 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                     </td>
                                     <td align="center">
                                         @if ($habilitation->type_entreprise == 'PR')
-                                            <td align="center">
+
                                                 @can($lien . '-edit')
                                                     <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(9)]) }}"
                                                         class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                                 @endcan
-                                            </td>
+
                                         @else
-                                            <td align="center">
+
                                                 @can($lien . '-edit')
                                                     <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
                                                         class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                                 @endcan
-                                            </td>
+
                                         @endif
                                     </td>
                                 </tr>
