@@ -1104,7 +1104,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                         <div class="col-4" align="right">
                                                 @if ( count($rapportVisite)>0)
                                                     @if ($demandehabilitation->flag_soumis_comite_technique == false)
-                                                        <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                        <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(10)]) }}">
                                                             @csrf
                                                             @method('put')
                                                             <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
@@ -1116,7 +1116,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                                             <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                 class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
-                                                                title="Modifier">Fiche d'analyse</a>
+                                                                title="Modifier">Voir la fiche d'analyse</a>
 
                                                     @endif
                                                 @endif
