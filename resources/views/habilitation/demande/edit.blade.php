@@ -1058,10 +1058,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                       <button type="submit" name="action" value="AjouterDivers"
-                                                               class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                               Ajouter
-                                                       </button>
+                                                        <button type="submit" name="action" value="AjouterDivers"
+                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                Ajouter
+                                                        </button>
                                                    <?php } ?>
 
 
