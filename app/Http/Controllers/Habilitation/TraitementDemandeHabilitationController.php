@@ -1544,6 +1544,7 @@ class TraitementDemandeHabilitationController extends Controller
 
                 $input = $request->all();
                 $dateanneeencours = Carbon::now()->format('Y');
+                $demandehabilitation = DemandeHabilitation::find($id);
                 $input['flag_reception_demande_habilitation'] = true;
                 if(!isset($demandehabilitation->code_demande_habilitation)){
                     $input['code_demande_habilitation'] =  substr(Auth::user()->name,0,1).''.substr(Auth::user()->prenom_users,0,1).'-'. Gencode::randStrGen(4, 5).'-'. $dateanneeencours;
