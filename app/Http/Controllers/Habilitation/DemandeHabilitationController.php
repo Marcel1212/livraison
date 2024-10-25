@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Habilitation;
 
+use App\Helpers\Fonction;
+use App\Helpers\GenerateCode as Gencode;
 use App\Http\Controllers\Controller;
 use App\Models\DemandeHabilitation;
+use App\Models\DemandeSuppressionHabilitation;
+use App\Models\DomaineDemandeSuppressionHabilitation;
+use App\Models\Motif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Crypt;
@@ -23,6 +28,7 @@ use App\Models\FormationsEduc;
 use App\Models\InterventionHorsCi;
 use App\Models\LanguesFormateurs;
 use App\Models\MoyenPermanente;
+use App\Models\NombreDomaineHabilitation;
 use App\Models\OrganisationFormation;
 use App\Models\Pays;
 use App\Models\PrincipaleQualification;
@@ -32,6 +38,11 @@ use App\Models\TypeIntervention;
 use App\Models\TypeMoyenPermanent;
 use App\Models\TypeOrganisationFormation;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Helpers\ListeDemandeHabilitationSoumis;
+use App\Models\CommentaireNonRecevableDemande;
+use App\Models\PiecesDemandeHabilitation;
+use App\Models\TypesPieces;
 
 class DemandeHabilitationController extends Controller
 {
@@ -525,7 +536,18 @@ class DemandeHabilitationController extends Controller
 
         $moyenpermanentes = MoyenPermanente::where([['id_demande_habilitation','=',$id]])->get();
 
-        $typeinterventions = TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+        $typeinterventions = DB::table('type_intervention')->whereNotExists(function ($query) use ($id){
+                            $query->select('*')
+                            ->from('demande_intervention')
+                            ->whereColumn('demande_intervention.id_type_intervention','=','type_intervention.id_type_intervention')
+                            ->where('demande_intervention.id_demande_habilitation',$id);
+                            })
+                            ->where([
+                                ['type_intervention.flag_type_intervention','=', true],
+                            ])->get();
+
+        //TypeIntervention::where([['flag_type_intervention','=',true]])->get();
+
         $typeinterventionsList = "<option value=''> Selectionnez le type d\'intervention </option>";
         foreach ($typeinterventions as $comp) {
             $typeinterventionsList .= "<option value='" . $comp->id_type_intervention  . "'>" . mb_strtoupper($comp->libelle_type_intervention) ." </option>";
@@ -534,7 +556,17 @@ class DemandeHabilitationController extends Controller
         $interventions = DemandeIntervention::where([['id_demande_habilitation','=',$id]])->get();
         //dd($idetape);
 
-        $organisationFormations = TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
+        $organisationFormations = DB::table('type_organisation_formation')->whereNotExists(function ($query) use ($id){
+                                $query->select('*')
+                                ->from('organisation_formation')
+                                ->whereColumn('organisation_formation.id_type_organisation_formation','=','type_organisation_formation.id_type_organisation_formation')
+                                ->where('organisation_formation.id_demande_habilitation',$id);
+                                })
+                                ->where([
+                                    ['type_organisation_formation.flag_type_organisation_formation','=', true],
+                                ])->get();
+
+        //TypeOrganisationFormation::where([['flag_type_organisation_formation','=',true]])->get();
         $organisationFormationsList = "<option value=''> Selectionnez le type d\'organisation </option>";
         foreach ($organisationFormations as $comp) {
             $organisationFormationsList .= "<option value='" . $comp->id_type_organisation_formation  . "'>" . mb_strtoupper($comp->libelle_type_organisation_formation) ." </option>";
@@ -554,18 +586,44 @@ class DemandeHabilitationController extends Controller
             $domainesList .= "<option value='" . $comp->id_domaine_formation  . "'>" . mb_strtoupper($comp->libelle_domaine_formation) ." </option>";
         }
 
-        $Mesformateurs = Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire]])->get();
+        $Mesformateurs = Fonction::listedesformateurayant5ansExp(Auth::user()->id_partenaire);
+        //Formateurs::where([['id_entreprises','=',Auth::user()->id_partenaire],['flag_attestation_formateurs','=',true]])->get();
         $MesformateursList = "<option value=''> Selectionnez le domaine de formation </option>";
         foreach ($Mesformateurs as $comp) {
-            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." </option>";
+            $MesformateursList .= "<option value='" . $comp->id_formateurs  . "'>" . mb_strtoupper($comp->nom_formateurs) ." ". mb_strtoupper($comp->prenom_formateurs)." / ".mb_strtoupper($comp->fonction_formateurs)." </option>";
         }
 
         $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
 
-        $domainedemandes = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+        $domainedemandes = DomaineDemandeHabilitation::whereNotExists(function ($query) use ($id){
+                                $query->select('*')
+                                    ->from('formateur_domaine_demande_habilitation')
+                                    ->whereColumn('formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','=','domaine_demande_habilitation.id_domaine_demande_habilitation');
+                                })
+                                ->where('domaine_demande_habilitation.id_demande_habilitation',$id)
+                                ->get();
+
+        //DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
         $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
         foreach ($domainedemandes as $comp) {
             $domainedemandeList .= "<option value='" . $comp->id_domaine_demande_habilitation  . "'>" . mb_strtoupper($comp->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation) .' - '.mb_strtoupper($comp->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public).' - '. mb_strtoupper( $comp->domaineFormation->libelle_domaine_formation) ." </option>";
+        }
+
+        $TypesPieces =  DB::table('types_pieces')->whereNotExists(function ($query) use ($id){
+                            $query->select('*')
+                            ->from('pieces_demande_habilitation')
+                            ->whereColumn('pieces_demande_habilitation.id_types_pieces','=','types_pieces.id_types_pieces')
+                            ->where('pieces_demande_habilitation.id_demande_habilitation',$id);
+                            })
+                            ->where([
+                                ['types_pieces.flag_types_pieces','=', true],
+                                ['types_pieces.code_types_pieces','=', 'DEMHAB'],
+                            ])->get();
+
+        //TypesPieces::where([['flag_types_pieces','=',true],['code_types_pieces','=','DEMHAB']])->get();
+        $TypesPiecesListe = "<option value=''> Selectionnez la mention </option>";
+        foreach ($TypesPieces as $comp) {
+            $TypesPiecesListe .= "<option value='" . $comp->id_types_pieces  . "'>" . $comp->libelle_types_pieces ." </option>";
         }
 
         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
@@ -573,7 +631,8 @@ class DemandeHabilitationController extends Controller
                                                           ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
                                                           ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
                                                           ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
-                                                          ->where([['id_demande_habilitation','=',$id]])
+                                                          ->join('pieces_formateur','formateurs.id_formateurs','pieces_formateur.id_formateurs')
+                                                          ->where([['id_demande_habilitation','=',$id],['id_types_pieces','=',2]])
                                                           ->get();
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
@@ -584,6 +643,10 @@ class DemandeHabilitationController extends Controller
         foreach ($typeDomaineDemandeHabilitationPublic as $comp) {
             $typeDomaineDemandeHabilitationPublicList .= "<option value='" . $comp->id_type_domaine_demande_habilitation_public  . "'>" . mb_strtoupper($comp->libelle_type_domaine_demande_habilitation_public) ." </option>";
         }
+
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','HAB']])->get();
 
         Audit::logSave([
 
@@ -603,7 +666,7 @@ class DemandeHabilitationController extends Controller
                     'id','typemoyenpermanenteList','moyenpermanentes','typeinterventionsList','interventions',
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList','typeDomaineDemandeHabilitationPublicList',
-                    'MesformateursList'));
+                    'MesformateursList','commentairenonrecevables','TypesPiecesListe','piecesDemandeHabilitations'));
     }
 
 
@@ -1121,7 +1184,20 @@ class DemandeHabilitationController extends Controller
 
                 $input['id_demande_habilitation'] = $id;
 
-                DomaineDemandeHabilitation::create($input);
+                $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_habilitation','=',true]])->first();
+
+                $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
+
+                $domainedejaenregistrer = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+                if (count($nbresollicite) == $nombredomainedroit->libelle_nombre_domaine_habilitation
+                && !in_array($input['id_domaine_formation'], $domainedejaenregistrer->pluck('id_domaine_formation')->toArray())) {
+
+                    return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')
+                       ->with('error', 'Echec : Cinq (5) domaines de formations sont autorisés pour une nouvelle demande d\'habilitation');
+                } else {
+                    DomaineDemandeHabilitation::create($input);
+                }
+
 
                 Audit::logSave([
 
@@ -1290,6 +1366,47 @@ class DemandeHabilitationController extends Controller
             }
 
 
+            if ($data['action'] == 'AjouterInterventionsHorsCisPU'){
+
+                $this->validate($request, [
+                    'objet_intervention_hors_ci' => 'required',
+                    'annee_intervention_hors_ci' => 'required',
+                    'id_pays' => 'required',
+                    'quel_financement_intervention_hors' => 'required'
+                ],[
+                    'objet_intervention_hors_ci.required' => 'Veuillez ajouter l\'objet .',
+                    'annee_intervention_hors_ci.required' => 'Veuillez ajouter l\'année intervention.',
+                    'id_pays.required' => 'Veuillez selectionner le pays.',
+                    'quel_financement_intervention_hors.required' => 'Veuillez ajouter le financement.'
+                ]);
+
+                $input = $request->all();
+
+                $input['id_demande_habilitation'] = $id;
+                $input['objet_intervention_hors_ci'] = mb_strtoupper($input['objet_intervention_hors_ci']);
+                $input['quel_financement_intervention_hors_ci'] = mb_strtoupper($input['quel_financement_intervention_hors']);
+
+                InterventionHorsCi::create($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation) PU',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape intervention hors du pays hors cote divoire PU '
+
+                ]);
+                //$idetape == 7 ;
+
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(7).'/editpu')->with('success', 'Succes : Intervention ajouter avec success ');
+
+
+
 
 
             if ($data['action'] == 'AjouterDivers'){
@@ -1442,27 +1559,40 @@ class DemandeHabilitationController extends Controller
 
             }
 
-            if ($data['action'] == 'AjouterInterventionsHorsCisPU'){
-
+            if ($data['action'] == 'AjouterPieces'){
                 $this->validate($request, [
-                    'objet_intervention_hors_ci' => 'required',
-                    'annee_intervention_hors_ci' => 'required',
-                    'id_pays' => 'required',
-                    'quel_financement_intervention_hors' => 'required'
-                ],[
-                    'objet_intervention_hors_ci.required' => 'Veuillez ajouter l\'objet .',
-                    'annee_intervention_hors_ci.required' => 'Veuillez ajouter l\'année intervention.',
-                    'id_pays.required' => 'Veuillez selectionner le pays.',
-                    'quel_financement_intervention_hors.required' => 'Veuillez ajouter le financement.'
+                    'id_types_pieces' => 'required',
+                ], [
+                    'id_types_pieces.required' => 'Veuillez ajouter le type de la piéce.',
                 ]);
 
                 $input = $request->all();
 
                 $input['id_demande_habilitation'] = $id;
-                $input['objet_intervention_hors_ci'] = mb_strtoupper($input['objet_intervention_hors_ci']);
-                $input['quel_financement_intervention_hors_ci'] = mb_strtoupper($input['quel_financement_intervention_hors']);
 
-                InterventionHorsCi::create($input);
+                $TypeP = TypesPieces::find($input['id_types_pieces']);
+
+
+
+                if (isset($input['pieces_demande_habilitation'])){
+
+                    $filefront = $input['pieces_demande_habilitation'];
+
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'PDH_'.$TypeP->code_types_pieces. '_' . rand(111,99999) . '_' . $demandehabilitation->entreprise->ncc_entreprises . '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/pieces_demande_habilitation/'.$demandehabilitation->entreprise->ncc_entreprises.'/'), $fileName1);
+
+                        $input['pieces_demande_habilitation'] = $fileName1;
+                    }
+
+                }
+
+                $piecesdemande = PiecesDemandeHabilitation::create($input);
 
                 Audit::logSave([
 
@@ -1470,16 +1600,15 @@ class DemandeHabilitationController extends Controller
 
                     'code_piece'=>$id,
 
-                    'menu'=>'Habilitation (Soumission de l\'habilitation) PU',
+                    'menu'=>'Habilitation (Soumission de l\'habilitation)',
 
                     'etat'=>'Succès',
 
-                    'objet'=>'HABILITATION etape intervention hors du pays hors cote divoire PU '
+                    'objet'=>'Habilitation ajouter piece Habilitation'
 
                 ]);
-                //$idetape == 7 ;
 
-                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(7).'/editpu')->with('success', 'Succes : Intervention ajouter avec success ');
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($idetape).'/edit')->with('success', 'Succes : Information mise a jour reussi ');
 
             }
 
@@ -1546,6 +1675,7 @@ class DemandeHabilitationController extends Controller
     {
         //
     }
+
 
     public function deletemoyenpermanente($id){
 
@@ -1684,6 +1814,163 @@ class DemandeHabilitationController extends Controller
         ]);
 
         return redirect('demandehabilitation/'.Crypt::UrlCrypt($idHabilitation).'/'.Crypt::UrlCrypt(5).'/edit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+
+    public function editdomaine($id, $id1)
+    {
+
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
+        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
+        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
+        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
+        $domaineSuppressionHabilitations = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)->get();
+        $domaineSuppressionHabilitationEnCours = DomaineDemandeSuppressionHabilitation::where('id_domaine_demande_habilitation',$id)
+            ->where('flag_rejeter_domaine_demande_suppression_habilitation',false)
+            ->where('flag_validation_domaine_demande_suppression_habilitation',false)->first();
+
+        Audit::logSave([
+            'action'=>'MODIFIER',
+            'code_piece'=>$id,
+            'menu'=>'HABILITATION (Soumission de HABILITATION)',
+            'etat'=>'Succès',
+            'objet'=>'HABILITATION'
+        ]);
+
+        return view('habilitation.demande.editdomaine', compact('domaineHabilitation',
+            'domaine','typedomaine','typedomainepublic','motifs', 'idetape',
+                        'domaineSuppressionHabilitations',
+        'domaineSuppressionHabilitationEnCours'
+        ));
+    }
+
+    public function deletedomainestore(Request $request,$id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'commentaire_domaine_demande_suppression_habilitation' => 'required',
+                'id_motif_domaine_demande_suppression_habilitation' => 'required',
+            ],[
+                'commentaire_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter le commentaire de la demande de suppression.',
+                'id_motif_domaine_demande_suppression_habilitation.required' => 'Veuillez ajouter un motif.',
+            ]);
+
+            $input = $request->all();
+
+
+            if ($input['action'] == 'soumettre'){
+                $input['date_soumis_domaine_demande_suppression_habilitation'] = Carbon::now();
+                $input['flag_soumis_domaine_demande_suppression_habilitation'] = true;
+                $input['id_domaine_demande_habilitation'] = $id;
+
+                if (isset($input['piece_domaine_demande_suppression_habilitation'])){
+                    $filefront = $input['piece_domaine_demande_suppression_habilitation'];
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+                        $fileName1 = 'piece_domaine_demande_suppression_habilitation'. '_' . rand(111,99999) . 'piece_domaine_demande_suppression_habilitation' . time() . '.' . $filefront->extension();
+                        $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
+                        $input['piece_domaine_demande_suppression_habilitation'] = $fileName1;
+                    }
+
+                }else{
+                    return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('error', 'Erreur : Veuillez ajouter une pièce justificatif');
+                }
+
+                DomaineDemandeSuppressionHabilitation::create($input);
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(2).'/editdomaine')->with('success', 'Succes : Demande de suppression effectuée avec succès');
+            }
+        }
+
+//        $id =  Crypt::UrldeCrypt($id);
+//        $idetape =  Crypt::UrldeCrypt($id1);
+//
+//        $domaineHabilitation = DomaineDemandeHabilitation::find($id);
+//        $motifs = Motif::where('code_motif','SDF')->where('flag_actif_motif',true)->get();
+//        $domaine = "<option value='".@$domaineHabilitation->domaineFormation->id_domaine_formation."'> " . $domaineHabilitation->domaineFormation->libelle_domaine_formation. "</option>";
+//        $typedomaine = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitation->id_type_domaine_demande_habilitation."'> " . $domaineHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation. "</option>";
+//        $typedomainepublic = "<option value='".@$domaineHabilitation->typeDomaineDemandeHabilitationPublic->id_type_domaine_demande_habilitation_public."'> " . $domaineHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public. "</option>";
+
+
+    }
+
+
+    public function indexyancho()
+    {
+        $infoentrprise = InfosEntreprise::get_infos_entreprise(Auth::user()->login_users);
+        if(!empty($infoentrprise)){
+
+            $habilitations = DemandeHabilitation::where([['id_entreprises','=',$infoentrprise->id_entreprises]])->get();
+
+            $formejuridique = $infoentrprise->demandeEnrolement->formeJuridique->code_forme_juridique;
+
+            //dd($formejuridique);
+
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'HABILITATION (Soumission)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+
+            return view('habilitation.demande.indexyancho', compact('habilitations','formejuridique'));
+
+        }else{
+            Audit::logSave([
+
+                'action'=>'INDEX',
+
+                'code_piece'=>'',
+
+                'menu'=>'HABILITATION',
+
+                'etat'=>'Echec',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+            return redirect('/dashboard')->with('Error', 'Erreur : Vous n\'est autoriser a acces a ce menu');
+        }
+    }
+
+    public function deletepieceDemande($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        $pieceformateur = PiecesDemandeHabilitation::find($id);
+
+        $idDemande = $pieceformateur->id_demande_habilitation;
+
+        $pieceformateur->delete();
+
+        Audit::logSave([
+
+            'action'=>'SUPPRIMER',
+
+            'code_piece'=>$idDemande,
+
+            'menu'=>'Habilitation (Soumission de l\'habilitation)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'Habilitation suppression de piece'
+
+        ]);
+
+        return redirect('demandehabilitation/'.Crypt::UrlCrypt($idDemande).'/'.Crypt::UrlCrypt(9).'/edit')->with('success', 'Succes : Information mise a jour  ');
 
     }
 }

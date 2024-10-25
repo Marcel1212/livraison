@@ -78,52 +78,80 @@ $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_solli
     <tr>
         <td colspan="6" class="header section">DOMAINES D'INTERVENTION</td>
     </tr>
-    <tr>
+
         @foreach ($nbresollicite as $domaine)
-            <td colspan="3">{{ $loop->iteration }}. {{ $domaine->libelle_domaine_formation }}</td>
+        <tr>
+            <td colspan="6">{{ $loop->iteration }}. {{ $domaine->libelle_domaine_formation }}</td>
+        </tr>
         @endforeach
 
-    </tr>
+
     <tr>
         <td colspan="6" class="header section">FORMATEURS</td>
     </tr>
-    <tr>
+
         @foreach ($formateurs as $formateur)
-            <td colspan="3">{{ $formateur->nom_formateurs }} {{ $formateur->nom_formateurs }}</td>
-        @endforeach
-    </tr>
-    <tr>
-        @foreach ($formateurs as $formateur)
-            <td colspan="3">{{ $formateur->fonction_formateurs }} / {{ Fonction::calculerAnneesExperience($formateur->id_formateurs) }} ans d’expérience</td>
+        <tr>
+            <td colspan="6">{{ $loop->iteration }}. {{ $formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }} / {{ $formateur->fonction_formateurs }} / {{ Fonction::calculerAnneesExperience($formateur->id_formateurs) }} ans d’expérience</td>
+        </tr>
         @endforeach
 
-    </tr>
+    {{-- <tr>
+        @foreach ($formateurs as $formateur)
+            <td colspan="3"></td>
+        @endforeach
+
+    </tr> --}}
     <tr>
         <td colspan="6" class="header section">SITUATION DU DOSSIER</td>
     </tr>
+    @foreach($piecesDemandes as $piecesDemande)
     <tr>
-        <td>Registre de commerce</td>
-        <td>OUI</td>
-        <td>Mise à jour ITS</td>
-        <td>OUI</td>
-        <td>Mise à jour CNPS</td>
-        <td>OUI</td>
+        <td colspan="3">
+            {{ $piecesDemande->typesPiece->libelle_types_pieces }}
+        </td>
+        <td colspan="3">
+            @if($piecesDemande->flag_pieces_demande_habilitation == 'true')
+                OUI
+            @else
+                NON
+            @endif
+        </td>
+    </tr>
+    @endforeach
+    <tr>
+        <td colspan="3">Registre de commerce</td>
+        <td colspan="3">
+            OUI
+        </td>
     </tr>
     <tr>
-        <td>Relevé identité bancaire</td>
-        <td>OUI</td>
-        <td>Matériels pédagogiques</td>
-        <td>OUI</td>
-        <td>Salle de formation</td>
-        <td>OUI</td>
+        <td colspan="3">CV des formateurs</td>
+        <td colspan="3">OUI</td>
     </tr>
     <tr>
-        <td>CV des formateurs</td>
-        <td>OUI</td>
-        <td>Lettres d'engagement</td>
-        <td>OUI</td>
-        <td></td>
-        <td></td>
+        <td colspan="3">Lettres d'engagement</td>
+        <td colspan="3">OUI</td>
+    </tr>
+    <tr>
+        <td colspan="3">Materiels pedagogiques</td>
+        <td colspan="3">
+            @if ($rapport->flag_materiel_pedagogique == 'true')
+                OUI
+            @else
+                NON
+            @endif
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">Salle de formation</td>
+        <td colspan="3">
+            @if ($rapport->flag_salle_formation == 'true')
+                OUI
+            @else
+                NON
+            @endif
+        </td>
     </tr>
     <tr>
         <td colspan="6" class="header section">OBSERVATIONS</td>

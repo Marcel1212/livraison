@@ -266,7 +266,7 @@ class FormateursController extends Controller
             $LanguesListe .= "<option value='" . $comp->id_langues  . "'>" . $comp->libelle_langues ." </option>";
         }
 
-        $TypesPieces =  TypesPieces::where([['flag_types_pieces','=',true]])->get();
+        $TypesPieces =  TypesPieces::where([['flag_types_pieces','=',true],['code_types_pieces','!=','DEMHAB']])->get();
         $TypesPiecesListe = "<option value=''> Selectionnez la mention </option>";
         foreach ($TypesPieces as $comp) {
             $TypesPiecesListe .= "<option value='" . $comp->id_types_pieces  . "'>" . $comp->libelle_types_pieces ." </option>";

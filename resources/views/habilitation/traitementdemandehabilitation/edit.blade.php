@@ -60,6 +60,15 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
 
                         <div class="col-xl-12">
+                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                <div align="right">
+                                    <button type="button"
+                                            class="btn rounded-pill btn-outline-success btn-sm waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#modalToggleCommentaireplan">
+                                        Voir les commentaire de la non recevabilité
+                                    </button>
+                                </div>
+                            @endif
                         <h6 class="text-muted"></h6>
                         <div class="nav-align-top nav-tabs-shadow mb-4">
                             <ul class="nav nav-tabs" role="tablist">
@@ -156,7 +165,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 data-bs-target="#navs-top-Soumettre"
                                 aria-controls="navs-top-Soumettre"
                                 aria-selected="false">
-                                Intervention hors du pays
+                                Intervention hors du pays et Pieces jointes
                                 </button>
                             </li>
                             @if ($codeRoles == 'CHEFSERVICE')
@@ -617,6 +626,10 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                             <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                 class=" "
                                                                 title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+
+                                                            <a onclick="NewWindow('{{ asset("/pieces/pieces_formateur/".$demandehabilitation->entreprise->ncc_entreprises."_".$formateur->nom_formateurs."_".$formateur->prenom_formateurs."/".$formateur->pieces_formateur)}}','',screen.width/2,screen.height,'yes','center',1);" target="_blank"
+                                                                    class=" "
+                                                                    title="Modifier"><img src='/assets/img/display.png'></a>
                                                             <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                             <a href="{{ route($lien.'.delete',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                             class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
@@ -742,7 +755,40 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table table-bordered table-striped table-hover table-sm"
+                                        id=""
+                                        style="margin-top: 13px !important">
+                                        <thead>
+                                        <tr>
+                                             <th>No</th>
+                                             <th>Types de pieces </th>
+                                             <th>Pieces </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                             @foreach ($piecesDemandeHabilitations as $piecesDemandeHabilitation)
+                                                 <tr>
+                                                     <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
+                                                     <td>{{ $piecesDemandeHabilitation->typesPiece->libelle_types_pieces }}</td>
+                                                     <td>
+                                                         @if (isset($piecesDemandeHabilitation->pieces_demande_habilitation))
+                                                             <span class="badge bg-secondary">
+                                                                 <a target="_blank"
+                                                                     onclick="NewWindow('{{ asset("/pieces/pieces_demande_habilitation/".$demandehabilitation->entreprise->ncc_entreprises."/". $piecesDemandeHabilitation->pieces_demande_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                     Voir la pièce
+                                                                 </a>
+                                                             </span>
+                                                         @endif
+                                                     </td>
+                                                 </tr>
+                                             @endforeach
 
+                                        </tbody>
+                                    </table>
+                                    </div>
+                                    <div class="col-md-6">
                                        <table class="table table-bordered table-striped table-hover table-sm"
                                            id=""
                                            style="margin-top: 13px !important">
@@ -778,7 +824,8 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                            </tbody>
                                        </table>
-
+                                    </div>
+                                </div>
                                 </div>
 
                                 @if ($codeRoles == 'CHEFSERVICE')
@@ -801,7 +848,6 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                                     <?= $chargerHabilitationsList; ?>
                                                                                 </select>
                                                                                 @error('id_charge_habilitation')
-                                                                                <div class=""><label class="error">{{ $message }}</label></div>
                                                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                                                 @enderror
                                                                             </div>
@@ -826,7 +872,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                                                         <button type="submit" name="action" value="FaireAttribution"
                                                                                 class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                                                Attribution
+                                                                                Imputer
                                                                         </button>
 
 
@@ -974,22 +1020,18 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                     <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
                                                         <div class="modal-dialog sidebar-lg">
                                                             <div class="modal-content p-0">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                                                                 <div class="modal-header mb-1">
                                                                     <h5 class="modal-title">Prise de rendez-vous</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    </button>
                                                                 </div>
+                                                                <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
+
                                                                 <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                                                                     <div id="error_text"></div>
-
-
-
                                                                     <!-- Formulaire d'événement -->
-                                                                        <form class="event-form needs-validation" id="event-form" data-ajax="false" novalidate>
                                                                             <!-- Champ caché pour l'ID de la demande d'habilitation -->
                                                                             <input type="hidden" id="id_demande_habilitation" name="id_demande_habilitation" value="{{ $demandehabilitation->id_demande_habilitation }}">
-
-
-
                                                                             <!-- Sélection du statut -->
                                                                             <div class="mb-1">
                                                                                 <label for="select-label" class="form-label">Statut</label>
@@ -1030,17 +1072,18 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                                                 <textarea class="form-control" id="event-description-editor" name="event-description-editor" required></textarea>
                                                                             </div>
 
-                                                                            <!-- Boutons d'action -->
-                                                                            <div class="d-flex mb-1">
-                                                                                <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
-                                                                                <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
-                                                                                <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
-                                                                                <a href="" class="btn btn-success update-lien-event-btn d-none me-1">Aller sur le dossier</a>
-                                                                                <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
-                                                                            </div>
-                                                                        </form>
-
                                                                 </div>
+                                                                    <!-- Boutons d'action -->
+
+                                                                    <div class="modal-footer d-flex mb-1">
+                                                                        <button type="submit" class="btn btn-primary add-event-btn me-1">Ajouter</button>
+                                                                        <button type="button" class="btn btn-outline-secondary btn-cancel" data-bs-dismiss="modal">Annuler</button>
+                                                                        <button type="submit" class="btn btn-primary update-event-btn d-none me-1">Mettre à jour</button>
+                                                                        <a href="" class="btn btn-success update-lien-event-btn d-none me-1">Aller sur le dossier</a>
+                                                                        <button type="button" class="btn btn-outline-danger btn-delete-event d-none">Supprimer</button>
+                                                                    </div>
+                                                                </form>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1059,21 +1102,23 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                         </div>
                                         <div class="col-4" align="right">
-                                                @if ($demandehabilitation->flag_soumis_comite_technique == false)
-                                                    <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
-                                                        @csrf
-                                                        @method('put')
-                                                        <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
-                                                                        class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                                                        Soumettre pour le comite
-                                                        </button>
-                                                    </form>
-                                                @else
+                                                @if ( count($rapportVisite)>0)
+                                                    @if ($demandehabilitation->flag_soumis_comite_technique == false)
+                                                        <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                                            @csrf
+                                                            @method('put')
+                                                            <button onclick='javascript:if (!confirm("La demande sera soumis au comite technique  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Soumission_demande_ct"
+                                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
+                                                                            Soumettre pour le comite
+                                                            </button>
+                                                        </form>
+                                                    @else
 
-                                                         <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
-                                                            class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
-                                                            title="Modifier">Fiche d'analyse</a>
+                                                            <a onclick="NewWindow('{{ route($lien.".rapport",\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
+                                                                class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light"
+                                                                title="Modifier">Fiche d'analyse</a>
 
+                                                    @endif
                                                 @endif
                                         </div>
 
@@ -1085,29 +1130,44 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                         @method('put')
 
                                         <div class="row">
+
+                                            <div class="col-md-6 col-12">
+                                                    <label class="form-label" for="billings-country">Materiels pedagogiques <strong style="color:red;">*</strong></label>
+
+                                                    <select class="select2 form-select input-group" data-allow-clear="true" name="flag_materiel_pedagogique" id="flag_materiel_pedagogique">
+                                                        <option value="true" @if(@$rapportVisite[0]->flag_materiel_pedagogique == true ) selected @endif>OUI</option>
+                                                        <option value="false" @if(@$rapportVisite[0]->flag_materiel_pedagogique == false ) selected @endif>NON</option>
+                                                    </select>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                    <label class="form-label" for="billings-country">Salle de formation <strong style="color:red;">*</strong></label>
+
+                                                    <select class="select2 form-select input-group" data-allow-clear="true" name="flag_salle_formation" id="flag_salle_formation">
+                                                        <option value="true" @if(@$rapportVisite[0]->flag_salle_formation == true ) selected @endif>OUI</option>
+                                                        <option value="false" @if(@$rapportVisite[0]->flag_salle_formation == false ) selected @endif>NON</option>
+                                                    </select>
+                                            </div>
                                             <div class="col-md-6">
                                                 <label class="form-label" for="etat_locaux_rapport">Etat des locaux
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport">{{ @$rapportVisite[0]->etat_locaux_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="etat_locaux_rapport" id="etat_locaux_rapport" rows="6">{{ @$rapportVisite[0]->etat_locaux_rapport }}</textarea>
                                             </div>
-
-
 
                                             <div class="col-md-6">
                                                 <label class="form-label" for="equipement_rapport">Equipements
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport">{{ @$rapportVisite[0]->equipement_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="equipement_rapport" id="equipement_rapport" rows="6">{{ @$rapportVisite[0]->equipement_rapport }}</textarea>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="form-label" for="salubrite_rapport">Salubrité/Securité
                                                     <strong style="color:red;">*</strong></label>
-                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport">{{ @$rapportVisite[0]->salubrite_rapport }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="salubrite_rapport" id="salubrite_rapport" rows="6">{{ @$rapportVisite[0]->salubrite_rapport }}</textarea>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="form-label" for="contenu">Autres</label>
-                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu">{{ @$rapportVisite[0]->contenu }}</textarea>
+                                                    <textarea class="form-control form-control-sm" name="contenu" id="contenu" rows="6">{{ @$rapportVisite[0]->contenu }}</textarea>
                                             </div>
                                         </div>
                                         {{-- <div class="col-md-12">
@@ -1140,6 +1200,56 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                     </div>
 
                 </div>
+
+                <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggleCommentaireplan"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Commentaire </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Commentaire des non recevabilités</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+
+                                                    <li class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+													@foreach($commentairenonrecevables as $com)
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0"></h6>
+                                                                <span class="text-muted"><strong>{{ $com->motif->libelle_motif}}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation :   <?php echo $com->commentaire_commentaire_non_recevable_demande; ?></span>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+														@endforeach
+                                                    </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
 
                 <input name="idddemha" class="idddemha" value="{{ $demandehabilitation->id_demande_habilitation }}" type="hidden" id="idddemha"/>
                 <input name="id_visite" class="id_visite"  type="hidden" id="id_visite"/>

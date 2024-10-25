@@ -32,11 +32,13 @@ use App\Models\Motif;
 use App\Helpers\SmsPerso;
 use App\Helpers\GenerateCode as Gencode;
 use App\Helpers\Email;
+use App\Models\CommentaireNonRecevableDemande;
 use App\Models\Competences;
 use App\Models\Experiences;
 use App\Models\Formateurs;
 use App\Models\FormationsEduc;
 use App\Models\LanguesFormateurs;
+use App\Models\PiecesDemandeHabilitation;
 use App\Models\PrincipaleQualification;
 use App\Models\RapportsVisites;
 use App\Models\TypeDomaineDemandeHabilitationPublic;
@@ -61,7 +63,7 @@ class TraitementDemandeHabilitationController extends Controller
             //dd($habilitations); exit();
         }
         else{
-            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
         }
         //dd($habilitations);
         Audit::logSave([
@@ -306,16 +308,20 @@ class TraitementDemandeHabilitationController extends Controller
                                                           ->where([['id_demande_habilitation','=',$id]])
                                                           ->get(); */
 
-                                                          $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
-                                                          ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-                                                          ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
-                                                          ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
-                                                          ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
-                                                          ->where([['id_demande_habilitation','=',$id]])
-                                                          ->get();
+             $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+                                    ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+                                    ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+                                    ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+                                    ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+                                    ->join('pieces_formateur','formateurs.id_formateurs','pieces_formateur.id_formateurs')
+                                    ->where([['id_demande_habilitation','=',$id],['id_types_pieces','=',2]])
+                                    ->get();
 
 
         $interventionsHorsCis = InterventionHorsCi::where([['id_demande_habilitation','=',$id]])->get();
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','HAB']])->get();
+
        // dd($codeRoles);
         if($codeRoles == 'CHEFSERVICE'){
             //dd(Auth::user()->id_service);
@@ -338,6 +344,8 @@ class TraitementDemandeHabilitationController extends Controller
             $motif .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
         }
 
+        $piecesDemandeHabilitations = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
         Audit::logSave([
 
             'action'=>'MODIFIER',
@@ -358,7 +366,7 @@ class TraitementDemandeHabilitationController extends Controller
                     'organisationFormationsList','organisations','domainesList','typeDomaineDemandeHabilitationList',
                     'domaineDemandeHabilitations','domainedemandeList','formateurs','interventionsHorsCis','payList',
                     'chargerHabilitationsList','NombreDemandeHabilitation','motif','typeDomaineDemandeHabilitationPublicList',
-                    'visites','rapportVisite'));
+                    'visites','rapportVisite','commentairenonrecevables','piecesDemandeHabilitations'));
     }
 
 
@@ -718,11 +726,28 @@ class TraitementDemandeHabilitationController extends Controller
             $logo = Menu::get_logo();
             $demandehabilitation = DemandeHabilitation::find($visitef->id_demande_habilitation);
             $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+            if ($visitef->statut == 'planifier') {
+                $MsgStat = 'la planification';
+            }
+            if ($visitef->statut == 'commencer') {
+                $MsgStat = 'le debut';
+            }
+            if ($visitef->statut == 'terminer') {
+                $MsgStat = 'la fin';
+            }
+            if ($visitef->statut == 'annuler') {
+                $MsgStat = 'l\'annulation';
+            }
+            if ($visitef->statut == 'reporter') {
+                $MsgStat = 'le report';
+            }
+
             if (isset($demandehabilitation->email_responsable_habilitation)) {
                 $sujet = "Demande de prise de rendez-vous pour la demande habilitation sur e-FDFP";
                 $titre = "Bienvenue sur ".@$logo->mot_cle ."";
                 $messageMail = "<b>Cher,  ".$infoentreprise->sigl_entreprises." ,</b>
-                                <br><br>Nous avons le plaisir de vous notifie la demande de prise de rendez-vous pour la visite de votre locaux :
+                                <br><br>Nous avons le plaisir de vous notifie ".$MsgStat." de prise de rendez-vous pour la visite de votre locaux :
 
                                 <br><b>Date de prise de rendez-vous  : </b> ".@$dateEtHeureDebut."
                                 <br><b>Heure : </b> ".@$request->end."
@@ -1602,9 +1627,11 @@ class TraitementDemandeHabilitationController extends Controller
             if($data['action'] === 'NonRecevable'){
 
                 $this->validate($request, [
-                    'id_motif_recevable' => 'required'
+                    'id_motif_recevable' => 'required',
+                    'commentaire_recevabilite' => 'required',
                 ],[
                     'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                    'commentaire_recevabilite.required' => 'Veuillez ajouter le commentaire de la non recevaibilité.',
                 ]);
 
                 $input = $request->all();
@@ -1617,6 +1644,13 @@ class TraitementDemandeHabilitationController extends Controller
                 }
                 $input['date_reception_demande_habilitation'] = Carbon::now();
                 $input['date_rejet_demande_habilitation'] = Carbon::now();
+
+                $commentaire = CommentaireNonRecevableDemande::create([
+                    'commentaire_commentaire_non_recevable_demande' => $input['commentaire_recevabilite'],
+                    'id_demande' => $id,
+                    'id_motif_recevable' => $input['id_motif_recevable'],
+                    'code_demande' => 'HAB'
+                ]);
 
                 $demandehabilitation = DemandeHabilitation::find($id);
                 $demandehabilitation->update($input);
@@ -1631,12 +1665,12 @@ class TraitementDemandeHabilitationController extends Controller
                                     malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
 
                                     <br><b>Motif de rejet  : </b> ".@$demandehabilitation->motif->libelle_motif."
-                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevable_plan_formation."
+                                    <br><b>Commentaire : </b> ".@$demandehabilitation->commentaire_recevabilite."
                                     <br><br>
                                     <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
-                                        fournir, n'hésitez pas à nous contacter à [Adresse e-mail du support] pour obtenir de l'aide.
+                                        fournir, n'hésitez pas à contactez votre chargé habilitation : ".@$demandehabilitation->userchargerhabilitation->email." pour obtenir de l'aide.
                                         Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
-                                        soumettre une nouvelle demande lorsque les problèmes seront résolus.
+                                        soumettre la demande lorsque les problèmes seront résolus.
                                         Cordialement,
                                         L'équipe e-FDFP
                                     <br><br><br>
@@ -1680,9 +1714,13 @@ class TraitementDemandeHabilitationController extends Controller
                     'etat_locaux_rapport' => 'required',
                     'equipement_rapport' => 'required',
                     'salubrite_rapport' => 'required',
+                    'flag_materiel_pedagogique' => 'required',
+                    'flag_salle_formation' => 'required',
                 ], [
                     'etat_locaux_rapport.required' => 'Veuillez ajouter un commentaire pour les locaux.',
                     'equipement_rapport.required' => 'Veuillez ajouter un commentaire pour les equipement.',
+                    'flag_materiel_pedagogique.required' => 'Veuillez ajouter le status des materiels pedagogiques.',
+                    'flag_salle_formation.required' => 'Veuillez ajouter le status des salles de formation.',
                     'salubrite_rapport.required' => 'Veuillez ajouter un commentaire pour la salubrite / securité.',
                 ]);
 
@@ -1702,7 +1740,9 @@ class TraitementDemandeHabilitationController extends Controller
                         'etat_locaux_rapport' => $input['etat_locaux_rapport'],
                         'equipement_rapport' => $input['equipement_rapport'],
                         'salubrite_rapport' => $input['salubrite_rapport'],
-                        'contenu' => $input['contenu']
+                        'contenu' => $input['contenu'],
+                        'flag_materiel_pedagogique' => $input['flag_materiel_pedagogique'],
+                        'flag_salle_formation' => $input['flag_salle_formation'],
                     ]);
                 }else{
                     $rap = RapportsVisites::create($input);
@@ -1727,6 +1767,36 @@ class TraitementDemandeHabilitationController extends Controller
     }
 
 
+
+
+    public function indexyancho()
+    {
+        $numAgce = Auth::user()->num_agce;
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        if($codeRoles == 'CHEFSERVICE'){
+            $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
+        }else{
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+        }
+        //dd($habilitations);
+        Audit::logSave([
+
+            'action'=>'INDEX',
+
+            'code_piece'=>'',
+
+            'menu'=>'HABILITATION (Traitement)',
+
+            'etat'=>'Succès',
+
+            'objet'=>'HABILITATION'
+
+        ]);
+
+        return view('habilitation.traitementdemandehabilitation.indexyancho',compact('habilitations'));
+    }
+
+
     public function rapport($id)  {
 
         $id =  Crypt::UrldeCrypt($id);
@@ -1741,7 +1811,9 @@ class TraitementDemandeHabilitationController extends Controller
 
         $rapport = RapportsVisites::where([['id_demande_habilitation','=',$id]])->first();
 
+        $piecesDemandes = PiecesDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
         return view('habilitation.traitementdemandehabilitation.rapport',compact('id','infoentreprise',
-                        'demandehabilitation','visite','formateurs','rapport'));
+                        'demandehabilitation','visite','formateurs','rapport','piecesDemandes'));
     }
 }

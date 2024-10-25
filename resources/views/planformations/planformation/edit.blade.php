@@ -937,8 +937,6 @@ $idpart = Auth::user()->id_partenaire;
 
                             <div class="col-md-12" align="right">
 
-
-
                                 <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($planformation->id_plan_de_formation),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                 <a href="/modelfichebeneficiaire/beneficiaire.xlsx" class="btn btn-sm btn-secondary me-sm-3 me-1"  target="_blank"> Modèle de la liste des bénéficiaires à télécharger</a>
@@ -967,8 +965,8 @@ $idpart = Auth::user()->id_partenaire;
                                 <th>Nombre de stagiaires</th>
                                 <th>Nombre de groupes</th>
                                 <th>Nombre d'heures par groupe</th>
-                                <th>Priorité</th>
                                 <th>Cout de l'action</th>
+                                <th>Changer la priorité</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -983,27 +981,42 @@ $idpart = Auth::user()->id_partenaire;
                                                 <td>{{ $actionplanformation->nombre_stagiaire_action_formati }}</td>
                                                 <td>{{ $actionplanformation->nombre_groupe_action_formation_ }}</td>
                                                 <td>{{ $actionplanformation->nombre_heure_action_formation_p }}</td>
-                                                <td>{{ $actionplanformation->pirorite_action_formation }}</td>
                                                 <td align="rigth">{{ number_format($actionplanformation->cout_action_formation_plan, 0, ',', ' ') }}</td>
+                                                <td>
+                                                        <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
+                                                    @isset($actionplanformations)
+                                                        @if($actionplanformation->pirorite_action_formation>1)
+                                                            <a href="{{ route($lien.'.upapf',\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}"
+                                                               class="btn btn-icon btn-xs btn-success" onclick='javascript:if (!confirm("Voulez-vous faire monter cette action de formation ?")) return false;'
+                                                               title="Faire monter"> <span><i class="ti ti-caret-up"></i></span> </a>
+                                                        @endif
+                                                        @if($actionplanformation->pirorite_action_formation<count($actionplanformations))
 
-                                                <td align="center">
+                                                            <a href="{{ route($lien.'.downapf',\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}"
+                                                               class="btn btn-icon btn-xs btn-dark" onclick='javascript:if (!confirm("Voulez-vous faire descendre cette action de formation ?")) return false;'
+                                                               title="Faire descendre"> <span><i class="ti ti-caret-down"></i></span> </a>
+                                                        @endif
+
+                                                    @endisset
+
+                                                    <?php } ?>
+                                                </td>
+                                                <td>
                                                     @can($lien.'-edit')
                                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                            class=" "
                                                            title="Modifier"><img src='/assets/img/eye-solid.png'></a>
 
                                                            <?php if ($planformation->flag_soumis_plan_formation != true){ ?>
+
                                                                     <a href="{{ route($lien.'.deleteapf',\App\Helpers\Crypt::UrlCrypt($actionplanformation->id_action_formation_plan)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet action de plan de formation ?")) return false;'
                                                                     title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>
-
                                                             <?php } ?>
                                                     @endcan
-
                                                 </td>
                                             </tr>
                                 @endforeach
-
                             </tbody>
                         </table>
                       </div>

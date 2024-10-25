@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Comites;
 
+use App\Helpers\AnneeExercice;
 use App\Helpers\SmsPerso;
 use App\Http\Controllers\Controller;
 use App\Models\Comite;
@@ -25,6 +26,9 @@ use App\Models\CahierComite;
 use App\Models\CahierPlansProjets;
 use App\Models\CategorieComite;
 use App\Models\ComiteParticipant;
+use App\Models\DemandeHabilitation;
+use App\Models\DomaineDemandeHabilitation;
+use App\Models\DomaineFormationCabinet;
 use App\Models\FicheAgrement;
 use App\Models\PlanFormation;
 use App\Models\ProcessusComiteLieComite;
@@ -32,6 +36,8 @@ use App\Models\ProjetEtude;
 use App\Models\ProjetFormation;
 use Carbon\Carbon;
 use App\Models\User;
+use DateTime;
+
 @ini_set('max_execution_time',0);
 class ComitesController extends Controller
 {
@@ -116,9 +122,12 @@ class ComitesController extends Controller
                 'commentaire_comite.required' => 'Veuillez ajouter un commentaire.',
             ]);
 
+            $anneeExercice = AnneeExercice::get_annee_exercice();
+
             $input = $request->all();
             $dateanneeencours = Carbon::now()->format('Y');
             $input['id_user_comite'] = Auth::user()->id;
+            $input['id_periode_exercice'] = $anneeExercice->id_periode_exercice;
             $infostypecomite = CategorieComite::find($input['id_categorie_comite']);
             $input['code_comite'] = $infostypecomite->code_categorie_comite.'-'. Gencode::randStrGen(4, 5) .'-'. $dateanneeencours;
 
@@ -261,6 +270,16 @@ class ComitesController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $comitep = Comite::find($id);
+
+        $anneeExercice = AnneeExercice::get_annee_exercice();
+
+        $nombredecomiteencours = DB::table('comite as c')
+                                    ->join('periode_exercice as pe', function ($join) {
+                                        $join->on('c.date_debut_comite', '>=', 'pe.date_debut_periode_exercice')
+                                            ->on('c.date_debut_comite', '<=', 'pe.date_fin_periode_exercice');
+                                    })
+                                    ->select('c.*')
+                                    ->get();
 
         if ($request->isMethod('put')) {
 
@@ -656,6 +675,103 @@ class ComitesController extends Controller
                             SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
 
                         }
+
+                        if($infoscahier->code_pieces_ligne_cahier_plans_projets =='HAB'){
+
+                            $demh = DemandeHabilitation::find($infoscahier->id_demande);
+
+                            $entreprise = Entreprises::where('id_entreprises',$demh->id_entreprises)->first();
+                            $rais = $entreprise->raison_social_entreprises;
+
+                            $nombreactueComite = str_pad(count($nombredecomiteencours)+1, 3, '0', STR_PAD_LEFT);
+
+                            $coderef = 'FDFP/SG-D2EQPC/N°'.$nombreactueComite.'-'.$anneeExercice->annee.'/'.substr($demh->userchefservice->name,0,1).''.substr($demh->userchefservice->prenom_users,0,1).'/'.substr($demh->userchargerhabilitation->name,0,1).''.substr($demh->userchargerhabilitation->prenom_users,0,1);
+
+                            FicheAgrement::create([
+                                'id_demande' => $demh->id_demande_habilitation,
+                                'id_comite_permanente' => $id,
+                                'id_user_fiche_agrement' => Auth::user()->id,
+                                'flag_fiche_agrement'=> true,
+                                'reference_agrement'=> $coderef,
+                                'code_fiche_agrement'=> $infoscahier->code_pieces_ligne_cahier_plans_projets
+                            ]);
+
+                            $dateDebut = new DateTime($anneeExercice->date_debut_periode_exercice); // Crée un objet DateTime
+                            $dateDebut->modify('+2 years'); // Ajoute 2 ans à la date de début
+                            $dateDebut->setDate($dateDebut->format('Y'), 12, 31); // Modifie la date pour être le 31 décembre de l'année modifiée
+
+                            // Si tu veux afficher ou utiliser la date modifiée
+                            //echo $dateDebut->format('Y-m-d');
+                            $datefin = $dateDebut->format('Y-m-d');
+
+                            $demh->update([
+                                'flag_agrement_demande_habilitaion' => true,
+                                'reference_agrement' => $coderef,
+                                'date_agrement_demande_habilitation' => Carbon::now(),
+                                'date_debut_validite' => Carbon::now(),
+                                'date_fin_validite' => $datefin
+                            ]);
+
+                            $entreprise->update([
+                                'flag_habilitation_entreprise' => true
+                            ]);
+
+                            $domaines = DB::table('domaine_demande_habilitation as ddh')
+                                    ->join('domaine_formation as df', 'ddh.id_domaine_formation', '=', 'df.id_domaine_formation')
+                                    ->where('ddh.id_demande_habilitation', $demh->id_demande_habilitation)
+                                    ->groupBy('df.id_domaine_formation', 'df.libelle_domaine_formation')
+                                    ->select('df.id_domaine_formation', 'df.libelle_domaine_formation')
+                                    ->get();
+
+
+                            foreach ($domaines as $domaine) {
+                                // Créer l'enregistrement dans DomaineFormationCabinet
+                                DomaineFormationCabinet::create([
+                                    'id_domaine_formation' => $domaine->id_domaine_formation,
+                                    'id_entreprises' => $entreprise->id_entreprises,
+                                    'flag_domaine_formation_cabinet' => true
+                                ]);
+
+                                // Récupérer directement l'enregistrement
+                                $domDem = DomaineDemandeHabilitation::where([
+                                    ['id_domaine_formation', '=', $domaine->id_domaine_formation],
+                                    ['id_demande_habilitation', '=', $demh->id_demande_habilitation]
+                                ])->first();
+
+                                if ($domDem) {
+                                    // Mettre à jour directement
+                                    $domDem->update([
+                                        'flag_agree_domaine_demande_habilitation' => true
+                                    ]);
+                                }
+                            }
+
+                            //Envoi SMS
+                            $content = "Cher(e) ".$rais.",\nvotre agrément de demande habilitation est disponible, veuillez-vous connecter sur le portail ".route('/');
+                            SmsPerso::sendSMS($entreprise->tel_entreprises,$content);
+
+                            $logo = Menu::get_logo();
+							$email = $entreprise->email_entreprises;
+						   if (isset($email)) {
+                                $nom_prenom = $rais;
+                                $sujet = "Agrement validé";
+                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                $messageMail = "<b>Cher(e) $nom_prenom  ,</b>
+                                            <br/><br/>votre agrément de demande habilitation est disponible</br>
+                                            Veuillez-vous connecter sur le portail : <br><br>
+                                            <a class=\"o_text-white\" href=\"".route('/')."\" style=\"text-decoration: none;outline: none;color: #ffffff;display: block;padding: 7px 16px;mso-text-raise: 3px;
+                                            font-family: Helvetica, Arial, sans-serif;font-weight: bold;width: 30%;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;mso-padding-alt: 7px 16px;background-color: #e07204;border-radius: 4px;\">Accedé a votre portail</a>"
+                                    ."<br><br><br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+
+                                $messageMailEnvoi = Email::get_envoimailTemplate($email, $nom_prenom, $messageMail, $sujet, $titre);
+                            }
+
+                        }
+
 
                         if($infoscahier->code_pieces_ligne_cahier_plans_projets =='PE'){
 

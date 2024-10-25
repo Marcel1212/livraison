@@ -17,6 +17,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('cahierplansprojets/store', [CahierPlansProjetsController::class, 'store'])->name('cahierplansprojets.store');
         Route::get('cahierplansprojets/{id}/show', [CahierPlansProjetsController::class, 'show'])->name('cahierplansprojets.show');
         Route::get('cahierplansprojets/{id}/etatpf', [CahierPlansProjetsController::class, 'etatpf'])->name('cahierplansprojets.etatpf');
+        Route::get('cahierplansprojets/{id}/etathab', [CahierPlansProjetsController::class, 'etathab'])->name('cahierplansprojets.etathab');
         Route::get('cahierplansprojets/{id}/etatpe', [CahierPlansProjetsController::class, 'etatpe'])->name('cahierplansprojets.etatpe');
         Route::get('cahierplansprojets/{id}/etatprf', [CahierPlansProjetsController::class, 'etatprf'])->name('cahierplansprojets.etatprf');
         Route::get('cahierplansprojets/{id}/{id2}/agrement', [CahierPlansProjetsController::class, 'agrement'])->name('cahierplansprojets.agrement');

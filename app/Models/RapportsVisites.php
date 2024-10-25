@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_demande_habilitation
  * @property string $contenu
  * @property boolean $flag_rapports_visites
+ * @property boolean $flag_materiel_pedagogique
+ * @property boolean $flag_salle_formation
  * @property string $date_rapport
  * @property string $created_at
  * @property string $updated_at
@@ -39,7 +41,7 @@ class RapportsVisites extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_visites', 'id_demande_habilitation', 'contenu', 'flag_rapports_visites', 'date_rapport', 'created_at', 'updated_at', 'etat_locaux_rapport', 'equipement_rapport', 'salubrite_rapport', 'avis_comite_technique'];
+    protected $fillable = ['id_visites', 'id_demande_habilitation', 'contenu', 'flag_rapports_visites', 'date_rapport', 'created_at', 'updated_at', 'etat_locaux_rapport', 'equipement_rapport', 'salubrite_rapport', 'avis_comite_technique','flag_salle_formation','flag_materiel_pedagogique'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

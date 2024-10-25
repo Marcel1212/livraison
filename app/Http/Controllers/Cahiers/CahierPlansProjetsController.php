@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Cahiers;
 
+use App\Helpers\AnneeExercice;
 use App\Http\Controllers\Controller;
 use App\Models\LigneCahierPlansProjets;
 use Illuminate\Http\Request;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Helpers\EtatCahierPlanDeFormation;
 use App\Models\CategorieComite;
+use App\Models\DemandeHabilitation;
+use DateTime;
+
 @ini_set('max_execution_time',0);
 
 class CahierPlansProjetsController extends Controller
@@ -395,6 +399,16 @@ class CahierPlansProjetsController extends Controller
 
                         }
 
+                        if($codeprocessus == 'HAB'){
+                            $plan = DemandeHabilitation::find($iddemande);
+                            $plan->update([
+                                'flag_demande_habilitation_valider_cahier'=> true,
+                                'flag_passer_cahier_cp_cg' => true,
+                                'date_passe_cahier_cp_cg' => Carbon::now()
+                            ]);
+
+                        }
+
                         if($codeprocessus == 'PE'){
                             $projet_etude = ProjetEtude::find($iddemande);
                             $projet_etude->flag_projet_etude_valider_cahier = true;
@@ -527,6 +541,122 @@ class CahierPlansProjetsController extends Controller
 
         return view('cahiers.cahier.etatpf',compact('cahier','etatsecteuractivite','etatactionplan','etatplanf','etatbutformation','etattypeformation'));
     }
+
+    private function genererTexteBaseSurClassification($resultats)
+    {
+        // Construction de la phrase
+        $texte = '';
+
+        // Parcourir les résultats pour formater le texte
+        foreach ($resultats as $index => $resultat) {
+            $libelle = $resultat['libelle'];
+            $pourcentage = round($resultat['pourcentage'],1);
+
+            // Ajouter une conjonction pour lier les différentes parties du texte
+            if ($index == 0) {
+                $texte .= "Les domaines les plus sollicités sont : ";
+            } elseif ($index == count($resultats) - 1) {
+                $texte .= "et ";
+            } else {
+                $texte .= ", ";
+            }
+
+            // Ajouter le libellé et le pourcentage pour chaque domaine
+            $texte .= "{$libelle} avec {$pourcentage} %";
+        }
+
+        // Ajouter une conclusion si nécessaire
+        $texte .= ".";
+
+        return $texte;
+    }
+
+    public function genererTexteDynamique($id)
+    {
+        // Récupérer les classifications
+        $classifications = DB::table('vue_classification_des_domaines')
+            ->where([
+                ['code_pieces_ligne_cahier_plans_projets', '=', 'HAB'],
+                ['id_cahier_plans_projets', '=', $id]
+            ])->orderby('pourcentage','DESC')->get();
+
+        // Initialisation des variables pour stocker les pourcentages par catégorie
+        $resultats = [];
+        $totalPourcentage = 0;
+
+        // Parcourir les résultats et les stocker
+        foreach ($classifications as $classification) {
+            $resultats[] = [
+                'libelle' => $classification->libelle_domaine_formation,
+                'pourcentage' => $classification->pourcentage,
+            ];
+            $totalPourcentage += $classification->pourcentage;
+        }
+
+        // Générer le texte dynamique en fonction des résultats
+        return $this->genererTexteBaseSurClassification($resultats);
+    }
+
+
+
+    public function etathab($id){
+
+        $id =  Crypt::UrldeCrypt($id);
+
+        $cahier = CahierPlansProjets::find($id);
+
+        $anneeExercice = AnneeExercice::get_annee_exercice();
+
+
+        $contenantCahiers = CahierPlansProjets::join('ligne_cahier_plans_projets','cahier_plans_projets.id_cahier_plans_projets','ligne_cahier_plans_projets.id_cahier_plans_projets')
+                                                ->where([['code_pieces_ligne_cahier_plans_projets','=','HAB'],
+                                                ['cahier_plans_projets.id_cahier_plans_projets','=',$id]])
+                                                ->get();
+
+        $classifications = DB::table('vue_classification_des_domaines')
+                                                ->where([['code_pieces_ligne_cahier_plans_projets','=','HAB'],
+                                                ['id_cahier_plans_projets','=',$id]])
+                                                ->get();
+
+        $vue_zones = DB::table('vue_zone_geographique')
+                                                ->where([['code_pieces_ligne_cahier_plans_projets','=','HAB'],
+                                                ['id_cahier_plans_projets','=',$id]])
+                                                ->get();
+
+        // Générer le texte en fonction de l'ID du projet
+        $texte = $this->genererTexteDynamique($id);
+
+        $dateDebut = new DateTime($anneeExercice->date_debut_periode_exercice); // Crée un objet DateTime
+        $dateDebut->modify('+2 years'); // Ajoute 2 ans à la date de début
+        $dateDebut->setDate($dateDebut->format('Y'), 12, 31); // Modifie la date pour être le 31 décembre de l'année modifiée
+
+        // Si tu veux afficher ou utiliser la date modifiée
+        //echo $dateDebut->format('Y-m-d');
+        $datefin = $dateDebut->format('Y-m-d');
+
+        //dd($dateDebut->format('Y-m-d'));
+
+
+
+       //dd($etatsecteuractivite);
+       Audit::logSave([
+
+        'action'=>'CONSULTER',
+
+        'code_piece'=>$id,
+
+        'menu'=>'CAHIERS (CAHIERS)',
+
+        'etat'=>'Succès',
+
+        'objet'=>'CAHIERS'
+
+        ]);
+
+        return view('cahiers.cahier.etathab',compact('cahier','contenantCahiers','classifications','texte','vue_zones','datefin'));
+    }
+
+
 
     public function etatpe($id){
 

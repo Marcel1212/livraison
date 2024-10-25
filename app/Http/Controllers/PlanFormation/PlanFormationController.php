@@ -341,7 +341,7 @@ class PlanFormationController extends Controller
             $structureformation .= "<option value='" . $comp->id_entreprises  . "'>" .mb_strtoupper($comp->ncc_entreprises) .' / '.mb_strtoupper($comp->raison_social_entreprises)." </option>";
         }
 
-        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
+        $actionplanformations = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->orderBy('pirorite_action_formation', 'asc')->get();
 
         $montantactionplanformation = 0;
 
@@ -644,7 +644,7 @@ class PlanFormationController extends Controller
                 //dd($input);
 
                 $nombreactionplan = ActionFormationPlan::where([['id_plan_de_formation','=',$id]])->get();
-
+                $lastaction = ActionFormationPlan::where('id_plan_de_formation',$id)->latest()->first();
                 $rccentreprisehabilitation = Entreprises::where([['id_entreprises','=',$input['id_entreprise_structure_formation_plan_formation']]])->first();
 
                 $input['id_entreprise_structure_formation_action'] = $input['id_entreprise_structure_formation_plan_formation'];
@@ -654,7 +654,11 @@ class PlanFormationController extends Controller
                 $input['lieu_formation_fiche_agrement'] = mb_strtoupper($input['lieu_formation_fiche_agrement']);
                 $input['objectif_pedagogique_fiche_agre'] = mb_strtoupper($input['objectif_pedagogique_fiche_agre']);
                 $input['id_plan_de_formation'] = $id;
-                $input['pirorite_action_formation'] = count($nombreactionplan)+1;
+                if(isset($lastaction)){
+                    $input['pirorite_action_formation'] = $lastaction->pirorite_action_formation+1;
+                }else{
+                    $input['pirorite_action_formation'] = 1;
+                }
 
                 $input['cout_action_formation_plan'] = str_replace(' ', '', $input['cout_action_formation_plan']);
 
@@ -980,6 +984,24 @@ class PlanFormationController extends Controller
                 BeneficiairesFormation::where([['id_beneficiaire_formation','=',$beneficiaire->id_beneficiaire_formation]])->delete();
             }
 
+            //Recupérer le précédent
+            $actionplanprevious = ActionFormationPlan::where('id_plan_de_formation',$actionplan->id_plan_de_formation)
+            ->where('id_action_formation_plan','<',$actionplan->id_action_formation_plan)->first();
+
+            $actionplannexts = ActionFormationPlan::where('id_plan_de_formation',$actionplan->id_plan_de_formation)
+                ->where('id_action_formation_plan','>',$actionplan->id_action_formation_plan)->get();
+
+            foreach ($actionplannexts as $actionplannext){
+                if(isset($actionplanprevious->pirorite_action_formation)){
+                    $actionplannext->pirorite_action_formation = $actionplanprevious->pirorite_action_formation+1;
+                }else{
+                    $actionplannext->pirorite_action_formation = 1;
+                }
+                $actionplannext->update();
+                $actionplanprevious = $actionplannext;
+            }
+
+
             FicheADemandeAgrement::where([['id_fiche_agrement','=',$ficheagrement->id_fiche_agrement]])->delete();
             ActionFormationPlan::where([['id_action_formation_plan','=',$actionplan->id_action_formation_plan]])->delete();
 
@@ -1008,7 +1030,6 @@ class PlanFormationController extends Controller
         $categorieplan = CategoriePlan::find($idVal);
         $idplanformation = $categorieplan->id_plan_de_formation;
         CategoriePlan::where([['id_categorie_plan','=',$idVal]])->delete();
-
         $listecategorieplans = CategoriePlan::where([['id_plan_de_formation','=',$idplanformation]])->get();
 
         $nombretotalsalarie = 0;
@@ -1038,4 +1059,67 @@ class PlanFormationController extends Controller
         return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : La categorie des traivailleurs à été  supprimer avec succes ');
     }
 
+
+    public function upapf($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        if(isset($id)){
+            $actionplan = ActionFormationPlan::find($id);
+            $plan = PlanFormation::where('id_plan_de_formation',$actionplan->id_plan_de_formation)->first();
+            $actionplannext = ActionFormationPlan::where('id_plan_de_formation',$plan->id_plan_de_formation)
+                ->orderBy('pirorite_action_formation', 'desc')
+                ->where('pirorite_action_formation','<',$actionplan->pirorite_action_formation)->latest()->first();
+            $idplanformation = $plan->id_plan_de_formation;
+
+            if(isset($actionplannext)){
+                $priorite_action_formation = $actionplannext->pirorite_action_formation;
+
+                $actionplannext->pirorite_action_formation = $actionplan->pirorite_action_formation;
+                $actionplannext->update();
+
+                $actionplan->pirorite_action_formation = $priorite_action_formation;
+                $actionplan->update();
+
+            }else{
+                $actionplan->pirorite_action_formation = 1;
+                $actionplan->update();
+            }
+
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation déplacé avec succes ');
+
+        }else{
+            return redirect()->back()->with('error','Données manquantes');
+        }
+    }
+
+    public function downapf($id){
+        $id = Crypt::UrldeCrypt($id);
+
+        if(isset($id)){
+            $actionplan = ActionFormationPlan::find($id);
+            $plan = PlanFormation::where('id_plan_de_formation',$actionplan->id_plan_de_formation)->first();
+            $actionplanprevious = ActionFormationPlan::where('id_plan_de_formation',$plan->id_plan_de_formation)
+                ->orderBy('pirorite_action_formation', 'asc')
+                ->where('pirorite_action_formation','>',$actionplan->pirorite_action_formation)->first();
+
+            $idplanformation = $plan->id_plan_de_formation;
+
+            if(isset($actionplanprevious)){
+                $priorite_action_formation = $actionplanprevious->pirorite_action_formation;
+
+                $actionplanprevious->pirorite_action_formation = $actionplan->pirorite_action_formation;
+                $actionplanprevious->update();
+
+                $actionplan->pirorite_action_formation = $priorite_action_formation;
+                $actionplan->update();
+
+            }else{
+                $actionplan->pirorite_action_formation = 1;
+                $actionplan->update();
+            }
+            return redirect('planformation/'.Crypt::UrlCrypt($idplanformation).'/'.Crypt::UrlCrypt(3).'/edit')->with('success', 'Succes : Action de plan de formation déplacé avec succes ');
+        }else{
+            return redirect()->back()->with('error','Données manquantes');
+        }
+    }
 }

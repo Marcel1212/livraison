@@ -7,11 +7,15 @@ use App\Helpers\InfosEntreprise;
 use App\Helpers\PartEntreprisesHelper;
 use App\Helpers\ListeDemandeHabilitationSoumis;
 use App\Helpers\Fonction;
+use App\Models\NombreDomaineHabilitation;
 
 
 $nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
 $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite_formateur($demandehabilitation->id_demande_habilitation);
 
+$nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_habilitation','=',true]])->first();
+
+//dd($nbresollicite);
 
 ?>
 
@@ -46,6 +50,15 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
             </div>
         @endif
 
+        @if ($message = Session::get('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert-body">
+                    {{ $message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         @if($errors->any())
                                   @foreach ($errors->all() as $error)
                                       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -59,6 +72,15 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
 
 
                         <div class="col-xl-12">
+                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                <div align="right">
+                                    <button type="button"
+                                            class="btn rounded-pill btn-outline-success btn-sm waves-effect waves-light"
+                                            data-bs-toggle="modal" data-bs-target="#modalToggleCommentaireplan">
+                                        Voir les commentaire de la non recevabilité
+                                    </button>
+                                </div>
+                            @endif
                         <h6 class="text-muted"></h6>
                         <div class="nav-align-top nav-tabs-shadow mb-4">
                             <ul class="nav nav-tabs" role="tablist">
@@ -155,23 +177,23 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                 data-bs-target="#navs-top-Soumettre"
                                 aria-controls="navs-top-Soumettre"
                                 aria-selected="false">
-                                Intervention hors du pays et Soumission
+                                Intervention hors du pays
                                 </button>
                             </li>
-                            @if($demandehabilitation->flag_rejet_demande_habilitation == true)
+
                                 <li class="nav-item">
                                     <button
                                     type="button"
-                                    class="nav-link"
+                                    class="nav-link <?php if($idetape==9 and count($formateurs)>0){ echo "active";} ?>"
                                     role="tab"
                                     data-bs-toggle="tab"
-                                    data-bs-target="#navs-top-rejet"
-                                    aria-controls="navs-top-rejet"
+                                    data-bs-target="#navs-top-soumission"
+                                    aria-controls="navs-top-soumission"
                                     aria-selected="false">
-                                    Motif du rejet
+                                    Soumisson
                                     </button>
                                 </li>
-                            @endif
+
 
                             </ul>
                             <div class="tab-content">
@@ -549,6 +571,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                         @enderror" data-allow-clear="true" name="id_type_intervention[]" multiple>
                                                         <?= $typeinterventionsList; ?>
                                                     </select>
+                                                    <span><i>Choix multiple</i></span>
                                                     @error('id_type_intervention')
                                                     <div class=""><label class="error">{{ $message }}</label></div>
                                                     @enderror
@@ -622,6 +645,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                         @enderror" data-allow-clear="true" name="id_type_organisation_formation[]" multiple>
                                                         <?= $organisationFormationsList; ?>
                                                     </select>
+                                                    <span><i>Choix multiple</i></span>
                                                     @error('id_type_organisation_formation')
                                                     <div class=""><label class="error">{{ $message }}</label></div>
                                                     @enderror
@@ -682,6 +706,15 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                         </table>
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==5 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-domaineformation" role="tabpanel">
+                                    @if(count($nbresollicite) == $nombredomainedroit->libelle_nombre_domaine_habilitation)
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Cinq (5) domaines de formations sont autorisés pour une nouvelle demande d'habilitation
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+                                    @endif
+
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                         <form method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(5)]) }}">
                                             @csrf
@@ -731,10 +764,14 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(4)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                       <button type="submit" name="action" value="AjouterDomaineFormation"
-                                                               class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                               Ajouter
-                                                       </button>
+
+
+                                                            <button type="submit" name="action" value="AjouterDomaineFormation"
+                                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                    Ajouter
+                                                            </button>
+
+
                                                    <?php } ?>
 
                                                    @if (count($domaineDemandeHabilitations)>0)
@@ -784,22 +821,28 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==6 and count($organisations)>0){ echo "show active";} ?>" id="navs-top-formateur" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+
+                                        <div class="col-12" align="right">
+                                            <a href="{{ route('formateurs.create') }}" class="btn btn-sm btn-primary waves-effect waves-light" target="_blank">
+                                                <i class="menu-icon tf-icons ti ti-plus"></i> Créer un formateur
+                                            </a>
+                                        </div>
+                                        <br/>
                                         @if(count($nbresollicite) != count($nbresolliciteFormateur))
                                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                 <div class="alert-body" style="text-align: center">
-                                                    Vous devez avoir au moins un formateur par domaine de formation
+                                                    Un formateur est obligatoire par domaine de formation et au moins cinq (5) années minimum d'expériences.
                                                 </div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
                                         @endif
 
+
+
                                         <form method="POST" enctype="multipart/form-data" id="formformateur" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}">
                                             @csrf
                                            @method('put')
                                            <div class="row">
-
-
-
                                                     <div class="col-md-6 col-12">
                                                         <label class="form-label" for="billings-country">Domaine de formation  <strong style="color:red;">*</strong></label>
                                                         <select class="select2 form-select-sm input-group @error('id_domaine_demande_habilitation')
@@ -858,6 +901,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                 <th>No</th>
                                                 <th>Domaine</th>
                                                 <th>Nom et prénom </th>
+                                                <th>Fonction </th>
                                                 <th>Année d'experience </th>
                                                 <th>Action</th>
                                             </tr>
@@ -870,11 +914,15 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                                 <td>{{ $i }}</td>
                                                                 <td>{{ $formateur->libelle_type_domaine_demande_habilitation }} - {{ $formateur->libelle_type_domaine_demande_habilitation_public }} - {{ $formateur->libelle_domaine_formation }}</td>
                                                                 <td>{{ $formateur->formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</td>
+                                                                <td>{{ $formateur->formateur->fonction_formateurs }} </td>
                                                                 <td>{{   Fonction::calculerAnneesExperience($formateur->id_formateurs)  }}</td>
                                                                 <td>
                                                                     <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($formateur->id_formateurs)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                                                         class=" "
                                                                         title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                                                    <a onclick="NewWindow('{{ asset("/pieces/pieces_formateur/".$demandehabilitation->entreprise->ncc_entreprises."_".$formateur->nom_formateurs."_".$formateur->prenom_formateurs."/".$formateur->pieces_formateur)}}','',screen.width/2,screen.height,'yes','center',1);" target="_blank"
+                                                                        class=" "
+                                                                        title="Modifier"><img src='/assets/img/display.png'></a>
                                                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
                                                                     <a href="{{ route($lien.'.deleteformateurs',\App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)) }}"
                                                                     class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
@@ -1019,24 +1067,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                 </div>
                                 <div class="tab-pane fade <?php if($idetape==8 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-Soumettre" role="tabpanel">
                                     <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
-                                            <div class="col-md-12" align="right">
-                                                <button
-                                                type="button"
-                                                class="btn btn-outline-success"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#SoummissiondemandehabilitationApprouve1">
-                                                    Soumettre la demande d'habilitation
-                                                </button>
-                                            </div>
-                                        @else
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                            <div class="alert-body" style="text-align: center">
-                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
-                                            </div>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                          </div>
-                                        @endif
+
 
                                       <br/>
                                       <br/>
@@ -1046,7 +1077,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
-                                        <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(8)]) }}">
+                                            <form method="POST" enctype="multipart/form-data" id="formInterventionHorsCi" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(8)]) }}">
                                             @csrf
                                            @method('put')
                                            <div class="row">
@@ -1110,6 +1141,10 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                                        </button>
                                                    <?php } ?>
 
+                                                   @if (count($formateurs)>0)
+                                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>
+                                                    @endif
+
                                                    <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                                        Retour</a>
                                                </div>
@@ -1154,8 +1189,131 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                        </table>
 
                                 </div>
+                                <div class="tab-pane fade <?php if($idetape==9 and count($formateurs)>0){ echo "show active";} ?>" id="navs-top-soumission" role="tabpanel">
+                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                        @if (count($nbresollicite) == count($nbresolliciteFormateur))
+                                            @if (count($piecesDemandeHabilitations)>=3)
+                                                <div class="col-md-12" align="right">
+                                                    <button
+                                                    type="button"
+                                                    class="btn btn-outline-success"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#SoummissiondemandehabilitationApprouve1">
+                                                        Soumettre la demande d'habilitation
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        @else
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Tout les domaine n'ont pas de formateur attribuer, Voila pourquoi vous ne pouvez pas soumettre
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
+                                        @endif
 
-                                @if ($demandehabilitation->flag_rejet_demande_habilitation == true)
+                                      <br/>
+                                      <br/>
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                            <div class="alert-body" style="text-align: center">
+                                                Toutes les pieces sont obligatoire
+                                            </div>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                          </div>
+                                            <form method="POST" enctype="multipart/form-data" id="formAjouterPieces" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(9)]) }}">
+                                            @csrf
+                                           @method('put')
+                                           <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="mb-1">
+                                                                <label>Type de pieces <strong style="color:red;">*</strong></label>
+                                                                <select class="select2 form-select-sm input-group" data-allow-clear="true" name="id_types_pieces" id="id_types_pieces" >
+                                                                    <?= $TypesPiecesListe; ?>
+                                                                </select>
+                                                                @error('id_types_pieces')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="mb-1">
+                                                                <label>Pieces jointes <strong style="color:red;">*</strong></label>
+                                                                <input type="file" name="pieces_demande_habilitation" value="{{ old('pieces_demande_habilitation') }}" id="pieces_demande_habilitation" class="form-control form-control-sm" />
+                                                                @error('pieces_demande_habilitation')
+                                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                               <div class="col-12" align="right">
+                                                   <hr>
+
+                                                   <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(7)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
+
+                                                   <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
+                                                       <button type="submit" name="action" value="AjouterPieces"
+                                                               class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                               Ajouter
+                                                       </button>
+                                                   <?php } ?>
+
+                                                   <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
+                                                       Retour</a>
+                                               </div>
+                                           </div>
+                                       </form>
+                                       <?php } ?>
+                                       <hr>
+                                       <table class="table table-bordered table-striped table-hover table-sm"
+                                           id=""
+                                           style="margin-top: 13px !important">
+                                           <thead>
+                                           <tr>
+                                                <th>No</th>
+                                                <th>Types de pieces </th>
+                                                <th>Pieces </th>
+                                                <th>Action</th>
+                                           </tr>
+                                           </thead>
+                                           <tbody>
+                                                @foreach ($piecesDemandeHabilitations as $piecesDemandeHabilitation)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td> <!-- Utilisation de $loop->iteration pour l'incrémentation -->
+                                                        <td>{{ $piecesDemandeHabilitation->typesPiece->libelle_types_pieces }}</td>
+                                                        <td>
+                                                            @if (isset($piecesDemandeHabilitation->pieces_demande_habilitation))
+                                                                <span class="badge bg-secondary">
+                                                                    <a target="_blank"
+                                                                        onclick="NewWindow('{{ asset("/pieces/pieces_demande_habilitation/".$demandehabilitation->entreprise->ncc_entreprises."/". $piecesDemandeHabilitation->pieces_demande_habilitation)}}','',screen.width/2,screen.height,'yes','center',1);">
+                                                                        Voir la pièce
+                                                                    </a>
+                                                                </span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+
+                                                                <a href="{{ route($lien.'.deletepieceDemande', \App\Helpers\Crypt::UrlCrypt($piecesDemandeHabilitation->id_pieces_demande_habilitation)) }}"
+                                                                onclick="return confirm('Voulez-vous supprimer cette ligne ?')"
+                                                                title="Supprimer">
+                                                                <img src="/assets/img/trash-can-solid.png" alt="Supprimer">
+                                                                </a>
+
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+
+                                           </tbody>
+                                       </table>
+
+                                </div>
+
+                                {{-- @if ($demandehabilitation->flag_rejet_demande_habilitation == true)
                                     <div class="tab-pane fade" id="navs-top-rejet" role="tabpanel">
 
 
@@ -1169,7 +1327,7 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                                         </div>
 
                                     </div>
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </div>
@@ -1216,6 +1374,56 @@ $nbresolliciteFormateur = ListeDemandeHabilitationSoumis::get_vue_nombre_de_doma
                     </div>
                     </div>
 				</div>
+
+                <div class="modal animate_animated animate_fadeInDownBig fade" id="modalToggleCommentaireplan"
+                             aria-labelledby="modalToggleLabel" tabindex="-1" style="display: none;"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalToggleLabel">Commentaire </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="card">
+                                        <h5 class="card-header">Commentaire des non recevabilités</h5>
+                                        <div class="card-body pb-2">
+                                            <ul class="timeline pt-3">
+
+                                                    <li class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+                                    <span class="timeline-indicator-advanced timeline-indicator-primary">
+                                      <i class="ti ti-send rounded-circle scaleX-n1-rtl"></i>
+                                    </span>
+													@foreach($commentairenonrecevables as $com)
+                                                        <div class="timeline-event">
+                                                            <div class="timeline-header border-bottom mb-3">
+                                                                <h6 class="mb-0"></h6>
+                                                                <span class="text-muted"><strong>{{ $com->motif->libelle_motif}}</strong></span>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                                                <div class="d-flex align-items-center">
+
+                                                                        <div class="row ">
+                                                                            <div>
+                                                                                <span>Observation :   <?php echo $com->commentaire_commentaire_non_recevable_demande; ?></span>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+														@endforeach
+                                                    </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
         <!-- END: Content-->
 
         @endsection
