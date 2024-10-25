@@ -378,6 +378,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                 @error('titre_propriete_contrat_bail')
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
+                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                        maxi : 5Mo</em>
+                                                    </div>
 
                                             </div>
 
