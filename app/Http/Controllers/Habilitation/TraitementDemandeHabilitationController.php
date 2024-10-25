@@ -197,6 +197,22 @@ class TraitementDemandeHabilitationController extends Controller
         return view('habilitation.traitementdemandehabilitation.show', compact('demandehabilitation','id','entreprise','domaineDemandeHabilitations'));
     }
 
+    public function showagrement( Request $request, $id)
+    {
+        //
+
+        $id =  Crypt::UrldeCrypt($id);
+        $demandehabilitation = DemandeHabilitation::find($id);
+
+        // Domaine d'interventions
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$id]])->get();
+
+        // Recuperation de l'entreprise
+        $entreprise = Entreprises::find($demandehabilitation->id_entreprises);
+       //dd($entreprise); exit();
+        return view('habilitation.traitementdemandehabilitation.showagrement', compact('demandehabilitation','id','entreprise','domaineDemandeHabilitations'));
+    }
+
     public function shownotetechnique( Request $request, $id)
     {
         //

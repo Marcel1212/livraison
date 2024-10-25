@@ -141,7 +141,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                         class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                                     <?php if ( $habilitation->flag_agrement_demande_habilitaion == true  ){ ?>
-                                                    <a onclick="NewWindow('{{ route($lien2 . '.show', \App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);"
+                                                    <a onclick="NewWindow('{{ route($lien2 . '.showagrement', \App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);"
                                                         target="_blank" class=" " title="Voir l'agrement"><img
                                                             src='/assets/img/eye-solid.png'></a>
                                                     <?php } ?>
