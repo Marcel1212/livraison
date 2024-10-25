@@ -367,16 +367,16 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                            <div class="col-md-4 col-12">
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
-                                                   <input type="text" name="date_de_debut_formations_educ" id="date_de_debut_formations_educ"
-                                                       class="form-control form-control-sm" value="{{ old('date_de_debut_formations_educ') }}" />
+                                                   <input type="month" name="date_de_debut_formations_educ" id="date_de_debut_formations_educ"
+                                                       class="form-control month form-control-sm" value="{{ old('date_de_debut_formations_educ') }}" />
                                                </div>
                                            </div>
 
                                            <div class="col-md-4 col-12">
                                                <div class="mb-1">
                                                    <label>Date de fin <strong style="color:red;">*</strong></label>
-                                                   <input type="text" name="date_de_fin_formations_educ" id="date_de_fin_formations_educ"
-                                                       class="form-control form-control-sm"  value="{{ old('date_de_fin_formations_educ') }}" />
+                                                   <input type="month" name="date_de_fin_formations_educ" id="date_de_fin_formations_educ"
+                                                       class="form-control month form-control-sm"  value="{{ old('date_de_fin_formations_educ') }}" />
                                                </div>
                                            </div>
 
@@ -536,16 +536,16 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                            <div class="col-md-3 col-12">
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
-                                                   <input type="text" name="date_de_debut" id="date_de_debut"
-                                                       class="form-control form-control-sm" value="{{ old('date_de_debut') }}" />
+                                                   <input type="month" name="date_de_debut" id="date_de_debut"
+                                                       class="form-control month form-control-sm" value="{{ old('date_de_debut') }}" />
                                                </div>
                                            </div>
 
                                            <div class="col-md-3 col-12" id="date_de_fin">
                                                <div class="mb-1">
                                                    <label>Date de fin </label>
-                                                   <input type="text" name="date_de_fin" id="date_de_fin"
-                                                       class="form-control form-control-sm"  value="{{ old('date_de_fin') }}" />
+                                                   <input type="month" name="date_de_fin" id="date_de_fin"
+                                                       class="form-control month form-control-sm"  value="{{ old('date_de_fin') }}" />
                                                </div>
                                            </div>
 
@@ -981,44 +981,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
 
         @section('js_perso')
 
-        <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-        <script>
-            var picker = new Pikaday({
-                field: document.getElementById('date_de_debut_formations_educ'),
-                format: 'YYYY-MM',  // pour un format de type mois
-                yearRange: [2000, 2025],
-                onSelect: function(date) {
-                    console.log(date);
-                }
-            });
 
-            var picker = new Pikaday({
-                field: document.getElementById('date_de_fin_formations_educ'),
-                format: 'YYYY-MM',  // pour un format de type mois
-                yearRange: [2000, 2025],
-                onSelect: function(date) {
-                    console.log(date);
-                }
-            });
-
-            var picker = new Pikaday({
-                field: document.getElementById('date_de_debut'),
-                format: 'YYYY-MM',  // pour un format de type mois
-                yearRange: [2000, 2025],
-                onSelect: function(date) {
-                    console.log(date);
-                }
-            });
-
-            var picker = new Pikaday({
-                field: document.getElementById('date_de_fin'),
-                format: 'YYYY-MM',  // pour un format de type mois
-                yearRange: [2000, 2025],
-                onSelect: function(date) {
-                    console.log(date);
-                }
-            });
-        </script>
 
         <script>
 

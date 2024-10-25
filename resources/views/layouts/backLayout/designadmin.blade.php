@@ -38,7 +38,9 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
         rel="stylesheet"/>
@@ -51,6 +53,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
     {{-- <link rel="stylesheet" type="text/css" href="../../../app-assets/css/pages/app-calendar.css"> --}}
      <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap.css')}}">
     {{-- <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/bootstrap-extended.css')}}"> --}}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
 
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/quill/snow.css')}}"/>
@@ -75,15 +78,21 @@ $imagedashboard = Menu::get_info_image_dashboard();
     <link rel="stylesheet"
           href="{{asset('/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css')}}"/>
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css')}}"/>
-    <link rel="stylesheet" href="{{asset('/assets/vendor/libs/flatpickr/flatpickr.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/plugins/forms/pickers/form-flat-pickr.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/plugins/forms/pickers/form-pickadate.css')}}">
+
+    {{-- <link rel="stylesheet" href="{{asset('/assets/vendor/libs/flatpickr/flatpickr.css')}}"/> --}}
     <link rel="stylesheet" href="{{asset('/assets/vendor/libs/apex-charts/apex-charts.css')}}"/>
 
-    <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/plugins/forms/pickers/form-flat-pickr.css')}}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/plugins/forms/pickers/form-flat-pickr.css')}}"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/vendor/css/pages/app-calendar.css')}}">
 
     <!-- Page CSS -->
-<style>
+<style>7
+
+
     .ql-snow .ql-editor{
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
@@ -323,6 +332,9 @@ $imagedashboard = Menu::get_info_image_dashboard();
 <script src="{{asset('/assets/vendor/libs/swiper/swiper.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/moment/moment.js')}}"></script>
+<script src="{{asset('/assets/js/pickers/pickadate/picker.js')}}"></script>
+<script src="{{asset('/assets/js/pickers/pickadate/picker.date.js')}}"></script>
+<script src="{{asset('/assets/js/pickers/pickadate/picker.time.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/flatpickr/flatpickr.js')}}"></script>
 
 <!-- Main JS -->
@@ -343,6 +355,10 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
     <script src="{{asset('/assets/vendor/js/calendar/fullcalendar.min.js')}}"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/l10n/fr.js"></script>
 
     <script>
     var win = null;
@@ -402,6 +418,40 @@ $imagedashboard = Menu::get_info_image_dashboard();
     $(document).ready(function () {
         $('#exampleData').DataTable();
     });
+
+
+    flatpickr(".month", {
+        locale: "fr",                 // Définit la langue sur le français
+
+        dateFormat: "Y-m",
+        altInput: true,
+        altFormat: "F Y",
+        shorthand: false,
+        plugins: [
+            new monthSelectPlugin({
+                dateFormat: "Y-m",
+                altFormat: "F Y",
+                theme: "light"
+            })
+        ]
+    });
+
+    // $('.').flatpickr({
+    //      plugins: [
+    //     new monthSelectPlugin({
+    //       shorthand: true, //defaults to false
+    //       dateFormat: "m.y", //defaults to "F Y"
+    //       altFormat: "F Y", //defaults to "F Y"
+    //       theme: "dark" // defaults to "light"
+    //     })
+    // ]
+        //   ],
+    //     altInput: true,
+    //     shorthand: true,
+
+    //   altFormat: 'F Y',
+    //   dateFormat: 'Y-m'
+    // });
 
     $('input.number').keyup(function(event) {
         if(event.which >= 37 && event.which <= 40){
