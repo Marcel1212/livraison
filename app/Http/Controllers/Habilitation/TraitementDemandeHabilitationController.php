@@ -58,8 +58,8 @@ class TraitementDemandeHabilitationController extends Controller
             $habilitations = DB::table('vue_demande_habilitation_soumis_generale')->where([['id_agence','=',$numAgce]])->get();
             //dd($habilitations); exit();
         }else{
-           // $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
-            $habilitations = DB::table('vue_demande_habilitation_soumis_generale_publique')->where([['id_charge_habilitation','=',Auth::user()->id]])->get();
+            $habilitations = DemandeHabilitation::where([['id_charge_habilitation','=',Auth::user()->id],['flag_soumis_comite_technique','=',false]])->get();
+            //$habilitations = DB::table('vue_demande_habilitation_soumis_generale_publique')->where([['id_charge_habilitation','=',Auth::user()->id]])->get();
         }
 
 
@@ -1807,7 +1807,7 @@ class TraitementDemandeHabilitationController extends Controller
 
             }
 
-
+        }
     }
 
     /**
