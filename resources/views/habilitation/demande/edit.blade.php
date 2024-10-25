@@ -1227,7 +1227,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                                             <div class="alert-body" style="text-align: center">
-                                                Toutes les pieces sont obligatoire
+                                                Toutes les pièces sont obligatoires
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
@@ -1256,6 +1256,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                                 @error('pieces_demande_habilitation')
                                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                                 @enderror
+                                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        maxi : 5Mo</em>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
