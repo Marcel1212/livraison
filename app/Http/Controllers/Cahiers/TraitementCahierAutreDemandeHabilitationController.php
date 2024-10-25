@@ -320,10 +320,6 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                     $formation_cabinet->id_entreprises = $entreprise->id_entreprises;
                                     $formation_cabinet->id_domaine_formation = $domaine_demande_habilitation->id_domaine_formation;
                                     $formation_cabinet->save();
-//                                    $domaine_autre_demande_habilitation = DomaineAutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$demande->id_autre_demande_habilitation_formation)
-//                                        ->first();
-//                                    $domaine_autre_demande_habilitation->flag_autre_demande_habilitation_formation = false;
-//                                    $domaine_autre_demande_habilitation->update();
 
 
 
@@ -357,89 +353,81 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                         }
 
                     if ($data['action'] === 'Rejeter') {
-//                        $idUser = Auth::user()->id;
-//                        $idAgceCon = Auth::user()->num_agce;
-//                        $Idroles = Menu::get_id_profil($idUser);
-//                        $dateNow = Carbon::now();
-//                        $id_combi_proc = Crypt::UrldeCrypt($request->input('id_combi_proc'));
-//                        $infosprocessus = DB::table('vue_processus')
-//                            ->where('id_combi_proc', '=', $id_combi_proc)
-//                            ->first();
-//                        $idProComb = $infosprocessus->id_combi_proc;
-//                        $idProcessus = $infosprocessus->id_processus;
+                        $idUser = Auth::user()->id;
+                        $idAgceCon = Auth::user()->num_agce;
+                        $Idroles = Menu::get_id_profil($idUser);
+                        $dateNow = Carbon::now();
+                        $id_combi_proc = Crypt::UrldeCrypt($request->input('id_combi_proc'));
+                        $infosprocessus = DB::table('vue_processus')
+                            ->where('id_combi_proc', '=', $id_combi_proc)
+                            ->first();
+                        $idProComb = $infosprocessus->id_combi_proc;
+                        $idProcessus = $infosprocessus->id_processus;
 //
-//                        Parcours::create([
-//                            'id_processus' => $idProcessus,
-//                            'id_user' => $idUser,
-//                            'id_piece' => $id_demande_suppression,
-//                            'id_roles' => $Idroles,
-//                            'num_agce' => $idAgceCon,
-//                            'comment_parcours' => $request->input('comment_parcours'),
-//                            'is_valide' => true,
-//                            'date_valide' => $dateNow,
-//                            'id_combi_proc' => $idProComb,
-//                        ]);
-//
-//                        $domaine_suppression_data = DomaineAutreDemandeHabilitationFormation::find($id_demande_suppression);
-//                        $domaine_suppression_data->flag_autre_demande_habilitation_formation_valider_par_proce = true;
-//                        $domaine_suppression_data->flag_rejeter_autre_demande_habilitation_formation = true;
-//                        $domaine_suppression_data->flag_validation_autre_demande_habilitation_formation = false;
-//                        $domaine_suppression_data->date_valider_par_processus_autre_demande_habilitation_formation = now();
-//                        $domaine_suppression_data->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
-//                        $domaine_suppression_data->update();
-//
-//                        $name = $domaine_suppression->raison_social_entreprises;
-//                        $logo = Menu::get_logo();
-//
-//                        $domaine_lib = '';
-//
-//                        if(isset($domaine_suppression_data->domaineAutreDemandeHabilitationFormations)){
-//                            foreach ($domaine_suppression_data->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
-//
-//                                $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-//                                    ->first();
-//                                $domaine_demande_domaine_supression->flag_autre_demande_habilitation_formation = true;
-//                                $domaine_demande_domaine_supression->update();
-//
-//
-//                                $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-//                                    ->first();
-//                                $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = true;
-//                                $domaine_demande_domaine->update();
-//
-//                                $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
-//
-//                            }
-//                        }
-////
-////
-//
-//                        $user = User::where('id_partenaire',$domaine_suppression->id_entreprises)->first();
-//                        if (isset($user->email)) {
-//                            $sujet = "Demande de suppression domaine de formation habilité";
-//                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-//
-//                            $messageMail = "<b>Monsieur le Directeur,</b>
-//                                    <br><br> Nous sommes ravis de vous informer que votre demande suppression du domaine de formation
-//                                     intitulé : <b>".@$domaine_suppression->libelle_domaine_formation.".</b> a été rejété pour la raison suivant<br>
-//                                     ".@$domaine_suppression->commentaire_final_autre_demande_habilitation_formation."
-//                                    <br>
-//                                    Nous apprécions votre intérêt pour notre services.
-//                                    Cordialement, L'équipe e-FDFP
-//                                    <br>
-//                                    <br>
-//                                    <br>
-//                                    -----
-//                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-//                                    -----
-//                                    ";
-//
-//                            $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
-//                        }
+                        Parcours::create([
+                            'id_processus' => $idProcessus,
+                            'id_user' => $idUser,
+                            'id_piece' => $id_cahier,
+                            'id_roles' => $Idroles,
+                            'num_agce' => $idAgceCon,
+                            'comment_parcours' => $request->input('comment_parcours'),
+                            'is_valide' => true,
+                            'date_valide' => $dateNow,
+                            'id_combi_proc' => $idProComb,
+                        ]);
+                        $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
+                        $lignes = LigneCahierAutreDemandeHabilitation::where(
+                            'id_cahier_autre_demande_habilitations',$cahier->id_cahier_autre_demande_habilitations,
+                        )->get();
 
-//                        return redirect('traitementsuppressiondomaine/' . Crypt::UrlCrypt($id_demande_suppression) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
+                        foreach ($lignes as $ligne){
+                            $demande =  AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$ligne->id_demande)->first();
+                            $demande->flag_autre_demande_habilitation_formation_valider_par_proce = true;
+                            $demande->flag_validation_autre_demande_habilitation_formation = false;
+                            $demande->date_valider_par_processus_autre_demande_habilitation_formation = now();
+                            $demande->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
+                            $demande->flag_rejeter_autre_demande_habilitation_formation = true;
+                            $demande->update();
 
+                            $domaine_demande_habilitation = DomaineDemandeHabilitation::where('id_autre_demande',$demande->id_autre_demande_habilitation_formation)
+                                ->first();
+                            $domaine_demande_habilitation->flag_agree_domaine_demande_habilitation = false;
+                            $domaine_demande_habilitation->flag_extension_domaine_demande_habilitation = false;
+                            $domaine_demande_habilitation->update();
+
+
+                            $habilitation = DemandeHabilitation::where('id_demande_habilitation',$demande->id_demande_habilitation)->first();
+                            $logo = Menu::get_logo();
+                            $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                            $name = $entreprise->raison_social_entreprises;
+
+                            if (isset($entreprise->email)) {
+                                $sujet = "Demande de suppression domaine de formation habilité";
+                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                $messageMail = "<b>Monsieur le Directeur,</b>
+                                            <br><br> Nous désolé de vous informer que votre demande  a été rejété.<br>
+                                            Nous vous prions de bien vous connecter sur le portail.
+                                            <br>
+                                            Nous apprécions votre intérêt pour notre services.
+                                            Cordialement, L'équipe e-FDFP
+                                            <br>
+                                            <br>
+                                            <br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+                                $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                            }
+                        }
+                        $cahier->flag_traitement_cahier_autre_demande_habilitations = true;
+                        $cahier->date_traitement_valide_flag_cahier_autre_demande_habilitations = Carbon::now();
+                        $cahier->update();
                     }
+
+//
+                    return redirect('traitementcahierautredemandehabilitations/' . Crypt::UrlCrypt($id_cahier) . '/' . Crypt::UrlCrypt($id_combi_proc) .'/'.Crypt::UrlCrypt(3). '/edit')->with('success', 'Succes : Operation validée avec succes ');
 
                 }
             }
