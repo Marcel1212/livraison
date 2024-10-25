@@ -1084,7 +1084,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                                             <div class="alert-body" style="text-align: center">
-                                                Cette partie n'est pas une obligatiore mais peut contribuer a solidifier votre demande
+                                                Cette partie n'est pas obligatoire, mais peut contribuer à solidifier votre demande
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
