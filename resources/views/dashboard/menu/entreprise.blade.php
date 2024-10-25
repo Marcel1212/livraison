@@ -160,7 +160,7 @@ $verificationcotisation = MoyenCotisation::get_verif_cotisation_entreprise($idus
                                     <span class="avatar-initial rounded bg-label-info"><i
                                             class="ti ti-authorization ti-md"></i></span>
                                 </div>
-                                <h4 class="ms-1 mb-0">Demande d'une habilitation</h4>
+                                <h4 class="ms-1 mb-0">Habilitation</h4>
                             </div>
                             <a href="{{ route($lienhabilitation.'.index') }}" class="mb-1">
                                 Cliquez ici pour effectuer une demande</a>
