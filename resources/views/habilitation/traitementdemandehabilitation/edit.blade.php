@@ -178,7 +178,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     data-bs-target="#navs-top-affectation"
                                     aria-controls="navs-top-affectation"
                                     aria-selected="false">
-                                    Affectation
+                                    Imputation
                                     </button>
                                 </li>
                             @else
