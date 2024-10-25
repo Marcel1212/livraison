@@ -1381,7 +1381,7 @@ use App\Helpers\PartEntreprisesHelper;
                                     <div class="col-12" align="right">
                                         <hr>
 
-                                        <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
+                                        <a href="{{ route($lien . '.update', [\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                             class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                         <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
@@ -1574,7 +1574,7 @@ use App\Helpers\PartEntreprisesHelper;
                                     "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, " .
                                     @$demandehabilitation->fonction_demande_habilitation .
                                     ", atteste l'exactitude des informations contenue dans ce document.
-                                                                                                                                                                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                                                                                                                                                                                                    En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
                                 ?>
                                 <?php echo wordwrap($message, 144, "<br>\n"); ?>
 

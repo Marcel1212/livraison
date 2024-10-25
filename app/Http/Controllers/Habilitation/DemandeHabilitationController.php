@@ -796,11 +796,14 @@ class DemandeHabilitationController extends Controller
         $idetape =  Crypt::UrldeCrypt($id1);
 
         $demandehabilitation = DemandeHabilitation::find($id);
+        $data = $request->all();
+       // dd($data); exit();
 
         $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
 
         if ($request->isMethod('put')) {
             $data = $request->all();
+            //dd($data); exit();
 
             if ($data['action'] == 'Modifier'){
 
@@ -1365,6 +1368,88 @@ class DemandeHabilitationController extends Controller
 
             }
 
+            if ($data['action'] == 'Enregistrer_soumettre_demande_habilitation_PU'){
+
+                //dd($request->input());exit();
+
+                DemandeHabilitation::where('id_demande_habilitation',$id)->update([
+                    'flag_soumis_demande_habilitation' => true,
+                    'date_soumis_demande_habilitation' => Carbon::now()
+                ]);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation) etablissement public',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape soumission etablissement public'
+
+                ]);
+
+               return redirect()->route('demandehabilitation.index')->with('success', 'Demande habilitation soumis avec succès.');
+
+            }
+
+            if ($data['action'] == 'AjouterDiversPU'){
+
+                $this->validate($request, [
+                    'information_catalogue_demande_habilitation' => 'required',
+                    'information_seul_activite_demande_habilitation' => 'required',
+                    //'materiel_didactique_demande_habilitation' => 'required'
+                ],[
+                    'information_catalogue_demande_habilitation.required' => 'Veuillez selectionner l\'information catalogue.',
+                    'information_seul_activite_demande_habilitation.required' => 'Veuillez selectionner l\'information seul activite.',
+                   //'materiel_didactique_demande_habilitation.required' => 'Veuillez ajouter le materiel didactique.'
+                ]);
+
+                $input = $request->all();
+                dd($input); exit();
+
+
+                if (isset($input['dernier_catalogue_demande_habilitation'])){
+
+                    $filefront = $input['dernier_catalogue_demande_habilitation'];
+
+                    //dd($filefront->extension());
+
+                    if($filefront->extension() == "PDF"  || $filefront->extension() == "pdf" || $filefront->extension() == "png"
+                    || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
+                    || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG"){
+
+                        $fileName1 = 'dernier_catalogue_demande_habilitation'. '_' . rand(111,99999) . '_' . 'catalogue'. '_' . time() . '.' . $filefront->extension();
+
+                        $filefront->move(public_path('pieces/catalogue/'), $fileName1);
+
+                        $input['dernier_catalogue_demande_habilitation'] = $fileName1;
+                    }
+
+                }
+
+                $demandehabilitation->update($input);
+
+                Audit::logSave([
+
+                    'action'=>'MISE A JOUR',
+
+                    'code_piece'=>$id,
+
+                    'menu'=>'Habilitation (Soumission de l\'habilitation) PU',
+
+                    'etat'=>'Succès',
+
+                    'objet'=>'HABILITATION etape divers PU'
+
+                ]);
+
+                return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(7).'/editpu')->with('success', 'Succes : Mise a jour effectué avec succes de l\'onglet divers  ');
+
+            }
+
 
             if ($data['action'] == 'AjouterInterventionsHorsCisPU'){
 
@@ -1477,7 +1562,7 @@ class DemandeHabilitationController extends Controller
                 ]);
 
                 $input = $request->all();
-                //dd($input);
+                dd($input); exit();
 
 
                 if (isset($input['dernier_catalogue_demande_habilitation'])){
@@ -1637,7 +1722,7 @@ class DemandeHabilitationController extends Controller
 
             }
 
-
+            //dd($data); exit();
             if ($data['action'] == 'Enregistrer_soumettre_demande_habilitation_PU'){
 
                 //dd($request->input());exit();
@@ -1666,15 +1751,7 @@ class DemandeHabilitationController extends Controller
             }
 
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+        }}
 
 
     public function deletemoyenpermanente($id){

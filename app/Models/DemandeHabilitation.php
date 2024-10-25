@@ -117,7 +117,7 @@ class DemandeHabilitation extends Model
                             'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation',
                             'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation',
                             'id_processus', 'commentaire_cs','flag_reception_chef_departement','flag_reception_directerur','flag_reception_secretaiaire','flag_lettre_enregistrement', 'flag_note_technique', 'note_technique', 'lettre_enregistrement', 'id_charge_habilitation', 'decret_structure_public', 'decret_nomination_directeur', 'id_chef_service'
-                            'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation',
+                            ,'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation',
                             'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation',
                             'flag_soumis_charge_habilitation', 'commentaire_recevabilite', 'titre_propriete_contrat_bail', 'autorisation_ouverture_ecole',
                             'flag_ecole_autre_entreprise','flag_soumis_comite_technique','date_soumis_comite_technique','date_flag_passer_comite_technique',
