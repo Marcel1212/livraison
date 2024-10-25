@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $maison_mere_demande_habilitation
  * @property string $agence_domiciliation_demande_habilitation
  * @property string $type_entreprise
+ * @property string $registre_commerce
+ * @property string $num_id_impot
+ * @property string $num_cnps_emp
+ * @property float $id_statut_jur
  * @property boolean $flag_demande_habilitation
  * @property string $date_creer_demande_habilitation
  * @property boolean $flag_creer_demande_habilitation
@@ -112,7 +116,8 @@ class DemandeHabilitation extends Model
                             'materiel_didactique_demande_habilitation', 'information_catalogue_demande_habilitation',
                             'dernier_catalogue_demande_habilitation', 'reference_ci_demande_habilitation', 'information_seul_activite_demande_habilitation',
                             'autre_activite_demande_habilitation', 'created_at', 'updated_at', 'code_demande_habilitation',
-                            'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation',
+                            'id_processus', 'commentaire_cs','flag_reception_chef_departement','flag_reception_directerur','flag_reception_secretaiaire','flag_lettre_enregistrement', 'flag_note_technique', 'note_technique', 'lettre_enregistrement', 'id_charge_habilitation', 'decret_structure_public', 'decret_nomination_directeur', 'id_chef_service'
+                            ,'flag_agrement_demande_habilitaion', 'date_agrement_demande_habilitation', 'email_responsable_habilitation',
                             'contact_responsable_habilitation', 'type_demande', 'commantaire_cs', 'date_transmi_charge_habilitation',
                             'flag_soumis_charge_habilitation', 'commentaire_recevabilite', 'titre_propriete_contrat_bail', 'autorisation_ouverture_ecole',
                             'flag_ecole_autre_entreprise','flag_soumis_comite_technique','date_soumis_comite_technique','date_flag_passer_comite_technique',
@@ -208,5 +213,4 @@ class DemandeHabilitation extends Model
     {
         return $this->hasMany('App\Models\DomaineDemandeHabilitation', 'id_demande_habilitation', 'id_demande_habilitation');
     }
-
 }

@@ -64,70 +64,75 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                             </thead>
                             <tbody>
                                 <?php $i = 0; ?>
-                                @foreach ($habilitations as $key => $habilitation)
-                                    <tr>
-                                        <td>{{ ++$i }}</td>
-                                        <td>{{ @$habilitation->nom_responsable_demande_habilitation }}</td>
-                                        <td>{{ @$habilitation->code_demande_habilitation }}</td>
-                                        <td>{{ @$habilitation->raison_social_entreprises }}</td>
-                                        <td>{{ @$habilitation->userchargehabilitation->name }}
-                                            {{ @$habilitation->userchargehabilitation->prenom_users }}</td>
-                                        <td>{{ @$habilitation->date_creer_demande_habilitation }}</td>
-                                        <td>{{ @$habilitation->date_soumis_demande_habilitation }}</td>
-                                        <td>{{ @$habilitation->date_agrement_demande_habilitation }}</td>
-                                        <td align="center">
-                                            <?php if ($habilitation->flag_soumis_demande_habilitation == true and
+                                {{-- @foreach ($habilitations as $key => $habilitation) --}}
+                                @foreach ($Resultat as $key => $res1)
+                                    @foreach ($res1 as $key => $habilitation)
+                                        <tr>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ @$habilitation->nom_responsable_demande_habilitation }}</td>
+                                            <td>{{ @$habilitation->code_demande_habilitation }}</td>
+                                            <td>{{ @$habilitation->raison_social_entreprises }}</td>
+                                            <td>{{ @$habilitation->userchargehabilitation->name }}
+                                                {{ @$habilitation->userchargehabilitation->prenom_users }}</td>
+                                            <td>{{ @$habilitation->date_creer_demande_habilitation }}</td>
+                                            <td>{{ @$habilitation->date_soumis_demande_habilitation }}</td>
+                                            <td>{{ @$habilitation->date_agrement_demande_habilitation }}</td>
+                                            <td align="center">
+                                                <?php if ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == true
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false){ ?>
-                                            <span class="badge bg-success">Valider</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
+                                                <span class="badge bg-success">Valider</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false){ ?>
-                                            <span class="badge bg-warning">En cours de traitement</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
+                                                <span class="badge bg-warning">En cours de traitement</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == true){ ?>
-                                            <span class="badge bg-success">Agrée</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
+                                                <span class="badge bg-success">Agrée</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == false and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-secondary">Soumis</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == false and
+                                                <span class="badge bg-secondary">Soumis</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == false and
                                             $habilitation->flag_reception_demande_habilitation == false and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-primary">Non Soumis</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
+                                                <span class="badge bg-primary">Non Soumis</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == true and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-danger">Non recevable</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and $habilitation->flag_annulation_plan == true and
+                                                <span class="badge bg-danger">Non recevable</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and $habilitation->flag_annulation_plan == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_valide_demande_habilitation == false
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-danger">Annulé</span>
-                                            <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
+                                                <span class="badge bg-danger">Annulé</span>
+                                                <?php } elseif ($habilitation->flag_soumis_demande_habilitation == true and
                                             $habilitation->flag_reception_demande_habilitation == true and $habilitation->flag_annulation_plan == true
                                             and $habilitation->flag_rejet_demande_habilitation == false and $habilitation->flag_agrement_demande_habilitaion == false) { ?>
-                                            <span class="badge bg-danger">Annulé</span>
-                                            <?php }else { ?>
-                                            <span class="badge bg-danger"> </span>
-                                            <?php } ?>
-                                        </td>
-                                        @if ($habilitation->type_entreprise == 'PR')
-                                            <td align="center">
-                                                @can($lien . '-edit')
-                                                    <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(9)]) }}"
-                                                        class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                                @endcan
+                                                <span class="badge bg-danger">Annulé</span>
+                                                <?php }else { ?>
+                                                <span class="badge bg-danger"> </span>
+                                                <?php } ?>
                                             </td>
-                                        @else
-                                            <td align="center">
-                                                @can($lien . '-edit')
-                                                    <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(8)]) }}"
-                                                        class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
-                                                @endcan
-                                            </td>
-                                        @endif
-                                    </tr>
+                                            @if ($habilitation->type_entreprise == 'PR')
+                                                <td align="center">
+                                                    @can($lien . '-edit')
+                                                        <a href="{{ route($lien . '.edit', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt(9)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endcan
+                                                </td>
+                                            @else
+                                                <td align="center">
+                                                    @can($lien . '-edit')
+                                                        <a href="{{ route($lien . '.editpu', [\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation), \App\Helpers\Crypt::UrlCrypt($habilitation->id_combi_proc)]) }}"
+                                                            class=" " title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endcan
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>

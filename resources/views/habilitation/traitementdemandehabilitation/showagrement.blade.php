@@ -1,12 +1,7 @@
 <?php
-<<<<<<< HEAD
 use App\Helpers\Menu;
 $logo = Menu::get_logo();
 ?>
-=======
- use App\Helpers\Fonction;
- ?>
->>>>>>> dev
 
 <!DOCTYPE html>
 <html>
@@ -76,7 +71,6 @@ $logo = Menu::get_logo();
 </head>
 
 <body>
-<<<<<<< HEAD
     <div style="margin-bottom: 25px;" id="">
         <div>
             <div align="right">
@@ -86,71 +80,6 @@ $logo = Menu::get_logo();
                     onclick="window.print();" />
             </div>
             <br />
-=======
-    <div class="container">
-        <!-- Informations du formateur -->
-        <h1>{{ $formateur->nom_formateurs }} {{ $formateur->prenom_formateurs }}</h1>
-        <p><strong>Email :</strong> {{ $formateur->email_formateurs }}</p>
-        <p><strong>Téléphone :</strong> {{ $formateur->contact_formateurs }}</p>
-
-        <!-- Qualifications principales -->
-        <div class="section">
-            <h2 class="section-title">Qualification Principale</h2>
-            <p> {{ $qualification->principale_qualification_libelle }}</p>
-        </div>
-
-        <!-- Formations -->
-        <div class="section">
-            <h2 class="section-title">Formations</h2>
-            @foreach($formations as $formation)
-                <div class="formation">
-                    <h3>Etabillssement : {{ $formation->ecole_formation_educ }} - Diplome obtenu : {{ $formation->diplome_formation_educ }}</h3>
-                    <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($formation->date_de_debut_formations_educ)->format('d/m/Y') }} - {{ $formation->date_de_fin_formations_educ ? \Carbon\Carbon::parse($formation->date_fin)->format('d/m/Y') : 'En cours' }}</p>
-                    <p>{{ $formation->description_formations_educ }}</p>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Expériences professionnelles -->
-        <div class="section">
-            <h2 class="section-title">Expériences professionnelles</h2>
-            @foreach($experiences as $experience)
-                <div class="experience">
-                    <h3>{{ $experience->intitule_de_poste }} - {{ $experience->nom_entreprise }}</h3>
-                    <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($experience->date_de_debut)->format('d/m/Y') }} - {{ $experience->date_de_fin ? \Carbon\Carbon::parse($experience->date_de_fin)->format('d/m/Y') : 'Présent' }}</p>
-                    <p><strong>Durée :</strong>
-                        <?php $res = Fonction::calculerDureeExperience($experience->date_de_debut,@$experience->date_de_fin);?>
-                        @if ($res->y > 0)
-                            {{ $res->y }} ans
-                        @endif
-                        @if ($res->m > 0)
-                            {{ $res->m }} mois
-                        @endif
-                    </p>
-                    <p>{{ $experience->description_experience }}</p>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Compétences -->
-        <div class="section">
-            <h2 class="section-title">Compétences</h2>
-            <ul class="competences">
-                @foreach($competences as $competence)
-                    <li>{{ $competence->competences_libelle }}</li>
-                @endforeach
-            </ul>
-        </div>
-
-        <!-- Langues -->
-        <div class="section">
-            <h2 class="section-title">Langues </h2>
-            <ul class="langues">
-                @foreach($languesformateurs as $langue)
-                    <li>{{ $langue->langues->libelle_langues }} - Aptitude : {{ $langue->aptitude->libelle_aptitude }} - Mention : {{ $langue->mention->libelle_mention }}</li>
-                @endforeach
-            </ul>
->>>>>>> dev
         </div>
     </div>
     {{-- <div class=" content" style="margin-top: 25px">

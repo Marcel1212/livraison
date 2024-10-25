@@ -144,7 +144,7 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_rccm_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
                     'piece_attestation_immatriculati' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                    'g-recaptcha-response' => ['required', new ReCaptcha]
+                    //'g-recaptcha-response' => ['required', new ReCaptcha]
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale.',
                     'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle.',
@@ -174,7 +174,7 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement.max' => 'la taille maximale doit être 5 MegaOctets.',
                     'piece_rccm_demande_enrolement.mimes' => 'Les formats requis pour la pièce de la RCCM sont: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF.',
                     'piece_rccm_demande_enrolement.max' => 'la taille maximale doit être de 5 MegaOctets.',
-                    'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
+                   // 'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité .',
                 ]);
 
 
@@ -471,7 +471,7 @@ class EnrolementController extends Controller
                         })
                     ],
                     'piece_dfe_demande_enrolement' => 'required|mimes:png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF|max:5120',
-                    'g-recaptcha-response' => ['required', new Recaptcha],
+                  //  'g-recaptcha-response' => ['required', new Recaptcha],
                 ], [
                     'raison_sociale_demande_enroleme.required' => 'Veuillez ajouter votre raison sociale',
                     'sigl_demande_enrolement.required' => 'Veuillez ajouter votre sigle',
@@ -491,7 +491,7 @@ class EnrolementController extends Controller
                     'piece_dfe_demande_enrolement.uploaded' => 'Veuillez ajouter une piéce DFE',
                     'piece_dfe_demande_enrolement.mimes' => 'Les formats requis pour la pièce de la DFE est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
                     'piece_dfe_demande_enrolement.max' => 'la taille maximale doit être de 5 MégaOctets',
-                    'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité'
+                  //  'g-recaptcha-response.required' => 'Veuillez saisir le vérificateur de securité'
                 ]);
 
 
@@ -553,14 +553,14 @@ class EnrolementController extends Controller
                                     Ceci est un mail automatique, Merci de ne pas y répondre.
                                     -----
                                     ";
-                      $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
+                     // $messageMailEnvoi = Email::get_envoimailTemplate($input['email_demande_enrolement'], $rais, $messageMail, $sujet, $titre);
                 }
 
                 //Envoyer notification via SMS
-                // if($input['tel_demande_enrolement']){
-                //     $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
-                //     SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
-                // }
+                if($input['tel_demande_enrolement']){
+                    $content = "CHER(e) ".$rais.",\nVOTRE DEMANDE ENROLEMENT A ETE EFFECTUEE AVEC SUCCES.LE TRAITEMENT DE VOTRE DEMANDE EFFECTUERA DANS UN DELAI DE 48h !";
+                    //SmsPerso::sendSMS($input['tel_demande_enrolement'],$content);
+                }
 
             }
         }
@@ -863,7 +863,8 @@ class EnrolementController extends Controller
                         ->with('danger', 'Echec : Cet numero est déja utilisé par une entreprise !');
                 }
 
-                $passwordCli = Crypt::MotDePasse(); // '123456789';
+                $passwordCli = '123456789'; //Crypt::MotDePasse(); //
+               // dd($passwordCli);
                 $password = Hash::make($passwordCli);
 
                 $user = new User();
@@ -904,14 +905,14 @@ class EnrolementController extends Controller
                                     ";
 
 
-                    $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
+                  //  $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
                 }
 
                 //Envoi SMS Validé
-                // if (isset($cel_users)) {
-                //     $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME . VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : IDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
-                //     SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
-                // }
+                if (isset($cel_users)) {
+                    $content = "CHER ".$name." ,\nNOUS SOMMES RAVIS DE VOUS ACCUEILLIR SUR NOTRE PLATEFORME . VOICI UN RECAPITULATIF DE VOS INFORMATIONS DE COMPTE : IDENTIFIANT : ".$ncc_entreprises."\nMOT DE PASSE : ".$passwordCli."\nDATE DE CREATION DU COMPTE : ".$entreprise->created_at."\nPOUR ACTIVER VOTRE COMPTE, VEUILLEZ CLIQUER SUR LE LIEN CI-DESSOUS : ".route('/');
+                   // SmsPerso::sendSMS($demandeenrole1->tel_demande_enrolement,$content);
+                }
 
                 return redirect()->route('enrolement.index')->with('success', 'Traitement effectué avec succès.');
             }
