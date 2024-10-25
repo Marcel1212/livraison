@@ -87,7 +87,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 <span class="badge bg-warning">En attente de traitement</span>
                                             </td>
                                             <td align="center">
-                                                <a onclick="NewWindow('{{ route('cahierautredemandehabilitations'.".notetechnique",\App\Helpers\Crypt::UrlCrypt($cahier_demande->id_cahier_autre_demande_habilitations)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
+                                                <a onclick="NewWindow('{{ route($lien.".notetechnique",\App\Helpers\Crypt::UrlCrypt($cahier_demande->id_cahier_autre_demande_habilitations)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>
                                                 <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier_demande->id_cahier_autre_demande_habilitations),
 \App\Helpers\Crypt::UrlCrypt($cahier_demande->id_combi_proc),\App\Helpers\Crypt::UrlCrypt(3)]) }}"
                                                    class=" "
