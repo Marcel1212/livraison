@@ -1173,6 +1173,35 @@ class TraitementDemandeHabilitationController extends Controller
                             'flag_agrement_demande_habilitaion' => true
                         ]);
 
+                        $demandehabilitation = DemandeHabilitation::find($id);
+                $demandehabilitation->update($input);
+
+                $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
+
+                //Envoi SMS Validé
+                // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                //     $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEAMNDE D'HABILITATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                // }
+
+                //Envoi email
+                 if (isset($demandehabilitation->email_responsable_habilitation)) {
+                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'habilitation a ete agree.
+                                    <br><br>Nous apprécions votre intérêt pour notre services.<br>
+                                    <br><br>Connectez vous sur votre compte afin de pouvoir voir votre agrement.<br>
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+
                     }
 
                     Audit::logSave([
@@ -1412,22 +1441,23 @@ class TraitementDemandeHabilitationController extends Controller
                 // }
 
                 //Envoi email
-                //  if (isset($demandehabilitation->email_responsable_habilitation)) {
-                //     $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
-                //     $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                //     $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
-                //                     <br><br>Nous sommes ravis de vous informer que votre demande d'habilitation est jugé recevable.
-                //                     <br><br>Nous apprécions votre intérêt pour notre services.<br>
-                //                     Cordialement,
-                //                     L'équipe e-FDFP
-                //                     <br><br><br>
-                //                     -----
-                //                     Ceci est un mail automatique, Merci de ne pas y répondre.
-                //                     -----
-                //                     ";
-                //     $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+                 if (isset($demandehabilitation->email_responsable_habilitation)) {
+                    $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                    $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                    $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+                                    <br><br>Nous sommes ravis de vous informer que votre demande d'habilitation est jugé recevable.
+                                    <br><br>Nous apprécions votre intérêt pour notre services.<br>
+                                    <br><br>Le traitement est en cours.<br>
+                                    Cordialement,
+                                    L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                    $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
 
-                // }
+                }
 
 
                 Audit::logSave([
