@@ -664,10 +664,10 @@ class TraitementDemandeHabilitationController extends Controller
             }
 
                             //Envoi SMS Validé
-                            if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                                $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
-                                SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-                            }
+                            // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                            //     $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
+                            //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                            // }
 
             return response()->json(['status' => 'Événement ajouté avec succès'], 200);
         }
@@ -781,10 +781,10 @@ class TraitementDemandeHabilitationController extends Controller
             }
 
                             //Envoi SMS Validé
-                            if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                                $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
-                                SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-                            }
+                            // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                            //     $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
+                            //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                            // }
 
             return response()->json(['status' => 'Événement modifié avec succès'], 200);
         }
@@ -1598,10 +1598,10 @@ class TraitementDemandeHabilitationController extends Controller
                 $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
 
                 //Envoi SMS Validé
-                if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                    $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE PLAN DE FORMATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
-                    SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-                }
+                // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                //     $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE PLAN DE FORMATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
+                //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                // }
 
                 //Envoi email
                  if (isset($demandehabilitation->email_responsable_habilitation)) {
@@ -1699,12 +1699,12 @@ class TraitementDemandeHabilitationController extends Controller
                 }
 
                 //Envoi SMS Rejeté
-                if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                    $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif." Veuillez mettre a jour le dossier .
-                        Cordialement,
-                        L'équipe e-FDFP";
-                    SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-                }
+                // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                //     $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$demandehabilitation->motif->libelle_motif." Veuillez mettre a jour le dossier .
+                //         Cordialement,
+                //         L'équipe e-FDFP";
+                //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                // }
 
                 Audit::logSave([
 

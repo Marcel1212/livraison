@@ -180,60 +180,12 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                                         </div>
                                     </div>
-
-                                    <div class="col-12" align="right">
-                                        <hr>
-                                        <?php if($cahier->flag_statut_cahier_autre_demande_habilitations == false){?>
-                                            <button type="submit" name="action" value="Modifier"
-                                                    class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                Modifier
-                                            </button>
-                                        <?php } ?>
-{{--                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitations),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-primary me-sm-3 me-1">Suivant</a>--}}
-
-                                        <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">Retour</a>
-
-                                    </div>
-
                                 </div>
                             </form>
                         </div>
 
 
                         <div class="tab-pane fade<?php if($idetape==2){ echo "show active";} ?>" id="navs-top-cahieraprescomite" role="tabpanel">
-                            traitement
-                            <div class="col-12" align="right">
-                                <?php  if(count($cahierautredemandehabilitations)>=1 and $cahier->flag_statut_cahier_autre_demande_habilitations == false){?>
-
-                                <form  method="POST" class="form" action="{{ route($lien.'.update', [\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitations),\App\Helpers\Crypt::UrlCrypt(3)]) }}" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('put')
-                                    <button onclick='javascript:if (!confirm("Vous allez soumettre ce cahier pour validation  ? . Cette action est irréversible.")) return false;' type="submit" name="action" value="Traiter_cahier_autre_demande_habilitation"
-                                    class="btn btn-sm btn-success me-1 waves-effect waves-float waves-light">
-                                        Génerer la note technique pour validation
-                                    </button>
-                                </form>
-
-                                <?php } ?>
-{{--                                else{ ?>--}}
-{{--                                    @if ($cahier->processusComite->code_processus_comite =='PF')--}}
-
-{{--                                    <a onclick="NewWindow('{{ route($lien.".etatpf",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitation)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>--}}
-
-{{--                                    @endif--}}
-{{--                                    @if ($cahier->processusComite->code_processus_comite =='PE')--}}
-
-{{--                                    <a onclick="NewWindow('{{ route($lien.".etatpe",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitation)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>--}}
-
-{{--                                    @endif--}}
-{{--                                    @if ($cahier->processusComite->code_processus_comite =='PRF')--}}
-
-{{--                                    <a onclick="NewWindow('{{ route($lien.".etatprf",\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitation)) }}','',screen.width*1,screen.height,'yes','center',1);" target="_blank" class=" " title="Modifier"><img src='/assets/img/eye-solid.png'></a>--}}
-
-{{--                                    @endif--}}
-{{--                                <?php } ?>--}}
-                            </div>
-
                             <table class="table table-bordered table-striped table-hover table-sm"
                             id="exampleData"
                             style="margin-top: 13px !important">
@@ -259,7 +211,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>
                                             @if(@$demande->code_processus=='DED')
                                                 DEMANDE D'EXTENSION
-                                            @elseif(@$demande->code_processus=='demande_extension')
+                                            @elseif(@$demande->code_processus=='DSD')
                                                 DEMANDE DE SUBSTITUTION
                                             @endif
 
@@ -270,7 +222,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>{{date('d/m/Y H:i:s',strtotime(@$demande->date_demande))}}</td>
                                         <td>{{ date('d/m/Y H:i:s',strtotime(@$demande->date_soumis))}}</td>
                                         <td>
-                                            <a target="_blank" href="{{ route('cahierautredemandehabilitations' . '.show', [\App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                            <a target="_blank" href="{{ route($lien . '.show', [\App\Helpers\Crypt::UrlCrypt($demande->id_demande), \App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                class=" " title="Modifier"><img src='/assets/img/editing.png'></a>
                                         </td>
                                     </tr>
@@ -280,11 +232,6 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
 
                             <div class="col-12" align="right">
                                 <hr>
-
-{{--                                <?php if (count($cahierautredemandehabilitations)>=1){ ?>--}}
-{{--                                        <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($cahier->id_cahier_autre_demande_habilitations),\App\Helpers\Crypt::UrlCrypt(2)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédent</a>--}}
-{{--                                <?php } ?>--}}
-
                                 <a class="btn btn-sm btn-outline-secondary waves-effect" href="/{{$lien }}">
                                     Retour</a>
                             </div>
