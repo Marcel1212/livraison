@@ -213,10 +213,10 @@ class HabilitationRendezVousController extends Controller
                 }
 
                                 //Envoi SMS Validé
-                                if (isset($demandehabilitation->contact_responsable_habilitation)) {
-                                    $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
-                                    SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-                                }
+                                // if (isset($demandehabilitation->contact_responsable_habilitation)) {
+                                //     $content = "Cher ".$infoentreprise->sigl_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE LE RENDEZ-VOUS POUR LA VISITE DE VOTRE LOCAUX EST: ".@$dateEtHeureDebut.". CORDIALEMENT, L EQUIPE E-FDFP";
+                                //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
+                                // }
 
                 return response()->json(['status' => 'Événement modifié avec succès'], 200);
             }
