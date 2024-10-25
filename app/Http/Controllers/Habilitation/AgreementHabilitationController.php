@@ -502,8 +502,7 @@ class AgreementHabilitationController extends Controller
 
         $domaine_list_demandes = DomaineDemandeHabilitation::where('id_demande_habilitation','=',$id1)
             ->where('id_autre_demande','=',$id)
-            ->where('flag_agree_domaine_demande_habilitation',false)
-            ->where('flag_extension_domaine_demande_habilitation',true)->get();
+            ->get();
 
         $domainedemandeList = "<option value=''> Selectionnez la banque </option>";
         foreach ($domainedemandes as $comp) {
