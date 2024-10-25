@@ -1366,9 +1366,9 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                         <div class="modal-body">
                         <p>
                                                         <?php
-                                                        $message = "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, ".@$demandehabilitation->fonction_demande_habilitation.", atteste l'exactitude des informations contenue dans ce document.
+                                                        $message = "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, ".@$demandehabilitation->fonction_demande_habilitation.", atteste l'exactitude des informations contenues dans ce document.
 
-                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                       En cochant sur la mention <strong>'Lu et approuvé'</strong> ci-dessous, j'atteste cela.";
                                                         ?>
                                                         <?php echo wordwrap($message,144,"<br>\n"); ?>
 
