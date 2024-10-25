@@ -46,6 +46,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
         rel="stylesheet"/>
 
         {{-- <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/vendors.min.css')}}"> --}}
+{{--        <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/vendors.min.css')}}">--}}
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/calendars/fullcalendar.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/forms/select/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/css/pickers/flatpickr/flatpickr.min.css')}}">
@@ -323,6 +324,7 @@ $imagedashboard = Menu::get_info_image_dashboard();
 
 <!-- Vendors JS -->
 {{-- <script src="{{asset('/assets/vendor/js/vendors.min.js')}}"></script> --}}
+{{--<script src="{{asset('/assets/vendor/js/vendors.min.js')}}"></script>--}}
 <script src="{{asset('/assets/vendor/libs/select2/select2.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/tagify/tagify.js')}}"></script>
 <script src="{{asset('/assets/vendor/libs/bootstrap-select/bootstrap-select.js')}}"></script>

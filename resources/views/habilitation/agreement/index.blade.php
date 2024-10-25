@@ -58,7 +58,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 <th>Date de soumission</th>
                                 <th>Date d'agrément</th>
                                 <th>Statut</th>
-                                <th>Action</th>
+                                <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -119,8 +119,13 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             echo $badge;
                                             ?>
                                     </td>
-                                    <td align="center">
+                                    <td class="text-center">
                                         @can($lien.'-edit')
+                                            <a href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                               class=" "
+                                               title="Modifier"><img
+                                                    src='/assets/img/editing.png'></a>
+
                                         <a onclick="NewWindow('{{ route($lien.".show",\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)) }}','',screen.width*2,screen.height,'yes','center',1);" target="_blank"
                                             class=" "
                                             title="Modifier"><img src='/assets/img/eye-solid.png'></a>
