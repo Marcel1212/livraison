@@ -254,7 +254,7 @@ class CtDemandeHabilitationController extends Controller
 
         $ResultProssesList = DB::table('vue_processus_validation_affichage as v')
         ->select('v.name', 'v.priorite_combi_proc', 'v.is_valide', 'v.date_valide',
-            'v.comment_parcours', 'v.id_processus')
+            'v.comment_parcours', 'v.id_processus','v.id_demande')
         ->where('v.id_processus', '=', $demandehabilitation->id_processus)
         ->where('v.id_demande', '=', $demandehabilitation->id_demande_habilitation)
         ->orderBy('v.priorite_combi_proc', 'ASC')
