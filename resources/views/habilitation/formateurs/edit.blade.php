@@ -841,7 +841,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
 
                                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                 <div class="alert-body" style="text-align: center">
-                                                    Le CV et la lettre d'engagment sont obligatoire
+                                                    Le CV et la lettre d'engagement sont obligatoires
                                                 </div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
@@ -893,6 +893,10 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                    @error('pieces_formateur')
                                                    <div class=""><label class="error">{{ $message }}</label></div>
                                                    @enderror
+                                                   <div id="defaultFormControlHelp" class="form-text ">
+                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                        maxi : 5Mo</em>
+                                                    </div>
                                                </div>
                                            </div>
 
