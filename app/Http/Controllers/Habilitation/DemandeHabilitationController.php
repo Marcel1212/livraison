@@ -181,13 +181,7 @@ class DemandeHabilitationController extends Controller
     {
         if ($request->isMethod('post')) {
 
-            $this->validate($request, [
-                'flag_ecole_autre_entreprise' => 'required',
-            ], [
-                'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
-            ]);
 
-            $autorisation =  $request->input('flag_ecole_autre_entreprise');
 
             $input = $request->all();
 
@@ -256,6 +250,15 @@ class DemandeHabilitationController extends Controller
                // return redirect('demandehabilitation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             } else {
 
+                $this->validate($request, [
+                    'flag_ecole_autre_entreprise' => 'required',
+                ], [
+                    'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
+                ]);
+
+                $autorisation =  $request->input('flag_ecole_autre_entreprise');
+
+                $input = $request->all();
 
             if ($autorisation == 'true') {
 
