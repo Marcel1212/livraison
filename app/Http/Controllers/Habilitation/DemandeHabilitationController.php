@@ -1490,8 +1490,9 @@ class DemandeHabilitationController extends Controller
                     'materiel_didactique_demande_habilitation.required' => 'Veuillez ajouter le materiel didactique.'
                 ]);
 
-                $input = $request->all();
 
+                $input = $request->all();
+                dd($input);
 
                 if (isset($input['dernier_catalogue_demande_habilitation'])){
 
