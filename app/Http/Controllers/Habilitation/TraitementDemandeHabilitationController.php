@@ -709,7 +709,7 @@ class TraitementDemandeHabilitationController extends Controller
             $dateFin = $request->start;
 
             $heureDebut = $request->end;
-        -    $heureFin = $request->endfin;
+        -    $heureFin = $request->endfinR;
 
             if (strpos($heureDebut, ':') === strrpos($heureDebut, ':')) {
                 // Format sans secondes
