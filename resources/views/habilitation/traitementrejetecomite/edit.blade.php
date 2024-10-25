@@ -822,12 +822,12 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="modalToggleLabel">Avis du comite techinqie </h5>
+                                    <h5 class="modal-title" id="modalToggleLabel">Avis du comite technique </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="card">
-                                    <h5 class="card-header">Avis du comite techinqie</h5>
+                                    <h5 class="card-header"></h5>
                                     <div class="card-body pb-2">
                                         <ul class="timeline pt-3">
 
@@ -846,7 +846,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                                                     <div class="row ">
                                                                         <div>
-                                                                            <span>Avis cu comite technique : {{ $avis->statutOperation->libelle_statut_operation }}</span>
+                                                                            <span>Avis du comite technique : {{ $avis->statutOperation->libelle_statut_operation }}</span>
                                                                         </div>
                                                                         <div>
                                                                             <span>Motif : {{ $avis->motif->libelle_motif }}</span>
