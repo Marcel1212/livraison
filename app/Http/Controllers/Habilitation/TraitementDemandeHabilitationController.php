@@ -1222,6 +1222,7 @@ class TraitementDemandeHabilitationController extends Controller
 
 
             }
+        }
 
             if ($data['action'] == 'GenererAgrement'){
 
@@ -1801,7 +1802,7 @@ class TraitementDemandeHabilitationController extends Controller
 
             }
 
-        }
+
     }
 
     /**
