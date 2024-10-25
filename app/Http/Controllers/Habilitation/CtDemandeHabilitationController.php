@@ -259,7 +259,7 @@ class CtDemandeHabilitationController extends Controller
         ->where('v.id_demande', '=', $demandehabilitation->id_demande_habilitation)
         ->orderBy('v.priorite_combi_proc', 'ASC')
         ->get();
-        dd($ResultProssesList);
+        //dd($ResultProssesList);
             $idUser=Auth::user()->id;
             $idAgceCon=Auth::user()->num_agce;
             $Idroles = Menu::get_id_profil($idUser);
