@@ -216,7 +216,8 @@ class DemandeHabilitationController extends Controller
                 $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
                 $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
                 $input['type_demande'] = 'NOUVELLE DEMANDE';
-                $input['id_processus'] = 11;
+                //$input['id_processus'] = 11;
+                $input['id_processus'] = 14; //PROD
                 $input['type_entreprise'] = 'PU';
 
                 $habilitation = DemandeHabilitation::create($input);
