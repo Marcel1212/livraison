@@ -1807,7 +1807,7 @@ class TraitementDemandeHabilitationController extends Controller
 
             }
 
-        }
+        } //fin
     }
 
     /**
