@@ -45,7 +45,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                 {{--                                 <a href="#"
                                 class="btn btn-sm btn-primary waves-effect waves-light">
                                     <i class="menu-icon tf-icons ti ti-plus"></i> Creer </a> --}}
-                                @if ($formejuridique == 'PR')
+                                {{-- @if ($formejuridique == 'PR')
                                     @if (count($habilitations) < 1)
                                         <button type="button" class="btn btn-sm btn-primary waves-effect waves-light"
                                             data-bs-toggle="modal" data-bs-target="#addNewhabilitation">
@@ -57,6 +57,15 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                         <a href="{{ route($lien . '.createpu') }}"
                                             class="btn btn-sm btn-primary waves-effect waves-light">
                                             <i class="menu-icon tf-icons ti ti-plus"></i> Nouvelle demande d'habilitation </a>
+                                    @endif
+                                @endif --}}
+                                @if (count($habilitations) < 1)
+                                    @if ($formejuridique == 'PR')
+                                        <a href="{{ route($lien . '.create') }}" class="btn btn-sm btn-info me-1 mt-1"> <i
+                                                class="menu-icon tf-icons ti ti-plus"></i> Nouvelle demande</a>
+                                    @else
+                                        <a href="{{ route($lien . '.createpu') }}" class="btn btn-sm btn-info me-1 mt-1"> <i
+                                                class="menu-icon tf-icons ti ti-plus"></i> Nouvelle demande</a>
                                     @endif
                                 @endif
                             @endcan
