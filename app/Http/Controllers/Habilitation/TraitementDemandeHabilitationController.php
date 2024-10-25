@@ -1174,7 +1174,7 @@ class TraitementDemandeHabilitationController extends Controller
                         ]);
 
                         $demandehabilitation = DemandeHabilitation::find($id);
-                $demandehabilitation->update($input);
+              //  $demandehabilitation->update($input);
 
                 $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
 
@@ -1803,10 +1803,9 @@ class TraitementDemandeHabilitationController extends Controller
 
         }
     }
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
         //
