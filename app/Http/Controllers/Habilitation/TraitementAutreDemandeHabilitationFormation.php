@@ -599,6 +599,7 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
     {
         $id_autre_demande_habilitation_formation =  Crypt::UrldeCrypt($id);
 
+
         if(isset($id_autre_demande_habilitation_formation)){
             $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::
             Join('domaine_autre_demande_habilitation_formation',
@@ -617,6 +618,7 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                 ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
                 ->where('autre_demande_habilitation_formation.id_autre_demande_habilitation_formation','=',@$id_autre_demande_habilitation_formation)
                 ->first();
+
 
             if(isset($autre_demande_habilitation_formation)) {
                 if ($request->isMethod('put')) {
@@ -679,8 +681,10 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                                     $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = false;
                                     $domaine_demande_domaine->update();
 
-                                    $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-                                        ->where('id_entreprises',$autre_demande_habilitation_formation->id_entreprises)->first();
+                                    $habilitation = DemandeHabilitation::find($domaine_demande_domaine->id_demande_habilitation);
+
+                                    $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaine_demande_domaine->id_domaine_formation)
+                                        ->where('id_entreprises',$habilitation->id_entreprises)->first();
                                     $domaine_formation->delete();
 
                                     $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
@@ -688,25 +692,29 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                                 }
                             }
 
-                            $user = User::where('id_partenaire',$autre_demande_habilitation_formation->id_entreprises)->first();
-                                    if (isset($user->email)) {
-                                        $sujet = "Demande validé";
-                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                                $logo = Menu::get_logo();
+                                $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                                $name = $entreprise->raison_social_entreprises;
 
-                                        $messageMail = "<b>Monsieur le Directeur,</b>
-                                    <br><br> Nous sommes ravis de vous informer que votre demande a été validé  avec succès
-                                    <br>
-                                    Nous apprécions votre intérêt pour notre services.
-                                    Cordialement, L'équipe e-FDFP
-                                    <br>
-                                    <br>
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-                                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
-                                    }
+                                if (isset($entreprise->email)) {
+                                    $sujet = "Demande de suppression domaine de formation habilité";
+                                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                    $messageMail = "<b>Monsieur le Directeur,</b>
+                                                    <br><br> Nous désolé de vous informer que votre demande  a été validé avec succès.<br>
+                                                    Nous vous prions de bien vous connecter sur le portail.
+                                                    <br>
+                                                    Nous apprécions votre intérêt pour notre services.
+                                                    Cordialement, L'équipe e-FDFP
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    -----
+                                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                                    -----
+                                                    ";
+                                    $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                                }
                             return redirect('traitementautredemandehabilitation')->with('success', 'Succes : Operation validée avec succes ');
 
                         }
@@ -759,6 +767,9 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                                 $domaine_demande_domaine_supression->update();
 
 
+                                $habilitation = DemandeHabilitation::find($autre_demande_habilitation_formation_data->id_demande_habilitation);
+
+
                                 $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
                                     ->first();
                                 $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = true;
@@ -768,31 +779,29 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
 
                             }
                         }
-//
-//
+                        $logo = Menu::get_logo();
+                        $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                        $name = $entreprise->raison_social_entreprises;
 
-                            $user = User::where('id_partenaire',$autre_demande_habilitation_formation->id_entreprises)->first();
-                            if (isset($user->email)) {
-                                $sujet = "Demande de suppression domaine de formation habilité";
-                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        if (isset($entreprise->email)) {
+                            $sujet = "Demande de suppression domaine de formation habilité";
+                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
 
-                                $messageMail = "<b>Monsieur le Directeur,</b>
-                                    <br><br> Nous sommes ravis de vous informer que votre demande suppression du domaine de formation
-                                     intitulé : <b>".@$autre_demande_habilitation_formation->libelle_domaine_formation.".</b> a été rejété pour la raison suivant<br>
-                                     ".@$autre_demande_habilitation_formation->commentaire_final_autre_demande_habilitation_formation."
-                                    <br>
-                                    Nous apprécions votre intérêt pour notre services.
-                                    Cordialement, L'équipe e-FDFP
-                                    <br>
-                                    <br>
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-                                $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
-                            }
+                            $messageMail = "<b>Monsieur le Directeur,</b>
+                                            <br><br> Nous désolé de vous informer que votre demande  a été validé avec succès.<br>
+                                            Nous vous prions de bien vous connecter sur le portail.
+                                            <br>
+                                            Nous apprécions votre intérêt pour notre services.
+                                            Cordialement, L'équipe e-FDFP
+                                            <br>
+                                            <br>
+                                            <br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+                            $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                        }
 
                         return redirect('traitementautredemandehabilitation/' . Crypt::UrlCrypt($id_autre_demande_habilitation_formation) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
 
