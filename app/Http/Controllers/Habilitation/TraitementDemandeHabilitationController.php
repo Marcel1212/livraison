@@ -98,7 +98,7 @@ class TraitementDemandeHabilitationController extends Controller
         $ResultatEtap = DB::table('vue_processus')
             ->where([
                 ['id_roles', '=', $Idroles],
-                ['id_processus', '=', 11]
+                ['id_processus', '=', 14] // 11 Local
             ])
             ->get();
            // dd($ResultatEtap);
