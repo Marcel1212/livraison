@@ -76,7 +76,14 @@ $logo = Menu::get_logo();
         <tr>
             <td width="40%" style="float: right;margin-top: 2px">
                 <div style="text-align: center">
-                    Abidjan, {{ date('d F Y',strtotime(@$cahier->date_soumis_cahier_autre_demande_habilitations))}}
+                    Abidjan,
+                    @php
+                        $locale = 'fr_FR';
+                        $dateActuelle = new \DateTime(@$cahier->date_soumis_cahier_autre_demande_habilitations);
+                        $dateFormatter = new \IntlDateFormatter($locale, \IntlDateFormatter::LONG, \IntlDateFormatter::NONE);
+                        $dateFormatee = $dateFormatter->format($dateActuelle);
+                    @endphp
+                    {{@$dateFormatee}}
                 </div>
                 <br/>
             </td>
@@ -113,8 +120,8 @@ $logo = Menu::get_logo();
             <td width="100%" style="float: left;margin-top: 2px">
                 <div>
                     @isset($cahierautredemandehabilitations[0])
-                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu {{$cahierautredemandehabilitations->count()}} demande d'extension de domaine de
-                            formation de cabinets privés de formation qui ont fait l'objet dun traitement conformément à la procédure en vigueur.
+                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) demandes @else demande @endif d'extension de domaine de
+                            formation de cabinets privés de formation qui ont fait l'objet d'un traitement conformément à la procédure en vigueur.
                             Les cabinets concernés sont régulièrement habilités pour l'année 2024.</p>
                         <br>
                         <p  style="margin: 0px !important;padding: 0px;">Nous venons par la présente note solliciter votre autorisation pour
@@ -168,7 +175,7 @@ $logo = Menu::get_logo();
                     @isset($ResultProssesList)
                         @foreach($ResultProssesList as $res)
                             @if($res->priorite_combi_proc==2)
-                                 {{$res->name}}<br>
+                                {{$res->name}}<br>
                                 @if(isset($res->nom) && isset($res->prenom_users))
                                     {{$res->nom}} {{$res->prenom_users}}
                                 @endisset
@@ -210,39 +217,40 @@ $logo = Menu::get_logo();
         <tbody >
         @if($ResultProssesList!=null)
 
-        <tr style="height:50px !important;background: #bebebe !important;">
-            <td style="text-align:center;font-weight:bold;width: 50%;border-top: 1pt solid windowtext;border-left: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
+            <tr style="height:50px !important;background: #bebebe !important;">
+                <td style="text-align:center;font-weight:bold;width: 50%;border-top: 1pt solid windowtext;border-left: 1pt solid windowtext;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
                     @foreach($ResultProssesList as $res)
                         @if($res->priorite_combi_proc==3)
                             AVIS {{$res->name}}<br>
                             @if(isset($res->nom) && isset($res->prenom_users))
                                 {{$res->nom}} {{$res->prenom_users}}
                             @endisset
-                                    <div class="d-flex justify-content-between flex-wrap mb-2">
-                                        <div class="d-flex align-items-center">
-                                            @if($res->is_valide==true)
-                                                <div class="row ">
-                                                    <div>
-                                                        <span>Validé le  {{ $res->date_valide }}</span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            @if($res->is_valide===false)
-                                                <div class="row">
-                                                    <div>
-                                                        <span class="badge bg-label-danger">Rejeté le {{ $res->date_valide }}</span>
-                                                    </div>
-                                                </div>
-                                            @endif
+                            <div class="d-flex justify-content-between flex-wrap mb-2">
+                                <div class="d-flex align-items-center">
+                                    @if($res->is_valide==true)
+                                        <div class="row ">
+                                            <div>
+                                                <div>{{ $res->comment_parcours }}</div>
+                                                <span>Validé le  {{ $res->date_valide }}</span>
+                                            </div>
                                         </div>
-
+                                    @endif
+                                    @if($res->is_valide===false)
+                                        <div class="row">
+                                            <div>
+                                                <span class="badge bg-label-danger">Rejeté le {{ $res->date_valide }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
+
+                            </div>
                         @endif
 
                     @endforeach
                     <br>
-            </td>
-            <td style="text-align:center;font-weight:bold;width: 50%;border-top: 1pt solid windowtext;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
+                </td>
+                <td style="text-align:center;font-weight:bold;width: 50%;border-top: 1pt solid windowtext;border-left: none;border-bottom: 1pt solid windowtext;border-right: 1pt solid windowtext;padding: 0cm 5.4pt;height: 13.5pt;vertical-align: top;">
                     @foreach($ResultProssesList as $res)
                         @if($res->priorite_combi_proc==4)
                             DECISION {{$res->name}}<br>
@@ -254,6 +262,7 @@ $logo = Menu::get_logo();
                                     @if($res->is_valide==true)
                                         <div class="row ">
                                             <div>
+                                                <div>{{ $res->comment_parcours }}</div>
                                                 <span>Validé le  {{ $res->date_valide }}</span>
                                             </div>
                                         </div>
@@ -270,8 +279,8 @@ $logo = Menu::get_logo();
                             </div>
                         @endif
                     @endforeach
-            </td>
-        </tr>
+                </td>
+            </tr>
         @endif
 
         </tbody>

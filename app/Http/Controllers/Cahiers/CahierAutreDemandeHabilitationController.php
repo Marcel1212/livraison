@@ -175,20 +175,11 @@ class CahierAutreDemandeHabilitationController extends Controller
             $ResultProssesList = [];
         }
 
-
-//
-//        dd($cahier);
-//        Auth::user()->direction->libelle_direction;
-//
-//
-//        $departement = Direction::join('departement','direction.id_direction','departement.id_direction')->where([
-//            ['direction.id_direction','=','1'],['departement.flag_departement','=',true]
-//        ])->first();
-
         $cahierautredemandehabilitations = DB::table('vue_autre_demande_habilitation_disponible_pour_cahier_traiter as vppdpct')
             ->join('ligne_cahier_autre_demande_habilitations','vppdpct.id_demande','ligne_cahier_autre_demande_habilitations.id_demande')
             ->join('cahier_autre_demande_habilitations','ligne_cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations','cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations')
             ->join('autre_demande_habilitation_formation','autre_demande_habilitation_formation.id_autre_demande_habilitation_formation','ligne_cahier_autre_demande_habilitations.id_demande')
+            ->join('demande_habilitation','autre_demande_habilitation_formation.id_demande_habilitation','demande_habilitation.id_demande_habilitation')
             ->join('users','autre_demande_habilitation_formation.id_chef_service','users.id')
             ->join('direction','users.id_direction','direction.id_direction')
             ->join('departement','users.id_departement','departement.id_departement')

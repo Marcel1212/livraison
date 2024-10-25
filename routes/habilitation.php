@@ -151,7 +151,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('traitementcahierautredemandehabilitations/index', [TraitementCahierAutreDemandeHabilitationController::class, 'index'])->name('traitementcahierautredemandehabilitations.index');
         Route::get('traitementcahierautredemandehabilitations/{id}/{id1}/{id2}/edit', [TraitementCahierAutreDemandeHabilitationController::class, 'edit'])->name('traitementcahierautredemandehabilitations.edit');
         Route::put('traitementcahierautredemandehabilitations/{id}/update', [TraitementCahierAutreDemandeHabilitationController::class, 'update'])->name('traitementcahierautredemandehabilitations.update');
-//    Route::get('traitementcahierautredemandehabilitations/{id}/show', [TraitementSuppressionDomaineHabilitationController::class, 'show'])->name('traitementsuppressiondomaine.show');
+        Route::get('traitementcahierautredemandehabilitations/{id}/notetechnique', [TraitementCahierAutreDemandeHabilitationController::class, 'notetechnique'])->name('traitementcahierautredemandehabilitations.notetechnique');
+        Route::get('traitementcahierautredemandehabilitations/{id}/{id1}/show', [TraitementCahierAutreDemandeHabilitationController::class, 'show'])->name('traitementcahierautredemandehabilitations.show');
     });
 
     Route::group(['middleware' => ['can:ctdemandehabilitation-index']], function () {
