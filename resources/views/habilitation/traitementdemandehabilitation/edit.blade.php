@@ -1182,7 +1182,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
 
                                                      <button type="submit" name="action" value="Rapport"
                                                              class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                             Rapport
+                                                             Enregistrer le Rapport
                                                      </button>
 
                                         </div>
