@@ -359,7 +359,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                     $formation_cabinet->id_domaine_formation = $domaine_demande_habilitation->id_domaine_formation;
                                     $formation_cabinet->save();
 
-                                    if(isset($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations)){
+                                    if(isset($demande->domaineAutreDemandeHabilitationFormations)){
                                         foreach ($demande->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
                                             $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
                                                 ->first();
