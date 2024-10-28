@@ -753,13 +753,13 @@ class AgreementHabilitationController extends Controller
                 }
                 $dateanneeencours = Carbon::now()->format('Y');
                 $data_saving = AutreDemandeHabilitationFormation::create([
-                    'code_autre_demande_habilitation_formation'=>'DED-'.Gencode::randStrGen(4, 5).'-'. $dateanneeencours,
+                    'code_autre_demande_habilitation_formation'=>'SUDF-'.Gencode::randStrGen(4, 5).'-'. $dateanneeencours,
                     'id_motif_autre_demande_habilitation_formation'=> $input['id_motif_autre_demande_habilitation_formation'],
                     'commentaire_autre_demande_habilitation_formation'=> $input['commentaire_autre_demande_habilitation_formation'],
                     'piece_autre_demande_habilitation_formation'=> $input['piece_autre_demande_habilitation_formation'],
                     'date_enregistrer_autre_demande_habilitation_formation'=> Carbon::now(),
                     'flag_enregistrer_autre_demande_habilitation_formation'=> true,
-                    'type_autre_demande'=> 'demande_extension',
+                    'type_autre_demande'=> 'demande_substitution',
                     'id_demande_habilitation'=> $id,
                     'id_user'=> Auth::user()->id
                 ]);
@@ -874,9 +874,7 @@ class AgreementHabilitationController extends Controller
         $id2 = Crypt::UrldeCrypt($id2);
         if ($request->isMethod('post')) {
             $input = $request->all();
-
             if ($input['action'] == 'enregistrer_info_demande') {
-
 
                 if (count($input['id_domaine_demande_habilitation']) > 0) {
 
@@ -942,50 +940,6 @@ class AgreementHabilitationController extends Controller
                 } else {
                     return redirect('agrementhabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/substitutiondomaineformationedit')->with('error', 'Erreur : Une erreur s\'est produite');
                 }
-
-
-
-//
-//                $this->validate($request, [
-//                    'commentaire_autre_demande_habilitation_formation' => 'required',
-//                    'id_motif_autre_demande_habilitation_formation' => 'required',
-//                ], [
-//                    'commentaire_autre_demande_habilitation_formation.required' => 'Veuillez ajouter le commentaire de la demande d\'extension.',
-//                    'id_motif_autre_demande_habilitation_formation.required' => 'Veuillez ajouter un motif.',
-//                ]);
-//
-//                if (isset($input['piece_autre_demande_habilitation_formation'])) {
-//                    $filefront = $input['piece_autre_demande_habilitation_formation'];
-//                    if ($filefront->extension() == "PDF" || $filefront->extension() == "pdf" || $filefront->extension() == "png"
-//                        || $filefront->extension() == "jpg" || $filefront->extension() == "jpeg" || $filefront->extension() == "PNG"
-//                        || $filefront->extension() == "JPG" || $filefront->extension() == "JPEG") {
-//                        $fileName1 = 'piece_autre_demande_habilitation_formation' . '_' . rand(111, 99999) . 'piece_autre_demande_habilitation_formation' . time() . '.' . $filefront->extension();
-//                        $filefront->move(public_path('pieces/demande_suppression_domaine/'), $fileName1);
-//                        $input['piece_autre_demande_habilitation_formation'] = $fileName1;
-//                    }
-//                    AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
-//                        'id_motif_autre_demande_habilitation_formation'=> $input['id_motif_autre_demande_habilitation_formation'],
-//                        'commentaire_autre_demande_habilitation_formation'=> $input['commentaire_autre_demande_habilitation_formation'],
-//                        'piece_autre_demande_habilitation_formation'=> $input['piece_autre_demande_habilitation_formation'],
-//                        'date_enregistrer_autre_demande_habilitation_formation'=> Carbon::now(),
-//                        'flag_enregistrer_autre_demande_habilitation_formation'=> true,
-//                        'id_demande_habilitation'=> $id1,
-//                        'type_autre_demande'=> 'demande_extension',
-//                        'id_user'=> Auth::user()->id
-//                    ]);
-//                }
-//                else {
-//                    AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
-//                        'id_motif_autre_demande_habilitation_formation'=> $input['id_motif_autre_demande_habilitation_formation'],
-//                        'commentaire_autre_demande_habilitation_formation'=> $input['commentaire_autre_demande_habilitation_formation'],
-//                        'date_enregistrer_autre_demande_habilitation_formation'=> Carbon::now(),
-//                        'flag_enregistrer_autre_demande_habilitation_formation'=> true,
-//                        'id_demande_habilitation'=> $id1,
-//                        'type_autre_demande'=> 'demande_extension',
-//                        'id_user'=> Auth::user()->id
-//                    ]);
-//                }
-//                return redirect('agrementhabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(1) . '/extensiondomaineformationedit')->with('success', 'Succes : Demande d\'extension modifiée avec succès');
             }
 
             if ($input['action'] == 'enregistrer_domaine_demande') {
@@ -1012,7 +966,8 @@ class AgreementHabilitationController extends Controller
 
                 $input = $request->all();
                 $input['id_demande_habilitation'] = $id1;
-                $input['flag_extension_domaine_demande_habilitation'] = true;
+                $input['flag_extension_domaine_demande_habilitation'] = false;
+                $input['flag_substitution_domaine_demande_habilitation'] = true;
                 $input['flag_agree_domaine_demande_habilitation'] = false;
                 $input['id_autre_demande'] = $id;
                 DomaineDemandeHabilitation::create($input);
@@ -1035,20 +990,14 @@ class AgreementHabilitationController extends Controller
                 FormateurDomaineDemandeHabilitation::create($input);
 
                 Audit::logSave([
-
                     'action'=>'MISE A JOUR',
-
                     'code_piece'=>$id,
-
                     'menu'=>'Habilitation (Soumission de l\'habilitation)',
-
                     'etat'=>'Succès',
-
                     'objet'=>'HABILITATION etape ajouter formateur'
-
                 ]);
-                return redirect('agrementhabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(3) . '/extensiondomaineformationedit')->with('success', 'Succes : Domaine de formation enregistrer avec succès');
 
+                return redirect('agrementhabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(3) . '/extensiondomaineformationedit')->with('success', 'Succes : Domaine de formation enregistrer avec succès');
             }
 
             if ($input['action'] == 'soumettreDemandeExtension') {
@@ -1057,18 +1006,33 @@ class AgreementHabilitationController extends Controller
                     'date_soumis_autre_demande_habilitation_formation'=> Carbon::now(),
                     'flag_soumis_autre_demande_habilitation_formation'=> true
                 ]);
-
-                return redirect('agrementhabilitation/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($id1) .'/'. Crypt::UrlCrypt(3) . '/extensiondomaineformationedit')->with('success', 'Succes : Demande d\'extension effectuée avec succès');
+                return redirect('agrementhabilitation/' . Crypt::UrlCrypt($id) . '/' . Crypt::UrlCrypt($id1) .'/'. Crypt::UrlCrypt(3) . '/substitutiondomaineformationedit')->with('success', 'Succes : Demande de substitution effectuée avec succès');
             }
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function deletedomaineDemandeSubstitution($id,$id1,$id2){
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::find($id2);
+        $domaineDemandeHabilitations->delete();
+
+        return redirect('agrementhabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id1).'/'.Crypt::UrlCrypt(2).'/substituiondomaineformationedit')->with('success', 'Succes : Information mise a jour  ');
+
+    }
+
+    public function deleteformateursDemandeSubstitution($id,$id1,$id2){
+
+        $id = Crypt::UrldeCrypt($id);
+        $id1 = Crypt::UrldeCrypt($id1);
+        $id2 = Crypt::UrldeCrypt($id2);
+
+        $formateurs = FormateurDomaineDemandeHabilitation::find($id2);
+        $formateurs->delete();
+        return redirect('agrementhabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt($id1).'/'.Crypt::UrlCrypt(3).'/substituiondomaineformationedit')->with('success', 'Succes : Information mise a jour  ');
     }
 
     /**

@@ -206,8 +206,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('agrementhabilitation/{id}/{id1}/substitutiondomaineformationstore', [AgreementHabilitationController::class, 'substitutiondomaineformationstore'])->name('agrementhabilitation.substitutiondomaineformationstore');
         Route::get('agrementhabilitation/{id}/{id1}/{id2}/substitutiondomaineformationedit', [AgreementHabilitationController::class, 'substitutiondomaineformationedit'])->name('agrementhabilitation.substitutiondomaineformationedit');
         Route::post('agrementhabilitation/{id}/{id1}/{id2}/substitutiondomaineformationupdate', [AgreementHabilitationController::class, 'substitutiondomaineformationupdate'])->name('agrementhabilitation.substitutiondomaineformationupdate');
-//        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deletedomaineDemandeExtension', [AgreementHabilitationController::class, 'deletedomaineDemandeExtension'])->name('agrementhabilitation.deletedomaineDemandeExtension');
-//        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deleteformateursDemandeExtension', [AgreementHabilitationController::class, 'deleteformateursDemandeExtension'])->name('agrementhabilitation.deleteformateursDemandeExtension');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deletedomaineDemandeSubstitution', [AgreementHabilitationController::class, 'deletedomaineDemandeSubstitution'])->name('agrementhabilitation.deletedomaineDemandeSubstitution');
+        Route::get('agrementhabilitation/{id}/{id1}/{id2}/deleteformateursDemandeSubstitution', [AgreementHabilitationController::class, 'deleteformateursDemandeSubstitution'])->name('agrementhabilitation.deleteformateursDemandeSubstitution');
 
 
     });
@@ -224,10 +224,19 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('traitementautredemandehabilitation/{id}/{id1}/updateExtension', [TraitementAutreDemandeHabilitationFormation::class, 'updateExtension'])->name('traitementautredemandehabilitation.updateExtension');
 
 
+        Route::get('traitementautredemandehabilitation/{id}/{id1}/editsubstitution', [TraitementAutreDemandeHabilitationFormation::class, 'editsubstitution'])->name('traitementautredemandehabilitation.editsubstitution');
+        Route::put('traitementautredemandehabilitation/{id}/{id1}/updatesubstitution', [TraitementAutreDemandeHabilitationFormation::class, 'updatesubstitution'])->name('traitementautredemandehabilitation.updatesubstitution');
+
+
         Route::get('traitementautredemandehabilitation/affectation', [TraitementAutreDemandeHabilitationFormation::class, 'affectation'])->name('traitementautredemandehabilitation.affectation');
         Route::get('traitementautredemandehabilitation/{id}/{id1}/editaffectation', [TraitementAutreDemandeHabilitationFormation::class, 'editaffectation'])->name('traitementautredemandehabilitation.editaffectation');
         Route::put('traitementautredemandehabilitation/{id}/updateaffectation', [TraitementAutreDemandeHabilitationFormation::class, 'updateaffectation'])->name('traitementautredemandehabilitation.updateaffectation');
         Route::get('traitementautredemandehabilitation/{id}/show', [TraitementAutreDemandeHabilitationFormation::class, 'show'])->name('traitementautredemandehabilitation.show');
+
+
+        Route::get('traitementautredemandehabilitation/{id}/{id1}/editaffectationsubstitution', [TraitementAutreDemandeHabilitationFormation::class, 'editaffectationsubstitution'])->name('traitementautredemandehabilitation.editaffectationsubstitution');
+        Route::put('traitementautredemandehabilitation/{id}/updateaffectationsubstitution', [TraitementAutreDemandeHabilitationFormation::class, 'updateaffectationsubstitution'])->name('traitementautredemandehabilitation.updateaffectationsubstitution');
+
 
         Route::get('traitementautredemandehabilitation/{id}/{id1}/editaffectationExtension', [TraitementAutreDemandeHabilitationFormation::class, 'editaffectationExtension'])->name('traitementautredemandehabilitation.editaffectationExtension');
         Route::put('traitementautredemandehabilitation/{id}/updateaffectationExtension', [TraitementAutreDemandeHabilitationFormation::class, 'updateaffectationExtension'])->name('traitementautredemandehabilitation.updateaffectationExtension');

@@ -428,7 +428,7 @@ use App\Helpers\Fonction;
                                                                    title="Modifier"><img src='/assets/img/display.png'></a>
 
                                                                 @if($autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_formation != true)
-                                                                    <a href="{{ route($lien.'.deleteformateursDemandeExtension',[\App\Helpers\Crypt::UrlCrypt($id),\App\Helpers\Crypt::UrlCrypt($id1),
+                                                                    <a href="{{ route($lien.'.deleteformateursDemandeSubstitution',[\App\Helpers\Crypt::UrlCrypt($id),\App\Helpers\Crypt::UrlCrypt($id1),
 \App\Helpers\Crypt::UrlCrypt($formateur->id_formateur_domaine_demande_habilitation)]) }}"
                                                                        class="" onclick='javascript:if (!confirm("Voulez-vous supprimer cet ligne ?")) return false;'
                                                                        title="Suprimer"> <img src='/assets/img/trash-can-solid.png'> </a>

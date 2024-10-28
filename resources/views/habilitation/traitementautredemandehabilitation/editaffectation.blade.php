@@ -95,7 +95,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                             data-bs-target="#navs-top-traitement"
                                             aria-controls="navs-top-traitement"
                                             aria-selected="false">
-                                            Affectation
+                                            Imputation
                                         </button>
                                     </li>
                             @endif
