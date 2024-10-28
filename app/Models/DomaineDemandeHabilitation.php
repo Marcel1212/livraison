@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $id_domaine_formation
  * @property float $id_type_domaine_demande_habilitation_public
  * @property boolean $flag_organisation_formation
+ * @property boolean $flag_agree_domaine_demande_habilitation
  * @property string $created_at
  * @property string $updated_at
  * @property FormateurDomaineDemandeHabilitation[] $formateurDomaineDemandeHabilitations
@@ -47,7 +48,7 @@ class DomaineDemandeHabilitation extends Model
      */
     protected $fillable = ['id_type_domaine_demande_habilitation',
         'flag_extension_domaine_demande_habilitation','id_autre_demande',
-'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at'];
+'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at','flag_agree_domaine_demande_habilitation'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
