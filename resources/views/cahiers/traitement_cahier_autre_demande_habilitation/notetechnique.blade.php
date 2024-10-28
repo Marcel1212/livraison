@@ -145,7 +145,7 @@ $logo = Menu::get_logo();
             <td width="100%" style="float: left;margin-top: 2px">
                 <div>
                     @isset($cahierautredemandehabilitations[0])
-                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) demandes @else demande @endif
+                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu ({{$cahierautredemandehabilitations->count()}}) @if($cahierautredemandehabilitations->count()>1) demandes @else demande @endif
                             @if($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DED')
                                 d'extension de domaine de formation
                             @elseif($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DSD')
@@ -156,7 +156,6 @@ $logo = Menu::get_logo();
                                 de cabinets privés de formation
                             @elseif($cahierautredemandehabilitations[0]->type_entreprise == 'PU')
                                 de cabinets publics de formation
-
                             @endif
 
                             qui
