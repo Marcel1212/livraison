@@ -47,7 +47,8 @@ class DomaineDemandeHabilitation extends Model
      */
     protected $fillable = ['id_type_domaine_demande_habilitation',
         'flag_extension_domaine_demande_habilitation','id_autre_demande',
-'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public', 'flag_organisation_formation', 'created_at', 'updated_at'];
+'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public',
+        'flag_substitution_domaine_demande_habilitation','flag_organisation_formation', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
