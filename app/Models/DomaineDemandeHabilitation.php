@@ -48,7 +48,7 @@ class DomaineDemandeHabilitation extends Model
      */
     protected $fillable = ['id_type_domaine_demande_habilitation',
         'flag_extension_domaine_demande_habilitation','id_autre_demande',
-'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public',
+        'id_demande_habilitation', 'id_domaine_formation', 'id_type_domaine_demande_habilitation_public',
         'flag_substitution_domaine_demande_habilitation','flag_organisation_formation',
 'flag_organisation_formation', 'created_at', 'updated_at','flag_agree_domaine_demande_habilitation'];
 
