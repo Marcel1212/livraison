@@ -325,7 +325,8 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                 $cahier->flag_traitement_cahier_autre_demande_habilitations = true;
                                 $cahier->date_traitement_valide_flag_cahier_autre_demande_habilitations = Carbon::now();
                                 $cahier->update();
-                            }elseif($cahier->code_pieces_cahier_autre_demande_habilitations=='DSD'){
+                            }
+                            elseif($cahier->code_pieces_cahier_autre_demande_habilitations=='DSD'){
                                 $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
                                 $lignes = LigneCahierAutreDemandeHabilitation::where(
                                     'id_cahier_autre_demande_habilitations',$cahier->id_cahier_autre_demande_habilitations,
@@ -343,7 +344,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                     $domaine_demande_habilitation = DomaineDemandeHabilitation::where('id_autre_demande',$demande->id_autre_demande_habilitation_formation)
                                         ->first();
                                     $domaine_demande_habilitation->flag_agree_domaine_demande_habilitation = true;
-                                    $domaine_demande_habilitation->flag_extension_domaine_demande_habilitation = true;
+                                    $domaine_demande_habilitation->flag_substitution_domaine_demande_habilitation = true;
                                     $domaine_demande_habilitation->update();
 
 
@@ -358,14 +359,34 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                     $formation_cabinet->id_domaine_formation = $domaine_demande_habilitation->id_domaine_formation;
                                     $formation_cabinet->save();
 
+                                    if(isset($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations)){
+                                        foreach ($demande->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
+                                            $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+                                                ->first();
+                                            $domaine_demande_domaine_supression->flag_autre_demande_habilitation_formation = false;
+                                            $domaine_demande_domaine_supression->update();
 
+                                            $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+                                                ->first();
+                                            $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = false;
+                                            $domaine_demande_domaine->update();
 
-                                    if (isset($user->email)) {
-                                        $sujet = "Demande de suppression domaine de formation habilité";
+                                            $habilitation = DemandeHabilitation::find($domaine_demande_domaine->id_demande_habilitation);
+
+                                            $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaine_demande_domaine->id_domaine_formation)
+                                                ->where('id_entreprises',$habilitation->id_entreprises)->first();
+                                            $domaine_formation->delete();
+
+                                            $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
+                                        }
+                                    }
+
+                                    if (isset($entreprise->email)) {
+                                        $sujet = "Demande de substitution de domaine de formation habilité";
                                         $titre = "Bienvenue sur " . @$logo->mot_cle . "";
 
                                         $messageMail = "<b>Monsieur le Directeur,</b>
-                                            <br><br> Nous sommes ravis de vous informer que votre demande  a été validé avec succès.<br>
+                                            <br><br> Nous sommes ravis de vous informer que votre demande de substitution a été validé avec succès.<br>
                                             Nous vous prions de bien vous connecter sur le portail.
                                             <br>
                                             Nous apprécions votre intérêt pour notre services.
@@ -377,7 +398,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                             Ceci est un mail automatique, Merci de ne pas y répondre.
                                             -----
                                             ";
-                                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                        $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
                                     }
                                 }
                                 $cahier->flag_traitement_cahier_autre_demande_habilitations = true;
