@@ -84,8 +84,8 @@ class AgreementHabilitationController extends Controller
     public function show($id)
     {
         $id =  Crypt::UrldeCrypt($id);
-        $agrementhabilitation = DemandeHabilitation::find($id);
-        return view('habilitation.agreement.show', compact('agrementhabilitation'));
+        $demandehabilitation = DemandeHabilitation::find($id);
+        return view('habilitation.agreement.show', compact('demandehabilitation'));
     }
 
     /**

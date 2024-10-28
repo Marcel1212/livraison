@@ -2,7 +2,7 @@
 use App\Helpers\Menu;
 use Carbon\Carbon;
 use App\Helpers\ListeDemandeHabilitationSoumis;
-$nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($agrementhabilitation->id_demande_habilitation);
+$nbresollicite = ListeDemandeHabilitationSoumis::get_vue_nombre_de_domaine_sollicite($demandehabilitation->id_demande_habilitation);
 ?>
 
 <!DOCTYPE html>
