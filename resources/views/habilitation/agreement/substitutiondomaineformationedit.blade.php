@@ -349,7 +349,7 @@ use App\Helpers\Fonction;
                                                     <br/>
                                                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                         <div class="alert-body" style="text-align: center">
-                                                            Ajouter un formateur à chaque domaine, avant de pouvoir soumettre votre demande d'extensoin
+                                                            Ajouter un formateur à chaque domaine, avant de pouvoir soumettre votre demande
                                                         </div>
                                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                     </div>

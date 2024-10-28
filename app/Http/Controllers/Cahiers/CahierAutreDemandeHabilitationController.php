@@ -92,7 +92,7 @@ class CahierAutreDemandeHabilitationController extends Controller
             $input['id_users_cahier_autre_demande_habilitations'] = Auth::user()->id;
             $input['date_creer_cahier_autre_demande_habilitations'] = Carbon::now();
             $input['code_pieces_cahier_autre_demande_habilitations'] = $processus->code_processus_autre_demande;
-            $input['id_processus_autre_demande'] = $processus->latest()->first()->id_processus_autre_demande;
+//            $input['id_processus_autre_demande'] = $processus->latest()->first()->id_processus_autre_demande;
 
             $cahier = CahierAutreDemandeHabilitation::create($input);
 

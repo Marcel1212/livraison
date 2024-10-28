@@ -334,7 +334,11 @@ $logo = Menu::get_logo();
     <br>
     <br>
     <div class="col-xl-12">
-        <h2 class="" style="font-size: 18px;text-align: center;text-decoration: underline">LISTE DES DEMANDES D'EXTENSION</h2>
+        @if($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DED')
+            <h2 class="" style="font-size: 18px;text-align: center;text-decoration: underline">LISTE DES DEMANDES D'EXTENSION</h2>
+        @elseif($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DSD')
+            <h2 class="" style="font-size: 18px;text-align: center;text-decoration: underline">LISTE DES DEMANDES DE SUBSTITUTION</h2>
+        @endif
     </div>
     <table width="100%" cellspacing="0" cellpadding="0" id="table_avis">
         <tbody>
