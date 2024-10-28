@@ -339,6 +339,7 @@ use App\Helpers\Fonction;
                                                         </div>
                                                     @endif
 
+
                                                 @else
                                                     <div class="col-12" align="right">
                                                         <a href="{{ route('formateurs.create') }}" class="btn btn-sm btn-primary waves-effect waves-light" target="_blank">
