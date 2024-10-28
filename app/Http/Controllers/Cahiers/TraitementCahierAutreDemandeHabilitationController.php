@@ -126,8 +126,6 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
 
     public function edit($id,$id1)
     {
-
-
         $id =  Crypt::UrldeCrypt($id);
         $idetape =  3;
         $id_combi_proc = Crypt::UrldeCrypt($id1);
@@ -136,11 +134,6 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
         $cahier = CahierAutreDemandeHabilitation::find($id);
 
         $processusautre_demandes = ProcessusAutreDemande::where([['flag_processus_autre_demande','=',true]])->orderBy('libelle_processus_autre_demande')->get();
-        $processusAutreDemandesListe = "<option value='".$cahier->processusAutreDemande->id_processus_autre_demande."'> ".$cahier->processusAutreDemande->libelle_processus_autre_demande." </option>";
-        foreach ($processusautre_demandes as $comp) {
-            $processusAutreDemandesListe .= "<option value='" . $comp->id_processus_autre_demande . "'>" . mb_strtoupper($comp->libelle_processus_autre_demande) . " </option>";
-        }
-
 
             $demandes = DB::table('vue_autre_demande_habilitation_disponible_pour_cahier')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
@@ -149,6 +142,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                     ->where('ligne_cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations',$id);
             })
                 ->where('vue_autre_demande_habilitation_disponible_pour_cahier.code_processus','=',$cahier->processusAutreDemande->code_processus_autre_demande)
+                ->where('vue_autre_demande_habilitation_disponible_pour_cahier.code_forme_juridique','=',$cahier->type_entreprise)
 
                 ->get();
 
@@ -189,7 +183,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
             ['id_combi_proc','=',$id_combi_proc]
         ])->get();
 
-        return view("cahiers.traitement_cahier_autre_demande_habilitation.edit",compact('ResultProssesList','id_combi_proc','parcoursexist','processusAutreDemandesListe','cahierautredemandehabilitations','id','idetape','cahier','demandes'));
+        return view("cahiers.traitement_cahier_autre_demande_habilitation.edit",compact('ResultProssesList','id_combi_proc','parcoursexist','processusautre_demandes','cahierautredemandehabilitations','id','idetape','cahier','demandes'));
     }
 
     public function notetechnique($id)
@@ -235,21 +229,6 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
 
         if(isset($id_cahier)){
             $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
-//            Join('domaine_autre_demande_habilitation_formation',
-//                'domaine_autre_demande_habilitation_formation.id_autre_demande_habilitation_formation',
-//                'autre_demande_habilitation_formation.id_autre_demande_habilitation_formation')->
-//
-//            join('domaine_demande_habilitation',
-//                'domaine_demande_habilitation.id_domaine_demande_habilitation',
-//                'domaine_autre_demande_habilitation_formation.id_domaine_demande_habilitation')->
-//            join('demande_habilitation', 'demande_habilitation.id_demande_habilitation',
-//                'domaine_demande_habilitation.id_demande_habilitation')
-//                ->join('entreprises','entreprises.id_entreprises','demande_habilitation.id_entreprises')
-//                ->join('agence_localite','entreprises.id_localite_entreprises','agence_localite.id_localite')
-//                ->join('agence','agence.num_agce','agence_localite.id_agence')
-//                ->join('localite','agence_localite.id_localite','localite.id_localite')
-//                ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
-
 
             if(isset($cahier)) {
                 if ($request->isMethod('put')) {
@@ -288,11 +267,11 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                             ->first();
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-
-                            $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
+                            if($cahier->code_pieces_cahier_autre_demande_habilitations=='DED'){
+                                $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
                                 $lignes = LigneCahierAutreDemandeHabilitation::where(
                                     'id_cahier_autre_demande_habilitations',$cahier->id_cahier_autre_demande_habilitations,
-                               )->get();
+                                )->get();
 
                                 foreach ($lignes as $ligne){
                                     $demande =  AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$ligne->id_demande)->first();
@@ -346,10 +325,105 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                                 $cahier->flag_traitement_cahier_autre_demande_habilitations = true;
                                 $cahier->date_traitement_valide_flag_cahier_autre_demande_habilitations = Carbon::now();
                                 $cahier->update();
+                            }elseif($cahier->code_pieces_cahier_autre_demande_habilitations=='DSD'){
+                                $cahier = CahierAutreDemandeHabilitation::find($id_cahier);
+                                $lignes = LigneCahierAutreDemandeHabilitation::where(
+                                    'id_cahier_autre_demande_habilitations',$cahier->id_cahier_autre_demande_habilitations,
+                                )->get();
+
+                                foreach ($lignes as $ligne){
+                                    $demande =  AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$ligne->id_demande)->first();
+                                    $demande->flag_autre_demande_habilitation_formation_valider_par_proce = true;
+                                    $demande->flag_validation_autre_demande_habilitation_formation = true;
+                                    $demande->date_valider_par_processus_autre_demande_habilitation_formation = now();
+                                    $demande->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
+                                    $demande->flag_rejeter_autre_demande_habilitation_formation = false;
+                                    $demande->update();
+
+                                    $domaine_demande_habilitation = DomaineDemandeHabilitation::where('id_autre_demande',$demande->id_autre_demande_habilitation_formation)
+                                        ->first();
+                                    $domaine_demande_habilitation->flag_agree_domaine_demande_habilitation = true;
+                                    $domaine_demande_habilitation->flag_extension_domaine_demande_habilitation = true;
+                                    $domaine_demande_habilitation->update();
+
+
+                                    $habilitation = DemandeHabilitation::where('id_demande_habilitation',$demande->id_demande_habilitation)->first();
+                                    $logo = Menu::get_logo();
+                                    $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                                    $name = $entreprise->raison_social_entreprises;
+
+
+                                    $formation_cabinet = new DomaineFormationCabinet();
+                                    $formation_cabinet->id_entreprises = $entreprise->id_entreprises;
+                                    $formation_cabinet->id_domaine_formation = $domaine_demande_habilitation->id_domaine_formation;
+                                    $formation_cabinet->save();
+
+
+
+                                    if (isset($user->email)) {
+                                        $sujet = "Demande de suppression domaine de formation habilité";
+                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                        $messageMail = "<b>Monsieur le Directeur,</b>
+                                            <br><br> Nous sommes ravis de vous informer que votre demande  a été validé avec succès.<br>
+                                            Nous vous prions de bien vous connecter sur le portail.
+                                            <br>
+                                            Nous apprécions votre intérêt pour notre services.
+                                            Cordialement, L'équipe e-FDFP
+                                            <br>
+                                            <br>
+                                            <br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+                                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
+                                    }
+                                }
+                                $cahier->flag_traitement_cahier_autre_demande_habilitations = true;
+                                $cahier->date_traitement_valide_flag_cahier_autre_demande_habilitations = Carbon::now();
+                                $cahier->update();
+
+
+//                                $autre_demande_habilitation_formation_data = AutreDemandeHabilitationFormation::find($id_autre_demande_habilitation_formation);
+//                                $autre_demande_habilitation_formation_data->flag_autre_demande_habilitation_formation_valider_par_proce = true;
+//                                $autre_demande_habilitation_formation_data->flag_validation_autre_demande_habilitation_formation = true;
+//                                $autre_demande_habilitation_formation_data->date_valider_par_processus_autre_demande_habilitation_formation = now();
+//                                $autre_demande_habilitation_formation_data->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
+//                                $autre_demande_habilitation_formation_data->update();
+//
+//                                $name = $autre_demande_habilitation_formation->raison_social_entreprises;
+//                                $logo = Menu::get_logo();
+//
+//                                $domaine_lib = '';
+//
+//                                if(isset($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations)){
+//                                    foreach ($autre_demande_habilitation_formation_data->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
+//                                        $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+//                                            ->first();
+//                                        $domaine_demande_domaine_supression->flag_autre_demande_habilitation_formation = false;
+//                                        $domaine_demande_domaine_supression->update();
+//
+//                                        $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+//                                            ->first();
+//                                        $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = false;
+//                                        $domaine_demande_domaine->update();
+//
+//                                        $habilitation = DemandeHabilitation::find($domaine_demande_domaine->id_demande_habilitation);
+//
+//                                        $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaine_demande_domaine->id_domaine_formation)
+//                                            ->where('id_entreprises',$habilitation->id_entreprises)->first();
+//                                        $domaine_formation->delete();
+//
+//                                        $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
+//
+//                                    }
+//                                }
                             }
 
-//
-                        return redirect('traitementcahierautredemandehabilitations/' . Crypt::UrlCrypt($id_cahier) . '/' . Crypt::UrlCrypt($id_combi_proc) .'/'.Crypt::UrlCrypt(3). '/edit')->with('success', 'Succes : Operation validée avec succes ');
+                        }
+
+                            return redirect('traitementcahierautredemandehabilitations/' . Crypt::UrlCrypt($id_cahier) . '/' . Crypt::UrlCrypt($id_combi_proc) .'/'.Crypt::UrlCrypt(3). '/edit')->with('success', 'Succes : Operation validée avec succes ');
                         }
 
                     if ($data['action'] === 'Rejeter') {
@@ -363,7 +437,7 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                             ->first();
                         $idProComb = $infosprocessus->id_combi_proc;
                         $idProcessus = $infosprocessus->id_processus;
-//
+
                         Parcours::create([
                             'id_processus' => $idProcessus,
                             'id_user' => $idUser,
@@ -426,7 +500,6 @@ class TraitementCahierAutreDemandeHabilitationController extends Controller
                         $cahier->update();
                     }
 
-//
                     return redirect('traitementcahierautredemandehabilitations/' . Crypt::UrlCrypt($id_cahier) . '/' . Crypt::UrlCrypt($id_combi_proc) .'/'.Crypt::UrlCrypt(3). '/edit')->with('success', 'Succes : Operation validée avec succes ');
 
                 }

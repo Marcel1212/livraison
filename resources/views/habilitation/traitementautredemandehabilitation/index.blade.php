@@ -124,12 +124,14 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                 Demande de suppression
                                             @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                 Demande d'extension
+                                            @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                Demande de substitution
                                             @endif
                                         </td>
                                         <td>{{ @$autre_demande_habilitation_formation->raison_social_entreprises }}</td>
                                         <td>{{ @$autre_demande_habilitation_formation->nom_responsable_demande_habilitation }}</td>
-                                        <td>{{ date('d/m/Y d:i:s',strtotime(@$autre_demande_habilitation_formation->date_enregistrer_autre_demande_habilitation_formation))  }}</td>
-                                        <td>{{ date('d/m/Y d:i:s',strtotime(@$autre_demande_habilitation_formation->date_soumis_autre_demande_habilitation_formation))  }}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$autre_demande_habilitation_formation->date_enregistrer_autre_demande_habilitation_formation))  }}</td>
+                                        <td>{{ date('d/m/Y H:i:s',strtotime(@$autre_demande_habilitation_formation->date_soumis_autre_demande_habilitation_formation))  }}</td>
                                         <td align="">
 
                                             @if($autre_demande_habilitation_formation->flag_rejeter_domaine_autre_demande_habilitation_formation==false &&
@@ -146,6 +148,11 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                         src='/assets/img/editing.png'></a>
                                             @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                 <a href="{{ route($lien.'.editaffectationExtension',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
+                                                   class=" "
+                                                   title="Modifier"><img
+                                                        src='/assets/img/editing.png'></a>
+                                            @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                <a href="{{ route($lien.'.editaffectationsubsitution',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
                                                    class=" "
                                                    title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
@@ -190,6 +197,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                         Demande de suppression
                                                     @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                         Demande d'extension
+                                                    @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                        Demande de substitution
                                                     @endif
                                                 </td>
                                                 <td>{{ @$autre_demande_habilitation_formation->raison_social_entreprises }}</td>
@@ -205,10 +214,18 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                     @endif
                                                 </td>
                                                 <td align="center">
+                                                    @if(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                         <a href="{{ route($lien.'.editExtension',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
                                                            class=" "
                                                            title="Modifier"><img
                                                                 src='/assets/img/editing.png'></a>
+                                                    @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                        <a href="{{ route($lien.'.editsubstitution',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
+                                                           class=" "
+                                                           title="Modifier"><img
+                                                                src='/assets/img/editing.png'></a>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -248,6 +265,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                             Demande de suppression
                                                         @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                             Demande d'extension
+                                                        @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                            Demande de substitution
                                                         @endif
                                                     </td>
                                                     <td>{{ @$autre_demande_habilitation_formation->raison_social_entreprises }}</td>

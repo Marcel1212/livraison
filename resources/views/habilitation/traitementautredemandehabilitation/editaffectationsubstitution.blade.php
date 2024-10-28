@@ -130,7 +130,7 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                     data-bs-target="#navs-top-affectation"
                                     aria-controls="navs-top-affectation"
                                     aria-selected="false">
-                                        Imputation
+                                    Imputation
                                     </button>
                                 </li>
                             @endif
@@ -357,10 +357,38 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                                            value=" Demande de suppression"
                                                        @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                            value=" Demande d'extension"
+                                                       @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                           value=" Demande de substitution"
 
                                                     @endif >
                                             </div>
                                         </div>
+
+                                        <div class="col-md-12">
+                                            <div class="mb-1">
+                                                <label> Domaines de formation <strong
+                                                        style="color:red;">*</strong></label>
+                                                <select
+                                                    class="select2 form-control form-select-sm input-group"
+                                                    disabled
+                                                    required multiple  data-allow-clear="true" name="id_domaine_demande_habilitation[]" id="id_domaine_demande_habilitation" >
+                                                    @foreach($domaineDemandeHabilitations as $domaineDemandeHabilitation)
+                                                        <option value="{{$domaineDemandeHabilitation->id_domaine_demande_habilitation}}"
+
+                                                                @foreach($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations as $domaine)
+                                                                    @if($domaine->id_domaine_demande_habilitation == $domaineDemandeHabilitation->id_domaine_demande_habilitation)
+                                                                        selected
+                                                            @endif
+                                                            @endforeach
+                                                        >{{$domaineDemandeHabilitation->typeDomaineDemandeHabilitation->libelle_type_domaine_demande_habilitation}} /
+                                                            {{ $domaineDemandeHabilitation->typeDomaineDemandeHabilitationPublic->libelle_type_domaine_demande_habilitation_public }} /
+                                                            {{ $domaineDemandeHabilitation->domaineFormation->libelle_domaine_formation }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-6">
                                             <div class="mb-1">
                                                 <label> Motif <strong
@@ -484,12 +512,11 @@ $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
                                 @if ($codeRoles == 'CHEFSERVICE'
 
                                 )
-
                                             <div class="tab-pane fade <?php if($idetape==5){ echo "show active";}  ?>" id="navs-top-affectation" role="tabpanel">
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="row">
-                                                            <form method="POST" class="form" action="{{ route($lien.'.updateaffectationExtension', [\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation)]) }}">
+                                                            <form method="POST" class="form" action="{{ route($lien.'.updateaffectationsubstitution', [\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation)]) }}">
                                                                 @csrf
                                                                 @method('put')
                                                                 <div class="row">

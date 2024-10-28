@@ -13,6 +13,27 @@ $logo = Menu::get_logo();
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: right;
+        }
+        .section {
+            margin-bottom: 0px;
+        }
+        .list-item::before {
+            content: "❖ ";
+            color: #000;
+            margin-right: 1px;
+        }
+        .signature {
+            text-align: right;
+            margin-top: 0px;
+        }
+        .footer {
+            margin-top: 0px;
+            text-align: center;
         }
         @media print {
             .visuel_bouton {
@@ -111,7 +132,11 @@ $logo = Menu::get_logo();
         <tr>
             <td width="100%" style="float: left;margin-top: 2px">
                 <div>
-                    <h2 style="font-size: 18px" ><span style="font-size: 18px;text-decoration: underline;">Objet:</span> Extension d'habilitation {{date('Y')}}</h2>
+                    @if($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DED')
+                        <h2 style="font-size: 18px" ><span style="font-size: 18px;text-decoration: underline;">Objet:</span> Extension d'habilitation {{date('Y')}}</h2>
+                    @elseif($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DSD')
+                        <h2 style="font-size: 18px" ><span style="font-size: 18px;text-decoration: underline;">Objet:</span> Subtitution d'habilitation {{date('Y')}}</h2>
+                    @endif
                 </div>
                 <br/>
             </td>
@@ -120,8 +145,24 @@ $logo = Menu::get_logo();
             <td width="100%" style="float: left;margin-top: 2px">
                 <div>
                     @isset($cahierautredemandehabilitations[0])
-                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) demandes @else demande @endif d'extension de domaine de
-                            formation de cabinets privés de formation qui ont fait l'objet d'un traitement conformément à la procédure en vigueur.
+                        <p  style="margin: 0px !important;padding: 0px;">Le département {{$cahierautredemandehabilitations[0]->libelle_departement}} a reçu {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) demandes @else demande @endif
+                            @if($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DED')
+                                d'extension de domaine de formation
+                            @elseif($cahierautredemandehabilitations[0]->code_pieces_cahier_autre_demande_habilitations == 'DSD')
+                                de substitution de domaine de formation
+                            @endif
+
+                            @if($cahierautredemandehabilitations[0]->type_entreprise == 'PU')
+                                de cabinets privés de formation
+                            @elseif($cahierautredemandehabilitations[0]->type_entreprise == 'PR')
+                                de cabinets publics de formation
+
+                            @endif
+
+                            qui
+                            {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) ont @else a @endif
+
+                            fait l'objet d'un traitement conformément à la procédure en vigueur.
                             Les cabinets concernés sont régulièrement habilités pour l'année 2024.</p>
                         <br>
                         <p  style="margin: 0px !important;padding: 0px;">Nous venons par la présente note solliciter votre autorisation pour
