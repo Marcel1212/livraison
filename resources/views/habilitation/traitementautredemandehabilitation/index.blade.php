@@ -152,7 +152,7 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                                    title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
                                             @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
-                                                <a href="{{ route($lien.'.editaffectationsubsitution',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
+                                                <a href="{{ route($lien.'.editaffectationsubstitution',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt(5)]) }}"
                                                    class=" "
                                                    title="Modifier"><img
                                                         src='/assets/img/editing.png'></a>
