@@ -75,7 +75,7 @@ use App\Helpers\Fonction;
                                         Nouvelle demande
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="javascript:void(0);">Substitution domaine de formation</a></li>
+                                        <li><a class="dropdown-item" href="{{route($lien.'.substitutiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Substitution domaine de formation</a></li>
                                         <li><a class="dropdown-item" href="{{route($lien.'.extensiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Extension domaine de formation</a></li>
                                         <li><a class="dropdown-item" href="{{route($lien.'.suppressiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Suppression domaine de formation</a></li>
                                     </ul>
