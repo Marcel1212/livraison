@@ -633,7 +633,7 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
 
                                                 @elseif($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==false &&
                                                $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
-                                                    <span class="badge bg-danger">Supprimée</span>
+                                                    <span class="badge bg-danger">Supprimé</span>
                                                 @endif
                                             </td>
                                         </tr>
