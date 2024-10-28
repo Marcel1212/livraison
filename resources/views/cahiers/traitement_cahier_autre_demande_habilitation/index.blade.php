@@ -77,6 +77,8 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                                             <td>
                                                 @if($cahier_demande->code_pieces_cahier_autre_demande_habilitations=="DED")
                                                     DEMANDE D'EXTENSION
+                                                    @elseif($cahier_demande->code_pieces_cahier_autre_demande_habilitations=="DSD")
+                                                    DEMANDE DE SUBSTITUTION
                                                 @endif
                                             </td>
                                             <td>{{ $cahier_demande->commentaire_cahier_autre_demande_habilitations }}</td>
