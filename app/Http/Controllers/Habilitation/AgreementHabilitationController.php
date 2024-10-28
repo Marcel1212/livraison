@@ -999,7 +999,7 @@ class AgreementHabilitationController extends Controller
                 return redirect('agrementhabilitation/'. Crypt::UrlCrypt($id).'/'. Crypt::UrlCrypt($id1).'/' . Crypt::UrlCrypt(3) . '/extensiondomaineformationedit')->with('success', 'Succes : Domaine de formation enregistrer avec succès');
             }
 
-            if ($input['action'] == 'soumettreDemandeExtension') {
+            if ($input['action'] == 'soumettreDemandeSubstitution') {
 
                 AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
                     'date_soumis_autre_demande_habilitation_formation'=> Carbon::now(),
