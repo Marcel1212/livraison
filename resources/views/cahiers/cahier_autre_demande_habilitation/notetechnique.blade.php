@@ -160,7 +160,7 @@ $logo = Menu::get_logo();
                             @endif
 
                             qui
-                            {{$cahierautredemandehabilitations->count()}} @if($cahierautredemandehabilitations->count()>1) ont @else a @endif
+                             @if($cahierautredemandehabilitations->count()>1) ont @else a @endif
 
                              fait l'objet d'un traitement conformément à la procédure en vigueur.
                             Les cabinets concernés sont régulièrement habilités pour l'année 2024.</p>
