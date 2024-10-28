@@ -152,9 +152,9 @@ $logo = Menu::get_logo();
                                 de substitution de domaine de formation
                             @endif
 
-                            @if($cahierautredemandehabilitations[0]->type_entreprise == 'PU')
+                            @if($cahierautredemandehabilitations[0]->type_entreprise == 'PR')
                                 de cabinets privés de formation
-                            @elseif($cahierautredemandehabilitations[0]->type_entreprise == 'PR')
+                            @elseif($cahierautredemandehabilitations[0]->type_entreprise == 'PU')
                                 de cabinets publics de formation
 
                             @endif
