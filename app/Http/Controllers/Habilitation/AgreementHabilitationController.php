@@ -625,7 +625,7 @@ class AgreementHabilitationController extends Controller
                     ->where('id_type_domaine_demande_habilitation_public',$request->id_type_domaine_demande_habilitation_public)
                     ->where(function ($query) {
                         $query->where('flag_extension_domaine_demande_habilitation', true)
-                            ->orwhere('flag_agree_domaine_demande_habilitation',false);
+                            ->orwhere('flag_agree_domaine_demande_habilitation',true);
                     })->where('flag_substitution_domaine_demande_habilitation',false)
                     ->where('id_domaine_formation',$request->id_domaine_formation)->first();
                 if(isset($domaine_exist)){
