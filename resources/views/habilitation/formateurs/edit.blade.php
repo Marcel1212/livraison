@@ -368,7 +368,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
                                                    <input type="month" name="date_de_debut_formations_educ" id="date_de_debut_formations_educ"
-                                                       class="form-control form-control-sm" value="{{ old('date_de_debut_formations_educ') }}" />
+                                                       class="form-control month form-control-sm" value="{{ old('date_de_debut_formations_educ') }}" />
                                                </div>
                                            </div>
 
@@ -376,7 +376,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                <div class="mb-1">
                                                    <label>Date de fin <strong style="color:red;">*</strong></label>
                                                    <input type="month" name="date_de_fin_formations_educ" id="date_de_fin_formations_educ"
-                                                       class="form-control form-control-sm"  value="{{ old('date_de_fin_formations_educ') }}" />
+                                                       class="form-control month form-control-sm"  value="{{ old('date_de_fin_formations_educ') }}" />
                                                </div>
                                            </div>
 
@@ -537,7 +537,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                <div class="mb-1">
                                                    <label>Date de debut <strong style="color:red;">*</strong></label>
                                                    <input type="month" name="date_de_debut" id="date_de_debut"
-                                                       class="form-control form-control-sm" value="{{ old('date_de_debut') }}" />
+                                                       class="form-control month form-control-sm" value="{{ old('date_de_debut') }}" />
                                                </div>
                                            </div>
 
@@ -545,7 +545,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                <div class="mb-1">
                                                    <label>Date de fin </label>
                                                    <input type="month" name="date_de_fin" id="date_de_fin"
-                                                       class="form-control form-control-sm"  value="{{ old('date_de_fin') }}" />
+                                                       class="form-control month form-control-sm"  value="{{ old('date_de_fin') }}" />
                                                </div>
                                            </div>
 
@@ -841,7 +841,7 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
 
                                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                 <div class="alert-body" style="text-align: center">
-                                                    Le CV et la lettre d'engagment sont obligatoire
+                                                    Le CV et la lettre d'engagement sont obligatoires
                                                 </div>
                                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             </div>
@@ -893,6 +893,10 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
                                                    @error('pieces_formateur')
                                                    <div class=""><label class="error">{{ $message }}</label></div>
                                                    @enderror
+                                                   <div id="defaultFormControlHelp" class="form-text ">
+                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                        maxi : 5Mo</em>
+                                                    </div>
                                                </div>
                                            </div>
 
@@ -980,7 +984,15 @@ $response = Fonction::calculerAnneesExperience5ans($formateur->id_formateurs);
         @endsection
 
         @section('js_perso')
+
+
+
         <script>
+
+
+
+
+
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl)

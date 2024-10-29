@@ -56,10 +56,6 @@ class CahierAutreDemandeHabilitationController extends Controller
     public function create()
     {
         $processusautre_demandes = ProcessusAutreDemande::where([['flag_processus_autre_demande','=',true]])->orderBy('libelle_processus_autre_demande')->get();
-        $processusautre_demandesListe = "<option value=''> Selectionnez le/les processus </option>";
-        foreach ($processusautre_demandes as $comp) {
-            $processusautre_demandesListe .= "<option value='" . $comp->id_processus_autre_demande . "'>" . mb_strtoupper($comp->libelle_processus_autre_demande) . " </option>";
-        }
 
         Audit::logSave([
             'action'=>'CREER',
@@ -69,7 +65,7 @@ class CahierAutreDemandeHabilitationController extends Controller
             'objet'=>'CAHIERS'
         ]);
 
-        return view("cahiers.cahier_autre_demande_habilitation.create",compact('processusautre_demandesListe'));
+        return view("cahiers.cahier_autre_demande_habilitation.create",compact('processusautre_demandes'));
     }
 
 
@@ -79,9 +75,12 @@ class CahierAutreDemandeHabilitationController extends Controller
 
             $this->validate($request, [
                 'id_processus_autre_demande' => 'required',
-                'commentaire_cahier_autre_demande_habilitations' => 'required'
+                'commentaire_cahier_autre_demande_habilitations' => 'required',
+                'type_entreprise' => 'required',
+
             ],[
                 'id_processus_autre_demande.required' => 'Veuillez selection la demande.',
+                'type_entreprise.required' => 'Veuillez selectionner le type d\'entreprise.',
                 'commentaire_cahier_autre_demande_habilitations.after_or_equal' => 'Veuillez ajouter un commentaire .'
             ]);
 
@@ -93,7 +92,7 @@ class CahierAutreDemandeHabilitationController extends Controller
             $input['id_users_cahier_autre_demande_habilitations'] = Auth::user()->id;
             $input['date_creer_cahier_autre_demande_habilitations'] = Carbon::now();
             $input['code_pieces_cahier_autre_demande_habilitations'] = $processus->code_processus_autre_demande;
-            $input['id_processus_autre_demande'] = $processus->latest()->first()->id_processus_autre_demande;
+//            $input['id_processus_autre_demande'] = $processus->latest()->first()->id_processus_autre_demande;
 
             $cahier = CahierAutreDemandeHabilitation::create($input);
 
@@ -121,22 +120,15 @@ class CahierAutreDemandeHabilitationController extends Controller
         $cahier = CahierAutreDemandeHabilitation::find($id);
 
         $processusautre_demandes = ProcessusAutreDemande::where([['flag_processus_autre_demande','=',true]])->orderBy('libelle_processus_autre_demande')->get();
-        $processusAutreDemandesListe = "<option value='".$cahier->processusAutreDemande->id_processus_autre_demande."'> ".$cahier->processusAutreDemande->libelle_processus_autre_demande." </option>";
-        foreach ($processusautre_demandes as $comp) {
-            $processusAutreDemandesListe .= "<option value='" . $comp->id_processus_autre_demande . "'>" . mb_strtoupper($comp->libelle_processus_autre_demande) . " </option>";
-        }
-
 
             $demandes = DB::table('vue_autre_demande_habilitation_disponible_pour_cahier')->whereNotExists(function ($query) use ($id){
                 $query->select('*')
                     ->from('ligne_cahier_autre_demande_habilitations')
                     ->whereColumn('ligne_cahier_autre_demande_habilitations.id_demande','=','vue_autre_demande_habilitation_disponible_pour_cahier.id_demande')
                     ->where('ligne_cahier_autre_demande_habilitations.id_cahier_autre_demande_habilitations',$id);
-            })
-                ->where('vue_autre_demande_habilitation_disponible_pour_cahier.code_processus','=',$cahier->processusAutreDemande->code_processus_autre_demande)
-
+            })->where('vue_autre_demande_habilitation_disponible_pour_cahier.code_processus','=',$cahier->processusAutreDemande->code_processus_autre_demande)
+                ->where('vue_autre_demande_habilitation_disponible_pour_cahier.code_forme_juridique','=',$cahier->type_entreprise)
                 ->get();
-
 
         $cahierautredemandehabilitations = DB::table('vue_autre_demande_habilitation_disponible_pour_cahier_traiter as vppdpct')
             ->join('ligne_cahier_autre_demande_habilitations','vppdpct.id_demande','ligne_cahier_autre_demande_habilitations.id_demande')
@@ -153,7 +145,7 @@ class CahierAutreDemandeHabilitationController extends Controller
             'objet'=>'CAHIERS'
         ]);
 
-        return view("cahiers.cahier_autre_demande_habilitation.edit",compact('processusAutreDemandesListe','cahierautredemandehabilitations','id','idetape','cahier','demandes'));
+        return view("cahiers.cahier_autre_demande_habilitation.edit",compact('processusautre_demandes','cahierautredemandehabilitations','id','idetape','cahier','demandes'));
     }
 
 
@@ -207,9 +199,12 @@ class CahierAutreDemandeHabilitationController extends Controller
 
                 $this->validate($request, [
                     'id_processus_autre_demande' => 'required',
-                    'commentaire_cahier_autre_demande_habilitations' => 'required'
+                    'commentaire_cahier_autre_demande_habilitations' => 'required',
+                    'type_entreprise' => 'required',
+
                 ],[
                     'id_processus_autre_demande.required' => 'Veuillez selection la demande.',
+                    'type_entreprise.required' => 'Veuillez selectionner le type d\'entreprise.',
                     'commentaire_cahier_autre_demande_habilitations.after_or_equal' => 'Veuillez ajouter un commentaire .'
                 ]);
 
@@ -220,7 +215,6 @@ class CahierAutreDemandeHabilitationController extends Controller
                 $input['id_users_cahier_autre_demande_habilitations'] = Auth::user()->id;
                 $input['date_creer_cahier_autre_demande_habilitations'] = Carbon::now();
                 $input['code_pieces_cahier_autre_demande_habilitations'] = $processus->code_processus_autre_demande;
-                $input['id_processus_autre_demande'] = $processus->latest()->first()->id_processus_autre_demande;
 
                 $cahier = CahierAutreDemandeHabilitation::find($id);
                 $cahier->update($input);
@@ -311,11 +305,21 @@ class CahierAutreDemandeHabilitationController extends Controller
                     $autre_demande_habilitation_formation->update();
                 }
 
-                $cahier->update([
-                    'id_processus_cahier_autre_demande_habilitations' => 13,
-                    'flag_statut_cahier_autre_demande_habilitations' => true,
-                    'date_soumis_cahier_autre_demande_habilitations' => Carbon::now()
-                ]);
+                if($cahier->code_pieces_cahier_autre_demande_habilitations="DSD"){
+                    $cahier->update([
+                        'id_processus_cahier_autre_demande_habilitations' => 15,
+                        'flag_statut_cahier_autre_demande_habilitations' => true,
+                        'date_soumis_cahier_autre_demande_habilitations' => Carbon::now()
+                    ]);
+                }
+                if($cahier->code_pieces_cahier_autre_demande_habilitations="DED"){
+                    $cahier->update([
+                        'id_processus_cahier_autre_demande_habilitations' => 13,
+                        'flag_statut_cahier_autre_demande_habilitations' => true,
+                        'date_soumis_cahier_autre_demande_habilitations' => Carbon::now()
+                    ]);
+                }
+
 
                 Audit::logSave([
 

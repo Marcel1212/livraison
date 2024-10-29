@@ -365,6 +365,32 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                             </div>
 
                                             <div class="col-md-4 col-12">
+                                                <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select-sm input-group @error('id_banque')
+                                                    error
+                                                    @enderror" data-allow-clear="true" name="id_banque">
+                                                    <?= $banque; ?>
+                                                </select>
+                                                @error('id_banque')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+
+
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
+                                                    <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
+                                                        class="form-control form-control-sm" value="{{ $demandehabilitation->maison_mere_demande_habilitation }}"/>
+                                                </div>
+                                                @error('maison_mere_demande_habilitation')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+
+
+                                            <div class="col-md-4 col-12">
                                                 <label class="form-label" for="billings-country">Titre ou Contrat de bail <strong style="color:red;">*</strong></label>
                                                 @if (isset($demandehabilitation->titre_propriete_contrat_bail))
                                                     <span class="badge bg-secondary">
@@ -378,30 +404,11 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                 @error('titre_propriete_contrat_bail')
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
+                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                        maxi : 5Mo</em>
+                                                    </div>
 
-                                            </div>
-
-                                            <div class="col-md-4 col-12">
-                                                <div class="mb-1">
-                                                    <label>Maison mere ou tutelle <strong style="color:red;">(s'il y a lieu)</strong> </label>
-                                                    <input type="text" name="maison_mere_demande_habilitation" id="maison_mere_demande_habilitation"
-                                                        class="form-control form-control-sm" value="{{ $demandehabilitation->maison_mere_demande_habilitation }}"/>
-                                                </div>
-                                                @error('maison_mere_demande_habilitation')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
-                                            </div>
-
-                                            <div class="col-md-4 col-12">
-                                                <label class="form-label" for="billings-country">Agence domiciliation <strong style="color:red;">*</strong></label>
-                                                <select class="select2 form-select-sm input-group @error('id_banque')
-                                                    error
-                                                    @enderror" data-allow-clear="true" name="id_banque">
-                                                    <?= $banque; ?>
-                                                </select>
-                                                @error('id_banque')
-                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                @enderror
                                             </div>
 
                                             <div class="col-md-4 col-12">
@@ -432,6 +439,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                 @error('autorisation_ouverture_ecole')
                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                 @enderror
+                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                        maxi : 5Mo</em>
+                                                    </div>
                                             </div>
 
 
@@ -1047,10 +1058,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                    <a  href="{{ route($lien.'.edit',[\App\Helpers\Crypt::UrlCrypt($demandehabilitation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(6)]) }}"  class="btn btn-sm btn-secondary me-sm-3 me-1">Précédant</a>
 
                                                    <?php if ($demandehabilitation->flag_soumis_demande_habilitation != true){ ?>
-                                                       <button type="submit" name="action" value="AjouterDivers"
-                                                               class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
-                                                               Ajouter
-                                                       </button>
+                                                        <button type="submit" name="action" value="AjouterDivers"
+                                                                class="btn btn-sm btn-primary me-1 waves-effect waves-float waves-light">
+                                                                Ajouter
+                                                        </button>
                                                    <?php } ?>
 
 
@@ -1073,7 +1084,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                                             <div class="alert-body" style="text-align: center">
-                                                Cette partie n'est pas une obligatiore mais peut contribuer a solidifier votre demande
+                                                Cette partie n'est pas obligatoire, mais peut contribuer à solidifier votre demande
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
@@ -1216,7 +1227,7 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                       <br/>
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                                             <div class="alert-body" style="text-align: center">
-                                                Toutes les pieces sont obligatoire
+                                                Toutes les pièces sont obligatoires
                                             </div>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                           </div>
@@ -1245,6 +1256,10 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                                                                 @error('pieces_demande_habilitation')
                                                                 <div class=""><label class="error">{{ $message }}</label></div>
                                                                 @enderror
+                                                                <div id="defaultFormControlHelp" class="form-text ">
+                                                                    <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
+                                                                        maxi : 5Mo</em>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1351,9 +1366,9 @@ $nombredomainedroit = NombreDomaineHabilitation::where([['flag_nombre_domaine_ha
                         <div class="modal-body">
                         <p>
                                                         <?php
-                                                        $message = "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, ".@$demandehabilitation->fonction_demande_habilitation.", atteste l'exactitude des informations contenue dans ce document.
+                                                        $message = "Je soussigné(e) <strong>$demandehabilitation->nom_responsable_demande_habilitation</strong>, ".@$demandehabilitation->fonction_demande_habilitation.", atteste l'exactitude des informations contenues dans ce document.
 
-                                                        En cochant sur la mention <strong>Lu et approuvé</strong> ci-dessous, j'atteste cela.";
+                                                       En cochant sur la mention <strong>'Lu et approuvé'</strong> ci-dessous, j'atteste cela.";
                                                         ?>
                                                         <?php echo wordwrap($message,144,"<br>\n"); ?>
 

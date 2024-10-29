@@ -104,22 +104,45 @@ $anneexercice = AnneeExercice::get_annee_exercice();
                         <form method="POST" class="form" action="{{ route($lien.'.store') }}">
                             @csrf
                             <div class="row">
-
-                                <div class="col-md-6 col-12">
+                                <div class="col-md-4 col-12">
+                                    <label>Type de cabinet <strong style="color:red;">*</strong></label>
+                                    <select class="select2 form-select @error('type_entreprise')
+                                    error
+                                    @enderror"
+                                            data-allow-clear="true" name="type_entreprise"
+                                            id="type_entreprise" >
+                                        <option value="PU">Publique</option>
+                                        <option value="PR">Privé</option>
+                                    </select>
+                                    @error('type_entreprise')
+                                    <div class=""><label class="error">{{ $message }}</label></div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4 col-12">
                                     <label>Liste des demandes <strong style="color:red;">*</strong></label>
                                     <select class="select2 form-select @error('id_processus_autre_demande')
                                     error
                                     @enderror"
                                                     data-allow-clear="true" name="id_processus_autre_demande"
                                                     id="id_processus_autre_demande" >
-                                         <?php echo $processusautre_demandesListe ?>
+                                        @foreach($processusautre_demandes as $processusautre_demande)
+                                            <option value="{{$processusautre_demande->id_processus_autre_demande}}"
+
+                                            @if(isset($cahier))
+                                                @if($cahier->code_pieces_cahier_autre_demande_habilitations==$processusautre_demande->code_processus_autre_demande)
+                                                    selected
+                                                    @endif
+                                                @endif
+
+                                            >{{$processusautre_demande->libelle_processus_autre_demande}}</option>
+                                        @endforeach
                                     </select>
                                     @error('id_processus_autre_demande')
                                     <div class=""><label class="error">{{ $message }}</label></div>
                                     @enderror
                                 </div>
 
-                                <div class="col-md-6 col-12">
+                                <div class="col-md-4 col-12">
                                     <div class="mb-1">
                                         <label>Commentaire <strong style="color:red;">*</strong></label>
                                         <textarea class="form-control form-control-sm"  name="commentaire_cahier_autre_demande_habilitations" id="commentaire_cahier_plans_projets" rows="6" required></textarea>

@@ -143,29 +143,59 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                 @csrf
                                 @method('put')
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label>Code <strong style="color:red;">*</strong></label>
+                                                    <input type="text" class="form-control form-control-sm" value="{{ @$cahier->code_cahier_autre_demande_habilitations }}" disabled="disabled"/>
+                                                </div>
+                                            </div>
 
-                                    <div class="col-md-4 col-12">
-                                        <div class="mb-1">
-                                            <label>Code <strong style="color:red;">*</strong></label>
-                                            <input type="text" class="form-control form-control-sm" value="{{ @$cahier->code_cahier_autre_demande_habilitations }}" disabled="disabled"/>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <label>Type de cabinet <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select @error('type_entreprise')
+                                    error
+                                    @enderror"
+                                                        data-allow-clear="true" name="type_entreprise"
+                                                        id="type_entreprise" >
+                                                    <option value="PU" @if($cahier->type_entreprise=="PU") selected @endif>Publique</option>
+                                                    <option value="PR" @if($cahier->type_entreprise=="PR") selected @endif>Privé</option>
+                                                </select>
+                                                @error('type_entreprise')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <label>Liste des demandes <strong style="color:red;">*</strong></label>
+                                                <select class="select2 form-select @error('id_processus_autre_demande')
+                                    error
+                                    @enderror"
+                                                        data-allow-clear="true" name="id_processus_autre_demande"
+                                                        id="id_processus_autre_demande" >
+                                                    @foreach($processusautre_demandes as $processusautre_demande)
+                                                        <option value="{{$processusautre_demande->id_processus_autre_demande}}"
+
+                                                                @if(isset($cahier))
+                                                                    @if($cahier->code_pieces_cahier_autre_demande_habilitations==$processusautre_demande->code_processus_autre_demande)
+                                                                        selected
+                                                            @endif
+                                                            @endif
+
+                                                        >{{$processusautre_demande->libelle_processus_autre_demande}}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('id_processus_autre_demande')
+                                                <div class=""><label class="error">{{ $message }}</label></div>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4 col-12">
-                                        <label>Liste des demandes <strong style="color:red;">*</strong></label>
-                                        <select class="select2 form-select @error('id_processus_autre_demande')
-                                    error
-                                    @enderror"
-                                                data-allow-clear="true" name="id_processus_autre_demande"
-                                                id="id_processus_autre_demande" >
-                                                <?php echo $processusAutreDemandesListe ?>
-                                        </select>
-                                        @error('id_processus_autre_demande')
-                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                        @enderror
-                                    </div>
 
-                                    <div class="col-md-4 col-12">
+                                    <div class="col-md-6 col-12">
                                         <div class="mb-1">
                                             <label>Commentaire <strong style="color:red;">*</strong></label>
                                             <textarea class="form-control form-control-sm"  name="commentaire_cahier_autre_demande_habilitations" id="commentaire_cahier_autre_demande_habilitations" rows="6">{{ $cahier->commentaire_cahier_autre_demande_habilitations }}</textarea>
@@ -236,7 +266,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>
                                                 @if(@$cahier->code_pieces_cahier_autre_demande_habilitations=='DED')
                                                     DEMANDE D'EXTENSION
-                                                @elseif(@$cahier->code_pieces_cahier_autre_demande_habilitations=='demande_extension')
+                                                @elseif(@$cahier->code_pieces_cahier_autre_demande_habilitations=='DSD')
                                                     DEMANDE DE SUBSTITUTION
                                                 @endif
                                         </td>
@@ -331,7 +361,7 @@ if(!empty($anneexercice->date_prolongation_periode_exercice)){
                                         <td>
                                             @if(@$demande->code_processus=='DED')
                                                 DEMANDE D'EXTENSION
-                                            @elseif(@$demande->code_processus=='demande_extension')
+                                            @elseif(@$cahier->code_pieces_cahier_autre_demande_habilitations=='DSD')
                                                 DEMANDE DE SUBSTITUTION
                                             @endif
 

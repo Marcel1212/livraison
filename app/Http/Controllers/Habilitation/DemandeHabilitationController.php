@@ -180,7 +180,11 @@ class DemandeHabilitationController extends Controller
     public function store(Request $request)
     {
         if ($request->isMethod('post')) {
+
+
+
             $input = $request->all();
+
             if ($input['action'] == 'EnregisterPU'){
                // dd('ici'); exit();
 
@@ -246,38 +250,16 @@ class DemandeHabilitationController extends Controller
                // return redirect('demandehabilitation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(1).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             } else {
 
-               // dd('kla'); exit();
+                $this->validate($request, [
+                    'flag_ecole_autre_entreprise' => 'required',
+                ], [
+                    'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
+                ]);
 
-            $this->validate($request, [
-                'nom_responsable_demande_habilitation' => 'required',
-                'fonction_demande_habilitation' => 'required',
-               'email_responsable_habilitation' => 'required',
-               'registre_commerce'=> 'required',
-                'contact_responsable_habilitation' => 'required',
-                'id_banque' => 'required',
-            ],[
-                'nom_responsable_demande_habilitation.required' => 'Veuillez ajouter une personne responsable.',
-                'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
-                'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
-                'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
-                'id_banque.unique' => 'Veuillez selectionnez une banque ',
-                'flag_ecole_autre_entreprise' => 'required',
-            ], [
-                'flag_ecole_autre_entreprise.required' => 'Veuillez sélectionner le type entreprise.'
-            ]);
+                $autorisation =  $request->input('flag_ecole_autre_entreprise');
 
-            $autorisation =  $request->input('flag_ecole_autre_entreprise');
+                $input = $request->all();
 
-            $input = $request->all();
-
-            //dd( $request->all()); exit();
-            $infoentreprise = Entreprises::where([['ncc_entreprises','=',Auth::user()->login_users]])->first();
-            $input['date_creer_demande_habilitation'] = Carbon::now();
-            $input['id_entreprises'] = $infoentreprise->id_entreprises;
-            $input['nom_responsable_demande_habilitation'] = mb_strtoupper($input['nom_responsable_demande_habilitation']);
-            $input['fonction_demande_habilitation'] = mb_strtoupper($input['fonction_demande_habilitation']);
-            $input['type_demande'] = 'NOUVELLE DEMANDE';
-            $input['type_entreprise'] = 'PR';
             if ($autorisation == 'true') {
 
                 $this->validate($request, [
@@ -294,8 +276,8 @@ class DemandeHabilitationController extends Controller
                     'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
                     'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
                     'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
-                    'id_banque.unique' => 'Veuillez selectionnez une banque ',
-                    'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                    'id_banque.required' => 'Veuillez selectionnez une banque ',
+                    'flag_ecole_autre_entreprise.required' => 'Veuillez selectionnez le type entreprise ',
                     'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
                     'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
                     'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
@@ -374,8 +356,8 @@ class DemandeHabilitationController extends Controller
                     'fonction_demande_habilitation.required' => 'Veuillez ajouter la fonction de la personne responsable.',
                     'email_responsable_habilitation.required' => 'Veuillez ajouter une adresse email.',
                     'contact_responsable_habilitation.required' => 'Veuillez ajouter un contact .',
-                    'id_banque.unique' => 'Veuillez selectionnez une banque ',
-                    'flag_ecole_autre_entreprise.unique' => 'Veuillez selectionnez le type entreprise ',
+                    'id_banque.required' => 'Veuillez selectionnez une banque ',
+                    'flag_ecole_autre_entreprise.required' => 'Veuillez selectionnez le type entreprise ',
                     'titre_propriete_contrat_bail.required' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
                     'titre_propriete_contrat_bail.uploaded' => 'Veuillez ajouter un titre de proprieté ou de contrat de bail',
                     'titre_propriete_contrat_bail.mimes' => 'Les formats requis pour la pièce du  titre de proprieté ou de contrat de bail est: png,jpg,jpeg,pdf,PNG,JPG,JPEG,PDF',
@@ -432,7 +414,7 @@ class DemandeHabilitationController extends Controller
 
                     'etat'=>'Succès',
 
-                    'objet'=>'HABILITATION etape information entreprise publique'
+                    'objet'=>'HABILITATION etape information entreprise'
 
                 ]);
 
@@ -457,7 +439,8 @@ class DemandeHabilitationController extends Controller
 
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($insertedId).'/'.Crypt::UrlCrypt(2).'/edit')->with('success', 'Succes : Enregistrement reussi ');
             }
-        }
+
+            }
 
         }
     }
@@ -819,7 +802,7 @@ class DemandeHabilitationController extends Controller
                 //$input = $request->all();
 
                 if ($autorisation == 'true') {
-                    dd($autorisation);
+                    //dd($autorisation);
                     $this->validate($request, [
                         'nom_responsable_demande_habilitation' => 'required',
                         'fonction_demande_habilitation' => 'required',
@@ -1492,7 +1475,7 @@ class DemandeHabilitationController extends Controller
                 return redirect('demandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(7).'/editpu')->with('success', 'Succes : Intervention ajouter avec success ');
 
 
-
+            }
 
 
             if ($data['action'] == 'AjouterDivers'){
@@ -1506,6 +1489,7 @@ class DemandeHabilitationController extends Controller
                     'information_seul_activite_demande_habilitation.required' => 'Veuillez selectionner l\'information seul activite.',
                     'materiel_didactique_demande_habilitation.required' => 'Veuillez ajouter le materiel didactique.'
                 ]);
+
 
                 $input = $request->all();
 
@@ -1751,7 +1735,7 @@ class DemandeHabilitationController extends Controller
 
             }
 
-        }
+
         }}
 
 
