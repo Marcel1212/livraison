@@ -1133,7 +1133,7 @@ class TraitementDemandeHabilitationController extends Controller
 
        // dd($request->isMethod()) ; exit();
         if ($request->isMethod('put')) {
-            dd('Put Validation'); exit();
+           // dd('Put Validation'); exit();
 
             $data = $request->all();
            dd($data) ; exit(); //86
