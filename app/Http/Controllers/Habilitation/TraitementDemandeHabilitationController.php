@@ -1136,7 +1136,7 @@ class TraitementDemandeHabilitationController extends Controller
            // dd('Put Validation'); exit();
 
             $data = $request->all();
-           dd($data) ; exit(); //86
+           //dd($data) ; exit(); //86
 
            if ($data['action'] == 'GenererAgrement'){
 
@@ -1526,7 +1526,7 @@ class TraitementDemandeHabilitationController extends Controller
         }
 
         if($data['action'] === 'Valider'){
-
+            dd($data) ; exit();
                 $idUser=Auth::user()->id;
                 $idAgceCon=Auth::user()->num_agce;
                 $Idroles = Menu::get_id_profil($idUser);
