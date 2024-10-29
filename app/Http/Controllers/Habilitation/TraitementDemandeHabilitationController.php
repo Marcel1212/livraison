@@ -1128,6 +1128,7 @@ class TraitementDemandeHabilitationController extends Controller
         $etape =  Crypt::UrldeCrypt($id1);
 
         $logo = Menu::get_logo();
+        $data = $request->all();
 
 
         if($data['action'] === 'Valider'){
