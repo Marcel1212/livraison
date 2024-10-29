@@ -97,7 +97,7 @@
             <p>Le Département chargé de l’Habilitation, du Contrôle-Liquidation et du Suivi-Evaluation a
                 reçu la demande d’habilitation du <strong> <?php echo $entreprise->raison_social_entreprises . ' (' . $entreprise->sigl_entreprises . ')'; ?> </strong>.</p>
 
-            <p>Les établissements publics n’étant pas assujetti à la procédure d’habilitation, <strong>
+            <p>Les établissements publics n’étant pas assujettis à la procédure d’habilitation, <strong>
                     nous
                     sollicitons par la présente note, votre accord pour son enregistrement dans la base
                     de
