@@ -65,7 +65,10 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                 ->join('agence','agence.num_agce','agence_localite.id_agence')
                 ->join('localite','agence_localite.id_localite','localite.id_localite')
                 ->where('autre_demande_habilitation_formation.id_charge_habilitation',Auth::user()->id)
-                ->where('type_autre_demande','demande_extension')
+                ->where(function ($query) {
+                    $query->where('type_autre_demande', 'demande_extension')
+                        ->orwhere('type_autre_demande','demande_substitution');
+                })
                 ->where('autre_demande_habilitation_formation.flag_instruction',false)
                 ->where('autre_demande_habilitation_formation.flag_soumis_autre_demande_habilitation_formation','=',true)
                 ->get();
@@ -379,14 +382,14 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
             $NombreDemandeHabilitation = [];
         }
 
-            $motif = "<option value='".@$autre_demande_habilitation_formation->motif->id_motif."'> " . $autre_demande_habilitation_formation->motif->libelle_motif. "</option>";
+        $motif = "<option value='".@$autre_demande_habilitation_formation->motif->id_motif."'> " . $autre_demande_habilitation_formation->motif->libelle_motif. "</option>";
 
 
-                $domaine_list_demandes = DomaineDemandeHabilitation::
-                where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
-                    ->where('id_autre_demande','=',$id)
-                    ->where('flag_agree_domaine_demande_habilitation',false)
-                    ->where('flag_extension_domaine_demande_habilitation',true)->get();
+        $domaine_list_demandes = DomaineDemandeHabilitation::
+        where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
+            ->where('id_autre_demande','=',$id)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_extension_domaine_demande_habilitation',true)->get();
 
 
         $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
@@ -402,12 +405,91 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
             'banque','autre_demande_habilitation_formation',
             'pay','motif',
             'id','idetape',
-        'domaine_list_demandes',
-        'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
+            'domaine_list_demandes',
+            'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
         ));
     }
+    public function editaffectationsubstitution($id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::find($id);
+        $habilitation = DemandeHabilitation::find(@$autre_demande_habilitation_formation->id_demande_habilitation);
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation]])->get();
+
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($habilitation->entreprise->ncc_entreprises);
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$habilitation->banque->id_banque."'> ".mb_strtoupper($habilitation->banque->libelle_banque)." </option>";
+
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
 
 
+        if($codeRoles == 'CHEFSERVICE' && $autre_demande_habilitation_formation->flag_soumis_cs==false){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            $chargerHabilitationsList =  "<option value=''> Selectionnez le charge d\'habilitation </option>";
+            foreach ($chargerHabilitations as $comp) {
+                $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+            }
+
+        }else{
+            $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+        }
+        if($codeRoles == 'CHEFSERVICE'){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            if(isset($autre_demande_habilitation_formation->chargehabilitation->id)){
+                $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+
+            }else{
+                $chargerHabilitationsList = "<option value=''> Selectionnez le domaine de formation </option>";
+                foreach ($chargerHabilitations as $comp) {
+                    $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+                }
+            }
+            $NombreDemandeHabilitation = DB::table('vue_nombre_traitement_demande_habilitation')->where([['id_service','=',Auth::user()->id_service]])->orderBy('nbre_dossier_en_cours','asc')->get();
+        }else{
+            $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+            $NombreDemandeHabilitation = [];
+        }
+
+        $motif = "<option value='".@$autre_demande_habilitation_formation->motif->id_motif."'> " . $autre_demande_habilitation_formation->motif->libelle_motif. "</option>";
+
+
+        $domaine_list_demandes = DomaineDemandeHabilitation::
+        where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
+            ->where('id_autre_demande','=',$id)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_extension_domaine_demande_habilitation',false)
+            ->where('flag_substitution_domaine_demande_habilitation',true)->get();
+
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+            ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+            ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+            ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+            ->where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
+            ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
+            ->get();
+
+        return view('habilitation.traitementautredemandehabilitation.editaffectationsubstitution', compact('habilitation','infoentreprise',
+            'banque','autre_demande_habilitation_formation',
+            'pay','motif','domaineDemandeHabilitations',
+            'id','idetape',
+            'domaine_list_demandes',
+            'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
+        ));
+    }
 
 
     public function show($id)
@@ -595,9 +677,27 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
         }
     }
 
+    public function updateaffectationsubstitution(Request $request,$id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $input = $request->all();
+
+        if($input['action']=="imputer"){
+            AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
+                'id_charge_habilitation' => $input['id_charge_habilitation'],
+                'commentaire_cs' => $input['commentaire_cs'],
+                'date_soumis_cs_autre_demande_habilitation_formation' => Carbon::now(),
+                'id_chef_service' => Auth::user()->id,
+                'flag_soumis_cs' => true
+            ]);
+            return redirect('traitementautredemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/editaffectationsubstitution')->with('success', 'Succes : Demande imputé avec succès');
+        }
+    }
+
     public function update(Request $request,$id)
     {
         $id_autre_demande_habilitation_formation =  Crypt::UrldeCrypt($id);
+
 
         if(isset($id_autre_demande_habilitation_formation)){
             $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::
@@ -617,6 +717,7 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                 ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
                 ->where('autre_demande_habilitation_formation.id_autre_demande_habilitation_formation','=',@$id_autre_demande_habilitation_formation)
                 ->first();
+
 
             if(isset($autre_demande_habilitation_formation)) {
                 if ($request->isMethod('put')) {
@@ -655,58 +756,64 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                             ->first();
 
                         if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-                            $autre_demande_habilitation_formation_data = AutreDemandeHabilitationFormation::find($id_autre_demande_habilitation_formation);
-                            $autre_demande_habilitation_formation_data->flag_autre_demande_habilitation_formation_valider_par_proce = true;
-                            $autre_demande_habilitation_formation_data->flag_validation_autre_demande_habilitation_formation = true;
-                            $autre_demande_habilitation_formation_data->date_valider_par_processus_autre_demande_habilitation_formation = now();
-                            $autre_demande_habilitation_formation_data->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
-                            $autre_demande_habilitation_formation_data->update();
+                                $autre_demande_habilitation_formation_data = AutreDemandeHabilitationFormation::find($id_autre_demande_habilitation_formation);
+                                $autre_demande_habilitation_formation_data->flag_autre_demande_habilitation_formation_valider_par_proce = true;
+                                $autre_demande_habilitation_formation_data->flag_validation_autre_demande_habilitation_formation = true;
+                                $autre_demande_habilitation_formation_data->date_valider_par_processus_autre_demande_habilitation_formation = now();
+                                $autre_demande_habilitation_formation_data->commentaire_final_autre_demande_habilitation_formation = $request->input('comment_parcours');
+                                $autre_demande_habilitation_formation_data->update();
 
-                            $name = $autre_demande_habilitation_formation->raison_social_entreprises;
-                            $logo = Menu::get_logo();
+                                $name = $autre_demande_habilitation_formation->raison_social_entreprises;
+                                $logo = Menu::get_logo();
 
-                            $domaine_lib = '';
+                                $domaine_lib = '';
 
-                            if(isset($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations)){
-                                foreach ($autre_demande_habilitation_formation_data->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
-                                    $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-                                        ->first();
-                                    $domaine_demande_domaine_supression->flag_autre_demande_habilitation_formation = false;
-                                    $domaine_demande_domaine_supression->update();
+                                if(isset($autre_demande_habilitation_formation->domaineAutreDemandeHabilitationFormations)){
+                                    foreach ($autre_demande_habilitation_formation_data->domaineAutreDemandeHabilitationFormations as $domaineAutreDemandeHabilitationFormation){
+                                        $domaine_demande_domaine_supression = DomaineAutreDemandeHabilitationFormation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+                                            ->first();
+                                        $domaine_demande_domaine_supression->flag_autre_demande_habilitation_formation = false;
+                                        $domaine_demande_domaine_supression->update();
 
-                                    $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-                                        ->first();
-                                    $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = false;
-                                    $domaine_demande_domaine->update();
+                                        $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
+                                            ->first();
+                                        $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = false;
+                                        $domaine_demande_domaine->update();
 
-                                    $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
-                                        ->where('id_entreprises',$autre_demande_habilitation_formation->id_entreprises)->first();
-                                    $domaine_formation->delete();
+                                        $habilitation = DemandeHabilitation::find($domaine_demande_domaine->id_demande_habilitation);
 
-                                    $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
+                                        $domaine_formation = DomaineFormationCabinet::where('id_domaine_formation',$domaine_demande_domaine->id_domaine_formation)
+                                            ->where('id_entreprises',$habilitation->id_entreprises)->first();
+                                        $domaine_formation->delete();
 
-                                }
-                            }
+                                        $domaine_lib .= $domaine_demande_domaine->domaineFormation->libelle_domaine_formation.',';
 
-                            $user = User::where('id_partenaire',$autre_demande_habilitation_formation->id_entreprises)->first();
-                                    if (isset($user->email)) {
-                                        $sujet = "Demande validé";
-                                        $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-
-                                        $messageMail = "<b>Monsieur le Directeur,</b>
-                                    <br><br> Nous sommes ravis de vous informer que votre demande a été validé  avec succès
-                                    <br>
-                                    Nous apprécions votre intérêt pour notre services.
-                                    Cordialement, L'équipe e-FDFP
-                                    <br>
-                                    <br>
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-                                        $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
                                     }
+                                }
+
+                                $logo = Menu::get_logo();
+                                $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                                $name = $entreprise->raison_social_entreprises;
+
+                                if (isset($entreprise->email)) {
+                                    $sujet = "Demande de suppression domaine de formation habilité";
+                                    $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+
+                                    $messageMail = "<b>Monsieur le Directeur,</b>
+                                                    <br><br> Nous désolé de vous informer que votre demande  a été validé avec succès.<br>
+                                                    Nous vous prions de bien vous connecter sur le portail.
+                                                    <br>
+                                                    Nous apprécions votre intérêt pour notre services.
+                                                    Cordialement, L'équipe e-FDFP
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    -----
+                                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                                    -----
+                                                    ";
+                                    $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                                }
                             return redirect('traitementautredemandehabilitation')->with('success', 'Succes : Operation validée avec succes ');
 
                         }
@@ -759,6 +866,9 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
                                 $domaine_demande_domaine_supression->update();
 
 
+                                $habilitation = DemandeHabilitation::find($autre_demande_habilitation_formation_data->id_demande_habilitation);
+
+
                                 $domaine_demande_domaine = DomaineDemandeHabilitation::where('id_domaine_demande_habilitation',$domaineAutreDemandeHabilitationFormation->id_domaine_demande_habilitation)
                                     ->first();
                                 $domaine_demande_domaine->flag_agree_domaine_demande_habilitation = true;
@@ -768,31 +878,29 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
 
                             }
                         }
-//
-//
+                        $logo = Menu::get_logo();
+                        $entreprise = Entreprises::where('id_entreprises',$habilitation->id_entreprises)->first();
+                        $name = $entreprise->raison_social_entreprises;
 
-                            $user = User::where('id_partenaire',$autre_demande_habilitation_formation->id_entreprises)->first();
-                            if (isset($user->email)) {
-                                $sujet = "Demande de suppression domaine de formation habilité";
-                                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
+                        if (isset($entreprise->email)) {
+                            $sujet = "Demande de suppression domaine de formation habilité";
+                            $titre = "Bienvenue sur " . @$logo->mot_cle . "";
 
-                                $messageMail = "<b>Monsieur le Directeur,</b>
-                                    <br><br> Nous sommes ravis de vous informer que votre demande suppression du domaine de formation
-                                     intitulé : <b>".@$autre_demande_habilitation_formation->libelle_domaine_formation.".</b> a été rejété pour la raison suivant<br>
-                                     ".@$autre_demande_habilitation_formation->commentaire_final_autre_demande_habilitation_formation."
-                                    <br>
-                                    Nous apprécions votre intérêt pour notre services.
-                                    Cordialement, L'équipe e-FDFP
-                                    <br>
-                                    <br>
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-                                $messageMailEnvoi = Email::get_envoimailTemplate($user->email, $name, $messageMail, $sujet, $titre);
-                            }
+                            $messageMail = "<b>Monsieur le Directeur,</b>
+                                            <br><br> Nous désolé de vous informer que votre demande  a été validé avec succès.<br>
+                                            Nous vous prions de bien vous connecter sur le portail.
+                                            <br>
+                                            Nous apprécions votre intérêt pour notre services.
+                                            Cordialement, L'équipe e-FDFP
+                                            <br>
+                                            <br>
+                                            <br>
+                                            -----
+                                            Ceci est un mail automatique, Merci de ne pas y répondre.
+                                            -----
+                                            ";
+                            $messageMailEnvoi = Email::get_envoimailTemplate($entreprise->email, $name, $messageMail, $sujet, $titre);
+                        }
 
                         return redirect('traitementautredemandehabilitation/' . Crypt::UrlCrypt($id_autre_demande_habilitation_formation) . '/' . Crypt::UrlCrypt($id_combi_proc) . '/edit')->with('success', 'Succes : Operation validée avec succes ');
 
@@ -802,7 +910,6 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
             }
         }
     }
-
 
     public function extensiondomaineformation()
     {
@@ -1031,4 +1138,205 @@ class TraitementAutreDemandeHabilitationFormation extends Controller
         }
     }
 
+
+    public function editsubstitution($id, $id1)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $idetape =  Crypt::UrldeCrypt($id1);
+
+        $codeRoles = Menu::get_code_menu_profil(Auth::user()->id);
+        $autre_demande_habilitation_formation = AutreDemandeHabilitationFormation::
+        where('id_autre_demande_habilitation_formation',$id)
+            ->where('flag_instruction',false)->first();
+        $habilitation = DemandeHabilitation::where('id_demande_habilitation',$autre_demande_habilitation_formation->id_demande_habilitation)->first();
+        $infoentreprise = InfosEntreprise::get_infos_entreprise($habilitation->entreprise->ncc_entreprises);
+        $domaineDemandeHabilitations = DomaineDemandeHabilitation::where([['id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation]])->get();
+
+        $banques = Banque::where([['flag_banque','=',true]])->get();
+        $banque = "<option value='".$habilitation->banque->id_banque."'> ".mb_strtoupper($habilitation->banque->libelle_banque)." </option>";
+
+        foreach ($banques as $comp) {
+            $banque .= "<option value='" . $comp->id_banque  . "'>" . mb_strtoupper($comp->libelle_banque) ." </option>";
+        }
+
+        $pays = Pays::all();
+        $pay = "<option value='".$infoentreprise->pay->id_pays."'> " . $infoentreprise->pay->indicatif . "</option>";
+        foreach ($pays as $comp) {
+            $pay .= "<option value='" . $comp->id_pays  . "'>" . $comp->indicatif ." </option>";
+        }
+
+
+        if($codeRoles == 'CHEFSERVICE' && $autre_demande_habilitation_formation->flag_soumis_cs==false){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            $chargerHabilitationsList =  "<option value=''> Selectionnez le charge d\'habilitation </option>";
+            foreach ($chargerHabilitations as $comp) {
+                $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+            }
+
+        }else{
+            $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+        }
+        if($codeRoles == 'CHEFSERVICE'){
+            $chargerHabilitations = DB::table('vue_users_chargehabilitation')->where([['id_service','=',Auth::user()->id_service]])->get();
+            if(isset($demande_extension->chargehabilitation->id)){
+                $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+
+            }else{
+                $chargerHabilitationsList = "<option value=''> Selectionnez le domaine de formation </option>";
+                foreach ($chargerHabilitations as $comp) {
+                    $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+                }
+            }
+            $NombreDemandeHabilitation = DB::table('vue_nombre_traitement_demande_habilitation')->where([['id_service','=',Auth::user()->id_service]])->orderBy('nbre_dossier_en_cours','asc')->get();
+        }else{
+            $chargerHabilitationsList = "<option value='".$autre_demande_habilitation_formation->chargehabilitation->id."'> " . @$autre_demande_habilitation_formation->chargehabilitation->name.' '. mb_strtoupper(@$autre_demande_habilitation_formation->chargehabilitation->prenom_users) . "</option>";
+            $NombreDemandeHabilitation = [];
+        }
+
+        $motif = "<option value='".@$autre_demande_habilitation_formation->motif->id_motif."'> " . $autre_demande_habilitation_formation->motif->libelle_motif. "</option>";
+
+        $motifs = Motif::where([['code_motif','=','RESDF']])->get();
+        $motif_recevabilite = "<option value=''> Selectionnez un motif </option>";
+        foreach ($motifs as $comp) {
+            $motif_recevabilite .= "<option value='" . $comp->id_motif  . "'>" . $comp->libelle_motif ." </option>";
+        }
+
+        $commentairenonrecevables = CommentaireNonRecevableDemande::where([['id_demande','=',$id],['code_demande','=','SUDF']])->get();
+
+
+        $domaine_list_demandes = DomaineDemandeHabilitation::
+        where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
+            ->where('id_autre_demande','=',$id)
+            ->where('flag_agree_domaine_demande_habilitation',false)
+            ->where('flag_substitution_domaine_demande_habilitation',true)
+            ->where('flag_extension_domaine_demande_habilitation',false)->get();
+
+        $formateurs = FormateurDomaineDemandeHabilitation::Join('domaine_demande_habilitation','formateur_domaine_demande_habilitation.id_domaine_demande_habilitation','domaine_demande_habilitation.id_domaine_demande_habilitation')
+            ->join('domaine_formation','domaine_demande_habilitation.id_domaine_formation','domaine_formation.id_domaine_formation')
+            ->join('type_domaine_demande_habilitation','domaine_demande_habilitation.id_type_domaine_demande_habilitation','type_domaine_demande_habilitation.id_type_domaine_demande_habilitation')
+            ->join('type_domaine_demande_habilitation_public','domaine_demande_habilitation.id_type_domaine_demande_habilitation_public','type_domaine_demande_habilitation_public.id_type_domaine_demande_habilitation_public')
+            ->join('formateurs','formateur_domaine_demande_habilitation.id_formateurs','formateurs.id_formateurs')
+            ->where('id_demande_habilitation','=',$autre_demande_habilitation_formation->id_demande_habilitation)
+            ->where('domaine_demande_habilitation.id_autre_demande','=',$id)
+            ->get();
+
+        return view('habilitation.traitementautredemandehabilitation.substitutiondomaineEdit', compact('habilitation','infoentreprise',
+            'banque','autre_demande_habilitation_formation',
+            'pay','motif','commentairenonrecevables',
+            'id','idetape','motif_recevabilite','domaineDemandeHabilitations',
+            'domaine_list_demandes',
+            'formateurs','chargerHabilitationsList','NombreDemandeHabilitation'
+        ));
+    }
+
+    public function updatesubstitution(Request $request,$id)
+    {
+        $id =  Crypt::UrldeCrypt($id);
+        $input = $request->all();
+
+        if($input['action']=="Recevable"){
+            AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
+                'commentaire_recevabilite' => $input['commentaire_recevabilite'],
+                'flag_recevabilite' => true,
+                'date_recevabilite' => Carbon::now()
+            ]);
+            return redirect('traitementautredemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(5).'/editsubstitution')->with('success', 'Succes : Recevabilité effectuée avec succès');
+        }
+
+        if($input['action'] === 'NonRecevable'){
+
+            $this->validate($request, [
+                'id_motif_recevable' => 'required',
+                'commentaire_recevabilite' => 'required',
+            ],[
+                'id_motif_recevable.required' => 'Veuillez selectionner le motif de recevabilité.',
+                'commentaire_recevabilite.required' => 'Veuillez ajouter le commentaire de la non recevaibilité.',
+            ]);
+
+            $input = $request->all();
+
+            $commentaire = CommentaireNonRecevableDemande::create([
+                'commentaire_commentaire_non_recevable_demande' => $input['commentaire_recevabilite'],
+                'id_demande' => $id,
+                'id_motif_recevable' => $input['id_motif_recevable'],
+                'code_demande' => 'RDE'
+            ]);
+
+
+            AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
+                'commentaire_recevabilite' => $input['commentaire_recevabilite'],
+                'flag_recevabilite' => false,
+                'flag_rejeter_recevabilit_suppression_habilitation'=>true,
+                'flag_soumis_autre_demande_habilitation_formation'=>false,
+                'date_rejeter_autre_demande_habilitation_formation' => Carbon::now()
+            ]);
+
+            $demande  = AutreDemandeHabilitationFormation::find($id);
+
+            $habilitation = DemandeHabilitation::find($demande->id_demande_habilitation);
+
+            $infoentreprise = Entreprises::find($habilitation->id_entreprises);
+            $logo = Menu::get_logo();
+
+            if (isset($habilitation->email_responsable_habilitation)) {
+                $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
+                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
+                $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
+
+                                    <br><br>Nous avons examiné votre demande d'extension de domaine sur e-FDFP, et
+                                    malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :
+
+                                    <br><b>Motif de rejet  : </b> ".@$habilitation->motif->libelle_motif."
+                                    <br><b>Commentaire : </b> ".@$habilitation->commentaire_recevabilite."
+                                    <br><br>
+                                    <br><br>Si vous estimez que cela est une erreur ou si vous avez des informations supplémentaires à
+                                        fournir, n'hésitez pas à contactez votre chargé habilitation : ".@$habilitation->userchargerhabilitation->email." pour obtenir de l'aide.
+                                        Nous apprécions votre intérêt pour notre service et espérons que vous envisagerez de
+                                        soumettre la demande lorsque les problèmes seront résolus.
+                                        Cordialement,
+                                        L'équipe e-FDFP
+                                    <br><br><br>
+                                    -----
+                                    Ceci est un mail automatique, Merci de ne pas y répondre.
+                                    -----
+                                    ";
+                $messageMailEnvoi = Email::get_envoimailTemplate($habilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
+
+            }
+
+            //Envoi SMS Rejeté
+            if (isset($habilitation->contact_responsable_habilitation)) {
+                $content = "Cher ".$infoentreprise->sigl_entreprises.", Nous avons examiné votre demande  et malheureusement, nous ne pouvons pas l'approuver pour la raison suivante :".@$habilitation->motif->libelle_motif." Veuillez mettre a jour le dossier .
+                        Cordialement,
+                        L'équipe e-FDFP";
+                SmsPerso::sendSMS($habilitation->contact_responsable_habilitation,$content);
+            }
+
+            Audit::logSave([
+
+                'action'=>'MISE A JOUR',
+
+                'code_piece'=>$id,
+
+                'menu'=>'HABILITATION (Instruction: La non-recevabilité a été effectué avec succès.)',
+
+                'etat'=>'Succès',
+
+                'objet'=>'HABILITATION'
+
+            ]);
+
+            return redirect()->route('traitementautredemandehabilitation.index')->with('success', 'Recevabilité effectué avec succès.');
+
+        }
+
+        if($input['action']=="instruction"){
+            AutreDemandeHabilitationFormation::where('id_autre_demande_habilitation_formation',$id)->update([
+                'observation_instruction' => $input['observation_instruction'],
+                'flag_instruction' => true,
+                'date_instruction' => Carbon::now()
+            ]);
+            return redirect('traitementautredemandehabilitation')->with('success', 'Succes : Instruction effectuée avec succès');
+        }
+    }
 }

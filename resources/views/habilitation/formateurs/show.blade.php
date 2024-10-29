@@ -65,7 +65,7 @@
             <h2 class="section-title">Formations</h2>
             @foreach($formations as $formation)
                 <div class="formation">
-                    <h3>Etabillssement : {{ $formation->ecole_formation_educ }} - Diplome obtenu : {{ $formation->diplome_formation_educ }}</h3>
+                    <h3>Établissement : {{ $formation->ecole_formation_educ }} - Diplôme obtenu : {{ $formation->diplome_formation_educ }}</h3>
                     <p><strong>Date :</strong> {{ \Carbon\Carbon::parse($formation->date_de_debut_formations_educ)->format('d/m/Y') }} - {{ $formation->date_de_fin_formations_educ ? \Carbon\Carbon::parse($formation->date_fin)->format('d/m/Y') : 'En cours' }}</p>
                     <p>{{ $formation->description_formations_educ }}</p>
                 </div>

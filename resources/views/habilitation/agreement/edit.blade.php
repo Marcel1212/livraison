@@ -75,7 +75,7 @@ use App\Helpers\Fonction;
                                         Nouvelle demande
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" href="javascript:void(0);">Substitution domaine de formation</a></li>
+                                        <li><a class="dropdown-item" href="{{route($lien.'.substitutiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Substitution domaine de formation</a></li>
                                         <li><a class="dropdown-item" href="{{route($lien.'.extensiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Extension domaine de formation</a></li>
                                         <li><a class="dropdown-item" href="{{route($lien.'.suppressiondomaineformation',[\App\Helpers\Crypt::UrlCrypt($habilitation->id_demande_habilitation)])}}">Suppression domaine de formation</a></li>
                                     </ul>
@@ -93,6 +93,7 @@ use App\Helpers\Fonction;
                                         <th>Motif de la demande</th>
                                         <th>Commentaire de la demande</th>
                                         <th>Pièce justificatif  </th>
+                                        <th>Date de soumission</th>
                                         <th>Statut </th>
                                         <th>Action </th>
                                     </tr>
@@ -110,9 +111,9 @@ use App\Helpers\Fonction;
                                                         Demande de suppression
                                                     @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                         Demande d'extension
+                                                    @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                        Demande d'extension
                                                     @endif
-
-
                                                 </td>
                                                 <td>
                                                     @if(@$autre_demande_habilitation_formation->motif)
@@ -124,6 +125,7 @@ use App\Helpers\Fonction;
                                                         {{ $autre_demande_habilitation_formation->commentaire_autre_demande_habilitation_formation }}
                                                     @endif
                                                 </td>
+
                                                 <td>
                                                     @isset($autre_demande_habilitation_formation->piece_autre_demande_habilitation_formation)
                                                         <span class="badge bg-secondary mt-2">
@@ -132,6 +134,11 @@ use App\Helpers\Fonction;
                                                                     Voir la pièce
                                                                 </a>
                                                             </span>
+                                                    @endisset
+                                                </td>
+                                                <td>
+                                                    @isset($autre_demande_habilitation_formation->date_soumis_autre_demande_habilitation_formation)
+                                                        {{ date('d/m/Y H:i:s',strtotime(@$autre_demande_habilitation_formation->date_soumis_autre_demande_habilitation_formation))  }}
                                                     @endisset
                                                 </td>
                                                 <td>
@@ -176,6 +183,11 @@ $autre_demande_habilitation_formation->flag_soumis_autre_demande_habilitation_fo
                                                                     src='/assets/img/editing.png'></a>
                                                         @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_extension')
                                                             <a href="{{ route($lien.'.extensiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
+                                                               class=" "
+                                                               title="Modifier"><img
+                                                                    src='/assets/img/editing.png'></a>
+                                                        @elseif(@$autre_demande_habilitation_formation->type_autre_demande=='demande_substitution')
+                                                            <a href="{{ route($lien.'.substitutiondomaineformationedit',[\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_autre_demande_habilitation_formation),\App\Helpers\Crypt::UrlCrypt($autre_demande_habilitation_formation->id_demande_habilitation),\App\Helpers\Crypt::UrlCrypt(1)]) }}"
                                                                class=" "
                                                                title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
@@ -621,7 +633,7 @@ $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
 
                                                 @elseif($domaineDemandeHabilitation->flag_agree_domaine_demande_habilitation==false &&
                                                $domaineDemandeHabilitation->flag_extension_domaine_demande_habilitation==false)
-                                                    <span class="badge bg-danger">Supprimée</span>
+                                                    <span class="badge bg-danger">Supprimé</span>
                                                 @endif
                                             </td>
                                         </tr>
