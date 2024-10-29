@@ -1126,107 +1126,12 @@ class TraitementDemandeHabilitationController extends Controller
         $data = $request->all();
 
 
-        if($data['action'] === 'Valider'){
-            //dd('Validation'); exit();
-
-            $idUser=Auth::user()->id;
-            $idAgceCon=Auth::user()->num_agce;
-            $Idroles = Menu::get_id_profil($idUser);
-            $dateNow = Carbon::now();
-            $id_combi_proc = $request->input('id_combi_proc');
-            //dd($id_combi_proc) ; exit();
-            $infosprocessus = DB::table('vue_processus')
-                                ->where('id_combi_proc', '=', $id_combi_proc)
-                                ->first();
-            $idProComb = $infosprocessus->id_combi_proc;
-            $idProcessus = $infosprocessus->id_processus;
-
-            Parcours::create(
-                [
-                    'id_processus' => $idProcessus,
-                    'id_user' => $idUser,
-                    'id_piece' => $id,
-                    'id_roles' => $Idroles,
-                    'num_agce' => $idAgceCon,
-                    'comment_parcours' => $request->input('comment_parcours'),
-                    'is_valide' => true,
-                    'date_valide' => $dateNow,
-                    'id_combi_proc' => $idProComb,
-                ]);
-
-                $ResultCptVal = DB::table('combinaison_processus as v')
-                                    ->select(DB::raw('max(v.priorite_combi_proc) as priorite_combi_proc'), 'a.priorite_max')
-                                    ->Join('vue_processus_max as a', 'a.id_processus', '=', 'v.id_processus')
-                                    ->where('a.id_demande', '=', $id)
-                                    ->where('a.id_processus', '=', $idProcessus)
-                                    ->where('v.id_roles', '=', $Idroles)
-                                    ->groupBy('a.priorite_max', 'v.priorite_combi_proc')
-                                    ->first();
-
-                if (@$ResultCptVal->priorite_max == @$ResultCptVal->priorite_combi_proc and $ResultCptVal != null) {
-
-                    $dem = DemandeHabilitation::find($id);
-                    $dem->update([
-                        'flag_agrement_demande_habilitaion' => true
-                    ]);
-
-                    $demandehabilitation = DemandeHabilitation::find($id);
-          //  $demandehabilitation->update($input);
-
-            $infoentreprise = Entreprises::find($demandehabilitation->id_entreprises);
-
-            //Envoi SMS Validé
-            // if (isset($demandehabilitation->contact_responsable_habilitation)) {
-            //     $content = "Cher ".$infoentreprise->raison_social_entreprises.", NOUS SOMMES RAVIS DE VOUS INFORMER QUE VOTRE DEAMNDE D'HABILITATION EST JUGEE RECEVABLE. NOUS APPRECIONS VOTRE INTERET POUR NOS SERVICES. CORDIALEMENT, L EQUIPE E-FDFP";
-            //     SmsPerso::sendSMS($demandehabilitation->contact_responsable_habilitation,$content);
-            // }
-
-            //Envoi email
-             if (isset($demandehabilitation->email_responsable_habilitation)) {
-                $sujet = "Recevabilité de la demande habilitation sur e-FDFP";
-                $titre = "Bienvenue sur ".@$logo->mot_cle ."";
-                $messageMail = "<b>Cher,  ".$infoentreprise->raison_social_entreprises." ,</b>
-                                <br><br>Nous sommes ravis de vous informer que votre demande d'habilitation a ete agree.
-                                <br><br>Nous apprécions votre intérêt pour notre services.<br>
-                                <br><br>Connectez vous sur votre compte afin de pouvoir voir votre agrement.<br>
-                                Cordialement,
-                                L'équipe e-FDFP
-                                <br><br><br>
-                                -----
-                                Ceci est un mail automatique, Merci de ne pas y répondre.
-                                -----
-                                ";
-                $messageMailEnvoi = Email::get_envoimailTemplate($demandehabilitation->email_responsable_habilitation, $infoentreprise->raison_social_entreprises, $messageMail, $sujet, $titre);
-
-
-                }
-
-                Audit::logSave([
-
-                    'action'=>'MISE A JOUR',
-
-                    'code_piece'=>$id,
-
-                    'menu'=>'HABILITATION PUBLIQUE (Validation par le processus : VALIDER  )',
-
-                    'etat'=>'Succès',
-
-                    'objet'=>'HABILITATION'
-
-                ]);
-
-                return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(10).'/editpu')->with('success', 'Succes : Dossier valider avec succès. ');
-
-
-        }
-    }
-
-
+        dd($request->isMethod()) ; exit();
         if ($request->isMethod('put')) {
-            //dd('Put Validation'); exit();
+            dd('Put Validation'); exit();
 
             $data = $request->all();
-           //dd($data) ; exit(); //86
+           dd($data) ; exit(); //86
 
            if ($data['action'] == 'GenererAgrement'){
 
@@ -1281,7 +1186,7 @@ class TraitementDemandeHabilitationController extends Controller
 
             return redirect('traitementdemandehabilitation/'.Crypt::UrlCrypt($id).'/'.Crypt::UrlCrypt(9).'/editpu')->with('success', 'Succes : Agremment generer avec succès. ');
 
-        }
+            }
 
 
         if ($data['action'] == 'AttributionSecretaire'){
@@ -2289,7 +2194,7 @@ class TraitementDemandeHabilitationController extends Controller
 
         }
     }
-}
+
 
 
     public function destroy(string $id)
