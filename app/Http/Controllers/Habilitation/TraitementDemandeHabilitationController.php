@@ -1526,7 +1526,7 @@ class TraitementDemandeHabilitationController extends Controller
         }
 
         if($data['action'] === 'Valider'){
-            dd($data) ; exit();
+            //dd($data) ; exit();
                 $idUser=Auth::user()->id;
                 $idAgceCon=Auth::user()->num_agce;
                 $Idroles = Menu::get_id_profil($idUser);
