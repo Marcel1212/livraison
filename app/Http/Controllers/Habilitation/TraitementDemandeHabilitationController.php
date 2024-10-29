@@ -1127,7 +1127,7 @@ class TraitementDemandeHabilitationController extends Controller
 
 
         if($data['action'] === 'Valider'){
-            dd('Validation'); exit();
+            //dd('Validation'); exit();
 
             $idUser=Auth::user()->id;
             $idAgceCon=Auth::user()->num_agce;
@@ -1223,7 +1223,7 @@ class TraitementDemandeHabilitationController extends Controller
 
 
         if ($request->isMethod('put')) {
-            dd('Put Validation'); exit();
+            //dd('Put Validation'); exit();
 
             $data = $request->all();
            //dd($data) ; exit(); //86
