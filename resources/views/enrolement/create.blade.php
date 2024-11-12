@@ -6,73 +6,80 @@ $logo = Menu::get_logo();
 $reseaux = Menu::get_info_reseaux();
 ?>
 
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
-<html
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    class="light-style layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed"
-    dir="ltr"
-    data-theme="theme-default"
-    data-assets-path="{{asset('assets/')}}"
-    data-template="vertical-menu-template">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
+    class="light-style layout-navbar-fixed layout-menu-fixed layout-compact layout-menu-collapsed" dir="ltr"
+    data-theme="theme-default" data-assets-path="{{ asset('assets/') }}" data-template="vertical-menu-template">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <?php if (isset($logo->mot_cle)){ ?>
     <title><?php echo @$logo->mot_cle; ?> | demande d'enrolement</title>
     <?php } ?>
 
-    <meta name="description" content=""/>
+    <meta name="description" content="" />
 
     <!-- Favicon -->
     <?php if (isset($logo->logo_logo)){ ?>
-    <link rel="<?php echo @$logo->mot_cle;?>" type="image/x-icon"
-          href="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}"/>
+    <link rel="<?php echo @$logo->mot_cle; ?>" type="image/x-icon" href="{{ asset('/frontend/logo/' . @$logo->logo_logo) }}" />
     <?php } ?>
 
-        <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
-        rel="stylesheet"/>
+        rel="stylesheet" />
 
     <!-- Icons -->
-    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/fontawesome.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/tabler-icons.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/fonts/flag-icons.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/css/form-validation.css')}}"/>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/fontawesome.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/tabler-icons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/flag-icons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/form-validation.css') }}" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/core.css')}}" class="template-customizer-core-css"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/css/rtl/theme-default.css')}}"
-          class="template-customizer-theme-css"/>
-    <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/front-page.css')}}"/>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/theme-default.css') }}"
+        class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/front-page.css') }}" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/node-waves/node-waves.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/typeahead-js/typeahead.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select1/select1.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select2/select2.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/select3/select3.css')}}"/>
-    <link rel="stylesheet" href="{{asset('assets/vendor/libs/dropzone/dropzone.css')}}"/>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/node-waves/node-waves.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select1/select1.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select3/select3.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/dropzone/dropzone.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/forms/wizard/bs-stepper.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/plugins/forms/form-wizard.css') }}" />
 
-    <link rel="stylesheet" href="{{asset('assets/vendor/css/pages/page-faq.css')}}"/>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-faq.css') }}" />
 
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="{{asset('assets/vendor/js/helpers.js')}}"></script>
+    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bs-stepper/bs-stepper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/form-wizard-numbered.js') }}"></script>
+    <script src="{{ asset('assets/js/form-wizard-validation.js') }}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{{asset('assets/js/config.js')}}"></script>
+    <script src="{{ asset('assets/js/config.js') }}"></script>
 
 
     <!--<script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script>-->
@@ -82,456 +89,562 @@ $reseaux = Menu::get_info_reseaux();
 </head>
 
 <body>
-<!-- Layout wrapper -->
-<div class="bgui-container">
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <!-- Menu -->
+    <!-- Layout wrapper -->
+    <div class="bgui-container">
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <!-- Menu -->
 
-            <!-- / Menu -->
+                <!-- / Menu -->
 
-            <!-- Layout container -->
-            <div class="layout-page bt-ls-x0">
-                <!-- Navbar -->
+                <!-- Layout container -->
+                <div class="layout-page bt-ls-x0">
+                    <!-- Navbar -->
 
-                <nav class="layout-navbar shadow-none bt-ls-xl0 py-0">
-                    <div class="container">
-                        <div class="navbar navbar-expand-lg landing-navbar px-3 px-md-4">
-                            <!-- Menu logo wrapper: Start -->
-                            <div class="navbar-brand app-brand demo d-flex">
-                                <!-- Mobile menu toggle: Start-->
-                                <button
-                                    class="navbar-toggler border-0 px-0 me-2"
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target="#navbarSupportedContent"
-                                    aria-controls="navbarSupportedContent"
-                                    aria-expanded="false"
-                                    aria-label="Toggle navigation">
-                                    <i class="ti ti-menu-2 ti-sm align-middle"></i>
-                                </button>
-                                <!-- Mobile menu toggle: End-->
-                                <a href="{{route('/')}}" class="app-brand-link">
-              <span class="app-brand-logo demo">
-              <img src="{{ asset('/frontend/logo/'. @$logo->logo_logo)}}" width="90"/>
-              </span>
+                    <nav class="layout-navbar shadow-none bt-ls-xl0 py-0">
+                        <div class="container">
+                            <div class="navbar navbar-expand-lg landing-navbar px-3 px-md-4">
+                                <!-- Menu logo wrapper: Start -->
+                                <div class="navbar-brand app-brand demo d-flex">
+                                    <!-- Mobile menu toggle: Start-->
+                                    <button class="navbar-toggler border-0 px-0 me-2" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                                        aria-controls="navbarSupportedContent" aria-expanded="false"
+                                        aria-label="Toggle navigation">
+                                        <i class="ti ti-menu-2 ti-sm align-middle"></i>
+                                    </button>
+                                    <!-- Mobile menu toggle: End-->
+                                    <a href="{{ route('/') }}" class="app-brand-link">
+                                        <span class="app-brand-logo demo">
+                                            <img src="{{ asset('/frontend/logo/' . @$logo->logo_logo) }}"
+                                                width="90" />
+                                        </span>
 
-                                </a>
-                            </div>
-                            <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
-                                <ul class="navbar-nav me-auto">
-                                </ul>
-                            </div>
-                            <div class="landing-menu-overlay d-lg-none"></div>
-                            <!-- Menu wrapper: End -->
-                            <!-- Toolbar: Start -->
-                            <ul class="navbar-nav flex-row align-items-center ms-auto">
-
-                            </ul>
-                            <!-- Toolbar: End -->
-                        </div>
-                    </div>
-                </nav>
-                <!-- / Navbar -->
-
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
-                    <!-- Content -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <div
-                            class="faq-header d-flex flex-column justify-content-center align-items-center rounded">
-                            <h3 class="text-center"></h3>
-                        </div>
-                        <p class="text-center mb-0 px-3"></p>
-                    </div>
-                </div>
-
-                <div class="container-xxl flex-grow-1 container-p-y">
-
-
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <div class="alert-body align-middle">
-                              <h4>  {!! $message !!}  </h4>
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div
-                                    class="card-header bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
-                                    <h3 class="card-title mb-sm-0 me-2"> <i class="fa fa-file-alt" ></i>  Demande d'enrôlement</h3>
-                                    <div class="action-btns">
-                                        <button class="btn btn-gray me-3"> <a href="{{route('/')}}">Retour</a>
-                                        </button>
-                                    </div>
+                                    </a>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-10 mx-auto">
-                                            <!-- 1. Delivery Address -->
-                                            <h5 class="my-4">1. Renseigner les informations </h5>
-                                            <form method="POST"
-                                                  action="{{ route('enrolements.store') }}"
-                                                  enctype="multipart/form-data" id="enrolementForm">
-                                                @csrf
-                                                <div class="row g-6">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="fullname">Forme juridique
-                                                                <strong style="color:red;">*</strong></label>
-                                                            <select class="form-select
-                                                                    @error('id_forme_juridique')
-                                                                        error
-                                                                   @enderror"
-                                                                    data-allow-clear="true" name="id_forme_juridique"
-                                                                    id="id_forme_juridique"
-                                                                    onchange="changeFuncFormeJuridique(this.options[this.selectedIndex].value);"
-                                                                    required="required"
-                                                            >
-                                                                @foreach(@$formejuridiques as $formejuridique)
-                                                                    <option value="{{$formejuridique->code_forme_juridique}}/{{$formejuridique->id_forme_juridique}}"
-                                                                        {{(old('id_forme_juridique')==$formejuridique->code_forme_juridique.'/'.$formejuridique->id_forme_juridique)? 'selected':''}}
-                                                                    >
-                                                                        {{mb_strtoupper($formejuridique->libelle_forme_juridique)}}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('id_forme_juridique')
-                                                                <div class="mb-1"><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                        </div>
+                                <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
+                                    <ul class="navbar-nav me-auto">
+                                    </ul>
+                                </div>
+                                <div class="landing-menu-overlay d-lg-none"></div>
+                                <!-- Menu wrapper: End -->
+                                <!-- Toolbar: Start -->
+                                <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                                </ul>
+                                <!-- Toolbar: End -->
+                            </div>
+                        </div>
+                    </nav>
+                    <!-- / Navbar -->
+
+                    <!-- Content wrapper -->
+                    <div class="content-wrapper">
+                        <!-- Content -->
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            <div
+                                class="faq-header d-flex flex-column justify-content-center align-items-center rounded">
+                                <h3 class="text-center"></h3>
+                            </div>
+                            <p class="text-center mb-0 px-3"></p>
+                        </div>
+                    </div>
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
 
 
-                                                        <div class="col-md-6">
-                                                            <label class="form-label" for="raison_sociale_demande_enroleme">Raison sociale
-                                                                <strong style="color:red;">*</strong></label>
-                                                            <input type="text" id="raison_sociale_demande_enroleme"
-                                                                   name="raison_sociale_demande_enroleme"
-                                                                   class="form-control form-control-sm
-                                                                   @error('raison_sociale_demande_enroleme')
-                                                                        error
-                                                                   @enderror"
-                                                                   placeholder="Raison sociale"
-                                                                   required="required"
-                                                                   value="{{ old('raison_sociale_demande_enroleme') }}"/>
-                                                                    @error('raison_sociale_demande_enroleme')
-                                                                        <div class="mb-1"><label class="error">{{ $message }}</label></div>
-                                                                    @enderror
-                                                        </div>
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert-body align-middle">
+                                    <h4> {!! $message !!} </h4>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div
+                                        class="card-header bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
+                                        <h3 class="card-title mb-sm-0 me-2"> <i class="fa fa-file-alt"></i> Livraison
+                                        </h3>
+                                        <div class="action-btns">
+                                            <button class="btn btn-gray me-3"> <a
+                                                    href="{{ route('/') }}">Retour</a>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-10 mx-auto">
+                                                <!-- 1. Delivery Address -->
+                                                <h5 class="my-4">1. Renseigner les informations de la livraison </h5>
+                                                <form method="POST" action="{{ route('enrolements.store') }}"
+                                                    enctype="multipart/form-data" id="enrolementForm">
+                                                    @csrf
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-lg-8 mx-auto">
+                                                                <!-- 1. Delivery Address -->
+                                                                <h5 class="mb-4">1. Delivery Address</h5>
+                                                                <div class="row g-3">
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label" for="fullname">Full
+                                                                            Name</label>
+                                                                        <input type="text" id="fullname"
+                                                                            class="form-control"
+                                                                            placeholder="John Doe">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="email">Email</label>
+                                                                        <div class="input-group input-group-merge">
+                                                                            <input class="form-control" type="text"
+                                                                                id="email" name="email"
+                                                                                placeholder="john.doe"
+                                                                                aria-label="john.doe"
+                                                                                aria-describedby="email3">
+                                                                            <span class="input-group-text"
+                                                                                id="email3">@example.com</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="phone">Contact Number</label>
+                                                                        <input type="text" id="phone"
+                                                                            class="form-control phone-mask"
+                                                                            placeholder="658 799 8941"
+                                                                            aria-label="658 799 8941">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="alt-num">Alternate Number</label>
+                                                                        <input type="text" id="alt-num"
+                                                                            class="form-control phone-mask"
+                                                                            placeholder="658 799 8941">
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <label class="form-label"
+                                                                            for="address">Address</label>
+                                                                        <textarea name="address" class="form-control" id="address" rows="2" placeholder="1456, Mall Road"></textarea>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="pincode">Pincode</label>
+                                                                        <input type="text" id="pincode"
+                                                                            class="form-control" placeholder="658468">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <label class="form-label"
+                                                                            for="landmark">Landmark</label>
+                                                                        <input type="text" id="landmark"
+                                                                            class="form-control"
+                                                                            placeholder="Nr. Wall Street">
+                                                                    </div>
+                                                                    <div class="col-md">
+                                                                        <label class="form-label"
+                                                                            for="city">City</label>
+                                                                        <input type="text" id="city"
+                                                                            class="form-control"
+                                                                            placeholder="Jackson">
+                                                                    </div>
+                                                                    <div class="col-md">
+                                                                        <label class="form-label"
+                                                                            for="state">State</label>
+                                                                        <div class="position-relative"><select
+                                                                                id="state"
+                                                                                class="select2 form-select select2-hidden-accessible"
+                                                                                data-allow-clear="true"
+                                                                                data-select2-id="state" tabindex="-1"
+                                                                                aria-hidden="true">
+                                                                                <option value=""
+                                                                                    data-select2-id="2">Select</option>
+                                                                                <option value="AL">Alabama</option>
+                                                                                <option value="AK">Alaska</option>
+                                                                                <option value="AZ">Arizona</option>
+                                                                                <option value="AR">Arkansas
+                                                                                </option>
+                                                                                <option value="CA">California
+                                                                                </option>
+                                                                                <option value="CO">Colorado
+                                                                                </option>
+                                                                                <option value="CT">Connecticut
+                                                                                </option>
+                                                                                <option value="DE">Delaware
+                                                                                </option>
+                                                                                <option value="DC">District Of
+                                                                                    Columbia</option>
+                                                                                <option value="FL">Florida</option>
+                                                                                <option value="GA">Georgia</option>
+                                                                                <option value="HI">Hawaii</option>
+                                                                                <option value="ID">Idaho</option>
+                                                                                <option value="IL">Illinois
+                                                                                </option>
+                                                                                <option value="IN">Indiana</option>
+                                                                                <option value="IA">Iowa</option>
+                                                                                <option value="KS">Kansas</option>
+                                                                                <option value="KY">Kentucky
+                                                                                </option>
+                                                                                <option value="LA">Louisiana
+                                                                                </option>
+                                                                                <option value="ME">Maine</option>
+                                                                                <option value="MD">Maryland
+                                                                                </option>
+                                                                                <option value="MA">Massachusetts
+                                                                                </option>
+                                                                                <option value="MI">Michigan
+                                                                                </option>
+                                                                                <option value="MN">Minnesota
+                                                                                </option>
+                                                                                <option value="MS">Mississippi
+                                                                                </option>
+                                                                                <option value="MO">Missouri
+                                                                                </option>
+                                                                                <option value="MT">Montana</option>
+                                                                                <option value="NE">Nebraska
+                                                                                </option>
+                                                                                <option value="NV">Nevada</option>
+                                                                                <option value="NH">New Hampshire
+                                                                                </option>
+                                                                                <option value="NJ">New Jersey
+                                                                                </option>
+                                                                                <option value="NM">New Mexico
+                                                                                </option>
+                                                                                <option value="NY">New York
+                                                                                </option>
+                                                                                <option value="NC">North Carolina
+                                                                                </option>
+                                                                                <option value="ND">North Dakota
+                                                                                </option>
+                                                                                <option value="OH">Ohio</option>
+                                                                                <option value="OK">Oklahoma
+                                                                                </option>
+                                                                                <option value="OR">Oregon</option>
+                                                                                <option value="PA">Pennsylvania
+                                                                                </option>
+                                                                                <option value="RI">Rhode Island
+                                                                                </option>
+                                                                                <option value="SC">South Carolina
+                                                                                </option>
+                                                                                <option value="SD">South Dakota
+                                                                                </option>
+                                                                                <option value="TN">Tennessee
+                                                                                </option>
+                                                                                <option value="TX">Texas</option>
+                                                                                <option value="UT">Utah</option>
+                                                                                <option value="VT">Vermont</option>
+                                                                                <option value="VA">Virginia
+                                                                                </option>
+                                                                                <option value="WA">Washington
+                                                                                </option>
+                                                                                <option value="WV">West Virginia
+                                                                                </option>
+                                                                                <option value="WI">Wisconsin
+                                                                                </option>
+                                                                                <option value="WY">Wyoming</option>
+                                                                            </select><span
+                                                                                class="select2 select2-container select2-container--default"
+                                                                                dir="ltr" data-select2-id="1"
+                                                                                style="width: 436px;"><span
+                                                                                    class="selection"><span
+                                                                                        class="select2-selection select2-selection--single"
+                                                                                        role="combobox"
+                                                                                        aria-haspopup="true"
+                                                                                        aria-expanded="false"
+                                                                                        tabindex="0"
+                                                                                        aria-disabled="false"
+                                                                                        aria-labelledby="select2-state-container"><span
+                                                                                            class="select2-selection__rendered"
+                                                                                            id="select2-state-container"
+                                                                                            role="textbox"
+                                                                                            aria-readonly="true"><span
+                                                                                                class="select2-selection__placeholder">Select
+                                                                                                value</span></span><span
+                                                                                            class="select2-selection__arrow"
+                                                                                            role="presentation"><b
+                                                                                                role="presentation"></b></span></span></span><span
+                                                                                    class="dropdown-wrapper"
+                                                                                    aria-hidden="true"></span></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" value=""
+                                                                                id="deliveryAdd" checked="">
+                                                                            <label class="form-check-label"
+                                                                                for="deliveryAdd">
+                                                                                Use this as default delivery address
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
 
-                                                        <div class="col-md-2">
-                                                            <label class="form-label" for="sigl_demande_enrolement">Sigle
-                                                                <strong style="color:red;">*</strong></label>
-                                                            <input type="text" id="sigl_demande_enrolement"
-                                                                   name="sigl_demande_enrolement"
-                                                                   class="form-control form-control-sm
-                                                                   @error('sigl_demande_enrolement')
-                                                                        error
-                                                                   @enderror"
-                                                                   placeholder="Sigle"
-                                                                   required="required"
-                                                                   value="{{ old('sigl_demande_enrolement') }}"/>
-                                                                    @error('sigl_demande_enrolement')
-                                                                        <div class="mb-1"><label class="error">{{ $message }}</label></div>
-                                                                    @enderror
-                                                        </div>
+                                                                    <label class="form-check-label">Address
+                                                                        Type</label>
+                                                                    <div class="col mt-2">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input name="collapsible-address-type"
+                                                                                class="form-check-input"
+                                                                                type="radio" value=""
+                                                                                id="collapsible-address-type-home"
+                                                                                checked="">
+                                                                            <label class="form-check-label"
+                                                                                for="collapsible-address-type-home">Home
+                                                                                (All day delivery)</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input name="collapsible-address-type"
+                                                                                class="form-check-input"
+                                                                                type="radio" value=""
+                                                                                id="collapsible-address-type-office">
+                                                                            <label class="form-check-label"
+                                                                                for="collapsible-address-type-office">
+                                                                                Office (Delivery between 10 AM - 5 PM)
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <!-- 2. Delivery Type -->
+                                                                <h5 class="my-4">2. Delivery Type</h5>
+                                                                <div class="row gy-3">
+                                                                    <div class="col-md">
+                                                                        <div
+                                                                            class="form-check custom-option custom-option-icon">
+                                                                            <label
+                                                                                class="form-check-label custom-option-content"
+                                                                                for="customRadioIcon1">
+                                                                                <span class="custom-option-body">
+                                                                                    <i class="ti ti-briefcase"></i>
+                                                                                    <span class="custom-option-title">
+                                                                                        Standard </span>
+                                                                                    <small> Delivery in 3-5 days.
+                                                                                    </small>
+                                                                                </span>
+                                                                                <input name="customDeliveryRadioIcon"
+                                                                                    class="form-check-input"
+                                                                                    type="radio" value=""
+                                                                                    id="customRadioIcon1"
+                                                                                    checked="">
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md">
+                                                                        <div
+                                                                            class="form-check custom-option custom-option-icon">
+                                                                            <label
+                                                                                class="form-check-label custom-option-content"
+                                                                                for="customRadioIcon2">
+                                                                                <span class="custom-option-body">
+                                                                                    <i class="ti ti-send"></i>
+                                                                                    <span class="custom-option-title">
+                                                                                        Express </span>
+                                                                                    <small>Delivery within 2
+                                                                                        days.</small>
+                                                                                </span>
+                                                                                <input name="customDeliveryRadioIcon"
+                                                                                    class="form-check-input"
+                                                                                    type="radio" value=""
+                                                                                    id="customRadioIcon2">
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md">
+                                                                        <div
+                                                                            class="form-check custom-option custom-option-icon checked">
+                                                                            <label
+                                                                                class="form-check-label custom-option-content"
+                                                                                for="customRadioIcon3">
+                                                                                <span class="custom-option-body">
+                                                                                    <i class="ti ti-crown"></i>
+                                                                                    <span class="custom-option-title">
+                                                                                        Overnight </span>
+                                                                                    <small> Delivery within a days.
+                                                                                    </small>
+                                                                                </span>
+                                                                                <input name="customDeliveryRadioIcon"
+                                                                                    class="form-check-input"
+                                                                                    type="radio" value=""
+                                                                                    id="customRadioIcon3">
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <!-- 3. Apply Promo code -->
+                                                                <h5 class="my-4">3. Apply Promo code</h5>
+                                                                <div class="row g-3">
+                                                                    <div class="col-sm-10 col-8">
+                                                                        <input type="text" class="form-control"
+                                                                            placeholder="TAKEITALL">
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-4 text-end">
+                                                                        <button
+                                                                            class="btn btn-primary waves-effect waves-light">Apply</button>
+                                                                    </div>
 
+                                                                    <div class="divider divider-dashed">
+                                                                        <div class="divider-text">OR</div>
+                                                                    </div>
 
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="email">Email <strong
-                                                                    style="color:red;">*</strong></label>
-                                                                <input
-                                                                    class="form-control form-control-sm
-                                                                     @error('email_demande_enrolement')
-                                                                        error
-                                                                    @enderror"
-                                                                    type="email"
-                                                                    id="email"
-                                                                    name="email_demande_enrolement"
-                                                                    placeholder="Email"
-                                                                    aria-label=""
-                                                                    aria-describedby="email3"
-                                                                    required="required"
-                                                                    value="{{ old('email_demande_enrolement') }}"/>
-                                                                @error('email_demande_enrolement')
-                                                                    <div class="mb-1"><label class="error">{{ $message }}</label></div>
-                                                                @enderror
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="form-label"
-                                                                   for="billings-country">Indicatif</label>
-                                                            @error('indicatif_demande_enrolement')
-                                                            <div class="mt-1"><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                            <select class="form-select
-                                                            @error('indicatif_demande_enrolement')
-                                                                        selecterror
-                                                                   @enderror"
-                                                                    required="required"
-                                                                    readonly=""
-                                                                    name="indicatif_demande_enrolement">
-                                                                @foreach(@$pays as $pay)
-                                                                    <option value="{{$pay->id_pays}}"
-                                                                        {{(old('indicatif_demande_enrolement')==$pay->id_pays)? 'selected':''}}
-                                                                    >
-                                                                        + {{mb_strtoupper($pay->indicatif)}}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="form-label">Numéro de Téléphone Mobile <strong
-                                                                    style="color:red;">*</strong></label>
-                                                            <input type="text" maxlength="10" min="0"
-                                                                   name="tel_demande_enrolement"
-                                                                   class="form-control form-control-sm
-                                                                   @error('tel_demande_enrolement')
-                                                                        error
-                                                                   @enderror
-                                                                   "
-                                                                   placeholder="Téléphone"
-                                                                   required="required"
-                                                                   value="{{ old('tel_demande_enrolement') }}"/>
-                                                            @error('tel_demande_enrolement')
-                                                                <div class="mb-1"><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                        </div>
-
-
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="state">Localité de
-                                                                l'entreprise <strong
-                                                                    style="color:red;">*</strong></label>
-
-                                                            <select class="select2 form-select
-                                                            @error('id_localite')
-                                                                        error
-                                                                   @enderror"
-                                                                    data-allow-clear="true" name="id_localite"
-                                                            id="id_localite"
-                                                                    required="required"
-                                                            >
-                                                                <option value="">-- Sélectionnez une localité --
-                                                                </option>
-                                                                @foreach(@$localites as $localite)
-                                                                    <option value="{{$localite->id_localite}}"
-                                                                        {{(old('id_localite')==$localite->id_localite)? 'selected':''}}
-                                                                    >
-                                                                        {{mb_strtoupper($localite->libelle_localite)}}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('id_localite')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="state">Centre d'impôt
-                                                                <strong style="color:red;">*</strong></label>
-
-                                                            <select class="select2 form-select
-                                                                    @error('id_centre_impot')
-                                                                        error
-                                                                   @enderror"
-                                                                    data-allow-clear="true" name="id_centre_impot"
-                                                                    required="required"
-                                                            >
-                                                                <option value="">-- Sélectionnez un centre d'impôt --
-                                                                </option>
-                                                                @foreach(@$centreimpots as $centreimpot)
-                                                                    <option value="{{$centreimpot->id_centre_impot}}"
-                                                                        {{(old('id_centre_impot')==$centreimpot->id_centre_impot)? 'selected':''}}
-                                                                    >
-                                                                        {{mb_strtoupper($centreimpot->libelle_centre_impot)}}
-                                                                    </option>
-                                                                @endforeach
-
-                                                            </select>
-                                                            @error('id_centre_impot')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="id_secteur_activite">Secteur d'activité
-                                                                <strong style="color:red;">*</strong></label>
-
-                                                            <select class="select2 form-select
-                                                                    @error('id_secteur_activite')
-                                                                        error
-                                                                   @enderror
-                                                                   "
-                                                                    required="required"
-                                                                    data-allow-clear="true" name="id_secteur_activite"
-                                                                    id="id_secteur_activite">
-                                                                <option value="">-- Sélectionnez un secteur d'activité
-                                                                    --
-                                                                </option>
-                                                                @foreach (@$secteuractivites as $activite)
-                                                                    <option
-                                                                        value="{{ $activite->id_secteur_activite }}">{{ mb_strtoupper($activite->libelle_secteur_activite) }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            @error('id_secteur_activite')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <div class="col-4 col-md-4">
-                                                            <div class="mb-3">
-                                                                <label class="form-label"
-                                                                       for="collapsible-ncc-name">Numéro de compte
-                                                                    contribuable (NCC)<strong
-                                                                        style="color:red;">*</strong></label>
-                                                                <input
-                                                                    type="text"
-                                                                    id="collapsible-payment-name"
-                                                                    class="form-control form-control-sm @error('ncc_demande_enrolement')
-                                                                        error
-                                                                   @enderror" maxlength="9"
-                                                                    minlength="6"
-                                                                    placeholder="Numéro de compte  contribuable (NCC)"
-                                                                    name="ncc_demande_enrolement"
-                                                                    required="required"
-                                                                    value="{{ old('ncc_demande_enrolement') }}"/>
-                                                                @error('ncc_demande_enrolement')
-                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                                @enderror
+                                                                    <div class="col-12">
+                                                                        <ul class="list-group">
+                                                                            <li
+                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
+                                                                                <div class="offer">
+                                                                                    <p class="mb-0 fw-medium">TAKEITALL
+                                                                                    </p>
+                                                                                    <span>Apply this code to get 15%
+                                                                                        discount on orders above
+                                                                                        20$.</span>
+                                                                                </div>
+                                                                                <div class="apply mt-3 mt-sm-0">
+                                                                                    <button
+                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li
+                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
+                                                                                <div class="offer">
+                                                                                    <p class="mb-0 fw-medium">FESTIVE10
+                                                                                    </p>
+                                                                                    <span>Apply this code to get 10%
+                                                                                        discount on all orders.</span>
+                                                                                </div>
+                                                                                <div class="apply mt-3 mt-sm-0">
+                                                                                    <button
+                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li
+                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
+                                                                                <div class="offer">
+                                                                                    <p class="mb-0 fw-medium">
+                                                                                        MYSTERYDEAL</p>
+                                                                                    <span>Apply this code to get
+                                                                                        discount between 10% -
+                                                                                        50%.</span>
+                                                                                </div>
+                                                                                <div class="apply mt-3 mt-sm-0">
+                                                                                    <button
+                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <hr>
+                                                                <!-- 4. Payment Method -->
+                                                                <h5 class="my-4">4. Payment Method</h5>
+                                                                <div class="row g-3">
+                                                                    <div class="mb-3">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input name="collapsible-payment"
+                                                                                class="form-check-input form-check-input-payment"
+                                                                                type="radio" value="credit-card"
+                                                                                id="collapsible-payment-cc"
+                                                                                checked="">
+                                                                            <label
+                                                                                class="form-check-label d-flex gap-1"
+                                                                                for="collapsible-payment-cc">
+                                                                                Credit/Debit/ATM Card <i
+                                                                                    class="ti ti-credit-card ti-xs"></i>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input name="collapsible-payment"
+                                                                                class="form-check-input form-check-input-payment"
+                                                                                type="radio" value="cash"
+                                                                                id="collapsible-payment-cash">
+                                                                            <label
+                                                                                class="form-check-label d-flex gap-1"
+                                                                                for="collapsible-payment-cash">
+                                                                                Cash On Delivery
+                                                                                <i class="ti ti-help text-muted ti-xs"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-placement="top"
+                                                                                    aria-label="You can pay once you receive the product."
+                                                                                    data-bs-original-title="You can pay once you receive the product."></i>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="form-credit-card" class="d-none">
+                                                                        <div class="col-12">
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label w-100"
+                                                                                    for="creditCardMask">Card
+                                                                                    Number</label>
+                                                                                <div
+                                                                                    class="input-group input-group-merge">
+                                                                                    <input type="text"
+                                                                                        id="creditCardMask"
+                                                                                        name="creditCardMask"
+                                                                                        class="form-control credit-card-mask"
+                                                                                        placeholder="1356 3215 6548 7898"
+                                                                                        aria-describedby="creditCardMask2">
+                                                                                    <span
+                                                                                        class="input-group-text cursor-pointer p-1"
+                                                                                        id="creditCardMask2"><span
+                                                                                            class="card-type"></span></span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-12 col-md-6">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label"
+                                                                                            for="collapsible-payment-name">Name</label>
+                                                                                        <input type="text"
+                                                                                            id="collapsible-payment-name"
+                                                                                            class="form-control"
+                                                                                            placeholder="John Doe">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 col-md-3">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label"
+                                                                                            for="collapsible-payment-expiry-date">Exp.
+                                                                                            Date</label>
+                                                                                        <input type="text"
+                                                                                            id="collapsible-payment-expiry-date"
+                                                                                            class="form-control expiry-date-mask"
+                                                                                            placeholder="MM/YY">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-6 col-md-3">
+                                                                                    <div class="mb-3">
+                                                                                        <label class="form-label"
+                                                                                            for="collapsible-payment-cvv">CVV
+                                                                                            Code</label>
+                                                                                        <div
+                                                                                            class="input-group input-group-merge">
+                                                                                            <input type="text"
+                                                                                                id="collapsible-payment-cvv"
+                                                                                                class="form-control cvv-code-mask"
+                                                                                                maxlength="3"
+                                                                                                placeholder="654">
+                                                                                            <span
+                                                                                                class="input-group-text cursor-pointer"
+                                                                                                id="collapsible-payment-cvv2"><i
+                                                                                                    class="ti ti-help ti-xs text-muted"
+                                                                                                    data-bs-toggle="tooltip"
+                                                                                                    data-bs-placement="top"
+                                                                                                    aria-label="Card Verification Value"
+                                                                                                    data-bs-original-title="Card Verification Value"></i></span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-
-                                                        </div>
-                                                        <div class="col-4 col-md-4" id="rccm_demande_enrolement_div">
-                                                            <div class="mb-3">
-                                                                <label class="form-label"
-                                                                       for="collapsible-rccm-name">Numéro du registre de
-                                                                    commerce (RCCM)<strong
-                                                                        style="color:red;" id="rccm_demande_enrolement_label">*</strong></label>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control form-control-sm @error('rccm_demande_enrolement')
-                                                                        error
-                                                                   @enderror"
-                                                                    placeholder="Numéro du registre de  commerce (RCCM)"
-                                                                    name="rccm_demande_enrolement"
-                                                                    id="rccm_demande_enrolement"
-                                                                    required="required"
-                                                                    value="{{ old('rccm_demande_enrolement') }}"/>
-                                                                @error('rccm_demande_enrolement')
-                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-4 col-md-4" id="numero_cnps_demande_enrolement_div">
-                                                            <div class="mb-3">
-                                                                <label class="form-label"
-                                                                       for="collapsible-cnps-name">Numéro CNPS <strong
-                                                                        style="color:red;" id="numero_cnps_demande_enrolement_label">*</strong></label>
-
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control form-control-sm
-                                                                    @error('numero_cnps_demande_enrolement')
-                                                                        error
-                                                                   @enderror"
-                                                                    placeholder="Numéro CNPS "
-                                                                    name="numero_cnps_demande_enrolement"
-                                                                    id="numero_cnps_demande_enrolement"
-                                                                    required="required"
-                                                                    value="{{ old('numero_cnps_demande_enrolement') }}"/>
-                                                                @error('numero_cnps_demande_enrolement')
-                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                                @enderror
-
-
-                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                </div>
 
-
-                                                <hr/>
-
-                                                <!-- 2. Delivery Type -->
-                                                <h5 class="my-4">2. Joindre les documents</h5>
-
-
-                                                <div class="row gy-3">
-
-                                                    <div class="col-md-4">
-                                                        <label class="form-label">Pièce de la DFE <strong
-                                                                style="color:red;">*</strong></label>
-                                                        <input type="file" name="piece_dfe_demande_enrolement"
-                                                               class="form-control form-control-sm  @error('piece_dfe_demande_enrolement')
-                                                               error
-                                                                @enderror" placeholder=""
-                                                               required="required"
-                                                               value="{{ old('piece_dfe_demande_enrolement') }}"/>
-                                                        @error('piece_dfe_demande_enrolement')
-                                                            <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text ">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-md-4" id="piece_rccm_demande_enrolement_div">
-                                                        <label class="form-label"> Pièce du RCCM <strong
-                                                                style="color:red;"  id="piece_rccm_demande_enrolement_label">*</strong></label>
-                                                        <input type="file" name="piece_rccm_demande_enrolement"
-                                                               id="piece_rccm_demande_enrolement"
-                                                               class="form-control form-control-sm
-                                                               @error('piece_rccm_demande_enrolement')
-                                                               error
-                                                                @enderror
-                                                                " placeholder=""
-                                                               required="required"
-                                                               value="{{ old('piece_rccm_demande_enrolement') }}"/>
-                                                        @error('piece_rccm_demande_enrolement')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4" id="piece_attestation_immatriculati_div">
-                                                        <label class="form-label">Pièce d'attestation immatriculation CNPS
-                                                            <strong style="color:red;" id="piece_attestation_immatriculati_label">*</strong></label>
-                                                        <input type="file" name="piece_attestation_immatriculati"
-                                                               id="piece_attestation_immatriculati"
-                                                               class="form-control form-control-sm
-                                                               @error('piece_attestation_immatriculati')
-                                                               error
-                                                                @enderror
-                                                    " placeholder=""
-                                                               required="required"
-                                                               value="{{ old('piece_attestation_immatriculati') }}"/>
-                                                        @error('piece_attestation_immatriculati')
-                                                        <div class=""><label class="error">{{ $message }}</label></div>
-                                                        @enderror
-                                                        <div id="defaultFormControlHelp" class="form-text">
-                                                            <em> Fichiers autorisés : PDF, JPG, JPEG, PNG <br>Taille
-                                                                maxi : 5Mo</em>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <br/>
-                                                {{-- <hr>
+                                                    <br />
+                                                    {{-- <hr>
 
                                                 <h5 class="my-4">3. Vérificateur de sécurité</h5>
 
@@ -549,53 +662,54 @@ $reseaux = Menu::get_info_reseaux();
                                                 </div>
                                                 <br/>
                                                 <hr> --}}
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-4 text-end mt-0">
-                                                        <button class="btn btn-primary" type="submit" name="submit">Enregistrer</button>
+                                                    <div class="row">
+                                                        <div class="col-sm-12 col-4 text-end mt-0">
+                                                            <button class="btn btn-primary" type="submit"
+                                                                name="submit">Enregistrer</button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </form>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
-
+                        <!-- /Sticky Actions -->
                     </div>
-                    <!-- /Sticky Actions -->
+                    <!-- / Content -->
+
+                    <!-- Footer -->
+
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+
                 </div>
-                <!-- / Content -->
+                <!-- Content wrapper -->
 
-                <!-- Footer -->
-
-                <!-- / Footer -->
-
-                <div class="content-backdrop fade"></div>
 
             </div>
-            <!-- Content wrapper -->
-
-
+            <!-- / Layout page -->
         </div>
-        <!-- / Layout page -->
     </div>
-</div>
 
-<!-- Overlay -->
-<div class="layout-overlay layout-menu-toggle"></div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
 
-<!-- Drag Target Area To SlideIn Menu On Small Screens -->
-<div class="drag-target"></div>
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
 
-<footer class="landing-footer bg-body footer-text mt-4">
-    <div class="footer-top">
-        <div class="container">
-            <div class="row gx-0 gy-4 g-md-5">
-                <div class="col-lg-7">
-                    <a href="{{route('/')}}" class="app-brand-link mb-4">
-                <span class="app-brand-logo demo">
-                <img src="{{ asset('/frontend/logo/logo-blanc.png')}}"/>
-                    <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1735.63 920.98">
+    <footer class="landing-footer bg-body footer-text mt-4">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row gx-0 gy-4 g-md-5">
+                    <div class="col-lg-7">
+                        <a href="{{ route('/') }}" class="app-brand-link mb-4">
+                            <span class="app-brand-logo demo">
+                                <img src="{{ asset('/frontend/logo/logo-blanc.png') }}" />
+                                <!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1735.63 920.98">
                         <g id="Calque_2" data-name="Calque 2">
                             <g id="Calque_1-2" data-name="Calque 1">
                                 <rect width="1735.63" height="920.98" fill="none"></rect>
@@ -607,99 +721,100 @@ $reseaux = Menu::get_info_reseaux();
                             </g>
                         </g>
                     </svg>-->
-                </span>
-                    </a>
-                    <p class="footer-text footer-logo-description mb-4">
-                        Fonds de Dévéloppement de Formation Professionnelle.
-                    </p>
+                            </span>
+                        </a>
+                        <p class="footer-text footer-logo-description mb-4">
+                            Fonds de Dévéloppement de Formation Professionnelle.
+                        </p>
+
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <h6 class="footer-title mb-4">Besoin<span class="badge rounded bg-primary ms-2">d'aide?</span>
+                        </h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Consulter les questions
+                                    fréquentes</a>
+                            </li>
+                            <li class="mb-3">
+                                <a href="#" target="_blank" class="footer-link">Contacter l'assistance</a>
+                            </li>
+
+                        </ul>
+                    </div>
 
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <h6 class="footer-title mb-4">Besoin<span class="badge rounded bg-primary ms-2">d'aide?</span></h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <a href="#" target="_blank" class="footer-link">Consulter les questions fréquentes</a>
-                        </li>
-                        <li class="mb-3">
-                            <a href="#" target="_blank" class="footer-link">Contacter l'assistance</a>
-                        </li>
-
-                    </ul>
+            </div>
+        </div>
+        <div class="footer-bottom py-3">
+            <div
+                class="container d-flex flex-wrap justify-content-between flex-md-row flex-column text-center text-md-start">
+                <div class="mb-2 mb-md-0">
+                    <span class="footer-text">©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                    </span>
+                    <a href="#" target="_blank" class="fw-medium text-white footer-link">FDFP</a>
+                    <span class="footer-text">Tous droits réservés</span>
                 </div>
-
+                <div>
+                    @foreach ($reseaux as $reseau)
+                        <a href="{{ $reseau->mot_cle }}" class="footer-link me-3" target="_blank">
+                            <img src="{{ asset('/frontend/logo/' . @$reseau->logo_logo) }}"
+                                alt="{{ $reseau->titre_logo }}" />
+                        </a>
+                    @endforeach
+                    <a href="www.barnoininformatique.ci" class="footer-link me-3" target="_blank">Designed by Barnoin
+                        Informatique</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="footer-bottom py-3">
-        <div
-            class="container d-flex flex-wrap justify-content-between flex-md-row flex-column text-center text-md-start">
-            <div class="mb-2 mb-md-0">
-            <span class="footer-text">©
-              <script>
-                document.write(new Date().getFullYear());
-              </script>
-            </span>
-                <a href="#" target="_blank" class="fw-medium text-white footer-link">FDFP</a>
-                <span class="footer-text">Tous droits réservés</span>
-            </div>
-            <div>
-                @foreach($reseaux as $reseau)
-                    <a href="{{$reseau->mot_cle}}" class="footer-link me-3" target="_blank">
-                        <img
-                            src="{{ asset('/frontend/logo/'. @$reseau->logo_logo)}}"
-                            alt="{{$reseau->titre_logo}}"/>
-                    </a>
-                @endforeach
-                <a href="www.barnoininformatique.ci" class="footer-link me-3" target="_blank">Designed by Barnoin
-                    Informatique</a>
-            </div>
-        </div>
-    </div>
-</footer>
+    </footer>
 
 
-<!-- / Layout wrapper -->
+    <!-- / Layout wrapper -->
 
-<!-- Core JS -->
-<!-- build:js assets/vendor/js/core.js -->
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
 
-<script src="{{asset('assets/vendor/libs/jquery/jquery.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/popper/popper.js')}}"></script>
-<script src="{{asset('assets/vendor/js/bootstrap.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/node-waves/node-waves.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/hammer/hammer.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/i18n/i18n.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/typeahead-js/typeahead.js')}}"></script>
-<script src="{{asset('assets/vendor/js/menu.js')}}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 
-<!-- endbuild -->
+    <!-- endbuild -->
 
-<!-- Vendors JS -->
-<script src="{{asset('assets/vendor/libs/jquery-sticky/jquery-sticky.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/cleavejs/cleave.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/cleavejs/cleave-phone.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/select1/select1.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/select2/select2.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/select3/select3.js')}}"></script>
-<script src="{{asset('assets/vendor/libs/dropzone/dropzone.js')}}"></script>
-<script src="{{asset('assets/js/jquery.validate.min.js')}}"></script>
-<script src="{{asset('assets/js/additional-methods.js')}}"></script>
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendor/libs/jquery-sticky/jquery-sticky.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select1/select1.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select3/select3.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/js/additional-methods.js') }}"></script>
 
-<!-- Main JS -->
-<script src="{{asset('assets/js/main.js')}}"></script>
-<script src="{{asset('assets/js/forms-file-upload.js')}}"></script>
-<!-- Page JS -->
-<script src="{{asset('assets/js/form-layouts.js')}}"></script>
-<script src="{{asset('assets/js/pages-enrolements.js')}}"></script>
+    <!-- Main JS -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/forms-file-upload.js') }}"></script>
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    <script src="{{ asset('assets/js/pages-enrolements.js') }}"></script>
 
-<script>
-    var selectBox = $("#id_forme_juridique");
-    let selectedValue = selectBox.val();
-    changeFuncFormeJuridique(selectedValue);
+    <script>
+        var selectBox = $("#id_forme_juridique");
+        let selectedValue = selectBox.val();
+        changeFuncFormeJuridique(selectedValue);
 
-    //Afficher les champs requis ou non en fontion du type de forme juridique
-    function changeFuncFormeJuridique(code_forme_juridique_array) {
+        //Afficher les champs requis ou non en fontion du type de forme juridique
+        function changeFuncFormeJuridique(code_forme_juridique_array) {
             const myArray = code_forme_juridique_array.split("/");
             let code_forme_juridique = myArray[0];
             if (code_forme_juridique === 'PR') {
@@ -710,22 +825,24 @@ $reseaux = Menu::get_info_reseaux();
                 displayPufield();
             }
         }
-    function hiddenPufield(){
-            $("#rccm_demande_enrolement").prop( "disabled", true );
-            $("#piece_attestation_immatriculati").prop( "disabled", true );
-            $("#numero_cnps_demande_enrolement").prop( "disabled", true );
-            $("#piece_rccm_demande_enrolement").prop( "disabled", true );
+
+        function hiddenPufield() {
+            $("#rccm_demande_enrolement").prop("disabled", true);
+            $("#piece_attestation_immatriculati").prop("disabled", true);
+            $("#numero_cnps_demande_enrolement").prop("disabled", true);
+            $("#piece_rccm_demande_enrolement").prop("disabled", true);
 
             $("#rccm_demande_enrolement_div").hide();
             $("#numero_cnps_demande_enrolement_div").hide();
             $("#piece_rccm_demande_enrolement_div").hide();
             $("#piece_attestation_immatriculati_div").hide();
         }
-    function displayPufield(){
-            $("#rccm_demande_enrolement").prop( "disabled", false );
-            $("#piece_attestation_immatriculati").prop( "disabled", false );
-            $("#numero_cnps_demande_enrolement").prop( "disabled", false );
-            $("#piece_rccm_demande_enrolement").prop( "disabled", false );
+
+        function displayPufield() {
+            $("#rccm_demande_enrolement").prop("disabled", false);
+            $("#piece_attestation_immatriculati").prop("disabled", false);
+            $("#numero_cnps_demande_enrolement").prop("disabled", false);
+            $("#piece_rccm_demande_enrolement").prop("disabled", false);
 
             $("#rccm_demande_enrolement_div").show();
             $("#numero_cnps_demande_enrolement_div").show();
@@ -734,53 +851,51 @@ $reseaux = Menu::get_info_reseaux();
         }
 
 
-    //Select2 localité entreprise
-    $("#id_localite").select2().val({{old('id_localite')}});
+        //Select2 localité entreprise
+        $("#id_localite").select2().val({{ old('id_localite') }});
 
-    //Select2 centre impot
-    $("#id_centre_impot").select2().val({{old('id_centre_impot')}});
+        //Select2 centre impot
+        $("#id_centre_impot").select2().val({{ old('id_centre_impot') }});
 
-    //Select2 secteur d'activité
-    $("#id_secteur_activite").select2().val({{old('id_secteur_activite')}});
+        //Select2 secteur d'activité
+        $("#id_secteur_activite").select2().val({{ old('id_secteur_activite') }});
+    </script>
 
-</script>
+    <script>
+        $(function() {
 
-<script>
-    $(function () {
-
-        $('#id_secteur_activite').on('change', function (e) {
-            var id = e.target.value;
-            telUpdate1(id);
-        });
-
-        function telUpdate1(id) {
-            $.get('/secteuractivilitelistes/' + id, function (data) {
-                $('#id_activites').empty();
-                $.each(data, function (index, tels) {
-                    $('#id_activites').append($('<option>', {
-                        value: tels.id_activites,
-                        text: tels.libelle_activites,
-                    }));
-                });
+            $('#id_secteur_activite').on('change', function(e) {
+                var id = e.target.value;
+                telUpdate1(id);
             });
-        }
-    });
 
-</script>
-
-<script>
-    $('#reload').click(function () {
-        $.ajax({
-            type: 'GET',
-            url: 'reload-captcha',
-            success: function (data) {
-                $(".captcha span").html(data.captcha);
+            function telUpdate1(id) {
+                $.get('/secteuractivilitelistes/' + id, function(data) {
+                    $('#id_activites').empty();
+                    $.each(data, function(index, tels) {
+                        $('#id_activites').append($('<option>', {
+                            value: tels.id_activites,
+                            text: tels.libelle_activites,
+                        }));
+                    });
+                });
             }
         });
-    });
+    </script>
 
-</script>
+    <script>
+        $('#reload').click(function() {
+            $.ajax({
+                type: 'GET',
+                url: 'reload-captcha',
+                success: function(data) {
+                    $(".captcha span").html(data.captcha);
+                }
+            });
+        });
+    </script>
 
 
 </body>
+
 </html>

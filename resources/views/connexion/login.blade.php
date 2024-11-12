@@ -73,11 +73,11 @@ $couleur = Menu::get_info_couleur();
             <!-- /Left Text -->
             <div class="d-none d-lg-flex col-lg-7 p-0">
                 <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
-                    <img src="{{ asset('assets/img/illustrations/auth-login-illustration-light.png') }}"
+                    <img src="{{ asset('assets/img/illustrations/boy-verify-email-light.png') }}"
                         alt="auth-login-cover" class="img-fluid my-5 auth-illustration" />
 
-                    <img src="{{ asset('assets/img/illustrations/bg-shape-image-light.png') }}" alt="auth-login-cover"
-                        class="platform-bg" />
+                    {{-- <img src="{{ asset('assets/img/illustrations/bg-shape-image-light.png') }}" alt="auth-login-cover"
+                        class="platform-bg" /> --}}
                 </div>
             </div>
             <!-- /Left Text -->
@@ -169,7 +169,7 @@ $couleur = Menu::get_info_couleur();
                         <input id="captcha" type="text" class="form-control" placeholder="Saisir les caractères ci-dessus" name="captcha">
                     </div>-->
 
-                         <div class="form-group mb-4">
+                        <div class="form-group mb-4">
                             <div class="form-group">
                                 <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
                                 @if ($errors->has('g-recaptcha-response'))
@@ -182,9 +182,9 @@ $couleur = Menu::get_info_couleur();
                     </form>
 
                     <p class="text-center">
-                        <span>Vous êtes nouveau sur la plateforme ?</span> <br>
+                        <span>Vous êtes une entreprise ?</span> <br>
                         <a href="{{ route('enrolements') }}">
-                            <span>Enrôlez vous ici</span>
+                            <span>Creez un compte ici</span>
                         </a>
                     </p>
 

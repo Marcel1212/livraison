@@ -1,0 +1,36 @@
+{
+  "name": "prgayman/laravel-qrcodemonkey",
+  "description": "Laravel package for use Qrcode Monkey Api",
+  "keywords": [
+    "QRCodeMonkey",
+    "laravel",
+    "monkey",
+    "qrcode"
+  ],
+  "homepage": "https://github.com/prgayman/laravel-qrcodemonkey",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ayman Alaiwah",
+      "email": "aymanalaiwah.dev@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "^7.0@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "Prgayman\\QRCodeMonkey\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Prgayman\\QRCodeMonkey\\QRCodeMonkeyServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev"
+}
