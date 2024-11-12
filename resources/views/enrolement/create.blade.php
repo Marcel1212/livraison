@@ -41,6 +41,30 @@ $reseaux = Menu::get_info_reseaux();
     <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/flag-icons.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/form-validation.css') }}" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Jost:wght@300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700&display=swap"
+        rel="stylesheet">
+
+
+    <!--==============================
+ All CSS File
+ ============================== -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/bootstrap.min.css') }}">
+    <!-- Fontawesome Icon -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/fontawesome.min.css') }}">
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/magnific-popup.min.css') }}">
+    <!-- Slick Slider -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/slick.min.css') }}">
+    <!-- Nice Select -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/nice-select.min.css') }}">
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('assetsfront/css/style.css') }}">
+
+
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/core.css') }}" class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/rtl/theme-default.css') }}"
@@ -107,12 +131,7 @@ $reseaux = Menu::get_info_reseaux();
                                 <!-- Menu logo wrapper: Start -->
                                 <div class="navbar-brand app-brand demo d-flex">
                                     <!-- Mobile menu toggle: Start-->
-                                    <button class="navbar-toggler border-0 px-0 me-2" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                                        aria-controls="navbarSupportedContent" aria-expanded="false"
-                                        aria-label="Toggle navigation">
-                                        <i class="ti ti-menu-2 ti-sm align-middle"></i>
-                                    </button>
+
                                     <!-- Mobile menu toggle: End-->
                                     <a href="{{ route('/') }}" class="app-brand-link">
                                         <span class="app-brand-logo demo">
@@ -139,7 +158,7 @@ $reseaux = Menu::get_info_reseaux();
                     <!-- / Navbar -->
 
                     <!-- Content wrapper -->
-                    <div class="content-wrapper">
+                    {{-- <div class="content-wrapper">
                         <!-- Content -->
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <div
@@ -148,7 +167,7 @@ $reseaux = Menu::get_info_reseaux();
                             </div>
                             <p class="text-center mb-0 px-3"></p>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -166,8 +185,9 @@ $reseaux = Menu::get_info_reseaux();
                             <div class="col-12">
                                 <div class="card">
                                     <div
-                                        class="card-header bg-label-secondary d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
-                                        <h3 class="card-title mb-sm-0 me-2"> <i class="fa fa-file-alt"></i> Livraison
+                                        class="card-header bg-label-los d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
+                                        <h3 class="card-title mb-sm-0 me-2">
+                                            Demande de service de livraison
                                         </h3>
                                         <div class="action-btns">
                                             <button class="btn btn-gray me-3"> <a
@@ -179,7 +199,8 @@ $reseaux = Menu::get_info_reseaux();
                                         <div class="row">
                                             <div class="col-lg-10 mx-auto">
                                                 <!-- 1. Delivery Address -->
-                                                <h5 class="my-4">1. Renseigner les informations de la livraison </h5>
+                                                <h5 class="my-4">Renseigner les informations et details de la
+                                                    livraison </h5>
                                                 <form method="POST" action="{{ route('enrolements.store') }}"
                                                     enctype="multipart/form-data" id="enrolementForm">
                                                     @csrf
@@ -187,359 +208,102 @@ $reseaux = Menu::get_info_reseaux();
                                                         <div class="row">
                                                             <div class="col-lg-8 mx-auto">
                                                                 <!-- 1. Delivery Address -->
-                                                                <h5 class="mb-4">1. Delivery Address</h5>
-                                                                <div class="row g-3">
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label" for="fullname">Full
-                                                                            Name</label>
+                                                                <h5 class="my-4"> <strong>1. Expediteur</strong></h5>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label" for="fullname">Nom
+                                                                            et prenoms <span
+                                                                                style="color:red;">*</span> </label>
                                                                         <input type="text" id="fullname"
-                                                                            class="form-control"
+                                                                            class="form-control" required="required"
                                                                             placeholder="John Doe">
                                                                     </div>
-                                                                    <div class="col-md-6">
+                                                                    <div class="col-md-12">
                                                                         <label class="form-label"
-                                                                            for="email">Email</label>
-                                                                        <div class="input-group input-group-merge">
-                                                                            <input class="form-control" type="text"
-                                                                                id="email" name="email"
-                                                                                placeholder="john.doe"
-                                                                                aria-label="john.doe"
-                                                                                aria-describedby="email3">
-                                                                            <span class="input-group-text"
-                                                                                id="email3">@example.com</span>
-                                                                        </div>
+                                                                            for="numero">Contact <span
+                                                                                style="color:red;">*</span></label>
+                                                                        <input type="number" id="numero"
+                                                                            class="form-control" required="required"
+                                                                            placeholder="0102032216">
                                                                     </div>
-                                                                    <div class="col-md-6">
+
+                                                                    <div class="col-md-12">
                                                                         <label class="form-label"
-                                                                            for="phone">Contact Number</label>
-                                                                        <input type="text" id="phone"
-                                                                            class="form-control phone-mask"
-                                                                            placeholder="658 799 8941"
-                                                                            aria-label="658 799 8941">
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label"
-                                                                            for="alt-num">Alternate Number</label>
-                                                                        <input type="text" id="alt-num"
-                                                                            class="form-control phone-mask"
-                                                                            placeholder="658 799 8941">
-                                                                    </div>
-                                                                    <div class="col-12">
-                                                                        <label class="form-label"
-                                                                            for="address">Address</label>
-                                                                        <textarea name="address" class="form-control" id="address" rows="2" placeholder="1456, Mall Road"></textarea>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label"
-                                                                            for="pincode">Pincode</label>
-                                                                        <input type="text" id="pincode"
-                                                                            class="form-control" placeholder="658468">
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label"
-                                                                            for="landmark">Landmark</label>
-                                                                        <input type="text" id="landmark"
-                                                                            class="form-control"
-                                                                            placeholder="Nr. Wall Street">
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <label class="form-label"
-                                                                            for="city">City</label>
-                                                                        <input type="text" id="city"
-                                                                            class="form-control"
-                                                                            placeholder="Jackson">
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <label class="form-label"
-                                                                            for="state">State</label>
+                                                                            for="state">Commune <span
+                                                                                style="color:red;">*</span></label>
                                                                         <div class="position-relative"><select
-                                                                                id="state"
-                                                                                class="select2 form-select select2-hidden-accessible"
-                                                                                data-allow-clear="true"
-                                                                                data-select2-id="state" tabindex="-1"
-                                                                                aria-hidden="true">
-                                                                                <option value=""
-                                                                                    data-select2-id="2">Select</option>
-                                                                                <option value="AL">Alabama</option>
-                                                                                <option value="AK">Alaska</option>
-                                                                                <option value="AZ">Arizona</option>
-                                                                                <option value="AR">Arkansas
-                                                                                </option>
-                                                                                <option value="CA">California
-                                                                                </option>
-                                                                                <option value="CO">Colorado
-                                                                                </option>
-                                                                                <option value="CT">Connecticut
-                                                                                </option>
-                                                                                <option value="DE">Delaware
-                                                                                </option>
-                                                                                <option value="DC">District Of
-                                                                                    Columbia</option>
-                                                                                <option value="FL">Florida</option>
-                                                                                <option value="GA">Georgia</option>
-                                                                                <option value="HI">Hawaii</option>
-                                                                                <option value="ID">Idaho</option>
-                                                                                <option value="IL">Illinois
-                                                                                </option>
-                                                                                <option value="IN">Indiana</option>
-                                                                                <option value="IA">Iowa</option>
-                                                                                <option value="KS">Kansas</option>
-                                                                                <option value="KY">Kentucky
-                                                                                </option>
-                                                                                <option value="LA">Louisiana
-                                                                                </option>
-                                                                                <option value="ME">Maine</option>
-                                                                                <option value="MD">Maryland
-                                                                                </option>
-                                                                                <option value="MA">Massachusetts
-                                                                                </option>
-                                                                                <option value="MI">Michigan
-                                                                                </option>
-                                                                                <option value="MN">Minnesota
-                                                                                </option>
-                                                                                <option value="MS">Mississippi
-                                                                                </option>
-                                                                                <option value="MO">Missouri
-                                                                                </option>
-                                                                                <option value="MT">Montana</option>
-                                                                                <option value="NE">Nebraska
-                                                                                </option>
-                                                                                <option value="NV">Nevada</option>
-                                                                                <option value="NH">New Hampshire
-                                                                                </option>
-                                                                                <option value="NJ">New Jersey
-                                                                                </option>
-                                                                                <option value="NM">New Mexico
-                                                                                </option>
-                                                                                <option value="NY">New York
-                                                                                </option>
-                                                                                <option value="NC">North Carolina
-                                                                                </option>
-                                                                                <option value="ND">North Dakota
-                                                                                </option>
-                                                                                <option value="OH">Ohio</option>
-                                                                                <option value="OK">Oklahoma
-                                                                                </option>
-                                                                                <option value="OR">Oregon</option>
-                                                                                <option value="PA">Pennsylvania
-                                                                                </option>
-                                                                                <option value="RI">Rhode Island
-                                                                                </option>
-                                                                                <option value="SC">South Carolina
-                                                                                </option>
-                                                                                <option value="SD">South Dakota
-                                                                                </option>
-                                                                                <option value="TN">Tennessee
-                                                                                </option>
-                                                                                <option value="TX">Texas</option>
-                                                                                <option value="UT">Utah</option>
-                                                                                <option value="VT">Vermont</option>
-                                                                                <option value="VA">Virginia
-                                                                                </option>
-                                                                                <option value="WA">Washington
-                                                                                </option>
-                                                                                <option value="WV">West Virginia
-                                                                                </option>
-                                                                                <option value="WI">Wisconsin
-                                                                                </option>
-                                                                                <option value="WY">Wyoming</option>
-                                                                            </select><span
-                                                                                class="select2 select2-container select2-container--default"
-                                                                                dir="ltr" data-select2-id="1"
-                                                                                style="width: 436px;"><span
-                                                                                    class="selection"><span
-                                                                                        class="select2-selection select2-selection--single"
-                                                                                        role="combobox"
-                                                                                        aria-haspopup="true"
-                                                                                        aria-expanded="false"
-                                                                                        tabindex="0"
-                                                                                        aria-disabled="false"
-                                                                                        aria-labelledby="select2-state-container"><span
-                                                                                            class="select2-selection__rendered"
-                                                                                            id="select2-state-container"
-                                                                                            role="textbox"
-                                                                                            aria-readonly="true"><span
-                                                                                                class="select2-selection__placeholder">Select
-                                                                                                value</span></span><span
-                                                                                            class="select2-selection__arrow"
-                                                                                            role="presentation"><b
-                                                                                                role="presentation"></b></span></span></span><span
-                                                                                    class="dropdown-wrapper"
-                                                                                    aria-hidden="true"></span></span>
+                                                                                id="operateur" name="operateur"
+                                                                                required="required"
+                                                                                class="select2 select2-size-sm form-select">
+
+                                                                                <?php echo $localite;
+                                                                                ?>
+
+                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-12">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input"
-                                                                                type="checkbox" value=""
-                                                                                id="deliveryAdd" checked="">
-                                                                            <label class="form-check-label"
-                                                                                for="deliveryAdd">
-                                                                                Use this as default delivery address
-                                                                            </label>
-                                                                        </div>
+                                                                        <label class="form-label"
+                                                                            for="address">Details du lieu </label>
+                                                                        <textarea name="address" class="form-control" id="address" rows="2"
+                                                                            placeholder="Ex: Rue M3 , Cocody Danga, Chez SAMER Riviera 2"></textarea>
                                                                     </div>
 
-                                                                    <label class="form-check-label">Address
-                                                                        Type</label>
-                                                                    <div class="col mt-2">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input name="collapsible-address-type"
-                                                                                class="form-check-input"
-                                                                                type="radio" value=""
-                                                                                id="collapsible-address-type-home"
-                                                                                checked="">
-                                                                            <label class="form-check-label"
-                                                                                for="collapsible-address-type-home">Home
-                                                                                (All day delivery)</label>
-                                                                        </div>
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input name="collapsible-address-type"
-                                                                                class="form-check-input"
-                                                                                type="radio" value=""
-                                                                                id="collapsible-address-type-office">
-                                                                            <label class="form-check-label"
-                                                                                for="collapsible-address-type-office">
-                                                                                Office (Delivery between 10 AM - 5 PM)
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
                                                                 <hr>
+                                                                <br>
                                                                 <!-- 2. Delivery Type -->
-                                                                <h5 class="my-4">2. Delivery Type</h5>
-                                                                <div class="row gy-3">
-                                                                    <div class="col-md">
-                                                                        <div
-                                                                            class="form-check custom-option custom-option-icon">
-                                                                            <label
-                                                                                class="form-check-label custom-option-content"
-                                                                                for="customRadioIcon1">
-                                                                                <span class="custom-option-body">
-                                                                                    <i class="ti ti-briefcase"></i>
-                                                                                    <span class="custom-option-title">
-                                                                                        Standard </span>
-                                                                                    <small> Delivery in 3-5 days.
-                                                                                    </small>
-                                                                                </span>
-                                                                                <input name="customDeliveryRadioIcon"
-                                                                                    class="form-check-input"
-                                                                                    type="radio" value=""
-                                                                                    id="customRadioIcon1"
-                                                                                    checked="">
-                                                                            </label>
-                                                                        </div>
+                                                                <h5 class="my-4"><strong>2. Destinataire</strong>
+                                                                </h5>
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label" for="fullname">Nom
+                                                                            et prenoms <span
+                                                                                style="color:red;">*</span> </label>
+                                                                        <input type="text" id="fullname"
+                                                                            class="form-control" required="required"
+                                                                            placeholder="John Doe">
                                                                     </div>
-                                                                    <div class="col-md">
-                                                                        <div
-                                                                            class="form-check custom-option custom-option-icon">
-                                                                            <label
-                                                                                class="form-check-label custom-option-content"
-                                                                                for="customRadioIcon2">
-                                                                                <span class="custom-option-body">
-                                                                                    <i class="ti ti-send"></i>
-                                                                                    <span class="custom-option-title">
-                                                                                        Express </span>
-                                                                                    <small>Delivery within 2
-                                                                                        days.</small>
-                                                                                </span>
-                                                                                <input name="customDeliveryRadioIcon"
-                                                                                    class="form-check-input"
-                                                                                    type="radio" value=""
-                                                                                    id="customRadioIcon2">
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md">
-                                                                        <div
-                                                                            class="form-check custom-option custom-option-icon checked">
-                                                                            <label
-                                                                                class="form-check-label custom-option-content"
-                                                                                for="customRadioIcon3">
-                                                                                <span class="custom-option-body">
-                                                                                    <i class="ti ti-crown"></i>
-                                                                                    <span class="custom-option-title">
-                                                                                        Overnight </span>
-                                                                                    <small> Delivery within a days.
-                                                                                    </small>
-                                                                                </span>
-                                                                                <input name="customDeliveryRadioIcon"
-                                                                                    class="form-check-input"
-                                                                                    type="radio" value=""
-                                                                                    id="customRadioIcon3">
-                                                                            </label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <hr>
-                                                                <!-- 3. Apply Promo code -->
-                                                                <h5 class="my-4">3. Apply Promo code</h5>
-                                                                <div class="row g-3">
-                                                                    <div class="col-sm-10 col-8">
-                                                                        <input type="text" class="form-control"
-                                                                            placeholder="TAKEITALL">
-                                                                    </div>
-                                                                    <div class="col-sm-2 col-4 text-end">
-                                                                        <button
-                                                                            class="btn btn-primary waves-effect waves-light">Apply</button>
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label"
+                                                                            for="numero">Contact <span
+                                                                                style="color:red;">*</span> </label>
+                                                                        <input type="number" id="numero"
+                                                                            class="form-control" required="required"
+                                                                            placeholder="0102032216">
                                                                     </div>
 
-                                                                    <div class="divider divider-dashed">
-                                                                        <div class="divider-text">OR</div>
-                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <label class="form-label"
+                                                                            for="state">Commune <span
+                                                                                style="color:red;">*</span> </label>
+                                                                        <div class="position-relative"><select
+                                                                                id="operateur" name="operateur"
+                                                                                required="required"
+                                                                                class="select2 select2-size-sm form-select">
 
+                                                                                <?php echo $localite;
+                                                                                ?>
+
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="col-12">
-                                                                        <ul class="list-group">
-                                                                            <li
-                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
-                                                                                <div class="offer">
-                                                                                    <p class="mb-0 fw-medium">TAKEITALL
-                                                                                    </p>
-                                                                                    <span>Apply this code to get 15%
-                                                                                        discount on orders above
-                                                                                        20$.</span>
-                                                                                </div>
-                                                                                <div class="apply mt-3 mt-sm-0">
-                                                                                    <button
-                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li
-                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
-                                                                                <div class="offer">
-                                                                                    <p class="mb-0 fw-medium">FESTIVE10
-                                                                                    </p>
-                                                                                    <span>Apply this code to get 10%
-                                                                                        discount on all orders.</span>
-                                                                                </div>
-                                                                                <div class="apply mt-3 mt-sm-0">
-                                                                                    <button
-                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li
-                                                                                class="list-group-item d-flex justify-content-between flex-column flex-sm-row">
-                                                                                <div class="offer">
-                                                                                    <p class="mb-0 fw-medium">
-                                                                                        MYSTERYDEAL</p>
-                                                                                    <span>Apply this code to get
-                                                                                        discount between 10% -
-                                                                                        50%.</span>
-                                                                                </div>
-                                                                                <div class="apply mt-3 mt-sm-0">
-                                                                                    <button
-                                                                                        class="btn btn-outline-primary waves-effect">Apply</button>
-                                                                                </div>
-                                                                            </li>
-                                                                        </ul>
+                                                                        <label class="form-label"
+                                                                            for="address">Details du lieu </label>
+                                                                        <textarea name="address" class="form-control" id="address" rows="2"
+                                                                            placeholder="Ex: Rue M3 , Cocody Danga, Chez SAMER Riviera 2"></textarea>
                                                                     </div>
+
                                                                 </div>
                                                                 <hr>
+
                                                                 <!-- 4. Payment Method -->
-                                                                <h5 class="my-4">4. Payment Method</h5>
+                                                                <h5 class="my-4"> <strong>3. Methode de
+                                                                        paiement</strong></h5>
                                                                 <div class="row g-3">
                                                                     <div class="mb-3">
-                                                                        <div class="form-check form-check-inline">
+                                                                        {{-- <div class="form-check form-check-inline">
                                                                             <input name="collapsible-payment"
                                                                                 class="form-check-input form-check-input-payment"
                                                                                 type="radio" value="credit-card"
@@ -551,92 +315,26 @@ $reseaux = Menu::get_info_reseaux();
                                                                                 Credit/Debit/ATM Card <i
                                                                                     class="ti ti-credit-card ti-xs"></i>
                                                                             </label>
-                                                                        </div>
+                                                                        </div> --}}
                                                                         <div class="form-check form-check-inline">
                                                                             <input name="collapsible-payment"
                                                                                 class="form-check-input form-check-input-payment"
                                                                                 type="radio" value="cash"
+                                                                                checked="checked"
                                                                                 id="collapsible-payment-cash">
                                                                             <label
                                                                                 class="form-check-label d-flex gap-1"
                                                                                 for="collapsible-payment-cash">
-                                                                                Cash On Delivery
+                                                                                Paiement a la livraison
                                                                                 <i class="ti ti-help text-muted ti-xs"
                                                                                     data-bs-toggle="tooltip"
                                                                                     data-bs-placement="top"
-                                                                                    aria-label="You can pay once you receive the product."
-                                                                                    data-bs-original-title="You can pay once you receive the product."></i>
+                                                                                    aria-label="Payez dès réception du colis"
+                                                                                    data-bs-original-title="Payez dès réception du colis"></i>
                                                                             </label>
                                                                         </div>
                                                                     </div>
-                                                                    <div id="form-credit-card" class="d-none">
-                                                                        <div class="col-12">
-                                                                            <div class="mb-3">
-                                                                                <label class="form-label w-100"
-                                                                                    for="creditCardMask">Card
-                                                                                    Number</label>
-                                                                                <div
-                                                                                    class="input-group input-group-merge">
-                                                                                    <input type="text"
-                                                                                        id="creditCardMask"
-                                                                                        name="creditCardMask"
-                                                                                        class="form-control credit-card-mask"
-                                                                                        placeholder="1356 3215 6548 7898"
-                                                                                        aria-describedby="creditCardMask2">
-                                                                                    <span
-                                                                                        class="input-group-text cursor-pointer p-1"
-                                                                                        id="creditCardMask2"><span
-                                                                                            class="card-type"></span></span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="row">
-                                                                                <div class="col-12 col-md-6">
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label"
-                                                                                            for="collapsible-payment-name">Name</label>
-                                                                                        <input type="text"
-                                                                                            id="collapsible-payment-name"
-                                                                                            class="form-control"
-                                                                                            placeholder="John Doe">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-6 col-md-3">
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label"
-                                                                                            for="collapsible-payment-expiry-date">Exp.
-                                                                                            Date</label>
-                                                                                        <input type="text"
-                                                                                            id="collapsible-payment-expiry-date"
-                                                                                            class="form-control expiry-date-mask"
-                                                                                            placeholder="MM/YY">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-6 col-md-3">
-                                                                                    <div class="mb-3">
-                                                                                        <label class="form-label"
-                                                                                            for="collapsible-payment-cvv">CVV
-                                                                                            Code</label>
-                                                                                        <div
-                                                                                            class="input-group input-group-merge">
-                                                                                            <input type="text"
-                                                                                                id="collapsible-payment-cvv"
-                                                                                                class="form-control cvv-code-mask"
-                                                                                                maxlength="3"
-                                                                                                placeholder="654">
-                                                                                            <span
-                                                                                                class="input-group-text cursor-pointer"
-                                                                                                id="collapsible-payment-cvv2"><i
-                                                                                                    class="ti ti-help ti-xs text-muted"
-                                                                                                    data-bs-toggle="tooltip"
-                                                                                                    data-bs-placement="top"
-                                                                                                    aria-label="Card Verification Value"
-                                                                                                    data-bs-original-title="Card Verification Value"></i></span>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -665,7 +363,7 @@ $reseaux = Menu::get_info_reseaux();
                                                     <div class="row">
                                                         <div class="col-sm-12 col-4 text-end mt-0">
                                                             <button class="btn btn-primary" type="submit"
-                                                                name="submit">Enregistrer</button>
+                                                                name="submit">Suivant</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -701,7 +399,34 @@ $reseaux = Menu::get_info_reseaux();
     <!-- Drag Target Area To SlideIn Menu On Small Screens -->
     <div class="drag-target"></div>
 
-    <footer class="landing-footer bg-body footer-text mt-4">
+    <footer class="footer-wrapper pt-45 footer-layout1"
+        data-bg-src="{{ asset('assetsfront/img/bg/footer-bg.png') }}">
+
+        <div class="footer-wrap  " data-bg-src="{{ asset('assetsfront/img/bg/jiji.png') }}">
+            <div class="widget-area">
+
+            </div>
+            <div class="container">
+                <div class="copyright-wrap">
+                    <div class="row justify-content-between align-items-center">
+                        <div class="col-md-6">
+                            <p class="copyright-text">Copyright © <?php echo Date('Y'); ?> <a
+                                    href="{{ route('/') }}">LOS Livraison</a> Tous droits réservés.</p>
+                        </div>
+                        <div class="col-md-6 text-end d-none d-md-block">
+                            <div class="footer-links">
+                                <ul>
+                                    <li><a href="www.kouassimarcel.online">Designed by ITVerse Informatique</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {{-- <footer class="landing-footer bg-body footer-text mt-4">
         <div class="footer-top">
             <div class="container">
                 <div class="row gx-0 gy-4 g-md-5">
@@ -770,13 +495,53 @@ $reseaux = Menu::get_info_reseaux();
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> --}}
 
 
     <!-- / Layout wrapper -->
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+
+    <!-- Scroll To Top -->
+    <div class="scroll-top">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
+                style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;">
+            </path>
+        </svg>
+    </div>
+
+    <!--==============================
+    All Js File
+============================== -->
+    <!-- Jquery -->
+    <script src="{{ asset('assetsfront/js/vendor/jquery-3.6.0.min.js') }}"></script>
+    <!-- Slick Slider -->
+    <script src="{{ asset('assetsfront/js/slick.min.js') }}"></script>
+    <!-- Bootstrap -->
+    <script src="{{ asset('assetsfront/js/bootstrap.min.js') }}"></script>
+    <!-- Magnific Popup -->
+    <script src="{{ asset('assetsfront/js/jquery.magnific-popup.min.js') }}"></script>
+    <!-- Counter Up -->
+    <script src="{{ asset('assetsfront/js/jquery.counterup.min.js') }}"></script>
+    <!-- Circle Progress -->
+    <script src="{{ asset('assetsfront/js/circle-progress.js') }}"></script>
+    <!-- Range Slider -->
+    <script src="{{ asset('assetsfront/js/jquery-ui.min.js') }}"></script>
+    <!-- Isotope Filter -->
+    <script src="{{ asset('assetsfront/js/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('assetsfront/js/isotope.pkgd.min.js') }}"></script>
+    <!-- Tilt JS -->
+    <script src="{{ asset('assetsfront/js/tilt.jquery.min.js') }}"></script>
+    <!-- Tweenmax JS -->
+    <script src="{{ asset('assetsfront/js/tweenmax.min.js') }}"></script>
+    <!-- Nice Select JS -->
+    <script src="{{ asset('assetsfront/js/nice-select.min.js') }}"></script>
+
+    <!-- Main Js File -->
+    <script src="{{ asset('assetsfront/js/main.js') }}"></script>
+
 
     <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>

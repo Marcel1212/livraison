@@ -37,6 +37,7 @@ class EnrolementController extends Controller
      */
     public function index()
     {
+        //dd('ici'); exit();
         $demandeenroles = DemandeEnrolement::where([['flag_valider_demande_enrolement', '=', false], ['flag_rejeter_demande_enrolement', '=', false]])->get();
         return view('enrolement.index', compact('demandeenroles'));
     }
@@ -51,29 +52,35 @@ class EnrolementController extends Controller
      */
     public function create()
     {
+        //dd('ici'); exit();
         //Secteur d'activité
-        $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
-                                           ->orderBy('libelle_secteur_activite')
-                                           ->get();
+        // $secteuractivites = SecteurActivite::where('flag_actif_secteur_activite', '=', true)
+        //                                    ->orderBy('libelle_secteur_activite')
+        //                                    ->get();
 
-        //Centre des impots
-        $centreimpots = CentreImpot::where('flag_centre_impot', '=', true)
-                                   ->orderBy('libelle_centre_impot')
-                                   ->get();
+        // //Centre des impots
+        // $centreimpots = CentreImpot::where('flag_centre_impot', '=', true)
+        //                            ->orderBy('libelle_centre_impot')
+        //                            ->get();
 
         //Localités
-        $localites = Localite::where('flag_localite', '=', true)
+        $localites = Localite::where('departement_localite_id', '=', 1)
                              ->orderBy('libelle_localite')
                              ->get();
+        $localite = "<option value=''> Selectionnez une commune </option>";
+        foreach ($localites as $comp) {
+            $localite .= "<option value='" . $comp->id_localite  . "'>" . $comp->libelle_localite ." </option>";
+        }
+                             //dd($localite); exit();
         //Forme juridiques
-        $formejuridiques = FormeJuridique::where('flag_actif_forme_juridique', '=', true)
-                                         ->orderBy('libelle_forme_juridique')
-                                         ->get();
+        // $formejuridiques = FormeJuridique::where('flag_actif_forme_juridique', '=', true)
+        //                                  ->orderBy('libelle_forme_juridique')
+        //                                  ->get();
         //Pays
-        $pays = Pays::where('flag_actif_pays', '=', true)
-                    ->get();
+        // $pays = Pays::where('flag_actif_pays', '=', true)
+        //             ->get();
 
-        return view('enrolement.create', compact('secteuractivites', 'centreimpots', 'localites', 'pays', 'formejuridiques'));
+        return view('enrolement.create', compact(  'localites', 'localite' ));
     }
 
 

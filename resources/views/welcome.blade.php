@@ -105,7 +105,7 @@ $reseaux = Menu::get_info_reseaux();
             <div class="th-mobile-menu">
                 <ul>
                     <li>
-                        <a href="{{ route('enrolements') }}" class="th-btn style3">Effectuer une livraison</a>
+                        <a href="{{ route('livraison') }}" class="th-btn style3">Effectuer une livraison</a>
                     </li>
                     <li>
                         <?php if (Auth::check()) {?>
@@ -183,7 +183,7 @@ $reseaux = Menu::get_info_reseaux();
                                     </nav>
                                     <!--<button type="button" class="th-menu-toggle d-block d-lg-none"><i class="far fa-bars"></i></button>-->
                                     <div class="header-button d-lg-none">
-                                        <a href="{{ route('enrolements') }}" class="th-btn style4">Effectuer une
+                                        <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
                                             livraison<i class="fas fa-arrow-right ms-1"></i></a>
                                         <?php if (Auth::check()) {?>
                                         <a href="{{ route('dashboard') }}" class="">Mon espace<i
@@ -197,7 +197,7 @@ $reseaux = Menu::get_info_reseaux();
                                 </div>
                                 <div class="col-auto d-none d-xl-block">
                                     <div class="header-button">
-                                        <a href="{{ route('enrolements') }}" class="th-btn style4">Effectuer une
+                                        <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
                                             livraison<i class="fas fa-arrow-right ms-1"></i></a>
                                         <?php if (Auth::check()) {?>
                                         <a href="{{ route('dashboard') }}" class="th-btn ml-25">Mon espace<i
@@ -238,7 +238,7 @@ Hero Area
                                 <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">L'experience fait
                                     la difference</p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{ route('enrolements') }}" class="th-btn style3">Effectuer une
+                                    <a href="{{ route('livraison') }}" class="th-btn style3">Effectuer une
                                         livraison<i class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@ Hero Area
                                     notre clientele, une priorite
                                 </p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{ route('enrolements') }}" class="th-btn style3">Effectuer une
+                                    <a href="{{ route('livraison') }}" class="th-btn style3">Effectuer une
                                         livraison<i class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
@@ -325,7 +325,7 @@ Hero Area
                                 <p class="hero-text" data-ani="slideinleft" data-ani-delay="0.6s">Faites nous
                                     confiance</p>
                                 <div class="btn-group" data-ani="slideinleft" data-ani-delay="0.8s">
-                                    <a href="{{ route('enrolements') }}" class="th-btn style3">Effectuer une
+                                    <a href="{{ route('livraison') }}" class="th-btn style3">Effectuer une
                                         livraison<i class="fas fa-arrow-right ms-2"></i></a>
                                 </div>
                             </div>
@@ -427,7 +427,7 @@ Hero Area
                 <div class="copyright-wrap">
                     <div class="row justify-content-between align-items-center">
                         <div class="col-md-6">
-                            <p class="copyright-text">Copyright © <?php echo Date('Y'); ?>; <a
+                            <p class="copyright-text">Copyright © <?php echo Date('Y'); ?> <a
                                     href="{{ route('/') }}">LOS Livraison</a> Tous droits réservés.</p>
                         </div>
                         <div class="col-md-6 text-end d-none d-md-block">

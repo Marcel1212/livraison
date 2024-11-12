@@ -6278,6 +6278,12 @@ input:-internal-autofill-selected {
   color: #a8aaae !important;
 }
 
+.bg-label-los {
+    background-color: #02073e !important;
+    color: #ceec6d !important;
+  }
+
+
 .bg-label-success {
   background-color: #2e4b4f !important;
   color: #28c76f !important;

@@ -183,7 +183,7 @@ $couleur = Menu::get_info_couleur();
 
                     <p class="text-center">
                         <span>Vous êtes une entreprise ?</span> <br>
-                        <a href="{{ route('enrolements') }}">
+                        <a href="{{ route('/') }}">
                             <span>Creez un compte ici</span>
                         </a>
                     </p>
