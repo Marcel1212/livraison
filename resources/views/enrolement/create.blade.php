@@ -184,6 +184,7 @@ $reseaux = Menu::get_info_reseaux();
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
+
                                     <div
                                         class="card-header bg-label-los d-flex justify-content-sm-between align-items-sm-center flex-column flex-sm-row">
                                         <h3 class="card-title mb-sm-0 me-2">
