@@ -18,7 +18,7 @@ $reseaux = Menu::get_info_reseaux();
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <?php if (isset($logo->mot_cle)){ ?>
-    <title><?php echo @$logo->mot_cle; ?> | demande d'enrolement</title>
+    <title><?php echo @$logo->mot_cle; ?> | Service de livraison</title>
     <?php } ?>
 
     <meta name="description" content="" />
