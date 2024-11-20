@@ -36,9 +36,21 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-        $data = User::with('agence:num_agce,lib_agce')
+        $idutil = Auth::user()->id;
+        $roles = Menu::get_menu_profil($idutil);
+
+        if ($roles == 'GESTIONNAIRE LIVRAISON') {
+
+            $data = User::with('agence:num_agce,lib_agce')
+            ->where([['flag_demission_users', '=', false], ['flag_admin_users', '=', false], ['livraison', '=', true]])
+            ->get();
+        }else {
+                  $data = User::with('agence:num_agce,lib_agce')
                 ->where([['flag_demission_users', '=', false], ['flag_admin_users', '=', false]])
                 ->get();
+        }
+
+
        //dd($data);
        Audit::logSave([
 
@@ -65,21 +77,21 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roless = Role::where([['id', '!=', 15]])->get();
+        $roless = Role::where([['id', '!=', 15] , ['livraison', '=', true]])->get();
         //$roles = Role::where([['id', '!=', 15]])->get()->pluck('name', 'name');
         $roles = "<option value=''> -- Sélectionner --</option>";
         foreach ($roless as $comp) {
             $roles .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."'   > " . ucfirst($comp->name) . " </option>";
         }
         //dd($roles);
-        $Entite = Agence::where([['flag_agce', '=', true]])->get();
-        foreach ($Entite as $comp) {
-            $Entite .= "<option  value='" . $comp->num_agce . "'   > " . $comp->lib_agce . " </option>";
-        }
+        // $Entite = Agence::where([['flag_agce', '=', true]])->get();
+        // foreach ($Entite as $comp) {
+        //     $Entite .= "<option  value='" . $comp->num_agce . "'   > " . $comp->lib_agce . " </option>";
+        // }
 
 
 
-        $directions = Direction::where([['flag_direction','=',true]])->get();
+        //$directions = Direction::where([['flag_direction','=',true]])->get();
         /*$direction = "<option value=''> Selectionnez une direction </option>";
         foreach ($directions as $comp) {
             $direction .= "<option value='" . $comp->id_direction  . "'>" . $comp->libelle_direction ." </option>";
@@ -98,7 +110,7 @@ class UserController extends Controller
             'objet'=>'ADMINISTRATION'
 
         ]);
-        return view('users.create', compact('roles', 'Entite','directions'));
+        return view('users.create', compact('roles' ));
     }
 
 
@@ -115,10 +127,8 @@ class UserController extends Controller
                 'name' => 'required',
                 'login_users' => 'required|unique:users,login_users|min:8',
                 'email' => 'required|unique:users,email',
-                'roles' => 'required',
                 'prenom_users' => 'required',
                 'password' => 'required|min:8',
-                'num_agce' => 'required'
             ], [
                 'name.required' => 'Veuillez ajouter un nom.',
                 'login_users.required' => 'Veuillez ajouter un identifiant.',
@@ -130,7 +140,7 @@ class UserController extends Controller
                 'prenom_users.required' => 'Veuillez ajouter un prénom.',
                 'password.required' => 'Veuillez ajouter un mot de passe.',
                 'password.min' => 'Le mot de passe doit avoir au moins 6 caractère.',
-                'num_agce.required' => 'Veuillez ajouter une antenne.'
+
             ]);
 
             $input = $request->all();
@@ -139,6 +149,7 @@ class UserController extends Controller
             $loginusers = $input['login_users'];
             $name = $input['name'] .' '. $input['prenom_users'];
             $input['password'] = Hash::make($input['password']);
+            $input['livraison'] = true;
             $user = User::create($input);
             $exploeprofil = explode("/",$request->input('roles'));
             $valprofile = $exploeprofil[0];
@@ -150,31 +161,6 @@ class UserController extends Controller
 
             $logo = Menu::get_logo();
 
-            if (isset($emailcli)) {
-                $sujet = "Activation de compte FDFP";
-                $titre = "Bienvenue sur " . @$logo->mot_cle . "";
-                $messageMail = "<b>Cher $name ,</b>
-                                    <br><br>Nous sommes ravis de vous accueillir sur notre plateforme ! <br> Votre compte a été créé avec
-                                        succès, et il est maintenant prêt à être utilisé.
-                                    <br><br>
-                                    <br><br>Voici un récapitulatif de vos informations de compte :
-                                    <br><b>Nom d'utilisateur : </b> $name
-                                    <br><b>Adresse e-mail : </b> $emailcli
-                                    <br><b>Identifiant : </b> $loginusers
-                                    <br><b>Mot de passe : </b> $passwordCli
-                                    <br><b>Date de création du compte : : </b> $user->created_at
-                                    <br><br>
-                                    <br><br>Pour activer votre compte, veuillez cliquer sur le lien ci-dessous :
-                                            http://fdfp.ldfgroupe.com/
-                                    <br>
-                                    -----
-                                    Ceci est un mail automatique, Merci de ne pas y répondre.
-                                    -----
-                                    ";
-
-
-                $messageMailEnvoi = Email::get_envoimailTemplate($emailcli, $name, $messageMail, $sujet, $titre);
-            }
 
             if(isset($profile)){
                 if($profile->code_roles == "CONSEILLER"){
@@ -227,9 +213,11 @@ class UserController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
 
+
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->first();
+        //dd($roles); exit();
         //$userRole = $user->roles->pluck('name', 'name')->all();
         $Entite = Agence::where([['flag_agce', '=', true]])->get();
         foreach ($Entite as $comp) {
@@ -237,9 +225,16 @@ class UserController extends Controller
             $Entite .= "<option  value='" . $comp->num_agce . "' $val  > " . $comp->lib_agce . " </option>";
         }
 
-        $Roless = Role::get();
+        //$Roless = Role::get();
 
-        //dd($userRole);
+        if ($userRole == 'GESTIONNAIRE LIVRAISON') {
+
+            $Roless = Role::where([['id', '!=', 15] , ['livraison', '=', true]])->get();
+            }else {
+                $Roless = Role::get();
+            }
+
+        //dd($Roless); exit();
         foreach ($Roless as $comp) {
             if ($userRole == $comp->name) {$val = 'selected="selected"'; } else { $val = '';}
             $Roless .= "<option  value='" . $comp->id ."' $val  > " . $comp->name . " </option>";

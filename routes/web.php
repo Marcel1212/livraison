@@ -18,6 +18,7 @@ use App\Http\Controllers\ProjetEtude\SelectionOperateurProjetEtudeController;
 use App\Http\Controllers\ProjetEtude\TraitementProjetEtudeController;
 use App\Http\Controllers\ProjetEtude\TraitementSelectionOperateurProjetEtudeController;
 use App\Http\Controllers\SousCritereEvaluationOffreTechController;
+use App\Http\Controllers\TarificationController;
 use App\Http\Controllers\TraitementCommissionEvaluationOffreController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,21 @@ Route::post('/motdepasseoublie', [MotDePasseOublieController::class, 'verify'])-
 Route::get('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 'otp'])->name('otp');
 Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 'verifyOtpUpdatePassword'])->name('otp.verification');
 
+  // Tarification
+  Route::get('traitementlivraisonprix', [TarificationController::class, 'index'])->name('traitementlivraisonprix');
+  Route::get('traitementlivraisonprix/index', [TarificationController::class, 'index'])->name('traitementlivraisonprix.index');
+  Route::get('traitementlivraisonprix/create', [TarificationController::class, 'create'])->name('traitementlivraisonprix.create');
+  Route::get('traitementlivraisonprix/{id_tarif_livraison}/edit', [TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
+  Route::post('traitementlivraisonprix/store', [App\Http\Controllers\TarificationController::class, 'store'])->name('traitementlivraisonprix.store');
+  Route::get('traitementlivraisonprix/{id_tarif_livraison}/show', [App\Http\Controllers\TarificationController::class, 'show'])->name('traitementlivraisonprix.show');
+  Route::post('traitementlivraisonprix/storelivraison', [App\Http\Controllers\TarificationController::class, 'storelivraison'])->name('traitementlivraisonprix.storelivraison');
+  Route::put('traitementlivraisonprix/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraisonprix.update');
+
+
+
+
+
+
 
 //
 //Route::get('/reset-password', function(){
@@ -69,49 +85,7 @@ Route::group(['middleware' => ['auth']], function () {
         //'localite' => App\Http\Controllers\LocaliteController::class,
 //        'projetetude' => App\Http\Controllers\ProjetEtudeController::class,
         'projetformation' => App\Http\Controllers\ProjetFormationController::class,
-        // 'enrolement' => App\Http\Controllers\EnrolementController::class,
-        // 'comitetechniquepe' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
-        //'statutoperations' => App\Http\Controllers\StatutOperationController::class,
-        //'motifs' => App\Http\Controllers\MotifController::class,
-        //'planformation' => App\Http\Controllers\PlanFormationController::class,
-        //'typeentreprise' => App\Http\Controllers\TypeEntrepriseController::class,
-        //'butformation' => App\Http\Controllers\ButFormationController::class,
-        //'typeformation' => App\Http\Controllers\TypeFormationController::class,
-        //'traitementplanformation' => App\Http\Controllers\TratementPlanFormationController::class,
-        //'periodeexercice' => App\Http\Controllers\PeriodeExerciceController::class,
-        //'ctplanformation' => App\Http\Controllers\CtplanformationController::class,
-    //     'ctprojetformation' => App\Http\Controllers\CtprojetformationController::class, // Ajout ctprojet
-    //     'ctprojetetude' => \App\Http\Controllers\ProjetEtude\CtprojetetudeController::class,
-    //    // 'ctplanformationvalider' => App\Http\Controllers\CtplanformationvaliderController::class,
-    //     'ctprojetformationvalider' => App\Http\Controllers\CtprojetformationvaliderController::class,
-        //'comitepleniere' => App\Http\Controllers\ComitePleniereController::class,
-        //'ctplanformationpleniere' => App\Http\Controllers\ComitePleniereController::class,
-        //'formejuridique' => App\Http\Controllers\FormeJuridiqueController::class,
-        //'secteuractivite' => App\Http\Controllers\SecteurActiviteController::class,
-        //'partentreprise' => App\Http\Controllers\PartEntrepriseController::class,
-        //'typecomites' => App\Http\Controllers\TypeComiteController::class,
-        //'agreement' => App\Http\Controllers\AgreementController::class,
-        //'comitegestion' => App\Http\Controllers\ComiteGestionController::class,
-        //'comitepermanente' => App\Http\Controllers\ComitePermanenteController::class,
     ]);
-
-    /**********PROJET D'ETUDE DEBUT***********/
-
-    //Demande projet d'étude
-//    Route::get('projetetude', [ProjetEtudeController::class, 'index'])->name('projetetude');
-//    Route::get('projetetude/index', [ProjetEtudeController::class, 'index'])->name('projetetude.index');
-//    Route::get('projetetude/create', [ProjetEtudeController::class, 'create'])->name('projetetude.create');
-//    Route::post('projetetude/store', [ProjetEtudeController::class, 'store'])->name('projetetude.store');
-//    Route::get('projetetude/{id}/{id_etape}/edit', [ProjetEtudeController::class, 'edit'])->name('projetetude.edit');
-//    Route::put('projetetude/{id}/{id_etape}/update', [ProjetEtudeController::class, 'update'])->name('projetetude.update');
-//    Route::get('projetetude/{id}/{id_piece_projet}/deletefpe', [ProjetEtudeController::class, 'deletefpe'])->name('projetetude.deletefpe');
-
-    //Affectation projet d'étude
-//    Route::get('affectationprojetetude', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude');
-//    Route::get('affectationprojetetude/index', [AffectationProjetEtudeController::class, 'index'])->name('affectationprojetetude.index');
-//    Route::get('affectationprojetetude/{id}/{id_etape}/edit', [AffectationProjetEtudeController::class, 'edit'])->name('affectationprojetetude.edit');
-//    Route::put('affectationprojetetude/{id}/update', [AffectationProjetEtudeController::class, 'update'])->name('affectationprojetetude.update');
-
 
 
     /**********PROJET D'ETUDE FIN***********/
@@ -307,6 +281,22 @@ Route::group(['middleware' => ['auth']], function () {
     //Substitution
     Route::get('agreement/{id_plan}/{id_action}/substitution', [App\Http\Controllers\AgreementController::class, 'substitution'])->name('agreement.substitution');
 
+    // Tarification
+    //  Route::get('traitementlivraisonprix', [TarificationController::class, 'index'])->name('traitementlivraisonprix');
+    //  Route::get('traitementlivraisonprix/index', [TarificationController::class, 'index'])->name('traitementlivraisonprix.index');
+    //  Route::get('traitementlivraisonprix/create', [TarificationController::class, 'create'])->name('traitementlivraisonprix.create');
+    //  Route::get('traitementlivraisonprix/{id_tarif_livraison}/edit', [TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
+    //  Route::post('traitementlivraisonprix/store', [App\Http\Controllers\TarificationController::class, 'store'])->name('traitementlivraisonprix.store');
+    //  Route::get('traitementlivraisonprix/{id_tarif_livraison}/show', [App\Http\Controllers\TarificationController::class, 'show'])->name('traitementlivraisonprix.show');
+    //  Route::post('traitementlivraisonprix/storelivraison', [App\Http\Controllers\TarificationController::class, 'storelivraison'])->name('traitementlivraisonprix.storelivraison');
+    //  Route::put('traitementlivraisonprix/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraisonprix.update');
+
+    Route::get('traitementlivraison', [TarificationController::class, 'indexlivraison'])->name('traitementlivraison');
+  Route::put('traitementlivraisonprix/{id}/edit', [App\Http\Controllers\TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
+  Route::put('traitementlivraison/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraison.update');
+  Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');
+
+
 
 
 
@@ -385,7 +375,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('planformation/create', [App\Http\Controllers\PlanFormationController::class, 'create'])->name('planformation.create');
         Route::post('planformation/store', [App\Http\Controllers\PlanFormationController::class, 'store'])->name('planformation.store');
         Route::get('planformation/{id}/show', [App\Http\Controllers\PlanFormationController::class, 'show'])->name('planformation.show');
-        Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf');
+        Route::get('planformation/{id}/deleteapf', [App\Http\Controllers\PlanFormationController::class, 'deleteapf'])->name('planformation.deleteapf'); traitementlivraisonprix
     });*/
 
     Route::group(['middleware' => ['can:cotisation-index']], function () {
@@ -579,31 +569,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('traitementcommissionevaluationoffres', [TraitementCommissionEvaluationOffreController::class, 'index'])->name('traitementcommissionevaluationoffres');
         Route::get('traitementcommissionevaluationoffres/{id}/{id1}/edit', [TraitementCommissionEvaluationOffreController::class, 'edit'])->name('traitementcommissionevaluationoffres.edit');
     Route::post('traitementcommissionevaluationoffres/{id}/note', [TraitementCommissionEvaluationOffreController::class, 'notation'])->name('traitementcommissionevaluationoffres.notation');
-//      Route::get('traitementcomitetechniques/{id}/{id2}/{id3}/editer', [TraitementCommissionEvaluationOffreController::class, 'editer'])->name('traitementcomitetechniques.editer');
-//        Route::put('traitementcomitetechniques/{id}/{id2}/{id3}/cahierupdate', [TraitementComitesTechniquesController::class, 'cahierupdate'])->name('traitementcomitetechniques.cahierupdate');
-//        Route::put('traitementcomitetechniques/{id}/{id1}/update', [TraitementComitesTechniquesController::class, 'update'])->name('traitementcomitetechniques.update');
-//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/planformation', [TraitementComitesTechniquesController::class, 'editplanformation'])->name('traitementcomitetechniques.edit.planformation');
-//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/projetetude', [TraitementComitesTechniquesController::class, 'edit'])->name('traitementcomitetechniques.edit.projetetude');
-//        Route::get('traitementcomitetechniques/{id}/{id1}/{id2}/edit/projetformation', [TraitementComitesTechniquesController::class, 'edit'])->name('traitementcomitetechniques.edit.projetformation');
-//        Route::get('traitementcomitetechniques/{id}/delete', [TraitementComitesTechniquesController::class, 'delete'])->name('traitementcomitetechniques.delete');
 
-//    });
-
-
-//    Route::get('offretechniques', [OffreTechniqueController::class, 'index'])->name('offretechniques');
-//
-//
-//
-//
-//    Route::get('offretechniques', [OffreTechniqueController::class, 'index'])->name('offretechniques');
-//    Route::get('offretechniques/create', [OffreTechniqueController::class, 'create'])->name('offretechniques.create');
-//    Route::post('offretechniques/store', [OffreTechniqueController::class, 'store'])->name('offretechniques.store');
-//    Route::get('comites/{id}/show', [ComitesController::class, 'show'])->name('comites.show');
-//    Route::get('comites/{id}/{id2}/{id3}/cahier', [ComitesController::class, 'cahier'])->name('comites.cahier');
-//    Route::get('comites/{id}/{id2}/{id3}/editer', [ComitesController::class, 'editer'])->name('comites.editer');
-//    Route::post('comites/{id}/{id2}/{id3}/cahierupdate', [ComitesController::class, 'cahierupdate'])->name('comites.cahierupdate');
-//    Route::put('comites/{id}/{id1}/update', [ComitesController::class, 'update'])->name('comites.update');
-//    Route::get('comites/{id}/{id1}/edit', [ComitesController::class, 'edit'])->name('comites.edit');
 
     /* route domaine de fromation */
 

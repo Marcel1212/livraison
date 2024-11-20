@@ -55,6 +55,7 @@ class RoleController extends Controller
         ]);
         $role = new Role();
         $role->name = $request->name;
+        $role->livraison = true;
         $role->save();
         return redirect('menuprofillayout/'.$role->id)->with('success', 'Succès : Profil ajouté avec succès. Veuillez attribuer les droits d\'accès au profil');
     }

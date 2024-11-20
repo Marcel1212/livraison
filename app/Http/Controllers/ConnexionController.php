@@ -106,12 +106,13 @@ class ConnexionController extends Controller
         $idutilClient = Auth::user()->id_partenaire;
         $naroles = Menu::get_menu_profil($idutil);
         $nacodes = Menu::get_code_menu_profil($idutil);
+        //dd($naroles);exit();
         $date = date('d/m/Y'); // var_dump($date); exit();
         /******************AFFICHIER LES GRAPHES****************************/
         $dataUser = DB::table('users as v')->select(DB::raw("count(v.id) as nb_user"))->first();
 
         return view('dashboard.dashboard')->with(
-            compact('naroles', 'idutilClient', 'nacodes', 'dataUser')
+            compact('naroles', 'idutilClient', 'nacodes', 'dataUser','naroles')
         );
     }
 }

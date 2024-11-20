@@ -28,7 +28,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'prenom_users', 'email', 'password', 'genre_users', 'cel_users','login_users',
         'tel_users', 'localisation_users', 'adresse_users','id_partenaire','flag_mdp','flag_actif_users',
-        'photo_profil','indicatif_cel_users','indicatif_tel_users','num_agce','email_agce','id_direction','id_departement','id_service'
+        'photo_profil','indicatif_cel_users','indicatif_tel_users','num_agce','email_agce','id_direction','id_departement','id_service','livraison'
     ];
 
 
@@ -55,7 +55,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Departement::class,'id_departement','id_departement');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

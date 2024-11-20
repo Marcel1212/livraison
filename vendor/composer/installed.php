@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'f112e55ed00685a9afb400d2594ad76c3788f9c0',
+        'reference' => 'd68fab0492e884e49838acc0f3eacc5aa6582bb0',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -433,6 +433,15 @@
             'reference' => '1ac521f5ef79a376282e3315ba6a13a83c63fb9a',
             'dev_requirement' => false,
         ),
+        'krlove/eloquent-model-generator' => array(
+            'pretty_version' => '2.0.2',
+            'version' => '2.0.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../krlove/eloquent-model-generator',
+            'aliases' => array(),
+            'reference' => '7d0036f86a4731d81cbefce84b6ae04ff174a47c',
+            'dev_requirement' => false,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v10.30.1',
             'version' => '10.30.1.0',
@@ -448,7 +457,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'f112e55ed00685a9afb400d2594ad76c3788f9c0',
+            'reference' => 'd68fab0492e884e49838acc0f3eacc5aa6582bb0',
             'dev_requirement' => false,
         ),
         'laravel/pint' => array(

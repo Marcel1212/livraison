@@ -200,31 +200,37 @@ $reseaux = Menu::get_info_reseaux();
                                         <div class="row">
                                             <div class="col-lg-10 mx-auto">
                                                 <!-- 1. Delivery Address -->
-                                                <h5 class="my-4">Renseigner les informations et details de la
-                                                    livraison </h5>
-                                                <form method="POST" action="{{ route('enrolements.store') }}"
-                                                    enctype="multipart/form-data" id="enrolementForm">
+                                                <h5 class="my-4">
+                                                    Renseigner les informations et les détails de la livraison
+                                                </h5>
+                                                <form method="POST"
+                                                    action="{{ route('traitementlivraisonprix.storelivraison') }}"
+                                                    enctype="multipart/form-data" id="livraisonForm">
                                                     @csrf
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-8 mx-auto">
                                                                 <!-- 1. Delivery Address -->
-                                                                <h5 class="my-4"> <strong>1. Expediteur</strong></h5>
+                                                                <h5 class="my-4"> <strong>1. Expediteur</strong>
+                                                                </h5>
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <label class="form-label" for="fullname">Nom
                                                                             et prenoms <span
-                                                                                style="color:red;">*</span> </label>
-                                                                        <input type="text" id="fullname"
-                                                                            class="form-control" required="required"
-                                                                            placeholder="John Doe">
+                                                                                style="color:red;">*</span>
+                                                                        </label>
+                                                                        <input type="text" id="nom_exp"
+                                                                            name="nom_exp" class="form-control"
+                                                                            required="required"
+                                                                            placeholder="Dechou Moise">
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <label class="form-label"
                                                                             for="numero">Contact <span
                                                                                 style="color:red;">*</span></label>
-                                                                        <input type="number" id="numero"
-                                                                            class="form-control" required="required"
+                                                                        <input type="number" id="numero_exp"
+                                                                            name="numero_exp" class="form-control"
+                                                                            required="required"
                                                                             placeholder="0102032216">
                                                                     </div>
 
@@ -233,7 +239,8 @@ $reseaux = Menu::get_info_reseaux();
                                                                             for="state">Commune <span
                                                                                 style="color:red;">*</span></label>
                                                                         <div class="position-relative"><select
-                                                                                id="operateur" name="operateur"
+                                                                                id="id_commune_exp"
+                                                                                name="id_commune_exp"
                                                                                 required="required"
                                                                                 class="select2 select2-size-sm form-select">
 
@@ -246,7 +253,7 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <div class="col-12">
                                                                         <label class="form-label"
                                                                             for="address">Details du lieu </label>
-                                                                        <textarea name="address" class="form-control" id="address" rows="2"
+                                                                        <textarea name="details_exp" class="form-control" id="details_exp" rows="3"
                                                                             placeholder="Ex: Rue M3 , Cocody Danga, Chez SAMER Riviera 2"></textarea>
                                                                     </div>
 
@@ -260,39 +267,43 @@ $reseaux = Menu::get_info_reseaux();
                                                                     <div class="col-md-12">
                                                                         <label class="form-label" for="fullname">Nom
                                                                             et prenoms <span
-                                                                                style="color:red;">*</span> </label>
-                                                                        <input type="text" id="fullname"
-                                                                            class="form-control" required="required"
-                                                                            placeholder="John Doe">
+                                                                                style="color:red;">*</span>
+                                                                        </label>
+                                                                        <input type="text" id="nom_dest"
+                                                                            name="nom_dest" class="form-control"
+                                                                            required="required"
+                                                                            placeholder="Bedah Henri">
                                                                     </div>
                                                                     <div class="col-md-12">
                                                                         <label class="form-label"
                                                                             for="numero">Contact <span
-                                                                                style="color:red;">*</span> </label>
-                                                                        <input type="number" id="numero"
+                                                                                style="color:red;">*</span>
+                                                                        </label>
+                                                                        <input type="number" id="numero_dest"
                                                                             class="form-control" required="required"
+                                                                            name="numero_dest"
                                                                             placeholder="0102032216">
                                                                     </div>
 
                                                                     <div class="col-md-12">
                                                                         <label class="form-label"
                                                                             for="state">Commune <span
-                                                                                style="color:red;">*</span> </label>
-                                                                        <div class="position-relative"><select
-                                                                                id="operateur" name="operateur"
-                                                                                required="required"
-                                                                                class="select2 select2-size-sm form-select">
+                                                                                style="color:red;">*</span>
+                                                                        </label>
+                                                                        <select id="id_commune_dest"
+                                                                            name="id_commune_dest" required="required"
+                                                                            class="select2 select2-size-sm form-select">
 
-                                                                                <?php echo $localite;
-                                                                                ?>
+                                                                            <?php echo $localite;
+                                                                            ?>
 
-                                                                            </select>
-                                                                        </div>
+                                                                        </select>
+
                                                                     </div>
                                                                     <div class="col-12">
                                                                         <label class="form-label"
                                                                             for="address">Details du lieu </label>
-                                                                        <textarea name="address" class="form-control" id="address" rows="2"
+                                                                        <textarea name="details_dest" class="form-control" id="details_dest" rows="3"
                                                                             placeholder="Ex: Rue M3 , Cocody Danga, Chez SAMER Riviera 2"></textarea>
                                                                     </div>
 
@@ -300,23 +311,33 @@ $reseaux = Menu::get_info_reseaux();
                                                                 <hr>
 
                                                                 <!-- 4. Payment Method -->
-                                                                <h5 class="my-4"> <strong>3. Methode de
+
+                                                                <h5 class="my-4"> <strong>3. Date de
+                                                                        livraison</strong></h5>
+                                                                <div class="row g-3">
+                                                                    <div class="mb-3">
+
+                                                                        <div class="form-check form-check-inline">
+
+                                                                            <label class="form-label"
+                                                                                for="date_debut_fiche_agrement">Veuillez
+                                                                                renseignez la date de la
+                                                                                livraison<strong
+                                                                                    style="color:red;">*</strong></label>
+                                                                            <input type="date" id="date_livraison"
+                                                                                required="required"
+                                                                                name="date_livraison"
+                                                                                class="form-control form-control-sm" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <h5 class="my-4"> <strong>4. Methode de
                                                                         paiement</strong></h5>
                                                                 <div class="row g-3">
                                                                     <div class="mb-3">
-                                                                        {{-- <div class="form-check form-check-inline">
-                                                                            <input name="collapsible-payment"
-                                                                                class="form-check-input form-check-input-payment"
-                                                                                type="radio" value="credit-card"
-                                                                                id="collapsible-payment-cc"
-                                                                                checked="">
-                                                                            <label
-                                                                                class="form-check-label d-flex gap-1"
-                                                                                for="collapsible-payment-cc">
-                                                                                Credit/Debit/ATM Card <i
-                                                                                    class="ti ti-credit-card ti-xs"></i>
-                                                                            </label>
-                                                                        </div> --}}
+
                                                                         <div class="form-check form-check-inline">
                                                                             <input name="collapsible-payment"
                                                                                 class="form-check-input form-check-input-payment"
@@ -343,27 +364,9 @@ $reseaux = Menu::get_info_reseaux();
 
 
                                                     <br />
-                                                    {{-- <hr>
-
-                                                <h5 class="my-4">3. Vérificateur de sécurité</h5>
-
-                                                <div class="row gy-3">
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <div class="g-recaptcha"
-                                                                 data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
-                                                            @error('g-recaptcha-response')
-                                                                <div class=""><label class="error">{{ $message }}</label></div>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <br/>
-                                                <hr> --}}
                                                     <div class="row">
                                                         <div class="col-sm-12 col-4 text-end mt-0">
-                                                            <button class="btn btn-primary" type="submit"
+                                                            <button class="btn    btn-outline-warning" type="submit"
                                                                 name="submit">Suivant</button>
                                                         </div>
                                                     </div>

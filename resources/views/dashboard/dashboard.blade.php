@@ -6,7 +6,6 @@ use App\Helpers\Crypt;
 
 @extends('layouts.backLayout.designadmin')
 @section('content')
-
     <div class="app-content content ">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
@@ -28,11 +27,14 @@ use App\Helpers\Crypt;
                 @include('dashboard.menu.chefservice')
                 <?php } elseif($nacodes == "CHARGEHABIL") { ?>
                 @include('dashboard.menu.chargerhabilitation')
+                <?php } elseif($naroles == "GESTIONNAIRE LIVRAISON") { ?>
+                @include('dashboard.menu.gestionnaire')
+                <?php  } elseif($naroles == "Livreur") { ?>
+                @include('dashboard.menu.livreur')
                 <?php } else { ?>
                 @include('dashboard.menu.autre')
                 <?php } ?>
             </div>
         </div>
     </div>
-
 @endsection

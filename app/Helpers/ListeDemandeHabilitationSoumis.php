@@ -7,6 +7,7 @@ use App\Models\BeneficiairesFormation;
 use App\Models\DemandeHabilitation;
 use App\Models\FicheAgrementButFormation;
 use App\Models\PlanFormation;
+use App\Models\Livraison;
 use App\Models\SecteurActiviteUserConseiller;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,23 @@ class ListeDemandeHabilitationSoumis
     public static function get_liste_demande_habilitation_soumis($numAgce)
     {
         $demandehabilitations = DB::table('vue_demande_habilitation_soumis')->where([['id_agence','=',$numAgce]])->get();
+
+        return (isset($demandehabilitations) ? $demandehabilitations : '');
+    }
+    //
+
+    public static function get_livraisons()
+    {
+        //$demandehabilitations = DB::table('livraison')->where([['flag_valide','=',true],['flag_a_traite','=',false]])->get();
+        $demandehabilitations = Livraison::where([['flag_valide','=',true],['flag_a_traite','=',false]])->get();
+
+        return (isset($demandehabilitations) ? $demandehabilitations : '');
+    }
+
+    public static function get_livraisons_livreur($idlivreur)
+    {
+        //$demandehabilitations = DB::table('livraison')->where([['flag_valide','=',true],['flag_a_traite','=',false]])->get();
+        $demandehabilitations = Livraison::where([['id_livreur','=',$idlivreur],['flag_livre','=',false],['flag_echec','=',false]])->get();
 
         return (isset($demandehabilitations) ? $demandehabilitations : '');
     }

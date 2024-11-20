@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Localite;
 use App\Models\Departement;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\Menu;
+use Auth;
 
 
 class LocaliteController extends Controller
@@ -16,6 +18,20 @@ class LocaliteController extends Controller
      */
     public function index()
     {
+        $idutil = Auth::user()->id;
+        $roles = Menu::get_menu_profil($idutil);
+        //dd($roles); exit();
+        if ($roles == 'GESTIONNAIRE LIVRAISON'){
+            $localites = Localite::where('departement_localite_id','=',1)->get();
+            $localite_departement = DB::table('localite')
+            ->join('departement_localite', 'localite.departement_localite_id', '=', 'departement_localite.id_departement_localite')
+            ->join('region', 'departement_localite.id_region', '=', 'region.id_region')
+            ->join('district', 'region.id_district', '=', 'district.id_district')
+            ->select('localite.*', 'departement_localite.*', 'region.*', 'district.*')
+            ->where('departement_localite_id','=',1)
+            ->get();
+            //dd($localites); exit();
+        }else {
         $localites = Localite::all();
         $localite_departement = DB::table('localite')
         ->join('departement_localite', 'localite.departement_localite_id', '=', 'departement_localite.id_departement_localite')
@@ -23,7 +39,9 @@ class LocaliteController extends Controller
         ->join('district', 'region.id_district', '=', 'district.id_district')
         ->select('localite.*', 'departement_localite.*', 'region.*', 'district.*')
         ->get();
-        //dd( $localite_departement);
+        }
+
+        //dd( $localites); exit();
         Audit::logSave([
 
             'action'=>'INDEX',
@@ -66,7 +84,12 @@ class LocaliteController extends Controller
      */
     public function store(Request $request)
     {
-        $localite = Localite::create($request->all());
+        //dd($request->all());exit;
+        $input = $request->all();
+        $input["departement_localite_id"] = 1;
+        $input["departement_localite_id"] = '111D';
+        //dd($input);exit();
+        $localite = Localite::create($input);
 
         Audit::logSave([
 
