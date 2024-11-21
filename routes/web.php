@@ -50,9 +50,11 @@ Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 
   // Tarification
   Route::get('traitementlivraisonprix', [TarificationController::class, 'index'])->name('traitementlivraisonprix');
   Route::get('traitementlivraisonprix/index', [TarificationController::class, 'index'])->name('traitementlivraisonprix.index');
+  Route::get('/tracking', [TarificationController::class, 'tracking'])->name('tracking');
   Route::get('traitementlivraisonprix/create', [TarificationController::class, 'create'])->name('traitementlivraisonprix.create');
   Route::get('traitementlivraisonprix/{id_tarif_livraison}/edit', [TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
   Route::post('traitementlivraisonprix/store', [App\Http\Controllers\TarificationController::class, 'store'])->name('traitementlivraisonprix.store');
+  Route::post('traitementlivraisonprix/verification', [App\Http\Controllers\TarificationController::class, 'verification'])->name('traitementlivraisonprix.verification');
   Route::get('traitementlivraisonprix/{id_tarif_livraison}/show', [App\Http\Controllers\TarificationController::class, 'show'])->name('traitementlivraisonprix.show');
   Route::post('traitementlivraisonprix/storelivraison', [App\Http\Controllers\TarificationController::class, 'storelivraison'])->name('traitementlivraisonprix.storelivraison');
   Route::put('traitementlivraisonprix/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraisonprix.update');
@@ -293,8 +295,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('traitementlivraison', [TarificationController::class, 'indexlivraison'])->name('traitementlivraison');
   Route::put('traitementlivraisonprix/{id}/edit', [App\Http\Controllers\TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
+  Route::get('traitementlivraisonprix/{id}/editlivraison', [App\Http\Controllers\TarificationController::class, 'editlivraison'])->name('traitementlivraisonprix.editlivraison');
   Route::put('traitementlivraison/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraison.update');
   Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');
+  Route::put('traitementlivraison/{id}/updateprixlivraison', [App\Http\Controllers\TarificationController::class, 'updateprixlivraison'])->name('traitementlivraison.updateprixlivraison');
+  Route::get('statistiquelivreur', [TarificationController::class, 'indexstatlivreur'])->name('statistiquelivreur');
+  Route::get('statistiqueperiode', [TarificationController::class, 'indexstatperiode'])->name('statistiqueperiode');
 
 
 

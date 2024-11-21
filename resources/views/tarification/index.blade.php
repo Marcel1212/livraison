@@ -65,7 +65,7 @@
                                                     <th>Lieu d'expedition</th>
                                                     <th>Lieu de destination</th>
                                                     <th>Prix</th>
-                                                    <th>Statut</th>
+                                                    {{-- <th>Statut</th> --}}
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -74,21 +74,24 @@
                                                 @foreach ($tarification as $key => $tarifications)
                                                     <tr>
                                                         <td>{{ ++$i }}</td>
-                                                        <td>{{ $tarifications->localite->libelle_localite }}</td>
                                                         <td>{{ $tarifications->localitedest->libelle_localite }}</td>
+                                                        <td>{{ $tarifications->localite->libelle_localite }}</td>
                                                         <td>{{ $tarifications->prix }}</td>
-                                                        <td align="center">
-                                                            <?php if ($tarifications->flag_valide == true ){?>
+                                                        {{-- <td align="center">
+                                                            <?php //if ($tarifications->flag_valide == true ){
+                                                            ?>
                                                             <span class="badge bg-success">Actif</span>
-                                                            <?php } else {?>
+                                                            <?php //} else {
+                                                            ?>
                                                             <span class="badge bg-danger">Inactif</span>
-                                                            <?php }  ?>
-                                                        </td>
+                                                            <?php //}
+                                                            ?>
+                                                        </td> --}}
 
 
 
                                                         <td align="center">
-                                                            <a href="{{ route($lien . '.edit', \App\Helpers\Crypt::UrlCrypt($tarifications->id_tarif_livraison)) }}"
+                                                            <a href="{{ route($lien . '.editlivraison', \App\Helpers\Crypt::UrlCrypt($tarifications->id_tarif_livraison)) }}"
                                                                 class=" " title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>
                                                         </td>

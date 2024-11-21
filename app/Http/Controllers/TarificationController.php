@@ -25,6 +25,13 @@ class TarificationController extends Controller
         //dd($tarification);exit();
         return view('tarification.index', compact('tarification'));
     }
+    public function tracking()
+    {
+        //
+        //$tarification = TarifLivraison::all();
+        //dd($tarification);exit();
+        return view('tarification.tracking');
+    }
 
     public function indexLivraison()
     {
@@ -46,6 +53,31 @@ class TarificationController extends Controller
 
         //dd($livraison);exit();
         return view('tarification.indexlivraison', compact('livraison'));
+    }
+
+    public function indexstatlivreur()
+    {
+        //
+        $chargerHabilitations = DB::table('vue_liste_livreurs')->get();
+        $chargerHabilitationsList =  "<option value=''> Selectionnez le livreur </option>";
+        foreach ($chargerHabilitations as $comp) {
+            $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+        }
+        //dd($chargerHabilitationsList);exit();
+        return view('tarification.indexstatlivreur', compact('chargerHabilitationsList'));
+    }
+
+
+    public function indexstatperiode()
+    {
+        //
+        $chargerHabilitations = DB::table('vue_liste_livreurs')->get();
+        $chargerHabilitationsList =  "<option value=''> Selectionnez le livreur </option>";
+        foreach ($chargerHabilitations as $comp) {
+            $chargerHabilitationsList .= "<option value='" . $comp->id  . "'>" . mb_strtoupper($comp->name) .' '. mb_strtoupper($comp->prenom_users) ." </option>";
+        }
+        //dd($chargerHabilitationsList);exit();
+        return view('tarification.indexstatperiode', compact('chargerHabilitationsList'));
     }
 
 
@@ -99,6 +131,33 @@ class TarificationController extends Controller
         //return redirect()->route('traitementlivraisonprix.index')->with('success', 'Tarification ajouté avec succès.');
     }
 
+
+    public function verification(Request $request)
+    {
+        //
+        $input = $request->all();
+        $codelivraison = $input["code_livraison"];
+        $livraison = Livraison::where([['code_livraison','=',$codelivraison]])->first();
+        if($livraison != null){
+            if (isset($livraison->id_livreur)){
+                $livreur = User::find($livraison->id_livreur);
+                //dd($livreur); exit();
+
+            }else{
+                $livreur = [];
+            }
+            return view('tarification.trackingresult', compact('livraison','livreur'));
+        }else{
+
+            return redirect()->route('tracking')->with('error', 'Livraison inexistante');
+        }
+       // dd($livraison); exit();
+
+
+    }
+
+
+
     /**
      * Display the specified resource.
      */
@@ -150,6 +209,56 @@ class TarificationController extends Controller
 
     }
 
+
+    public function editlivraison(string $id)
+    {
+        //
+        $user_id = Auth::user()->id;
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
+        //dd($nomrole); exit(); //GESTIONNAIRE LIVRAISON
+        $id =  Crypt::UrldeCrypt($id);
+        $tariflivraison = TarifLivraison::find($id);
+        $idcommuneexp = $tariflivraison->id_commune_exp;
+        $idcommunedest = $tariflivraison->id_commune_dest;
+        //dd($tariflivraison); die();
+
+        $localites = Localite::where('departement_localite_id', '=', 1)
+                            ->orderBy('libelle_localite')
+                            ->get();
+        $localiteexp = "<option value=''> Selectionnez une commune </option>";
+        foreach ($localites as $comp) {
+            if ($comp->id_localite == $idcommuneexp){
+                $val = 'selected';
+            }else {
+                $val = '';
+            }
+
+        $localiteexp .= "<option value='" . $comp->id_localite  . "'  $val >" . $comp->libelle_localite ." </option>";
+        }
+        //dd($localiteexp); exit();
+
+        // Dest
+        $localitedest = "<option value=''> Selectionnez une commune </option>";
+        foreach ($localites as $comp) {
+            if ($comp->id_localite == $idcommunedest){
+                $val = 'selected';
+            }else {
+                $val = '';
+            }
+
+        $localitedest .= "<option value='" . $comp->id_localite  . "'  $val >" . $comp->libelle_localite ." </option>";
+        }
+
+        return view('tarification.editlivraison', compact('localiteexp', 'localitedest', 'tariflivraison'));
+
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -174,6 +283,25 @@ class TarificationController extends Controller
 
         return view('tarification.validation', compact('livraison'))->with('success', 'Livraison ajouté avec succès. Traitement en cours');
     }
+
+    public function updateprixlivraison(Request $request, string $id)
+    {
+        //
+
+        $data = $request->all();
+        $id = Crypt::UrldeCrypt($id);
+        //dd($data);exit();
+        if ($request->isMethod('put')) {
+            $tariflivraison = TarifLivraison::find($id);
+            $tariflivraison->prix = $data['prix'];
+            $tariflivraison->save();
+
+        }
+        return redirect('traitementlivraisonprix/')
+                    ->with('success', 'Prix du trajet modifié avec succes');
+
+    }
+
 
     public function updatelivraison(Request $request, string $id)
     {

@@ -83,13 +83,13 @@
                                                         required="required" name="prix">
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 col-12">
+                                            {{-- <div class="col-md-2 col-12">
                                                 <div class="mb-1">
                                                     <label> <strong>Statut</strong> </label><br>
                                                     <input type="checkbox" class="form-check-input" name="flag_valide"
                                                         id="colorCheck1">
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-12" align="right">
                                                 <hr>
                                                 <button type="submit"

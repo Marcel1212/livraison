@@ -109,7 +109,7 @@ $reseaux = Menu::get_info_reseaux();
                     </li>
                     <li>
 
-                        <a href="{{ route('livraison') }}" class="th-btn style3">Suivre un colis</a>
+                        <a href="{{ route('tracking') }}" class="th-btn style3">Suivre un colis</a>
                     </li>
                     <li>
                         <?php if (Auth::check()) {?>
@@ -189,7 +189,7 @@ $reseaux = Menu::get_info_reseaux();
                                     <div class="header-button d-lg-none">
                                         <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
                                             livraison<i class="fas fa-arrow-right ms-1"></i></a>
-                                        <a href="{{ route('livraison') }}" class="th-btn style4">Suivre un colis<i
+                                        <a href="{{ route('tracking') }}" class="th-btn style4">Suivre un colis<i
                                                 class="fas fa-arrow-right ms-1"></i></a>
                                         <?php if (Auth::check()) {?>
                                         <a href="{{ route('dashboard') }}" class="">Mon espace<i
@@ -205,7 +205,7 @@ $reseaux = Menu::get_info_reseaux();
                                     <div class="header-button">
                                         <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
                                             livraison<i class="fas fa-arrow-right ms-1"></i></a>
-                                        <a href="{{ route('livraison') }}" class="th-btn style4">Suivre un colis<i
+                                        <a href="{{ route('tracking') }}" class="th-btn style4">Suivre un colis<i
                                                 class="fas fa-arrow-right ms-1"></i></a>
                                         <?php if (Auth::check()) {?>
                                         <a href="{{ route('dashboard') }}" class="th-btn ml-25">Mon espace<i
