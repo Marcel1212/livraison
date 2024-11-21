@@ -119,15 +119,20 @@ class TarificationController extends Controller
         $idcommuneexp = $input['id_commune_exp'];
         $idcommunedest = $input['id_commune_dest'];
         $tarif = TarifLivraison::where([['id_commune_exp','=',$idcommuneexp],['id_commune_dest','=',$idcommunedest]])->first();
-        //dd($tarif->prix); die();
-        $communeexp = Localite::where([['id_localite','=',$idcommuneexp]])->first();
-        $communedest = Localite::where([['id_localite','=',$idcommunedest]])->first();
-        $input["prix"] = $tarif->prix;
-        Livraison::create($input);
-        $id_livraison = Livraison::latest()->first()->id_livraison;
-       //dd($communeexp); die();
-        //$tarification = TarifLivraison::create($input);
-        return view('tarification.prix', compact('tarif', 'input','communeexp','communedest','id_livraison'));
+        if(isset($tarif)){
+            // Tarif en place
+            $communeexp = Localite::where([['id_localite','=',$idcommuneexp]])->first();
+            $communedest = Localite::where([['id_localite','=',$idcommunedest]])->first();
+            $input["prix"] = $tarif->prix;
+            Livraison::create($input);
+            $id_livraison = Livraison::latest()->first()->id_livraison;
+            return view('tarification.prix', compact('tarif', 'input','communeexp','communedest','id_livraison'));
+        }else {
+            // Vide
+            return redirect()->route('livraison')->with('error', 'Livraison pas encore possible pour cette destination.');
+        }
+
+
         //return redirect()->route('traitementlivraisonprix.index')->with('success', 'Tarification ajouté avec succès.');
     }
 

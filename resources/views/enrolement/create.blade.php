@@ -158,22 +158,23 @@ $reseaux = Menu::get_info_reseaux();
                     <!-- / Navbar -->
 
                     <!-- Content wrapper -->
-                    {{-- <div class="content-wrapper">
-                        <!-- Content -->
-                        <div class="container-xxl flex-grow-1 container-p-y">
-                            <div
-                                class="faq-header d-flex flex-column justify-content-center align-items-center rounded">
-                                <h3 class="text-center"></h3>
-                            </div>
-                            <p class="text-center mb-0 px-3"></p>
-                        </div>
-                    </div> --}}
+
 
                     <div class="container-xxl flex-grow-1 container-p-y">
 
 
                         @if ($message = Session::get('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert-body align-middle">
+                                    <h4> {!! $message !!} </h4>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                            </div>
+                        @endif
+
+                        @if ($message = Session::get('error'))
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <div class="alert-body align-middle">
                                     <h4> {!! $message !!} </h4>
                                 </div>

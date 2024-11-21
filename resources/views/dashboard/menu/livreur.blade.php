@@ -13,6 +13,9 @@ $lien = 'traitementlivraisonprix';
 $demandehabilitations = ListeDemandeHabilitationSoumis::get_livraisons_livreur($idlivreur);
 ?>
 <!-- Hour chart  -->
+<link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
+    rel="stylesheet" />
 <div class="card bg-transparent shadow-none my-4 border-0">
     <div class="card-body row p-0 pb-3">
         <div class="col-12 col-md-12 card-separator">
