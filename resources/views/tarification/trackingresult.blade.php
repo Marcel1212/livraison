@@ -4,6 +4,7 @@ use App\Helpers\Menu;
 
 $logo = Menu::get_logo();
 $reseaux = Menu::get_info_reseaux();
+$lien = 'traitementlivraison';
 ?>
 
 <!DOCTYPE html>
@@ -202,158 +203,181 @@ $reseaux = Menu::get_info_reseaux();
                                             <h5 class="my-4">
 
                                             </h5>
-                                            <form method="POST"
-                                                action="{{ route('traitementlivraisonprix.storelivraison') }}"
-                                                enctype="multipart/form-data" id="livraisonForm">
-                                                @csrf
-                                                <div class="card-body">
-                                                    <div class="col-md-12 col-xxl-12 mb-4 order-0 order-xxl-4">
-                                                        <div class="card h-100">
-                                                            <div
-                                                                class="card-header d-flex justify-content-between pb-2">
-                                                                <div class="card-title mb-1">
-                                                                    <h5 class="m-0 me-2">Tracking Livraison</h5>
-                                                                    <small class="text-muted"></small>
-                                                                </div>
-                                                                <div class="dropdown">
-                                                                    <button class="btn p-0" type="button"
-                                                                        id="salesByCountryTabs"
-                                                                        data-bs-toggle="dropdown" aria-haspopup="true"
-                                                                        aria-expanded="false">
-                                                                        <i
-                                                                            class="ti ti-dots-vertical ti-sm text-muted"></i>
-                                                                    </button>
 
-                                                                </div>
+                                            <div class="card-body">
+                                                <div class="col-md-12 col-xxl-12 mb-4 order-0 order-xxl-4">
+                                                    <div class="card h-100">
+                                                        <div class="card-header d-flex justify-content-between pb-2">
+                                                            <div class="card-title mb-1">
+                                                                <h5 class="m-0 me-2">Tracking Livraison</h5>
+                                                                <small class="text-muted"></small>
                                                             </div>
-                                                            <div class="card-body">
-                                                                <div class="nav-align-top">
+                                                            <div class="dropdown">
+                                                                <button class="btn p-0" type="button"
+                                                                    id="salesByCountryTabs" data-bs-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                    <i
+                                                                        class="ti ti-dots-vertical ti-sm text-muted"></i>
+                                                                </button>
 
-                                                                    <div class="tab-content px-2 mx-1 pb-0">
-                                                                        <div class="tab-pane fade active show"
-                                                                            id="navs-justified-new" role="tabpanel">
-                                                                            <ul class="timeline mb-0 pb-1">
-                                                                                <?php if($livraison->flag_a_traite === false){ ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="nav-align-top">
 
-                                                                                <li
-                                                                                    class="timeline-item ps-4 border-left-dashed pb-1">
-                                                                                    <span
-                                                                                        class="timeline-indicator-advanced timeline-indicator-secondary">
-                                                                                        <i class="ti ti-clock"></i>
-                                                                                    </span>
+                                                                <div class="tab-content px-2 mx-1 pb-0">
+                                                                    <div class="tab-pane fade active show"
+                                                                        id="navs-justified-new" role="tabpanel">
+                                                                        <ul class="timeline mb-0 pb-1">
+                                                                            <?php if($livraison->flag_a_traite === false){ ?>
 
-                                                                                    <div
-                                                                                        class="timeline-event px-0 pb-0">
-                                                                                        <div class="timeline-header">
-                                                                                            <small
-                                                                                                class="text-warning text-uppercase fw-medium">
-                                                                                                Livraison en attente de
-                                                                                                traitement</small>
-                                                                                        </div>
-                                                                                        <h6 class="mb-1"> Le
-                                                                                            gestionnaire y travail</h6>
-                                                                                        <p class="text-muted mb-0">
-                                                                                            En attente d'affectation a
-                                                                                            un livreur
-                                                                                        </p>
+                                                                            <li
+                                                                                class="timeline-item ps-4 border-left-dashed pb-1">
+                                                                                <span
+                                                                                    class="timeline-indicator-advanced timeline-indicator-secondary">
+                                                                                    <i class="ti ti-clock"></i>
+                                                                                </span>
+
+                                                                                <div class="timeline-event px-0 pb-0">
+                                                                                    <div class="timeline-header">
+                                                                                        <small
+                                                                                            class="text-warning text-uppercase fw-medium">
+                                                                                            Livraison en attente de
+                                                                                            traitement</small>
                                                                                     </div>
-                                                                                </li>
+                                                                                    <h6 class="mb-1"> Le
+                                                                                        gestionnaire y travail</h6>
+                                                                                    <p class="text-muted mb-0">
+                                                                                        En attente d'affectation a
+                                                                                        un livreur
+                                                                                    </p>
+                                                                                </div>
+                                                                            </li>
 
-                                                                                <?php } ?>
-                                                                                <?php if($livraison->flag_a_traite === true ){ ?>
-                                                                                <li
-                                                                                    class="timeline-item ps-4 border-left-dashed pb-1">
-                                                                                    <span
-                                                                                        class="timeline-indicator-advanced timeline-indicator-success">
-                                                                                        <i class="ti ti-truck"></i>
-                                                                                    </span>
-                                                                                    <div
-                                                                                        class="timeline-event px-0 pb-0">
-                                                                                        <div class="timeline-header">
-                                                                                            <small
-                                                                                                class="text-success text-uppercase fw-medium">
-                                                                                                Livraison affecté a un
-                                                                                                livreur</small>
-                                                                                        </div>
-                                                                                        <h6 class="mb-1">
-                                                                                            {{ $livreur->name }}
-                                                                                            {{ $livreur->prenom_users }}
-                                                                                            / {{ $livreur->cel_users }}
-                                                                                        </h6>
-
-
-
-                                                                                        <p class="text-muted mb-0">
-                                                                                            Livraison en cours
-                                                                                        </p>
-
+                                                                            <?php } ?>
+                                                                            <?php if($livraison->flag_a_traite === true ){ ?>
+                                                                            <li
+                                                                                class="timeline-item ps-4 border-left-dashed pb-1">
+                                                                                <span
+                                                                                    class="timeline-indicator-advanced timeline-indicator-success">
+                                                                                    <i class="ti ti-truck"></i>
+                                                                                </span>
+                                                                                <div class="timeline-event px-0 pb-0">
+                                                                                    <div class="timeline-header">
+                                                                                        <small
+                                                                                            class="text-success text-uppercase fw-medium">
+                                                                                            Livraison affecté a un
+                                                                                            livreur</small>
                                                                                     </div>
-                                                                                </li>
-                                                                                <?php } ?>
-                                                                                <?php if($livraison->flag_liv_en_cours === true ){?>
-                                                                                <li
-                                                                                    class="timeline-item ps-4 border-transparent">
-                                                                                    <span
-                                                                                        class="timeline-indicator-advanced timeline-indicator-primary">
-                                                                                        <i class="ti ti-map-pin"></i>
-                                                                                    </span>
-                                                                                    <div
-                                                                                        class="timeline-event px-0 pb-0">
-                                                                                        <div class="timeline-header">
-                                                                                            <small
-                                                                                                class="text-primary text-uppercase fw-medium">Colis
-                                                                                                receptionné</small>
-                                                                                        </div>
-                                                                                        <h6 class="mb-1">
-                                                                                            {{ $livraison->nom_exp }}
-                                                                                            {{ $livreur->numero_exp }}
-                                                                                        </h6>
-                                                                                        <p class="text-muted mb-0">
-                                                                                            Colis receptionné chez
-                                                                                            l'expediteur
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <?php } ?>
+                                                                                    <h6 class="mb-1">
+                                                                                        {{ $livreur->name }}
+                                                                                        {{ $livreur->prenom_users }}
+                                                                                        / {{ $livreur->cel_users }}
+                                                                                    </h6>
 
-                                                                                <?php if($livraison->flag_livre === true ){?>
-                                                                                <li
-                                                                                    class="timeline-item ps-4 border-transparent">
-                                                                                    <span
-                                                                                        class="timeline-indicator-advanced timeline-indicator-success">
-                                                                                        <i
-                                                                                            class="ti ti-circle-check"></i>
-                                                                                    </span>
-                                                                                    <div
-                                                                                        class="timeline-event px-0 pb-0">
-                                                                                        <div class="timeline-header">
-                                                                                            <small
-                                                                                                class="text-success text-uppercase fw-medium">Colis
-                                                                                                livré</small>
-                                                                                        </div>
-                                                                                        <h6 class="mb-1">
-                                                                                            {{ $livraison->nom_dest }}
-                                                                                            {{ $livreur->numero_dest }}
-                                                                                        </h6>
-                                                                                        <p class="text-muted mb-0">
-                                                                                            Colis recuperé par le
-                                                                                            destinataire
-                                                                                        </p>
-                                                                                    </div>
-                                                                                </li>
-                                                                                <?php } ?>
-                                                                            </ul>
-                                                                            <div
-                                                                                class="border-bottom border-bottom-dashed mt-0 mb-4">
-                                                                            </div>
 
+
+                                                                                    <p class="text-muted mb-0">
+                                                                                        Livraison en cours
+                                                                                    </p>
+
+                                                                                </div>
+                                                                            </li>
+                                                                            <?php } ?>
+                                                                            <?php if($livraison->flag_liv_en_cours === true ){?>
+                                                                            <li
+                                                                                class="timeline-item ps-4 border-transparent">
+                                                                                <span
+                                                                                    class="timeline-indicator-advanced timeline-indicator-primary">
+                                                                                    <i class="ti ti-map-pin"></i>
+                                                                                </span>
+                                                                                <div class="timeline-event px-0 pb-0">
+                                                                                    <div class="timeline-header">
+                                                                                        <small
+                                                                                            class="text-primary text-uppercase fw-medium">Colis
+                                                                                            receptionné</small>
+                                                                                    </div>
+                                                                                    <h6 class="mb-1">
+                                                                                        {{ $livraison->nom_exp }}
+                                                                                        {{ $livreur->numero_exp }}
+                                                                                    </h6>
+                                                                                    <p class="text-muted mb-0">
+                                                                                        Colis receptionné chez
+                                                                                        l'expediteur
+                                                                                    </p>
+                                                                                </div>
+                                                                            </li>
+                                                                            <?php } ?>
+
+                                                                            <?php if($livraison->flag_livre === true ){?>
+                                                                            <li
+                                                                                class="timeline-item ps-4 border-transparent">
+                                                                                <span
+                                                                                    class="timeline-indicator-advanced timeline-indicator-success">
+                                                                                    <i class="ti ti-circle-check"></i>
+                                                                                </span>
+                                                                                <div class="timeline-event px-0 pb-0">
+                                                                                    <div class="timeline-header">
+                                                                                        <small
+                                                                                            class="text-success text-uppercase fw-medium">Colis
+                                                                                            livré</small>
+                                                                                    </div>
+                                                                                    <h6 class="mb-1">
+                                                                                        {{ $livraison->nom_dest }}
+                                                                                        {{ $livreur->numero_dest }}
+                                                                                    </h6>
+                                                                                    <p class="text-muted mb-0">
+                                                                                        Colis recuperé par le
+                                                                                        destinataire
+                                                                                    </p>
+                                                                                </div>
+                                                                            </li>
+                                                                            <?php } ?>
+                                                                        </ul>
+                                                                        <div
+                                                                            class="border-bottom border-bottom-dashed mt-0 mb-4">
                                                                         </div>
 
-
-
                                                                     </div>
+
+
+
                                                                 </div>
                                                             </div>
+
+                                                            <?php if($livraison->flag_livre === true && $livraison->commentaire_livraison === null  ){?>
+
+
+                                                            <form method="POST" class="form"
+                                                                action="{{ route($lien . '.updatelivraison', \App\Helpers\Crypt::UrlCrypt($livraison->id_livraison)) }}"
+                                                                enctype="multipart/form-data">
+                                                                @csrf
+                                                                @method('PUT')
+
+                                                                <div class="row">
+
+
+                                                                    <div class="card-body">
+                                                                        <div class="col-12">
+                                                                            <label class="form-label" for="address">
+                                                                                <strong> AVIS SUR LA
+                                                                                    LIVRAISON</strong>
+                                                                            </label>
+                                                                            <textarea name="commentaire_livraison" class="form-control" id="details_exp" rows="3"
+                                                                                placeholder="Ex: Rue M3 , Cocody Danga, Chez SAMER Riviera 2"></textarea>
+                                                                        </div>
+                                                                        <div class="col-12 col-md-12" align="right">
+                                                                            <br>
+                                                                            <button type="submit" name="action"
+                                                                                value="commentaire_livraison"
+                                                                                class="btn btn-sm btn-success me-sm-3 me-1"
+                                                                                onclick='javascript:if (!confirm("Cliquez sur OK pour confirmer votre commentaire  ?")) return false;'>Commenter
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
 
@@ -365,68 +389,67 @@ $reseaux = Menu::get_info_reseaux();
 
 
 
-
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                             </div>
-
+                            <!-- /Sticky Actions -->
                         </div>
-                        <!-- /Sticky Actions -->
+                        <!-- / Content -->
+
+                        <!-- Footer -->
+
+                        <!-- / Footer -->
+
+                        <div class="content-backdrop fade"></div>
+
                     </div>
-                    <!-- / Content -->
+                    <!-- Content wrapper -->
 
-                    <!-- Footer -->
-
-                    <!-- / Footer -->
-
-                    <div class="content-backdrop fade"></div>
 
                 </div>
-                <!-- Content wrapper -->
-
-
+                <!-- / Layout page -->
             </div>
-            <!-- / Layout page -->
         </div>
-    </div>
 
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
 
-    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-    <div class="drag-target"></div>
+        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
 
-    <footer class="footer-wrapper pt-45 footer-layout1"
-        data-bg-src="{{ asset('assetsfront/img/bg/footer-bg.png') }}">
+        <footer class="footer-wrapper pt-45 footer-layout1"
+            data-bg-src="{{ asset('assetsfront/img/bg/footer-bg.png') }}">
 
-        <div class="footer-wrap  " data-bg-src="{{ asset('assetsfront/img/bg/jiji.png') }}">
-            <div class="widget-area">
+            <div class="footer-wrap  " data-bg-src="{{ asset('assetsfront/img/bg/jiji.png') }}">
+                <div class="widget-area">
 
-            </div>
-            <div class="container">
-                <div class="copyright-wrap">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-md-6">
-                            <p class="copyright-text">Copyright © <?php echo Date('Y'); ?> <a
-                                    href="{{ route('/') }}">LOS Livraison</a> Tous droits réservés.</p>
-                        </div>
-                        <div class="col-md-6 text-end d-none d-md-block">
-                            <div class="footer-links">
-                                <ul>
-                                    <li><a href="www.kouassimarcel.online">Designed by ITVerse Informatique</a></li>
-                                </ul>
+                </div>
+                <div class="container">
+                    <div class="copyright-wrap">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-md-6">
+                                <p class="copyright-text">Copyright © <?php echo Date('Y'); ?> <a
+                                        href="{{ route('/') }}">LOS Livraison</a> Tous droits réservés.</p>
+                            </div>
+                            <div class="col-md-6 text-end d-none d-md-block">
+                                <div class="footer-links">
+                                    <ul>
+                                        <li><a href="www.kouassimarcel.online">Designed by ITVerse Informatique</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
 
-    {{-- <footer class="landing-footer bg-body footer-text mt-4">
+        {{-- <footer class="landing-footer bg-body footer-text mt-4">
         <div class="footer-top">
             <div class="container">
                 <div class="row gx-0 gy-4 g-md-5">
@@ -498,167 +521,167 @@ $reseaux = Menu::get_info_reseaux();
     </footer> --}}
 
 
-    <!-- / Layout wrapper -->
+        <!-- / Layout wrapper -->
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
+        <!-- Core JS -->
+        <!-- build:js assets/vendor/js/core.js -->
 
-    <!-- Scroll To Top -->
-    <div class="scroll-top">
-        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
-                style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;">
-            </path>
-        </svg>
-    </div>
+        <!-- Scroll To Top -->
+        <div class="scroll-top">
+            <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+                <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"
+                    style="transition: stroke-dashoffset 10ms linear 0s; stroke-dasharray: 307.919, 307.919; stroke-dashoffset: 307.919;">
+                </path>
+            </svg>
+        </div>
 
-    <!--==============================
+        <!--==============================
     All Js File
 ============================== -->
-    <!-- Jquery -->
-    <script src="{{ asset('assetsfront/js/vendor/jquery-3.6.0.min.js') }}"></script>
-    <!-- Slick Slider -->
-    <script src="{{ asset('assetsfront/js/slick.min.js') }}"></script>
-    <!-- Bootstrap -->
-    <script src="{{ asset('assetsfront/js/bootstrap.min.js') }}"></script>
-    <!-- Magnific Popup -->
-    <script src="{{ asset('assetsfront/js/jquery.magnific-popup.min.js') }}"></script>
-    <!-- Counter Up -->
-    <script src="{{ asset('assetsfront/js/jquery.counterup.min.js') }}"></script>
-    <!-- Circle Progress -->
-    <script src="{{ asset('assetsfront/js/circle-progress.js') }}"></script>
-    <!-- Range Slider -->
-    <script src="{{ asset('assetsfront/js/jquery-ui.min.js') }}"></script>
-    <!-- Isotope Filter -->
-    <script src="{{ asset('assetsfront/js/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('assetsfront/js/isotope.pkgd.min.js') }}"></script>
-    <!-- Tilt JS -->
-    <script src="{{ asset('assetsfront/js/tilt.jquery.min.js') }}"></script>
-    <!-- Tweenmax JS -->
-    <script src="{{ asset('assetsfront/js/tweenmax.min.js') }}"></script>
-    <!-- Nice Select JS -->
-    <script src="{{ asset('assetsfront/js/nice-select.min.js') }}"></script>
+        <!-- Jquery -->
+        <script src="{{ asset('assetsfront/js/vendor/jquery-3.6.0.min.js') }}"></script>
+        <!-- Slick Slider -->
+        <script src="{{ asset('assetsfront/js/slick.min.js') }}"></script>
+        <!-- Bootstrap -->
+        <script src="{{ asset('assetsfront/js/bootstrap.min.js') }}"></script>
+        <!-- Magnific Popup -->
+        <script src="{{ asset('assetsfront/js/jquery.magnific-popup.min.js') }}"></script>
+        <!-- Counter Up -->
+        <script src="{{ asset('assetsfront/js/jquery.counterup.min.js') }}"></script>
+        <!-- Circle Progress -->
+        <script src="{{ asset('assetsfront/js/circle-progress.js') }}"></script>
+        <!-- Range Slider -->
+        <script src="{{ asset('assetsfront/js/jquery-ui.min.js') }}"></script>
+        <!-- Isotope Filter -->
+        <script src="{{ asset('assetsfront/js/imagesloaded.pkgd.min.js') }}"></script>
+        <script src="{{ asset('assetsfront/js/isotope.pkgd.min.js') }}"></script>
+        <!-- Tilt JS -->
+        <script src="{{ asset('assetsfront/js/tilt.jquery.min.js') }}"></script>
+        <!-- Tweenmax JS -->
+        <script src="{{ asset('assetsfront/js/tweenmax.min.js') }}"></script>
+        <!-- Nice Select JS -->
+        <script src="{{ asset('assetsfront/js/nice-select.min.js') }}"></script>
 
-    <!-- Main Js File -->
-    <script src="{{ asset('assetsfront/js/main.js') }}"></script>
+        <!-- Main Js File -->
+        <script src="{{ asset('assetsfront/js/main.js') }}"></script>
 
 
-    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
-    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+        <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/node-waves/node-waves.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
+        <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
 
-    <!-- endbuild -->
+        <!-- endbuild -->
 
-    <!-- Vendors JS -->
-    <script src="{{ asset('assets/vendor/libs/jquery-sticky/jquery-sticky.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/select1/select1.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/select3/select3.js') }}"></script>
-    <script src="{{ asset('assets/vendor/libs/dropzone/dropzone.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-    <script src="{{ asset('assets/js/additional-methods.js') }}"></script>
+        <!-- Vendors JS -->
+        <script src="{{ asset('assets/vendor/libs/jquery-sticky/jquery-sticky.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/select1/select1.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/select3/select3.js') }}"></script>
+        <script src="{{ asset('assets/vendor/libs/dropzone/dropzone.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('assets/js/additional-methods.js') }}"></script>
 
-    <!-- Main JS -->
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script src="{{ asset('assets/js/forms-file-upload.js') }}"></script>
-    <!-- Page JS -->
-    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
-    <script src="{{ asset('assets/js/pages-enrolements.js') }}"></script>
+        <!-- Main JS -->
+        <script src="{{ asset('assets/js/main.js') }}"></script>
+        <script src="{{ asset('assets/js/forms-file-upload.js') }}"></script>
+        <!-- Page JS -->
+        <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+        <script src="{{ asset('assets/js/pages-enrolements.js') }}"></script>
 
-    <script>
-        var selectBox = $("#id_forme_juridique");
-        let selectedValue = selectBox.val();
-        changeFuncFormeJuridique(selectedValue);
+        <script>
+            var selectBox = $("#id_forme_juridique");
+            let selectedValue = selectBox.val();
+            changeFuncFormeJuridique(selectedValue);
 
-        //Afficher les champs requis ou non en fontion du type de forme juridique
-        function changeFuncFormeJuridique(code_forme_juridique_array) {
-            const myArray = code_forme_juridique_array.split("/");
-            let code_forme_juridique = myArray[0];
-            if (code_forme_juridique === 'PR') {
-                displayPufield();
-            } else if (code_forme_juridique === 'PU') {
-                hiddenPufield();
-            } else {
-                displayPufield();
+            //Afficher les champs requis ou non en fontion du type de forme juridique
+            function changeFuncFormeJuridique(code_forme_juridique_array) {
+                const myArray = code_forme_juridique_array.split("/");
+                let code_forme_juridique = myArray[0];
+                if (code_forme_juridique === 'PR') {
+                    displayPufield();
+                } else if (code_forme_juridique === 'PU') {
+                    hiddenPufield();
+                } else {
+                    displayPufield();
+                }
             }
-        }
 
-        function hiddenPufield() {
-            $("#rccm_demande_enrolement").prop("disabled", true);
-            $("#piece_attestation_immatriculati").prop("disabled", true);
-            $("#numero_cnps_demande_enrolement").prop("disabled", true);
-            $("#piece_rccm_demande_enrolement").prop("disabled", true);
+            function hiddenPufield() {
+                $("#rccm_demande_enrolement").prop("disabled", true);
+                $("#piece_attestation_immatriculati").prop("disabled", true);
+                $("#numero_cnps_demande_enrolement").prop("disabled", true);
+                $("#piece_rccm_demande_enrolement").prop("disabled", true);
 
-            $("#rccm_demande_enrolement_div").hide();
-            $("#numero_cnps_demande_enrolement_div").hide();
-            $("#piece_rccm_demande_enrolement_div").hide();
-            $("#piece_attestation_immatriculati_div").hide();
-        }
+                $("#rccm_demande_enrolement_div").hide();
+                $("#numero_cnps_demande_enrolement_div").hide();
+                $("#piece_rccm_demande_enrolement_div").hide();
+                $("#piece_attestation_immatriculati_div").hide();
+            }
 
-        function displayPufield() {
-            $("#rccm_demande_enrolement").prop("disabled", false);
-            $("#piece_attestation_immatriculati").prop("disabled", false);
-            $("#numero_cnps_demande_enrolement").prop("disabled", false);
-            $("#piece_rccm_demande_enrolement").prop("disabled", false);
+            function displayPufield() {
+                $("#rccm_demande_enrolement").prop("disabled", false);
+                $("#piece_attestation_immatriculati").prop("disabled", false);
+                $("#numero_cnps_demande_enrolement").prop("disabled", false);
+                $("#piece_rccm_demande_enrolement").prop("disabled", false);
 
-            $("#rccm_demande_enrolement_div").show();
-            $("#numero_cnps_demande_enrolement_div").show();
-            $("#piece_rccm_demande_enrolement_div").show();
-            $("#piece_attestation_immatriculati_div").show();
-        }
+                $("#rccm_demande_enrolement_div").show();
+                $("#numero_cnps_demande_enrolement_div").show();
+                $("#piece_rccm_demande_enrolement_div").show();
+                $("#piece_attestation_immatriculati_div").show();
+            }
 
 
-        //Select2 localité entreprise
-        $("#id_localite").select2().val({{ old('id_localite') }});
+            //Select2 localité entreprise
+            $("#id_localite").select2().val({{ old('id_localite') }});
 
-        //Select2 centre impot
-        $("#id_centre_impot").select2().val({{ old('id_centre_impot') }});
+            //Select2 centre impot
+            $("#id_centre_impot").select2().val({{ old('id_centre_impot') }});
 
-        //Select2 secteur d'activité
-        $("#id_secteur_activite").select2().val({{ old('id_secteur_activite') }});
-    </script>
+            //Select2 secteur d'activité
+            $("#id_secteur_activite").select2().val({{ old('id_secteur_activite') }});
+        </script>
 
-    <script>
-        $(function() {
+        <script>
+            $(function() {
 
-            $('#id_secteur_activite').on('change', function(e) {
-                var id = e.target.value;
-                telUpdate1(id);
-            });
-
-            function telUpdate1(id) {
-                $.get('/secteuractivilitelistes/' + id, function(data) {
-                    $('#id_activites').empty();
-                    $.each(data, function(index, tels) {
-                        $('#id_activites').append($('<option>', {
-                            value: tels.id_activites,
-                            text: tels.libelle_activites,
-                        }));
-                    });
+                $('#id_secteur_activite').on('change', function(e) {
+                    var id = e.target.value;
+                    telUpdate1(id);
                 });
-            }
-        });
-    </script>
 
-    <script>
-        $('#reload').click(function() {
-            $.ajax({
-                type: 'GET',
-                url: 'reload-captcha',
-                success: function(data) {
-                    $(".captcha span").html(data.captcha);
+                function telUpdate1(id) {
+                    $.get('/secteuractivilitelistes/' + id, function(data) {
+                        $('#id_activites').empty();
+                        $.each(data, function(index, tels) {
+                            $('#id_activites').append($('<option>', {
+                                value: tels.id_activites,
+                                text: tels.libelle_activites,
+                            }));
+                        });
+                    });
                 }
             });
-        });
-    </script>
+        </script>
+
+        <script>
+            $('#reload').click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'reload-captcha',
+                    success: function(data) {
+                        $(".captcha span").html(data.captcha);
+                    }
+                });
+            });
+        </script>
 
 
 </body>

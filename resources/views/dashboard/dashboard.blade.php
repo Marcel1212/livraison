@@ -29,8 +29,10 @@ use App\Helpers\Crypt;
                 @include('dashboard.menu.chargerhabilitation')
                 <?php } elseif($naroles == "GESTIONNAIRE LIVRAISON") { ?>
                 @include('dashboard.menu.gestionnaire')
-                <?php  } elseif($naroles == "Livreur") { ?>
+                <?php  } elseif($naroles == "LIVREUR") { ?>
                 @include('dashboard.menu.livreur')
+                <?php }  elseif($naroles == "CLIENT") { ?>
+                @include('dashboard.menu.clientlivraison')
                 <?php } else { ?>
                 @include('dashboard.menu.autre')
                 <?php } ?>

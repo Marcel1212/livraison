@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $libelle_commune_exp
  * @property string $libelle_commune_dest
  * @property string $code_livraison
+ * @property string $commentaire_livraison
  * @property float $prix
  * @property string $nom_exp
  * @property string $details_exp
@@ -57,7 +58,7 @@ class Livraison extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_commune_exp', 'id_commune_dest', 'numero_dest', 'date_livraison', 'flag_valide', 'date_livraison_effectue' , 'numero_exp', 'libelle_commune_exp', 'libelle_commune_dest', 'code_livraison', 'prix', 'nom_exp', 'details_exp', 'nom_dest', 'details_dest', 'flag_a_traite', 'flag_en_attente', 'flag_liv_en_cours', 'flag_livre', 'flag_echec', 'id_livreur', 'id_gestionnaire', 'id_client', 'created_at', 'updated_at'];
+    protected $fillable = ['id_commune_exp', 'id_commune_dest', 'numero_dest', 'date_livraison', 'flag_valide', 'date_livraison_effectue' , 'numero_exp', 'libelle_commune_exp', 'libelle_commune_dest', 'code_livraison', 'prix', 'nom_exp', 'details_exp', 'commentaire_livraison', 'nom_dest', 'details_dest', 'flag_a_traite', 'flag_en_attente', 'flag_liv_en_cours', 'flag_livre', 'flag_echec', 'id_livreur', 'id_gestionnaire', 'id_client', 'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

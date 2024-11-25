@@ -59,6 +59,12 @@ Route::post('motdepasseoublie/{email}/otp', [MotDePasseOublieController::class, 
   Route::post('traitementlivraisonprix/storelivraison', [App\Http\Controllers\TarificationController::class, 'storelivraison'])->name('traitementlivraisonprix.storelivraison');
   Route::put('traitementlivraisonprix/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraisonprix.update');
 
+  Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');
+
+
+  //Route::put('traitementlivraison/{id}/commentaire', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('commentaire');
+
+
 
 
 
@@ -297,7 +303,7 @@ Route::group(['middleware' => ['auth']], function () {
   Route::put('traitementlivraisonprix/{id}/edit', [App\Http\Controllers\TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
   Route::get('traitementlivraisonprix/{id}/editlivraison', [App\Http\Controllers\TarificationController::class, 'editlivraison'])->name('traitementlivraisonprix.editlivraison');
   Route::put('traitementlivraison/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraison.update');
-  Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');
+ // Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');
   Route::put('traitementlivraison/{id}/updateprixlivraison', [App\Http\Controllers\TarificationController::class, 'updateprixlivraison'])->name('traitementlivraison.updateprixlivraison');
   Route::get('statistiquelivreur', [TarificationController::class, 'indexstatlivreur'])->name('statistiquelivreur');
   Route::get('statistiqueperiode', [TarificationController::class, 'indexstatperiode'])->name('statistiqueperiode');

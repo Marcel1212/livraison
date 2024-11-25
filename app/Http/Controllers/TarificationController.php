@@ -44,15 +44,17 @@ class TarificationController extends Controller
                 ->first();
             $idroles = $roles->role_id;
         $nomrole = $roles->name ;
-        //dd($user_id); exit();
+        //dd($nomrole); exit();
         if($nomrole == 'GESTIONNAIRE LIVRAISON' ) {
         $livraison = Livraison::where([['flag_valide','=',true]])->get();
-        }elseif($nomrole == 'Livreur') {
+        }elseif($nomrole == 'LIVREUR') {
             $livraison = Livraison::where([['id_livreur','=', $user_id]])->get();
+        }elseif($nomrole == 'CLIENT'){
+            $livraison = Livraison::where([['id_client','=', $user_id]])->get();
         }
 
         //dd($livraison);exit();
-        return view('tarification.indexlivraison', compact('livraison'));
+        return view('tarification.indexlivraison', compact('livraison','nomrole'));
     }
 
     public function indexstatlivreur()
@@ -115,7 +117,6 @@ class TarificationController extends Controller
     {
         //
         $input = $request->all();
-        //dd($input); exit();
         $idcommuneexp = $input['id_commune_exp'];
         $idcommunedest = $input['id_commune_dest'];
         $tarif = TarifLivraison::where([['id_commune_exp','=',$idcommuneexp],['id_commune_dest','=',$idcommunedest]])->first();
@@ -137,9 +138,10 @@ class TarificationController extends Controller
     }
 
 
-    public function verification(Request $request)
+    public function  verification(Request $request)
     {
         //
+
         $input = $request->all();
         $codelivraison = $input["code_livraison"];
         $livraison = Livraison::where([['code_livraison','=',$codelivraison]])->first();
@@ -203,12 +205,17 @@ class TarificationController extends Controller
         }else{
             $id_charge =  $livraison->id_livreur;
             $chargerHabilitations = DB::table('vue_liste_livreurs')->where([['id','=',$id_charge]])->get();
-            $chargerHabilitations = $chargerHabilitations[0];
+            if($nomrole == 'CLIENT' && $livraison->flag_a_traite == false){
+                $chargerHabilitations = $chargerHabilitations ;
+            }else {
+                $chargerHabilitations = $chargerHabilitations[0];
+            }
+
             //$chargerHabilitations = [];
             $chargerHabilitationsList = [];
             $NombreDemandeHabilitation = [];
         }
-        //dd($chargerHabilitations); exit();
+        //dd($chargerHabilitations[0]->name); exit();
 
         return view('tarification.edit', compact('livraison','nomrole','chargerHabilitationsList','NombreDemandeHabilitation','chargerHabilitations'));
 
@@ -276,9 +283,15 @@ class TarificationController extends Controller
         if ($request->isMethod('put')) {
             $codelivraisonunique = random_int(100, 200000);
             //dd($indexAleatoire); exit();
+            if(isset(Auth::user()->id)){
+                $id_client = Auth::user()->id;
+            }else {
+                $id_client =0;
+            }
             $livraison = Livraison::find($id);
-            $livraison ->code_livraison = $codelivraisonunique ;
-            $livraison ->flag_valide = true ;
+            $livraison->code_livraison = $codelivraisonunique ;
+            $livraison->id_client = $id_client ;
+            $livraison->flag_valide = true ;
             $livraison->save();
             //dd($livraison);
             // Generer un code
@@ -318,6 +331,20 @@ class TarificationController extends Controller
         //dd($id);exit();
         if ($request->isMethod('put')) {
             //Affectation a un livreur
+
+            if($data['action'] === 'commentaire_livraison'){
+                // Recherche de la livraison
+                $livraison = Livraison::find($id);
+                //dd($livraison);exit();
+                // Modification de l'id et du flag
+                $livraison ->commentaire_livraison = $data["commentaire_livraison"] ;
+                $livraison->save();
+
+
+                return redirect('livraison')
+                ->with('success', 'Commentaire ajouteé avec succes');
+
+        }
             if($data['action'] === 'affecter_livraison'){
                     // Recherche de la livraison
                     $livraison = Livraison::find($id);

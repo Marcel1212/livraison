@@ -308,7 +308,7 @@
                                                                     <h1
                                                                         class="price-toggle price-yearly display-4 text-primary mb-0">
                                                                         {{ $livraison->prix }} <br>
-                                                                        <small>{{ $livraison->code_livraison }} </small>
+                                                                        <small>{{ $livraison->code_livraison }}</small>
                                                                         <br>
                                                                         {{-- <button type="button"
                                                                             class="btn rounded-pill btn-success waves-effect waves-light"> --}}
@@ -316,6 +316,15 @@
                                                                         <small> LIVREUR :
                                                                             {{ $chargerHabilitations->name }}
                                                                             {{ $chargerHabilitations->prenom_users }}</small>
+                                                                        {{-- </button> --}}
+                                                                        <?php } ?>
+
+                                                                        <br>
+
+                                                                        <?php if ($livraison->commentaire_livraison != null ) {  ?>
+                                                                        <small> COMMENTAIRE :
+                                                                            <i>{{ $livraison->commentaire_livraison }}</i>
+                                                                        </small>
                                                                         {{-- </button> --}}
                                                                         <?php } ?>
 
@@ -447,7 +456,7 @@
                                                 <?php }
                                                 ?>
 
-                                                <?php if ($nomrole == 'Livreur' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === false  ) { ?>
+                                                <?php if ($nomrole == 'LIVREUR' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === false  ) { ?>
                                                 <div class="col-12 col-md-12" align="right"> <br>
                                                     <button type="submit" name="action" value="valider_livraison"
                                                         class="btn btn-sm btn-success me-sm-3 me-1"
@@ -456,7 +465,7 @@
                                                 </div>
                                                 <?php }   ?>
 
-                                                <?php if ($nomrole == 'Livreur' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === true && $livraison->flag_liv_en_cours === false   ) { ?>
+                                                <?php if ($nomrole == 'LIVREUR' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === true && $livraison->flag_liv_en_cours === false   ) { ?>
                                                 <div class="col-12 col-md-12" align="right"> <br>
                                                     <button type="submit" name="action" value="valider_reception"
                                                         class="btn btn-sm btn-success me-sm-3 me-1"
@@ -464,7 +473,7 @@
                                                         LA RECEPTION DU COLIS </button>
                                                 </div>
                                                 <?php }   ?>
-                                                <?php if ($nomrole == 'Livreur' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === true && $livraison->flag_liv_en_cours === true  && $livraison->flag_livre === false   ) { ?>
+                                                <?php if ($nomrole == 'LIVREUR' && $livraison->flag_a_traite == true && $livraison->flag_en_attente === true && $livraison->flag_liv_en_cours === true  && $livraison->flag_livre === false   ) { ?>
                                                 <div class="col-12 col-md-12" align="right"> <br>
                                                     <button type="submit" name="action"
                                                         value="valider_succes_livraison"

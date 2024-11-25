@@ -42,17 +42,16 @@
                             <div class="card mb-4">
                                 <div class="card-header d-flex align-items-center justify-content-between">
                                     <h5 class="mb-0">{{ $titre }}</h5>
-                                    <?php //if ($nomrole == 'ENTREPRISE') {
-                                    ?>
-                                    <!-- <span align="right">
-                                                                                                                                                                                                                                                                                                    <a href="{{ route($lien . '.create') }}"
-                                                                                                                                                                                                                                                                                                        class="btn btn-sm btn-primary waves-effect waves-light">
-                                                                                                                                                                                                                                                                                                        <i class="menu-icon tf-icons ti ti-plus"></i> Ajouter une tarification</a>
+                                    @if ($nomrole == 'CLIENT')
+                                        <span align="right">
+                                            <a href="{{ route('livraison') }}"
+                                                class="btn btn-sm btn-primary waves-effect waves-light">
+                                                <i class="menu-icon tf-icons ti ti-plus"></i> Creer une livraison</a>
+                                        </span>
+                                    @endif
 
-                                                                                                                                                                                                                                                                                                </span> -->
 
-                                    <?php // }
-                                    ?>
+
                                 </div>
                                 <div class="card-body">
                                     <div class="table">
@@ -66,9 +65,14 @@
                                                     <th>Destinataire / Lieu</th>
                                                     <th>Prix / Code</th>
                                                     <th>Date de livraison</th>
-                                                    <th>Statut traitement</th>
+                                                    @if ($nomrole != 'CLIENT')
+                                                        <th>Statut traitement</th>
+                                                    @endif
+
                                                     <th>Statut livraison</th>
                                                     <th class="text-end">Actions</th>
+
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -104,18 +108,23 @@
                                                             $dateFormatee = $dateFormatter->format($dateActuelle);
                                                             ?>
                                                             {{ $dateFormatee }} </td>
-                                                        <td align="center">
-                                                            <?php if ($livraisons->flag_a_traite == true ){?>
-                                                            <span class="badge bg-success">Livraison traitée & affecté a un
-                                                                livreur</span>
-                                                            <?php } else {?>
-                                                            {{-- <div class="spinner-grow text-danger" role="status">
+                                                        @if ($nomrole != 'CLIENT')
+                                                            <td align="center">
+                                                                <?php if ($livraisons->flag_a_traite == true ){?>
+                                                                <span class="badge bg-success">Livraison traitée & affecté a
+                                                                    un
+                                                                    livreur</span>
+                                                                <?php } else {?>
+                                                                {{-- <div class="spinner-grow text-danger" role="status">
                                                                 <span class="visually-hidden">Loading...</span>
                                                             </div> <br> --}}
-                                                            <span class="badge bg-danger">Livraison à traité </span> <br>
+                                                                <span class="badge bg-danger">Livraison à traité </span>
+                                                                <br>
 
-                                                            <?php }  ?>
-                                                        </td>
+                                                                <?php }  ?>
+                                                            </td>
+                                                        @endif
+
 
                                                         <td align="center">
                                                             <?php if ($livraisons->flag_en_attente == true && $livraisons->flag_livre == false  ){?>
@@ -130,6 +139,7 @@
                                                                 succ</span>
                                                             <?php } ?>
                                                         </td>
+
                                                         <td class="text-end pt-2">
                                                             <div class="user-progress mt-lg-4">
 

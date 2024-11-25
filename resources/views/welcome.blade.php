@@ -140,7 +140,7 @@ $reseaux = Menu::get_info_reseaux();
                                     LIVRAISON</a>
                                 </li>
                                 <li><i class="far fa-clock"></i>Ouvert 24H/24 / 07:30 - 16:30</li>
-                                <li><i class="far fa-phone"></i><a href="tel:+11156456825">Appellez</a></li>
+                                <li><i class="far fa-phone"></i><a href="tel:+2250777386397">Appellez</a></li>
                             </ul>
                         </div>
                     </div>

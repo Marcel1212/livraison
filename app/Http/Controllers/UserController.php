@@ -83,7 +83,7 @@ class UserController extends Controller
         foreach ($roless as $comp) {
             $roles .= "<option  value='" . $comp->name .'/'. $comp->code_fonction ."'   > " . ucfirst($comp->name) . " </option>";
         }
-        //dd($roles);
+        //dd($roless); exit();
         // $Entite = Agence::where([['flag_agce', '=', true]])->get();
         // foreach ($Entite as $comp) {
         //     $Entite .= "<option  value='" . $comp->num_agce . "'   > " . $comp->lib_agce . " </option>";
@@ -213,6 +213,15 @@ class UserController extends Controller
     {
         $id =  \App\Helpers\Crypt::UrldeCrypt($id);
 
+        $user_id = Auth::user()->id;
+        $roles = DB::table('users')
+                ->join('model_has_roles','users.id','model_has_roles.model_id')
+                ->join('roles','model_has_roles.role_id','roles.id')
+                ->where([['users.id','=',$user_id]])
+                ->first();
+            $idroles = $roles->role_id;
+        $nomrole = $roles->name ;
+
 
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
@@ -226,13 +235,14 @@ class UserController extends Controller
         }
 
         //$Roless = Role::get();
+        //dd($nomrole); exit();
 
-        if ($userRole == 'GESTIONNAIRE LIVRAISON') {
+        if ($nomrole == 'GESTIONNAIRE LIVRAISON') {
 
             $Roless = Role::where([['id', '!=', 15] , ['livraison', '=', true]])->get();
-            }else {
-                $Roless = Role::get();
-            }
+        }else {
+            $Roless = Role::get();
+        }
 
         //dd($Roless); exit();
         foreach ($Roless as $comp) {
