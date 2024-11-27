@@ -99,6 +99,7 @@ $reseaux = Menu::get_info_reseaux();
     <div class="th-menu-wrapper">
         <div class="th-menu-area text-center">
             <button class="th-menu-toggle"><i class="fal fa-times"></i></button>
+
             <div class="mobile-logo">
                 <a href="{{ route('/') }}"><img src="{{ asset('assetsfront/img/logo.png') }}" alt="FDFP"></a>
             </div>
@@ -172,7 +173,9 @@ $reseaux = Menu::get_info_reseaux();
         <div class="sticky-wrapper">
             <!-- Main Menu Area -->
             <div class="menu-area">
+
                 <div class="container">
+
                     <div class="row align-items-center justify-content-between">
                         <div class="col-auto">
                             <div class="header-logo">
@@ -181,12 +184,15 @@ $reseaux = Menu::get_info_reseaux();
                             </div>
                         </div>
                         <div class="col-auto">
+
                             <div class="row">
+
                                 <div class="col-auto">
                                     <nav class="main-menu d-none d-lg-inline-block">
                                     </nav>
-                                    <!--<button type="button" class="th-menu-toggle d-block d-lg-none"><i class="far fa-bars"></i></button>-->
+
                                     <div class="header-button d-lg-none">
+                                        <i class="far fa-phone"></i><a href="tel:+2250777386397">Appelez</a> <br>
                                         <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
                                             livraison<i class="fas fa-arrow-right ms-1"></i></a>
                                         <a href="{{ route('tracking') }}" class="th-btn style4">Suivre un colis<i
