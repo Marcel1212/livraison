@@ -21,6 +21,7 @@ $lien = 'traitementlivraison';
     <?php if (isset($logo->mot_cle)){ ?>
     <title><?php echo @$logo->mot_cle; ?> | Service de livraison</title>
     <?php } ?>
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
 
     <meta name="description" content="" />
 

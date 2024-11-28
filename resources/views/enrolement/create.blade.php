@@ -22,6 +22,7 @@ $reseaux = Menu::get_info_reseaux();
     <?php } ?>
 
     <meta name="description" content="" />
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
 
     <!-- Favicon -->
     <?php if (isset($logo->logo_logo)){ ?>

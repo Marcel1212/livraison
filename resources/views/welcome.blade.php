@@ -24,6 +24,7 @@ $reseaux = Menu::get_info_reseaux();
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
 
     <!-- Favicons - Place favicon.ico in the root directory -->
     <?php if(isset($logo->logo_logo)){?>

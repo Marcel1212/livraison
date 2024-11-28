@@ -12,6 +12,7 @@ $couleur = Menu::get_info_couleur();
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light-style layout-wide customizer-hide" dir="ltr"
     data-theme="theme-default" data-assets-path="{{ asset('assets/') }}"
     data-template="horizontal-menu-template-no-customizer">
+<link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
 
 <head>
     <meta charset="utf-8" />
