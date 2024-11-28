@@ -181,12 +181,12 @@ $couleur = Menu::get_info_couleur();
                         <button type="submit" class="btn btn-primary d-grid w-100">Se connecter</button>
                     </form>
 
-                    <p class="text-center">
+                    {{-- <p class="text-center">
                         <span>Vous êtes une entreprise ?</span> <br>
                         <a href="tel:+2250708847077">
-                            <span>Contactez le gestionnaire</span>
+                            <span class="primary">Contactez le gestionnaire</span>
                         </a>
-                    </p>
+                    </p> --}}
 
                     <div class="divider my-4">
                         <div class="divider-text">Nous suivre</div>
