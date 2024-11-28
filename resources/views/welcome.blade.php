@@ -141,7 +141,7 @@ $reseaux = Menu::get_info_reseaux();
                                     LIVRAISON</a>
                                 </li>
                                 <li><i class="far fa-clock"></i>Ouvert 24H/24 / 07:30 - 16:30</li>
-                                <li><i class="far fa-phone"></i><a href="tel:+2250777386397">Appellez</a></li>
+                                <li><i class="far fa-phone"></i><a href="tel:+2250708847077">Appelez</a></li>
                             </ul>
                         </div>
                     </div>
@@ -192,18 +192,28 @@ $reseaux = Menu::get_info_reseaux();
                                     </nav>
 
                                     <div class="header-button d-lg-none">
-                                        <i class="far fa-phone"></i><a href="tel:+2250777386397">Appelez</a> <br>
-                                        <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
-                                            livraison<i class="fas fa-arrow-right ms-1"></i></a>
-                                        <a href="{{ route('tracking') }}" class="th-btn style4">Suivre un colis<i
-                                                class="fas fa-arrow-right ms-1"></i></a>
-                                        <?php if (Auth::check()) {?>
-                                        <a href="{{ route('dashboard') }}" class="">Mon espace<i
-                                                class="fas fa-arrow-right ms-1"></i></a>
-                                        <?php } else {?>
-                                        <a href="{{ route('connexion') }}" class="">Se connecter<i
-                                                class="fas fa-arrow-right ms-1"></i></a>
-                                        <?php }?>
+                                        <div class="row">
+                                            <i class="far fa-phone"></i><a href="tel:+2250708847077">Appelez le
+                                                gestionnaire</a>
+                                            <?php if (Auth::check()) {?>
+                                            <a href="{{ route('dashboard') }}" class="th-btn style4">Mon espace<i
+                                                    class="fas fa-arrow-right ms-1"></i></a>
+                                            <?php } else {?>
+                                            <a href="{{ route('connexion') }}" class="th-btn style4">Se connecter<i
+                                                    class="fas fa-arrow-right ms-1"></i></a>
+                                            <?php }?>
+
+                                        </div>
+                                        <br>
+                                        <div class="row">
+                                            <a href="{{ route('tracking') }}" class="th-btn style4">Suivre un colis<i
+                                                    class="fas fa-arrow-right ms-1"></i></a>
+                                            <a href="{{ route('livraison') }}" class="th-btn style4">Effectuer une
+                                                livraison<i class="fas fa-arrow-right ms-1"></i></a>
+
+                                        </div>
+
+
 
                                     </div>
                                 </div>
