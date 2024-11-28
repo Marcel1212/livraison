@@ -425,9 +425,9 @@ Hero Area
                                 <h3 class="widget_title">Besoin d'aide ?</h3>
                                 <div class="menu-all-pages-container">
                                     <ul class="menu">
-                                        <li><a href="#">Contacter l'assistance</a></li>
-                                        <li><a href="#">Conditions générales</a></li>
-                                        <li><a href="#">Donnez un avis</a></li>
+                                        <li><a href="tel:+2250708847077">Contacter l'assistance</a></li>
+                                        {{-- <li><a href="#">Conditions générales</a></li>
+                                        <li><a href="#">Donnez un avis</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
