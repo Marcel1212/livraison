@@ -192,7 +192,7 @@ $reseaux = Menu::get_info_reseaux();
                                             Demande de service de livraison
                                         </h3>
                                         <div class="action-btns">
-                                            <button class="btn btn-gray me-3"> <a
+                                            <button class="btn btn-warning me-3"> <a
                                                     href="{{ route('/') }}">Retour</a>
                                             </button>
                                         </div>
