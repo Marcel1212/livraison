@@ -89,8 +89,13 @@
                                                         </td> --}}
 
 
-
                                                         <td align="center">
+                                                            <a href="{{ route($lien . '.destroy', \App\Helpers\Crypt::UrlCrypt($tarifications->id_tarif_livraison)) }}"
+                                                                class=" "
+                                                                onclick='javascript:if (!confirm("Voulez-vous supprimer cette tarification ?")) return false;'
+                                                                title="Supprimer"><img
+                                                                    src='/assets/img/trash-can-solid.png'></a>
+
                                                             <a href="{{ route($lien . '.editlivraison', \App\Helpers\Crypt::UrlCrypt($tarifications->id_tarif_livraison)) }}"
                                                                 class=" " title="Modifier"><img
                                                                     src='/assets/img/editing.png'></a>

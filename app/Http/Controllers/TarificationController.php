@@ -312,6 +312,8 @@ class TarificationController extends Controller
         if ($request->isMethod('put')) {
             $tariflivraison = TarifLivraison::find($id);
             $tariflivraison->prix = $data['prix'];
+            $tariflivraison->id_commune_exp = $data['id_commune_exp'];
+            $tariflivraison->id_commune_dest = $data['id_commune_dest'];
             $tariflivraison->save();
 
         }
@@ -415,8 +417,16 @@ class TarificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         //
+        //$data = $request->all();
+        //dd($data);exit();
+        $id = Crypt::UrldeCrypt($id);
+        $tarification = TarifLivraison::find($id);
+        $tarification->delete();
+        return redirect()->route('traitementlivraisonprix.index')->with('success', 'Tarification supprimé avec succès.');
+
+
     }
 }

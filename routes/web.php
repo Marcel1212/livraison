@@ -301,6 +301,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('traitementlivraison', [TarificationController::class, 'indexlivraison'])->name('traitementlivraison');
   Route::put('traitementlivraisonprix/{id}/edit', [App\Http\Controllers\TarificationController::class, 'edit'])->name('traitementlivraisonprix.edit');
+  Route::get('traitementlivraisonprix/{id}/destroy', [App\Http\Controllers\TarificationController::class, 'destroy'])->name('traitementlivraisonprix.destroy');
+
   Route::get('traitementlivraisonprix/{id}/editlivraison', [App\Http\Controllers\TarificationController::class, 'editlivraison'])->name('traitementlivraisonprix.editlivraison');
   Route::put('traitementlivraison/{id}/update', [App\Http\Controllers\TarificationController::class, 'update'])->name('traitementlivraison.update');
  // Route::put('traitementlivraison/{id}/updatelivraison', [App\Http\Controllers\TarificationController::class, 'updatelivraison'])->name('traitementlivraison.updatelivraison');

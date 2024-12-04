@@ -87,9 +87,10 @@ class LocaliteController extends Controller
         //dd($request->all());exit;
         $input = $request->all();
         $input["departement_localite_id"] = 1;
-        $input["departement_localite_id"] = '111D';
         //dd($input);exit();
         $localite = Localite::create($input);
+        // $localite->departement_localite_id = 1 ;
+        // $localite->save();
 
         Audit::logSave([
 

@@ -14,28 +14,28 @@ class Localite extends Model
 {
     /**
      * The table associated with the model.
-     * 
+     *
      * @var string
      */
     protected $table = 'localite';
 
     /**
      * The primary key for the model.
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'id_localite';
 
     /**
      * The "type" of the auto-incrementing ID.
-     * 
+     *
      * @var string
      */
     protected $keyType = 'float';
 
     /**
      * Indicates if the IDs are auto-incrementing.
-     * 
+     *
      * @var bool
      */
     public $incrementing = false;
@@ -43,7 +43,7 @@ class Localite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['libelle_localite', 'flag_localite'];
+    protected $fillable = ['libelle_localite', 'flag_localite','departement_localite_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
