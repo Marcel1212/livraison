@@ -6,11 +6,14 @@ use App\Models\Localite;
 use App\Helpers\Crypt;
 use App\Models\Livraison;
 use DB;
+//use http\Client;
+use GuzzleHttp\Client;
 use App\Models\User;
 use Image;
 use File;
 use Carbon\Carbon;
 use Auth;
+use GuzzleHttp\Psr7\Request as RequestSMS;
 use Illuminate\Http\Request;
 
 class TarificationController extends Controller
@@ -289,10 +292,28 @@ class TarificationController extends Controller
                 $id_client =0;
             }
             $livraison = Livraison::find($id);
+            //dd($livraison->numero_exp); exit();
             $livraison->code_livraison = $codelivraisonunique ;
             $livraison->id_client = $id_client ;
             $livraison->flag_valide = true ;
             $livraison->save();
+            // Envoie du SMS
+            $numeroexpediteur = $livraison->numero_exp ;
+            $client = new Client();
+            //dd ($client); exit();
+            $headers = [
+                'User-Agent" => "GuzzleHttp/7',
+                'Content-Type' => 'application/json'
+              ];
+              $body = '{
+                "content": "TEST"
+              }';
+              $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=2250'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été confirmée. Nous vous assignerons un livreur sous peu pour la prise en charge. Merci pour la confiance ! ', $headers, $body);
+              //echo ($request); exit();
+              //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+              $res = $client->sendAsync($request)->wait();
+              echo $res->getBody();
+
             //dd($livraison);
             // Generer un code
 
@@ -350,11 +371,49 @@ class TarificationController extends Controller
             if($data['action'] === 'affecter_livraison'){
                     // Recherche de la livraison
                     $livraison = Livraison::find($id);
-                    //dd($livraison);exit();
+                    $livreur = User::find( $data["id_livreur"]);
+                    $numerolivreur = $livreur->cel_users ;
+                    //dd($livreur);exit();
                     // Modification de l'id et du flag
                     $livraison ->id_livreur = $data["id_livreur"] ;
                     $livraison ->flag_a_traite = true ;
                     $livraison->save();
+
+                    // Envoie du message au client
+                    $numeroexpediteur = $livraison->numero_exp ;
+                    $codelivraisonunique = $livraison->code_livraison ;
+
+                    $client = new Client();
+                    //dd ($client); exit();
+                    $headers = [
+                    'User-Agent" => "GuzzleHttp/7',
+                    'Content-Type' => 'application/json'
+                    ];
+                    $body = '{
+                    "content": "TEST"
+                    }';
+                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=2250'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .'  est prise en charge par '.$livreur->name .' . Vous pouvez suivre son parcours en temps réel via l’application web. ', $headers, $body);
+                    //echo ($request); exit();
+                    //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+                    $res = $client->sendAsync($request)->wait();
+                    echo $res->getBody();
+
+
+                    // Envoie du message au livreur
+                    $client = new Client();
+                    //dd ($client); exit();
+                    $headers = [
+                        'User-Agent" => "GuzzleHttp/7',
+                        'Content-Type' => 'application/json'
+                    ];
+                    $body = '{
+                        "content": "TEST"
+                    }';
+                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez une nouvelle commande à prendre en charge : '.$codelivraisonunique .'. Rendez-vous sur l’application web Los Livraison pour consulter les détails et confirmer la prise en charge. ', $headers, $body);
+                    //echo ($request); exit();
+                    //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+                    $res = $client->sendAsync($request)->wait();
+                    //echo $res->getBody();
 
 
                     return redirect('traitementlivraisonprix/'.Crypt::UrlCrypt($id).'/edit')
@@ -365,11 +424,48 @@ class TarificationController extends Controller
             if($data['action'] === 'valider_livraison'){
                 // Recherche de la livraison
                 $livraison = Livraison::find($id);
-                //dd($livraison);exit();
+                //dd($livraison->localitedest->libelle_localite);exit();
+                $livreur = User::find( $livraison->id_livreur);
+                $numerolivreur = $livreur->cel_users ;
                 // Modification de l'id et du flag
                 //$livraison ->id_livreur = $data["id_livreur"] ;
                 $livraison ->flag_en_attente = true ;
                 $livraison->save();
+
+                // Envoie du message au client
+                $numeroexpediteur = $livraison->numero_exp ;
+                $codelivraisonunique = $livraison->code_livraison ;
+
+                $client = new Client();
+                //dd ($client); exit();
+                $headers = [
+                'User-Agent" => "GuzzleHttp/7',
+                'Content-Type' => 'application/json'
+                ];
+                $body = '{
+                "content": "TEST"
+                }';
+                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=2250'.$numeroexpediteur.'&content=Bonjour cher client, Le livreur '. $livreur->name .'   a pris en charge votre commande : '.$codelivraisonunique .' . Votre colis est en route pour être livré à  '.$livraison->localitedest->libelle_localite.'', $headers, $body);
+                //echo ($request); exit();
+                //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+                $res = $client->sendAsync($request)->wait();
+                echo $res->getBody();
+
+
+                // Envoie du message au livreur
+                $client = new Client();
+                //dd ($client); exit();
+                $headers = [
+                    'User-Agent" => "GuzzleHttp/7',
+                    'Content-Type' => 'application/json'
+                ];
+                $body = '{
+                    "content": "TEST"
+                }';
+                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez confirmé la prise en charge de la commande : '.$codelivraisonunique .'. Merci de vous rendre à l’adresse indiquée pour récupérer le colis et le livrer. ', $headers, $body);
+                //echo ($request); exit();
+                //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+                $res = $client->sendAsync($request)->wait();
 
 
                 return redirect('traitementlivraisonprix/'.Crypt::UrlCrypt($id).'/edit')
@@ -393,13 +489,51 @@ class TarificationController extends Controller
     if($data['action'] === 'valider_succes_livraison'){
         // Recherche de la livraison
         $livraison = Livraison::find($id);
-        //dd($livraison);exit();
-        // Modification de l'id et du flag
-        //$livraison ->id_livreur = $data["id_livreur"] ;
+        $livreur = User::find( $livraison->id_livreur);
+        $numerolivreur = $livreur->cel_users ;
         $dateFin = Carbon::now();
         $livraison ->flag_livre = true ;
         $livraison ->date_livraison_effectue = $dateFin  ;
         $livraison->save();
+
+           // Envoie du message au client
+           $numeroexpediteur = $livraison->numero_exp ;
+           $codelivraisonunique = $livraison->code_livraison ;
+
+           $client = new Client();
+           //echo date("H:i:s");
+           $now = date("H:i:s");
+           //dd($now); exit();
+
+           $headers = [
+           'User-Agent" => "GuzzleHttp/7',
+           'Content-Type' => 'application/json'
+           ];
+           $body = '{
+           "content": "TEST"
+           }';
+           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=2250'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été livrée avec succès à  '.$now.' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait. ', $headers, $body);
+           //echo ($request); exit();
+           //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+           $res = $client->sendAsync($request)->wait();
+           //echo $res->getBody();
+
+
+           // Envoie du message au livreur
+           $client = new Client();
+           //dd ($client); exit();
+           $headers = [
+               'User-Agent" => "GuzzleHttp/7',
+               'Content-Type' => 'application/json'
+           ];
+           $body = '{
+               "content": "TEST"
+           }';
+           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ee274adf6cc8937eacda063323d93858&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Votre commande: '.$codelivraisonunique .' a été livrée avec succès à '.$now .' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait.. ', $headers, $body);
+           //echo ($request); exit();
+           //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+           $res = $client->sendAsync($request)->wait();
+
 
 
         return redirect('traitementlivraisonprix/'.Crypt::UrlCrypt($id).'/edit')
