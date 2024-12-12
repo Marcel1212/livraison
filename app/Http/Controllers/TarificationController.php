@@ -449,7 +449,7 @@ class TarificationController extends Controller
                 //echo ($request); exit();
                 //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
                 $res = $client->sendAsync($request)->wait();
-                echo $res->getBody();
+                //echo $res->getBody();
 
 
                 // Envoie du message au livreur
