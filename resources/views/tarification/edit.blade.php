@@ -244,7 +244,7 @@
                                                                 <tr>
                                                                     <td class="pe-4">Lieu de
                                                                         recuperation:</td>
-                                                                    <td> <strong>{{ $livraison->localite->libelle_localite }}</strong>
+                                                                    <td> <strong>{{ $livraison->localitedest->libelle_localite }}</strong>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -280,7 +280,7 @@
                                                                 <tr>
                                                                     <td class="pe-4">Lieu de
                                                                         recuperation:</td>
-                                                                    <td> <strong>{{ $livraison->localitedest->libelle_localite }}</strong>
+                                                                    <td> <strong>{{ $livraison->localite->libelle_localite }}</strong>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
