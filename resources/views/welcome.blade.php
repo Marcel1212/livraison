@@ -187,9 +187,16 @@ $reseaux = Menu::get_info_reseaux();
                         <div class="col-auto">
 
                             <div class="row">
+                                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                        <i class="ti ti-menu-2 ti-sm"></i>
+                                    </a>
+                                </div>
 
                                 <div class="col-auto">
                                     <nav class="main-menu d-none d-lg-inline-block">
+
+
                                     </nav>
 
                                     <div class="header-button d-lg-none">

@@ -308,7 +308,26 @@ class TarificationController extends Controller
               $body = '{
                 "content": "TEST"
               }';
-              $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été confirmée. Nous vous assignerons un livreur sous peu pour la prise en charge. Merci pour la confiance ! ', $headers, $body);
+              $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été confirmée. Nous vous assignerons un livreur sous peu pour la prise en charge. Merci pour la confiance ! ', $headers, $body);
+              //echo ($request); exit();
+              //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+              $res = $client->sendAsync($request)->wait();
+              //echo $res->getBody();
+
+
+              // Envoie du SMS a l'administrateur
+              // Recherche de l'administrateur
+
+            $client = new Client();
+            //dd ($client); exit();
+            $headers = [
+                'User-Agent" => "GuzzleHttp/7',
+                'Content-Type' => 'application/json'
+              ];
+              $body = '{
+                "content": "TEST"
+              }';
+              $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=2250708847077&content=Bonjour , Une nouvelle demande de livraison a été effectuée sur l’application Los Livraison ayant le code: '.$codelivraisonunique .' . Veuillez vous rendre sur l’application pour affecter un livreur à cette commande. Merci de gérer cette commande rapidement. ', $headers, $body);
               //echo ($request); exit();
               //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
               $res = $client->sendAsync($request)->wait();
@@ -392,11 +411,30 @@ class TarificationController extends Controller
                     $body = '{
                     "content": "TEST"
                     }';
-                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .'  est prise en charge par '.$livreur->name .' . Vous pouvez suivre son parcours en temps réel via l’application web. ', $headers, $body);
+                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .'  est prise en charge par '.$livreur->name . $livreur->cel_users . '  . Vous pouvez suivre son parcours en temps réel via l’application web. ', $headers, $body);
                     //echo ($request); exit();
                     //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
                     $res = $client->sendAsync($request)->wait();
                     //echo $res->getBody();
+
+                     // Envoie du message au destiinataire
+                     $numeroexpediteur = $livraison->numero_dest ;
+                     $codelivraisonunique = $livraison->code_livraison ;
+
+                     $client = new Client();
+                     //dd ($client); exit();
+                     $headers = [
+                     'User-Agent" => "GuzzleHttp/7',
+                     'Content-Type' => 'application/json'
+                     ];
+                     $body = '{
+                     "content": "TEST"
+                     }';
+                     $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Un colis vous est destiné et il est en route vers vous. Elle est prise en charge par '.$livreur->name . $livreur->cel_users . '  . Vous pouvez suivre son parcours en temps réel via l’application web. ', $headers, $body);
+                     //echo ($request); exit();
+                     //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
+                     $res = $client->sendAsync($request)->wait();
+                     //echo $res->getBody();
 
 
                     // Envoie du message au livreur
@@ -409,7 +447,7 @@ class TarificationController extends Controller
                     $body = '{
                         "content": "TEST"
                     }';
-                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez une nouvelle commande à prendre en charge : '.$codelivraisonunique .'. Rendez-vous sur l’application web Los Livraison pour consulter les détails et confirmer la prise en charge. ', $headers, $body);
+                    $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez une nouvelle commande à prendre en charge : '.$codelivraisonunique .'. Rendez-vous sur l’application web Los Livraison pour consulter les détails et confirmer la prise en charge. ', $headers, $body);
                     //echo ($request); exit();
                     //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
                     $res = $client->sendAsync($request)->wait();
@@ -445,7 +483,7 @@ class TarificationController extends Controller
                 $body = '{
                 "content": "TEST"
                 }';
-                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Le livreur '. $livreur->name .'   a pris en charge votre commande : '.$codelivraisonunique .' . Votre colis est en route pour être livré à  '.$livraison->localitedest->libelle_localite.'', $headers, $body);
+                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Le livreur '. $livreur->name .'   a pris en charge votre commande : '.$codelivraisonunique .' . Votre colis est en route pour être livré à  '.$livraison->localitedest->libelle_localite.'', $headers, $body);
                 //echo ($request); exit();
                 //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
                 $res = $client->sendAsync($request)->wait();
@@ -462,7 +500,7 @@ class TarificationController extends Controller
                 $body = '{
                     "content": "TEST"
                 }';
-                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez confirmé la prise en charge de la commande : '.$codelivraisonunique .'. Merci de vous rendre à l’adresse indiquée pour récupérer le colis et le livrer. ', $headers, $body);
+                $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Vous avez confirmé la prise en charge de la commande : '.$codelivraisonunique .'. Merci de vous rendre à l’adresse indiquée pour récupérer le colis et le livrer. ', $headers, $body);
                 //echo ($request); exit();
                 //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
                 $res = $client->sendAsync($request)->wait();
@@ -512,7 +550,7 @@ class TarificationController extends Controller
            $body = '{
            "content": "TEST"
            }';
-           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été livrée avec succès à  '.$now.' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait. ', $headers, $body);
+           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numeroexpediteur.'&content=Bonjour cher client, Votre commande : '.$codelivraisonunique .' a été livrée avec succès à  '.$now.' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait. ', $headers, $body);
            //echo ($request); exit();
            //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
            $res = $client->sendAsync($request)->wait();
@@ -529,7 +567,7 @@ class TarificationController extends Controller
            $body = '{
                "content": "TEST"
            }';
-           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=bf9d062a9d87b3521c4d7b5e65ee09de&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Votre commande: '.$codelivraisonunique .' a été livrée avec succès à '.$now .' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait.. ', $headers, $body);
+           $request = new RequestSMS('GET', 'https://apis.letexto.com/v1/messages/send?token=ad868b9c59c9280f72cb4f6115c9e257&from=LOSSERVICE&to=225'.$numerolivreur.'&content=Bonjour '.$livreur->name.', Votre commande: '.$codelivraisonunique .' a été livrée avec succès à '.$now .' . Merci d’avoir choisi notre service ! C’est chap, c’est secu, c’est bien fait.. ', $headers, $body);
            //echo ($request); exit();
            //(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null
            $res = $client->sendAsync($request)->wait();
